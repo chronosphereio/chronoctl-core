@@ -73,3 +73,7 @@ Run `make chronoctl` to build the binary. It will be found under
 This repository guarantees backward compatibility between binary releases. This
 repository is not intended for use as a library, and doesn't guarantee backward
 compatibility of the code packages.
+
+## Support
+
+For any questions, bugs, or feature requests, please file a ticket through our standard support channels.
