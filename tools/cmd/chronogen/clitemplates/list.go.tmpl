@@ -1,0 +1,134 @@
+{{ define "list" }}
+type {{ .Name }}ListOpts struct {
+	// Limit represents that maximum number of items we wish to return.
+	Limit int
+	// PageToken is the pagination token we want to start our request at.
+	PageToken string
+	// PageMaxSize is the maximum page size to use when making List calls. 
+	PageMaxSize int 
+{{- range .ListParameters }}
+	{{ .SwaggerName }} {{ .GoType }}
+{{- end }}
+}
+
+func (r *{{ .Name }}ListOpts) registerFlags(flags *flag.FlagSet) {
+{{- range .ListParameters }}
+	var empty{{ .SwaggerName }} {{ .GoType }}
+	flags.{{ .FlagType }}(&r.{{ .SwaggerName }}, "{{ .Name | dasherize }}", empty{{ .SwaggerName }}, "{{ .Description | stripNewlines }}")
+{{- end }}
+	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
+	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
+	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
+}
+
+func List{{ .NameP }}(
+	ctx context.Context,
+	client {{ .Pkg.Client }}.ClientService,
+	streamer output.Streamer[*{{ .Name }}],
+	opts {{ .Name }}ListOpts,
+) (pagination.Token, error) {
+	var (
+		gotItems = 0
+		nextToken = opts.PageToken
+		pageMaxSize = opts.PageMaxSize
+	)
+
+	// Use the limit if it's set, and smaller than a set page size.
+	if opts.Limit > 0 && (opts.Limit < pageMaxSize || pageMaxSize == 0) {
+		pageMaxSize = opts.Limit
+	}
+
+	for {
+		res, err := client.List{{ .NameP }}(&{{ .Pkg.Client }}.List{{ .NameP }}Params{
+			Context: ctx,
+			PageToken: &nextToken,
+			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
+			{{ range .ListParameters -}}
+			{{ .SwaggerName }}: {{ if shouldReference . -}}&{{ end -}}opts.{{ .SwaggerName }},
+			{{ end -}}
+		})
+		if err != nil {
+			return pagination.Token(""), clienterror.Wrap(err)
+		}
+
+		for _, v := range res.Payload.{{ .NameP }} {
+			if err := streamer(New{{ .Name }}(v)); err != nil {
+				return pagination.Token(""), err
+			}
+			gotItems++
+		}
+
+		nextToken = res.Payload.Page.NextToken
+		if nextToken == "" {
+			return pagination.Token(""), nil
+		}
+
+		if opts.Limit > 0 && gotItems >= opts.Limit {
+			return pagination.Token(nextToken), nil
+		}
+
+		pageMaxSize = pagination.CalculatePageSize(pagination.Calculation{
+			GotItems:    gotItems,
+			MaxItems:    opts.Limit,
+			MaxPageSize: len(res.Payload.{{ .NameP }}),
+		})
+	}
+}
+func new{{ .Name }}ListCmd() *cobra.Command {
+	var listOptions {{ .Name }}ListOpts
+	clientFlags := client.NewClientFlags()
+	outputFlags := output.NewFlags()
+
+	cmd := &cobra.Command{
+		Use: "list",
+		Short: "Lists all {{ .NameP }} and applies optional filters",
+		GroupID: groups.Commands.ID,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
+			defer cancel()
+			if err := outputFlags.Validate(); err != nil {
+				return err
+			}
+
+			writer, err := outputFlags.NewWriterManager(cmd.OutOrStdout())
+			if err != nil {
+				return err
+			}
+			defer writer.Close()
+
+			client, err := clientFlags.{{ .Pkg.Swagger }}Client()
+			if err != nil {
+				return err
+			}
+
+			streamer := output.NewWriteObjectStreamer[*{{ .Name }}](writer)
+			nextToken, err := List{{ .NameP }}(ctx, client, streamer, listOptions)
+			if err != nil {
+				return err
+			}
+
+			if nextToken != "" {
+				nextPage := pagination.Result{
+					Kind: pagination.ResultKind,
+					Message: "There are additional {{ .NameP | lowerCamel }}. To view more, use the next page token or run the full command.",
+					NextPageToken: nextToken,
+					FullCommand: fmt.Sprintf("%s --page-token %q",
+						cli.BuildCommandString(cmd, []string{"page-token"}),
+						nextToken),
+				}
+				if err := outputFlags.WriteObject(nextPage, cmd.OutOrStdout()); err != nil {
+					return err
+				}
+			}
+
+			return nil
+		},
+	}
+
+	listOptions.registerFlags(cmd.Flags())
+	clientFlags.AddFlags(cmd)
+	outputFlags.AddFlags(cmd)
+
+  return cmd
+}
+{{ end }}

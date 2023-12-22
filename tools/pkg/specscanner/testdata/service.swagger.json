@@ -1,0 +1,1011 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "ConditionOp": {
+      "enum": [
+        "GEQ",
+        "GT",
+        "LEQ",
+        "LT",
+        "EQ",
+        "NEQ",
+        "EXISTS",
+        "NOT_EXISTS"
+      ],
+      "type": "string"
+    },
+    "MonitorCondition": {
+      "properties": {
+        "op": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ConditionOp"
+            }
+          ],
+          "description": "How the metric value and the configured value are compared."
+        },
+        "sustain_secs": {
+          "description": "How long op operation needs to evaluate to true for the condition to evaluate to true.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "value": {
+          "description": "The value to compare to the metric value using the op operation.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "MonitorSchedule": {
+      "properties": {
+        "timezone": {
+          "description": "The timezone of the time ranges.",
+          "type": "string"
+        },
+        "weekly_schedule": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ScheduleWeeklySchedule"
+            }
+          ],
+          "description": "Days which the monitor is active during. If any day is not set, then the\nmonitor will not be active at all on said day."
+        }
+      },
+      "type": "object"
+    },
+    "MonitorSeriesConditions": {
+      "description": "Conditions evaluated against each queried series to determine the severity of each series.",
+      "properties": {
+        "defaults": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/SeriesConditionsSeverityConditions"
+            }
+          ],
+          "description": "Mapping of alert severity to its conditions. All conditions are\nevaluated for every series. If multiple conditions match, the most\nsevere is chosen."
+        },
+        "overrides": {
+          "description": "Optional list of overrides to use for series having matching labels.\nEach override defines labels that potentially match a series' labels.\nIf one or more overrides match a series, the severity conditions of the first matching\noverride are used instead of the defaults.\n\nCannot be used if graphite_query is set.",
+          "items": {
+            "$ref": "#/definitions/MonitorSeriesConditionsOverride"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "MonitorSeriesConditionsOverride": {
+      "properties": {
+        "label_matchers": {
+          "description": "Set of matchers on a series' labels.\nIf all labels match then the conditions defined in this override are used.",
+          "items": {
+            "$ref": "#/definitions/configv1LabelMatcher"
+          },
+          "type": "array"
+        },
+        "severity_conditions": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/SeriesConditionsSeverityConditions"
+            }
+          ],
+          "description": "Mapping of alert severity to its conditions for series that match this\noverride. These conditions completely supersedes the default\nconditions; the conditions are not merged with the defaults."
+        }
+      },
+      "type": "object"
+    },
+    "MonitorSignalGrouping": {
+      "description": "SignalGrouping defines how the set of series from the query are split into signals.",
+      "properties": {
+        "label_names": {
+          "description": "Set of labels names used to split series into signals.\nEach unique combination of labels will result in its own signal.\nFor example, if label_names is [\"service\", \"code\"] then all series including labels {service=\"foo\",code=\"404\"}\nwill be grouped together in the same signal.\n\nCannot be used if graphite_query is set.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "signal_per_series": {
+          "description": "If this is true, each series will have its own signal.\nIf this is true then label_names cannot be set.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "ScheduleDayActive": {
+      "enum": [
+        "ALL_DAY",
+        "ONLY_DURING_RANGES",
+        "NEVER"
+      ],
+      "type": "string"
+    },
+    "ScheduleDayTimeRange": {
+      "properties": {
+        "end_hh_mm": {
+          "description": "End time in the in format \"\u003chour\u003e:\u003cminute\u003e\", e.g. \"15:30\".",
+          "type": "string"
+        },
+        "start_hh_mm": {
+          "description": "Start time in the in format \"\u003chour\u003e:\u003cminute\u003e\", e.g. \"15:30\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ScheduleScheduleDay": {
+      "properties": {
+        "active": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ScheduleDayActive"
+            }
+          ],
+          "description": "Required enum for when the monitor is active on this day. If ALL_DAY,\nthen the monitor is active all day. If ONLY_DURING_RANGES, then the\nmonitor is only active during the given ranges. If NEVER, then the\nmonitor is never active during this day."
+        },
+        "ranges": {
+          "description": "The time ranges that the monitor is active on this day. Required if\nactive is set to ONLY_DURING_RANGES, else must be empty.",
+          "items": {
+            "$ref": "#/definitions/ScheduleDayTimeRange"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ScheduleWeeklySchedule": {
+      "properties": {
+        "friday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "monday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "saturday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "sunday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "thursday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "tuesday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "wednesday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        }
+      },
+      "type": "object"
+    },
+    "SeriesConditionsConditions": {
+      "properties": {
+        "conditions": {
+          "description": "List of conditions to evaluate against a series.\nOnly one condition -- not all -- needs to match in order to assign a severity to a signal.",
+          "items": {
+            "$ref": "#/definitions/MonitorCondition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SeriesConditionsSeverityConditions": {
+      "properties": {
+        "critical": {
+          "$ref": "#/definitions/SeriesConditionsConditions"
+        },
+        "warn": {
+          "$ref": "#/definitions/SeriesConditionsConditions"
+        }
+      },
+      "type": "object"
+    },
+    "apiError": {
+      "properties": {
+        "message": {
+          "description": "An error message describing what went wrong.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateMonitorRequest": {
+      "properties": {
+        "dry_run": {
+          "description": "If true, the Monitor will not be created, and no response Monitor will be returned. The response will return an error if the given Monitor is invalid.",
+          "type": "boolean"
+        },
+        "monitor": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/configv1Monitor"
+            }
+          ],
+          "description": "The Monitor to be created"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateMonitorResponse": {
+      "properties": {
+        "monitor": {
+          "$ref": "#/definitions/configv1Monitor"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateTeamRequest": {
+      "properties": {
+        "team": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/configv1Team"
+            }
+          ],
+          "description": "The Team to be created"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateTeamResponse": {
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/configv1Team"
+        }
+      },
+      "type": "object"
+    },
+    "configv1DeleteMonitorResponse": {
+      "type": "object"
+    },
+    "configv1DeleteTeamResponse": {
+      "type": "object"
+    },
+    "configv1LabelMatcher": {
+      "properties": {
+        "name": {
+          "description": "name always matches against an exact label name.",
+          "type": "string"
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/configv1LabelMatcherMatcherType"
+            }
+          ],
+          "description": "type determines how the label value is matched."
+        },
+        "value": {
+          "description": "value matches against a label value based on the configured type.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1LabelMatcherMatcherType": {
+      "enum": [
+        "EXACT",
+        "REGEX"
+      ],
+      "type": "string"
+    },
+    "configv1ListMonitorsResponse": {
+      "properties": {
+        "monitors": {
+          "items": {
+            "$ref": "#/definitions/configv1Monitor"
+          },
+          "type": "array"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListTeamsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "teams": {
+          "items": {
+            "$ref": "#/definitions/configv1Team"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1Monitor": {
+      "properties": {
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Annotations are visible in notifications generated by this monitor.\nThey can be be templated with labels from notifications.",
+          "type": "object"
+        },
+        "bucket_slug": {
+          "description": "Slug of the bucket the monitor belongs to. Required if collection_slug is\nnot set.",
+          "type": "string"
+        },
+        "collection_slug": {
+          "description": "Slug of the collection the monitor belongs to. Required if bucket_slug is\nnot set.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the Monitor was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "graphite_query": {
+          "description": "Graphite query. If set, prometheus_query cannot be set.",
+          "example": "sumSeries(stats.timers.*.mean_90)",
+          "type": "string"
+        },
+        "interval_secs": {
+          "description": "Optional setting for configuring how often alerts are evaluated.\nIf this is not set, it will default to 60s.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are visible in notifications generated by this monitor,\nand can be used to route alerts with notification overrides.",
+          "type": "object"
+        },
+        "name": {
+          "description": "Required name of the Monitor. May be modified after the Monitor is created.",
+          "type": "string"
+        },
+        "notification_policy_slug": {
+          "description": "Optional notification policy used to route alerts generated by the monitor.\nIf omitted, the notification policy is inherited from the monitor's bucket.",
+          "type": "string"
+        },
+        "prometheus_query": {
+          "description": "PromQL query. If set, graphite_query cannot be set.",
+          "example": "up{job=\"prometheus\"} == 0",
+          "type": "string"
+        },
+        "schedule": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/MonitorSchedule"
+            }
+          ],
+          "description": "Optional schedule for when the monitor should be evaluated. If not set, then\nthe monitor defaults to being always active."
+        },
+        "series_conditions": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/MonitorSeriesConditions"
+            }
+          ],
+          "description": "Conditions to determine the severity of each series.\nThe highest severity series of a signal will determine that signal's severity."
+        },
+        "signal_grouping": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/MonitorSignalGrouping"
+            }
+          ],
+          "description": "Optional grouping of series into signals. If this is omitted, all series will group together into one signal."
+        },
+        "slug": {
+          "description": "Unique identifier of the Monitor. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Monitor is created.",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the Monitor was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1PageResult": {
+      "properties": {
+        "next_token": {
+          "description": "Opaque page token which identifies the next page of items which the\nclient should request. An empty next_token indicates that there are no\nmore items to return.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadMonitorResponse": {
+      "properties": {
+        "monitor": {
+          "$ref": "#/definitions/configv1Monitor"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadTeamResponse": {
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/configv1Team"
+        }
+      },
+      "type": "object"
+    },
+    "configv1Team": {
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the Team was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the Team. May be modified after the Team is created.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "Unique identifier of the Team. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Team is created.",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the Team was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "user_emails": {
+          "description": "Unordered set of emails whose users are members of this team.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateMonitorResponse": {
+      "properties": {
+        "monitor": {
+          "$ref": "#/definitions/configv1Monitor"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateTeamResponse": {
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/configv1Team"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "info": {
+    "description": "\nThe Config API provides standard HTTP/JSON REST endpoints for creating, reading,\nupdating, deleting, and listing configurable Chronosphere resources.\n\nUse this link to download the raw Swagger specification:\n\u003ca href=\"/api/v1/config/swagger.json\"\u003e/api/v1/config/swagger.json\u003c/a\u003e\n",
+    "title": "Config V1 API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/config/monitors": {
+      "get": {
+        "operationId": "ListMonitors",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any Monitor with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by bucket_slug, where any Monitor with a matching bucket_slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "bucket_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by collection_slug, where any Monitor with a matching collection_slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "collection_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any Monitor with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter returned monitors by the teams that own the collections that they belong to.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "team_slugs",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListMonitorsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Monitor"
+        ]
+      },
+      "post": {
+        "operationId": "CreateMonitor",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateMonitorRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created Monitor.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateMonitorResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the Monitor because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the Monitor because there is a conflict with an existing Monitor.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Monitor"
+        ]
+      }
+    },
+    "/api/v1/config/monitors/{slug}": {
+      "delete": {
+        "operationId": "DeleteMonitor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteMonitorResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the Monitor because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Monitor"
+        ]
+      },
+      "get": {
+        "operationId": "ReadMonitor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadMonitorResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the Monitor because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Monitor"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateMonitor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the Monitor will be created if it does not already exist, identified by slug. If false, an error will be returned if the Monitor does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "type": "boolean"
+                },
+                "monitor": {
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/configv1Monitor"
+                    }
+                  ],
+                  "description": "The Monitor to update"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated Monitor.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateMonitorResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the Monitor because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the Monitor because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the Monitor because there is a conflict with an existing Monitor.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Monitor"
+        ]
+      }
+    },
+    "/api/v1/config/teams": {
+      "get": {
+        "operationId": "ListTeams",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any Team with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any Team with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListTeamsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Team"
+        ]
+      },
+      "post": {
+        "operationId": "CreateTeam",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTeamRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created Team.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTeamResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the Team because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the Team because there is a conflict with an existing Team.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Team"
+        ]
+      }
+    },
+    "/api/v1/config/teams/{slug}": {
+      "delete": {
+        "operationId": "DeleteTeam",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteTeamResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the Team because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Team"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTeam",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadTeamResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the Team because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Team"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTeam",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the Team will be created if it does not already exist, identified by slug. If false, an error will be returned if the Team does not already exist.",
+                  "type": "boolean"
+                },
+                "team": {
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/configv1Team"
+                    }
+                  ],
+                  "description": "The Team to update"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated Team.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateTeamResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the Team because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the Team because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the Team because there is a conflict with an existing Team.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Team"
+        ]
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "swagger": "2.0",
+  "tags": [
+    {
+      "name": "ConfigV1"
+    }
+  ]
+}

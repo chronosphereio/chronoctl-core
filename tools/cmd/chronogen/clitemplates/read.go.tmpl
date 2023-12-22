@@ -1,0 +1,71 @@
+{{ define "read" }}
+func Get{{ .Name }}(
+	ctx context.Context,
+	client {{ .Pkg.Client }}.ClientService,
+	{{- if .Entity.IsNotSingleton}}
+	slug string,
+	{{- end }}
+) (*{{ .Name }}, error) {
+	res, err := client.Read{{ .Name }}(&{{ .Pkg.Client }}.Read{{ .Name }}Params{
+		Context: ctx,
+		{{- if .Entity.IsNotSingleton }}
+		Slug: slug,
+		{{- end }}
+	})
+	if err != nil {
+		return nil, clienterror.Wrap(err)
+	}
+	return New{{ .Name }}(res.GetPayload().{{ .Name }}), nil
+}
+
+func new{{ .Name }}ReadCmd() *cobra.Command {
+	clientFlags := client.NewClientFlags()
+	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
+	var (
+	  short string
+		use string
+		args cobra.PositionalArgs
+	)
+	{{- if .Entity.IsNotSingleton }}
+	short = "Reads a single {{ .Name }} by slug"
+	use = "read <slug>"
+	args = cobra.ExactArgs(1)
+	{{ else }}
+	short = "Reads a {{ .Name }} singleton"
+	use = "read"
+	{{- end }}
+
+	cmd := &cobra.Command{
+		Use: use,
+		GroupID: groups.Commands.ID,
+		Short: short,
+		Args: args,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
+			defer cancel()
+			if err := outputFlags.Validate(); err != nil {
+				return err
+			}
+			defer outputFlags.Close(cmd.OutOrStdout())
+
+			client, err := clientFlags.{{.Pkg.Swagger}}Client()
+			if err != nil {
+				return err
+			}
+			entity, err := Get{{ .Name }}(ctx, client {{- if .Entity.IsNotSingleton }}, args[0]{{- end }})
+			if err != nil {
+				return err
+			}
+			if err := outputFlags.WriteObject(entity, cmd.OutOrStdout()); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+
+	clientFlags.AddFlags(cmd)
+	outputFlags.AddFlags(cmd)
+
+  return cmd
+}
+{{ end }}

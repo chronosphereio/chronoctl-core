@@ -1,0 +1,3386 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "ChronoConfigCollectionsConfig": {
+      "properties": {
+        "group_teams": {
+          "description": "Ordered map of prometheus group regexes to chronosphere team slug. This is used to\ndetermine which team will own the collection created for each prometheus group..",
+          "items": {
+            "$ref": "#/definitions/CollectionsConfigGroupTeam"
+          },
+          "type": "array"
+        },
+        "notification_policy_team_slug": {
+          "description": "The team that will own the generated notification policy",
+          "type": "string"
+        }
+      },
+      "title": "Configuration for when ContainerType == COLLECTIONS or DEFAULT is collections",
+      "type": "object"
+    },
+    "ChronoConfigSeverityMapping": {
+      "properties": {
+        "severity": {
+          "type": "string"
+        },
+        "chronosphere_severity": {
+          "$ref": "#/definitions/SeverityMappingSeverity"
+        }
+      },
+      "type": "object"
+    },
+    "CollectionsConfigGroupTeam": {
+      "properties": {
+        "group_regex": {
+          "type": "string"
+        },
+        "team_slug": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GroupByGroupByKey": {
+      "description": "GroupByKey describes a key to group by.",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/GroupByKeyGroupByKeyType"
+        },
+        "named_key": {
+          "description": "For named KeyTypes (e.g. span tags), the name of the key to group by.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GroupByKeyGroupByKeyType": {
+      "description": " - SERVICE: Group by service.\n - OPERATION: Group by operation.\n - TAG: Group by span tag.",
+      "enum": [
+        "SERVICE",
+        "OPERATION",
+        "TAG"
+      ],
+      "type": "string"
+    },
+    "NoopEntityNestedEnum": {
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ],
+      "type": "string"
+    },
+    "NumericFilterComparisonType": {
+      "enum": [
+        "EQUAL",
+        "NOT_EQUAL",
+        "GREATER_THAN",
+        "GREATER_THAN_OR_EQUAL",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUAL"
+      ],
+      "type": "string"
+    },
+    "PerOperationSamplingStrategiesPerOperationSamplingStrategy": {
+      "properties": {
+        "operation": {
+          "description": "The operation to which this specific strategy should apply.",
+          "type": "string"
+        },
+        "probabilistic_sampling_strategy": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyProbabilisticStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "SavedTraceSearchBetweenTimeFilter": {
+      "properties": {
+        "min_time": {
+          "description": "Start time of the search interval.",
+          "format": "date-time",
+          "type": "string"
+        },
+        "max_time": {
+          "description": "End time of the search interval.",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SavedTraceSearchCloseToTimeFilter": {
+      "properties": {
+        "time": {
+          "description": "Time around which the search will performed.",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SavedTraceSearchRelativeTimeFilter": {
+      "properties": {
+        "start_relative_offset_secs": {
+          "description": "The duration, in seconds, from now to the beginning of the search interval.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "end_relative_offset_secs": {
+          "description": "The duration, in seconds, from now to the end of the search interval.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SavedTraceSearchTimeFilter": {
+      "properties": {
+        "close_to": {
+          "$ref": "#/definitions/SavedTraceSearchCloseToTimeFilter"
+        },
+        "between": {
+          "$ref": "#/definitions/SavedTraceSearchBetweenTimeFilter"
+        },
+        "relative": {
+          "$ref": "#/definitions/SavedTraceSearchRelativeTimeFilter"
+        }
+      },
+      "type": "object"
+    },
+    "SavedTraceSearchTraceSearch": {
+      "properties": {
+        "criteria": {
+          "$ref": "#/definitions/configunstableTraceSearchFilter"
+        },
+        "time": {
+          "$ref": "#/definitions/SavedTraceSearchTimeFilter"
+        }
+      },
+      "type": "object"
+    },
+    "SeverityMappingSeverity": {
+      "enum": [
+        "CRITICAL"
+      ],
+      "type": "string"
+    },
+    "SpanFilterSpanFilterMatchType": {
+      "enum": [
+        "INCLUDE",
+        "EXCLUDE"
+      ],
+      "type": "string"
+    },
+    "StringFilterStringFilterMatchType": {
+      "enum": [
+        "EXACT",
+        "REGEX",
+        "EXACT_NEGATION",
+        "REGEX_NEGATION"
+      ],
+      "type": "string"
+    },
+    "SyncPrometheusChangeLog": {
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/SyncPrometheusChangeLogType"
+        },
+        "diff": {
+          "description": "TODO: do we want to keep diff in the public API?",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyncPrometheusChangeLogType": {
+      "enum": [
+        "CREATED_NOTIFIER",
+        "UPDATED_NOTIFIER",
+        "DELETED_NOTIFIER",
+        "CREATED_BUCKET",
+        "UPDATED_BUCKET",
+        "DELETED_BUCKET",
+        "CREATED_COLLECTION",
+        "UPDATED_COLLECTION",
+        "DELETED_COLLECTION",
+        "CREATED_NOTIFICATION_POLICY",
+        "UPDATED_NOTIFICATION_POLICY",
+        "DELETED_NOTIFICATION_POLICY",
+        "CREATED_MONITOR",
+        "UPDATED_MONITOR",
+        "DELETED_MONITOR",
+        "CREATED_RECORDING_RULE",
+        "UPDATED_RECORDING_RULE",
+        "DELETED_RECORDING_RULE"
+      ],
+      "type": "string"
+    },
+    "SyncPrometheusChronoConfig": {
+      "properties": {
+        "use_collections": {
+          "$ref": "#/definitions/SyncPrometheusContainerType"
+        },
+        "collections_config": {
+          "$ref": "#/definitions/ChronoConfigCollectionsConfig"
+        },
+        "severity_mappings": {
+          "items": {
+            "$ref": "#/definitions/ChronoConfigSeverityMapping"
+          },
+          "type": "array"
+        },
+        "severity_label_name": {
+          "description": "Customer-specific name of alert rule label used to determine severity.\nIf omitted, the Chronosphere default of \"severity\" is used.",
+          "type": "string"
+        },
+        "assign_monitor_slugs": {
+          "description": "TODO: before configv1 - is this still required? does chronoctl set it?",
+          "type": "boolean"
+        },
+        "monitor_signal_per_series": {
+          "description": "If true, each monitor will not group alert notifications.",
+          "type": "boolean"
+        },
+        "infer_monitor_signals": {
+          "description": "Controls whether we try to infer monitor signals from the alertmanager route tree.",
+          "type": "boolean"
+        },
+        "group_across_severities": {
+          "description": "If true, we set the the group_across_severities flag on notification policies to\ntrue, so that warn and critical notifications are grouped together.\n\nTODO:  i don't think we export this on notification policies in the public API,\n       we may need to figure out a better solution here (do we need to expose\n       in both, or do we need to update the comment to stop referring to the\n       option on the policy?)",
+          "type": "boolean"
+        },
+        "exists_op_supported": {
+          "description": "If true, alert rule expressions that are not in the form of \"expr op number\" (e.g. \"sum(stuff) \u003e 5\")\nwill be executed as-is.\nWithout this set, expressions will be converted to binary expressions (e.g. \"x \u003e y\" as \"(x - y) \u003e 0\").\n\nTODO: before configv1 - is this still required? does chronoctl set it?",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "SyncPrometheusContainerType": {
+      "enum": [
+        "COLLECTIONS",
+        "BUCKETS"
+      ],
+      "title": "TODO: confirm naming with InfoModel team",
+      "type": "string"
+    },
+    "TraceJaegerRemoteSamplingStrategyAppliedStrategy": {
+      "properties": {
+        "probabilistic_strategy": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyProbabilisticStrategy"
+        },
+        "per_operation_strategies": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyPerOperationSamplingStrategies"
+        },
+        "rate_limiting_strategy": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyRateLimitingSamplingStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "TraceJaegerRemoteSamplingStrategyPerOperationSamplingStrategies": {
+      "properties": {
+        "default_sampling_rate": {
+          "description": "Defines the service-wide sampling probability (in the range [0, 1]) when specific operations are not matched.",
+          "format": "double",
+          "type": "number"
+        },
+        "default_lower_bound_traces_per_second": {
+          "description": "Defines a minimum number of traces to send for ANY operation in the service, regardless of matching per operation strategy.",
+          "format": "double",
+          "type": "number"
+        },
+        "default_upper_bound_traces_per_second": {
+          "description": "Defines a maximum number of traces to send for ANY operation in the service, regardless of matching per operation strategy.",
+          "format": "double",
+          "type": "number"
+        },
+        "per_operation_strategies": {
+          "description": "Defines explicit operations-specific strategies that take precedence over the default sampling rate.",
+          "items": {
+            "$ref": "#/definitions/PerOperationSamplingStrategiesPerOperationSamplingStrategy"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "TraceJaegerRemoteSamplingStrategyProbabilisticStrategy": {
+      "properties": {
+        "sampling_rate": {
+          "description": "Value in the range [0, 1] that defines the probability of sampling any trace.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "TraceJaegerRemoteSamplingStrategyRateLimitingSamplingStrategy": {
+      "properties": {
+        "max_traces_per_second": {
+          "description": "Maximum number of traces to sample per second.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "TraceMetricsRuleGroupBy": {
+      "description": "GroupBy contains fields required to group the resultant metrics of a TraceMetricsRule by a specific key.",
+      "properties": {
+        "label": {
+          "description": "The label to use in the resultant metrics.",
+          "type": "string"
+        },
+        "key": {
+          "$ref": "#/definitions/GroupByGroupByKey"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterBoolFilter": {
+      "properties": {
+        "value": {
+          "description": "The value the filter compares to the target trace or span field.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterCountFilter": {
+      "properties": {
+        "min": {
+          "description": "Minimum number of spans that must match a SpanFilter (inclusive).",
+          "format": "int32",
+          "type": "integer"
+        },
+        "max": {
+          "description": "Maximum number of spans that must match a SpanFilter (inclusive).",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterDurationFilter": {
+      "properties": {
+        "min_secs": {
+          "description": "Minimum duration, in seconds, required for a span or trace to match.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "max_secs": {
+          "description": "Maximum duration, in seconds, required for a span or trace to match.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterNumericFilter": {
+      "properties": {
+        "comparison": {
+          "$ref": "#/definitions/NumericFilterComparisonType"
+        },
+        "value": {
+          "description": "The filter value used in comparison against match candidates.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterSpanFilter": {
+      "properties": {
+        "match_type": {
+          "$ref": "#/definitions/SpanFilterSpanFilterMatchType"
+        },
+        "service": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "operation": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "parent_service": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "parent_operation": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "duration": {
+          "$ref": "#/definitions/TraceSearchFilterDurationFilter"
+        },
+        "error": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
+        },
+        "tags": {
+          "description": "Matches the tags of the candidate.",
+          "items": {
+            "$ref": "#/definitions/TraceSearchFilterTagFilter"
+          },
+          "type": "array"
+        },
+        "span_count": {
+          "$ref": "#/definitions/TraceSearchFilterCountFilter"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterStringFilter": {
+      "properties": {
+        "match": {
+          "$ref": "#/definitions/StringFilterStringFilterMatchType"
+        },
+        "value": {
+          "description": "The value the filter compares to the target trace or span field.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterTagFilter": {
+      "properties": {
+        "key": {
+          "description": "The key (or name) of the span tag that is inspected by this filter.",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "numeric_value": {
+          "$ref": "#/definitions/TraceSearchFilterNumericFilter"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterTraceFilter": {
+      "properties": {
+        "duration": {
+          "$ref": "#/definitions/TraceSearchFilterDurationFilter"
+        },
+        "error": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
+        }
+      },
+      "type": "object"
+    },
+    "apiError": {
+      "properties": {
+        "code": {
+          "description": "An optional private error code whose values are undefined.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "message": {
+          "description": "An error message describing what went wrong.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateDashboardRequest": {
+      "properties": {
+        "dashboard": {
+          "$ref": "#/definitions/configunstableDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateDashboardResponse": {
+      "properties": {
+        "dashboard": {
+          "$ref": "#/definitions/configunstableDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateLinkTemplateRequest": {
+      "properties": {
+        "link_template": {
+          "$ref": "#/definitions/configunstableLinkTemplate"
+        },
+        "dry_run": {
+          "description": "If true, the LinkTemplate will not be created, and no response LinkTemplate will be returned. The response will return an error if the given LinkTemplate is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateLinkTemplateResponse": {
+      "properties": {
+        "link_template": {
+          "$ref": "#/definitions/configunstableLinkTemplate"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateNoopEntityRequest": {
+      "properties": {
+        "noop_entity": {
+          "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateNoopEntityResponse": {
+      "properties": {
+        "noop_entity": {
+          "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateSavedTraceSearchRequest": {
+      "properties": {
+        "saved_trace_search": {
+          "$ref": "#/definitions/configunstableSavedTraceSearch"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateSavedTraceSearchResponse": {
+      "properties": {
+        "saved_trace_search": {
+          "$ref": "#/definitions/configunstableSavedTraceSearch"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateServiceRequest": {
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/configunstableService"
+        },
+        "dry_run": {
+          "description": "If true, the Service will not be created, and no response Service will be returned. The response will return an error if the given Service is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateServiceResponse": {
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/configunstableService"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceJaegerRemoteSamplingStrategyRequest": {
+      "properties": {
+        "trace_jaeger_remote_sampling_strategy": {
+          "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
+        },
+        "dry_run": {
+          "description": "If true, the TraceJaegerRemoteSamplingStrategy will not be created, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceJaegerRemoteSamplingStrategyResponse": {
+      "properties": {
+        "trace_jaeger_remote_sampling_strategy": {
+          "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceMetricsRuleRequest": {
+      "properties": {
+        "trace_metrics_rule": {
+          "$ref": "#/definitions/configunstableTraceMetricsRule"
+        },
+        "dry_run": {
+          "description": "If true, the TraceMetricsRule will not be created, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceMetricsRuleResponse": {
+      "properties": {
+        "trace_metrics_rule": {
+          "$ref": "#/definitions/configunstableTraceMetricsRule"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceTailSamplingRulesRequest": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configunstableTraceTailSamplingRules"
+        },
+        "dry_run": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceTailSamplingRulesResponse": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configunstableTraceTailSamplingRules"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableDashboard": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the Dashboard. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Dashboard is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the Dashboard. May be modified after the Dashboard is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the Dashboard was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the Dashboard was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "collection_slug": {
+          "description": "Required slug of the collection the dashboard belongs to.",
+          "type": "string"
+        },
+        "dashboard_json": {
+          "description": "Required raw JSON of the dashboard.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableDefaultSampleRate": {
+      "properties": {
+        "enabled": {
+          "description": "Whether to override the default sample rate",
+          "type": "boolean"
+        },
+        "sample_rate": {
+          "description": "A fraction of traces to keep, which should be a number between 0 and 1, inclusive",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableDeleteDashboardResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteLinkTemplateResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteNoopEntityResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteSavedTraceSearchResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteServiceResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteTraceJaegerRemoteSamplingStrategyResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteTraceMetricsRuleResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteTraceTailSamplingRulesResponse": {
+      "type": "object"
+    },
+    "configunstableLinkTemplate": {
+      "properties": {
+        "slug": {
+          "description": "Unique slug identifying the LinkTemplate.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Unique name of the LinkTemplate. Used as the link text.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the LinkTemplate was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the LinkTemplate was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "url_template": {
+          "description": "URL template.",
+          "type": "string"
+        },
+        "ui_component": {
+          "description": "Link template is scoped to the specified string representing a UI component here.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListDashboardsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "dashboards": {
+          "items": {
+            "$ref": "#/definitions/configunstableDashboard"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListLinkTemplatesResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "link_templates": {
+          "items": {
+            "$ref": "#/definitions/configunstableLinkTemplate"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListNoopEntitiesResponse": {
+      "properties": {
+        "noop_entities": {
+          "items": {
+            "$ref": "#/definitions/configunstableNoopEntity"
+          },
+          "type": "array"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListSavedTraceSearchesResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "saved_trace_searches": {
+          "description": "Found saved trace searches.",
+          "items": {
+            "$ref": "#/definitions/configunstableSavedTraceSearch"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListServicesResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "services": {
+          "items": {
+            "$ref": "#/definitions/configunstableService"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListTraceJaegerRemoteSamplingStrategiesResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "trace_jaeger_remote_sampling_strategies": {
+          "items": {
+            "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListTraceMetricsRulesResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "trace_metrics_rules": {
+          "description": "Found trace metrics rules.",
+          "items": {
+            "$ref": "#/definitions/configunstableTraceMetricsRule"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableNoopEntity": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the NoopEntity. If slug is not provided, one will be generated based of the name field. Cannot be modified after the NoopEntity is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the NoopEntity. May be modified after the NoopEntity is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the NoopEntity was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the NoopEntity was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "nested_enum": {
+          "$ref": "#/definitions/NoopEntityNestedEnum"
+        },
+        "enum": {
+          "$ref": "#/definitions/configunstableNoopEnum"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableNoopEnum": {
+      "enum": [
+        "ACTIVE",
+        "ARCHIVED",
+        "DELETED"
+      ],
+      "type": "string"
+    },
+    "configunstableReadDashboardResponse": {
+      "properties": {
+        "dashboard": {
+          "$ref": "#/definitions/configunstableDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadLinkTemplateResponse": {
+      "properties": {
+        "link_template": {
+          "$ref": "#/definitions/configunstableLinkTemplate"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadNoopEntityResponse": {
+      "properties": {
+        "noop_entity": {
+          "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadSavedTraceSearchResponse": {
+      "properties": {
+        "saved_trace_search": {
+          "$ref": "#/definitions/configunstableSavedTraceSearch"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadServiceResponse": {
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/configunstableService"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadTraceJaegerRemoteSamplingStrategyResponse": {
+      "properties": {
+        "trace_jaeger_remote_sampling_strategy": {
+          "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadTraceMetricsRuleResponse": {
+      "properties": {
+        "trace_metrics_rule": {
+          "$ref": "#/definitions/configunstableTraceMetricsRule"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadTraceTailSamplingRulesResponse": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configunstableTraceTailSamplingRules"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableSavedTraceSearch": {
+      "properties": {
+        "name": {
+          "description": "Required name of the SavedTraceSearch. May be modified after the SavedTraceSearch is created.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "Unique identifier of the SavedTraceSearch. If slug is not provided, one will be generated based of the name field. Cannot be modified after the SavedTraceSearch is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the SavedTraceSearch was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the SavedTraceSearch was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "search": {
+          "$ref": "#/definitions/SavedTraceSearchTraceSearch"
+        },
+        "comparison": {
+          "$ref": "#/definitions/SavedTraceSearchTraceSearch"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableService": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the Service. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Service is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the Service. May be modified after the Service is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the Service was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the Service was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "derived_name": {
+          "description": "Required telemetry name of the service.",
+          "type": "string"
+        },
+        "team_slug": {
+          "description": "Required slug of the team the service collection belongs to.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Optional description of the service collection.",
+          "type": "string"
+        },
+        "notification_policy_slug": {
+          "description": "Slug of the notification policy used by default for monitors in this service collection.\nThis is optional if the collection does not contain monitors or all of its monitors explicitly reference a policy.\nThis does not override the policy used when a monitor explicitly references a policy.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableSyncPrometheusRequest": {
+      "properties": {
+        "rules_yaml": {
+          "type": "string"
+        },
+        "rules_yaml_gzip": {
+          "format": "byte",
+          "type": "string"
+        },
+        "alertmanager_yaml": {
+          "type": "string"
+        },
+        "alertmanager_yaml_gzip": {
+          "format": "byte",
+          "type": "string"
+        },
+        "chrono_config": {
+          "$ref": "#/definitions/SyncPrometheusChronoConfig"
+        },
+        "dry_run": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableSyncPrometheusResponse": {
+      "properties": {
+        "changes": {
+          "items": {
+            "$ref": "#/definitions/SyncPrometheusChangeLog"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceJaegerRemoteSamplingStrategy": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the TraceJaegerRemoteSamplingStrategy. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceJaegerRemoteSamplingStrategy is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the TraceJaegerRemoteSamplingStrategy. May be modified after the TraceJaegerRemoteSamplingStrategy is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the TraceJaegerRemoteSamplingStrategy was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the TraceJaegerRemoteSamplingStrategy was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "service_name": {
+          "description": "The name of the service this sampling strategy applies to. This must match the slug and name fields.",
+          "type": "string"
+        },
+        "applied_strategy": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyAppliedStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceMetricsRule": {
+      "properties": {
+        "name": {
+          "description": "Required name of the TraceMetricsRule. May be modified after the TraceMetricsRule is created.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "Unique identifier of the TraceMetricsRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceMetricsRule is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the TraceMetricsRule was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the TraceMetricsRule was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "metric_name": {
+          "description": "The name of the generated trace metrics.",
+          "type": "string"
+        },
+        "metric_labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels to apply to the generated trace metrics.",
+          "type": "object"
+        },
+        "histogram_buckets_secs": {
+          "description": "Histogram bucket values, in seconds, for generated duration metrics.",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "trace_filter": {
+          "$ref": "#/definitions/configunstableTraceSearchFilter"
+        },
+        "group_by": {
+          "description": "Add labels to the resultant metrics based on these specified GroupBy messages.",
+          "items": {
+            "$ref": "#/definitions/TraceMetricsRuleGroupBy"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceSearchFilter": {
+      "properties": {
+        "trace": {
+          "$ref": "#/definitions/TraceSearchFilterTraceFilter"
+        },
+        "span": {
+          "description": "Each SpanFilter object represents all conditions that need to be true on\nthe same span for the span to be considered matching the SpanFilter. If\n`span_count` is used, the number of spans within the trace that match the\nSpanFilter needs to be within [min, max]. Multiple SpanFilters can be used,\nand each can be satisfied by any number of spans within the trace.",
+          "items": {
+            "$ref": "#/definitions/TraceSearchFilterSpanFilter"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceTailSamplingRule": {
+      "description": "Contains configuration for one tail sampling rule.",
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/configunstableTraceSearchFilter"
+        },
+        "sample_rate": {
+          "description": "A fraction of traces to keep, which should be a number between 0 and 1, inclusive",
+          "format": "double",
+          "type": "number"
+        },
+        "name": {
+          "description": "A human-readable name of the rule, which summarizes what it's for",
+          "type": "string"
+        },
+        "system_name": {
+          "description": "Value used as the metric label value for metrics emitted relating to this rule.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceTailSamplingRules": {
+      "description": "Root object containing all tail sampling rules (for a tenant).",
+      "properties": {
+        "created_at": {
+          "description": "Set in API responses.",
+          "format": "date-time",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Set in API responses.",
+          "format": "date-time",
+          "type": "string"
+        },
+        "rules": {
+          "description": "Optional. A list of rules, evaluated in order until a match is found,\nand the sample rate applied, or else the default sample rate is applied.",
+          "items": {
+            "$ref": "#/definitions/configunstableTraceTailSamplingRule"
+          },
+          "type": "array"
+        },
+        "default_sample_rate": {
+          "$ref": "#/definitions/configunstableDefaultSampleRate"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateDashboardResponse": {
+      "properties": {
+        "dashboard": {
+          "$ref": "#/definitions/configunstableDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateLinkTemplateResponse": {
+      "properties": {
+        "link_template": {
+          "$ref": "#/definitions/configunstableLinkTemplate"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateNoopEntityResponse": {
+      "properties": {
+        "noop_entity": {
+          "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateSavedTraceSearchResponse": {
+      "properties": {
+        "saved_trace_search": {
+          "$ref": "#/definitions/configunstableSavedTraceSearch"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateServiceResponse": {
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/configunstableService"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateTraceJaegerRemoteSamplingStrategyResponse": {
+      "properties": {
+        "trace_jaeger_remote_sampling_strategy": {
+          "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateTraceMetricsRuleResponse": {
+      "properties": {
+        "trace_metrics_rule": {
+          "$ref": "#/definitions/configunstableTraceMetricsRule"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateTraceTailSamplingRulesRequest": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configunstableTraceTailSamplingRules"
+        },
+        "create_if_missing": {
+          "type": "boolean"
+        },
+        "dry_run": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateTraceTailSamplingRulesResponse": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configunstableTraceTailSamplingRules"
+        }
+      },
+      "type": "object"
+    },
+    "configv1PageParams": {
+      "properties": {
+        "max_size": {
+          "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "token": {
+          "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1PageResult": {
+      "properties": {
+        "next_token": {
+          "description": "Opaque page token which identifies the next page of items which the\nclient should request. An empty next_token indicates that there are no\nmore items to return.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "genericError": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "protobufAny": {
+      "additionalProperties": {},
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "info": {
+    "description": "\n\u003cb\u003eWARNING: This API is unstable and is meant for experimentation only. Do not\nuse this API in production. The endpoints and schemas referenced in this\ndocumentation will be changed or removed without notice and without any\nbackwards compatibility guarantee. Note that even though this API is unstable,\nit is still connected to production data, so use with caution.\u003c/b\u003e",
+    "title": "Config Unstable API",
+    "version": "UNSTABLE"
+  },
+  "paths": {
+    "/api/unstable/config/dashboards": {
+      "get": {
+        "operationId": "ListDashboards",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any Dashboard with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by collection_slug, where any Dashboard with a matching collection_slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "collection_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any Dashboard with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "description": "Optional flag to populate the dashboard_json of the returned dashboards.\nBy default, dashboard_json will be left empty.",
+            "in": "query",
+            "name": "include_dashboard_json",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListDashboardsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dashboard"
+        ]
+      },
+      "post": {
+        "operationId": "CreateDashboard",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateDashboardRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created Dashboard.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateDashboardResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the Dashboard because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the Dashboard because there is a conflict with an existing Dashboard.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/unstable/config/dashboards/{slug}": {
+      "delete": {
+        "operationId": "DeleteDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteDashboardResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the Dashboard because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dashboard"
+        ]
+      },
+      "get": {
+        "operationId": "ReadDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadDashboardResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the Dashboard because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dashboard"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the Dashboard will be created if it does not already exist, identified by slug. If false, an error will be returned if the Dashboard does not already exist.",
+                  "type": "boolean"
+                },
+                "dashboard": {
+                  "$ref": "#/definitions/configunstableDashboard"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated Dashboard.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateDashboardResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the Dashboard because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the Dashboard because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the Dashboard because there is a conflict with an existing Dashboard.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/unstable/config/link-templates": {
+      "get": {
+        "operationId": "ListLinkTemplates",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any LinkTemplate with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any LinkTemplate with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by ui_component, where any LinkTemplate with a matching ui_component in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "ui_components",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListLinkTemplatesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LinkTemplate"
+        ]
+      },
+      "post": {
+        "operationId": "CreateLinkTemplate",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateLinkTemplateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created LinkTemplate.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateLinkTemplateResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the LinkTemplate because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the LinkTemplate because there is a conflict with an existing LinkTemplate.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LinkTemplate"
+        ]
+      }
+    },
+    "/api/unstable/config/link-templates/{slug}": {
+      "delete": {
+        "operationId": "DeleteLinkTemplate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteLinkTemplateResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the LinkTemplate because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LinkTemplate"
+        ]
+      },
+      "get": {
+        "operationId": "ReadLinkTemplate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadLinkTemplateResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the LinkTemplate because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LinkTemplate"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateLinkTemplate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the LinkTemplate will be created if it does not already exist, identified by slug. If false, an error will be returned if the LinkTemplate does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "description": "If true, the LinkTemplate will not be created nor updated, and no response LinkTemplate will be returned. The response will return an error if the given LinkTemplate is invalid.",
+                  "type": "boolean"
+                },
+                "link_template": {
+                  "$ref": "#/definitions/configunstableLinkTemplate"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated LinkTemplate.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateLinkTemplateResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the LinkTemplate because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the LinkTemplate because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the LinkTemplate because there is a conflict with an existing LinkTemplate.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LinkTemplate"
+        ]
+      }
+    },
+    "/api/unstable/config/noop-entities": {
+      "get": {
+        "operationId": "ListNoopEntities",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any NoopEntity with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListNoopEntitiesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "NoopEntity"
+        ]
+      },
+      "post": {
+        "operationId": "CreateNoopEntity",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateNoopEntityRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created NoopEntity.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateNoopEntityResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the NoopEntity because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the NoopEntity because there is a conflict with an existing NoopEntity.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "NoopEntity"
+        ]
+      }
+    },
+    "/api/unstable/config/noop-entities/{slug}": {
+      "delete": {
+        "operationId": "DeleteNoopEntity",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteNoopEntityResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the NoopEntity because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "NoopEntity"
+        ]
+      },
+      "get": {
+        "operationId": "ReadNoopEntity",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadNoopEntityResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the NoopEntity because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "NoopEntity"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateNoopEntity",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the NoopEntity will be created if it does not already exist, identified by slug. If false, an error will be returned if the NoopEntity does not already exist.",
+                  "type": "boolean"
+                },
+                "noop_entity": {
+                  "$ref": "#/definitions/configunstableNoopEntity"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated NoopEntity.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateNoopEntityResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the NoopEntity because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the NoopEntity because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the NoopEntity because there is a conflict with an existing NoopEntity.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "NoopEntity"
+        ]
+      }
+    },
+    "/api/unstable/config/saved-trace-searches": {
+      "get": {
+        "operationId": "ListSavedTraceSearches",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any SavedTraceSearch with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any SavedTraceSearch with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "description": "Optional filter: creator email address.",
+            "in": "query",
+            "name": "created_by",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListSavedTraceSearchesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SavedTraceSearch"
+        ]
+      },
+      "post": {
+        "description": "***\nSaved Trace Searches\n***",
+        "operationId": "CreateSavedTraceSearch",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateSavedTraceSearchRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created SavedTraceSearch.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateSavedTraceSearchResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the SavedTraceSearch because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the SavedTraceSearch because there is a conflict with an existing SavedTraceSearch.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SavedTraceSearch"
+        ]
+      }
+    },
+    "/api/unstable/config/saved-trace-searches/{slug}": {
+      "delete": {
+        "operationId": "DeleteSavedTraceSearch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteSavedTraceSearchResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the SavedTraceSearch because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SavedTraceSearch"
+        ]
+      },
+      "get": {
+        "operationId": "ReadSavedTraceSearch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadSavedTraceSearchResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the SavedTraceSearch because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SavedTraceSearch"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateSavedTraceSearch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the SavedTraceSearch will be created if it does not already exist, identified by slug. If false, an error will be returned if the SavedTraceSearch does not already exist.",
+                  "type": "boolean"
+                },
+                "saved_trace_search": {
+                  "$ref": "#/definitions/configunstableSavedTraceSearch"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated SavedTraceSearch.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateSavedTraceSearchResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the SavedTraceSearch because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the SavedTraceSearch because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the SavedTraceSearch because there is a conflict with an existing SavedTraceSearch.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SavedTraceSearch"
+        ]
+      }
+    },
+    "/api/unstable/config/services": {
+      "get": {
+        "operationId": "ListServices",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any Service with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by team_slug, where any Service with a matching team_slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "team_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any Service with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Get services that directly reference notifications policies by the referenced policy slugs.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "notification_policy_slugs",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListServicesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Service"
+        ]
+      },
+      "post": {
+        "operationId": "CreateService",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateServiceRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created Service.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateServiceResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the Service because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the Service because there is a conflict with an existing Service.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Service"
+        ]
+      }
+    },
+    "/api/unstable/config/services/{slug}": {
+      "delete": {
+        "operationId": "DeleteService",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteServiceResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the Service because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Service"
+        ]
+      },
+      "get": {
+        "operationId": "ReadService",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadServiceResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the Service because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Service"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateService",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the Service will be created if it does not already exist, identified by slug. If false, an error will be returned if the Service does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "description": "If true, the Service will not be created nor updated, and no response Service will be returned. The response will return an error if the given Service is invalid.",
+                  "type": "boolean"
+                },
+                "service": {
+                  "$ref": "#/definitions/configunstableService"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated Service.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateServiceResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the Service because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the Service because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the Service because there is a conflict with an existing Service.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Service"
+        ]
+      }
+    },
+    "/api/unstable/config/sync-prometheus": {
+      "post": {
+        "description": "***\nSync Prometheus Configuration\n***",
+        "operationId": "SyncPrometheus",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableSyncPrometheusRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableSyncPrometheusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "SyncPrometheus"
+        ]
+      }
+    },
+    "/api/unstable/config/trace-jaeger-remote-sampling-strategies": {
+      "get": {
+        "operationId": "ListTraceJaegerRemoteSamplingStrategies",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any TraceJaegerRemoteSamplingStrategy with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any TraceJaegerRemoteSamplingStrategy with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by service_name, where any TraceJaegerRemoteSamplingStrategy with a matching service_name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "service_names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListTraceJaegerRemoteSamplingStrategiesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      },
+      "post": {
+        "operationId": "CreateTraceJaegerRemoteSamplingStrategy",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceJaegerRemoteSamplingStrategyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created TraceJaegerRemoteSamplingStrategy.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceJaegerRemoteSamplingStrategyResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the TraceJaegerRemoteSamplingStrategy because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceJaegerRemoteSamplingStrategy because there is a conflict with an existing TraceJaegerRemoteSamplingStrategy.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      }
+    },
+    "/api/unstable/config/trace-jaeger-remote-sampling-strategies/{slug}": {
+      "delete": {
+        "operationId": "DeleteTraceJaegerRemoteSamplingStrategy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteTraceJaegerRemoteSamplingStrategyResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the TraceJaegerRemoteSamplingStrategy because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceJaegerRemoteSamplingStrategy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadTraceJaegerRemoteSamplingStrategyResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the TraceJaegerRemoteSamplingStrategy because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceJaegerRemoteSamplingStrategy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the TraceJaegerRemoteSamplingStrategy will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceJaegerRemoteSamplingStrategy does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "description": "If true, the TraceJaegerRemoteSamplingStrategy will not be created nor updated, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.",
+                  "type": "boolean"
+                },
+                "trace_jaeger_remote_sampling_strategy": {
+                  "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated TraceJaegerRemoteSamplingStrategy.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateTraceJaegerRemoteSamplingStrategyResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the TraceJaegerRemoteSamplingStrategy because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceJaegerRemoteSamplingStrategy because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the TraceJaegerRemoteSamplingStrategy because there is a conflict with an existing TraceJaegerRemoteSamplingStrategy.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      }
+    },
+    "/api/unstable/config/trace-metrics-rules": {
+      "get": {
+        "operationId": "ListTraceMetricsRules",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any TraceMetricsRule with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any TraceMetricsRule with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Get trace metric rules by name.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "metric_names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListTraceMetricsRulesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
+        ]
+      },
+      "post": {
+        "operationId": "CreateTraceMetricsRule",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceMetricsRuleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created TraceMetricsRule.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceMetricsRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the TraceMetricsRule because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceMetricsRule because there is a conflict with an existing TraceMetricsRule.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
+        ]
+      }
+    },
+    "/api/unstable/config/trace-metrics-rules/{slug}": {
+      "delete": {
+        "operationId": "DeleteTraceMetricsRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteTraceMetricsRuleResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the TraceMetricsRule because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceMetricsRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadTraceMetricsRuleResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the TraceMetricsRule because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceMetricsRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the TraceMetricsRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceMetricsRule does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "description": "If true, the TraceMetricsRule will not be created nor updated, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.",
+                  "type": "boolean"
+                },
+                "trace_metrics_rule": {
+                  "$ref": "#/definitions/configunstableTraceMetricsRule"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated TraceMetricsRule.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateTraceMetricsRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the TraceMetricsRule because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceMetricsRule because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the TraceMetricsRule because there is a conflict with an existing TraceMetricsRule.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
+        ]
+      }
+    },
+    "/api/unstable/config/trace-tail-sampling-rules": {
+      "delete": {
+        "operationId": "DeleteTraceTailSamplingRules",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "dry_run",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteTraceTailSamplingRulesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTailSamplingRules"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceTailSamplingRules",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadTraceTailSamplingRulesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTailSamplingRules"
+        ]
+      },
+      "post": {
+        "description": "TraceTailSamplingRules CRUD (subset for singleton objects)",
+        "operationId": "CreateTraceTailSamplingRules",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceTailSamplingRulesRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceTailSamplingRulesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTailSamplingRules"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceTailSamplingRules",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateTraceTailSamplingRulesRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateTraceTailSamplingRulesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTailSamplingRules"
+        ]
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "swagger": "2.0",
+  "tags": [
+    {
+      "name": "ConfigUnstable"
+    }
+  ]
+}

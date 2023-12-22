@@ -1,0 +1,112 @@
+{{ define "update" }}
+func Update{{ .Name }}(
+	ctx context.Context,
+	client {{ .Pkg.Client }}.ClientService,
+	entity *{{ .Name }},
+	opts UpdateOptions,
+) (*{{ .Name }}, error) {
+	res, err := client.Update{{ .Name }}(&{{ .Pkg.Client }}.Update{{ .Name }}Params{
+		Context: ctx,
+		{{- if .Entity.IsNotSingleton }}
+		Slug: entity.Spec.Slug,
+		Body: {{ .Pkg.Client }}.Update{{ .Name }}Body{
+		{{ else }}
+		Body: &models.{{.Pkg.Model}}Update{{ .Name }}Request{
+		{{- end }}
+			CreateIfMissing: opts.CreateIfMissing,
+			{{- if .Entity.Update.SupportsDryRun }}
+			DryRun: opts.DryRun,
+			{{- end }}
+			{{ .Name }}: entity.Spec,
+		},
+	})
+	if err != nil {
+		return nil,	clienterror.Wrap(err)
+	}
+
+	return New{{ .Name }}(res.Payload.{{ .Name }}), nil
+}
+
+func new{{ .Name }}UpdateCmd() *cobra.Command {
+	var (
+		permissiveParsing bool
+		createIfMissing bool
+		dryRunFlags = dry.NewFlags()
+		clientFlags = client.NewClientFlags()
+		outputFlags = output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
+		fileFlags = file.NewFlags(true /* required */)
+	)
+
+	cmd := &cobra.Command{
+		Use: "update -f <filename>",
+		GroupID: groups.Commands.ID,
+		Short: "Updates an existing {{ .Name }}.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
+			defer cancel()
+			if err := outputFlags.Validate(); err != nil {
+				return err
+			}
+			defer outputFlags.Close(cmd.OutOrStdout())
+			stderr := output.NewStderrPrinter(cmd)
+
+			client, err := clientFlags.{{.Pkg.Swagger}}Client()
+			if err != nil {
+				return err
+			}
+
+			file, err := fileFlags.File()
+			if err != nil {
+				return err
+			}
+			defer file.Close() //nolint:errcheck
+
+			{{ .Name | lowerCamel }}, err := types.MustDecodeSingleObject[*{{ .Name }}](file, permissiveParsing)
+			if err != nil {
+				return err
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun: dryRunFlags.DryRun,
+				CreateIfMissing: createIfMissing,
+			}
+
+			if dryRunFlags.DryRun {
+				stderr.Println("--dry-run is set, update not persisted")
+			}
+
+			full{{ .Name }}, err := Update{{ .Name }}(ctx, client, {{ .Name | lowerCamel }}, updateOpts)
+			if err != nil {
+				return err
+			}
+
+			if dryRunFlags.DryRun {
+				stderr.Println("{{ .Name }} is valid and can be updated")
+				return nil
+			}
+
+			{{- if .Entity.IsNotSingleton }}
+			stderr.Printf("{{ .Name }} with slug %q applied successfully\n", full{{ .Name }}.Spec.Slug)
+			{{ else }}
+			stderr.Printf("{{ .Name }} applied successfully\n")
+			{{- end }}
+
+			if err := outputFlags.WriteObject(full{{ .Name }}, cmd.OutOrStdout()); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+
+	{{- if .Entity.Update.SupportsDryRun }}
+	dryRunFlags.AddFlags(cmd)
+	{{- end }}
+	clientFlags.AddFlags(cmd)
+	outputFlags.AddFlags(cmd)
+	fileFlags.AddFlags(cmd)
+	cmd.Flags().BoolVar(&permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are allowed. Defaults to false.")
+	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the {{ .Name }} if it does not already exist. Defaults to false.")
+
+	return cmd
+}
+{{ end }}

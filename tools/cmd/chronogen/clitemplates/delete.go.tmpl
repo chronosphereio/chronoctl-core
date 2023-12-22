@@ -1,0 +1,82 @@
+{{ define "delete" }}
+func Delete{{ .Name }}(
+	ctx context.Context,
+	client {{ .Pkg.Client }}.ClientService,
+	{{- if .Entity.IsNotSingleton }}
+	slug string,
+	{{- end }}
+) error {
+	_, err := client.Delete{{ .Name }}(&{{ .Pkg.Client }}.Delete{{ .Name }}Params{
+	  Context: ctx,
+	{{- if .Entity.IsNotSingleton }}
+		Slug: slug,
+	{{- end }}
+	})
+	if err != nil {
+		return clienterror.Wrap(err)
+	}
+	return nil
+}
+
+func new{{ .Name }}DeleteCmd() *cobra.Command {
+	clientFlags := client.NewClientFlags()
+	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
+
+	{{- if .Entity.SupportsForceDelete }}
+	var forceDelete bool
+	{{- end }}
+
+	cmd := &cobra.Command{
+		Use: "delete <slug>",
+		GroupID: groups.Commands.ID,
+		Short: "Deletes a single {{ .Name }} by slug",
+		{{- if .Entity.IsNotSingleton }}
+		Args: cobra.ExactArgs(1),
+		{{- end }}
+		RunE: func(cmd *cobra.Command, args []string) error{
+			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
+			defer cancel()
+			if err := outputFlags.Validate(); err != nil {
+				return err
+			}
+			defer outputFlags.Close(cmd.OutOrStdout())
+
+			client, err := clientFlags.{{ .Pkg.Swagger }}Client()
+			if err != nil {
+				return err
+			}
+
+			res, err := client.Delete{{ .Name }}(&{{ .Pkg.Client }}.Delete{{ .Name }}Params{
+				Context: ctx,
+				{{- if .Entity.IsNotSingleton }}
+				Slug:  args[0],
+				{{- end }}
+				{{- if .Entity.SupportsForceDelete }}
+				ForceDelete: &forceDelete,
+				{{- end }}
+			})
+			if err != nil {
+				return clienterror.Wrap(err)
+			}
+			var _ = res
+			{{- if .Entity.IsNotSingleton }}
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted {{ .Name }} with slug %q\n", args[0])
+			{{ else }}
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted {{ .Name }}")
+			{{- end }}
+			{{- if .Entity.SupportsForceDelete }}
+			for _, change := range res.Payload.Changes {
+			  fmt.Fprintln(cmd.OutOrStdout(), output.Configv1ChangelogMessage(change))
+			}
+			{{- end }}
+			return nil
+		},
+	}
+	clientFlags.AddFlags(cmd)
+	outputFlags.AddFlags(cmd)
+	{{- if .Entity.SupportsForceDelete }}
+	cmd.Flags().BoolVar(&forceDelete, "force-delete", false, "deletes the {{.Name}} and all resources referencing it.")
+	{{- end }}
+	return cmd
+}
+{{ end }}

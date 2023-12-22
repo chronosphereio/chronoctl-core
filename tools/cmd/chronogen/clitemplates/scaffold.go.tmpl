@@ -1,0 +1,17 @@
+{{ define "scaffold" }}
+const {{ .Name }}ScaffoldYAML = `{{ .ScaffoldYAML}}`
+
+func new{{ .Name }}ScaffoldCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use: "scaffold",
+		GroupID: groups.Commands.ID,
+		Short: "Scaffolds a complete object with placeholder values",
+		Run: func(cmd *cobra.Command, args []string){
+			fmt.Fprint(cmd.OutOrStdout(), {{.Name}}ScaffoldYAML)
+		},
+	}
+	return cmd
+}
+{{ end }}
+
+

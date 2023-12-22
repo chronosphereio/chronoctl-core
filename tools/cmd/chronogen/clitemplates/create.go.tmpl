@@ -1,0 +1,135 @@
+{{ define "create" }}
+func Create{{ .Name }}(
+	ctx context.Context,
+	client {{ .Pkg.Client }}.ClientService,
+	entity *{{ .Name }},
+	dryRun bool,
+) (*{{ .Name }}, error) {
+	res, err := client.Create{{ .Name }}(&{{ .Pkg.Client }}.Create{{ .Name }}Params{
+		Context: ctx,
+		Body: &models.{{ .Pkg.Model }}Create{{ .Name }}Request{
+			{{- if .Entity.Create.SupportsDryRun }}
+			DryRun: dryRun,
+			{{- end }}
+			{{ .Name }}: entity.Spec,
+		},
+	})
+	if err != nil {
+		return nil, clienterror.Wrap(err)
+	}
+	return New{{ .Name }}(res.Payload.{{ .Name }}), nil
+}
+
+func new{{ .Name }}CreateCmd() *cobra.Command {
+	var (
+		permissiveParsing bool
+		dryRunFlags = dry.NewFlags()
+		clientFlags = client.NewClientFlags()
+		outputFlags = output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
+		fileFlags = file.NewFlags({{ print .FileFlagRequired}} /* required */)
+		{{- if .SupportsShorthandCreate }}
+		objectFlags = shorthand.New{{ .Name }}()
+		{{- end }}
+	)
+
+	var (
+		use string
+		short string
+	)
+	{{- if .SupportsShorthandCreate }}
+		use = "create"
+		short = "Creates a single {{ .Name }}. Supports creating from CLI flags or through a file via -f"
+	{{ else }}
+		use = "create -f <file>"
+		short = "Creates a single {{ .Name }}."
+	{{- end }}
+
+	cmd := &cobra.Command{
+		Use: use,
+		GroupID: groups.Commands.ID,
+		Short: short,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
+			defer cancel()
+			if err := outputFlags.Validate(); err != nil {
+				return err
+			}
+			defer outputFlags.Close(cmd.OutOrStdout())
+			stderr := output.NewStderrPrinter(cmd)
+
+			client, err := clientFlags.{{.Pkg.Swagger}}Client()
+			if err != nil {
+				return err
+			}
+
+			var {{.Name | lowerCamel }} *{{ .Name }}
+
+			{{- if .SupportsShorthandCreate }}
+			if objectFlags.IsEmpty() && fileFlags.Filename == "" {
+				return fmt.Errorf(`must set object flags or use -f <file>`)
+			}
+			if !objectFlags.IsEmpty() && fileFlags.Filename != "" {
+				return fmt.Errorf(`only one of object flags or -f <file> can be used`)
+			}
+			if !objectFlags.IsEmpty() {
+				spec, err := objectFlags.GenerateSpec()
+				if err != nil {
+					return err
+				}
+				{{ .Name | lowerCamel }} = New{{ .Name }}(spec)
+			} else {
+			{{- end }}
+				file, err := fileFlags.File()
+				if err != nil {
+					return err
+				}
+				defer file.Close() //nolint:errcheck
+				{{ .Name | lowerCamel }}, err = types.MustDecodeSingleObject[*{{ .Name }}](file, permissiveParsing)
+				if err != nil {
+					return err
+				}
+			{{- if .SupportsShorthandCreate }}
+			}
+			{{- end }}
+
+
+			if dryRunFlags.DryRun {
+				stderr.Println("--dry-run is set")
+			}
+			full{{ .Name }}, err := Create{{ .Name }}(ctx, client, {{ .Name | lowerCamel }}, dryRunFlags.DryRun)
+			if err != nil {
+				return err
+			}
+
+			if dryRunFlags.DryRun {
+				stderr.Println("{{ .Name }} is valid and can be created")
+				return nil
+			}
+
+			{{- if .Entity.IsNotSingleton }}
+			stderr.Printf("{{ .Name }} with slug %q created successfully\n", full{{ .Name }}.Spec.Slug)
+			{{ else }}
+			stderr.Printf("{{ .Name }} created successfully\n")
+			{{- end }}
+
+			if err := outputFlags.WriteObject(full{{ .Name }}, cmd.OutOrStdout()); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+
+	{{- if .Entity.Create.SupportsDryRun }}
+	dryRunFlags.AddFlags(cmd)
+	{{- end }}
+	{{- if .SupportsShorthandCreate}}
+	objectFlags.AddFlags(cmd)
+	{{- end }}
+	clientFlags.AddFlags(cmd)
+	outputFlags.AddFlags(cmd)
+	fileFlags.AddFlags(cmd)
+	cmd.Flags().BoolVar(&permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are not rejected. Defaults to false.")
+
+	return cmd
+}
+{{ end }}
