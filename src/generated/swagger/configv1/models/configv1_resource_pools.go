@@ -20,11 +20,13 @@ import (
 // swagger:model configv1ResourcePools
 type Configv1ResourcePools struct {
 
-	// created at
+	// Timestamp of when the ResourcePools was created. Cannot be set by clients.
+	// Read Only: true
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
-	// updated at
+	// Timestamp of when the ResourcePools was last updated. Cannot be set by clients.
+	// Read Only: true
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
@@ -134,6 +136,14 @@ func (m *Configv1ResourcePools) validatePools(formats strfmt.Registry) error {
 func (m *Configv1ResourcePools) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDefaultPool(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -145,6 +155,24 @@ func (m *Configv1ResourcePools) ContextValidate(ctx context.Context, formats str
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Configv1ResourcePools) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Configv1ResourcePools) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

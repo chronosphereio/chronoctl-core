@@ -14,10 +14,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableTraceSearchFilter configunstable trace search filter
+// Configv1TraceSearchFilter configv1 trace search filter
 //
-// swagger:model configunstableTraceSearchFilter
-type ConfigunstableTraceSearchFilter struct {
+// swagger:model configv1TraceSearchFilter
+type Configv1TraceSearchFilter struct {
 
 	// trace
 	Trace *TraceSearchFilterTraceFilter `json:"trace,omitempty"`
@@ -30,8 +30,8 @@ type ConfigunstableTraceSearchFilter struct {
 	Span []*TraceSearchFilterSpanFilter `json:"span"`
 }
 
-// Validate validates this configunstable trace search filter
-func (m *ConfigunstableTraceSearchFilter) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 trace search filter
+func (m *Configv1TraceSearchFilter) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateTrace(formats); err != nil {
@@ -48,7 +48,7 @@ func (m *ConfigunstableTraceSearchFilter) Validate(formats strfmt.Registry) erro
 	return nil
 }
 
-func (m *ConfigunstableTraceSearchFilter) validateTrace(formats strfmt.Registry) error {
+func (m *Configv1TraceSearchFilter) validateTrace(formats strfmt.Registry) error {
 	if swag.IsZero(m.Trace) { // not required
 		return nil
 	}
@@ -67,7 +67,7 @@ func (m *ConfigunstableTraceSearchFilter) validateTrace(formats strfmt.Registry)
 	return nil
 }
 
-func (m *ConfigunstableTraceSearchFilter) validateSpan(formats strfmt.Registry) error {
+func (m *Configv1TraceSearchFilter) validateSpan(formats strfmt.Registry) error {
 	if swag.IsZero(m.Span) { // not required
 		return nil
 	}
@@ -93,8 +93,8 @@ func (m *ConfigunstableTraceSearchFilter) validateSpan(formats strfmt.Registry) 
 	return nil
 }
 
-// ContextValidate validate this configunstable trace search filter based on the context it is used
-func (m *ConfigunstableTraceSearchFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 trace search filter based on the context it is used
+func (m *Configv1TraceSearchFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateTrace(ctx, formats); err != nil {
@@ -111,7 +111,7 @@ func (m *ConfigunstableTraceSearchFilter) ContextValidate(ctx context.Context, f
 	return nil
 }
 
-func (m *ConfigunstableTraceSearchFilter) contextValidateTrace(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1TraceSearchFilter) contextValidateTrace(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Trace != nil {
 
@@ -132,7 +132,7 @@ func (m *ConfigunstableTraceSearchFilter) contextValidateTrace(ctx context.Conte
 	return nil
 }
 
-func (m *ConfigunstableTraceSearchFilter) contextValidateSpan(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1TraceSearchFilter) contextValidateSpan(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Span); i++ {
 
@@ -158,7 +158,7 @@ func (m *ConfigunstableTraceSearchFilter) contextValidateSpan(ctx context.Contex
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableTraceSearchFilter) MarshalBinary() ([]byte, error) {
+func (m *Configv1TraceSearchFilter) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -166,8 +166,8 @@ func (m *ConfigunstableTraceSearchFilter) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableTraceSearchFilter) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableTraceSearchFilter
+func (m *Configv1TraceSearchFilter) UnmarshalBinary(b []byte) error {
+	var res Configv1TraceSearchFilter
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

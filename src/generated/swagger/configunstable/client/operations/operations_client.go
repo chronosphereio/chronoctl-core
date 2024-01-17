@@ -40,8 +40,6 @@ type ClientService interface {
 
 	CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*CreateTraceJaegerRemoteSamplingStrategyOK, error)
 
-	CreateTraceMetricsRule(params *CreateTraceMetricsRuleParams, opts ...ClientOption) (*CreateTraceMetricsRuleOK, error)
-
 	CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRulesParams, opts ...ClientOption) (*CreateTraceTailSamplingRulesOK, error)
 
 	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error)
@@ -55,8 +53,6 @@ type ClientService interface {
 	DeleteService(params *DeleteServiceParams, opts ...ClientOption) (*DeleteServiceOK, error)
 
 	DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error)
-
-	DeleteTraceMetricsRule(params *DeleteTraceMetricsRuleParams, opts ...ClientOption) (*DeleteTraceMetricsRuleOK, error)
 
 	DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRulesParams, opts ...ClientOption) (*DeleteTraceTailSamplingRulesOK, error)
 
@@ -72,8 +68,6 @@ type ClientService interface {
 
 	ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error)
 
-	ListTraceMetricsRules(params *ListTraceMetricsRulesParams, opts ...ClientOption) (*ListTraceMetricsRulesOK, error)
-
 	ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error)
 
 	ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...ClientOption) (*ReadLinkTemplateOK, error)
@@ -85,8 +79,6 @@ type ClientService interface {
 	ReadService(params *ReadServiceParams, opts ...ClientOption) (*ReadServiceOK, error)
 
 	ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*ReadTraceJaegerRemoteSamplingStrategyOK, error)
-
-	ReadTraceMetricsRule(params *ReadTraceMetricsRuleParams, opts ...ClientOption) (*ReadTraceMetricsRuleOK, error)
 
 	ReadTraceTailSamplingRules(params *ReadTraceTailSamplingRulesParams, opts ...ClientOption) (*ReadTraceTailSamplingRulesOK, error)
 
@@ -103,8 +95,6 @@ type ClientService interface {
 	UpdateService(params *UpdateServiceParams, opts ...ClientOption) (*UpdateServiceOK, error)
 
 	UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*UpdateTraceJaegerRemoteSamplingStrategyOK, error)
-
-	UpdateTraceMetricsRule(params *UpdateTraceMetricsRuleParams, opts ...ClientOption) (*UpdateTraceMetricsRuleOK, error)
 
 	UpdateTraceTailSamplingRules(params *UpdateTraceTailSamplingRulesParams, opts ...ClientOption) (*UpdateTraceTailSamplingRulesOK, error)
 
@@ -333,43 +323,6 @@ func (a *Client) CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaeg
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateTraceJaegerRemoteSamplingStrategyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-CreateTraceMetricsRule create trace metrics rule API
-*/
-func (a *Client) CreateTraceMetricsRule(params *CreateTraceMetricsRuleParams, opts ...ClientOption) (*CreateTraceMetricsRuleOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateTraceMetricsRuleParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateTraceMetricsRule",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/trace-metrics-rules",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateTraceMetricsRuleReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateTraceMetricsRuleOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateTraceMetricsRuleDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -633,43 +586,6 @@ func (a *Client) DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaeg
 }
 
 /*
-DeleteTraceMetricsRule delete trace metrics rule API
-*/
-func (a *Client) DeleteTraceMetricsRule(params *DeleteTraceMetricsRuleParams, opts ...ClientOption) (*DeleteTraceMetricsRuleOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteTraceMetricsRuleParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteTraceMetricsRule",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/trace-metrics-rules/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteTraceMetricsRuleReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteTraceMetricsRuleOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteTraceMetricsRuleDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 DeleteTraceTailSamplingRules delete trace tail sampling rules API
 */
 func (a *Client) DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRulesParams, opts ...ClientOption) (*DeleteTraceTailSamplingRulesOK, error) {
@@ -929,43 +845,6 @@ func (a *Client) ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaeger
 }
 
 /*
-ListTraceMetricsRules list trace metrics rules API
-*/
-func (a *Client) ListTraceMetricsRules(params *ListTraceMetricsRulesParams, opts ...ClientOption) (*ListTraceMetricsRulesOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListTraceMetricsRulesParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ListTraceMetricsRules",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/trace-metrics-rules",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListTraceMetricsRulesReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListTraceMetricsRulesOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListTraceMetricsRulesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ReadDashboard read dashboard API
 */
 func (a *Client) ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error) {
@@ -1184,43 +1063,6 @@ func (a *Client) ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRe
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadTraceJaegerRemoteSamplingStrategyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ReadTraceMetricsRule read trace metrics rule API
-*/
-func (a *Client) ReadTraceMetricsRule(params *ReadTraceMetricsRuleParams, opts ...ClientOption) (*ReadTraceMetricsRuleOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadTraceMetricsRuleParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadTraceMetricsRule",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/trace-metrics-rules/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadTraceMetricsRuleReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadTraceMetricsRuleOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadTraceMetricsRuleDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1520,43 +1362,6 @@ func (a *Client) UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaeg
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateTraceJaegerRemoteSamplingStrategyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-UpdateTraceMetricsRule update trace metrics rule API
-*/
-func (a *Client) UpdateTraceMetricsRule(params *UpdateTraceMetricsRuleParams, opts ...ClientOption) (*UpdateTraceMetricsRuleOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateTraceMetricsRuleParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateTraceMetricsRule",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/trace-metrics-rules/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateTraceMetricsRuleReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateTraceMetricsRuleOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateTraceMetricsRuleDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

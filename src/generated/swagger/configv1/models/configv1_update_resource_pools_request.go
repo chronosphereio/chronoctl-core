@@ -21,10 +21,10 @@ type Configv1UpdateResourcePoolsRequest struct {
 	// resource pools
 	ResourcePools *Configv1ResourcePools `json:"resource_pools,omitempty"`
 
-	// create if missing
+	// If true, the ResourcePools will be created if it does not already exist. If false, an error will be returned if the ResourcePools does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// dry run
+	// If true, the ResourcePools will not be created nor updated, and no response ResourcePools will be returned. The response will return an error if the given ResourcePools is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

@@ -155,26 +155,6 @@ func (mr *MockClientServiceMockRecorder) CreateTraceJaegerRemoteSamplingStrategy
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceJaegerRemoteSamplingStrategy", reflect.TypeOf((*MockClientService)(nil).CreateTraceJaegerRemoteSamplingStrategy), varargs...)
 }
 
-// CreateTraceMetricsRule mocks base method.
-func (m *MockClientService) CreateTraceMetricsRule(params *operations.CreateTraceMetricsRuleParams, opts ...operations.ClientOption) (*operations.CreateTraceMetricsRuleOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateTraceMetricsRule", varargs...)
-	ret0, _ := ret[0].(*operations.CreateTraceMetricsRuleOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateTraceMetricsRule indicates an expected call of CreateTraceMetricsRule.
-func (mr *MockClientServiceMockRecorder) CreateTraceMetricsRule(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceMetricsRule", reflect.TypeOf((*MockClientService)(nil).CreateTraceMetricsRule), varargs...)
-}
-
 // CreateTraceTailSamplingRules mocks base method.
 func (m *MockClientService) CreateTraceTailSamplingRules(params *operations.CreateTraceTailSamplingRulesParams, opts ...operations.ClientOption) (*operations.CreateTraceTailSamplingRulesOK, error) {
 	m.ctrl.T.Helper()
@@ -313,26 +293,6 @@ func (mr *MockClientServiceMockRecorder) DeleteTraceJaegerRemoteSamplingStrategy
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceJaegerRemoteSamplingStrategy", reflect.TypeOf((*MockClientService)(nil).DeleteTraceJaegerRemoteSamplingStrategy), varargs...)
-}
-
-// DeleteTraceMetricsRule mocks base method.
-func (m *MockClientService) DeleteTraceMetricsRule(params *operations.DeleteTraceMetricsRuleParams, opts ...operations.ClientOption) (*operations.DeleteTraceMetricsRuleOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteTraceMetricsRule", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteTraceMetricsRuleOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteTraceMetricsRule indicates an expected call of DeleteTraceMetricsRule.
-func (mr *MockClientServiceMockRecorder) DeleteTraceMetricsRule(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceMetricsRule", reflect.TypeOf((*MockClientService)(nil).DeleteTraceMetricsRule), varargs...)
 }
 
 // DeleteTraceTailSamplingRules mocks base method.
@@ -475,26 +435,6 @@ func (mr *MockClientServiceMockRecorder) ListTraceJaegerRemoteSamplingStrategies
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTraceJaegerRemoteSamplingStrategies", reflect.TypeOf((*MockClientService)(nil).ListTraceJaegerRemoteSamplingStrategies), varargs...)
 }
 
-// ListTraceMetricsRules mocks base method.
-func (m *MockClientService) ListTraceMetricsRules(params *operations.ListTraceMetricsRulesParams, opts ...operations.ClientOption) (*operations.ListTraceMetricsRulesOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ListTraceMetricsRules", varargs...)
-	ret0, _ := ret[0].(*operations.ListTraceMetricsRulesOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListTraceMetricsRules indicates an expected call of ListTraceMetricsRules.
-func (mr *MockClientServiceMockRecorder) ListTraceMetricsRules(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTraceMetricsRules", reflect.TypeOf((*MockClientService)(nil).ListTraceMetricsRules), varargs...)
-}
-
 // ReadDashboard mocks base method.
 func (m *MockClientService) ReadDashboard(params *operations.ReadDashboardParams, opts ...operations.ClientOption) (*operations.ReadDashboardOK, error) {
 	m.ctrl.T.Helper()
@@ -613,26 +553,6 @@ func (mr *MockClientServiceMockRecorder) ReadTraceJaegerRemoteSamplingStrategy(p
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadTraceJaegerRemoteSamplingStrategy", reflect.TypeOf((*MockClientService)(nil).ReadTraceJaegerRemoteSamplingStrategy), varargs...)
-}
-
-// ReadTraceMetricsRule mocks base method.
-func (m *MockClientService) ReadTraceMetricsRule(params *operations.ReadTraceMetricsRuleParams, opts ...operations.ClientOption) (*operations.ReadTraceMetricsRuleOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadTraceMetricsRule", varargs...)
-	ret0, _ := ret[0].(*operations.ReadTraceMetricsRuleOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadTraceMetricsRule indicates an expected call of ReadTraceMetricsRule.
-func (mr *MockClientServiceMockRecorder) ReadTraceMetricsRule(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadTraceMetricsRule", reflect.TypeOf((*MockClientService)(nil).ReadTraceMetricsRule), varargs...)
 }
 
 // ReadTraceTailSamplingRules mocks base method.
@@ -805,26 +725,6 @@ func (mr *MockClientServiceMockRecorder) UpdateTraceJaegerRemoteSamplingStrategy
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTraceJaegerRemoteSamplingStrategy", reflect.TypeOf((*MockClientService)(nil).UpdateTraceJaegerRemoteSamplingStrategy), varargs...)
-}
-
-// UpdateTraceMetricsRule mocks base method.
-func (m *MockClientService) UpdateTraceMetricsRule(params *operations.UpdateTraceMetricsRuleParams, opts ...operations.ClientOption) (*operations.UpdateTraceMetricsRuleOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateTraceMetricsRule", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateTraceMetricsRuleOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateTraceMetricsRule indicates an expected call of UpdateTraceMetricsRule.
-func (mr *MockClientServiceMockRecorder) UpdateTraceMetricsRule(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTraceMetricsRule", reflect.TypeOf((*MockClientService)(nil).UpdateTraceMetricsRule), varargs...)
 }
 
 // UpdateTraceTailSamplingRules mocks base method.

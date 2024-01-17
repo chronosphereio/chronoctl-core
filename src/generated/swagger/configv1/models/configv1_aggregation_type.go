@@ -101,6 +101,9 @@ const (
 
 	// Configv1AggregationTypeP75 captures enum value "P75"
 	Configv1AggregationTypeP75 Configv1AggregationType = "P75"
+
+	// Configv1AggregationTypeCOUNTSAMPLES captures enum value "COUNT_SAMPLES"
+	Configv1AggregationTypeCOUNTSAMPLES Configv1AggregationType = "COUNT_SAMPLES"
 )
 
 // for schema
@@ -108,7 +111,7 @@ var configv1AggregationTypeEnum []interface{}
 
 func init() {
 	var res []Configv1AggregationType
-	if err := json.Unmarshal([]byte(`["LAST","MIN","MAX","MEAN","MEDIAN","COUNT","SUM","SUMSQ","STDEV","P10","P20","P30","P40","P50","P60","P70","P80","P90","P95","P99","P999","P9999","P25","P75"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["LAST","MIN","MAX","MEAN","MEDIAN","COUNT","SUM","SUMSQ","STDEV","P10","P20","P30","P40","P50","P60","P70","P80","P90","P95","P99","P999","P9999","P25","P75","COUNT_SAMPLES"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

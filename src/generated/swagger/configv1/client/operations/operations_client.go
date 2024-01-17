@@ -64,6 +64,10 @@ type ClientService interface {
 
 	CreateTeam(params *CreateTeamParams, opts ...ClientOption) (*CreateTeamOK, error)
 
+	CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*CreateTraceJaegerRemoteSamplingStrategyOK, error)
+
+	CreateTraceMetricsRule(params *CreateTraceMetricsRuleParams, opts ...ClientOption) (*CreateTraceMetricsRuleOK, error)
+
 	DeleteBucket(params *DeleteBucketParams, opts ...ClientOption) (*DeleteBucketOK, error)
 
 	DeleteClassicDashboard(params *DeleteClassicDashboardParams, opts ...ClientOption) (*DeleteClassicDashboardOK, error)
@@ -100,6 +104,10 @@ type ClientService interface {
 
 	DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*DeleteTeamOK, error)
 
+	DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error)
+
+	DeleteTraceMetricsRule(params *DeleteTraceMetricsRuleParams, opts ...ClientOption) (*DeleteTraceMetricsRuleOK, error)
+
 	ListBuckets(params *ListBucketsParams, opts ...ClientOption) (*ListBucketsOK, error)
 
 	ListClassicDashboards(params *ListClassicDashboardsParams, opts ...ClientOption) (*ListClassicDashboardsOK, error)
@@ -134,6 +142,10 @@ type ClientService interface {
 
 	ListTeams(params *ListTeamsParams, opts ...ClientOption) (*ListTeamsOK, error)
 
+	ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error)
+
+	ListTraceMetricsRules(params *ListTraceMetricsRulesParams, opts ...ClientOption) (*ListTraceMetricsRulesOK, error)
+
 	ReadBucket(params *ReadBucketParams, opts ...ClientOption) (*ReadBucketOK, error)
 
 	ReadClassicDashboard(params *ReadClassicDashboardParams, opts ...ClientOption) (*ReadClassicDashboardOK, error)
@@ -166,9 +178,15 @@ type ClientService interface {
 
 	ReadRollupRule(params *ReadRollupRuleParams, opts ...ClientOption) (*ReadRollupRuleOK, error)
 
+	ReadService(params *ReadServiceParams, opts ...ClientOption) (*ReadServiceOK, error)
+
 	ReadServiceAccount(params *ReadServiceAccountParams, opts ...ClientOption) (*ReadServiceAccountOK, error)
 
 	ReadTeam(params *ReadTeamParams, opts ...ClientOption) (*ReadTeamOK, error)
+
+	ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*ReadTraceJaegerRemoteSamplingStrategyOK, error)
+
+	ReadTraceMetricsRule(params *ReadTraceMetricsRuleParams, opts ...ClientOption) (*ReadTraceMetricsRuleOK, error)
 
 	UpdateBucket(params *UpdateBucketParams, opts ...ClientOption) (*UpdateBucketOK, error)
 
@@ -203,6 +221,10 @@ type ClientService interface {
 	UpdateRollupRule(params *UpdateRollupRuleParams, opts ...ClientOption) (*UpdateRollupRuleOK, error)
 
 	UpdateTeam(params *UpdateTeamParams, opts ...ClientOption) (*UpdateTeamOK, error)
+
+	UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*UpdateTraceJaegerRemoteSamplingStrategyOK, error)
+
+	UpdateTraceMetricsRule(params *UpdateTraceMetricsRuleParams, opts ...ClientOption) (*UpdateTraceMetricsRuleOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -874,6 +896,83 @@ func (a *Client) CreateTeam(params *CreateTeamParams, opts ...ClientOption) (*Cr
 }
 
 /*
+CreateTraceJaegerRemoteSamplingStrategy create trace jaeger remote sampling strategy API
+*/
+func (a *Client) CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*CreateTraceJaegerRemoteSamplingStrategyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateTraceJaegerRemoteSamplingStrategyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateTraceJaegerRemoteSamplingStrategy",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/trace-jaeger-remote-sampling-strategies",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateTraceJaegerRemoteSamplingStrategyReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateTraceJaegerRemoteSamplingStrategyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateTraceJaegerRemoteSamplingStrategyDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+	CreateTraceMetricsRule ***
+
+Trace Metrics Rules
+***
+*/
+func (a *Client) CreateTraceMetricsRule(params *CreateTraceMetricsRuleParams, opts ...ClientOption) (*CreateTraceMetricsRuleOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateTraceMetricsRuleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateTraceMetricsRule",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/trace-metrics-rules",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateTraceMetricsRuleReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateTraceMetricsRuleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateTraceMetricsRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteBucket delete bucket API
 */
 func (a *Client) DeleteBucket(params *DeleteBucketParams, opts ...ClientOption) (*DeleteBucketOK, error) {
@@ -1540,6 +1639,80 @@ func (a *Client) DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*De
 }
 
 /*
+DeleteTraceJaegerRemoteSamplingStrategy delete trace jaeger remote sampling strategy API
+*/
+func (a *Client) DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteTraceJaegerRemoteSamplingStrategyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteTraceJaegerRemoteSamplingStrategy",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/trace-jaeger-remote-sampling-strategies/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteTraceJaegerRemoteSamplingStrategyReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteTraceJaegerRemoteSamplingStrategyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteTraceJaegerRemoteSamplingStrategyDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteTraceMetricsRule delete trace metrics rule API
+*/
+func (a *Client) DeleteTraceMetricsRule(params *DeleteTraceMetricsRuleParams, opts ...ClientOption) (*DeleteTraceMetricsRuleOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteTraceMetricsRuleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteTraceMetricsRule",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/trace-metrics-rules/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteTraceMetricsRuleReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteTraceMetricsRuleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteTraceMetricsRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListBuckets list buckets API
 */
 func (a *Client) ListBuckets(params *ListBucketsParams, opts ...ClientOption) (*ListBucketsOK, error) {
@@ -2169,6 +2342,80 @@ func (a *Client) ListTeams(params *ListTeamsParams, opts ...ClientOption) (*List
 }
 
 /*
+ListTraceJaegerRemoteSamplingStrategies list trace jaeger remote sampling strategies API
+*/
+func (a *Client) ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListTraceJaegerRemoteSamplingStrategiesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListTraceJaegerRemoteSamplingStrategies",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/trace-jaeger-remote-sampling-strategies",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListTraceJaegerRemoteSamplingStrategiesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListTraceJaegerRemoteSamplingStrategiesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListTraceJaegerRemoteSamplingStrategiesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListTraceMetricsRules list trace metrics rules API
+*/
+func (a *Client) ListTraceMetricsRules(params *ListTraceMetricsRulesParams, opts ...ClientOption) (*ListTraceMetricsRulesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListTraceMetricsRulesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListTraceMetricsRules",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/trace-metrics-rules",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListTraceMetricsRulesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListTraceMetricsRulesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListTraceMetricsRulesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadBucket read bucket API
 */
 func (a *Client) ReadBucket(params *ReadBucketParams, opts ...ClientOption) (*ReadBucketOK, error) {
@@ -2761,6 +3008,43 @@ func (a *Client) ReadRollupRule(params *ReadRollupRuleParams, opts ...ClientOpti
 }
 
 /*
+ReadService read service API
+*/
+func (a *Client) ReadService(params *ReadServiceParams, opts ...ClientOption) (*ReadServiceOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadServiceParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadService",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/services/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadServiceReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadServiceOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadServiceDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadServiceAccount read service account API
 */
 func (a *Client) ReadServiceAccount(params *ReadServiceAccountParams, opts ...ClientOption) (*ReadServiceAccountOK, error) {
@@ -2831,6 +3115,80 @@ func (a *Client) ReadTeam(params *ReadTeamParams, opts ...ClientOption) (*ReadTe
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadTeamDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadTraceJaegerRemoteSamplingStrategy read trace jaeger remote sampling strategy API
+*/
+func (a *Client) ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*ReadTraceJaegerRemoteSamplingStrategyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadTraceJaegerRemoteSamplingStrategyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadTraceJaegerRemoteSamplingStrategy",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/trace-jaeger-remote-sampling-strategies/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadTraceJaegerRemoteSamplingStrategyReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadTraceJaegerRemoteSamplingStrategyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadTraceJaegerRemoteSamplingStrategyDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadTraceMetricsRule read trace metrics rule API
+*/
+func (a *Client) ReadTraceMetricsRule(params *ReadTraceMetricsRuleParams, opts ...ClientOption) (*ReadTraceMetricsRuleOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadTraceMetricsRuleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadTraceMetricsRule",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/trace-metrics-rules/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadTraceMetricsRuleReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadTraceMetricsRuleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadTraceMetricsRuleDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3460,6 +3818,80 @@ func (a *Client) UpdateTeam(params *UpdateTeamParams, opts ...ClientOption) (*Up
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateTeamDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateTraceJaegerRemoteSamplingStrategy update trace jaeger remote sampling strategy API
+*/
+func (a *Client) UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*UpdateTraceJaegerRemoteSamplingStrategyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateTraceJaegerRemoteSamplingStrategyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateTraceJaegerRemoteSamplingStrategy",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/trace-jaeger-remote-sampling-strategies/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateTraceJaegerRemoteSamplingStrategyReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateTraceJaegerRemoteSamplingStrategyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateTraceJaegerRemoteSamplingStrategyDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateTraceMetricsRule update trace metrics rule API
+*/
+func (a *Client) UpdateTraceMetricsRule(params *UpdateTraceMetricsRuleParams, opts ...ClientOption) (*UpdateTraceMetricsRuleOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateTraceMetricsRuleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateTraceMetricsRule",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/trace-metrics-rules/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateTraceMetricsRuleReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateTraceMetricsRuleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateTraceMetricsRuleDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
