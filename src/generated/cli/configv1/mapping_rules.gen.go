@@ -517,7 +517,7 @@ spec:
         interval: <string>
         # Whether to drop the timestamp while writing the metric.
         drop_timestamp: <true|false>
-        aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75>
+        aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES>
         storage_policy:
             # Required resolution of the aggregated metrics.
             resolution: <string>

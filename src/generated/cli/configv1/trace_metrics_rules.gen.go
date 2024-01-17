@@ -21,55 +21,55 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-func init() { types.MustRegisterObject(RollupRuleTypeMeta, &RollupRule{}) }
+func init() { types.MustRegisterObject(TraceMetricsRuleTypeMeta, &TraceMetricsRule{}) }
 
-var _ types.Object = &RollupRule{}
+var _ types.Object = &TraceMetricsRule{}
 
-var RollupRuleTypeMeta = types.TypeMeta{
+var TraceMetricsRuleTypeMeta = types.TypeMeta{
 	APIVersion: "v1/config",
-	Kind:       "RollupRule",
+	Kind:       "TraceMetricsRule",
 }
 
-type RollupRule struct {
+type TraceMetricsRule struct {
 	types.TypeMeta `json:",inline"`
-	Spec           *models.Configv1RollupRule `json:"spec"`
+	Spec           *models.Configv1TraceMetricsRule `json:"spec"`
 }
 
-func NewRollupRule(spec *models.Configv1RollupRule) *RollupRule {
-	return &RollupRule{
-		TypeMeta: RollupRuleTypeMeta,
+func NewTraceMetricsRule(spec *models.Configv1TraceMetricsRule) *TraceMetricsRule {
+	return &TraceMetricsRule{
+		TypeMeta: TraceMetricsRuleTypeMeta,
 		Spec:     spec,
 	}
 }
 
-func (e *RollupRule) Description() string {
+func (e *TraceMetricsRule) Description() string {
 	return types.TypeDescription(e, "name", e.Spec.Name, "slug", e.Spec.Slug)
 }
 
-func (e *RollupRule) Identifier() string {
+func (e *TraceMetricsRule) Identifier() string {
 	return e.Spec.Slug
 }
 
-func CreateRollupRule(
+func CreateTraceMetricsRule(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *RollupRule,
+	entity *TraceMetricsRule,
 	dryRun bool,
-) (*RollupRule, error) {
-	res, err := client.CreateRollupRule(&config_v1.CreateRollupRuleParams{
+) (*TraceMetricsRule, error) {
+	res, err := client.CreateTraceMetricsRule(&config_v1.CreateTraceMetricsRuleParams{
 		Context: ctx,
-		Body: &models.Configv1CreateRollupRuleRequest{
-			DryRun:     dryRun,
-			RollupRule: entity.Spec,
+		Body: &models.Configv1CreateTraceMetricsRuleRequest{
+			DryRun:           dryRun,
+			TraceMetricsRule: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewRollupRule(res.Payload.RollupRule), nil
+	return NewTraceMetricsRule(res.Payload.TraceMetricsRule), nil
 }
 
-func newRollupRuleCreateCmd() *cobra.Command {
+func newTraceMetricsRuleCreateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		dryRunFlags       = dry.NewFlags()
@@ -83,7 +83,7 @@ func newRollupRuleCreateCmd() *cobra.Command {
 		short string
 	)
 	use = "create -f <file>"
-	short = "Creates a single RollupRule."
+	short = "Creates a single TraceMetricsRule."
 
 	cmd := &cobra.Command{
 		Use:     use,
@@ -103,13 +103,13 @@ func newRollupRuleCreateCmd() *cobra.Command {
 				return err
 			}
 
-			var rollupRule *RollupRule
+			var traceMetricsRule *TraceMetricsRule
 			file, err := fileFlags.File()
 			if err != nil {
 				return err
 			}
 			defer file.Close() //nolint:errcheck
-			rollupRule, err = types.MustDecodeSingleObject[*RollupRule](file, permissiveParsing)
+			traceMetricsRule, err = types.MustDecodeSingleObject[*TraceMetricsRule](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -117,18 +117,18 @@ func newRollupRuleCreateCmd() *cobra.Command {
 			if dryRunFlags.DryRun {
 				stderr.Println("--dry-run is set")
 			}
-			fullRollupRule, err := CreateRollupRule(ctx, client, rollupRule, dryRunFlags.DryRun)
+			fullTraceMetricsRule, err := CreateTraceMetricsRule(ctx, client, traceMetricsRule, dryRunFlags.DryRun)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("RollupRule is valid and can be created")
+				stderr.Println("TraceMetricsRule is valid and can be created")
 				return nil
 			}
-			stderr.Printf("RollupRule with slug %q created successfully\n", fullRollupRule.Spec.Slug)
+			stderr.Printf("TraceMetricsRule with slug %q created successfully\n", fullTraceMetricsRule.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullRollupRule, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullTraceMetricsRule, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -143,22 +143,22 @@ func newRollupRuleCreateCmd() *cobra.Command {
 	return cmd
 }
 
-func GetRollupRule(
+func GetTraceMetricsRule(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
-) (*RollupRule, error) {
-	res, err := client.ReadRollupRule(&config_v1.ReadRollupRuleParams{
+) (*TraceMetricsRule, error) {
+	res, err := client.ReadTraceMetricsRule(&config_v1.ReadTraceMetricsRuleParams{
 		Context: ctx,
 		Slug:    slug,
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewRollupRule(res.GetPayload().RollupRule), nil
+	return NewTraceMetricsRule(res.GetPayload().TraceMetricsRule), nil
 }
 
-func newRollupRuleReadCmd() *cobra.Command {
+func newTraceMetricsRuleReadCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 	var (
@@ -166,7 +166,7 @@ func newRollupRuleReadCmd() *cobra.Command {
 		use   string
 		args  cobra.PositionalArgs
 	)
-	short = "Reads a single RollupRule by slug"
+	short = "Reads a single TraceMetricsRule by slug"
 	use = "read <slug>"
 	args = cobra.ExactArgs(1)
 
@@ -187,7 +187,7 @@ func newRollupRuleReadCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			entity, err := GetRollupRule(ctx, client, args[0])
+			entity, err := GetTraceMetricsRule(ctx, client, args[0])
 			if err != nil {
 				return err
 			}
@@ -204,29 +204,29 @@ func newRollupRuleReadCmd() *cobra.Command {
 	return cmd
 }
 
-func UpdateRollupRule(
+func UpdateTraceMetricsRule(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *RollupRule,
+	entity *TraceMetricsRule,
 	opts UpdateOptions,
-) (*RollupRule, error) {
-	res, err := client.UpdateRollupRule(&config_v1.UpdateRollupRuleParams{
+) (*TraceMetricsRule, error) {
+	res, err := client.UpdateTraceMetricsRule(&config_v1.UpdateTraceMetricsRuleParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateRollupRuleBody{
-			CreateIfMissing: opts.CreateIfMissing,
-			DryRun:          opts.DryRun,
-			RollupRule:      entity.Spec,
+		Body: config_v1.UpdateTraceMetricsRuleBody{
+			CreateIfMissing:  opts.CreateIfMissing,
+			DryRun:           opts.DryRun,
+			TraceMetricsRule: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
 
-	return NewRollupRule(res.Payload.RollupRule), nil
+	return NewTraceMetricsRule(res.Payload.TraceMetricsRule), nil
 }
 
-func newRollupRuleUpdateCmd() *cobra.Command {
+func newTraceMetricsRuleUpdateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		createIfMissing   bool
@@ -239,7 +239,7 @@ func newRollupRuleUpdateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "update -f <filename>",
 		GroupID: groups.Commands.ID,
-		Short:   "Updates an existing RollupRule.",
+		Short:   "Updates an existing TraceMetricsRule.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
 			defer cancel()
@@ -260,7 +260,7 @@ func newRollupRuleUpdateCmd() *cobra.Command {
 			}
 			defer file.Close() //nolint:errcheck
 
-			rollupRule, err := types.MustDecodeSingleObject[*RollupRule](file, permissiveParsing)
+			traceMetricsRule, err := types.MustDecodeSingleObject[*TraceMetricsRule](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -274,18 +274,18 @@ func newRollupRuleUpdateCmd() *cobra.Command {
 				stderr.Println("--dry-run is set, update not persisted")
 			}
 
-			fullRollupRule, err := UpdateRollupRule(ctx, client, rollupRule, updateOpts)
+			fullTraceMetricsRule, err := UpdateTraceMetricsRule(ctx, client, traceMetricsRule, updateOpts)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("RollupRule is valid and can be updated")
+				stderr.Println("TraceMetricsRule is valid and can be updated")
 				return nil
 			}
-			stderr.Printf("RollupRule with slug %q applied successfully\n", fullRollupRule.Spec.Slug)
+			stderr.Printf("TraceMetricsRule with slug %q applied successfully\n", fullTraceMetricsRule.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullRollupRule, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullTraceMetricsRule, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -296,17 +296,17 @@ func newRollupRuleUpdateCmd() *cobra.Command {
 	outputFlags.AddFlags(cmd)
 	fileFlags.AddFlags(cmd)
 	cmd.Flags().BoolVar(&permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are allowed. Defaults to false.")
-	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the RollupRule if it does not already exist. Defaults to false.")
+	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the TraceMetricsRule if it does not already exist. Defaults to false.")
 
 	return cmd
 }
 
-func DeleteRollupRule(
+func DeleteTraceMetricsRule(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
 ) error {
-	_, err := client.DeleteRollupRule(&config_v1.DeleteRollupRuleParams{
+	_, err := client.DeleteTraceMetricsRule(&config_v1.DeleteTraceMetricsRuleParams{
 		Context: ctx,
 		Slug:    slug,
 	})
@@ -316,14 +316,14 @@ func DeleteRollupRule(
 	return nil
 }
 
-func newRollupRuleDeleteCmd() *cobra.Command {
+func newTraceMetricsRuleDeleteCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
 		Use:     "delete <slug>",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes a single RollupRule by slug",
+		Short:   "Deletes a single TraceMetricsRule by slug",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -338,7 +338,7 @@ func newRollupRuleDeleteCmd() *cobra.Command {
 				return err
 			}
 
-			res, err := client.DeleteRollupRule(&config_v1.DeleteRollupRuleParams{
+			res, err := client.DeleteTraceMetricsRule(&config_v1.DeleteTraceMetricsRuleParams{
 				Context: ctx,
 				Slug:    args[0],
 			})
@@ -346,7 +346,7 @@ func newRollupRuleDeleteCmd() *cobra.Command {
 				return clienterror.Wrap(err)
 			}
 			_ = res
-			fmt.Fprintf(cmd.OutOrStdout(), "deleted RollupRule with slug %q\n", args[0])
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted TraceMetricsRule with slug %q\n", args[0])
 
 			return nil
 		},
@@ -356,35 +356,35 @@ func newRollupRuleDeleteCmd() *cobra.Command {
 	return cmd
 }
 
-type RollupRuleListOpts struct {
+type TraceMetricsRuleListOpts struct {
 	// Limit represents that maximum number of items we wish to return.
 	Limit int
 	// PageToken is the pagination token we want to start our request at.
 	PageToken string
 	// PageMaxSize is the maximum page size to use when making List calls.
 	PageMaxSize int
-	BucketSlugs []string
+	MetricNames []string
 	Names       []string
 	Slugs       []string
 }
 
-func (r *RollupRuleListOpts) registerFlags(flags *flag.FlagSet) {
-	var emptyBucketSlugs []string
-	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any RollupRule with a matching bucket_slug in the given list (and matches all other filters) is returned.")
+func (r *TraceMetricsRuleListOpts) registerFlags(flags *flag.FlagSet) {
+	var emptyMetricNames []string
+	flags.StringSliceVar(&r.MetricNames, "metric-names", emptyMetricNames, "Get trace metric rules by name.")
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any RollupRule with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any TraceMetricsRule with a matching name in the given list (and matches all other filters) is returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any RollupRule with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any TraceMetricsRule with a matching slug in the given list (and matches all other filters) is returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
 }
 
-func ListRollupRules(
+func ListTraceMetricsRules(
 	ctx context.Context,
 	client config_v1.ClientService,
-	streamer output.Streamer[*RollupRule],
-	opts RollupRuleListOpts,
+	streamer output.Streamer[*TraceMetricsRule],
+	opts TraceMetricsRuleListOpts,
 ) (pagination.Token, error) {
 	var (
 		gotItems    = 0
@@ -398,11 +398,11 @@ func ListRollupRules(
 	}
 
 	for {
-		res, err := client.ListRollupRules(&config_v1.ListRollupRulesParams{
+		res, err := client.ListTraceMetricsRules(&config_v1.ListTraceMetricsRulesParams{
 			Context:     ctx,
 			PageToken:   &nextToken,
 			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
-			BucketSlugs: opts.BucketSlugs,
+			MetricNames: opts.MetricNames,
 			Names:       opts.Names,
 			Slugs:       opts.Slugs,
 		})
@@ -410,8 +410,8 @@ func ListRollupRules(
 			return pagination.Token(""), clienterror.Wrap(err)
 		}
 
-		for _, v := range res.Payload.RollupRules {
-			if err := streamer(NewRollupRule(v)); err != nil {
+		for _, v := range res.Payload.TraceMetricsRules {
+			if err := streamer(NewTraceMetricsRule(v)); err != nil {
 				return pagination.Token(""), err
 			}
 			gotItems++
@@ -429,19 +429,19 @@ func ListRollupRules(
 		pageMaxSize = pagination.CalculatePageSize(pagination.Calculation{
 			GotItems:    gotItems,
 			MaxItems:    opts.Limit,
-			MaxPageSize: len(res.Payload.RollupRules),
+			MaxPageSize: len(res.Payload.TraceMetricsRules),
 		})
 	}
 }
 
-func newRollupRuleListCmd() *cobra.Command {
-	var listOptions RollupRuleListOpts
+func newTraceMetricsRuleListCmd() *cobra.Command {
+	var listOptions TraceMetricsRuleListOpts
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags()
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   "Lists all RollupRules and applies optional filters",
+		Short:   "Lists all TraceMetricsRules and applies optional filters",
 		GroupID: groups.Commands.ID,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -461,8 +461,8 @@ func newRollupRuleListCmd() *cobra.Command {
 				return err
 			}
 
-			streamer := output.NewWriteObjectStreamer[*RollupRule](writer)
-			nextToken, err := ListRollupRules(ctx, client, streamer, listOptions)
+			streamer := output.NewWriteObjectStreamer[*TraceMetricsRule](writer)
+			nextToken, err := ListTraceMetricsRules(ctx, client, streamer, listOptions)
 			if err != nil {
 				return err
 			}
@@ -470,7 +470,7 @@ func newRollupRuleListCmd() *cobra.Command {
 			if nextToken != "" {
 				nextPage := pagination.Result{
 					Kind:          pagination.ResultKind,
-					Message:       "There are additional rollupRules. To view more, use the next page token or run the full command.",
+					Message:       "There are additional traceMetricsRules. To view more, use the next page token or run the full command.",
 					NextPageToken: nextToken,
 					FullCommand: fmt.Sprintf("%s --page-token %q",
 						cli.BuildCommandString(cmd, []string{"page-token"}),
@@ -492,109 +492,120 @@ func newRollupRuleListCmd() *cobra.Command {
 	return cmd
 }
 
-const RollupRuleScaffoldYAML = `api_version: v1/config
-kind: RollupRule
+const TraceMetricsRuleScaffoldYAML = `api_version: v1/config
+kind: TraceMetricsRule
 spec:
-    # Unique identifier of the RollupRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the RollupRule is created.
-    slug: <string>
-    # Required name of the RollupRule. May be modified after the RollupRule is created.
+    # Required name of the TraceMetricsRule. May be modified after the TraceMetricsRule is created.
     name: <string>
-    # Required slug of the bucket the RollupRule belongs to.
-    bucket_slug: <string>
-    # Filters that determine to which metrics to apply the rule.
-    filters:
-        - # Name of the label to match.
-          name: <string>
-          # Glob value of the label to match.
-          value_glob: <string>
-    # Name of the new metric created as a result of the rollup.
+    # Unique identifier of the TraceMetricsRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceMetricsRule is created.
+    slug: <string>
+    # The name of the generated trace metrics.
     metric_name: <string>
-    # Interval between aggregated data points, equivalent to the resolution
-    # field in storage policy. If set, then the storage_policy field can't be
-    # set.
-    interval: <string>
-    # Enables expansive label matching behavior for the provided filters and
-    # label_policy.keep (if set). By default (expansive_match=false), a series
-    # matches and aggregates only if each label defined by filters and
-    # label_policy.keep (respectively) exist in said series. Setting
-    # expansive_match=true removes this restriction.
-    expansive_match: <true|false>
-    # Defines whether to add a '__rollup_type__' label in the new metric.
-    add_metric_type_label: <true|false>
-    # Defines whether to automatically generate drop rules for this rollup.
-    drop_raw: <true|false>
-    # Replaces or adds new labels to the rollup, optionally based on a matching
-    # regex for tag values. This is only available on Graphite rollup rules.
-    label_replace:
-        - # The source label name; this can be equal to dst_label_name to replace
-          # this label’s value in place.
-          src_label_name: <string>
-          # The new value for the label matching this LabelReplace. This supports
-          # regex expansion if a label_value_regex is supplied, and is used as a
-          # literal otherwise.
-          new_label_value: <string>
-          # The optional destination label name; if this is present, a new tag with
-          # this name is added to the aggregated series (or an existing tag with this
-          # name is overwritten).
-          # This can be omitted to replace the label’s value in-place, and should be
-          # either omitted or equal to src_label_name for Graphite rules.
-          dst_label_name: <string>
-          # The optional regex that should match label value. If this regex is
-          # provided, it needs to match the value of the label with the name
-          # src_label_name to apply the replacement.
-          # This supports capture groups to extract parts of the label value.
-          # If omitted, the new_label_value is used as a literal to replace any
-          # src_label_name label value.
-          label_value_regex: <string>
-          # If src_label_name differs from dst_label_name keep_label determines if
-          # the label with src_label_name is kept.
-          keep_label: <true|false>
-    aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES>
-    label_policy:
-        # Labels that should be retained in the output metric. If set, then the
-        # discard field must be empty.
-        keep:
-            - <string>
-        # Labels that should be discarded in the output metric. If set, then the
-        # keep field must be empty.
-        discard:
-            - <string>
-    metric_type: <COUNTER|GAUGE|DELTA|DISTRIBUTION|HISTOGRAM_CUMULATIVE>
-    mode: <ENABLED|PREVIEW>
-    storage_policy:
-        # Required resolution of the aggregated metrics.
-        resolution: <string>
-        # Required retention of the aggregated metrics.
-        retention: <string>
+    # Labels to apply to the generated trace metrics.
+    metric_labels:
+        key_1: <string>
+    # Histogram bucket values, in seconds, for generated duration metrics.
+    histogram_buckets_secs:
+        - <number>
+    # Add labels to the resultant metrics based on these specified GroupBy messages.
+    group_by:
+        - # The label to use in the resultant metrics.
+          label: <string>
+          # GroupByKey describes a key to group by.
+          key:
+            # For named KeyTypes (e.g. span tags), the name of the key to group by.
+            named_key: <string>
+            #  - SERVICE: Group by service.
+            #  - OPERATION: Group by operation.
+            #  - TAG: Group by span tag.
+            type: <SERVICE|OPERATION|TAG>
+    trace_filter:
+        # Each SpanFilter object represents all conditions that need to be true on
+        # the same span for the span to be considered matching the SpanFilter. If
+        # 'span_count' is used, the number of spans within the trace that match the
+        # SpanFilter needs to be within [min, max]. Multiple SpanFilters can be used,
+        # and each can be satisfied by any number of spans within the trace.
+        span:
+            - # Matches the tags of the candidate.
+              tags:
+                - # The key (or name) of the span tag that is inspected by this filter.
+                  key: <string>
+                  numeric_value:
+                    # The filter value used in comparison against match candidates.
+                    value: <number>
+                    comparison: <EQUAL|NOT_EQUAL|GREATER_THAN|GREATER_THAN_OR_EQUAL|LESS_THAN|LESS_THAN_OR_EQUAL>
+                  value:
+                    # The value the filter compares to the target trace or span field.
+                    value: <string>
+                    match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION>
+              duration:
+                # Minimum duration, in seconds, required for a span or trace to match.
+                min_secs: <number>
+                # Maximum duration, in seconds, required for a span or trace to match.
+                max_secs: <number>
+              error:
+                # The value the filter compares to the target trace or span field.
+                value: <true|false>
+              match_type: <INCLUDE|EXCLUDE>
+              operation:
+                # The value the filter compares to the target trace or span field.
+                value: <string>
+                match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION>
+              parent_operation:
+                # The value the filter compares to the target trace or span field.
+                value: <string>
+                match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION>
+              parent_service:
+                # The value the filter compares to the target trace or span field.
+                value: <string>
+                match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION>
+              service:
+                # The value the filter compares to the target trace or span field.
+                value: <string>
+                match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION>
+              span_count:
+                # Minimum number of spans that must match a SpanFilter (inclusive).
+                min: <integer>
+                # Maximum number of spans that must match a SpanFilter (inclusive).
+                max: <integer>
+        trace:
+            duration:
+                # Minimum duration, in seconds, required for a span or trace to match.
+                min_secs: <number>
+                # Maximum duration, in seconds, required for a span or trace to match.
+                max_secs: <number>
+            error:
+                # The value the filter compares to the target trace or span field.
+                value: <true|false>
 `
 
-func newRollupRuleScaffoldCmd() *cobra.Command {
+func newTraceMetricsRuleScaffoldCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "scaffold",
 		GroupID: groups.Commands.ID,
 		Short:   "Scaffolds a complete object with placeholder values",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Fprint(cmd.OutOrStdout(), RollupRuleScaffoldYAML)
+			fmt.Fprint(cmd.OutOrStdout(), TraceMetricsRuleScaffoldYAML)
 		},
 	}
 	return cmd
 }
 
-func NewRollupRuleCmd() *cobra.Command {
+func NewTraceMetricsRuleCmd() *cobra.Command {
 	root := &cobra.Command{
-		Use:     "rollup-rules",
+		Use:     "trace-metrics-rules",
 		GroupID: groups.Config.ID,
-		Short:   "All commands for RollupRules",
+		Short:   "All commands for TraceMetricsRules",
 	}
 
 	root.AddGroup(groups.Commands)
 	root.AddCommand(
-		newRollupRuleCreateCmd(),
-		newRollupRuleReadCmd(),
-		newRollupRuleUpdateCmd(),
-		newRollupRuleDeleteCmd(),
-		newRollupRuleListCmd(),
-		newRollupRuleScaffoldCmd(),
+		newTraceMetricsRuleCreateCmd(),
+		newTraceMetricsRuleReadCmd(),
+		newTraceMetricsRuleUpdateCmd(),
+		newTraceMetricsRuleDeleteCmd(),
+		newTraceMetricsRuleListCmd(),
+		newTraceMetricsRuleScaffoldCmd(),
 	)
 	return root
 }
