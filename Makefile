@@ -51,9 +51,7 @@ gen-cli: install-tools
 
 .PHONY: update-swagger
 update-swagger:
-	ifndef ${SWAGGER_PATH}
-		$(error SWAGGER_PATH is undefined - please set it and rerun this command)
-	endif
+	@[ -n "${SWAGGER_PATH}" ] || (echo "SWAGGER_PATH must be set, please set it and rerun this command"; exit 1)
 	cp ${SWAGGER_PATH}/unstable_config_swagger.json src/generated/swagger/configunstable/spec.json
 	cp ${SWAGGER_PATH}/v1_config_swagger.json src/generated/swagger/configv1/spec.json
 	cp ${SWAGGER_PATH}/unstable_state_swagger.json src/generated/swagger/stateunstable/spec.json
