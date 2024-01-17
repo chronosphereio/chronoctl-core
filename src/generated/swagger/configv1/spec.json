@@ -129,6 +129,28 @@
       },
       "type": "object"
     },
+    "GroupByGroupByKey": {
+      "description": "GroupByKey describes a key to group by.",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/GroupByKeyGroupByKeyType"
+        },
+        "named_key": {
+          "description": "For named KeyTypes (e.g. span tags), the name of the key to group by.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GroupByKeyGroupByKeyType": {
+      "description": " - SERVICE: Group by service.\n - OPERATION: Group by operation.\n - TAG: Group by span tag.",
+      "enum": [
+        "SERVICE",
+        "OPERATION",
+        "TAG"
+      ],
+      "type": "string"
+    },
     "HTTPConfigBasicAuth": {
       "properties": {
         "username": {
@@ -683,6 +705,17 @@
       },
       "type": "object"
     },
+    "NumericFilterComparisonType": {
+      "enum": [
+        "EQUAL",
+        "NOT_EQUAL",
+        "GREATER_THAN",
+        "GREATER_THAN_OR_EQUAL",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUAL"
+      ],
+      "type": "string"
+    },
     "OpsGenieConfigResponder": {
       "properties": {
         "id": {
@@ -724,6 +757,18 @@
         },
         "text": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PerOperationSamplingStrategiesPerOperationSamplingStrategy": {
+      "properties": {
+        "operation": {
+          "description": "The operation to which this specific strategy should apply.",
+          "type": "string"
+        },
+        "probabilistic_sampling_strategy": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyProbabilisticStrategy"
         }
       },
       "type": "object"
@@ -1017,6 +1062,222 @@
       },
       "type": "object"
     },
+    "SpanFilterSpanFilterMatchType": {
+      "enum": [
+        "INCLUDE",
+        "EXCLUDE"
+      ],
+      "type": "string"
+    },
+    "StringFilterStringFilterMatchType": {
+      "enum": [
+        "EXACT",
+        "REGEX",
+        "EXACT_NEGATION",
+        "REGEX_NEGATION"
+      ],
+      "type": "string"
+    },
+    "TraceJaegerRemoteSamplingStrategyAppliedStrategy": {
+      "properties": {
+        "probabilistic_strategy": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyProbabilisticStrategy"
+        },
+        "per_operation_strategies": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyPerOperationSamplingStrategies"
+        },
+        "rate_limiting_strategy": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyRateLimitingSamplingStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "TraceJaegerRemoteSamplingStrategyPerOperationSamplingStrategies": {
+      "properties": {
+        "default_sampling_rate": {
+          "description": "Defines the service-wide sampling probability (in the range [0, 1]) when specific operations are not matched.",
+          "format": "double",
+          "type": "number"
+        },
+        "default_lower_bound_traces_per_second": {
+          "description": "Defines a minimum number of traces to send for ANY operation in the service, regardless of matching per operation strategy.",
+          "format": "double",
+          "type": "number"
+        },
+        "default_upper_bound_traces_per_second": {
+          "description": "Defines a maximum number of traces to send for ANY operation in the service, regardless of matching per operation strategy.",
+          "format": "double",
+          "type": "number"
+        },
+        "per_operation_strategies": {
+          "description": "Defines explicit operations-specific strategies that take precedence over the default sampling rate.",
+          "items": {
+            "$ref": "#/definitions/PerOperationSamplingStrategiesPerOperationSamplingStrategy"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "TraceJaegerRemoteSamplingStrategyProbabilisticStrategy": {
+      "properties": {
+        "sampling_rate": {
+          "description": "Value in the range [0, 1] that defines the probability of sampling any trace.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "TraceJaegerRemoteSamplingStrategyRateLimitingSamplingStrategy": {
+      "properties": {
+        "max_traces_per_second": {
+          "description": "Maximum number of traces to sample per second.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "TraceMetricsRuleGroupBy": {
+      "description": "GroupBy contains fields required to group the resultant metrics of a TraceMetricsRule by a specific key.",
+      "properties": {
+        "label": {
+          "description": "The label to use in the resultant metrics.",
+          "type": "string"
+        },
+        "key": {
+          "$ref": "#/definitions/GroupByGroupByKey"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterBoolFilter": {
+      "properties": {
+        "value": {
+          "description": "The value the filter compares to the target trace or span field.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterCountFilter": {
+      "properties": {
+        "min": {
+          "description": "Minimum number of spans that must match a SpanFilter (inclusive).",
+          "format": "int32",
+          "type": "integer"
+        },
+        "max": {
+          "description": "Maximum number of spans that must match a SpanFilter (inclusive).",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterDurationFilter": {
+      "properties": {
+        "min_secs": {
+          "description": "Minimum duration, in seconds, required for a span or trace to match.",
+          "format": "double",
+          "type": "number"
+        },
+        "max_secs": {
+          "description": "Maximum duration, in seconds, required for a span or trace to match.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterNumericFilter": {
+      "properties": {
+        "comparison": {
+          "$ref": "#/definitions/NumericFilterComparisonType"
+        },
+        "value": {
+          "description": "The filter value used in comparison against match candidates.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterSpanFilter": {
+      "properties": {
+        "match_type": {
+          "$ref": "#/definitions/SpanFilterSpanFilterMatchType"
+        },
+        "service": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "operation": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "parent_service": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "parent_operation": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "duration": {
+          "$ref": "#/definitions/TraceSearchFilterDurationFilter"
+        },
+        "error": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
+        },
+        "tags": {
+          "description": "Matches the tags of the candidate.",
+          "items": {
+            "$ref": "#/definitions/TraceSearchFilterTagFilter"
+          },
+          "type": "array"
+        },
+        "span_count": {
+          "$ref": "#/definitions/TraceSearchFilterCountFilter"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterStringFilter": {
+      "properties": {
+        "match": {
+          "$ref": "#/definitions/StringFilterStringFilterMatchType"
+        },
+        "value": {
+          "description": "The value the filter compares to the target trace or span field.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterTagFilter": {
+      "properties": {
+        "key": {
+          "description": "The key (or name) of the span tag that is inspected by this filter.",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "numeric_value": {
+          "$ref": "#/definitions/TraceSearchFilterNumericFilter"
+        }
+      },
+      "type": "object"
+    },
+    "TraceSearchFilterTraceFilter": {
+      "properties": {
+        "duration": {
+          "$ref": "#/definitions/TraceSearchFilterDurationFilter"
+        },
+        "error": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
+        }
+      },
+      "type": "object"
+    },
     "apiError": {
       "properties": {
         "code": {
@@ -1056,7 +1317,8 @@
         "P999",
         "P9999",
         "P25",
-        "P75"
+        "P75",
+        "COUNT_SAMPLES"
       ],
       "type": "string"
     },
@@ -1446,6 +1708,7 @@
           "$ref": "#/definitions/configv1ResourcePools"
         },
         "dry_run": {
+          "description": "If true, the ResourcePools will not be created, and no response ResourcePools will be returned. The response will return an error if the given ResourcePools is invalid.",
           "type": "boolean"
         }
       },
@@ -1515,6 +1778,46 @@
       "properties": {
         "team": {
           "$ref": "#/definitions/configv1Team"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateTraceJaegerRemoteSamplingStrategyRequest": {
+      "properties": {
+        "trace_jaeger_remote_sampling_strategy": {
+          "$ref": "#/definitions/configv1TraceJaegerRemoteSamplingStrategy"
+        },
+        "dry_run": {
+          "description": "If true, the TraceJaegerRemoteSamplingStrategy will not be created, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateTraceJaegerRemoteSamplingStrategyResponse": {
+      "properties": {
+        "trace_jaeger_remote_sampling_strategy": {
+          "$ref": "#/definitions/configv1TraceJaegerRemoteSamplingStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateTraceMetricsRuleRequest": {
+      "properties": {
+        "trace_metrics_rule": {
+          "$ref": "#/definitions/configv1TraceMetricsRule"
+        },
+        "dry_run": {
+          "description": "If true, the TraceMetricsRule will not be created, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateTraceMetricsRuleResponse": {
+      "properties": {
+        "trace_metrics_rule": {
+          "$ref": "#/definitions/configv1TraceMetricsRule"
         }
       },
       "type": "object"
@@ -1616,6 +1919,12 @@
       "type": "object"
     },
     "configv1DeleteTeamResponse": {
+      "type": "object"
+    },
+    "configv1DeleteTraceJaegerRemoteSamplingStrategyResponse": {
+      "type": "object"
+    },
+    "configv1DeleteTraceMetricsRuleResponse": {
       "type": "object"
     },
     "configv1DerivedLabel": {
@@ -2091,6 +2400,35 @@
       },
       "type": "object"
     },
+    "configv1ListTraceJaegerRemoteSamplingStrategiesResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "trace_jaeger_remote_sampling_strategies": {
+          "items": {
+            "$ref": "#/definitions/configv1TraceJaegerRemoteSamplingStrategy"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListTraceMetricsRulesResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "trace_metrics_rules": {
+          "description": "Found trace metrics rules.",
+          "items": {
+            "$ref": "#/definitions/configv1TraceMetricsRule"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configv1MappingRule": {
       "properties": {
         "slug": {
@@ -2553,10 +2891,34 @@
       },
       "type": "object"
     },
+    "configv1ReadServiceResponse": {
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/configv1Service"
+        }
+      },
+      "type": "object"
+    },
     "configv1ReadTeamResponse": {
       "properties": {
         "team": {
           "$ref": "#/definitions/configv1Team"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadTraceJaegerRemoteSamplingStrategyResponse": {
+      "properties": {
+        "trace_jaeger_remote_sampling_strategy": {
+          "$ref": "#/definitions/configv1TraceJaegerRemoteSamplingStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadTraceMetricsRuleResponse": {
+      "properties": {
+        "trace_metrics_rule": {
+          "$ref": "#/definitions/configv1TraceMetricsRule"
         }
       },
       "type": "object"
@@ -2625,11 +2987,15 @@
     "configv1ResourcePools": {
       "properties": {
         "created_at": {
+          "description": "Timestamp of when the ResourcePools was created. Cannot be set by clients.",
           "format": "date-time",
+          "readOnly": true,
           "type": "string"
         },
         "updated_at": {
+          "description": "Timestamp of when the ResourcePools was last updated. Cannot be set by clients.",
           "format": "date-time",
+          "readOnly": true,
           "type": "string"
         },
         "default_pool": {
@@ -2776,6 +3142,43 @@
       },
       "type": "object"
     },
+    "configv1Service": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the Service. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Service is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the Service. May be modified after the Service is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the Service was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the Service was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "team_slug": {
+          "description": "Required slug of the team the service collection belongs to.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Optional description of the service collection.",
+          "type": "string"
+        },
+        "notification_policy_slug": {
+          "description": "Slug of the notification policy used by default for monitors in this service collection.\nThis is optional if the collection does not contain monitors or all of its monitors explicitly reference a policy.\nThis does not override the policy used when a monitor explicitly references a policy.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configv1ServiceAccount": {
       "properties": {
         "slug": {
@@ -2850,6 +3253,107 @@
         "description": {
           "description": "Optional short description of the team.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1TraceJaegerRemoteSamplingStrategy": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the TraceJaegerRemoteSamplingStrategy. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceJaegerRemoteSamplingStrategy is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the TraceJaegerRemoteSamplingStrategy. May be modified after the TraceJaegerRemoteSamplingStrategy is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the TraceJaegerRemoteSamplingStrategy was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the TraceJaegerRemoteSamplingStrategy was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "service_name": {
+          "description": "The name of the service this sampling strategy applies to. This must match the slug and name fields.",
+          "type": "string"
+        },
+        "applied_strategy": {
+          "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyAppliedStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "configv1TraceMetricsRule": {
+      "properties": {
+        "name": {
+          "description": "Required name of the TraceMetricsRule. May be modified after the TraceMetricsRule is created.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "Unique identifier of the TraceMetricsRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceMetricsRule is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the TraceMetricsRule was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the TraceMetricsRule was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "metric_name": {
+          "description": "The name of the generated trace metrics.",
+          "type": "string"
+        },
+        "metric_labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels to apply to the generated trace metrics.",
+          "type": "object"
+        },
+        "histogram_buckets_secs": {
+          "description": "Histogram bucket values, in seconds, for generated duration metrics.",
+          "items": {
+            "format": "double",
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "trace_filter": {
+          "$ref": "#/definitions/configv1TraceSearchFilter"
+        },
+        "group_by": {
+          "description": "Add labels to the resultant metrics based on these specified GroupBy messages.",
+          "items": {
+            "$ref": "#/definitions/TraceMetricsRuleGroupBy"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1TraceSearchFilter": {
+      "properties": {
+        "trace": {
+          "$ref": "#/definitions/TraceSearchFilterTraceFilter"
+        },
+        "span": {
+          "description": "Each SpanFilter object represents all conditions that need to be true on\nthe same span for the span to be considered matching the SpanFilter. If\n`span_count` is used, the number of spans within the trace that match the\nSpanFilter needs to be within [min, max]. Multiple SpanFilters can be used,\nand each can be satisfied by any number of spans within the trace.",
+          "items": {
+            "$ref": "#/definitions/TraceSearchFilterSpanFilter"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -2972,9 +3476,11 @@
           "$ref": "#/definitions/configv1ResourcePools"
         },
         "create_if_missing": {
+          "description": "If true, the ResourcePools will be created if it does not already exist. If false, an error will be returned if the ResourcePools does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
+          "description": "If true, the ResourcePools will not be created nor updated, and no response ResourcePools will be returned. The response will return an error if the given ResourcePools is invalid.",
           "type": "boolean"
         }
       },
@@ -3000,6 +3506,22 @@
       "properties": {
         "team": {
           "$ref": "#/definitions/configv1Team"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateTraceJaegerRemoteSamplingStrategyResponse": {
+      "properties": {
+        "trace_jaeger_remote_sampling_strategy": {
+          "$ref": "#/definitions/configv1TraceJaegerRemoteSamplingStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateTraceMetricsRuleResponse": {
+      "properties": {
+        "trace_metrics_rule": {
+          "$ref": "#/definitions/configv1TraceMetricsRule"
         }
       },
       "type": "object"
@@ -6954,10 +7476,22 @@
               "$ref": "#/definitions/configv1DeleteResourcePoolsResponse"
             }
           },
-          "default": {
+          "404": {
+            "description": "Cannot delete the ResourcePools because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
             "description": "An unexpected error response.",
             "schema": {
               "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
             }
           }
         },
@@ -6974,10 +7508,22 @@
               "$ref": "#/definitions/configv1ReadResourcePoolsResponse"
             }
           },
-          "default": {
+          "404": {
+            "description": "Cannot read the ResourcePools because ResourcePools has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
             "description": "An unexpected error response.",
             "schema": {
               "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
             }
           }
         },
@@ -7000,15 +7546,33 @@
         ],
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response containing the created ResourcePools.",
             "schema": {
               "$ref": "#/definitions/configv1CreateResourcePoolsResponse"
             }
           },
-          "default": {
+          "400": {
+            "description": "Cannot create the ResourcePools because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the ResourcePools because there is a conflict with an existing ResourcePools.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
             "description": "An unexpected error response.",
             "schema": {
               "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
             }
           }
         },
@@ -7030,15 +7594,33 @@
         ],
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response containing the updated ResourcePools.",
             "schema": {
               "$ref": "#/definitions/configv1UpdateResourcePoolsResponse"
             }
           },
-          "default": {
+          "400": {
+            "description": "Cannot update the ResourcePools because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the ResourcePools because ResourcePools has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
             "description": "An unexpected error response.",
             "schema": {
               "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
             }
           }
         },
@@ -7516,6 +8098,48 @@
         ]
       }
     },
+    "/api/v1/config/services/{slug}": {
+      "get": {
+        "operationId": "ReadService",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadServiceResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the Service because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Service"
+        ]
+      }
+    },
     "/api/v1/config/teams": {
       "get": {
         "operationId": "ListTeams",
@@ -7779,6 +8403,564 @@
         },
         "tags": [
           "Team"
+        ]
+      }
+    },
+    "/api/v1/config/trace-jaeger-remote-sampling-strategies": {
+      "get": {
+        "operationId": "ListTraceJaegerRemoteSamplingStrategies",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any TraceJaegerRemoteSamplingStrategy with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any TraceJaegerRemoteSamplingStrategy with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by service_name, where any TraceJaegerRemoteSamplingStrategy with a matching service_name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "service_names",
+            "type": "array"
+          },
+          {
+            "in": "query",
+            "name": "name_or_service_contains",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListTraceJaegerRemoteSamplingStrategiesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      },
+      "post": {
+        "operationId": "CreateTraceJaegerRemoteSamplingStrategy",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTraceJaegerRemoteSamplingStrategyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created TraceJaegerRemoteSamplingStrategy.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTraceJaegerRemoteSamplingStrategyResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the TraceJaegerRemoteSamplingStrategy because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceJaegerRemoteSamplingStrategy because there is a conflict with an existing TraceJaegerRemoteSamplingStrategy.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      }
+    },
+    "/api/v1/config/trace-jaeger-remote-sampling-strategies/{slug}": {
+      "delete": {
+        "operationId": "DeleteTraceJaegerRemoteSamplingStrategy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteTraceJaegerRemoteSamplingStrategyResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the TraceJaegerRemoteSamplingStrategy because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceJaegerRemoteSamplingStrategy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadTraceJaegerRemoteSamplingStrategyResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the TraceJaegerRemoteSamplingStrategy because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceJaegerRemoteSamplingStrategy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the TraceJaegerRemoteSamplingStrategy will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceJaegerRemoteSamplingStrategy does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "description": "If true, the TraceJaegerRemoteSamplingStrategy will not be created nor updated, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.",
+                  "type": "boolean"
+                },
+                "trace_jaeger_remote_sampling_strategy": {
+                  "$ref": "#/definitions/configv1TraceJaegerRemoteSamplingStrategy"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated TraceJaegerRemoteSamplingStrategy.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateTraceJaegerRemoteSamplingStrategyResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the TraceJaegerRemoteSamplingStrategy because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceJaegerRemoteSamplingStrategy because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the TraceJaegerRemoteSamplingStrategy because there is a conflict with an existing TraceJaegerRemoteSamplingStrategy.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceJaegerRemoteSamplingStrategy"
+        ]
+      }
+    },
+    "/api/v1/config/trace-metrics-rules": {
+      "get": {
+        "operationId": "ListTraceMetricsRules",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any TraceMetricsRule with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any TraceMetricsRule with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Get trace metric rules by name.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "metric_names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListTraceMetricsRulesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
+        ]
+      },
+      "post": {
+        "description": "***\nTrace Metrics Rules\n***",
+        "operationId": "CreateTraceMetricsRule",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTraceMetricsRuleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created TraceMetricsRule.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTraceMetricsRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the TraceMetricsRule because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceMetricsRule because there is a conflict with an existing TraceMetricsRule.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
+        ]
+      }
+    },
+    "/api/v1/config/trace-metrics-rules/{slug}": {
+      "delete": {
+        "operationId": "DeleteTraceMetricsRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteTraceMetricsRuleResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the TraceMetricsRule because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceMetricsRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadTraceMetricsRuleResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the TraceMetricsRule because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceMetricsRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the TraceMetricsRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceMetricsRule does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "description": "If true, the TraceMetricsRule will not be created nor updated, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.",
+                  "type": "boolean"
+                },
+                "trace_metrics_rule": {
+                  "$ref": "#/definitions/configv1TraceMetricsRule"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated TraceMetricsRule.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateTraceMetricsRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the TraceMetricsRule because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceMetricsRule because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the TraceMetricsRule because there is a conflict with an existing TraceMetricsRule.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceMetricsRule"
         ]
       }
     }
