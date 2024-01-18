@@ -44,6 +44,14 @@ func main() {
 	if err != nil {
 		log.Fatal("could not create spec handler: ", err)
 	}
+
+	// Entities without Create endpoints are not supported.
+	for k, e := range spec.Entities {
+		if e.Create == nil {
+			delete(spec.Entities, k)
+		}
+	}
+
 	files, err := generate(*packageName, spec)
 	if err != nil {
 		log.Fatal("could not generate: ", err)

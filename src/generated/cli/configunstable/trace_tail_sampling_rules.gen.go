@@ -346,10 +346,6 @@ func newTraceTailSamplingRulesDeleteCmd() *cobra.Command {
 const TraceTailSamplingRulesScaffoldYAML = `api_version: unstable/config
 kind: TraceTailSamplingRules
 spec:
-    # Set in API responses.
-    created_at: <date-time>
-    # Set in API responses.
-    updated_at: <date-time>
     # Optional. A list of rules, evaluated in order until a match is found,
     # and the sample rate applied, or else the default sample rate is applied.
     rules:
@@ -359,6 +355,10 @@ spec:
           name: <string>
           # Value used as the metric label value for metrics emitted relating to this rule.
           system_name: <string>
+          # When the rule was created (novel system_name)
+          created_at: <date-time>
+          # When the rule was updated (existing system_name)
+          updated_at: <date-time>
           filter:
             # Each SpanFilter object represents all conditions that need to be true on
             # the same span for the span to be considered matching the SpanFilter. If
@@ -380,9 +380,9 @@ spec:
                         match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION>
                   duration:
                     # Minimum duration, in seconds, required for a span or trace to match.
-                    min_secs: <integer>
+                    min_secs: <number>
                     # Maximum duration, in seconds, required for a span or trace to match.
-                    max_secs: <integer>
+                    max_secs: <number>
                   error:
                     # The value the filter compares to the target trace or span field.
                     value: <true|false>
@@ -411,9 +411,9 @@ spec:
             trace:
                 duration:
                     # Minimum duration, in seconds, required for a span or trace to match.
-                    min_secs: <integer>
+                    min_secs: <number>
                     # Maximum duration, in seconds, required for a span or trace to match.
-                    max_secs: <integer>
+                    max_secs: <number>
                 error:
                     # The value the filter compares to the target trace or span field.
                     value: <true|false>

@@ -15,7 +15,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // UpdateTraceMetricsRuleReader is a Reader for the UpdateTraceMetricsRule structure.
@@ -79,7 +79,7 @@ UpdateTraceMetricsRuleOK describes a response with status code 200, with default
 A successful response containing the updated TraceMetricsRule.
 */
 type UpdateTraceMetricsRuleOK struct {
-	Payload *models.ConfigunstableUpdateTraceMetricsRuleResponse
+	Payload *models.Configv1UpdateTraceMetricsRuleResponse
 }
 
 // IsSuccess returns true when this update trace metrics rule o k response has a 2xx status code
@@ -113,20 +113,20 @@ func (o *UpdateTraceMetricsRuleOK) Code() int {
 }
 
 func (o *UpdateTraceMetricsRuleOK) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleOK) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateTraceMetricsRuleOK) GetPayload() *models.ConfigunstableUpdateTraceMetricsRuleResponse {
+func (o *UpdateTraceMetricsRuleOK) GetPayload() *models.Configv1UpdateTraceMetricsRuleResponse {
 	return o.Payload
 }
 
 func (o *UpdateTraceMetricsRuleOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableUpdateTraceMetricsRuleResponse)
+	o.Payload = new(models.Configv1UpdateTraceMetricsRuleResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -181,11 +181,11 @@ func (o *UpdateTraceMetricsRuleBadRequest) Code() int {
 }
 
 func (o *UpdateTraceMetricsRuleBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleBadRequest) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleBadRequest) GetPayload() *models.APIError {
@@ -249,11 +249,11 @@ func (o *UpdateTraceMetricsRuleNotFound) Code() int {
 }
 
 func (o *UpdateTraceMetricsRuleNotFound) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleNotFound) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleNotFound) GetPayload() *models.APIError {
@@ -317,11 +317,11 @@ func (o *UpdateTraceMetricsRuleConflict) Code() int {
 }
 
 func (o *UpdateTraceMetricsRuleConflict) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleConflict  %+v", 409, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleConflict) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleConflict  %+v", 409, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleConflict) GetPayload() *models.APIError {
@@ -385,11 +385,11 @@ func (o *UpdateTraceMetricsRuleInternalServerError) Code() int {
 }
 
 func (o *UpdateTraceMetricsRuleInternalServerError) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleInternalServerError) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] updateTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleInternalServerError) GetPayload() *models.APIError {
@@ -457,11 +457,11 @@ func (o *UpdateTraceMetricsRuleDefault) Code() int {
 }
 
 func (o *UpdateTraceMetricsRuleDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] UpdateTraceMetricsRule default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] UpdateTraceMetricsRule default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleDefault) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/trace-metrics-rules/{slug}][%d] UpdateTraceMetricsRule default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/trace-metrics-rules/{slug}][%d] UpdateTraceMetricsRule default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateTraceMetricsRuleDefault) GetPayload() models.GenericError {
@@ -491,7 +491,7 @@ type UpdateTraceMetricsRuleBody struct {
 	DryRun bool `json:"dry_run,omitempty"`
 
 	// trace metrics rule
-	TraceMetricsRule *models.ConfigunstableTraceMetricsRule `json:"trace_metrics_rule,omitempty"`
+	TraceMetricsRule *models.Configv1TraceMetricsRule `json:"trace_metrics_rule,omitempty"`
 }
 
 // Validate validates this update trace metrics rule body

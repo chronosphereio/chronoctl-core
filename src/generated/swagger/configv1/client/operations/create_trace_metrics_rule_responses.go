@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // CreateTraceMetricsRuleReader is a Reader for the CreateTraceMetricsRule structure.
@@ -70,7 +70,7 @@ CreateTraceMetricsRuleOK describes a response with status code 200, with default
 A successful response containing the created TraceMetricsRule.
 */
 type CreateTraceMetricsRuleOK struct {
-	Payload *models.ConfigunstableCreateTraceMetricsRuleResponse
+	Payload *models.Configv1CreateTraceMetricsRuleResponse
 }
 
 // IsSuccess returns true when this create trace metrics rule o k response has a 2xx status code
@@ -104,20 +104,20 @@ func (o *CreateTraceMetricsRuleOK) Code() int {
 }
 
 func (o *CreateTraceMetricsRuleOK) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] createTraceMetricsRuleOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] createTraceMetricsRuleOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateTraceMetricsRuleOK) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] createTraceMetricsRuleOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] createTraceMetricsRuleOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateTraceMetricsRuleOK) GetPayload() *models.ConfigunstableCreateTraceMetricsRuleResponse {
+func (o *CreateTraceMetricsRuleOK) GetPayload() *models.Configv1CreateTraceMetricsRuleResponse {
 	return o.Payload
 }
 
 func (o *CreateTraceMetricsRuleOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableCreateTraceMetricsRuleResponse)
+	o.Payload = new(models.Configv1CreateTraceMetricsRuleResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -172,11 +172,11 @@ func (o *CreateTraceMetricsRuleBadRequest) Code() int {
 }
 
 func (o *CreateTraceMetricsRuleBadRequest) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] createTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] createTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *CreateTraceMetricsRuleBadRequest) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] createTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] createTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *CreateTraceMetricsRuleBadRequest) GetPayload() *models.APIError {
@@ -240,11 +240,11 @@ func (o *CreateTraceMetricsRuleConflict) Code() int {
 }
 
 func (o *CreateTraceMetricsRuleConflict) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] createTraceMetricsRuleConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] createTraceMetricsRuleConflict  %+v", 409, o.Payload)
 }
 
 func (o *CreateTraceMetricsRuleConflict) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] createTraceMetricsRuleConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] createTraceMetricsRuleConflict  %+v", 409, o.Payload)
 }
 
 func (o *CreateTraceMetricsRuleConflict) GetPayload() *models.APIError {
@@ -308,11 +308,11 @@ func (o *CreateTraceMetricsRuleInternalServerError) Code() int {
 }
 
 func (o *CreateTraceMetricsRuleInternalServerError) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] createTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] createTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *CreateTraceMetricsRuleInternalServerError) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] createTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] createTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *CreateTraceMetricsRuleInternalServerError) GetPayload() *models.APIError {
@@ -380,11 +380,11 @@ func (o *CreateTraceMetricsRuleDefault) Code() int {
 }
 
 func (o *CreateTraceMetricsRuleDefault) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] CreateTraceMetricsRule default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] CreateTraceMetricsRule default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateTraceMetricsRuleDefault) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/trace-metrics-rules][%d] CreateTraceMetricsRule default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/trace-metrics-rules][%d] CreateTraceMetricsRule default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateTraceMetricsRuleDefault) GetPayload() models.GenericError {

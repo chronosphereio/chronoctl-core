@@ -29,6 +29,18 @@ func (o *ReadTraceTailSamplingRulesReader) ReadResponse(response runtime.ClientR
 			return nil, err
 		}
 		return result, nil
+	case 404:
+		result := NewReadTraceTailSamplingRulesNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewReadTraceTailSamplingRulesInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		result := NewReadTraceTailSamplingRulesDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -109,6 +121,142 @@ func (o *ReadTraceTailSamplingRulesOK) readResponse(response runtime.ClientRespo
 	return nil
 }
 
+// NewReadTraceTailSamplingRulesNotFound creates a ReadTraceTailSamplingRulesNotFound with default headers values
+func NewReadTraceTailSamplingRulesNotFound() *ReadTraceTailSamplingRulesNotFound {
+	return &ReadTraceTailSamplingRulesNotFound{}
+}
+
+/*
+ReadTraceTailSamplingRulesNotFound describes a response with status code 404, with default header values.
+
+Cannot read the TraceTailSamplingRules because TraceTailSamplingRules has not been created.
+*/
+type ReadTraceTailSamplingRulesNotFound struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this read trace tail sampling rules not found response has a 2xx status code
+func (o *ReadTraceTailSamplingRulesNotFound) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this read trace tail sampling rules not found response has a 3xx status code
+func (o *ReadTraceTailSamplingRulesNotFound) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this read trace tail sampling rules not found response has a 4xx status code
+func (o *ReadTraceTailSamplingRulesNotFound) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this read trace tail sampling rules not found response has a 5xx status code
+func (o *ReadTraceTailSamplingRulesNotFound) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this read trace tail sampling rules not found response a status code equal to that given
+func (o *ReadTraceTailSamplingRulesNotFound) IsCode(code int) bool {
+	return code == 404
+}
+
+// Code gets the status code for the read trace tail sampling rules not found response
+func (o *ReadTraceTailSamplingRulesNotFound) Code() int {
+	return 404
+}
+
+func (o *ReadTraceTailSamplingRulesNotFound) Error() string {
+	return fmt.Sprintf("[GET /api/unstable/config/trace-tail-sampling-rules][%d] readTraceTailSamplingRulesNotFound  %+v", 404, o.Payload)
+}
+
+func (o *ReadTraceTailSamplingRulesNotFound) String() string {
+	return fmt.Sprintf("[GET /api/unstable/config/trace-tail-sampling-rules][%d] readTraceTailSamplingRulesNotFound  %+v", 404, o.Payload)
+}
+
+func (o *ReadTraceTailSamplingRulesNotFound) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *ReadTraceTailSamplingRulesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewReadTraceTailSamplingRulesInternalServerError creates a ReadTraceTailSamplingRulesInternalServerError with default headers values
+func NewReadTraceTailSamplingRulesInternalServerError() *ReadTraceTailSamplingRulesInternalServerError {
+	return &ReadTraceTailSamplingRulesInternalServerError{}
+}
+
+/*
+ReadTraceTailSamplingRulesInternalServerError describes a response with status code 500, with default header values.
+
+An unexpected error response.
+*/
+type ReadTraceTailSamplingRulesInternalServerError struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this read trace tail sampling rules internal server error response has a 2xx status code
+func (o *ReadTraceTailSamplingRulesInternalServerError) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this read trace tail sampling rules internal server error response has a 3xx status code
+func (o *ReadTraceTailSamplingRulesInternalServerError) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this read trace tail sampling rules internal server error response has a 4xx status code
+func (o *ReadTraceTailSamplingRulesInternalServerError) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this read trace tail sampling rules internal server error response has a 5xx status code
+func (o *ReadTraceTailSamplingRulesInternalServerError) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this read trace tail sampling rules internal server error response a status code equal to that given
+func (o *ReadTraceTailSamplingRulesInternalServerError) IsCode(code int) bool {
+	return code == 500
+}
+
+// Code gets the status code for the read trace tail sampling rules internal server error response
+func (o *ReadTraceTailSamplingRulesInternalServerError) Code() int {
+	return 500
+}
+
+func (o *ReadTraceTailSamplingRulesInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /api/unstable/config/trace-tail-sampling-rules][%d] readTraceTailSamplingRulesInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *ReadTraceTailSamplingRulesInternalServerError) String() string {
+	return fmt.Sprintf("[GET /api/unstable/config/trace-tail-sampling-rules][%d] readTraceTailSamplingRulesInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *ReadTraceTailSamplingRulesInternalServerError) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *ReadTraceTailSamplingRulesInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewReadTraceTailSamplingRulesDefault creates a ReadTraceTailSamplingRulesDefault with default headers values
 func NewReadTraceTailSamplingRulesDefault(code int) *ReadTraceTailSamplingRulesDefault {
 	return &ReadTraceTailSamplingRulesDefault{
@@ -119,12 +267,12 @@ func NewReadTraceTailSamplingRulesDefault(code int) *ReadTraceTailSamplingRulesD
 /*
 ReadTraceTailSamplingRulesDefault describes a response with status code -1, with default header values.
 
-An unexpected error response.
+An undefined error response.
 */
 type ReadTraceTailSamplingRulesDefault struct {
 	_statusCode int
 
-	Payload *models.APIError
+	Payload models.GenericError
 }
 
 // IsSuccess returns true when this read trace tail sampling rules default response has a 2xx status code
@@ -165,16 +313,14 @@ func (o *ReadTraceTailSamplingRulesDefault) String() string {
 	return fmt.Sprintf("[GET /api/unstable/config/trace-tail-sampling-rules][%d] ReadTraceTailSamplingRules default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *ReadTraceTailSamplingRulesDefault) GetPayload() *models.APIError {
+func (o *ReadTraceTailSamplingRulesDefault) GetPayload() models.GenericError {
 	return o.Payload
 }
 
 func (o *ReadTraceTailSamplingRulesDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIError)
-
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

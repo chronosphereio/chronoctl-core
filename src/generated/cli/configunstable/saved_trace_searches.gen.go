@@ -517,9 +517,9 @@ spec:
                         match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION>
                   duration:
                     # Minimum duration, in seconds, required for a span or trace to match.
-                    min_secs: <integer>
+                    min_secs: <number>
                     # Maximum duration, in seconds, required for a span or trace to match.
-                    max_secs: <integer>
+                    max_secs: <number>
                   error:
                     # The value the filter compares to the target trace or span field.
                     value: <true|false>
@@ -548,9 +548,9 @@ spec:
             trace:
                 duration:
                     # Minimum duration, in seconds, required for a span or trace to match.
-                    min_secs: <integer>
+                    min_secs: <number>
                     # Maximum duration, in seconds, required for a span or trace to match.
-                    max_secs: <integer>
+                    max_secs: <number>
                 error:
                     # The value the filter compares to the target trace or span field.
                     value: <true|false>
@@ -590,9 +590,9 @@ spec:
                         match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION>
                   duration:
                     # Minimum duration, in seconds, required for a span or trace to match.
-                    min_secs: <integer>
+                    min_secs: <number>
                     # Maximum duration, in seconds, required for a span or trace to match.
-                    max_secs: <integer>
+                    max_secs: <number>
                   error:
                     # The value the filter compares to the target trace or span field.
                     value: <true|false>
@@ -621,9 +621,9 @@ spec:
             trace:
                 duration:
                     # Minimum duration, in seconds, required for a span or trace to match.
-                    min_secs: <integer>
+                    min_secs: <number>
                     # Maximum duration, in seconds, required for a span or trace to match.
-                    max_secs: <integer>
+                    max_secs: <number>
                 error:
                     # The value the filter compares to the target trace or span field.
                     value: <true|false>

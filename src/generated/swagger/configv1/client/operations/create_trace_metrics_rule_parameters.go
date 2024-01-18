@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewCreateTraceMetricsRuleParams creates a new CreateTraceMetricsRuleParams object,
@@ -64,7 +64,7 @@ CreateTraceMetricsRuleParams contains all the parameters to send to the API endp
 type CreateTraceMetricsRuleParams struct {
 
 	// Body.
-	Body *models.ConfigunstableCreateTraceMetricsRuleRequest
+	Body *models.Configv1CreateTraceMetricsRuleRequest
 
 	timeout    time.Duration
 	Context    context.Context
@@ -120,13 +120,13 @@ func (o *CreateTraceMetricsRuleParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create trace metrics rule params
-func (o *CreateTraceMetricsRuleParams) WithBody(body *models.ConfigunstableCreateTraceMetricsRuleRequest) *CreateTraceMetricsRuleParams {
+func (o *CreateTraceMetricsRuleParams) WithBody(body *models.Configv1CreateTraceMetricsRuleRequest) *CreateTraceMetricsRuleParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create trace metrics rule params
-func (o *CreateTraceMetricsRuleParams) SetBody(body *models.ConfigunstableCreateTraceMetricsRuleRequest) {
+func (o *CreateTraceMetricsRuleParams) SetBody(body *models.Configv1CreateTraceMetricsRuleRequest) {
 	o.Body = body
 }
 

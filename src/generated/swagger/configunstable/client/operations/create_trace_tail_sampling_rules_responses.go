@@ -29,6 +29,24 @@ func (o *CreateTraceTailSamplingRulesReader) ReadResponse(response runtime.Clien
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewCreateTraceTailSamplingRulesBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 409:
+		result := NewCreateTraceTailSamplingRulesConflict()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewCreateTraceTailSamplingRulesInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		result := NewCreateTraceTailSamplingRulesDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -49,7 +67,7 @@ func NewCreateTraceTailSamplingRulesOK() *CreateTraceTailSamplingRulesOK {
 /*
 CreateTraceTailSamplingRulesOK describes a response with status code 200, with default header values.
 
-A successful response.
+A successful response containing the created TraceTailSamplingRules.
 */
 type CreateTraceTailSamplingRulesOK struct {
 	Payload *models.ConfigunstableCreateTraceTailSamplingRulesResponse
@@ -109,6 +127,210 @@ func (o *CreateTraceTailSamplingRulesOK) readResponse(response runtime.ClientRes
 	return nil
 }
 
+// NewCreateTraceTailSamplingRulesBadRequest creates a CreateTraceTailSamplingRulesBadRequest with default headers values
+func NewCreateTraceTailSamplingRulesBadRequest() *CreateTraceTailSamplingRulesBadRequest {
+	return &CreateTraceTailSamplingRulesBadRequest{}
+}
+
+/*
+CreateTraceTailSamplingRulesBadRequest describes a response with status code 400, with default header values.
+
+Cannot create the TraceTailSamplingRules because the request is invalid.
+*/
+type CreateTraceTailSamplingRulesBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this create trace tail sampling rules bad request response has a 2xx status code
+func (o *CreateTraceTailSamplingRulesBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this create trace tail sampling rules bad request response has a 3xx status code
+func (o *CreateTraceTailSamplingRulesBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this create trace tail sampling rules bad request response has a 4xx status code
+func (o *CreateTraceTailSamplingRulesBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this create trace tail sampling rules bad request response has a 5xx status code
+func (o *CreateTraceTailSamplingRulesBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this create trace tail sampling rules bad request response a status code equal to that given
+func (o *CreateTraceTailSamplingRulesBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the create trace tail sampling rules bad request response
+func (o *CreateTraceTailSamplingRulesBadRequest) Code() int {
+	return 400
+}
+
+func (o *CreateTraceTailSamplingRulesBadRequest) Error() string {
+	return fmt.Sprintf("[POST /api/unstable/config/trace-tail-sampling-rules][%d] createTraceTailSamplingRulesBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *CreateTraceTailSamplingRulesBadRequest) String() string {
+	return fmt.Sprintf("[POST /api/unstable/config/trace-tail-sampling-rules][%d] createTraceTailSamplingRulesBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *CreateTraceTailSamplingRulesBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *CreateTraceTailSamplingRulesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateTraceTailSamplingRulesConflict creates a CreateTraceTailSamplingRulesConflict with default headers values
+func NewCreateTraceTailSamplingRulesConflict() *CreateTraceTailSamplingRulesConflict {
+	return &CreateTraceTailSamplingRulesConflict{}
+}
+
+/*
+CreateTraceTailSamplingRulesConflict describes a response with status code 409, with default header values.
+
+Cannot create the TraceTailSamplingRules because there is a conflict with an existing TraceTailSamplingRules.
+*/
+type CreateTraceTailSamplingRulesConflict struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this create trace tail sampling rules conflict response has a 2xx status code
+func (o *CreateTraceTailSamplingRulesConflict) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this create trace tail sampling rules conflict response has a 3xx status code
+func (o *CreateTraceTailSamplingRulesConflict) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this create trace tail sampling rules conflict response has a 4xx status code
+func (o *CreateTraceTailSamplingRulesConflict) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this create trace tail sampling rules conflict response has a 5xx status code
+func (o *CreateTraceTailSamplingRulesConflict) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this create trace tail sampling rules conflict response a status code equal to that given
+func (o *CreateTraceTailSamplingRulesConflict) IsCode(code int) bool {
+	return code == 409
+}
+
+// Code gets the status code for the create trace tail sampling rules conflict response
+func (o *CreateTraceTailSamplingRulesConflict) Code() int {
+	return 409
+}
+
+func (o *CreateTraceTailSamplingRulesConflict) Error() string {
+	return fmt.Sprintf("[POST /api/unstable/config/trace-tail-sampling-rules][%d] createTraceTailSamplingRulesConflict  %+v", 409, o.Payload)
+}
+
+func (o *CreateTraceTailSamplingRulesConflict) String() string {
+	return fmt.Sprintf("[POST /api/unstable/config/trace-tail-sampling-rules][%d] createTraceTailSamplingRulesConflict  %+v", 409, o.Payload)
+}
+
+func (o *CreateTraceTailSamplingRulesConflict) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *CreateTraceTailSamplingRulesConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateTraceTailSamplingRulesInternalServerError creates a CreateTraceTailSamplingRulesInternalServerError with default headers values
+func NewCreateTraceTailSamplingRulesInternalServerError() *CreateTraceTailSamplingRulesInternalServerError {
+	return &CreateTraceTailSamplingRulesInternalServerError{}
+}
+
+/*
+CreateTraceTailSamplingRulesInternalServerError describes a response with status code 500, with default header values.
+
+An unexpected error response.
+*/
+type CreateTraceTailSamplingRulesInternalServerError struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this create trace tail sampling rules internal server error response has a 2xx status code
+func (o *CreateTraceTailSamplingRulesInternalServerError) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this create trace tail sampling rules internal server error response has a 3xx status code
+func (o *CreateTraceTailSamplingRulesInternalServerError) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this create trace tail sampling rules internal server error response has a 4xx status code
+func (o *CreateTraceTailSamplingRulesInternalServerError) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this create trace tail sampling rules internal server error response has a 5xx status code
+func (o *CreateTraceTailSamplingRulesInternalServerError) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this create trace tail sampling rules internal server error response a status code equal to that given
+func (o *CreateTraceTailSamplingRulesInternalServerError) IsCode(code int) bool {
+	return code == 500
+}
+
+// Code gets the status code for the create trace tail sampling rules internal server error response
+func (o *CreateTraceTailSamplingRulesInternalServerError) Code() int {
+	return 500
+}
+
+func (o *CreateTraceTailSamplingRulesInternalServerError) Error() string {
+	return fmt.Sprintf("[POST /api/unstable/config/trace-tail-sampling-rules][%d] createTraceTailSamplingRulesInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *CreateTraceTailSamplingRulesInternalServerError) String() string {
+	return fmt.Sprintf("[POST /api/unstable/config/trace-tail-sampling-rules][%d] createTraceTailSamplingRulesInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *CreateTraceTailSamplingRulesInternalServerError) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *CreateTraceTailSamplingRulesInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewCreateTraceTailSamplingRulesDefault creates a CreateTraceTailSamplingRulesDefault with default headers values
 func NewCreateTraceTailSamplingRulesDefault(code int) *CreateTraceTailSamplingRulesDefault {
 	return &CreateTraceTailSamplingRulesDefault{
@@ -119,12 +341,12 @@ func NewCreateTraceTailSamplingRulesDefault(code int) *CreateTraceTailSamplingRu
 /*
 CreateTraceTailSamplingRulesDefault describes a response with status code -1, with default header values.
 
-An unexpected error response.
+An undefined error response.
 */
 type CreateTraceTailSamplingRulesDefault struct {
 	_statusCode int
 
-	Payload *models.APIError
+	Payload models.GenericError
 }
 
 // IsSuccess returns true when this create trace tail sampling rules default response has a 2xx status code
@@ -165,16 +387,14 @@ func (o *CreateTraceTailSamplingRulesDefault) String() string {
 	return fmt.Sprintf("[POST /api/unstable/config/trace-tail-sampling-rules][%d] CreateTraceTailSamplingRules default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *CreateTraceTailSamplingRulesDefault) GetPayload() *models.APIError {
+func (o *CreateTraceTailSamplingRulesDefault) GetPayload() models.GenericError {
 	return o.Payload
 }
 
 func (o *CreateTraceTailSamplingRulesDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIError)
-
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
