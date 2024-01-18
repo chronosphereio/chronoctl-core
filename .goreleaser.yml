@@ -1,0 +1,32 @@
+project_name: chronosphere
+before:
+  hooks:
+  - go mod tidy
+builds:
+  - id: chronoctl
+    main: ./src/cmd/chronoctl/main.go
+    binary: chronoctl
+    env:
+      - CGO_ENABLED=0
+    ldflags: "{{ .Env.GO_BUILD_LDFLAGS }}"
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+archives:
+  - name_template: >-
+      {{ .Binary }}-{{ .Os }}{{- if eq .Os "darwin" }}-unsigned{{- end }}-{{ .Arch }}
+    format: binary
+    files:
+      - none*
+blobs:
+  - provider: gs
+    bucket: chronosphere-release
+    folder: "{{.Version}}"
+checksum:
+  name_template: "{{ .ProjectName}}-checksums.txt"
+release:
+  disable: true
