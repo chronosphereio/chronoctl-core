@@ -13,17 +13,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableCreateTraceMetricsRuleResponse configunstable create trace metrics rule response
+// Configv1CreateTraceMetricsRuleRequest configv1 create trace metrics rule request
 //
-// swagger:model configunstableCreateTraceMetricsRuleResponse
-type ConfigunstableCreateTraceMetricsRuleResponse struct {
+// swagger:model configv1CreateTraceMetricsRuleRequest
+type Configv1CreateTraceMetricsRuleRequest struct {
 
 	// trace metrics rule
-	TraceMetricsRule *ConfigunstableTraceMetricsRule `json:"trace_metrics_rule,omitempty"`
+	TraceMetricsRule *Configv1TraceMetricsRule `json:"trace_metrics_rule,omitempty"`
+
+	// If true, the TraceMetricsRule will not be created, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.
+	DryRun bool `json:"dry_run,omitempty"`
 }
 
-// Validate validates this configunstable create trace metrics rule response
-func (m *ConfigunstableCreateTraceMetricsRuleResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 create trace metrics rule request
+func (m *Configv1CreateTraceMetricsRuleRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateTraceMetricsRule(formats); err != nil {
@@ -36,7 +39,7 @@ func (m *ConfigunstableCreateTraceMetricsRuleResponse) Validate(formats strfmt.R
 	return nil
 }
 
-func (m *ConfigunstableCreateTraceMetricsRuleResponse) validateTraceMetricsRule(formats strfmt.Registry) error {
+func (m *Configv1CreateTraceMetricsRuleRequest) validateTraceMetricsRule(formats strfmt.Registry) error {
 	if swag.IsZero(m.TraceMetricsRule) { // not required
 		return nil
 	}
@@ -55,8 +58,8 @@ func (m *ConfigunstableCreateTraceMetricsRuleResponse) validateTraceMetricsRule(
 	return nil
 }
 
-// ContextValidate validate this configunstable create trace metrics rule response based on the context it is used
-func (m *ConfigunstableCreateTraceMetricsRuleResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 create trace metrics rule request based on the context it is used
+func (m *Configv1CreateTraceMetricsRuleRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateTraceMetricsRule(ctx, formats); err != nil {
@@ -69,7 +72,7 @@ func (m *ConfigunstableCreateTraceMetricsRuleResponse) ContextValidate(ctx conte
 	return nil
 }
 
-func (m *ConfigunstableCreateTraceMetricsRuleResponse) contextValidateTraceMetricsRule(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1CreateTraceMetricsRuleRequest) contextValidateTraceMetricsRule(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.TraceMetricsRule != nil {
 
@@ -91,7 +94,7 @@ func (m *ConfigunstableCreateTraceMetricsRuleResponse) contextValidateTraceMetri
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableCreateTraceMetricsRuleResponse) MarshalBinary() ([]byte, error) {
+func (m *Configv1CreateTraceMetricsRuleRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -99,8 +102,8 @@ func (m *ConfigunstableCreateTraceMetricsRuleResponse) MarshalBinary() ([]byte, 
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableCreateTraceMetricsRuleResponse) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableCreateTraceMetricsRuleResponse
+func (m *Configv1CreateTraceMetricsRuleRequest) UnmarshalBinary(b []byte) error {
+	var res Configv1CreateTraceMetricsRuleRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

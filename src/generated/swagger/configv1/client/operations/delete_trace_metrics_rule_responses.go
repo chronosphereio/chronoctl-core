@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // DeleteTraceMetricsRuleReader is a Reader for the DeleteTraceMetricsRule structure.
@@ -64,7 +64,7 @@ DeleteTraceMetricsRuleOK describes a response with status code 200, with default
 A successful response.
 */
 type DeleteTraceMetricsRuleOK struct {
-	Payload models.ConfigunstableDeleteTraceMetricsRuleResponse
+	Payload models.Configv1DeleteTraceMetricsRuleResponse
 }
 
 // IsSuccess returns true when this delete trace metrics rule o k response has a 2xx status code
@@ -98,14 +98,14 @@ func (o *DeleteTraceMetricsRuleOK) Code() int {
 }
 
 func (o *DeleteTraceMetricsRuleOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteTraceMetricsRuleOK) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteTraceMetricsRuleOK) GetPayload() models.ConfigunstableDeleteTraceMetricsRuleResponse {
+func (o *DeleteTraceMetricsRuleOK) GetPayload() models.Configv1DeleteTraceMetricsRuleResponse {
 	return o.Payload
 }
 
@@ -164,11 +164,11 @@ func (o *DeleteTraceMetricsRuleNotFound) Code() int {
 }
 
 func (o *DeleteTraceMetricsRuleNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteTraceMetricsRuleNotFound) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteTraceMetricsRuleNotFound) GetPayload() *models.APIError {
@@ -232,11 +232,11 @@ func (o *DeleteTraceMetricsRuleInternalServerError) Code() int {
 }
 
 func (o *DeleteTraceMetricsRuleInternalServerError) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteTraceMetricsRuleInternalServerError) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteTraceMetricsRuleInternalServerError) GetPayload() *models.APIError {
@@ -304,11 +304,11 @@ func (o *DeleteTraceMetricsRuleDefault) Code() int {
 }
 
 func (o *DeleteTraceMetricsRuleDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/trace-metrics-rules/{slug}][%d] DeleteTraceMetricsRule default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] DeleteTraceMetricsRule default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteTraceMetricsRuleDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/trace-metrics-rules/{slug}][%d] DeleteTraceMetricsRule default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] DeleteTraceMetricsRule default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteTraceMetricsRuleDefault) GetPayload() models.GenericError {

@@ -19,7 +19,7 @@ import (
 type SavedTraceSearchTraceSearch struct {
 
 	// criteria
-	Criteria *ConfigunstableTraceSearchFilter `json:"criteria,omitempty"`
+	Criteria *Configv1TraceSearchFilter `json:"criteria,omitempty"`
 
 	// time
 	Time *SavedTraceSearchTimeFilter `json:"time,omitempty"`

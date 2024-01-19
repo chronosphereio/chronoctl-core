@@ -29,6 +29,18 @@ func (o *DeleteResourcePoolsReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return result, nil
+	case 404:
+		result := NewDeleteResourcePoolsNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewDeleteResourcePoolsInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		result := NewDeleteResourcePoolsDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -107,6 +119,142 @@ func (o *DeleteResourcePoolsOK) readResponse(response runtime.ClientResponse, co
 	return nil
 }
 
+// NewDeleteResourcePoolsNotFound creates a DeleteResourcePoolsNotFound with default headers values
+func NewDeleteResourcePoolsNotFound() *DeleteResourcePoolsNotFound {
+	return &DeleteResourcePoolsNotFound{}
+}
+
+/*
+DeleteResourcePoolsNotFound describes a response with status code 404, with default header values.
+
+Cannot delete the ResourcePools because the slug does not exist.
+*/
+type DeleteResourcePoolsNotFound struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete resource pools not found response has a 2xx status code
+func (o *DeleteResourcePoolsNotFound) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete resource pools not found response has a 3xx status code
+func (o *DeleteResourcePoolsNotFound) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete resource pools not found response has a 4xx status code
+func (o *DeleteResourcePoolsNotFound) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete resource pools not found response has a 5xx status code
+func (o *DeleteResourcePoolsNotFound) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete resource pools not found response a status code equal to that given
+func (o *DeleteResourcePoolsNotFound) IsCode(code int) bool {
+	return code == 404
+}
+
+// Code gets the status code for the delete resource pools not found response
+func (o *DeleteResourcePoolsNotFound) Code() int {
+	return 404
+}
+
+func (o *DeleteResourcePoolsNotFound) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/resource-pools][%d] deleteResourcePoolsNotFound  %+v", 404, o.Payload)
+}
+
+func (o *DeleteResourcePoolsNotFound) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/resource-pools][%d] deleteResourcePoolsNotFound  %+v", 404, o.Payload)
+}
+
+func (o *DeleteResourcePoolsNotFound) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteResourcePoolsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteResourcePoolsInternalServerError creates a DeleteResourcePoolsInternalServerError with default headers values
+func NewDeleteResourcePoolsInternalServerError() *DeleteResourcePoolsInternalServerError {
+	return &DeleteResourcePoolsInternalServerError{}
+}
+
+/*
+DeleteResourcePoolsInternalServerError describes a response with status code 500, with default header values.
+
+An unexpected error response.
+*/
+type DeleteResourcePoolsInternalServerError struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete resource pools internal server error response has a 2xx status code
+func (o *DeleteResourcePoolsInternalServerError) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete resource pools internal server error response has a 3xx status code
+func (o *DeleteResourcePoolsInternalServerError) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete resource pools internal server error response has a 4xx status code
+func (o *DeleteResourcePoolsInternalServerError) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this delete resource pools internal server error response has a 5xx status code
+func (o *DeleteResourcePoolsInternalServerError) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this delete resource pools internal server error response a status code equal to that given
+func (o *DeleteResourcePoolsInternalServerError) IsCode(code int) bool {
+	return code == 500
+}
+
+// Code gets the status code for the delete resource pools internal server error response
+func (o *DeleteResourcePoolsInternalServerError) Code() int {
+	return 500
+}
+
+func (o *DeleteResourcePoolsInternalServerError) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/resource-pools][%d] deleteResourcePoolsInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *DeleteResourcePoolsInternalServerError) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/resource-pools][%d] deleteResourcePoolsInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *DeleteResourcePoolsInternalServerError) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteResourcePoolsInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewDeleteResourcePoolsDefault creates a DeleteResourcePoolsDefault with default headers values
 func NewDeleteResourcePoolsDefault(code int) *DeleteResourcePoolsDefault {
 	return &DeleteResourcePoolsDefault{
@@ -117,12 +265,12 @@ func NewDeleteResourcePoolsDefault(code int) *DeleteResourcePoolsDefault {
 /*
 DeleteResourcePoolsDefault describes a response with status code -1, with default header values.
 
-An unexpected error response.
+An undefined error response.
 */
 type DeleteResourcePoolsDefault struct {
 	_statusCode int
 
-	Payload *models.APIError
+	Payload models.GenericError
 }
 
 // IsSuccess returns true when this delete resource pools default response has a 2xx status code
@@ -163,16 +311,14 @@ func (o *DeleteResourcePoolsDefault) String() string {
 	return fmt.Sprintf("[DELETE /api/v1/config/resource-pools][%d] DeleteResourcePools default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *DeleteResourcePoolsDefault) GetPayload() *models.APIError {
+func (o *DeleteResourcePoolsDefault) GetPayload() models.GenericError {
 	return o.Payload
 }
 
 func (o *DeleteResourcePoolsDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIError)
-
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

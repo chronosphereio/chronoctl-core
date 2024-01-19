@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ConfigunstableTraceTailSamplingRule Contains configuration for one tail sampling rule.
@@ -19,7 +20,7 @@ import (
 type ConfigunstableTraceTailSamplingRule struct {
 
 	// filter
-	Filter *ConfigunstableTraceSearchFilter `json:"filter,omitempty"`
+	Filter *Configv1TraceSearchFilter `json:"filter,omitempty"`
 
 	// A fraction of traces to keep, which should be a number between 0 and 1, inclusive
 	SampleRate float64 `json:"sample_rate,omitempty"`
@@ -29,6 +30,14 @@ type ConfigunstableTraceTailSamplingRule struct {
 
 	// Value used as the metric label value for metrics emitted relating to this rule.
 	SystemName string `json:"system_name,omitempty"`
+
+	// When the rule was created (novel system_name)
+	// Format: date-time
+	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
+
+	// When the rule was updated (existing system_name)
+	// Format: date-time
+	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 }
 
 // Validate validates this configunstable trace tail sampling rule
@@ -36,6 +45,14 @@ func (m *ConfigunstableTraceTailSamplingRule) Validate(formats strfmt.Registry) 
 	var res []error
 
 	if err := m.validateFilter(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdatedAt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -59,6 +76,30 @@ func (m *ConfigunstableTraceTailSamplingRule) validateFilter(formats strfmt.Regi
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceTailSamplingRule) validateCreatedAt(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("created_at", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceTailSamplingRule) validateUpdatedAt(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("updated_at", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
+		return err
 	}
 
 	return nil
