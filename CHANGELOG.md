@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.1.0
+
 ### Added
  - New config: trace-jaeger-remote-sampling-strategies.
  - New config: trace-metric-rules.
@@ -12,6 +14,7 @@
 
 ### Misc
  - Upgraded participle library to v2.1.0
+ - Added goreleaser support for releasing binaries
 
 ## v1.0.0
 
