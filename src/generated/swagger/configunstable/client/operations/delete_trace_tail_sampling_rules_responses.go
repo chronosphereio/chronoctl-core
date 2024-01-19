@@ -29,6 +29,18 @@ func (o *DeleteTraceTailSamplingRulesReader) ReadResponse(response runtime.Clien
 			return nil, err
 		}
 		return result, nil
+	case 404:
+		result := NewDeleteTraceTailSamplingRulesNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewDeleteTraceTailSamplingRulesInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		result := NewDeleteTraceTailSamplingRulesDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -107,6 +119,142 @@ func (o *DeleteTraceTailSamplingRulesOK) readResponse(response runtime.ClientRes
 	return nil
 }
 
+// NewDeleteTraceTailSamplingRulesNotFound creates a DeleteTraceTailSamplingRulesNotFound with default headers values
+func NewDeleteTraceTailSamplingRulesNotFound() *DeleteTraceTailSamplingRulesNotFound {
+	return &DeleteTraceTailSamplingRulesNotFound{}
+}
+
+/*
+DeleteTraceTailSamplingRulesNotFound describes a response with status code 404, with default header values.
+
+Cannot delete the TraceTailSamplingRules because the slug does not exist.
+*/
+type DeleteTraceTailSamplingRulesNotFound struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete trace tail sampling rules not found response has a 2xx status code
+func (o *DeleteTraceTailSamplingRulesNotFound) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete trace tail sampling rules not found response has a 3xx status code
+func (o *DeleteTraceTailSamplingRulesNotFound) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete trace tail sampling rules not found response has a 4xx status code
+func (o *DeleteTraceTailSamplingRulesNotFound) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete trace tail sampling rules not found response has a 5xx status code
+func (o *DeleteTraceTailSamplingRulesNotFound) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete trace tail sampling rules not found response a status code equal to that given
+func (o *DeleteTraceTailSamplingRulesNotFound) IsCode(code int) bool {
+	return code == 404
+}
+
+// Code gets the status code for the delete trace tail sampling rules not found response
+func (o *DeleteTraceTailSamplingRulesNotFound) Code() int {
+	return 404
+}
+
+func (o *DeleteTraceTailSamplingRulesNotFound) Error() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/trace-tail-sampling-rules][%d] deleteTraceTailSamplingRulesNotFound  %+v", 404, o.Payload)
+}
+
+func (o *DeleteTraceTailSamplingRulesNotFound) String() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/trace-tail-sampling-rules][%d] deleteTraceTailSamplingRulesNotFound  %+v", 404, o.Payload)
+}
+
+func (o *DeleteTraceTailSamplingRulesNotFound) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteTraceTailSamplingRulesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteTraceTailSamplingRulesInternalServerError creates a DeleteTraceTailSamplingRulesInternalServerError with default headers values
+func NewDeleteTraceTailSamplingRulesInternalServerError() *DeleteTraceTailSamplingRulesInternalServerError {
+	return &DeleteTraceTailSamplingRulesInternalServerError{}
+}
+
+/*
+DeleteTraceTailSamplingRulesInternalServerError describes a response with status code 500, with default header values.
+
+An unexpected error response.
+*/
+type DeleteTraceTailSamplingRulesInternalServerError struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete trace tail sampling rules internal server error response has a 2xx status code
+func (o *DeleteTraceTailSamplingRulesInternalServerError) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete trace tail sampling rules internal server error response has a 3xx status code
+func (o *DeleteTraceTailSamplingRulesInternalServerError) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete trace tail sampling rules internal server error response has a 4xx status code
+func (o *DeleteTraceTailSamplingRulesInternalServerError) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this delete trace tail sampling rules internal server error response has a 5xx status code
+func (o *DeleteTraceTailSamplingRulesInternalServerError) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this delete trace tail sampling rules internal server error response a status code equal to that given
+func (o *DeleteTraceTailSamplingRulesInternalServerError) IsCode(code int) bool {
+	return code == 500
+}
+
+// Code gets the status code for the delete trace tail sampling rules internal server error response
+func (o *DeleteTraceTailSamplingRulesInternalServerError) Code() int {
+	return 500
+}
+
+func (o *DeleteTraceTailSamplingRulesInternalServerError) Error() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/trace-tail-sampling-rules][%d] deleteTraceTailSamplingRulesInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *DeleteTraceTailSamplingRulesInternalServerError) String() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/trace-tail-sampling-rules][%d] deleteTraceTailSamplingRulesInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *DeleteTraceTailSamplingRulesInternalServerError) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteTraceTailSamplingRulesInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewDeleteTraceTailSamplingRulesDefault creates a DeleteTraceTailSamplingRulesDefault with default headers values
 func NewDeleteTraceTailSamplingRulesDefault(code int) *DeleteTraceTailSamplingRulesDefault {
 	return &DeleteTraceTailSamplingRulesDefault{
@@ -117,12 +265,12 @@ func NewDeleteTraceTailSamplingRulesDefault(code int) *DeleteTraceTailSamplingRu
 /*
 DeleteTraceTailSamplingRulesDefault describes a response with status code -1, with default header values.
 
-An unexpected error response.
+An undefined error response.
 */
 type DeleteTraceTailSamplingRulesDefault struct {
 	_statusCode int
 
-	Payload *models.APIError
+	Payload models.GenericError
 }
 
 // IsSuccess returns true when this delete trace tail sampling rules default response has a 2xx status code
@@ -163,16 +311,14 @@ func (o *DeleteTraceTailSamplingRulesDefault) String() string {
 	return fmt.Sprintf("[DELETE /api/unstable/config/trace-tail-sampling-rules][%d] DeleteTraceTailSamplingRules default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *DeleteTraceTailSamplingRulesDefault) GetPayload() *models.APIError {
+func (o *DeleteTraceTailSamplingRulesDefault) GetPayload() models.GenericError {
 	return o.Payload
 }
 
 func (o *DeleteTraceTailSamplingRulesDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIError)
-
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

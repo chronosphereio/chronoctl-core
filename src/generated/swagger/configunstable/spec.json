@@ -42,28 +42,6 @@
       },
       "type": "object"
     },
-    "GroupByGroupByKey": {
-      "description": "GroupByKey describes a key to group by.",
-      "properties": {
-        "type": {
-          "$ref": "#/definitions/GroupByKeyGroupByKeyType"
-        },
-        "named_key": {
-          "description": "For named KeyTypes (e.g. span tags), the name of the key to group by.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "GroupByKeyGroupByKeyType": {
-      "description": " - SERVICE: Group by service.\n - OPERATION: Group by operation.\n - TAG: Group by span tag.",
-      "enum": [
-        "SERVICE",
-        "OPERATION",
-        "TAG"
-      ],
-      "type": "string"
-    },
     "NoopEntityNestedEnum": {
       "enum": [
         "ENABLED",
@@ -151,7 +129,7 @@
     "SavedTraceSearchTraceSearch": {
       "properties": {
         "criteria": {
-          "$ref": "#/definitions/configunstableTraceSearchFilter"
+          "$ref": "#/definitions/configv1TraceSearchFilter"
         },
         "time": {
           "$ref": "#/definitions/SavedTraceSearchTimeFilter"
@@ -332,19 +310,6 @@
       },
       "type": "object"
     },
-    "TraceMetricsRuleGroupBy": {
-      "description": "GroupBy contains fields required to group the resultant metrics of a TraceMetricsRule by a specific key.",
-      "properties": {
-        "label": {
-          "description": "The label to use in the resultant metrics.",
-          "type": "string"
-        },
-        "key": {
-          "$ref": "#/definitions/GroupByGroupByKey"
-        }
-      },
-      "type": "object"
-    },
     "TraceSearchFilterBoolFilter": {
       "properties": {
         "value": {
@@ -373,13 +338,13 @@
       "properties": {
         "min_secs": {
           "description": "Minimum duration, in seconds, required for a span or trace to match.",
-          "format": "int32",
-          "type": "integer"
+          "format": "double",
+          "type": "number"
         },
         "max_secs": {
           "description": "Maximum duration, in seconds, required for a span or trace to match.",
-          "format": "int32",
-          "type": "integer"
+          "format": "double",
+          "type": "number"
         }
       },
       "type": "object"
@@ -593,32 +558,13 @@
       },
       "type": "object"
     },
-    "configunstableCreateTraceMetricsRuleRequest": {
-      "properties": {
-        "trace_metrics_rule": {
-          "$ref": "#/definitions/configunstableTraceMetricsRule"
-        },
-        "dry_run": {
-          "description": "If true, the TraceMetricsRule will not be created, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateTraceMetricsRuleResponse": {
-      "properties": {
-        "trace_metrics_rule": {
-          "$ref": "#/definitions/configunstableTraceMetricsRule"
-        }
-      },
-      "type": "object"
-    },
     "configunstableCreateTraceTailSamplingRulesRequest": {
       "properties": {
         "trace_tail_sampling_rules": {
           "$ref": "#/definitions/configunstableTraceTailSamplingRules"
         },
         "dry_run": {
+          "description": "If true, the TraceTailSamplingRules will not be created, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.",
           "type": "boolean"
         }
       },
@@ -695,9 +641,6 @@
       "type": "object"
     },
     "configunstableDeleteTraceJaegerRemoteSamplingStrategyResponse": {
-      "type": "object"
-    },
-    "configunstableDeleteTraceMetricsRuleResponse": {
       "type": "object"
     },
     "configunstableDeleteTraceTailSamplingRulesResponse": {
@@ -821,21 +764,6 @@
       },
       "type": "object"
     },
-    "configunstableListTraceMetricsRulesResponse": {
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/configv1PageResult"
-        },
-        "trace_metrics_rules": {
-          "description": "Found trace metrics rules.",
-          "items": {
-            "$ref": "#/definitions/configunstableTraceMetricsRule"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "configunstableNoopEntity": {
       "properties": {
         "slug": {
@@ -919,14 +847,6 @@
       "properties": {
         "trace_jaeger_remote_sampling_strategy": {
           "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableReadTraceMetricsRuleResponse": {
-      "properties": {
-        "trace_metrics_rule": {
-          "$ref": "#/definitions/configunstableTraceMetricsRule"
         }
       },
       "type": "object"
@@ -1079,80 +999,11 @@
       },
       "type": "object"
     },
-    "configunstableTraceMetricsRule": {
-      "properties": {
-        "name": {
-          "description": "Required name of the TraceMetricsRule. May be modified after the TraceMetricsRule is created.",
-          "type": "string"
-        },
-        "slug": {
-          "description": "Unique identifier of the TraceMetricsRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceMetricsRule is created.",
-          "type": "string"
-        },
-        "created_at": {
-          "description": "Timestamp of when the TraceMetricsRule was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the TraceMetricsRule was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "metric_name": {
-          "description": "The name of the generated trace metrics.",
-          "type": "string"
-        },
-        "metric_labels": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "Labels to apply to the generated trace metrics.",
-          "type": "object"
-        },
-        "histogram_buckets_secs": {
-          "description": "Histogram bucket values, in seconds, for generated duration metrics.",
-          "items": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "type": "array"
-        },
-        "trace_filter": {
-          "$ref": "#/definitions/configunstableTraceSearchFilter"
-        },
-        "group_by": {
-          "description": "Add labels to the resultant metrics based on these specified GroupBy messages.",
-          "items": {
-            "$ref": "#/definitions/TraceMetricsRuleGroupBy"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableTraceSearchFilter": {
-      "properties": {
-        "trace": {
-          "$ref": "#/definitions/TraceSearchFilterTraceFilter"
-        },
-        "span": {
-          "description": "Each SpanFilter object represents all conditions that need to be true on\nthe same span for the span to be considered matching the SpanFilter. If\n`span_count` is used, the number of spans within the trace that match the\nSpanFilter needs to be within [min, max]. Multiple SpanFilters can be used,\nand each can be satisfied by any number of spans within the trace.",
-          "items": {
-            "$ref": "#/definitions/TraceSearchFilterSpanFilter"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "configunstableTraceTailSamplingRule": {
       "description": "Contains configuration for one tail sampling rule.",
       "properties": {
         "filter": {
-          "$ref": "#/definitions/configunstableTraceSearchFilter"
+          "$ref": "#/definitions/configv1TraceSearchFilter"
         },
         "sample_rate": {
           "description": "A fraction of traces to keep, which should be a number between 0 and 1, inclusive",
@@ -1166,6 +1017,16 @@
         "system_name": {
           "description": "Value used as the metric label value for metrics emitted relating to this rule.",
           "type": "string"
+        },
+        "created_at": {
+          "description": "When the rule was created (novel system_name)",
+          "format": "date-time",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "When the rule was updated (existing system_name)",
+          "format": "date-time",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1176,11 +1037,13 @@
         "created_at": {
           "description": "Set in API responses.",
           "format": "date-time",
+          "readOnly": true,
           "type": "string"
         },
         "updated_at": {
           "description": "Set in API responses.",
           "format": "date-time",
+          "readOnly": true,
           "type": "string"
         },
         "rules": {
@@ -1244,23 +1107,17 @@
       },
       "type": "object"
     },
-    "configunstableUpdateTraceMetricsRuleResponse": {
-      "properties": {
-        "trace_metrics_rule": {
-          "$ref": "#/definitions/configunstableTraceMetricsRule"
-        }
-      },
-      "type": "object"
-    },
     "configunstableUpdateTraceTailSamplingRulesRequest": {
       "properties": {
         "trace_tail_sampling_rules": {
           "$ref": "#/definitions/configunstableTraceTailSamplingRules"
         },
         "create_if_missing": {
+          "description": "If true, the TraceTailSamplingRules will be created if it does not already exist. If false, an error will be returned if the TraceTailSamplingRules does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
+          "description": "If true, the TraceTailSamplingRules will not be created nor updated, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.",
           "type": "boolean"
         }
       },
@@ -1293,6 +1150,21 @@
         "next_token": {
           "description": "Opaque page token which identifies the next page of items which the\nclient should request. An empty next_token indicates that there are no\nmore items to return.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1TraceSearchFilter": {
+      "properties": {
+        "trace": {
+          "$ref": "#/definitions/TraceSearchFilterTraceFilter"
+        },
+        "span": {
+          "description": "Each SpanFilter object represents all conditions that need to be true on\nthe same span for the span to be considered matching the SpanFilter. If\n`span_count` is used, the number of spans within the trace that match the\nSpanFilter needs to be within [min, max]. Multiple SpanFilters can be used,\nand each can be satisfied by any number of spans within the trace.",
+          "items": {
+            "$ref": "#/definitions/TraceSearchFilterSpanFilter"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -2757,6 +2629,11 @@
             },
             "name": "service_names",
             "type": "array"
+          },
+          {
+            "in": "query",
+            "name": "name_or_service_contains",
+            "type": "string"
           }
         ],
         "responses": {
@@ -2987,282 +2864,6 @@
         ]
       }
     },
-    "/api/unstable/config/trace-metrics-rules": {
-      "get": {
-        "operationId": "ListTraceMetricsRules",
-        "parameters": [
-          {
-            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
-            "format": "int64",
-            "in": "query",
-            "name": "page.max_size",
-            "type": "integer"
-          },
-          {
-            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
-            "in": "query",
-            "name": "page.token",
-            "type": "string"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by slug, where any TraceMetricsRule with a matching slug in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "slugs",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by name, where any TraceMetricsRule with a matching name in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "names",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Get trace metric rules by name.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "metric_names",
-            "type": "array"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableListTraceMetricsRulesResponse"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceMetricsRule"
-        ]
-      },
-      "post": {
-        "operationId": "CreateTraceMetricsRule",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateTraceMetricsRuleRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created TraceMetricsRule.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateTraceMetricsRuleResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the TraceMetricsRule because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the TraceMetricsRule because there is a conflict with an existing TraceMetricsRule.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceMetricsRule"
-        ]
-      }
-    },
-    "/api/unstable/config/trace-metrics-rules/{slug}": {
-      "delete": {
-        "operationId": "DeleteTraceMetricsRule",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteTraceMetricsRuleResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the TraceMetricsRule because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceMetricsRule"
-        ]
-      },
-      "get": {
-        "operationId": "ReadTraceMetricsRule",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadTraceMetricsRuleResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the TraceMetricsRule because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceMetricsRule"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateTraceMetricsRule",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "properties": {
-                "create_if_missing": {
-                  "description": "If true, the TraceMetricsRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceMetricsRule does not already exist.",
-                  "type": "boolean"
-                },
-                "dry_run": {
-                  "description": "If true, the TraceMetricsRule will not be created nor updated, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.",
-                  "type": "boolean"
-                },
-                "trace_metrics_rule": {
-                  "$ref": "#/definitions/configunstableTraceMetricsRule"
-                }
-              },
-              "type": "object"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated TraceMetricsRule.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateTraceMetricsRuleResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the TraceMetricsRule because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the TraceMetricsRule because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot update the TraceMetricsRule because there is a conflict with an existing TraceMetricsRule.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceMetricsRule"
-        ]
-      }
-    },
     "/api/unstable/config/trace-tail-sampling-rules": {
       "delete": {
         "operationId": "DeleteTraceTailSamplingRules",
@@ -3280,10 +2881,22 @@
               "$ref": "#/definitions/configunstableDeleteTraceTailSamplingRulesResponse"
             }
           },
-          "default": {
+          "404": {
+            "description": "Cannot delete the TraceTailSamplingRules because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
             "description": "An unexpected error response.",
             "schema": {
               "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
             }
           }
         },
@@ -3300,10 +2913,22 @@
               "$ref": "#/definitions/configunstableReadTraceTailSamplingRulesResponse"
             }
           },
-          "default": {
+          "404": {
+            "description": "Cannot read the TraceTailSamplingRules because TraceTailSamplingRules has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
             "description": "An unexpected error response.",
             "schema": {
               "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
             }
           }
         },
@@ -3326,15 +2951,33 @@
         ],
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response containing the created TraceTailSamplingRules.",
             "schema": {
               "$ref": "#/definitions/configunstableCreateTraceTailSamplingRulesResponse"
             }
           },
-          "default": {
+          "400": {
+            "description": "Cannot create the TraceTailSamplingRules because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceTailSamplingRules because there is a conflict with an existing TraceTailSamplingRules.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
             "description": "An unexpected error response.",
             "schema": {
               "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
             }
           }
         },
@@ -3356,15 +2999,33 @@
         ],
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response containing the updated TraceTailSamplingRules.",
             "schema": {
               "$ref": "#/definitions/configunstableUpdateTraceTailSamplingRulesResponse"
             }
           },
-          "default": {
+          "400": {
+            "description": "Cannot update the TraceTailSamplingRules because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceTailSamplingRules because TraceTailSamplingRules has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
             "description": "An unexpected error response.",
             "schema": {
               "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
             }
           }
         },

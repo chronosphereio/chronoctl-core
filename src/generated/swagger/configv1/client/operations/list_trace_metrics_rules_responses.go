@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // ListTraceMetricsRulesReader is a Reader for the ListTraceMetricsRules structure.
@@ -58,7 +58,7 @@ ListTraceMetricsRulesOK describes a response with status code 200, with default 
 A successful response.
 */
 type ListTraceMetricsRulesOK struct {
-	Payload *models.ConfigunstableListTraceMetricsRulesResponse
+	Payload *models.Configv1ListTraceMetricsRulesResponse
 }
 
 // IsSuccess returns true when this list trace metrics rules o k response has a 2xx status code
@@ -92,20 +92,20 @@ func (o *ListTraceMetricsRulesOK) Code() int {
 }
 
 func (o *ListTraceMetricsRulesOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/trace-metrics-rules][%d] listTraceMetricsRulesOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/trace-metrics-rules][%d] listTraceMetricsRulesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListTraceMetricsRulesOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/trace-metrics-rules][%d] listTraceMetricsRulesOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/trace-metrics-rules][%d] listTraceMetricsRulesOK  %+v", 200, o.Payload)
 }
 
-func (o *ListTraceMetricsRulesOK) GetPayload() *models.ConfigunstableListTraceMetricsRulesResponse {
+func (o *ListTraceMetricsRulesOK) GetPayload() *models.Configv1ListTraceMetricsRulesResponse {
 	return o.Payload
 }
 
 func (o *ListTraceMetricsRulesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableListTraceMetricsRulesResponse)
+	o.Payload = new(models.Configv1ListTraceMetricsRulesResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -160,11 +160,11 @@ func (o *ListTraceMetricsRulesInternalServerError) Code() int {
 }
 
 func (o *ListTraceMetricsRulesInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/trace-metrics-rules][%d] listTraceMetricsRulesInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/trace-metrics-rules][%d] listTraceMetricsRulesInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ListTraceMetricsRulesInternalServerError) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/trace-metrics-rules][%d] listTraceMetricsRulesInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/trace-metrics-rules][%d] listTraceMetricsRulesInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ListTraceMetricsRulesInternalServerError) GetPayload() *models.APIError {
@@ -232,11 +232,11 @@ func (o *ListTraceMetricsRulesDefault) Code() int {
 }
 
 func (o *ListTraceMetricsRulesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/trace-metrics-rules][%d] ListTraceMetricsRules default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/trace-metrics-rules][%d] ListTraceMetricsRules default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListTraceMetricsRulesDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/trace-metrics-rules][%d] ListTraceMetricsRules default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/trace-metrics-rules][%d] ListTraceMetricsRules default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListTraceMetricsRulesDefault) GetPayload() models.GenericError {

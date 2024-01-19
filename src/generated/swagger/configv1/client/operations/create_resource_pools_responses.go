@@ -29,6 +29,24 @@ func (o *CreateResourcePoolsReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewCreateResourcePoolsBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 409:
+		result := NewCreateResourcePoolsConflict()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewCreateResourcePoolsInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		result := NewCreateResourcePoolsDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -49,7 +67,7 @@ func NewCreateResourcePoolsOK() *CreateResourcePoolsOK {
 /*
 CreateResourcePoolsOK describes a response with status code 200, with default header values.
 
-A successful response.
+A successful response containing the created ResourcePools.
 */
 type CreateResourcePoolsOK struct {
 	Payload *models.Configv1CreateResourcePoolsResponse
@@ -109,6 +127,210 @@ func (o *CreateResourcePoolsOK) readResponse(response runtime.ClientResponse, co
 	return nil
 }
 
+// NewCreateResourcePoolsBadRequest creates a CreateResourcePoolsBadRequest with default headers values
+func NewCreateResourcePoolsBadRequest() *CreateResourcePoolsBadRequest {
+	return &CreateResourcePoolsBadRequest{}
+}
+
+/*
+CreateResourcePoolsBadRequest describes a response with status code 400, with default header values.
+
+Cannot create the ResourcePools because the request is invalid.
+*/
+type CreateResourcePoolsBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this create resource pools bad request response has a 2xx status code
+func (o *CreateResourcePoolsBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this create resource pools bad request response has a 3xx status code
+func (o *CreateResourcePoolsBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this create resource pools bad request response has a 4xx status code
+func (o *CreateResourcePoolsBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this create resource pools bad request response has a 5xx status code
+func (o *CreateResourcePoolsBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this create resource pools bad request response a status code equal to that given
+func (o *CreateResourcePoolsBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the create resource pools bad request response
+func (o *CreateResourcePoolsBadRequest) Code() int {
+	return 400
+}
+
+func (o *CreateResourcePoolsBadRequest) Error() string {
+	return fmt.Sprintf("[POST /api/v1/config/resource-pools][%d] createResourcePoolsBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *CreateResourcePoolsBadRequest) String() string {
+	return fmt.Sprintf("[POST /api/v1/config/resource-pools][%d] createResourcePoolsBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *CreateResourcePoolsBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *CreateResourcePoolsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateResourcePoolsConflict creates a CreateResourcePoolsConflict with default headers values
+func NewCreateResourcePoolsConflict() *CreateResourcePoolsConflict {
+	return &CreateResourcePoolsConflict{}
+}
+
+/*
+CreateResourcePoolsConflict describes a response with status code 409, with default header values.
+
+Cannot create the ResourcePools because there is a conflict with an existing ResourcePools.
+*/
+type CreateResourcePoolsConflict struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this create resource pools conflict response has a 2xx status code
+func (o *CreateResourcePoolsConflict) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this create resource pools conflict response has a 3xx status code
+func (o *CreateResourcePoolsConflict) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this create resource pools conflict response has a 4xx status code
+func (o *CreateResourcePoolsConflict) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this create resource pools conflict response has a 5xx status code
+func (o *CreateResourcePoolsConflict) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this create resource pools conflict response a status code equal to that given
+func (o *CreateResourcePoolsConflict) IsCode(code int) bool {
+	return code == 409
+}
+
+// Code gets the status code for the create resource pools conflict response
+func (o *CreateResourcePoolsConflict) Code() int {
+	return 409
+}
+
+func (o *CreateResourcePoolsConflict) Error() string {
+	return fmt.Sprintf("[POST /api/v1/config/resource-pools][%d] createResourcePoolsConflict  %+v", 409, o.Payload)
+}
+
+func (o *CreateResourcePoolsConflict) String() string {
+	return fmt.Sprintf("[POST /api/v1/config/resource-pools][%d] createResourcePoolsConflict  %+v", 409, o.Payload)
+}
+
+func (o *CreateResourcePoolsConflict) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *CreateResourcePoolsConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateResourcePoolsInternalServerError creates a CreateResourcePoolsInternalServerError with default headers values
+func NewCreateResourcePoolsInternalServerError() *CreateResourcePoolsInternalServerError {
+	return &CreateResourcePoolsInternalServerError{}
+}
+
+/*
+CreateResourcePoolsInternalServerError describes a response with status code 500, with default header values.
+
+An unexpected error response.
+*/
+type CreateResourcePoolsInternalServerError struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this create resource pools internal server error response has a 2xx status code
+func (o *CreateResourcePoolsInternalServerError) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this create resource pools internal server error response has a 3xx status code
+func (o *CreateResourcePoolsInternalServerError) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this create resource pools internal server error response has a 4xx status code
+func (o *CreateResourcePoolsInternalServerError) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this create resource pools internal server error response has a 5xx status code
+func (o *CreateResourcePoolsInternalServerError) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this create resource pools internal server error response a status code equal to that given
+func (o *CreateResourcePoolsInternalServerError) IsCode(code int) bool {
+	return code == 500
+}
+
+// Code gets the status code for the create resource pools internal server error response
+func (o *CreateResourcePoolsInternalServerError) Code() int {
+	return 500
+}
+
+func (o *CreateResourcePoolsInternalServerError) Error() string {
+	return fmt.Sprintf("[POST /api/v1/config/resource-pools][%d] createResourcePoolsInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *CreateResourcePoolsInternalServerError) String() string {
+	return fmt.Sprintf("[POST /api/v1/config/resource-pools][%d] createResourcePoolsInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *CreateResourcePoolsInternalServerError) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *CreateResourcePoolsInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewCreateResourcePoolsDefault creates a CreateResourcePoolsDefault with default headers values
 func NewCreateResourcePoolsDefault(code int) *CreateResourcePoolsDefault {
 	return &CreateResourcePoolsDefault{
@@ -119,12 +341,12 @@ func NewCreateResourcePoolsDefault(code int) *CreateResourcePoolsDefault {
 /*
 CreateResourcePoolsDefault describes a response with status code -1, with default header values.
 
-An unexpected error response.
+An undefined error response.
 */
 type CreateResourcePoolsDefault struct {
 	_statusCode int
 
-	Payload *models.APIError
+	Payload models.GenericError
 }
 
 // IsSuccess returns true when this create resource pools default response has a 2xx status code
@@ -165,16 +387,14 @@ func (o *CreateResourcePoolsDefault) String() string {
 	return fmt.Sprintf("[POST /api/v1/config/resource-pools][%d] CreateResourcePools default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *CreateResourcePoolsDefault) GetPayload() *models.APIError {
+func (o *CreateResourcePoolsDefault) GetPayload() models.GenericError {
 	return o.Payload
 }
 
 func (o *CreateResourcePoolsDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIError)
-
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

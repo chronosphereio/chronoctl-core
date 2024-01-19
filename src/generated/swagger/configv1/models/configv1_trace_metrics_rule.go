@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ConfigunstableTraceMetricsRule configunstable trace metrics rule
+// Configv1TraceMetricsRule configv1 trace metrics rule
 //
-// swagger:model configunstableTraceMetricsRule
-type ConfigunstableTraceMetricsRule struct {
+// swagger:model configv1TraceMetricsRule
+type Configv1TraceMetricsRule struct {
 
 	// Required name of the TraceMetricsRule. May be modified after the TraceMetricsRule is created.
 	Name string `json:"name,omitempty"`
@@ -43,17 +43,17 @@ type ConfigunstableTraceMetricsRule struct {
 	MetricLabels map[string]string `json:"metric_labels,omitempty"`
 
 	// Histogram bucket values, in seconds, for generated duration metrics.
-	HistogramBucketsSecs []int32 `json:"histogram_buckets_secs"`
+	HistogramBucketsSecs []float64 `json:"histogram_buckets_secs"`
 
 	// trace filter
-	TraceFilter *ConfigunstableTraceSearchFilter `json:"trace_filter,omitempty"`
+	TraceFilter *Configv1TraceSearchFilter `json:"trace_filter,omitempty"`
 
 	// Add labels to the resultant metrics based on these specified GroupBy messages.
 	GroupBy []*TraceMetricsRuleGroupBy `json:"group_by"`
 }
 
-// Validate validates this configunstable trace metrics rule
-func (m *ConfigunstableTraceMetricsRule) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 trace metrics rule
+func (m *Configv1TraceMetricsRule) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
@@ -78,7 +78,7 @@ func (m *ConfigunstableTraceMetricsRule) Validate(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *ConfigunstableTraceMetricsRule) validateCreatedAt(formats strfmt.Registry) error {
+func (m *Configv1TraceMetricsRule) validateCreatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -90,7 +90,7 @@ func (m *ConfigunstableTraceMetricsRule) validateCreatedAt(formats strfmt.Regist
 	return nil
 }
 
-func (m *ConfigunstableTraceMetricsRule) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *Configv1TraceMetricsRule) validateUpdatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -102,7 +102,7 @@ func (m *ConfigunstableTraceMetricsRule) validateUpdatedAt(formats strfmt.Regist
 	return nil
 }
 
-func (m *ConfigunstableTraceMetricsRule) validateTraceFilter(formats strfmt.Registry) error {
+func (m *Configv1TraceMetricsRule) validateTraceFilter(formats strfmt.Registry) error {
 	if swag.IsZero(m.TraceFilter) { // not required
 		return nil
 	}
@@ -121,7 +121,7 @@ func (m *ConfigunstableTraceMetricsRule) validateTraceFilter(formats strfmt.Regi
 	return nil
 }
 
-func (m *ConfigunstableTraceMetricsRule) validateGroupBy(formats strfmt.Registry) error {
+func (m *Configv1TraceMetricsRule) validateGroupBy(formats strfmt.Registry) error {
 	if swag.IsZero(m.GroupBy) { // not required
 		return nil
 	}
@@ -147,8 +147,8 @@ func (m *ConfigunstableTraceMetricsRule) validateGroupBy(formats strfmt.Registry
 	return nil
 }
 
-// ContextValidate validate this configunstable trace metrics rule based on the context it is used
-func (m *ConfigunstableTraceMetricsRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 trace metrics rule based on the context it is used
+func (m *Configv1TraceMetricsRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
@@ -173,7 +173,7 @@ func (m *ConfigunstableTraceMetricsRule) ContextValidate(ctx context.Context, fo
 	return nil
 }
 
-func (m *ConfigunstableTraceMetricsRule) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1TraceMetricsRule) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
 		return err
@@ -182,7 +182,7 @@ func (m *ConfigunstableTraceMetricsRule) contextValidateCreatedAt(ctx context.Co
 	return nil
 }
 
-func (m *ConfigunstableTraceMetricsRule) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1TraceMetricsRule) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
 		return err
@@ -191,7 +191,7 @@ func (m *ConfigunstableTraceMetricsRule) contextValidateUpdatedAt(ctx context.Co
 	return nil
 }
 
-func (m *ConfigunstableTraceMetricsRule) contextValidateTraceFilter(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1TraceMetricsRule) contextValidateTraceFilter(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.TraceFilter != nil {
 
@@ -212,7 +212,7 @@ func (m *ConfigunstableTraceMetricsRule) contextValidateTraceFilter(ctx context.
 	return nil
 }
 
-func (m *ConfigunstableTraceMetricsRule) contextValidateGroupBy(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1TraceMetricsRule) contextValidateGroupBy(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.GroupBy); i++ {
 
@@ -238,7 +238,7 @@ func (m *ConfigunstableTraceMetricsRule) contextValidateGroupBy(ctx context.Cont
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableTraceMetricsRule) MarshalBinary() ([]byte, error) {
+func (m *Configv1TraceMetricsRule) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -246,8 +246,8 @@ func (m *ConfigunstableTraceMetricsRule) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableTraceMetricsRule) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableTraceMetricsRule
+func (m *Configv1TraceMetricsRule) UnmarshalBinary(b []byte) error {
+	var res Configv1TraceMetricsRule
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

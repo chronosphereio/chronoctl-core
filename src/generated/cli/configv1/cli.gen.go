@@ -30,6 +30,8 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewRollupRuleCmd())
 	root.AddCommand(NewServiceAccountCmd())
 	root.AddCommand(NewTeamCmd())
+	root.AddCommand(NewTraceJaegerRemoteSamplingStrategyCmd())
+	root.AddCommand(NewTraceMetricsRuleCmd())
 }
 
 func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, types.Object, bool) error {
@@ -301,6 +303,38 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateTeam(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		TraceJaegerRemoteSamplingStrategyTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*TraceJaegerRemoteSamplingStrategy)
+			if !ok {
+				return types.WrongObjectErr((&TraceJaegerRemoteSamplingStrategy{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateTraceJaegerRemoteSamplingStrategy(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		TraceMetricsRuleTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*TraceMetricsRule)
+			if !ok {
+				return types.WrongObjectErr((&TraceMetricsRule{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateTraceMetricsRule(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

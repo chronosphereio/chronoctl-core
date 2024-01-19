@@ -29,6 +29,18 @@ func (o *ReadResourcePoolsReader) ReadResponse(response runtime.ClientResponse, 
 			return nil, err
 		}
 		return result, nil
+	case 404:
+		result := NewReadResourcePoolsNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewReadResourcePoolsInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		result := NewReadResourcePoolsDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -109,6 +121,142 @@ func (o *ReadResourcePoolsOK) readResponse(response runtime.ClientResponse, cons
 	return nil
 }
 
+// NewReadResourcePoolsNotFound creates a ReadResourcePoolsNotFound with default headers values
+func NewReadResourcePoolsNotFound() *ReadResourcePoolsNotFound {
+	return &ReadResourcePoolsNotFound{}
+}
+
+/*
+ReadResourcePoolsNotFound describes a response with status code 404, with default header values.
+
+Cannot read the ResourcePools because ResourcePools has not been created.
+*/
+type ReadResourcePoolsNotFound struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this read resource pools not found response has a 2xx status code
+func (o *ReadResourcePoolsNotFound) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this read resource pools not found response has a 3xx status code
+func (o *ReadResourcePoolsNotFound) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this read resource pools not found response has a 4xx status code
+func (o *ReadResourcePoolsNotFound) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this read resource pools not found response has a 5xx status code
+func (o *ReadResourcePoolsNotFound) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this read resource pools not found response a status code equal to that given
+func (o *ReadResourcePoolsNotFound) IsCode(code int) bool {
+	return code == 404
+}
+
+// Code gets the status code for the read resource pools not found response
+func (o *ReadResourcePoolsNotFound) Code() int {
+	return 404
+}
+
+func (o *ReadResourcePoolsNotFound) Error() string {
+	return fmt.Sprintf("[GET /api/v1/config/resource-pools][%d] readResourcePoolsNotFound  %+v", 404, o.Payload)
+}
+
+func (o *ReadResourcePoolsNotFound) String() string {
+	return fmt.Sprintf("[GET /api/v1/config/resource-pools][%d] readResourcePoolsNotFound  %+v", 404, o.Payload)
+}
+
+func (o *ReadResourcePoolsNotFound) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *ReadResourcePoolsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewReadResourcePoolsInternalServerError creates a ReadResourcePoolsInternalServerError with default headers values
+func NewReadResourcePoolsInternalServerError() *ReadResourcePoolsInternalServerError {
+	return &ReadResourcePoolsInternalServerError{}
+}
+
+/*
+ReadResourcePoolsInternalServerError describes a response with status code 500, with default header values.
+
+An unexpected error response.
+*/
+type ReadResourcePoolsInternalServerError struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this read resource pools internal server error response has a 2xx status code
+func (o *ReadResourcePoolsInternalServerError) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this read resource pools internal server error response has a 3xx status code
+func (o *ReadResourcePoolsInternalServerError) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this read resource pools internal server error response has a 4xx status code
+func (o *ReadResourcePoolsInternalServerError) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this read resource pools internal server error response has a 5xx status code
+func (o *ReadResourcePoolsInternalServerError) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this read resource pools internal server error response a status code equal to that given
+func (o *ReadResourcePoolsInternalServerError) IsCode(code int) bool {
+	return code == 500
+}
+
+// Code gets the status code for the read resource pools internal server error response
+func (o *ReadResourcePoolsInternalServerError) Code() int {
+	return 500
+}
+
+func (o *ReadResourcePoolsInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /api/v1/config/resource-pools][%d] readResourcePoolsInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *ReadResourcePoolsInternalServerError) String() string {
+	return fmt.Sprintf("[GET /api/v1/config/resource-pools][%d] readResourcePoolsInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *ReadResourcePoolsInternalServerError) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *ReadResourcePoolsInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewReadResourcePoolsDefault creates a ReadResourcePoolsDefault with default headers values
 func NewReadResourcePoolsDefault(code int) *ReadResourcePoolsDefault {
 	return &ReadResourcePoolsDefault{
@@ -119,12 +267,12 @@ func NewReadResourcePoolsDefault(code int) *ReadResourcePoolsDefault {
 /*
 ReadResourcePoolsDefault describes a response with status code -1, with default header values.
 
-An unexpected error response.
+An undefined error response.
 */
 type ReadResourcePoolsDefault struct {
 	_statusCode int
 
-	Payload *models.APIError
+	Payload models.GenericError
 }
 
 // IsSuccess returns true when this read resource pools default response has a 2xx status code
@@ -165,16 +313,14 @@ func (o *ReadResourcePoolsDefault) String() string {
 	return fmt.Sprintf("[GET /api/v1/config/resource-pools][%d] ReadResourcePools default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *ReadResourcePoolsDefault) GetPayload() *models.APIError {
+func (o *ReadResourcePoolsDefault) GetPayload() models.GenericError {
 	return o.Payload
 }
 
 func (o *ReadResourcePoolsDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIError)
-
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

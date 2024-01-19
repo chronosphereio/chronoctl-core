@@ -549,7 +549,7 @@ spec:
           # If src_label_name differs from dst_label_name keep_label determines if
           # the label with src_label_name is kept.
           keep_label: <true|false>
-    aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75>
+    aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES>
     label_policy:
         # Labels that should be retained in the output metric. If set, then the
         # discard field must be empty.
