@@ -4,7 +4,10 @@ set -euo pipefail
 set -x
 [[ -z ${DEBUG:-} ]] || set -o xtrace
 
+# get the absolute path of the chronoctl-core directory no matter where the
+# script is called from.
 DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && cd .. && pwd -P)"
+
 GITCONFIG_VOLUME=${GIT_CONFIG:-"${HOME}/.gitconfig"}
 GCLOUD_CONFIG_DIR="${CLOUDSDK_CONFIG:-${HOME}/.config/gcloud}"
 SSH_CONFIG_DIR_VOLUME="${HOME}/.ssh"
