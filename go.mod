@@ -3,7 +3,7 @@ module github.com/chronosphereio/chronoctl-core
 go 1.21
 
 require (
-	github.com/alecthomas/participle/v2 v2.0.0-alpha7
+	github.com/alecthomas/participle/v2 v2.1.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/fatih/color v1.15.0
 	github.com/go-openapi/errors v0.20.2

@@ -26,11 +26,11 @@ import (
 )
 
 var (
-	promLabelsParser = participle.MustBuild(&PromLabels{}, participle.Unquote())
+	promLabelsParser = participle.MustBuild[PromLabels](participle.Unquote())
 )
 
 // PromLabelParser returns a parser for PromLabels
-func PromLabelParser() *participle.Parser {
+func PromLabelParser() *participle.Parser[PromLabels] {
 	return promLabelsParser
 }
 
@@ -41,8 +41,8 @@ func FromPromLabelsToMutingMatchers(s string) ([]*models.Configv1MutingRuleLabel
 		return nil, nil
 	}
 
-	var labelsHolder PromLabels
-	if err := promLabelsParser.ParseString("", s, &labelsHolder); err != nil {
+	labelsHolder, err := promLabelsParser.ParseString("", s)
+	if err != nil {
 		return nil, errors.Wrap(err, "invalid labels string")
 	}
 
