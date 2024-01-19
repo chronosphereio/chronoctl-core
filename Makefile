@@ -9,6 +9,9 @@ GO_BUILD_LDFLAGS_CMD      := $(abspath ./build/go-build-ldflags.sh)
 GO_BUILD_LDFLAGS          := $(shell $(GO_BUILD_LDFLAGS_CMD))
 GO_BUILD_COMMON_ENV       := CGO_ENABLED=0
 
+GO_RELEASER_WORKING_DIR   := /go/src/github.com/chronosphere/chronoctl
+GO_RELEASER_RELEASE_ARGS  ?= --rm-dist
+
 UNSTABLE_ENTITIES := link-templates,saved-trace-searches,dashboards,trace-tail-sampling-rules,services
 
 .PHONY: clean-build
@@ -84,3 +87,19 @@ go-version-check:
 	# make sure you're running the right version of Go, otherwise builds/codegen/tests
 	# may have inconsistent results that are hard to debug.
 	go version | grep go1.21 || (echo "Error: you must be running go1.21.x" && exit 1)
+
+.PHONY: release
+release:
+	@echo "Releasing new version"
+	GO_BUILD_LDFLAGS="$(GO_BUILD_LDFLAGS)" \
+		GO_RELEASER_DOCKER_IMAGE=$(GO_RELEASER_DOCKER_IMAGE) \
+		GO_RELEASER_RELEASE_ARGS="$(GO_RELEASER_RELEASE_ARGS)" \
+		GO_RELEASER_WORKING_DIR=$(GO_RELEASER_WORKING_DIR) \
+		SSH_AUTH_SOCK=$(SSH_AUTH_SOCK) \
+		./scripts/run_goreleaser.sh ${GO_RELEASER_RELEASE_ARGS}
+
+.PHONY: release-snapshot
+release-snapshot:
+	@echo Building binaries with goreleaser
+	# --snapshot mode allows building artifacts w/o release tag present and w/ publishing mode disabled useful when we want to test whether we can build binaries, but not publish yet.
+	make release GO_RELEASER_RELEASE_ARGS="--snapshot --rm-dist --skip-publish"
