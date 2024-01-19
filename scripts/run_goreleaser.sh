@@ -4,7 +4,6 @@ set -euo pipefail
 set -x
 [[ -z ${DEBUG:-} ]] || set -o xtrace
 
-OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && cd .. && pwd -P)"
 GITCONFIG_VOLUME=${GIT_CONFIG:-"${HOME}/.gitconfig"}
 GCLOUD_CONFIG_DIR="${CLOUDSDK_CONFIG:-${HOME}/.config/gcloud}"
@@ -17,12 +16,6 @@ if [[ "${BUILDKITE:-}" == "true" ]]; then
     SSH_CONFIG_DIR_VOLUME="/var/lib/buildkite-agent/.ssh"
 fi
 
-# On Mac for Desktop we need to use these hardcoded values when forwarding SSH agent socket
-# Docker would 'magically' map whatever is set in $SSH_AUTH_SOCK for the user to the container ns
-if [[ "${OS}" == "darwin" ]]; then
-    SSH_AUTH_SOCK_VOLUME="/run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock"
-    SSH_AUTH_SOCK_ENV_VAR="/run/host-services/ssh-auth.sock"
-fi
 
 DOCKER_OPTS=(
     -w "${GO_RELEASER_WORKING_DIR}"
