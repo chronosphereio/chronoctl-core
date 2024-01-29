@@ -26,6 +26,9 @@ blobs:
   - provider: gs
     bucket: chronosphere-release
     folder: "{{.Version}}"
+  - provider: gs
+    bucket: chronosphere-release
+    folder: "latest"
 checksum:
   name_template: "{{ .ProjectName}}-checksums.txt"
 release:
