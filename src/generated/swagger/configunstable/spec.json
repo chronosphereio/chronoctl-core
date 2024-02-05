@@ -42,6 +42,31 @@
       },
       "type": "object"
     },
+    "GCPMetricsIntegrationMetricGroup": {
+      "properties": {
+        "project_id": {
+          "description": "Project ID that has access to the metric data.",
+          "type": "string"
+        },
+        "prefixes": {
+          "description": "List of GCP metric prefixes to ingest.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GCPMetricsIntegrationServiceAccount": {
+      "properties": {
+        "client_email": {
+          "description": "Email address of the service account to impersonate.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "NoopEntityNestedEnum": {
       "enum": [
         "ENABLED",
@@ -466,6 +491,26 @@
       },
       "type": "object"
     },
+    "configunstableCreateGCPMetricsIntegrationRequest": {
+      "properties": {
+        "gcp_metrics_integration": {
+          "$ref": "#/definitions/configunstableGCPMetricsIntegration"
+        },
+        "dry_run": {
+          "description": "If true, the GCPMetricsIntegration will not be created, and no response GCPMetricsIntegration will be returned. The response will return an error if the given GCPMetricsIntegration is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateGCPMetricsIntegrationResponse": {
+      "properties": {
+        "gcp_metrics_integration": {
+          "$ref": "#/definitions/configunstableGCPMetricsIntegration"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateLinkTemplateRequest": {
       "properties": {
         "link_template": {
@@ -628,6 +673,9 @@
     "configunstableDeleteDashboardResponse": {
       "type": "object"
     },
+    "configunstableDeleteGCPMetricsIntegrationResponse": {
+      "type": "object"
+    },
     "configunstableDeleteLinkTemplateResponse": {
       "type": "object"
     },
@@ -644,6 +692,41 @@
       "type": "object"
     },
     "configunstableDeleteTraceTailSamplingRulesResponse": {
+      "type": "object"
+    },
+    "configunstableGCPMetricsIntegration": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the GCPMetricsIntegration. If slug is not provided, one will be generated based of the name field. Cannot be modified after the GCPMetricsIntegration is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the GCPMetricsIntegration. May be modified after the GCPMetricsIntegration is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the GCPMetricsIntegration was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the GCPMetricsIntegration was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "service_account": {
+          "$ref": "#/definitions/GCPMetricsIntegrationServiceAccount"
+        },
+        "metric_groups": {
+          "description": "Metric groups to be ingested for this integration.",
+          "items": {
+            "$ref": "#/definitions/GCPMetricsIntegrationMetricGroup"
+          },
+          "type": "array"
+        }
+      },
       "type": "object"
     },
     "configunstableLinkTemplate": {
@@ -687,6 +770,20 @@
         "dashboards": {
           "items": {
             "$ref": "#/definitions/configunstableDashboard"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListGCPMetricsIntegrationsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "gcp_metrics_integrations": {
+          "items": {
+            "$ref": "#/definitions/configunstableGCPMetricsIntegration"
           },
           "type": "array"
         }
@@ -807,6 +904,14 @@
       "properties": {
         "dashboard": {
           "$ref": "#/definitions/configunstableDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadGCPMetricsIntegrationResponse": {
+      "properties": {
+        "gcp_metrics_integration": {
+          "$ref": "#/definitions/configunstableGCPMetricsIntegration"
         }
       },
       "type": "object"
@@ -1063,6 +1168,14 @@
       "properties": {
         "dashboard": {
           "$ref": "#/definitions/configunstableDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateGCPMetricsIntegrationResponse": {
+      "properties": {
+        "gcp_metrics_integration": {
+          "$ref": "#/definitions/configunstableGCPMetricsIntegration"
         }
       },
       "type": "object"
@@ -1464,6 +1577,272 @@
         },
         "tags": [
           "Dashboard"
+        ]
+      }
+    },
+    "/api/unstable/config/gcp-metrics-integrations": {
+      "get": {
+        "operationId": "ListGCPMetricsIntegrations",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any GCPMetricsIntegration with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any GCPMetricsIntegration with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListGCPMetricsIntegrationsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GCPMetricsIntegration"
+        ]
+      },
+      "post": {
+        "operationId": "CreateGCPMetricsIntegration",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateGCPMetricsIntegrationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created GCPMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateGCPMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the GCPMetricsIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the GCPMetricsIntegration because there is a conflict with an existing GCPMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GCPMetricsIntegration"
+        ]
+      }
+    },
+    "/api/unstable/config/gcp-metrics-integrations/{slug}": {
+      "delete": {
+        "operationId": "DeleteGCPMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteGCPMetricsIntegrationResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the GCPMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GCPMetricsIntegration"
+        ]
+      },
+      "get": {
+        "operationId": "ReadGCPMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadGCPMetricsIntegrationResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the GCPMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GCPMetricsIntegration"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateGCPMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the GCPMetricsIntegration will be created if it does not already exist, identified by slug. If false, an error will be returned if the GCPMetricsIntegration does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "description": "If true, the GCPMetricsIntegration will not be created nor updated, and no response GCPMetricsIntegration will be returned. The response will return an error if the given GCPMetricsIntegration is invalid.",
+                  "type": "boolean"
+                },
+                "gcp_metrics_integration": {
+                  "$ref": "#/definitions/configunstableGCPMetricsIntegration"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated GCPMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateGCPMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the GCPMetricsIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the GCPMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the GCPMetricsIntegration because there is a conflict with an existing GCPMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GCPMetricsIntegration"
         ]
       }
     },

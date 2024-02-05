@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+- New config: trace-tail-sampling-rules
+- Support for new aggregation type `HISTOGRAM` for `mapping-rules` and `rollup-rules`
+
 ## v1.1.0
 
 ### Added
