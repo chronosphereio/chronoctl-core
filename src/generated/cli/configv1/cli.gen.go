@@ -32,6 +32,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewTeamCmd())
 	root.AddCommand(NewTraceJaegerRemoteSamplingStrategyCmd())
 	root.AddCommand(NewTraceMetricsRuleCmd())
+	root.AddCommand(NewTraceTailSamplingRulesCmd())
 }
 
 func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, types.Object, bool) error {
@@ -335,6 +336,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateTraceMetricsRule(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		TraceTailSamplingRulesTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*TraceTailSamplingRules)
+			if !ok {
+				return types.WrongObjectErr((&TraceTailSamplingRules{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateTraceTailSamplingRules(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

@@ -435,6 +435,26 @@ func (mr *MockClientServiceMockRecorder) CreateTraceMetricsRule(params interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceMetricsRule", reflect.TypeOf((*MockClientService)(nil).CreateTraceMetricsRule), varargs...)
 }
 
+// CreateTraceTailSamplingRules mocks base method.
+func (m *MockClientService) CreateTraceTailSamplingRules(params *operations.CreateTraceTailSamplingRulesParams, opts ...operations.ClientOption) (*operations.CreateTraceTailSamplingRulesOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateTraceTailSamplingRules", varargs...)
+	ret0, _ := ret[0].(*operations.CreateTraceTailSamplingRulesOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateTraceTailSamplingRules indicates an expected call of CreateTraceTailSamplingRules.
+func (mr *MockClientServiceMockRecorder) CreateTraceTailSamplingRules(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceTailSamplingRules", reflect.TypeOf((*MockClientService)(nil).CreateTraceTailSamplingRules), varargs...)
+}
+
 // DeleteBucket mocks base method.
 func (m *MockClientService) DeleteBucket(params *operations.DeleteBucketParams, opts ...operations.ClientOption) (*operations.DeleteBucketOK, error) {
 	m.ctrl.T.Helper()
@@ -833,6 +853,26 @@ func (mr *MockClientServiceMockRecorder) DeleteTraceMetricsRule(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceMetricsRule", reflect.TypeOf((*MockClientService)(nil).DeleteTraceMetricsRule), varargs...)
+}
+
+// DeleteTraceTailSamplingRules mocks base method.
+func (m *MockClientService) DeleteTraceTailSamplingRules(params *operations.DeleteTraceTailSamplingRulesParams, opts ...operations.ClientOption) (*operations.DeleteTraceTailSamplingRulesOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteTraceTailSamplingRules", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteTraceTailSamplingRulesOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteTraceTailSamplingRules indicates an expected call of DeleteTraceTailSamplingRules.
+func (mr *MockClientServiceMockRecorder) DeleteTraceTailSamplingRules(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceTailSamplingRules", reflect.TypeOf((*MockClientService)(nil).DeleteTraceTailSamplingRules), varargs...)
 }
 
 // ListBuckets mocks base method.
@@ -1635,6 +1675,26 @@ func (mr *MockClientServiceMockRecorder) ReadTraceMetricsRule(params interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadTraceMetricsRule", reflect.TypeOf((*MockClientService)(nil).ReadTraceMetricsRule), varargs...)
 }
 
+// ReadTraceTailSamplingRules mocks base method.
+func (m *MockClientService) ReadTraceTailSamplingRules(params *operations.ReadTraceTailSamplingRulesParams, opts ...operations.ClientOption) (*operations.ReadTraceTailSamplingRulesOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadTraceTailSamplingRules", varargs...)
+	ret0, _ := ret[0].(*operations.ReadTraceTailSamplingRulesOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadTraceTailSamplingRules indicates an expected call of ReadTraceTailSamplingRules.
+func (mr *MockClientServiceMockRecorder) ReadTraceTailSamplingRules(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadTraceTailSamplingRules", reflect.TypeOf((*MockClientService)(nil).ReadTraceTailSamplingRules), varargs...)
+}
+
 // SetTransport mocks base method.
 func (m *MockClientService) SetTransport(transport runtime.ClientTransport) {
 	m.ctrl.T.Helper()
@@ -2025,4 +2085,24 @@ func (mr *MockClientServiceMockRecorder) UpdateTraceMetricsRule(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTraceMetricsRule", reflect.TypeOf((*MockClientService)(nil).UpdateTraceMetricsRule), varargs...)
+}
+
+// UpdateTraceTailSamplingRules mocks base method.
+func (m *MockClientService) UpdateTraceTailSamplingRules(params *operations.UpdateTraceTailSamplingRulesParams, opts ...operations.ClientOption) (*operations.UpdateTraceTailSamplingRulesOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateTraceTailSamplingRules", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateTraceTailSamplingRulesOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateTraceTailSamplingRules indicates an expected call of UpdateTraceTailSamplingRules.
+func (mr *MockClientServiceMockRecorder) UpdateTraceTailSamplingRules(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTraceTailSamplingRules", reflect.TypeOf((*MockClientService)(nil).UpdateTraceTailSamplingRules), varargs...)
 }

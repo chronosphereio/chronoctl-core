@@ -899,7 +899,10 @@
         "GAUGE",
         "DELTA",
         "DISTRIBUTION",
-        "HISTOGRAM_CUMULATIVE"
+        "CUMULATIVE_EXPONENTIAL_HISTOGRAM",
+        "MEASUREMENT",
+        "CUMULATIVE_COUNTER",
+        "DELTA_COUNTER"
       ],
       "type": "string"
     },
@@ -1318,7 +1321,8 @@
         "P9999",
         "P25",
         "P75",
-        "COUNT_SAMPLES"
+        "COUNT_SAMPLES",
+        "HISTOGRAM"
       ],
       "type": "string"
     },
@@ -1822,6 +1826,26 @@
       },
       "type": "object"
     },
+    "configv1CreateTraceTailSamplingRulesRequest": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configv1TraceTailSamplingRules"
+        },
+        "dry_run": {
+          "description": "If true, the TraceTailSamplingRules will not be created, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateTraceTailSamplingRulesResponse": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configv1TraceTailSamplingRules"
+        }
+      },
+      "type": "object"
+    },
     "configv1Dashboard": {
       "properties": {
         "slug": {
@@ -1854,6 +1878,20 @@
         "dashboard_json": {
           "description": "Required raw JSON of the dashboard.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1DefaultSampleRate": {
+      "properties": {
+        "enabled": {
+          "description": "Whether to override the default sample rate",
+          "type": "boolean"
+        },
+        "sample_rate": {
+          "description": "A fraction of traces to keep, which should be a number between 0 and 1, inclusive",
+          "format": "double",
+          "type": "number"
         }
       },
       "type": "object"
@@ -1925,6 +1963,9 @@
       "type": "object"
     },
     "configv1DeleteTraceMetricsRuleResponse": {
+      "type": "object"
+    },
+    "configv1DeleteTraceTailSamplingRulesResponse": {
       "type": "object"
     },
     "configv1DerivedLabel": {
@@ -2923,6 +2964,14 @@
       },
       "type": "object"
     },
+    "configv1ReadTraceTailSamplingRulesResponse": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configv1TraceTailSamplingRules"
+        }
+      },
+      "type": "object"
+    },
     "configv1RecordingRule": {
       "properties": {
         "slug": {
@@ -3358,6 +3407,66 @@
       },
       "type": "object"
     },
+    "configv1TraceTailSamplingRule": {
+      "description": "Contains configuration for one tail sampling rule.",
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/configv1TraceSearchFilter"
+        },
+        "sample_rate": {
+          "description": "A fraction of traces to keep, which should be a number between 0 and 1, inclusive",
+          "format": "double",
+          "type": "number"
+        },
+        "name": {
+          "description": "A human-readable name of the rule, which summarizes what it's for",
+          "type": "string"
+        },
+        "system_name": {
+          "description": "Value used as the metric label value for metrics emitted relating to this rule.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "When the rule was created (novel system_name)",
+          "format": "date-time",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "When the rule was updated (existing system_name)",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1TraceTailSamplingRules": {
+      "description": "Root object containing all tail sampling rules (for a tenant).",
+      "properties": {
+        "created_at": {
+          "description": "Set in API responses.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Set in API responses.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "rules": {
+          "description": "Optional. A list of rules, evaluated in order until a match is found,\nand the sample rate applied, or else the default sample rate is applied.",
+          "items": {
+            "$ref": "#/definitions/configv1TraceTailSamplingRule"
+          },
+          "type": "array"
+        },
+        "default_sample_rate": {
+          "$ref": "#/definitions/configv1DefaultSampleRate"
+        }
+      },
+      "type": "object"
+    },
     "configv1UpdateBucketResponse": {
       "properties": {
         "bucket": {
@@ -3522,6 +3631,30 @@
       "properties": {
         "trace_metrics_rule": {
           "$ref": "#/definitions/configv1TraceMetricsRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateTraceTailSamplingRulesRequest": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configv1TraceTailSamplingRules"
+        },
+        "create_if_missing": {
+          "description": "If true, the TraceTailSamplingRules will be created if it does not already exist. If false, an error will be returned if the TraceTailSamplingRules does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the TraceTailSamplingRules will not be created nor updated, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateTraceTailSamplingRulesResponse": {
+      "properties": {
+        "trace_tail_sampling_rules": {
+          "$ref": "#/definitions/configv1TraceTailSamplingRules"
         }
       },
       "type": "object"
@@ -8961,6 +9094,176 @@
         },
         "tags": [
           "TraceMetricsRule"
+        ]
+      }
+    },
+    "/api/v1/config/trace-tail-sampling-rules": {
+      "delete": {
+        "operationId": "DeleteTraceTailSamplingRules",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "dry_run",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteTraceTailSamplingRulesResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the TraceTailSamplingRules because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTailSamplingRules"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceTailSamplingRules",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadTraceTailSamplingRulesResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the TraceTailSamplingRules because TraceTailSamplingRules has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTailSamplingRules"
+        ]
+      },
+      "post": {
+        "description": "TraceTailSamplingRules CRUD (subset for singleton objects)",
+        "operationId": "CreateTraceTailSamplingRules",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTraceTailSamplingRulesRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created TraceTailSamplingRules.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTraceTailSamplingRulesResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the TraceTailSamplingRules because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceTailSamplingRules because there is a conflict with an existing TraceTailSamplingRules.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTailSamplingRules"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceTailSamplingRules",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateTraceTailSamplingRulesRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated TraceTailSamplingRules.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateTraceTailSamplingRulesResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the TraceTailSamplingRules because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceTailSamplingRules because TraceTailSamplingRules has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTailSamplingRules"
         ]
       }
     }

@@ -68,6 +68,8 @@ type ClientService interface {
 
 	CreateTraceMetricsRule(params *CreateTraceMetricsRuleParams, opts ...ClientOption) (*CreateTraceMetricsRuleOK, error)
 
+	CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRulesParams, opts ...ClientOption) (*CreateTraceTailSamplingRulesOK, error)
+
 	DeleteBucket(params *DeleteBucketParams, opts ...ClientOption) (*DeleteBucketOK, error)
 
 	DeleteClassicDashboard(params *DeleteClassicDashboardParams, opts ...ClientOption) (*DeleteClassicDashboardOK, error)
@@ -107,6 +109,8 @@ type ClientService interface {
 	DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error)
 
 	DeleteTraceMetricsRule(params *DeleteTraceMetricsRuleParams, opts ...ClientOption) (*DeleteTraceMetricsRuleOK, error)
+
+	DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRulesParams, opts ...ClientOption) (*DeleteTraceTailSamplingRulesOK, error)
 
 	ListBuckets(params *ListBucketsParams, opts ...ClientOption) (*ListBucketsOK, error)
 
@@ -188,6 +192,8 @@ type ClientService interface {
 
 	ReadTraceMetricsRule(params *ReadTraceMetricsRuleParams, opts ...ClientOption) (*ReadTraceMetricsRuleOK, error)
 
+	ReadTraceTailSamplingRules(params *ReadTraceTailSamplingRulesParams, opts ...ClientOption) (*ReadTraceTailSamplingRulesOK, error)
+
 	UpdateBucket(params *UpdateBucketParams, opts ...ClientOption) (*UpdateBucketOK, error)
 
 	UpdateClassicDashboard(params *UpdateClassicDashboardParams, opts ...ClientOption) (*UpdateClassicDashboardOK, error)
@@ -225,6 +231,8 @@ type ClientService interface {
 	UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*UpdateTraceJaegerRemoteSamplingStrategyOK, error)
 
 	UpdateTraceMetricsRule(params *UpdateTraceMetricsRuleParams, opts ...ClientOption) (*UpdateTraceMetricsRuleOK, error)
+
+	UpdateTraceTailSamplingRules(params *UpdateTraceTailSamplingRulesParams, opts ...ClientOption) (*UpdateTraceTailSamplingRulesOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -973,6 +981,43 @@ func (a *Client) CreateTraceMetricsRule(params *CreateTraceMetricsRuleParams, op
 }
 
 /*
+CreateTraceTailSamplingRules TraceTailSamplingRules CRUD (subset for singleton objects)
+*/
+func (a *Client) CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRulesParams, opts ...ClientOption) (*CreateTraceTailSamplingRulesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateTraceTailSamplingRulesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateTraceTailSamplingRules",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/trace-tail-sampling-rules",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateTraceTailSamplingRulesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateTraceTailSamplingRulesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateTraceTailSamplingRulesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteBucket delete bucket API
 */
 func (a *Client) DeleteBucket(params *DeleteBucketParams, opts ...ClientOption) (*DeleteBucketOK, error) {
@@ -1709,6 +1754,43 @@ func (a *Client) DeleteTraceMetricsRule(params *DeleteTraceMetricsRuleParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteTraceMetricsRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteTraceTailSamplingRules delete trace tail sampling rules API
+*/
+func (a *Client) DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRulesParams, opts ...ClientOption) (*DeleteTraceTailSamplingRulesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteTraceTailSamplingRulesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteTraceTailSamplingRules",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/trace-tail-sampling-rules",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteTraceTailSamplingRulesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteTraceTailSamplingRulesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteTraceTailSamplingRulesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3193,6 +3275,43 @@ func (a *Client) ReadTraceMetricsRule(params *ReadTraceMetricsRuleParams, opts .
 }
 
 /*
+ReadTraceTailSamplingRules read trace tail sampling rules API
+*/
+func (a *Client) ReadTraceTailSamplingRules(params *ReadTraceTailSamplingRulesParams, opts ...ClientOption) (*ReadTraceTailSamplingRulesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadTraceTailSamplingRulesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadTraceTailSamplingRules",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/trace-tail-sampling-rules",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadTraceTailSamplingRulesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadTraceTailSamplingRulesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadTraceTailSamplingRulesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 UpdateBucket update bucket API
 */
 func (a *Client) UpdateBucket(params *UpdateBucketParams, opts ...ClientOption) (*UpdateBucketOK, error) {
@@ -3892,6 +4011,43 @@ func (a *Client) UpdateTraceMetricsRule(params *UpdateTraceMetricsRuleParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateTraceMetricsRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateTraceTailSamplingRules update trace tail sampling rules API
+*/
+func (a *Client) UpdateTraceTailSamplingRules(params *UpdateTraceTailSamplingRulesParams, opts ...ClientOption) (*UpdateTraceTailSamplingRulesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateTraceTailSamplingRulesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateTraceTailSamplingRules",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/trace-tail-sampling-rules",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateTraceTailSamplingRulesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateTraceTailSamplingRulesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateTraceTailSamplingRulesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
