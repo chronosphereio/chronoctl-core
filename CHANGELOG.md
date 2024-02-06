@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.2.0
+
 ### Added
 - New config: trace-tail-sampling-rules
 
