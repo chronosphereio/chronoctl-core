@@ -29,6 +29,12 @@ func (o *DeleteTraceMetricsRuleReader) ReadResponse(response runtime.ClientRespo
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteTraceMetricsRuleBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteTraceMetricsRuleNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteTraceMetricsRuleOK) readResponse(response runtime.ClientResponse,
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteTraceMetricsRuleBadRequest creates a DeleteTraceMetricsRuleBadRequest with default headers values
+func NewDeleteTraceMetricsRuleBadRequest() *DeleteTraceMetricsRuleBadRequest {
+	return &DeleteTraceMetricsRuleBadRequest{}
+}
+
+/*
+DeleteTraceMetricsRuleBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the TraceMetricsRule because it is in use.
+*/
+type DeleteTraceMetricsRuleBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete trace metrics rule bad request response has a 2xx status code
+func (o *DeleteTraceMetricsRuleBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete trace metrics rule bad request response has a 3xx status code
+func (o *DeleteTraceMetricsRuleBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete trace metrics rule bad request response has a 4xx status code
+func (o *DeleteTraceMetricsRuleBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete trace metrics rule bad request response has a 5xx status code
+func (o *DeleteTraceMetricsRuleBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete trace metrics rule bad request response a status code equal to that given
+func (o *DeleteTraceMetricsRuleBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete trace metrics rule bad request response
+func (o *DeleteTraceMetricsRuleBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteTraceMetricsRuleBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteTraceMetricsRuleBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-metrics-rules/{slug}][%d] deleteTraceMetricsRuleBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteTraceMetricsRuleBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteTraceMetricsRuleBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

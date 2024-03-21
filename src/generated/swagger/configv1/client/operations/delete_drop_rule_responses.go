@@ -29,6 +29,12 @@ func (o *DeleteDropRuleReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteDropRuleBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteDropRuleNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteDropRuleOK) readResponse(response runtime.ClientResponse, consume
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteDropRuleBadRequest creates a DeleteDropRuleBadRequest with default headers values
+func NewDeleteDropRuleBadRequest() *DeleteDropRuleBadRequest {
+	return &DeleteDropRuleBadRequest{}
+}
+
+/*
+DeleteDropRuleBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the DropRule because it is in use.
+*/
+type DeleteDropRuleBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete drop rule bad request response has a 2xx status code
+func (o *DeleteDropRuleBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete drop rule bad request response has a 3xx status code
+func (o *DeleteDropRuleBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete drop rule bad request response has a 4xx status code
+func (o *DeleteDropRuleBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete drop rule bad request response has a 5xx status code
+func (o *DeleteDropRuleBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete drop rule bad request response a status code equal to that given
+func (o *DeleteDropRuleBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete drop rule bad request response
+func (o *DeleteDropRuleBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteDropRuleBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/drop-rules/{slug}][%d] deleteDropRuleBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteDropRuleBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/drop-rules/{slug}][%d] deleteDropRuleBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteDropRuleBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteDropRuleBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

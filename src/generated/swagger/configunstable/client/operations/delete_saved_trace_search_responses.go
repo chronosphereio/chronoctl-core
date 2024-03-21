@@ -29,6 +29,12 @@ func (o *DeleteSavedTraceSearchReader) ReadResponse(response runtime.ClientRespo
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteSavedTraceSearchBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteSavedTraceSearchNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteSavedTraceSearchOK) readResponse(response runtime.ClientResponse,
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteSavedTraceSearchBadRequest creates a DeleteSavedTraceSearchBadRequest with default headers values
+func NewDeleteSavedTraceSearchBadRequest() *DeleteSavedTraceSearchBadRequest {
+	return &DeleteSavedTraceSearchBadRequest{}
+}
+
+/*
+DeleteSavedTraceSearchBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the SavedTraceSearch because it is in use.
+*/
+type DeleteSavedTraceSearchBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete saved trace search bad request response has a 2xx status code
+func (o *DeleteSavedTraceSearchBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete saved trace search bad request response has a 3xx status code
+func (o *DeleteSavedTraceSearchBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete saved trace search bad request response has a 4xx status code
+func (o *DeleteSavedTraceSearchBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete saved trace search bad request response has a 5xx status code
+func (o *DeleteSavedTraceSearchBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete saved trace search bad request response a status code equal to that given
+func (o *DeleteSavedTraceSearchBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete saved trace search bad request response
+func (o *DeleteSavedTraceSearchBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteSavedTraceSearchBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/saved-trace-searches/{slug}][%d] deleteSavedTraceSearchBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteSavedTraceSearchBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/saved-trace-searches/{slug}][%d] deleteSavedTraceSearchBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteSavedTraceSearchBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteSavedTraceSearchBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

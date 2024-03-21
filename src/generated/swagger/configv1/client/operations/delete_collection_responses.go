@@ -29,6 +29,12 @@ func (o *DeleteCollectionReader) ReadResponse(response runtime.ClientResponse, c
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteCollectionBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteCollectionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteCollectionOK) readResponse(response runtime.ClientResponse, consu
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteCollectionBadRequest creates a DeleteCollectionBadRequest with default headers values
+func NewDeleteCollectionBadRequest() *DeleteCollectionBadRequest {
+	return &DeleteCollectionBadRequest{}
+}
+
+/*
+DeleteCollectionBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the Collection because it is in use.
+*/
+type DeleteCollectionBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete collection bad request response has a 2xx status code
+func (o *DeleteCollectionBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete collection bad request response has a 3xx status code
+func (o *DeleteCollectionBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete collection bad request response has a 4xx status code
+func (o *DeleteCollectionBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete collection bad request response has a 5xx status code
+func (o *DeleteCollectionBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete collection bad request response a status code equal to that given
+func (o *DeleteCollectionBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete collection bad request response
+func (o *DeleteCollectionBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteCollectionBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/collections/{slug}][%d] deleteCollectionBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteCollectionBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/collections/{slug}][%d] deleteCollectionBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteCollectionBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteCollectionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

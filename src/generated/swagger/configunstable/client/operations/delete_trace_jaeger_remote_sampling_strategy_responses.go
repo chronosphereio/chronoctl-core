@@ -29,6 +29,12 @@ func (o *DeleteTraceJaegerRemoteSamplingStrategyReader) ReadResponse(response ru
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteTraceJaegerRemoteSamplingStrategyBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteTraceJaegerRemoteSamplingStrategyNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteTraceJaegerRemoteSamplingStrategyOK) readResponse(response runtim
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteTraceJaegerRemoteSamplingStrategyBadRequest creates a DeleteTraceJaegerRemoteSamplingStrategyBadRequest with default headers values
+func NewDeleteTraceJaegerRemoteSamplingStrategyBadRequest() *DeleteTraceJaegerRemoteSamplingStrategyBadRequest {
+	return &DeleteTraceJaegerRemoteSamplingStrategyBadRequest{}
+}
+
+/*
+DeleteTraceJaegerRemoteSamplingStrategyBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the TraceJaegerRemoteSamplingStrategy because it is in use.
+*/
+type DeleteTraceJaegerRemoteSamplingStrategyBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete trace jaeger remote sampling strategy bad request response has a 2xx status code
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete trace jaeger remote sampling strategy bad request response has a 3xx status code
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete trace jaeger remote sampling strategy bad request response has a 4xx status code
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete trace jaeger remote sampling strategy bad request response has a 5xx status code
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete trace jaeger remote sampling strategy bad request response a status code equal to that given
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete trace jaeger remote sampling strategy bad request response
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/trace-jaeger-remote-sampling-strategies/{slug}][%d] deleteTraceJaegerRemoteSamplingStrategyBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/trace-jaeger-remote-sampling-strategies/{slug}][%d] deleteTraceJaegerRemoteSamplingStrategyBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteTraceJaegerRemoteSamplingStrategyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

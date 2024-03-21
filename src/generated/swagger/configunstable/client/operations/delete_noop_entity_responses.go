@@ -29,6 +29,12 @@ func (o *DeleteNoopEntityReader) ReadResponse(response runtime.ClientResponse, c
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteNoopEntityBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteNoopEntityNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteNoopEntityOK) readResponse(response runtime.ClientResponse, consu
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteNoopEntityBadRequest creates a DeleteNoopEntityBadRequest with default headers values
+func NewDeleteNoopEntityBadRequest() *DeleteNoopEntityBadRequest {
+	return &DeleteNoopEntityBadRequest{}
+}
+
+/*
+DeleteNoopEntityBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the NoopEntity because it is in use.
+*/
+type DeleteNoopEntityBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete noop entity bad request response has a 2xx status code
+func (o *DeleteNoopEntityBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete noop entity bad request response has a 3xx status code
+func (o *DeleteNoopEntityBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete noop entity bad request response has a 4xx status code
+func (o *DeleteNoopEntityBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete noop entity bad request response has a 5xx status code
+func (o *DeleteNoopEntityBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete noop entity bad request response a status code equal to that given
+func (o *DeleteNoopEntityBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete noop entity bad request response
+func (o *DeleteNoopEntityBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteNoopEntityBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/noop-entities/{slug}][%d] deleteNoopEntityBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteNoopEntityBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/noop-entities/{slug}][%d] deleteNoopEntityBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteNoopEntityBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteNoopEntityBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

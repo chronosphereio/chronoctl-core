@@ -29,6 +29,12 @@ func (o *DeleteRecordingRuleReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteRecordingRuleBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteRecordingRuleNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteRecordingRuleOK) readResponse(response runtime.ClientResponse, co
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteRecordingRuleBadRequest creates a DeleteRecordingRuleBadRequest with default headers values
+func NewDeleteRecordingRuleBadRequest() *DeleteRecordingRuleBadRequest {
+	return &DeleteRecordingRuleBadRequest{}
+}
+
+/*
+DeleteRecordingRuleBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the RecordingRule because it is in use.
+*/
+type DeleteRecordingRuleBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete recording rule bad request response has a 2xx status code
+func (o *DeleteRecordingRuleBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete recording rule bad request response has a 3xx status code
+func (o *DeleteRecordingRuleBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete recording rule bad request response has a 4xx status code
+func (o *DeleteRecordingRuleBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete recording rule bad request response has a 5xx status code
+func (o *DeleteRecordingRuleBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete recording rule bad request response a status code equal to that given
+func (o *DeleteRecordingRuleBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete recording rule bad request response
+func (o *DeleteRecordingRuleBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteRecordingRuleBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/recording-rules/{slug}][%d] deleteRecordingRuleBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteRecordingRuleBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/recording-rules/{slug}][%d] deleteRecordingRuleBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteRecordingRuleBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteRecordingRuleBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

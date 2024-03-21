@@ -29,6 +29,12 @@ func (o *DeleteGCPMetricsIntegrationReader) ReadResponse(response runtime.Client
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteGCPMetricsIntegrationBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteGCPMetricsIntegrationNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteGCPMetricsIntegrationOK) readResponse(response runtime.ClientResp
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteGCPMetricsIntegrationBadRequest creates a DeleteGCPMetricsIntegrationBadRequest with default headers values
+func NewDeleteGCPMetricsIntegrationBadRequest() *DeleteGCPMetricsIntegrationBadRequest {
+	return &DeleteGCPMetricsIntegrationBadRequest{}
+}
+
+/*
+DeleteGCPMetricsIntegrationBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the GCPMetricsIntegration because it is in use.
+*/
+type DeleteGCPMetricsIntegrationBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete g c p metrics integration bad request response has a 2xx status code
+func (o *DeleteGCPMetricsIntegrationBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete g c p metrics integration bad request response has a 3xx status code
+func (o *DeleteGCPMetricsIntegrationBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete g c p metrics integration bad request response has a 4xx status code
+func (o *DeleteGCPMetricsIntegrationBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete g c p metrics integration bad request response has a 5xx status code
+func (o *DeleteGCPMetricsIntegrationBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete g c p metrics integration bad request response a status code equal to that given
+func (o *DeleteGCPMetricsIntegrationBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete g c p metrics integration bad request response
+func (o *DeleteGCPMetricsIntegrationBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteGCPMetricsIntegrationBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGCPMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteGCPMetricsIntegrationBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGCPMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteGCPMetricsIntegrationBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteGCPMetricsIntegrationBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

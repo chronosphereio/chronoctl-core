@@ -501,6 +501,8 @@ spec:
           name: <string>
           # Glob value of the label to match.
           value_glob: <string>
+    # Drops datapoints if datapoint values are NaN.
+    drop_nan_value: <true|false>
     conditional_rate_based_drop:
         # Enables rate-based metric dropping.
         enabled: <true|false>

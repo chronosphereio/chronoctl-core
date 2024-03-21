@@ -29,6 +29,12 @@ func (o *DeleteServiceReader) ReadResponse(response runtime.ClientResponse, cons
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteServiceBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteServiceNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteServiceOK) readResponse(response runtime.ClientResponse, consumer
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteServiceBadRequest creates a DeleteServiceBadRequest with default headers values
+func NewDeleteServiceBadRequest() *DeleteServiceBadRequest {
+	return &DeleteServiceBadRequest{}
+}
+
+/*
+DeleteServiceBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the Service because it is in use.
+*/
+type DeleteServiceBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete service bad request response has a 2xx status code
+func (o *DeleteServiceBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete service bad request response has a 3xx status code
+func (o *DeleteServiceBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete service bad request response has a 4xx status code
+func (o *DeleteServiceBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete service bad request response has a 5xx status code
+func (o *DeleteServiceBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete service bad request response a status code equal to that given
+func (o *DeleteServiceBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete service bad request response
+func (o *DeleteServiceBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteServiceBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/services/{slug}][%d] deleteServiceBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteServiceBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/services/{slug}][%d] deleteServiceBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteServiceBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteServiceBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

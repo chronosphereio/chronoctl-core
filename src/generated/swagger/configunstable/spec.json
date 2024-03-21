@@ -42,6 +42,23 @@
       },
       "type": "object"
     },
+    "DatasetDatasetConfiguration": {
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/DatasetDatasetType"
+        },
+        "trace_dataset": {
+          "$ref": "#/definitions/configunstableTraceDataset"
+        }
+      },
+      "type": "object"
+    },
+    "DatasetDatasetType": {
+      "enum": [
+        "TRACES"
+      ],
+      "type": "string"
+    },
     "GCPMetricsIntegrationMetricGroup": {
       "properties": {
         "project_id": {
@@ -491,6 +508,26 @@
       },
       "type": "object"
     },
+    "configunstableCreateDatasetRequest": {
+      "properties": {
+        "dataset": {
+          "$ref": "#/definitions/configunstableDataset"
+        },
+        "dry_run": {
+          "description": "If true, the Dataset will not be created, and no response Dataset will be returned. The response will return an error if the given Dataset is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateDatasetResponse": {
+      "properties": {
+        "dataset": {
+          "$ref": "#/definitions/configunstableDataset"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateGCPMetricsIntegrationRequest": {
       "properties": {
         "gcp_metrics_integration": {
@@ -656,6 +693,38 @@
       },
       "type": "object"
     },
+    "configunstableDataset": {
+      "properties": {
+        "name": {
+          "description": "Required name of the Dataset. May be modified after the Dataset is created.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "Unique identifier of the Dataset. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Dataset is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the Dataset was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the Dataset was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "description": {
+          "description": "Optional longer-form description of the dataset.",
+          "type": "string"
+        },
+        "configuration": {
+          "$ref": "#/definitions/DatasetDatasetConfiguration"
+        }
+      },
+      "type": "object"
+    },
     "configunstableDefaultSampleRate": {
       "properties": {
         "enabled": {
@@ -671,6 +740,9 @@
       "type": "object"
     },
     "configunstableDeleteDashboardResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteDatasetResponse": {
       "type": "object"
     },
     "configunstableDeleteGCPMetricsIntegrationResponse": {
@@ -770,6 +842,20 @@
         "dashboards": {
           "items": {
             "$ref": "#/definitions/configunstableDashboard"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListDatasetsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "datasets": {
+          "items": {
+            "$ref": "#/definitions/configunstableDataset"
           },
           "type": "array"
         }
@@ -904,6 +990,14 @@
       "properties": {
         "dashboard": {
           "$ref": "#/definitions/configunstableDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadDatasetResponse": {
+      "properties": {
+        "dataset": {
+          "$ref": "#/definitions/configunstableDataset"
         }
       },
       "type": "object"
@@ -1072,6 +1166,14 @@
       },
       "type": "object"
     },
+    "configunstableTraceDataset": {
+      "properties": {
+        "match_criteria": {
+          "$ref": "#/definitions/configv1TraceSearchFilter"
+        }
+      },
+      "type": "object"
+    },
     "configunstableTraceJaegerRemoteSamplingStrategy": {
       "properties": {
         "slug": {
@@ -1168,6 +1270,14 @@
       "properties": {
         "dashboard": {
           "$ref": "#/definitions/configunstableDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateDatasetResponse": {
+      "properties": {
+        "dataset": {
+          "$ref": "#/definitions/configunstableDataset"
         }
       },
       "type": "object"
@@ -1447,6 +1557,12 @@
               "$ref": "#/definitions/configunstableDeleteDashboardResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the Dashboard because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the Dashboard because the slug does not exist.",
             "schema": {
@@ -1580,6 +1696,287 @@
         ]
       }
     },
+    "/api/unstable/config/datasets": {
+      "get": {
+        "operationId": "ListDatasets",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any Dataset with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any Dataset with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "description": "Custom filtering option: list filtered down to a specific telemetry type.",
+            "enum": [
+              "TRACES"
+            ],
+            "in": "query",
+            "name": "type",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListDatasetsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dataset"
+        ]
+      },
+      "post": {
+        "operationId": "CreateDataset",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateDatasetRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created Dataset.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateDatasetResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the Dataset because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the Dataset because there is a conflict with an existing Dataset.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dataset"
+        ]
+      }
+    },
+    "/api/unstable/config/datasets/{slug}": {
+      "delete": {
+        "operationId": "DeleteDataset",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteDatasetResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the Dataset because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the Dataset because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dataset"
+        ]
+      },
+      "get": {
+        "operationId": "ReadDataset",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadDatasetResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the Dataset because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dataset"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateDataset",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the Dataset will be created if it does not already exist, identified by slug. If false, an error will be returned if the Dataset does not already exist.",
+                  "type": "boolean"
+                },
+                "dataset": {
+                  "$ref": "#/definitions/configunstableDataset"
+                },
+                "dry_run": {
+                  "description": "If true, the Dataset will not be created nor updated, and no response Dataset will be returned. The response will return an error if the given Dataset is invalid.",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated Dataset.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateDatasetResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the Dataset because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the Dataset because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the Dataset because there is a conflict with an existing Dataset.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Dataset"
+        ]
+      }
+    },
     "/api/unstable/config/gcp-metrics-integrations": {
       "get": {
         "operationId": "ListGCPMetricsIntegrations",
@@ -1707,6 +2104,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configunstableDeleteGCPMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the GCPMetricsIntegration because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -1985,6 +2388,12 @@
               "$ref": "#/definitions/configunstableDeleteLinkTemplateResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the LinkTemplate because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the LinkTemplate because the slug does not exist.",
             "schema": {
@@ -2239,6 +2648,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configunstableDeleteNoopEntityResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the NoopEntity because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -2508,6 +2923,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configunstableDeleteSavedTraceSearchResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the SavedTraceSearch because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -2790,6 +3211,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configunstableDeleteServiceResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the Service because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -3106,6 +3533,12 @@
               "$ref": "#/definitions/configunstableDeleteTraceJaegerRemoteSamplingStrategyResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the TraceJaegerRemoteSamplingStrategy because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the TraceJaegerRemoteSamplingStrategy because the slug does not exist.",
             "schema": {
@@ -3258,6 +3691,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configunstableDeleteTraceTailSamplingRulesResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the TraceTailSamplingRules because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {

@@ -29,6 +29,12 @@ func (o *DeleteGrafanaDashboardReader) ReadResponse(response runtime.ClientRespo
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteGrafanaDashboardBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteGrafanaDashboardNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteGrafanaDashboardOK) readResponse(response runtime.ClientResponse,
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteGrafanaDashboardBadRequest creates a DeleteGrafanaDashboardBadRequest with default headers values
+func NewDeleteGrafanaDashboardBadRequest() *DeleteGrafanaDashboardBadRequest {
+	return &DeleteGrafanaDashboardBadRequest{}
+}
+
+/*
+DeleteGrafanaDashboardBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the GrafanaDashboard because it is in use.
+*/
+type DeleteGrafanaDashboardBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete grafana dashboard bad request response has a 2xx status code
+func (o *DeleteGrafanaDashboardBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete grafana dashboard bad request response has a 3xx status code
+func (o *DeleteGrafanaDashboardBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete grafana dashboard bad request response has a 4xx status code
+func (o *DeleteGrafanaDashboardBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete grafana dashboard bad request response has a 5xx status code
+func (o *DeleteGrafanaDashboardBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete grafana dashboard bad request response a status code equal to that given
+func (o *DeleteGrafanaDashboardBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete grafana dashboard bad request response
+func (o *DeleteGrafanaDashboardBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteGrafanaDashboardBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/grafana-dashboards/{slug}][%d] deleteGrafanaDashboardBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteGrafanaDashboardBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/grafana-dashboards/{slug}][%d] deleteGrafanaDashboardBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteGrafanaDashboardBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteGrafanaDashboardBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

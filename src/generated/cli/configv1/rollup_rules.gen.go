@@ -523,32 +523,6 @@ spec:
     add_metric_type_label: <true|false>
     # Defines whether to automatically generate drop rules for this rollup.
     drop_raw: <true|false>
-    # Replaces or adds new labels to the rollup, optionally based on a matching
-    # regex for tag values. This is only available on Graphite rollup rules.
-    label_replace:
-        - # The source label name; this can be equal to dst_label_name to replace
-          # this label’s value in place.
-          src_label_name: <string>
-          # The new value for the label matching this LabelReplace. This supports
-          # regex expansion if a label_value_regex is supplied, and is used as a
-          # literal otherwise.
-          new_label_value: <string>
-          # The optional destination label name; if this is present, a new tag with
-          # this name is added to the aggregated series (or an existing tag with this
-          # name is overwritten).
-          # This can be omitted to replace the label’s value in-place, and should be
-          # either omitted or equal to src_label_name for Graphite rules.
-          dst_label_name: <string>
-          # The optional regex that should match label value. If this regex is
-          # provided, it needs to match the value of the label with the name
-          # src_label_name to apply the replacement.
-          # This supports capture groups to extract parts of the label value.
-          # If omitted, the new_label_value is used as a literal to replace any
-          # src_label_name label value.
-          label_value_regex: <string>
-          # If src_label_name differs from dst_label_name keep_label determines if
-          # the label with src_label_name is kept.
-          keep_label: <true|false>
     aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES|HISTOGRAM>
     label_policy:
         # Labels that should be retained in the output metric. If set, then the
@@ -559,7 +533,10 @@ spec:
         # keep field must be empty.
         discard:
             - <string>
-    metric_type: <COUNTER|GAUGE|DELTA|DISTRIBUTION|CUMULATIVE_EXPONENTIAL_HISTOGRAM|MEASUREMENT|CUMULATIVE_COUNTER|DELTA_COUNTER>
+    # Must keep this around for backwards compatibility because terraform will
+    # still send this key w/ a null value.
+    label_replace: null
+    metric_type: <COUNTER|GAUGE|DELTA|DISTRIBUTION|CUMULATIVE_EXPONENTIAL_HISTOGRAM|MEASUREMENT|CUMULATIVE_COUNTER|DELTA_COUNTER|DELTA_EXPONENTIAL_HISTOGRAM>
     mode: <ENABLED|PREVIEW>
     storage_policy:
         # Required resolution of the aggregated metrics.
