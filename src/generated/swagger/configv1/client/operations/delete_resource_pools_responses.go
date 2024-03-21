@@ -29,6 +29,12 @@ func (o *DeleteResourcePoolsReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteResourcePoolsBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteResourcePoolsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteResourcePoolsOK) readResponse(response runtime.ClientResponse, co
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteResourcePoolsBadRequest creates a DeleteResourcePoolsBadRequest with default headers values
+func NewDeleteResourcePoolsBadRequest() *DeleteResourcePoolsBadRequest {
+	return &DeleteResourcePoolsBadRequest{}
+}
+
+/*
+DeleteResourcePoolsBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the ResourcePools because it is in use.
+*/
+type DeleteResourcePoolsBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete resource pools bad request response has a 2xx status code
+func (o *DeleteResourcePoolsBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete resource pools bad request response has a 3xx status code
+func (o *DeleteResourcePoolsBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete resource pools bad request response has a 4xx status code
+func (o *DeleteResourcePoolsBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete resource pools bad request response has a 5xx status code
+func (o *DeleteResourcePoolsBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete resource pools bad request response a status code equal to that given
+func (o *DeleteResourcePoolsBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete resource pools bad request response
+func (o *DeleteResourcePoolsBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteResourcePoolsBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/resource-pools][%d] deleteResourcePoolsBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteResourcePoolsBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/resource-pools][%d] deleteResourcePoolsBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteResourcePoolsBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteResourcePoolsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

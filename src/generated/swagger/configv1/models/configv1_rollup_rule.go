@@ -75,9 +75,8 @@ type Configv1RollupRule struct {
 	// label policy
 	LabelPolicy *Configv1RollupRuleLabelPolicy `json:"label_policy,omitempty"`
 
-	// Replaces or adds new labels to the rollup, optionally based on a matching
-	// regex for tag values. This is only available on Graphite rollup rules.
-	LabelReplace []*RollupRuleLabelReplace `json:"label_replace"`
+	// label replace
+	LabelReplace RollupRuleLabelReplace `json:"label_replace,omitempty"`
 
 	// mode
 	Mode Configv1RollupRuleMode `json:"mode,omitempty"`
@@ -112,10 +111,6 @@ func (m *Configv1RollupRule) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateLabelPolicy(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateLabelReplace(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -251,32 +246,6 @@ func (m *Configv1RollupRule) validateLabelPolicy(formats strfmt.Registry) error 
 	return nil
 }
 
-func (m *Configv1RollupRule) validateLabelReplace(formats strfmt.Registry) error {
-	if swag.IsZero(m.LabelReplace) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.LabelReplace); i++ {
-		if swag.IsZero(m.LabelReplace[i]) { // not required
-			continue
-		}
-
-		if m.LabelReplace[i] != nil {
-			if err := m.LabelReplace[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("label_replace" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("label_replace" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
 func (m *Configv1RollupRule) validateMode(formats strfmt.Registry) error {
 	if swag.IsZero(m.Mode) { // not required
 		return nil
@@ -323,10 +292,6 @@ func (m *Configv1RollupRule) ContextValidate(ctx context.Context, formats strfmt
 	}
 
 	if err := m.contextValidateLabelPolicy(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateLabelReplace(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -456,31 +421,6 @@ func (m *Configv1RollupRule) contextValidateLabelPolicy(ctx context.Context, for
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *Configv1RollupRule) contextValidateLabelReplace(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.LabelReplace); i++ {
-
-		if m.LabelReplace[i] != nil {
-
-			if swag.IsZero(m.LabelReplace[i]) { // not required
-				return nil
-			}
-
-			if err := m.LabelReplace[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("label_replace" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("label_replace" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
 	}
 
 	return nil

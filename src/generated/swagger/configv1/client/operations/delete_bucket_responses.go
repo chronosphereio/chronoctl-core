@@ -29,6 +29,12 @@ func (o *DeleteBucketReader) ReadResponse(response runtime.ClientResponse, consu
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteBucketBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteBucketNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -112,6 +118,74 @@ func (o *DeleteBucketOK) GetPayload() *models.Configv1DeleteBucketResponse {
 func (o *DeleteBucketOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Configv1DeleteBucketResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteBucketBadRequest creates a DeleteBucketBadRequest with default headers values
+func NewDeleteBucketBadRequest() *DeleteBucketBadRequest {
+	return &DeleteBucketBadRequest{}
+}
+
+/*
+DeleteBucketBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the Bucket because it is in use.
+*/
+type DeleteBucketBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete bucket bad request response has a 2xx status code
+func (o *DeleteBucketBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete bucket bad request response has a 3xx status code
+func (o *DeleteBucketBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete bucket bad request response has a 4xx status code
+func (o *DeleteBucketBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete bucket bad request response has a 5xx status code
+func (o *DeleteBucketBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete bucket bad request response a status code equal to that given
+func (o *DeleteBucketBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete bucket bad request response
+func (o *DeleteBucketBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteBucketBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/buckets/{slug}][%d] deleteBucketBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteBucketBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/buckets/{slug}][%d] deleteBucketBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteBucketBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteBucketBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

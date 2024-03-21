@@ -29,6 +29,12 @@ func (o *DeleteMonitorReader) ReadResponse(response runtime.ClientResponse, cons
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteMonitorBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteMonitorNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteMonitorOK) readResponse(response runtime.ClientResponse, consumer
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteMonitorBadRequest creates a DeleteMonitorBadRequest with default headers values
+func NewDeleteMonitorBadRequest() *DeleteMonitorBadRequest {
+	return &DeleteMonitorBadRequest{}
+}
+
+/*
+DeleteMonitorBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the Monitor because it is in use.
+*/
+type DeleteMonitorBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete monitor bad request response has a 2xx status code
+func (o *DeleteMonitorBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete monitor bad request response has a 3xx status code
+func (o *DeleteMonitorBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete monitor bad request response has a 4xx status code
+func (o *DeleteMonitorBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete monitor bad request response has a 5xx status code
+func (o *DeleteMonitorBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete monitor bad request response a status code equal to that given
+func (o *DeleteMonitorBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete monitor bad request response
+func (o *DeleteMonitorBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteMonitorBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/monitors/{slug}][%d] deleteMonitorBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteMonitorBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/monitors/{slug}][%d] deleteMonitorBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteMonitorBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteMonitorBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

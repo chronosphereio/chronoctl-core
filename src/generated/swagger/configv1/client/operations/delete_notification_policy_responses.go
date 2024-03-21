@@ -29,6 +29,12 @@ func (o *DeleteNotificationPolicyReader) ReadResponse(response runtime.ClientRes
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteNotificationPolicyBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteNotificationPolicyNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteNotificationPolicyOK) readResponse(response runtime.ClientRespons
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteNotificationPolicyBadRequest creates a DeleteNotificationPolicyBadRequest with default headers values
+func NewDeleteNotificationPolicyBadRequest() *DeleteNotificationPolicyBadRequest {
+	return &DeleteNotificationPolicyBadRequest{}
+}
+
+/*
+DeleteNotificationPolicyBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the NotificationPolicy because it is in use.
+*/
+type DeleteNotificationPolicyBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete notification policy bad request response has a 2xx status code
+func (o *DeleteNotificationPolicyBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete notification policy bad request response has a 3xx status code
+func (o *DeleteNotificationPolicyBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete notification policy bad request response has a 4xx status code
+func (o *DeleteNotificationPolicyBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete notification policy bad request response has a 5xx status code
+func (o *DeleteNotificationPolicyBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete notification policy bad request response a status code equal to that given
+func (o *DeleteNotificationPolicyBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete notification policy bad request response
+func (o *DeleteNotificationPolicyBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteNotificationPolicyBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/notification-policies/{slug}][%d] deleteNotificationPolicyBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteNotificationPolicyBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/notification-policies/{slug}][%d] deleteNotificationPolicyBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteNotificationPolicyBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteNotificationPolicyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

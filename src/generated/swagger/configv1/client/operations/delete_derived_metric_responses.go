@@ -29,6 +29,12 @@ func (o *DeleteDerivedMetricReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteDerivedMetricBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteDerivedMetricNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteDerivedMetricOK) readResponse(response runtime.ClientResponse, co
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteDerivedMetricBadRequest creates a DeleteDerivedMetricBadRequest with default headers values
+func NewDeleteDerivedMetricBadRequest() *DeleteDerivedMetricBadRequest {
+	return &DeleteDerivedMetricBadRequest{}
+}
+
+/*
+DeleteDerivedMetricBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the DerivedMetric because it is in use.
+*/
+type DeleteDerivedMetricBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete derived metric bad request response has a 2xx status code
+func (o *DeleteDerivedMetricBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete derived metric bad request response has a 3xx status code
+func (o *DeleteDerivedMetricBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete derived metric bad request response has a 4xx status code
+func (o *DeleteDerivedMetricBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete derived metric bad request response has a 5xx status code
+func (o *DeleteDerivedMetricBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete derived metric bad request response a status code equal to that given
+func (o *DeleteDerivedMetricBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete derived metric bad request response
+func (o *DeleteDerivedMetricBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteDerivedMetricBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/derived-metrics/{slug}][%d] deleteDerivedMetricBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteDerivedMetricBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/derived-metrics/{slug}][%d] deleteDerivedMetricBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteDerivedMetricBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteDerivedMetricBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

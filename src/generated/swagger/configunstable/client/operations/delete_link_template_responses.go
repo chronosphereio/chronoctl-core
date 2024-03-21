@@ -29,6 +29,12 @@ func (o *DeleteLinkTemplateReader) ReadResponse(response runtime.ClientResponse,
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteLinkTemplateBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteLinkTemplateNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteLinkTemplateOK) readResponse(response runtime.ClientResponse, con
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteLinkTemplateBadRequest creates a DeleteLinkTemplateBadRequest with default headers values
+func NewDeleteLinkTemplateBadRequest() *DeleteLinkTemplateBadRequest {
+	return &DeleteLinkTemplateBadRequest{}
+}
+
+/*
+DeleteLinkTemplateBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the LinkTemplate because it is in use.
+*/
+type DeleteLinkTemplateBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete link template bad request response has a 2xx status code
+func (o *DeleteLinkTemplateBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete link template bad request response has a 3xx status code
+func (o *DeleteLinkTemplateBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete link template bad request response has a 4xx status code
+func (o *DeleteLinkTemplateBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete link template bad request response has a 5xx status code
+func (o *DeleteLinkTemplateBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete link template bad request response a status code equal to that given
+func (o *DeleteLinkTemplateBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete link template bad request response
+func (o *DeleteLinkTemplateBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteLinkTemplateBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/link-templates/{slug}][%d] deleteLinkTemplateBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteLinkTemplateBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/link-templates/{slug}][%d] deleteLinkTemplateBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteLinkTemplateBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteLinkTemplateBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

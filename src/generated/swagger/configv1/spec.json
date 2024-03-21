@@ -868,29 +868,7 @@
       "type": "string"
     },
     "RollupRuleLabelReplace": {
-      "description": "LabelReplace can be used to either create or modify an existing label on\nincoming aggregator series, optionally based on a matching regex.",
-      "properties": {
-        "src_label_name": {
-          "description": "The source label name; this can be equal to dst_label_name to replace\nthis label’s value in place.",
-          "type": "string"
-        },
-        "new_label_value": {
-          "description": "The new value for the label matching this LabelReplace. This supports\nregex expansion if a label_value_regex is supplied, and is used as a\nliteral otherwise.",
-          "type": "string"
-        },
-        "dst_label_name": {
-          "description": "The optional destination label name; if this is present, a new tag with\nthis name is added to the aggregated series (or an existing tag with this\nname is overwritten).\nThis can be omitted to replace the label’s value in-place, and should be\neither omitted or equal to src_label_name for Graphite rules.",
-          "type": "string"
-        },
-        "label_value_regex": {
-          "description": "The optional regex that should match label value. If this regex is\nprovided, it needs to match the value of the label with the name\nsrc_label_name to apply the replacement.\nThis supports capture groups to extract parts of the label value.\nIf omitted, the new_label_value is used as a literal to replace any\nsrc_label_name label value.",
-          "type": "string"
-        },
-        "keep_label": {
-          "description": "If src_label_name differs from dst_label_name keep_label determines if\nthe label with src_label_name is kept.",
-          "type": "boolean"
-        }
-      },
+      "description": "Must keep this around for backwards compatibility because terraform will\nstill send this key w/ a null value.",
       "type": "object"
     },
     "RollupRuleMetricType": {
@@ -902,7 +880,8 @@
         "CUMULATIVE_EXPONENTIAL_HISTOGRAM",
         "MEASUREMENT",
         "CUMULATIVE_COUNTER",
-        "DELTA_COUNTER"
+        "DELTA_COUNTER",
+        "DELTA_EXPONENTIAL_HISTOGRAM"
       ],
       "type": "string"
     },
@@ -2114,6 +2093,10 @@
         },
         "value_based_drop": {
           "$ref": "#/definitions/DropRuleValueBasedDrop"
+        },
+        "drop_nan_value": {
+          "description": "Drops datapoints if datapoint values are NaN.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -3139,11 +3122,7 @@
           "$ref": "#/definitions/configv1RollupRuleLabelPolicy"
         },
         "label_replace": {
-          "description": "Replaces or adds new labels to the rollup, optionally based on a matching\nregex for tag values. This is only available on Graphite rollup rules.",
-          "items": {
-            "$ref": "#/definitions/RollupRuleLabelReplace"
-          },
-          "type": "array"
+          "$ref": "#/definitions/RollupRuleLabelReplace"
         },
         "mode": {
           "$ref": "#/definitions/configv1RollupRuleMode"
@@ -3814,6 +3793,12 @@
               "$ref": "#/definitions/configv1DeleteBucketResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the Bucket because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the Bucket because the slug does not exist.",
             "schema": {
@@ -4106,6 +4091,12 @@
               "$ref": "#/definitions/configv1DeleteClassicDashboardResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the GrafanaDashboard because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the GrafanaDashboard because the slug does not exist.",
             "schema": {
@@ -4392,6 +4383,12 @@
               "$ref": "#/definitions/configv1DeleteCollectionResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the Collection because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the Collection because the slug does not exist.",
             "schema": {
@@ -4674,6 +4671,12 @@
               "$ref": "#/definitions/configv1DeleteDashboardResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the Dashboard because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the Dashboard because the slug does not exist.",
             "schema": {
@@ -4938,6 +4941,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configv1DeleteDerivedLabelResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the DerivedLabel because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -5206,6 +5215,12 @@
               "$ref": "#/definitions/configv1DeleteDerivedMetricResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the DerivedMetric because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the DerivedMetric because the slug does not exist.",
             "schema": {
@@ -5470,6 +5485,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configv1DeleteDropRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the DropRule because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -5764,6 +5785,12 @@
               "$ref": "#/definitions/configv1DeleteGrafanaDashboardResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the GrafanaDashboard because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the GrafanaDashboard because the slug does not exist.",
             "schema": {
@@ -6038,6 +6065,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configv1DeleteMappingRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the MappingRule because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -6336,6 +6369,12 @@
               "$ref": "#/definitions/configv1DeleteMonitorResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the Monitor because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the Monitor because the slug does not exist.",
             "schema": {
@@ -6615,6 +6654,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configv1DeleteMutingRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the MutingRule because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -6903,6 +6948,12 @@
               "$ref": "#/definitions/configv1DeleteNotificationPolicyResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the NotificationPolicy because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the NotificationPolicy because the slug does not exist.",
             "schema": {
@@ -7167,6 +7218,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configv1DeleteNotifierResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the Notifier because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -7455,6 +7512,12 @@
               "$ref": "#/definitions/configv1DeleteRecordingRuleResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the RecordingRule because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the RecordingRule because the slug does not exist.",
             "schema": {
@@ -7607,6 +7670,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configv1DeleteResourcePoolsResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the ResourcePools because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -7901,6 +7970,12 @@
               "$ref": "#/definitions/configv1DeleteRollupRuleResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the RollupRule because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the RollupRule because the slug does not exist.",
             "schema": {
@@ -8167,6 +8242,12 @@
               "$ref": "#/definitions/configv1DeleteServiceAccountResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the ServiceAccount because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the ServiceAccount because the slug does not exist.",
             "schema": {
@@ -8400,6 +8481,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configv1DeleteTeamResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the Team because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {
@@ -8683,6 +8770,12 @@
               "$ref": "#/definitions/configv1DeleteTraceJaegerRemoteSamplingStrategyResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the TraceJaegerRemoteSamplingStrategy because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the TraceJaegerRemoteSamplingStrategy because the slug does not exist.",
             "schema": {
@@ -8960,6 +9053,12 @@
               "$ref": "#/definitions/configv1DeleteTraceMetricsRuleResponse"
             }
           },
+          "400": {
+            "description": "Cannot delete the TraceMetricsRule because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
           "404": {
             "description": "Cannot delete the TraceMetricsRule because the slug does not exist.",
             "schema": {
@@ -9112,6 +9211,12 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/configv1DeleteTraceTailSamplingRulesResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the TraceTailSamplingRules because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "404": {

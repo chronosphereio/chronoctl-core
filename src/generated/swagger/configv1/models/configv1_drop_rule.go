@@ -47,6 +47,9 @@ type Configv1DropRule struct {
 
 	// value based drop
 	ValueBasedDrop *DropRuleValueBasedDrop `json:"value_based_drop,omitempty"`
+
+	// Drops datapoints if datapoint values are NaN.
+	DropNanValue bool `json:"drop_nan_value,omitempty"`
 }
 
 // Validate validates this configv1 drop rule

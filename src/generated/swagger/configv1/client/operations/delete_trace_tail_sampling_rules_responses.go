@@ -29,6 +29,12 @@ func (o *DeleteTraceTailSamplingRulesReader) ReadResponse(response runtime.Clien
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteTraceTailSamplingRulesBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteTraceTailSamplingRulesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteTraceTailSamplingRulesOK) readResponse(response runtime.ClientRes
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteTraceTailSamplingRulesBadRequest creates a DeleteTraceTailSamplingRulesBadRequest with default headers values
+func NewDeleteTraceTailSamplingRulesBadRequest() *DeleteTraceTailSamplingRulesBadRequest {
+	return &DeleteTraceTailSamplingRulesBadRequest{}
+}
+
+/*
+DeleteTraceTailSamplingRulesBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the TraceTailSamplingRules because it is in use.
+*/
+type DeleteTraceTailSamplingRulesBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete trace tail sampling rules bad request response has a 2xx status code
+func (o *DeleteTraceTailSamplingRulesBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete trace tail sampling rules bad request response has a 3xx status code
+func (o *DeleteTraceTailSamplingRulesBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete trace tail sampling rules bad request response has a 4xx status code
+func (o *DeleteTraceTailSamplingRulesBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete trace tail sampling rules bad request response has a 5xx status code
+func (o *DeleteTraceTailSamplingRulesBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete trace tail sampling rules bad request response a status code equal to that given
+func (o *DeleteTraceTailSamplingRulesBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete trace tail sampling rules bad request response
+func (o *DeleteTraceTailSamplingRulesBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteTraceTailSamplingRulesBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-tail-sampling-rules][%d] deleteTraceTailSamplingRulesBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteTraceTailSamplingRulesBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/trace-tail-sampling-rules][%d] deleteTraceTailSamplingRulesBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteTraceTailSamplingRulesBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteTraceTailSamplingRulesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

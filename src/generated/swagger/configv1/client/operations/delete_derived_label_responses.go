@@ -29,6 +29,12 @@ func (o *DeleteDerivedLabelReader) ReadResponse(response runtime.ClientResponse,
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteDerivedLabelBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteDerivedLabelNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteDerivedLabelOK) readResponse(response runtime.ClientResponse, con
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteDerivedLabelBadRequest creates a DeleteDerivedLabelBadRequest with default headers values
+func NewDeleteDerivedLabelBadRequest() *DeleteDerivedLabelBadRequest {
+	return &DeleteDerivedLabelBadRequest{}
+}
+
+/*
+DeleteDerivedLabelBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the DerivedLabel because it is in use.
+*/
+type DeleteDerivedLabelBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete derived label bad request response has a 2xx status code
+func (o *DeleteDerivedLabelBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete derived label bad request response has a 3xx status code
+func (o *DeleteDerivedLabelBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete derived label bad request response has a 4xx status code
+func (o *DeleteDerivedLabelBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete derived label bad request response has a 5xx status code
+func (o *DeleteDerivedLabelBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete derived label bad request response a status code equal to that given
+func (o *DeleteDerivedLabelBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete derived label bad request response
+func (o *DeleteDerivedLabelBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteDerivedLabelBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/derived-labels/{slug}][%d] deleteDerivedLabelBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteDerivedLabelBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/derived-labels/{slug}][%d] deleteDerivedLabelBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteDerivedLabelBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteDerivedLabelBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

@@ -29,6 +29,12 @@ func (o *DeleteNotifierReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteNotifierBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteNotifierNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteNotifierOK) readResponse(response runtime.ClientResponse, consume
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteNotifierBadRequest creates a DeleteNotifierBadRequest with default headers values
+func NewDeleteNotifierBadRequest() *DeleteNotifierBadRequest {
+	return &DeleteNotifierBadRequest{}
+}
+
+/*
+DeleteNotifierBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the Notifier because it is in use.
+*/
+type DeleteNotifierBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete notifier bad request response has a 2xx status code
+func (o *DeleteNotifierBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete notifier bad request response has a 3xx status code
+func (o *DeleteNotifierBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete notifier bad request response has a 4xx status code
+func (o *DeleteNotifierBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete notifier bad request response has a 5xx status code
+func (o *DeleteNotifierBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete notifier bad request response a status code equal to that given
+func (o *DeleteNotifierBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete notifier bad request response
+func (o *DeleteNotifierBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteNotifierBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/notifiers/{slug}][%d] deleteNotifierBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteNotifierBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/notifiers/{slug}][%d] deleteNotifierBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteNotifierBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteNotifierBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

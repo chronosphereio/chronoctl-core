@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Added
+* Adds new field `drop_nan_value` to `v1/config/DropRule`
+* Adds new metric type `DELTA_EXPONENTIAL_HISTOGRAM` to `v1/config/RollupRule`.
+
+### Deprecated
+* Unused field `label_replace` has been removed from `v1/config/RollupRule`.
+
 ## v1.2.0
 
 ### Added

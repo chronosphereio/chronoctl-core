@@ -29,6 +29,12 @@ func (o *DeleteMappingRuleReader) ReadResponse(response runtime.ClientResponse, 
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteMappingRuleBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteMappingRuleNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteMappingRuleOK) readResponse(response runtime.ClientResponse, cons
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteMappingRuleBadRequest creates a DeleteMappingRuleBadRequest with default headers values
+func NewDeleteMappingRuleBadRequest() *DeleteMappingRuleBadRequest {
+	return &DeleteMappingRuleBadRequest{}
+}
+
+/*
+DeleteMappingRuleBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the MappingRule because it is in use.
+*/
+type DeleteMappingRuleBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete mapping rule bad request response has a 2xx status code
+func (o *DeleteMappingRuleBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete mapping rule bad request response has a 3xx status code
+func (o *DeleteMappingRuleBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete mapping rule bad request response has a 4xx status code
+func (o *DeleteMappingRuleBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete mapping rule bad request response has a 5xx status code
+func (o *DeleteMappingRuleBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete mapping rule bad request response a status code equal to that given
+func (o *DeleteMappingRuleBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete mapping rule bad request response
+func (o *DeleteMappingRuleBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteMappingRuleBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/mapping-rules/{slug}][%d] deleteMappingRuleBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteMappingRuleBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/v1/config/mapping-rules/{slug}][%d] deleteMappingRuleBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteMappingRuleBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteMappingRuleBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

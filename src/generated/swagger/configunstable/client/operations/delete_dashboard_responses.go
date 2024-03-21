@@ -29,6 +29,12 @@ func (o *DeleteDashboardReader) ReadResponse(response runtime.ClientResponse, co
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteDashboardBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteDashboardNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -113,6 +119,74 @@ func (o *DeleteDashboardOK) readResponse(response runtime.ClientResponse, consum
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteDashboardBadRequest creates a DeleteDashboardBadRequest with default headers values
+func NewDeleteDashboardBadRequest() *DeleteDashboardBadRequest {
+	return &DeleteDashboardBadRequest{}
+}
+
+/*
+DeleteDashboardBadRequest describes a response with status code 400, with default header values.
+
+Cannot delete the Dashboard because it is in use.
+*/
+type DeleteDashboardBadRequest struct {
+	Payload *models.APIError
+}
+
+// IsSuccess returns true when this delete dashboard bad request response has a 2xx status code
+func (o *DeleteDashboardBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete dashboard bad request response has a 3xx status code
+func (o *DeleteDashboardBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete dashboard bad request response has a 4xx status code
+func (o *DeleteDashboardBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete dashboard bad request response has a 5xx status code
+func (o *DeleteDashboardBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete dashboard bad request response a status code equal to that given
+func (o *DeleteDashboardBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the delete dashboard bad request response
+func (o *DeleteDashboardBadRequest) Code() int {
+	return 400
+}
+
+func (o *DeleteDashboardBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/dashboards/{slug}][%d] deleteDashboardBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteDashboardBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /api/unstable/config/dashboards/{slug}][%d] deleteDashboardBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *DeleteDashboardBadRequest) GetPayload() *models.APIError {
+	return o.Payload
+}
+
+func (o *DeleteDashboardBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.APIError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
