@@ -60,10 +60,11 @@ type Configv1RollupRule struct {
 	Interval string `json:"interval,omitempty"`
 
 	// Enables expansive label matching behavior for the provided filters and
-	// label_policy.keep (if set). By default (expansive_match=false), a series
-	// matches and aggregates only if each label defined by filters and
-	// label_policy.keep (respectively) exist in said series. Setting
-	// expansive_match=true removes this restriction.
+	// label_policy.keep or graphite_label_policy.replace (if set). By default
+	// (expansive_match=false), a series matches and aggregates only if each label
+	// defined by filters and label_policy.keep or graphite_label_policy.replace
+	// (respectively) exist in said series. Setting expansive_match=true removes
+	// this restriction.
 	ExpansiveMatch bool `json:"expansive_match,omitempty"`
 
 	// Defines whether to add a `__rollup_type__` label in the new metric.
@@ -80,6 +81,9 @@ type Configv1RollupRule struct {
 
 	// mode
 	Mode Configv1RollupRuleMode `json:"mode,omitempty"`
+
+	// graphite label policy
+	GraphiteLabelPolicy *RollupRuleGraphiteLabelPolicy `json:"graphite_label_policy,omitempty"`
 }
 
 // Validate validates this configv1 rollup rule
@@ -115,6 +119,10 @@ func (m *Configv1RollupRule) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateMode(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateGraphiteLabelPolicy(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -263,6 +271,25 @@ func (m *Configv1RollupRule) validateMode(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Configv1RollupRule) validateGraphiteLabelPolicy(formats strfmt.Registry) error {
+	if swag.IsZero(m.GraphiteLabelPolicy) { // not required
+		return nil
+	}
+
+	if m.GraphiteLabelPolicy != nil {
+		if err := m.GraphiteLabelPolicy.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("graphite_label_policy")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("graphite_label_policy")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 rollup rule based on the context it is used
 func (m *Configv1RollupRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -296,6 +323,10 @@ func (m *Configv1RollupRule) ContextValidate(ctx context.Context, formats strfmt
 	}
 
 	if err := m.contextValidateMode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGraphiteLabelPolicy(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -439,6 +470,27 @@ func (m *Configv1RollupRule) contextValidateMode(ctx context.Context, formats st
 			return ce.ValidateName("mode")
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m *Configv1RollupRule) contextValidateGraphiteLabelPolicy(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GraphiteLabelPolicy != nil {
+
+		if swag.IsZero(m.GraphiteLabelPolicy) { // not required
+			return nil
+		}
+
+		if err := m.GraphiteLabelPolicy.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("graphite_label_policy")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("graphite_label_policy")
+			}
+			return err
+		}
 	}
 
 	return nil

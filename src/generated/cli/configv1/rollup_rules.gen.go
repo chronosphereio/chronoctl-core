@@ -514,16 +514,27 @@ spec:
     # set.
     interval: <string>
     # Enables expansive label matching behavior for the provided filters and
-    # label_policy.keep (if set). By default (expansive_match=false), a series
-    # matches and aggregates only if each label defined by filters and
-    # label_policy.keep (respectively) exist in said series. Setting
-    # expansive_match=true removes this restriction.
+    # label_policy.keep or graphite_label_policy.replace (if set). By default
+    # (expansive_match=false), a series matches and aggregates only if each label
+    # defined by filters and label_policy.keep or graphite_label_policy.replace
+    # (respectively) exist in said series. Setting expansive_match=true removes
+    # this restriction.
     expansive_match: <true|false>
     # Defines whether to add a '__rollup_type__' label in the new metric.
     add_metric_type_label: <true|false>
     # Defines whether to automatically generate drop rules for this rollup.
     drop_raw: <true|false>
     aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES|HISTOGRAM>
+    graphite_label_policy:
+        # Required list of labels to replace. Useful for discarding
+        # high-cardinality values while still preserving the original positions of
+        # the Graphite metric.
+        replace:
+            - # Required name of the label whose value should be replaced. Only
+              # '__gX__' labels are allowed (aka positional Graphite labels).
+              name: <string>
+              # Required new value of the replaced label.
+              new_value: <string>
     label_policy:
         # Labels that should be retained in the output metric. If set, then the
         # discard field must be empty.
