@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.4.0
+
 ### Added
 * Adds new field `graphite_label_policy` to `v1/config/RollupRule`
 
