@@ -129,6 +129,21 @@
       },
       "type": "object"
     },
+    "GraphiteLabelPolicyReplace": {
+      "properties": {
+        "name": {
+          "description": "Required name of the label whose value should be replaced. Only\n`__gX__` labels are allowed (aka positional Graphite labels).",
+          "example": "__g1__",
+          "type": "string"
+        },
+        "new_value": {
+          "description": "Required new value of the replaced label.",
+          "example": "ALL_HOSTS",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "GroupByGroupByKey": {
       "description": "GroupByKey describes a key to group by.",
       "properties": {
@@ -866,6 +881,18 @@
         "SCHEDULE"
       ],
       "type": "string"
+    },
+    "RollupRuleGraphiteLabelPolicy": {
+      "properties": {
+        "replace": {
+          "description": "Required list of labels to replace. Useful for discarding\nhigh-cardinality values while still preserving the original positions of\nthe Graphite metric.",
+          "items": {
+            "$ref": "#/definitions/GraphiteLabelPolicyReplace"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
     },
     "RollupRuleLabelReplace": {
       "description": "Must keep this around for backwards compatibility because terraform will\nstill send this key w/ a null value.",
@@ -3107,7 +3134,7 @@
           "type": "string"
         },
         "expansive_match": {
-          "description": "Enables expansive label matching behavior for the provided filters and\nlabel_policy.keep (if set). By default (expansive_match=false), a series\nmatches and aggregates only if each label defined by filters and\nlabel_policy.keep (respectively) exist in said series. Setting\nexpansive_match=true removes this restriction.",
+          "description": "Enables expansive label matching behavior for the provided filters and\nlabel_policy.keep or graphite_label_policy.replace (if set). By default\n(expansive_match=false), a series matches and aggregates only if each label\ndefined by filters and label_policy.keep or graphite_label_policy.replace\n(respectively) exist in said series. Setting expansive_match=true removes\nthis restriction.",
           "type": "boolean"
         },
         "add_metric_type_label": {
@@ -3126,6 +3153,9 @@
         },
         "mode": {
           "$ref": "#/definitions/configv1RollupRuleMode"
+        },
+        "graphite_label_policy": {
+          "$ref": "#/definitions/RollupRuleGraphiteLabelPolicy"
         }
       },
       "type": "object"
