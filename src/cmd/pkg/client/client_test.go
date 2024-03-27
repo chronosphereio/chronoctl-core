@@ -228,7 +228,7 @@ func TestClientFlagsTransport(t *testing.T) {
 				assert.NotNil(t, tp.DefaultAuthentication)
 
 				if tt.wantInsecureSkipVerify {
-					httpTransport := tp.Transport.(swagger.RequestIDTrailerTransport).RT.(transport.VersionHeaderTransport).Rt.(*http.Transport) //nolint:errcheck
+					httpTransport := tp.Transport.(swagger.RequestIDTrailerTransport).RT.(transport.CustomHeaderTransport).Rt.(*http.Transport) //nolint:errcheck
 					assert.Equal(t, tt.wantInsecureSkipVerify, httpTransport.TLSClientConfig.InsecureSkipVerify)
 				}
 			})
