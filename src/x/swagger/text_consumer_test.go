@@ -28,7 +28,6 @@ import (
 	"github.com/chronosphereio/chronoctl-core/src/x/swagger"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"google.golang.org/grpc/codes"
 )
 
 func TestTextConsumer(t *testing.T) {
@@ -50,7 +49,7 @@ func TestTextConsumer(t *testing.T) {
 			name:      "Test 500 response body with a RuntimError",
 			inputData: &models.APIError{},
 			expectedData: &models.APIError{
-				Code:    int32(codes.Unknown),
+				Code:    2,
 				Message: "500 Internal Server Error",
 			},
 			body:        "500 Internal Server Error",
@@ -60,7 +59,7 @@ func TestTextConsumer(t *testing.T) {
 			name:      "Test json response body with a RuntimError",
 			inputData: &models.APIError{},
 			expectedData: &models.APIError{
-				Code:    int32(codes.Unknown),
+				Code:    2,
 				Message: `{"code": 16, "message":"InternalServer", "details":"An internal server error has occured"}`,
 			},
 			body:        `{"code": 16, "message":"InternalServer", "details":"An internal server error has occured"}`,
@@ -170,7 +169,7 @@ func TestTextConsumerDummyServer(t *testing.T) {
 			}
 			assert.Equal(t, bucketDefault.Code(), 500)
 			fmt.Println(bucketDefault.GetPayload())
-			assert.Equal(t, bucketDefault.GetPayload().Code, int32(codes.Unknown))
+			assert.Equal(t, bucketDefault.GetPayload().Code, int32(2))
 			assert.Equal(t, bucketDefault.GetPayload().Message, tt.message)
 		})
 	}

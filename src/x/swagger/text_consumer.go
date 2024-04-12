@@ -23,8 +23,9 @@ import (
 
 	"github.com/go-openapi/runtime"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc/codes"
 )
+
+const codeUnknown = 2
 
 // TextConsumer creates a new text consumer.
 //
@@ -73,7 +74,7 @@ func setSwaggerErrorMessage(data any, message string) bool {
 	if !codeField.IsValid() {
 		return false
 	}
-	codeField.SetInt(int64(codes.Unknown))
+	codeField.SetInt(codeUnknown)
 
 	return true
 }
