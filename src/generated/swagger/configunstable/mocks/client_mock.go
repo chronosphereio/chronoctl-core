@@ -75,24 +75,24 @@ func (mr *MockClientServiceMockRecorder) CreateDataset(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDataset", reflect.TypeOf((*MockClientService)(nil).CreateDataset), varargs...)
 }
 
-// CreateGCPMetricsIntegration mocks base method.
-func (m *MockClientService) CreateGCPMetricsIntegration(params *operations.CreateGCPMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.CreateGCPMetricsIntegrationOK, error) {
+// CreateGcpMetricsIntegration mocks base method.
+func (m *MockClientService) CreateGcpMetricsIntegration(params *operations.CreateGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.CreateGcpMetricsIntegrationOK, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{params}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "CreateGCPMetricsIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.CreateGCPMetricsIntegrationOK)
+	ret := m.ctrl.Call(m, "CreateGcpMetricsIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.CreateGcpMetricsIntegrationOK)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateGCPMetricsIntegration indicates an expected call of CreateGCPMetricsIntegration.
-func (mr *MockClientServiceMockRecorder) CreateGCPMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+// CreateGcpMetricsIntegration indicates an expected call of CreateGcpMetricsIntegration.
+func (mr *MockClientServiceMockRecorder) CreateGcpMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateGCPMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).CreateGCPMetricsIntegration), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateGcpMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).CreateGcpMetricsIntegration), varargs...)
 }
 
 // CreateLinkTemplate mocks base method.
@@ -255,24 +255,24 @@ func (mr *MockClientServiceMockRecorder) DeleteDataset(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDataset", reflect.TypeOf((*MockClientService)(nil).DeleteDataset), varargs...)
 }
 
-// DeleteGCPMetricsIntegration mocks base method.
-func (m *MockClientService) DeleteGCPMetricsIntegration(params *operations.DeleteGCPMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.DeleteGCPMetricsIntegrationOK, error) {
+// DeleteGcpMetricsIntegration mocks base method.
+func (m *MockClientService) DeleteGcpMetricsIntegration(params *operations.DeleteGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.DeleteGcpMetricsIntegrationOK, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{params}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "DeleteGCPMetricsIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteGCPMetricsIntegrationOK)
+	ret := m.ctrl.Call(m, "DeleteGcpMetricsIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteGcpMetricsIntegrationOK)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// DeleteGCPMetricsIntegration indicates an expected call of DeleteGCPMetricsIntegration.
-func (mr *MockClientServiceMockRecorder) DeleteGCPMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+// DeleteGcpMetricsIntegration indicates an expected call of DeleteGcpMetricsIntegration.
+func (mr *MockClientServiceMockRecorder) DeleteGcpMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteGCPMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).DeleteGCPMetricsIntegration), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteGcpMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).DeleteGcpMetricsIntegration), varargs...)
 }
 
 // DeleteLinkTemplate mocks base method.
@@ -435,24 +435,24 @@ func (mr *MockClientServiceMockRecorder) ListDatasets(params interface{}, opts .
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDatasets", reflect.TypeOf((*MockClientService)(nil).ListDatasets), varargs...)
 }
 
-// ListGCPMetricsIntegrations mocks base method.
-func (m *MockClientService) ListGCPMetricsIntegrations(params *operations.ListGCPMetricsIntegrationsParams, opts ...operations.ClientOption) (*operations.ListGCPMetricsIntegrationsOK, error) {
+// ListGcpMetricsIntegrations mocks base method.
+func (m *MockClientService) ListGcpMetricsIntegrations(params *operations.ListGcpMetricsIntegrationsParams, opts ...operations.ClientOption) (*operations.ListGcpMetricsIntegrationsOK, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{params}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "ListGCPMetricsIntegrations", varargs...)
-	ret0, _ := ret[0].(*operations.ListGCPMetricsIntegrationsOK)
+	ret := m.ctrl.Call(m, "ListGcpMetricsIntegrations", varargs...)
+	ret0, _ := ret[0].(*operations.ListGcpMetricsIntegrationsOK)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListGCPMetricsIntegrations indicates an expected call of ListGCPMetricsIntegrations.
-func (mr *MockClientServiceMockRecorder) ListGCPMetricsIntegrations(params interface{}, opts ...interface{}) *gomock.Call {
+// ListGcpMetricsIntegrations indicates an expected call of ListGcpMetricsIntegrations.
+func (mr *MockClientServiceMockRecorder) ListGcpMetricsIntegrations(params interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListGCPMetricsIntegrations", reflect.TypeOf((*MockClientService)(nil).ListGCPMetricsIntegrations), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListGcpMetricsIntegrations", reflect.TypeOf((*MockClientService)(nil).ListGcpMetricsIntegrations), varargs...)
 }
 
 // ListLinkTemplates mocks base method.
@@ -595,24 +595,24 @@ func (mr *MockClientServiceMockRecorder) ReadDataset(params interface{}, opts ..
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadDataset", reflect.TypeOf((*MockClientService)(nil).ReadDataset), varargs...)
 }
 
-// ReadGCPMetricsIntegration mocks base method.
-func (m *MockClientService) ReadGCPMetricsIntegration(params *operations.ReadGCPMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.ReadGCPMetricsIntegrationOK, error) {
+// ReadGcpMetricsIntegration mocks base method.
+func (m *MockClientService) ReadGcpMetricsIntegration(params *operations.ReadGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.ReadGcpMetricsIntegrationOK, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{params}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "ReadGCPMetricsIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.ReadGCPMetricsIntegrationOK)
+	ret := m.ctrl.Call(m, "ReadGcpMetricsIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.ReadGcpMetricsIntegrationOK)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ReadGCPMetricsIntegration indicates an expected call of ReadGCPMetricsIntegration.
-func (mr *MockClientServiceMockRecorder) ReadGCPMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+// ReadGcpMetricsIntegration indicates an expected call of ReadGcpMetricsIntegration.
+func (mr *MockClientServiceMockRecorder) ReadGcpMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadGCPMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).ReadGCPMetricsIntegration), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadGcpMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).ReadGcpMetricsIntegration), varargs...)
 }
 
 // ReadLinkTemplate mocks base method.
@@ -807,24 +807,24 @@ func (mr *MockClientServiceMockRecorder) UpdateDataset(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDataset", reflect.TypeOf((*MockClientService)(nil).UpdateDataset), varargs...)
 }
 
-// UpdateGCPMetricsIntegration mocks base method.
-func (m *MockClientService) UpdateGCPMetricsIntegration(params *operations.UpdateGCPMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.UpdateGCPMetricsIntegrationOK, error) {
+// UpdateGcpMetricsIntegration mocks base method.
+func (m *MockClientService) UpdateGcpMetricsIntegration(params *operations.UpdateGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.UpdateGcpMetricsIntegrationOK, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{params}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "UpdateGCPMetricsIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateGCPMetricsIntegrationOK)
+	ret := m.ctrl.Call(m, "UpdateGcpMetricsIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateGcpMetricsIntegrationOK)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// UpdateGCPMetricsIntegration indicates an expected call of UpdateGCPMetricsIntegration.
-func (mr *MockClientServiceMockRecorder) UpdateGCPMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+// UpdateGcpMetricsIntegration indicates an expected call of UpdateGcpMetricsIntegration.
+func (mr *MockClientServiceMockRecorder) UpdateGcpMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateGCPMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).UpdateGCPMetricsIntegration), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateGcpMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).UpdateGcpMetricsIntegration), varargs...)
 }
 
 // UpdateLinkTemplate mocks base method.

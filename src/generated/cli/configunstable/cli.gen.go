@@ -13,6 +13,7 @@ import (
 // AddCommandsTo adds all entity subcommands to the given root command.
 func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewDashboardCmd())
+	root.AddCommand(NewGcpMetricsIntegrationCmd())
 	root.AddCommand(NewLinkTemplateCmd())
 	root.AddCommand(NewSavedTraceSearchCmd())
 	root.AddCommand(NewServiceCmd())
@@ -32,6 +33,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateDashboard(ctx, clients.ConfigUnstable, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		GcpMetricsIntegrationTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*GcpMetricsIntegration)
+			if !ok {
+				return types.WrongObjectErr((&GcpMetricsIntegration{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateGcpMetricsIntegration(ctx, clients.ConfigUnstable, entity, updateOpts)
 			if err != nil {
 				return err
 			}
