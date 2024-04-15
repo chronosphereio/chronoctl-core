@@ -14,20 +14,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableListGCPMetricsIntegrationsResponse configunstable list g c p metrics integrations response
+// ConfigunstableListGcpMetricsIntegrationsResponse configunstable list gcp metrics integrations response
 //
-// swagger:model configunstableListGCPMetricsIntegrationsResponse
-type ConfigunstableListGCPMetricsIntegrationsResponse struct {
+// swagger:model configunstableListGcpMetricsIntegrationsResponse
+type ConfigunstableListGcpMetricsIntegrationsResponse struct {
 
 	// page
 	Page *Configv1PageResult `json:"page,omitempty"`
 
 	// gcp metrics integrations
-	GcpMetricsIntegrations []*ConfigunstableGCPMetricsIntegration `json:"gcp_metrics_integrations"`
+	GcpMetricsIntegrations []*ConfigunstableGcpMetricsIntegration `json:"gcp_metrics_integrations"`
 }
 
-// Validate validates this configunstable list g c p metrics integrations response
-func (m *ConfigunstableListGCPMetricsIntegrationsResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this configunstable list gcp metrics integrations response
+func (m *ConfigunstableListGcpMetricsIntegrationsResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validatePage(formats); err != nil {
@@ -44,7 +44,7 @@ func (m *ConfigunstableListGCPMetricsIntegrationsResponse) Validate(formats strf
 	return nil
 }
 
-func (m *ConfigunstableListGCPMetricsIntegrationsResponse) validatePage(formats strfmt.Registry) error {
+func (m *ConfigunstableListGcpMetricsIntegrationsResponse) validatePage(formats strfmt.Registry) error {
 	if swag.IsZero(m.Page) { // not required
 		return nil
 	}
@@ -63,7 +63,7 @@ func (m *ConfigunstableListGCPMetricsIntegrationsResponse) validatePage(formats 
 	return nil
 }
 
-func (m *ConfigunstableListGCPMetricsIntegrationsResponse) validateGcpMetricsIntegrations(formats strfmt.Registry) error {
+func (m *ConfigunstableListGcpMetricsIntegrationsResponse) validateGcpMetricsIntegrations(formats strfmt.Registry) error {
 	if swag.IsZero(m.GcpMetricsIntegrations) { // not required
 		return nil
 	}
@@ -89,8 +89,8 @@ func (m *ConfigunstableListGCPMetricsIntegrationsResponse) validateGcpMetricsInt
 	return nil
 }
 
-// ContextValidate validate this configunstable list g c p metrics integrations response based on the context it is used
-func (m *ConfigunstableListGCPMetricsIntegrationsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configunstable list gcp metrics integrations response based on the context it is used
+func (m *ConfigunstableListGcpMetricsIntegrationsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidatePage(ctx, formats); err != nil {
@@ -107,7 +107,7 @@ func (m *ConfigunstableListGCPMetricsIntegrationsResponse) ContextValidate(ctx c
 	return nil
 }
 
-func (m *ConfigunstableListGCPMetricsIntegrationsResponse) contextValidatePage(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConfigunstableListGcpMetricsIntegrationsResponse) contextValidatePage(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Page != nil {
 
@@ -128,7 +128,7 @@ func (m *ConfigunstableListGCPMetricsIntegrationsResponse) contextValidatePage(c
 	return nil
 }
 
-func (m *ConfigunstableListGCPMetricsIntegrationsResponse) contextValidateGcpMetricsIntegrations(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConfigunstableListGcpMetricsIntegrationsResponse) contextValidateGcpMetricsIntegrations(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.GcpMetricsIntegrations); i++ {
 
@@ -154,7 +154,7 @@ func (m *ConfigunstableListGCPMetricsIntegrationsResponse) contextValidateGcpMet
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableListGCPMetricsIntegrationsResponse) MarshalBinary() ([]byte, error) {
+func (m *ConfigunstableListGcpMetricsIntegrationsResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -162,8 +162,8 @@ func (m *ConfigunstableListGCPMetricsIntegrationsResponse) MarshalBinary() ([]by
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableListGCPMetricsIntegrationsResponse) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableListGCPMetricsIntegrationsResponse
+func (m *ConfigunstableListGcpMetricsIntegrationsResponse) UnmarshalBinary(b []byte) error {
+	var res ConfigunstableListGcpMetricsIntegrationsResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
