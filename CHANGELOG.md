@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.5.0
+
 ### Added
 * New config: gcp-metrics-integrations
 
