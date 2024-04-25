@@ -60,6 +60,7 @@ type RuntimeConfig struct {
 	InsecureSkipVerify bool
 	AllowHTTP          bool
 	DefaultBasePath    string
+	EntityNamespace    string
 }
 
 // New creates a new HTTP transport that can communicate with the Chronosphere API.
@@ -104,7 +105,10 @@ func New(config RuntimeConfig) (*httptransport.Runtime, error) {
 	}
 
 	transport.DefaultAuthentication = httptransport.APIKeyAuth(apiTokenHeader, "header", config.APIToken)
-	transport.Transport = xswagger.WithRequestIDTrailerTransport(withVersionHeader(config.Component, transport.Transport))
+
+	transport.Transport = xswagger.WithRequestIDTrailerTransport(
+		withCustomHeaders(config.Component, config.EntityNamespace, transport.Transport),
+	)
 	transport.Consumers[httpruntime.JSONMime] = xswagger.JSONConsumer()
 	transport.Consumers[httpruntime.HTMLMime] = xswagger.TextConsumer()
 	transport.Consumers[httpruntime.TextMime] = xswagger.TextConsumer()
@@ -115,18 +119,20 @@ func New(config RuntimeConfig) (*httptransport.Runtime, error) {
 
 const userAgentHeader = "User-Agent"
 
-// VersionHeaderTransport is a RoundTripper that adds a User-Agent header to all requests.
-type VersionHeaderTransport struct {
-	agent string
-	Rt    http.RoundTripper
+// CustomHeaderTransport is a RoundTripper that adds a custom headres to all requests
+// for example: User-Agent, and Chrono-Entity-Namespace
+type CustomHeaderTransport struct {
+	agent           string
+	entityNamespace string
+	Rt              http.RoundTripper
 }
 
-func withVersionHeader(component Component, rt http.RoundTripper) http.RoundTripper {
+func withCustomHeaders(component Component, entityNamespace string, rt http.RoundTripper) http.RoundTripper {
 	if rt == nil {
 		rt = http.DefaultTransport
 	}
 
-	return VersionHeaderTransport{
+	return CustomHeaderTransport{
 		Rt: rt,
 		agent: fmt.Sprintf("%s/%v-%v (%s; %s; %s)",
 			component,
@@ -136,11 +142,15 @@ func withVersionHeader(component Component, rt http.RoundTripper) http.RoundTrip
 			runtime.GOOS,
 			runtime.GOARCH,
 		),
+		entityNamespace: entityNamespace,
 	}
 }
 
 // RoundTrip implements the RoundTripper interface.
-func (v VersionHeaderTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	req.Header.Set(userAgentHeader, v.agent)
-	return v.Rt.RoundTrip(req)
+func (c CustomHeaderTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.Header.Set(userAgentHeader, c.agent)
+	if c.entityNamespace != "" {
+		req.Header.Set("Chrono-Entity-Namespace", c.entityNamespace)
+	}
+	return c.Rt.RoundTrip(req)
 }

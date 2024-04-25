@@ -48,6 +48,8 @@ const (
 	ChronosphereOrgKey = "CHRONOSPHERE_ORG" // fallback for CHRONOSPHERE_ORG_NAME
 	// ChronosphereAPITokenKey is the environment variable that specifies the Chronosphere API token
 	ChronosphereAPITokenKey = "CHRONOSPHERE_API_TOKEN"
+	// ChronosphereEntityNamespace is the environment variable that specifies the Chronosphere entity namespace
+	ChronosphereEntityNamespace = "CHRONOSPHERE_ENTITY_NAMESPACE"
 )
 
 // Clients is a list of clients our generated CLI needs access to.
@@ -129,6 +131,7 @@ func (f *Flags) Transport(component transport.Component, basePath string) (*http
 		InsecureSkipVerify: f.InsecureSkipVerify,
 		AllowHTTP:          f.AllowHTTP,
 		DefaultBasePath:    basePath,
+		EntityNamespace:    f.getEntityNamespace(),
 	})
 	if err != nil {
 		return nil, err
@@ -157,6 +160,13 @@ func (f *Flags) AddFlags(cmd *cobra.Command) {
 // Timeout returns the value of the timeout flag as a time.Duration.
 func (f *Flags) Timeout() time.Duration {
 	return time.Duration(f.TimeoutSeconds) * time.Second
+}
+
+func (f *Flags) getEntityNamespace() string {
+	if ns := os.Getenv(ChronosphereEntityNamespace); ns != "" {
+		return ns
+	}
+	return ""
 }
 
 func (f *Flags) getAPIToken() (string, error) {

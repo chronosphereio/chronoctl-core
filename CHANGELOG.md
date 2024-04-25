@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Added support for entity namespaces
+
 ## v1.5.0
 
 ### Added
