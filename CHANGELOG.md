@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Added support for entity namespaces
+* Added support for datasets
 
 ## v1.5.0
 

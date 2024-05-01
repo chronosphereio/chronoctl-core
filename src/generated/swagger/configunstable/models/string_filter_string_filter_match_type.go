@@ -41,6 +41,12 @@ const (
 
 	// StringFilterStringFilterMatchTypeREGEXNEGATION captures enum value "REGEX_NEGATION"
 	StringFilterStringFilterMatchTypeREGEXNEGATION StringFilterStringFilterMatchType = "REGEX_NEGATION"
+
+	// StringFilterStringFilterMatchTypeIN captures enum value "IN"
+	StringFilterStringFilterMatchTypeIN StringFilterStringFilterMatchType = "IN"
+
+	// StringFilterStringFilterMatchTypeNOTIN captures enum value "NOT_IN"
+	StringFilterStringFilterMatchTypeNOTIN StringFilterStringFilterMatchType = "NOT_IN"
 )
 
 // for schema
@@ -48,7 +54,7 @@ var stringFilterStringFilterMatchTypeEnum []interface{}
 
 func init() {
 	var res []StringFilterStringFilterMatchType
-	if err := json.Unmarshal([]byte(`["EXACT","REGEX","EXACT_NEGATION","REGEX_NEGATION"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["EXACT","REGEX","EXACT_NEGATION","REGEX_NEGATION","IN","NOT_IN"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
