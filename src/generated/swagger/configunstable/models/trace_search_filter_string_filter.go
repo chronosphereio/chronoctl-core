@@ -23,6 +23,9 @@ type TraceSearchFilterStringFilter struct {
 
 	// The value the filter compares to the target trace or span field.
 	Value string `json:"value,omitempty"`
+
+	// Values the filter tests against when using IN or NOT_IN match type.
+	InValues []string `json:"in_values"`
 }
 
 // Validate validates this trace search filter string filter

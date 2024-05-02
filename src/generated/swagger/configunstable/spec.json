@@ -3,6 +3,73 @@
     "application/json"
   ],
   "definitions": {
+    "BaselineBehaviorOptionsErrorSampleOptions": {
+      "properties": {
+        "sample_rate": {
+          "description": "Sample rate for traces with errors.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "BaselineBehaviorOptionsFastSampleOptions": {
+      "properties": {
+        "max_duration_seconds": {
+          "description": "Duration in seconds under which traces are sampled\naccording to the given sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sample_rate": {
+          "description": "Sample rate for traces under the given duration.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "BaselineBehaviorOptionsLargeTraceSampleOptions": {
+      "properties": {
+        "span_count_threshold": {
+          "description": "For N = number of spans in the trace, if N \u003e= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "sample_rate": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "BaselineBehaviorOptionsSlowSampleOptions": {
+      "properties": {
+        "min_duration_seconds": {
+          "description": "Duration in seconds over which traces are sampled\naccording to the given sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sample_rate": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "BaselineBehaviorOptionsSmallTraceSampleOptions": {
+      "properties": {
+        "span_count_threshold": {
+          "description": "For N = number of spans in the trace, if N \u003c= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "sample_rate": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "ChronoConfigCollectionsConfig": {
       "properties": {
         "group_teams": {
@@ -49,13 +116,17 @@
         },
         "trace_dataset": {
           "$ref": "#/definitions/configunstableTraceDataset"
+        },
+        "log_dataset": {
+          "$ref": "#/definitions/configunstableLogDataset"
         }
       },
       "type": "object"
     },
     "DatasetDatasetType": {
       "enum": [
-        "TRACES"
+        "TRACES",
+        "LOGS"
       ],
       "type": "string"
     },
@@ -84,10 +155,40 @@
       },
       "type": "object"
     },
+    "LogAllocationConfigAllocation": {
+      "description": "Configuration for allocating resources to a dataset.",
+      "properties": {
+        "percent_of_license": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "LogAllocationConfigDatasetAllocation": {
+      "properties": {
+        "dataset_slug": {
+          "description": "Slug of the dataset.",
+          "type": "string"
+        },
+        "allocation": {
+          "$ref": "#/definitions/LogAllocationConfigAllocation"
+        }
+      },
+      "type": "object"
+    },
+    "LogAllocationConfigDefaultDataset": {
+      "description": "Configuration for default dataset.",
+      "properties": {
+        "allocation": {
+          "$ref": "#/definitions/LogAllocationConfigAllocation"
+        }
+      },
+      "type": "object"
+    },
     "NoopEntityNestedEnum": {
       "enum": [
-        "ENABLED",
-        "DISABLED"
+        "ENABLED"
       ],
       "type": "string"
     },
@@ -102,6 +203,28 @@
       ],
       "type": "string"
     },
+    "OpenTelemetryMetricsIngestionResourceAttributes": {
+      "properties": {
+        "flatten_mode": {
+          "$ref": "#/definitions/ResourceAttributesFlattenMode"
+        },
+        "filter_mode": {
+          "$ref": "#/definitions/ResourceAttributesFilterMode"
+        },
+        "exclude_keys": {
+          "description": "Do not copy any resource attribute whose key exactly matches one of the\nstrings in this list.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "generate_target_info": {
+          "description": "Generate a target_info time series with labels derived from resource\nattributes. The filter_mode and exclude_keys settings apply in the same way as\nfor the \"flatten\" operation. The default is false.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "PerOperationSamplingStrategiesPerOperationSamplingStrategy": {
       "properties": {
         "operation": {
@@ -113,6 +236,21 @@
         }
       },
       "type": "object"
+    },
+    "ResourceAttributesFilterMode": {
+      "enum": [
+        "APPEND_DEFAULT_EXCLUDE_KEYS",
+        "CUSTOM_EXCLUDE_KEYS"
+      ],
+      "type": "string"
+    },
+    "ResourceAttributesFlattenMode": {
+      "enum": [
+        "MERGE",
+        "OVERWRITE",
+        "IGNORE"
+      ],
+      "type": "string"
     },
     "SavedTraceSearchBetweenTimeFilter": {
       "properties": {
@@ -197,7 +335,9 @@
         "EXACT",
         "REGEX",
         "EXACT_NEGATION",
-        "REGEX_NEGATION"
+        "REGEX_NEGATION",
+        "IN",
+        "NOT_IN"
       ],
       "type": "string"
     },
@@ -289,6 +429,112 @@
         "BUCKETS"
       ],
       "title": "TODO: confirm naming with InfoModel team",
+      "type": "string"
+    },
+    "TraceBehaviorBaselineBehaviorOptions": {
+      "properties": {
+        "base_tail_sample_rate": {
+          "description": "Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.\nIf they do apply to one or more of these options, the smallest sample rate is used.",
+          "format": "double",
+          "type": "number"
+        },
+        "base_head_sample_rate": {
+          "description": "Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,\nbut do not have a specific rule defined for their service.",
+          "format": "double",
+          "type": "number"
+        },
+        "error_sample_options": {
+          "$ref": "#/definitions/BaselineBehaviorOptionsErrorSampleOptions"
+        },
+        "fast_sample_options": {
+          "$ref": "#/definitions/BaselineBehaviorOptionsFastSampleOptions"
+        },
+        "slow_sample_options": {
+          "$ref": "#/definitions/BaselineBehaviorOptionsSlowSampleOptions"
+        },
+        "large_trace_sample_options": {
+          "$ref": "#/definitions/BaselineBehaviorOptionsLargeTraceSampleOptions"
+        },
+        "small_trace_sample_options": {
+          "$ref": "#/definitions/BaselineBehaviorOptionsSmallTraceSampleOptions"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorConfigMainBehaviorAssignment": {
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "dataset_slug": {
+          "description": "Slug reference of a TraceDataset",
+          "type": "string"
+        },
+        "behavior_slug": {
+          "description": "Slug reference of a TraceBehavior",
+          "type": "string"
+        },
+        "created_by": {
+          "description": "Author/creator of the entry.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the entry.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorConfigOverrideBehaviorAssignment": {
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "dataset_slug": {
+          "description": "Slug reference of a TraceDataset",
+          "type": "string"
+        },
+        "behavior_slug": {
+          "description": "Slug reference of a TraceBehavior",
+          "type": "string"
+        },
+        "start_time": {
+          "description": "Start and end time of the override.",
+          "format": "date-time",
+          "type": "string"
+        },
+        "end_time": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "created_by": {
+          "description": "Author/creator of the entry.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the entry.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorTraceBehaviorType": {
+      "description": " - TYPE_KEEP_ALL: Keep all traces.\n - TYPE_DROP_ALL: Drop all traces.\n - TYPE_BASELINE: Keep traces based on a default sample rate and additional sample rates for fast, slow, and error traces.",
+      "enum": [
+        "TYPE_KEEP_ALL",
+        "TYPE_DROP_ALL",
+        "TYPE_BASELINE"
+      ],
       "type": "string"
     },
     "TraceJaegerRemoteSamplingStrategyAppliedStrategy": {
@@ -448,6 +694,13 @@
         "value": {
           "description": "The value the filter compares to the target trace or span field.",
           "type": "string"
+        },
+        "in_values": {
+          "description": "Values the filter tests against when using IN or NOT_IN match type.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -568,6 +821,26 @@
       },
       "type": "object"
     },
+    "configunstableCreateLogAllocationConfigRequest": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configunstableLogAllocationConfig"
+        },
+        "dry_run": {
+          "description": "If true, the LogAllocationConfig will not be created, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateLogAllocationConfigResponse": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configunstableLogAllocationConfig"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateNoopEntityRequest": {
       "properties": {
         "noop_entity": {
@@ -580,6 +853,26 @@
       "properties": {
         "noop_entity": {
           "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateOpenTelemetryMetricsIngestionRequest": {
+      "properties": {
+        "open_telemetry_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
+        },
+        "dry_run": {
+          "description": "If true, the OpenTelemetryMetricsIngestion will not be created, and no response OpenTelemetryMetricsIngestion will be returned. The response will return an error if the given OpenTelemetryMetricsIngestion is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateOpenTelemetryMetricsIngestionResponse": {
+      "properties": {
+        "open_telemetry_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
         }
       },
       "type": "object"
@@ -616,6 +909,46 @@
       "properties": {
         "service": {
           "$ref": "#/definitions/configunstableService"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceBehaviorConfigRequest": {
+      "properties": {
+        "trace_behavior_config": {
+          "$ref": "#/definitions/configunstableTraceBehaviorConfig"
+        },
+        "dry_run": {
+          "description": "If true, the TraceBehaviorConfig will not be created, and no response TraceBehaviorConfig will be returned. The response will return an error if the given TraceBehaviorConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceBehaviorConfigResponse": {
+      "properties": {
+        "trace_behavior_config": {
+          "$ref": "#/definitions/configunstableTraceBehaviorConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceBehaviorRequest": {
+      "properties": {
+        "trace_behavior": {
+          "$ref": "#/definitions/configunstableTraceBehavior"
+        },
+        "dry_run": {
+          "description": "If true, the TraceBehavior will not be created, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceBehaviorResponse": {
+      "properties": {
+        "trace_behavior": {
+          "$ref": "#/definitions/configunstableTraceBehavior"
         }
       },
       "type": "object"
@@ -751,13 +1084,30 @@
     "configunstableDeleteLinkTemplateResponse": {
       "type": "object"
     },
+    "configunstableDeleteLogAllocationConfigResponse": {
+      "type": "object"
+    },
     "configunstableDeleteNoopEntityResponse": {
+      "properties": {
+        "not_hidden": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableDeleteOpenTelemetryMetricsIngestionResponse": {
       "type": "object"
     },
     "configunstableDeleteSavedTraceSearchResponse": {
       "type": "object"
     },
     "configunstableDeleteServiceResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteTraceBehaviorConfigResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteTraceBehaviorResponse": {
       "type": "object"
     },
     "configunstableDeleteTraceJaegerRemoteSamplingStrategyResponse": {
@@ -933,6 +1283,20 @@
       },
       "type": "object"
     },
+    "configunstableListTraceBehaviorsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "trace_behaviors": {
+          "items": {
+            "$ref": "#/definitions/configunstableTraceBehavior"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configunstableListTraceJaegerRemoteSamplingStrategiesResponse": {
       "properties": {
         "page": {
@@ -943,6 +1307,51 @@
             "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableLogAllocationConfig": {
+      "description": "LogAllocationConfig is a singleton configuration object that specifies the\nconfiguration for Log budget allocations.",
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the LogAllocationConfig was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the LogAllocationConfig was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "default_dataset": {
+          "$ref": "#/definitions/LogAllocationConfigDefaultDataset"
+        },
+        "dataset_allocations": {
+          "description": "Defines datasets and budget allocations. Datasets are evaluated in order.",
+          "items": {
+            "$ref": "#/definitions/LogAllocationConfigDatasetAllocation"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableLogDataset": {
+      "properties": {
+        "match_criteria": {
+          "$ref": "#/definitions/configunstableLogSearchFilter"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableLogSearchFilter": {
+      "properties": {
+        "query": {
+          "description": "Matches logs which match this query.\nQuery may only include top level operations (no nested clauses).\nOnly one type of operator AND/OR is allowed.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -980,11 +1389,29 @@
     },
     "configunstableNoopEnum": {
       "enum": [
-        "ACTIVE",
-        "ARCHIVED",
-        "DELETED"
+        "ACTIVE"
       ],
       "type": "string"
+    },
+    "configunstableOpenTelemetryMetricsIngestion": {
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the OpenTelemetryMetricsIngestion was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the OpenTelemetryMetricsIngestion was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "resource_attributes": {
+          "$ref": "#/definitions/OpenTelemetryMetricsIngestionResourceAttributes"
+        }
+      },
+      "type": "object"
     },
     "configunstableReadDashboardResponse": {
       "properties": {
@@ -1018,10 +1445,26 @@
       },
       "type": "object"
     },
+    "configunstableReadLogAllocationConfigResponse": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configunstableLogAllocationConfig"
+        }
+      },
+      "type": "object"
+    },
     "configunstableReadNoopEntityResponse": {
       "properties": {
         "noop_entity": {
           "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadOpenTelemetryMetricsIngestionResponse": {
+      "properties": {
+        "open_telemetry_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
         }
       },
       "type": "object"
@@ -1038,6 +1481,22 @@
       "properties": {
         "service": {
           "$ref": "#/definitions/configunstableService"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadTraceBehaviorConfigResponse": {
+      "properties": {
+        "trace_behavior_config": {
+          "$ref": "#/definitions/configunstableTraceBehaviorConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadTraceBehaviorResponse": {
+      "properties": {
+        "trace_behavior": {
+          "$ref": "#/definitions/configunstableTraceBehavior"
         }
       },
       "type": "object"
@@ -1160,6 +1619,76 @@
         "changes": {
           "items": {
             "$ref": "#/definitions/SyncPrometheusChangeLog"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceBehavior": {
+      "properties": {
+        "name": {
+          "description": "Required name of the TraceBehavior. May be modified after the TraceBehavior is created.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "Unique identifier of the TraceBehavior. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceBehavior is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the TraceBehavior was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the TraceBehavior was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/TraceBehaviorTraceBehaviorType"
+        },
+        "baseline_behavior_options": {
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptions"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceBehaviorConfig": {
+      "description": "TraceBehaviorConfig is a singleton configuration object that specifies the\nconfiguration for trace behaviors.",
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the TraceBehaviorConfig was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the TraceBehaviorConfig was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "main_behavior_assignments": {
+          "description": "List of Main Behavior Assignments. The datasets referenced here are the\ndatasets considered to be 'enrolled' in behaviors. The behaviors referenced\nhere are the active behaviors for the dataset when there is no override in\nplace. \n* There can only be one main behavior assignment per dataset.\n* There can only be one TraceBehavior referenced that has the type field\nset to TYPE_BASELINE.",
+          "items": {
+            "$ref": "#/definitions/TraceBehaviorConfigMainBehaviorAssignment"
+          },
+          "type": "array"
+        },
+        "override_behavior_assignments": {
+          "description": "List of OverrideBehaviorAssignments. OverrideBehaviorAssignments are used to\nspecify the active behavior for a dataset over a specific time range.\n* There can only be one override assignment for each Dataset.\n* There can only be one TraceBehavior referenced that has the type field\nset to TYPE_BASELINE, and it must be the same as the one in the\nmain_behavior_assignments list.",
+          "items": {
+            "$ref": "#/definitions/TraceBehaviorConfigOverrideBehaviorAssignment"
+          },
+          "type": "array"
+        },
+        "dataset_priorities": {
+          "description": "List of dataset priorities. This list specifies the order in which datasets\nare considered when determining the behavior to follow for a trace. Dataset\npriorities are used to break ties when a trace matches more than one dataset\nwith an active behavior.\n* Each entry in this list must refer to the slug of an existing dataset.\n* The order of the list is the order in which the datasets are considered.\n* The list must contain all datasets referenced in either main_behavior_assignments\n  and override_behavior_assignments.\n* The list may contain datasets that are not referenced in either of the above.",
+          "items": {
+            "type": "string"
           },
           "type": "array"
         }
@@ -1298,10 +1827,58 @@
       },
       "type": "object"
     },
+    "configunstableUpdateLogAllocationConfigRequest": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configunstableLogAllocationConfig"
+        },
+        "create_if_missing": {
+          "description": "If true, the LogAllocationConfig will be created if it does not already exist. If false, an error will be returned if the LogAllocationConfig does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the LogAllocationConfig will not be created nor updated, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateLogAllocationConfigResponse": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configunstableLogAllocationConfig"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateNoopEntityResponse": {
       "properties": {
         "noop_entity": {
           "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateOpenTelemetryMetricsIngestionRequest": {
+      "properties": {
+        "open_telemetry_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
+        },
+        "create_if_missing": {
+          "description": "If true, the OpenTelemetryMetricsIngestion will be created if it does not already exist. If false, an error will be returned if the OpenTelemetryMetricsIngestion does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the OpenTelemetryMetricsIngestion will not be created nor updated, and no response OpenTelemetryMetricsIngestion will be returned. The response will return an error if the given OpenTelemetryMetricsIngestion is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateOpenTelemetryMetricsIngestionResponse": {
+      "properties": {
+        "open_telemetry_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
         }
       },
       "type": "object"
@@ -1318,6 +1895,38 @@
       "properties": {
         "service": {
           "$ref": "#/definitions/configunstableService"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateTraceBehaviorConfigRequest": {
+      "properties": {
+        "trace_behavior_config": {
+          "$ref": "#/definitions/configunstableTraceBehaviorConfig"
+        },
+        "create_if_missing": {
+          "description": "If true, the TraceBehaviorConfig will be created if it does not already exist. If false, an error will be returned if the TraceBehaviorConfig does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the TraceBehaviorConfig will not be created nor updated, and no response TraceBehaviorConfig will be returned. The response will return an error if the given TraceBehaviorConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateTraceBehaviorConfigResponse": {
+      "properties": {
+        "trace_behavior_config": {
+          "$ref": "#/definitions/configunstableTraceBehaviorConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateTraceBehaviorResponse": {
+      "properties": {
+        "trace_behavior": {
+          "$ref": "#/definitions/configunstableTraceBehavior"
         }
       },
       "type": "object"
@@ -1736,7 +2345,8 @@
           {
             "description": "Custom filtering option: list filtered down to a specific telemetry type.",
             "enum": [
-              "TRACES"
+              "TRACES",
+              "LOGS"
             ],
             "in": "query",
             "name": "type",
@@ -2531,39 +3141,33 @@
         ]
       }
     },
-    "/api/unstable/config/noop-entities": {
-      "get": {
-        "operationId": "ListNoopEntities",
+    "/api/unstable/config/log-allocation-config": {
+      "delete": {
+        "operationId": "DeleteLogAllocationConfig",
         "parameters": [
           {
-            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
-            "format": "int64",
             "in": "query",
-            "name": "page.max_size",
-            "type": "integer"
-          },
-          {
-            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
-            "in": "query",
-            "name": "page.token",
-            "type": "string"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by slug, where any NoopEntity with a matching slug in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "slugs",
-            "type": "array"
+            "name": "dry_run",
+            "type": "boolean"
           }
         ],
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/configunstableListNoopEntitiesResponse"
+              "$ref": "#/definitions/configunstableDeleteLogAllocationConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the LogAllocationConfig because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the LogAllocationConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
             }
           },
           "500": {
@@ -2580,9 +3184,139 @@
           }
         },
         "tags": [
-          "NoopEntity"
+          "LogAllocationConfig"
         ]
       },
+      "get": {
+        "operationId": "ReadLogAllocationConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadLogAllocationConfigResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the LogAllocationConfig because LogAllocationConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogAllocationConfig"
+        ]
+      },
+      "post": {
+        "operationId": "CreateLogAllocationConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateLogAllocationConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created LogAllocationConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateLogAllocationConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the LogAllocationConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the LogAllocationConfig because there is a conflict with an existing LogAllocationConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogAllocationConfig"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateLogAllocationConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateLogAllocationConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated LogAllocationConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateLogAllocationConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the LogAllocationConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the LogAllocationConfig because LogAllocationConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogAllocationConfig"
+        ]
+      }
+    },
+    "/api/unstable/config/noop-entities": {
       "post": {
         "operationId": "CreateNoopEntity",
         "parameters": [
@@ -2786,6 +3520,174 @@
         },
         "tags": [
           "NoopEntity"
+        ]
+      }
+    },
+    "/api/unstable/config/open-telemetry-metrics-ingestion": {
+      "delete": {
+        "operationId": "DeleteOpenTelemetryMetricsIngestion",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteOpenTelemetryMetricsIngestionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the OpenTelemetryMetricsIngestion because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the OpenTelemetryMetricsIngestion because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "OpenTelemetryMetricsIngestion"
+        ]
+      },
+      "get": {
+        "operationId": "ReadOpenTelemetryMetricsIngestion",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadOpenTelemetryMetricsIngestionResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the OpenTelemetryMetricsIngestion because OpenTelemetryMetricsIngestion has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "OpenTelemetryMetricsIngestion"
+        ]
+      },
+      "post": {
+        "operationId": "CreateOpenTelemetryMetricsIngestion",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateOpenTelemetryMetricsIngestionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created OpenTelemetryMetricsIngestion.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateOpenTelemetryMetricsIngestionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the OpenTelemetryMetricsIngestion because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the OpenTelemetryMetricsIngestion because there is a conflict with an existing OpenTelemetryMetricsIngestion.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "OpenTelemetryMetricsIngestion"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateOpenTelemetryMetricsIngestion",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateOpenTelemetryMetricsIngestionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated OpenTelemetryMetricsIngestion.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateOpenTelemetryMetricsIngestionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the OpenTelemetryMetricsIngestion because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the OpenTelemetryMetricsIngestion because OpenTelemetryMetricsIngestion has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "OpenTelemetryMetricsIngestion"
         ]
       }
     },
@@ -3386,6 +4288,453 @@
         },
         "tags": [
           "SyncPrometheus"
+        ]
+      }
+    },
+    "/api/unstable/config/trace-behavior-config": {
+      "delete": {
+        "operationId": "DeleteTraceBehaviorConfig",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "dry_run",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteTraceBehaviorConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the TraceBehaviorConfig because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the TraceBehaviorConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehaviorConfig"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceBehaviorConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadTraceBehaviorConfigResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the TraceBehaviorConfig because TraceBehaviorConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehaviorConfig"
+        ]
+      },
+      "post": {
+        "operationId": "CreateTraceBehaviorConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceBehaviorConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created TraceBehaviorConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceBehaviorConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the TraceBehaviorConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceBehaviorConfig because there is a conflict with an existing TraceBehaviorConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehaviorConfig"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceBehaviorConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateTraceBehaviorConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated TraceBehaviorConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateTraceBehaviorConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the TraceBehaviorConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceBehaviorConfig because TraceBehaviorConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehaviorConfig"
+        ]
+      }
+    },
+    "/api/unstable/config/trace-behaviors": {
+      "get": {
+        "operationId": "ListTraceBehaviors",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any TraceBehavior with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any TraceBehavior with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListTraceBehaviorsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
+        ]
+      },
+      "post": {
+        "operationId": "CreateTraceBehavior",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceBehaviorRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created TraceBehavior.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceBehaviorResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the TraceBehavior because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceBehavior because there is a conflict with an existing TraceBehavior.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
+        ]
+      }
+    },
+    "/api/unstable/config/trace-behaviors/{slug}": {
+      "delete": {
+        "operationId": "DeleteTraceBehavior",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteTraceBehaviorResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the TraceBehavior because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the TraceBehavior because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceBehavior",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadTraceBehaviorResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the TraceBehavior because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceBehavior",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the TraceBehavior will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceBehavior does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "description": "If true, the TraceBehavior will not be created nor updated, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.",
+                  "type": "boolean"
+                },
+                "trace_behavior": {
+                  "$ref": "#/definitions/configunstableTraceBehavior"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated TraceBehavior.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateTraceBehaviorResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the TraceBehavior because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceBehavior because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the TraceBehavior because there is a conflict with an existing TraceBehavior.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
         ]
       }
     },

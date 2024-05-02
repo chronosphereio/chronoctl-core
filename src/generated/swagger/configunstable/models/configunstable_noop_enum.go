@@ -32,12 +32,6 @@ const (
 
 	// ConfigunstableNoopEnumACTIVE captures enum value "ACTIVE"
 	ConfigunstableNoopEnumACTIVE ConfigunstableNoopEnum = "ACTIVE"
-
-	// ConfigunstableNoopEnumARCHIVED captures enum value "ARCHIVED"
-	ConfigunstableNoopEnumARCHIVED ConfigunstableNoopEnum = "ARCHIVED"
-
-	// ConfigunstableNoopEnumDELETED captures enum value "DELETED"
-	ConfigunstableNoopEnumDELETED ConfigunstableNoopEnum = "DELETED"
 )
 
 // for schema
@@ -45,7 +39,7 @@ var configunstableNoopEnumEnum []interface{}
 
 func init() {
 	var res []ConfigunstableNoopEnum
-	if err := json.Unmarshal([]byte(`["ACTIVE","ARCHIVED","DELETED"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVE"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

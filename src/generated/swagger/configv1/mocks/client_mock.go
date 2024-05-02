@@ -115,6 +115,26 @@ func (mr *MockClientServiceMockRecorder) CreateDashboard(params interface{}, opt
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDashboard", reflect.TypeOf((*MockClientService)(nil).CreateDashboard), varargs...)
 }
 
+// CreateDataset mocks base method.
+func (m *MockClientService) CreateDataset(params *operations.CreateDatasetParams, opts ...operations.ClientOption) (*operations.CreateDatasetOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateDataset", varargs...)
+	ret0, _ := ret[0].(*operations.CreateDatasetOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateDataset indicates an expected call of CreateDataset.
+func (mr *MockClientServiceMockRecorder) CreateDataset(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDataset", reflect.TypeOf((*MockClientService)(nil).CreateDataset), varargs...)
+}
+
 // CreateDerivedLabel mocks base method.
 func (m *MockClientService) CreateDerivedLabel(params *operations.CreateDerivedLabelParams, opts ...operations.ClientOption) (*operations.CreateDerivedLabelOK, error) {
 	m.ctrl.T.Helper()
@@ -533,6 +553,26 @@ func (mr *MockClientServiceMockRecorder) DeleteDashboard(params interface{}, opt
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDashboard", reflect.TypeOf((*MockClientService)(nil).DeleteDashboard), varargs...)
+}
+
+// DeleteDataset mocks base method.
+func (m *MockClientService) DeleteDataset(params *operations.DeleteDatasetParams, opts ...operations.ClientOption) (*operations.DeleteDatasetOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteDataset", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteDatasetOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteDataset indicates an expected call of DeleteDataset.
+func (mr *MockClientServiceMockRecorder) DeleteDataset(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDataset", reflect.TypeOf((*MockClientService)(nil).DeleteDataset), varargs...)
 }
 
 // DeleteDerivedLabel mocks base method.
@@ -955,6 +995,26 @@ func (mr *MockClientServiceMockRecorder) ListDashboards(params interface{}, opts
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDashboards", reflect.TypeOf((*MockClientService)(nil).ListDashboards), varargs...)
 }
 
+// ListDatasets mocks base method.
+func (m *MockClientService) ListDatasets(params *operations.ListDatasetsParams, opts ...operations.ClientOption) (*operations.ListDatasetsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListDatasets", varargs...)
+	ret0, _ := ret[0].(*operations.ListDatasetsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListDatasets indicates an expected call of ListDatasets.
+func (mr *MockClientServiceMockRecorder) ListDatasets(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDatasets", reflect.TypeOf((*MockClientService)(nil).ListDatasets), varargs...)
+}
+
 // ListDerivedLabels mocks base method.
 func (m *MockClientService) ListDerivedLabels(params *operations.ListDerivedLabelsParams, opts ...operations.ClientOption) (*operations.ListDerivedLabelsOK, error) {
 	m.ctrl.T.Helper()
@@ -1333,6 +1393,26 @@ func (mr *MockClientServiceMockRecorder) ReadDashboard(params interface{}, opts 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadDashboard", reflect.TypeOf((*MockClientService)(nil).ReadDashboard), varargs...)
+}
+
+// ReadDataset mocks base method.
+func (m *MockClientService) ReadDataset(params *operations.ReadDatasetParams, opts ...operations.ClientOption) (*operations.ReadDatasetOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadDataset", varargs...)
+	ret0, _ := ret[0].(*operations.ReadDatasetOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadDataset indicates an expected call of ReadDataset.
+func (mr *MockClientServiceMockRecorder) ReadDataset(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadDataset", reflect.TypeOf((*MockClientService)(nil).ReadDataset), varargs...)
 }
 
 // ReadDerivedLabel mocks base method.
@@ -1785,6 +1865,26 @@ func (mr *MockClientServiceMockRecorder) UpdateDashboard(params interface{}, opt
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDashboard", reflect.TypeOf((*MockClientService)(nil).UpdateDashboard), varargs...)
+}
+
+// UpdateDataset mocks base method.
+func (m *MockClientService) UpdateDataset(params *operations.UpdateDatasetParams, opts ...operations.ClientOption) (*operations.UpdateDatasetOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateDataset", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateDatasetOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateDataset indicates an expected call of UpdateDataset.
+func (mr *MockClientServiceMockRecorder) UpdateDataset(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDataset", reflect.TypeOf((*MockClientService)(nil).UpdateDataset), varargs...)
 }
 
 // UpdateDerivedLabel mocks base method.

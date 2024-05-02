@@ -32,9 +32,6 @@ const (
 
 	// NoopEntityNestedEnumENABLED captures enum value "ENABLED"
 	NoopEntityNestedEnumENABLED NoopEntityNestedEnum = "ENABLED"
-
-	// NoopEntityNestedEnumDISABLED captures enum value "DISABLED"
-	NoopEntityNestedEnumDISABLED NoopEntityNestedEnum = "DISABLED"
 )
 
 // for schema
@@ -42,7 +39,7 @@ var noopEntityNestedEnumEnum []interface{}
 
 func init() {
 	var res []NoopEntityNestedEnum
-	if err := json.Unmarshal([]byte(`["ENABLED","DISABLED"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ENABLED"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

@@ -70,7 +70,7 @@ DeleteNoopEntityOK describes a response with status code 200, with default heade
 A successful response.
 */
 type DeleteNoopEntityOK struct {
-	Payload models.ConfigunstableDeleteNoopEntityResponse
+	Payload *models.ConfigunstableDeleteNoopEntityResponse
 }
 
 // IsSuccess returns true when this delete noop entity o k response has a 2xx status code
@@ -111,14 +111,16 @@ func (o *DeleteNoopEntityOK) String() string {
 	return fmt.Sprintf("[DELETE /api/unstable/config/noop-entities/{slug}][%d] deleteNoopEntityOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteNoopEntityOK) GetPayload() models.ConfigunstableDeleteNoopEntityResponse {
+func (o *DeleteNoopEntityOK) GetPayload() *models.ConfigunstableDeleteNoopEntityResponse {
 	return o.Payload
 }
 
 func (o *DeleteNoopEntityOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.ConfigunstableDeleteNoopEntityResponse)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

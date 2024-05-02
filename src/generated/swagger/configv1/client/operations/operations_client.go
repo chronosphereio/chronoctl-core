@@ -36,6 +36,8 @@ type ClientService interface {
 
 	CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error)
 
+	CreateDataset(params *CreateDatasetParams, opts ...ClientOption) (*CreateDatasetOK, error)
+
 	CreateDerivedLabel(params *CreateDerivedLabelParams, opts ...ClientOption) (*CreateDerivedLabelOK, error)
 
 	CreateDerivedMetric(params *CreateDerivedMetricParams, opts ...ClientOption) (*CreateDerivedMetricOK, error)
@@ -77,6 +79,8 @@ type ClientService interface {
 	DeleteCollection(params *DeleteCollectionParams, opts ...ClientOption) (*DeleteCollectionOK, error)
 
 	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error)
+
+	DeleteDataset(params *DeleteDatasetParams, opts ...ClientOption) (*DeleteDatasetOK, error)
 
 	DeleteDerivedLabel(params *DeleteDerivedLabelParams, opts ...ClientOption) (*DeleteDerivedLabelOK, error)
 
@@ -120,6 +124,8 @@ type ClientService interface {
 
 	ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error)
 
+	ListDatasets(params *ListDatasetsParams, opts ...ClientOption) (*ListDatasetsOK, error)
+
 	ListDerivedLabels(params *ListDerivedLabelsParams, opts ...ClientOption) (*ListDerivedLabelsOK, error)
 
 	ListDerivedMetrics(params *ListDerivedMetricsParams, opts ...ClientOption) (*ListDerivedMetricsOK, error)
@@ -157,6 +163,8 @@ type ClientService interface {
 	ReadCollection(params *ReadCollectionParams, opts ...ClientOption) (*ReadCollectionOK, error)
 
 	ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error)
+
+	ReadDataset(params *ReadDatasetParams, opts ...ClientOption) (*ReadDatasetOK, error)
 
 	ReadDerivedLabel(params *ReadDerivedLabelParams, opts ...ClientOption) (*ReadDerivedLabelOK, error)
 
@@ -201,6 +209,8 @@ type ClientService interface {
 	UpdateCollection(params *UpdateCollectionParams, opts ...ClientOption) (*UpdateCollectionOK, error)
 
 	UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOption) (*UpdateDashboardOK, error)
+
+	UpdateDataset(params *UpdateDatasetParams, opts ...ClientOption) (*UpdateDatasetOK, error)
 
 	UpdateDerivedLabel(params *UpdateDerivedLabelParams, opts ...ClientOption) (*UpdateDerivedLabelOK, error)
 
@@ -382,6 +392,43 @@ func (a *Client) CreateDashboard(params *CreateDashboardParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateDataset create dataset API
+*/
+func (a *Client) CreateDataset(params *CreateDatasetParams, opts ...ClientOption) (*CreateDatasetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateDatasetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateDataset",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/datasets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateDatasetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateDatasetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateDatasetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1166,6 +1213,43 @@ func (a *Client) DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOp
 }
 
 /*
+DeleteDataset delete dataset API
+*/
+func (a *Client) DeleteDataset(params *DeleteDatasetParams, opts ...ClientOption) (*DeleteDatasetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteDatasetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteDataset",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/datasets/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteDatasetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteDatasetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteDatasetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteDerivedLabel delete derived label API
 */
 func (a *Client) DeleteDerivedLabel(params *DeleteDerivedLabelParams, opts ...ClientOption) (*DeleteDerivedLabelOK, error) {
@@ -1943,6 +2027,43 @@ func (a *Client) ListDashboards(params *ListDashboardsParams, opts ...ClientOpti
 }
 
 /*
+ListDatasets list datasets API
+*/
+func (a *Client) ListDatasets(params *ListDatasetsParams, opts ...ClientOption) (*ListDatasetsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListDatasetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListDatasets",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/datasets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListDatasetsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListDatasetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListDatasetsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListDerivedLabels list derived labels API
 */
 func (a *Client) ListDerivedLabels(params *ListDerivedLabelsParams, opts ...ClientOption) (*ListDerivedLabelsOK, error) {
@@ -2642,6 +2763,43 @@ func (a *Client) ReadDashboard(params *ReadDashboardParams, opts ...ClientOption
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadDataset read dataset API
+*/
+func (a *Client) ReadDataset(params *ReadDatasetParams, opts ...ClientOption) (*ReadDatasetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadDatasetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadDataset",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/datasets/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadDatasetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadDatasetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadDatasetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3456,6 +3614,43 @@ func (a *Client) UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateDataset update dataset API
+*/
+func (a *Client) UpdateDataset(params *UpdateDatasetParams, opts ...ClientOption) (*UpdateDatasetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateDatasetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateDataset",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/datasets/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateDatasetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateDatasetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateDatasetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

@@ -16,6 +16,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewClassicDashboardCmd())
 	root.AddCommand(NewCollectionCmd())
 	root.AddCommand(NewDashboardCmd())
+	root.AddCommand(NewDatasetCmd())
 	root.AddCommand(NewDerivedLabelCmd())
 	root.AddCommand(NewDerivedMetricCmd())
 	root.AddCommand(NewDropRuleCmd())
@@ -96,6 +97,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateDashboard(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		DatasetTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*Dataset)
+			if !ok {
+				return types.WrongObjectErr((&Dataset{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateDataset(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}
