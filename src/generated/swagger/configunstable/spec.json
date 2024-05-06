@@ -130,31 +130,6 @@
       ],
       "type": "string"
     },
-    "GcpMetricsIntegrationMetricGroup": {
-      "properties": {
-        "project_id": {
-          "description": "Project ID that has access to the metric data.",
-          "type": "string"
-        },
-        "prefixes": {
-          "description": "List of Gcp metric prefixes to ingest.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "GcpMetricsIntegrationServiceAccount": {
-      "properties": {
-        "client_email": {
-          "description": "Email address of the service account to impersonate.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "LogAllocationConfigAllocation": {
       "description": "Configuration for allocating resources to a dataset.",
       "properties": {
@@ -203,7 +178,7 @@
       ],
       "type": "string"
     },
-    "OpenTelemetryMetricsIngestionResourceAttributes": {
+    "OtelMetricsIngestionResourceAttributes": {
       "properties": {
         "flatten_mode": {
           "$ref": "#/definitions/ResourceAttributesFlattenMode"
@@ -781,26 +756,6 @@
       },
       "type": "object"
     },
-    "configunstableCreateGcpMetricsIntegrationRequest": {
-      "properties": {
-        "gcp_metrics_integration": {
-          "$ref": "#/definitions/configunstableGcpMetricsIntegration"
-        },
-        "dry_run": {
-          "description": "If true, the GcpMetricsIntegration will not be created, and no response GcpMetricsIntegration will be returned. The response will return an error if the given GcpMetricsIntegration is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateGcpMetricsIntegrationResponse": {
-      "properties": {
-        "gcp_metrics_integration": {
-          "$ref": "#/definitions/configunstableGcpMetricsIntegration"
-        }
-      },
-      "type": "object"
-    },
     "configunstableCreateLinkTemplateRequest": {
       "properties": {
         "link_template": {
@@ -857,22 +812,22 @@
       },
       "type": "object"
     },
-    "configunstableCreateOpenTelemetryMetricsIngestionRequest": {
+    "configunstableCreateOtelMetricsIngestionRequest": {
       "properties": {
-        "open_telemetry_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
         },
         "dry_run": {
-          "description": "If true, the OpenTelemetryMetricsIngestion will not be created, and no response OpenTelemetryMetricsIngestion will be returned. The response will return an error if the given OpenTelemetryMetricsIngestion is invalid.",
+          "description": "If true, the OtelMetricsIngestion will not be created, and no response OtelMetricsIngestion will be returned. The response will return an error if the given OtelMetricsIngestion is invalid.",
           "type": "boolean"
         }
       },
       "type": "object"
     },
-    "configunstableCreateOpenTelemetryMetricsIngestionResponse": {
+    "configunstableCreateOtelMetricsIngestionResponse": {
       "properties": {
-        "open_telemetry_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
         }
       },
       "type": "object"
@@ -1078,9 +1033,6 @@
     "configunstableDeleteDatasetResponse": {
       "type": "object"
     },
-    "configunstableDeleteGcpMetricsIntegrationResponse": {
-      "type": "object"
-    },
     "configunstableDeleteLinkTemplateResponse": {
       "type": "object"
     },
@@ -1095,7 +1047,7 @@
       },
       "type": "object"
     },
-    "configunstableDeleteOpenTelemetryMetricsIngestionResponse": {
+    "configunstableDeleteOtelMetricsIngestionResponse": {
       "type": "object"
     },
     "configunstableDeleteSavedTraceSearchResponse": {
@@ -1114,41 +1066,6 @@
       "type": "object"
     },
     "configunstableDeleteTraceTailSamplingRulesResponse": {
-      "type": "object"
-    },
-    "configunstableGcpMetricsIntegration": {
-      "properties": {
-        "slug": {
-          "description": "Unique identifier of the GcpMetricsIntegration. If slug is not provided, one will be generated based of the name field. Cannot be modified after the GcpMetricsIntegration is created.",
-          "type": "string"
-        },
-        "name": {
-          "description": "Required name of the GcpMetricsIntegration. May be modified after the GcpMetricsIntegration is created.",
-          "type": "string"
-        },
-        "created_at": {
-          "description": "Timestamp of when the GcpMetricsIntegration was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the GcpMetricsIntegration was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "service_account": {
-          "$ref": "#/definitions/GcpMetricsIntegrationServiceAccount"
-        },
-        "metric_groups": {
-          "description": "Metric groups to be ingested for this integration.",
-          "items": {
-            "$ref": "#/definitions/GcpMetricsIntegrationMetricGroup"
-          },
-          "type": "array"
-        }
-      },
       "type": "object"
     },
     "configunstableLinkTemplate": {
@@ -1206,20 +1123,6 @@
         "datasets": {
           "items": {
             "$ref": "#/definitions/configunstableDataset"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableListGcpMetricsIntegrationsResponse": {
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/configv1PageResult"
-        },
-        "gcp_metrics_integrations": {
-          "items": {
-            "$ref": "#/definitions/configunstableGcpMetricsIntegration"
           },
           "type": "array"
         }
@@ -1393,22 +1296,22 @@
       ],
       "type": "string"
     },
-    "configunstableOpenTelemetryMetricsIngestion": {
+    "configunstableOtelMetricsIngestion": {
       "properties": {
         "created_at": {
-          "description": "Timestamp of when the OpenTelemetryMetricsIngestion was created. Cannot be set by clients.",
+          "description": "Timestamp of when the OtelMetricsIngestion was created. Cannot be set by clients.",
           "format": "date-time",
           "readOnly": true,
           "type": "string"
         },
         "updated_at": {
-          "description": "Timestamp of when the OpenTelemetryMetricsIngestion was last updated. Cannot be set by clients.",
+          "description": "Timestamp of when the OtelMetricsIngestion was last updated. Cannot be set by clients.",
           "format": "date-time",
           "readOnly": true,
           "type": "string"
         },
         "resource_attributes": {
-          "$ref": "#/definitions/OpenTelemetryMetricsIngestionResourceAttributes"
+          "$ref": "#/definitions/OtelMetricsIngestionResourceAttributes"
         }
       },
       "type": "object"
@@ -1425,14 +1328,6 @@
       "properties": {
         "dataset": {
           "$ref": "#/definitions/configunstableDataset"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableReadGcpMetricsIntegrationResponse": {
-      "properties": {
-        "gcp_metrics_integration": {
-          "$ref": "#/definitions/configunstableGcpMetricsIntegration"
         }
       },
       "type": "object"
@@ -1461,10 +1356,10 @@
       },
       "type": "object"
     },
-    "configunstableReadOpenTelemetryMetricsIngestionResponse": {
+    "configunstableReadOtelMetricsIngestionResponse": {
       "properties": {
-        "open_telemetry_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
         }
       },
       "type": "object"
@@ -1811,14 +1706,6 @@
       },
       "type": "object"
     },
-    "configunstableUpdateGcpMetricsIntegrationResponse": {
-      "properties": {
-        "gcp_metrics_integration": {
-          "$ref": "#/definitions/configunstableGcpMetricsIntegration"
-        }
-      },
-      "type": "object"
-    },
     "configunstableUpdateLinkTemplateResponse": {
       "properties": {
         "link_template": {
@@ -1859,26 +1746,26 @@
       },
       "type": "object"
     },
-    "configunstableUpdateOpenTelemetryMetricsIngestionRequest": {
+    "configunstableUpdateOtelMetricsIngestionRequest": {
       "properties": {
-        "open_telemetry_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
         },
         "create_if_missing": {
-          "description": "If true, the OpenTelemetryMetricsIngestion will be created if it does not already exist. If false, an error will be returned if the OpenTelemetryMetricsIngestion does not already exist.",
+          "description": "If true, the OtelMetricsIngestion will be created if it does not already exist. If false, an error will be returned if the OtelMetricsIngestion does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
-          "description": "If true, the OpenTelemetryMetricsIngestion will not be created nor updated, and no response OpenTelemetryMetricsIngestion will be returned. The response will return an error if the given OpenTelemetryMetricsIngestion is invalid.",
+          "description": "If true, the OtelMetricsIngestion will not be created nor updated, and no response OtelMetricsIngestion will be returned. The response will return an error if the given OtelMetricsIngestion is invalid.",
           "type": "boolean"
         }
       },
       "type": "object"
     },
-    "configunstableUpdateOpenTelemetryMetricsIngestionResponse": {
+    "configunstableUpdateOtelMetricsIngestionResponse": {
       "properties": {
-        "open_telemetry_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOpenTelemetryMetricsIngestion"
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
         }
       },
       "type": "object"
@@ -2587,278 +2474,6 @@
         ]
       }
     },
-    "/api/unstable/config/gcp-metrics-integrations": {
-      "get": {
-        "operationId": "ListGcpMetricsIntegrations",
-        "parameters": [
-          {
-            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
-            "format": "int64",
-            "in": "query",
-            "name": "page.max_size",
-            "type": "integer"
-          },
-          {
-            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
-            "in": "query",
-            "name": "page.token",
-            "type": "string"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by slug, where any GcpMetricsIntegration with a matching slug in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "slugs",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by name, where any GcpMetricsIntegration with a matching name in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "names",
-            "type": "array"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableListGcpMetricsIntegrationsResponse"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "GcpMetricsIntegration"
-        ]
-      },
-      "post": {
-        "operationId": "CreateGcpMetricsIntegration",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateGcpMetricsIntegrationRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created GcpMetricsIntegration.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateGcpMetricsIntegrationResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the GcpMetricsIntegration because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the GcpMetricsIntegration because there is a conflict with an existing GcpMetricsIntegration.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "GcpMetricsIntegration"
-        ]
-      }
-    },
-    "/api/unstable/config/gcp-metrics-integrations/{slug}": {
-      "delete": {
-        "operationId": "DeleteGcpMetricsIntegration",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteGcpMetricsIntegrationResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot delete the GcpMetricsIntegration because it is in use.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the GcpMetricsIntegration because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "GcpMetricsIntegration"
-        ]
-      },
-      "get": {
-        "operationId": "ReadGcpMetricsIntegration",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadGcpMetricsIntegrationResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the GcpMetricsIntegration because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "GcpMetricsIntegration"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateGcpMetricsIntegration",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "properties": {
-                "create_if_missing": {
-                  "description": "If true, the GcpMetricsIntegration will be created if it does not already exist, identified by slug. If false, an error will be returned if the GcpMetricsIntegration does not already exist.",
-                  "type": "boolean"
-                },
-                "dry_run": {
-                  "description": "If true, the GcpMetricsIntegration will not be created nor updated, and no response GcpMetricsIntegration will be returned. The response will return an error if the given GcpMetricsIntegration is invalid.",
-                  "type": "boolean"
-                },
-                "gcp_metrics_integration": {
-                  "$ref": "#/definitions/configunstableGcpMetricsIntegration"
-                }
-              },
-              "type": "object"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated GcpMetricsIntegration.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateGcpMetricsIntegrationResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the GcpMetricsIntegration because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the GcpMetricsIntegration because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot update the GcpMetricsIntegration because there is a conflict with an existing GcpMetricsIntegration.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "GcpMetricsIntegration"
-        ]
-      }
-    },
     "/api/unstable/config/link-templates": {
       "get": {
         "operationId": "ListLinkTemplates",
@@ -3523,24 +3138,24 @@
         ]
       }
     },
-    "/api/unstable/config/open-telemetry-metrics-ingestion": {
+    "/api/unstable/config/otel-metrics-ingestion": {
       "delete": {
-        "operationId": "DeleteOpenTelemetryMetricsIngestion",
+        "operationId": "DeleteOtelMetricsIngestion",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/configunstableDeleteOpenTelemetryMetricsIngestionResponse"
+              "$ref": "#/definitions/configunstableDeleteOtelMetricsIngestionResponse"
             }
           },
           "400": {
-            "description": "Cannot delete the OpenTelemetryMetricsIngestion because it is in use.",
+            "description": "Cannot delete the OtelMetricsIngestion because it is in use.",
             "schema": {
               "$ref": "#/definitions/apiError"
             }
           },
           "404": {
-            "description": "Cannot delete the OpenTelemetryMetricsIngestion because the slug does not exist.",
+            "description": "Cannot delete the OtelMetricsIngestion because the slug does not exist.",
             "schema": {
               "$ref": "#/definitions/apiError"
             }
@@ -3559,20 +3174,20 @@
           }
         },
         "tags": [
-          "OpenTelemetryMetricsIngestion"
+          "OtelMetricsIngestion"
         ]
       },
       "get": {
-        "operationId": "ReadOpenTelemetryMetricsIngestion",
+        "operationId": "ReadOtelMetricsIngestion",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/configunstableReadOpenTelemetryMetricsIngestionResponse"
+              "$ref": "#/definitions/configunstableReadOtelMetricsIngestionResponse"
             }
           },
           "404": {
-            "description": "Cannot read the OpenTelemetryMetricsIngestion because OpenTelemetryMetricsIngestion has not been created.",
+            "description": "Cannot read the OtelMetricsIngestion because OtelMetricsIngestion has not been created.",
             "schema": {
               "$ref": "#/definitions/apiError"
             }
@@ -3591,36 +3206,36 @@
           }
         },
         "tags": [
-          "OpenTelemetryMetricsIngestion"
+          "OtelMetricsIngestion"
         ]
       },
       "post": {
-        "operationId": "CreateOpenTelemetryMetricsIngestion",
+        "operationId": "CreateOtelMetricsIngestion",
         "parameters": [
           {
             "in": "body",
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/configunstableCreateOpenTelemetryMetricsIngestionRequest"
+              "$ref": "#/definitions/configunstableCreateOtelMetricsIngestionRequest"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "A successful response containing the created OpenTelemetryMetricsIngestion.",
+            "description": "A successful response containing the created OtelMetricsIngestion.",
             "schema": {
-              "$ref": "#/definitions/configunstableCreateOpenTelemetryMetricsIngestionResponse"
+              "$ref": "#/definitions/configunstableCreateOtelMetricsIngestionResponse"
             }
           },
           "400": {
-            "description": "Cannot create the OpenTelemetryMetricsIngestion because the request is invalid.",
+            "description": "Cannot create the OtelMetricsIngestion because the request is invalid.",
             "schema": {
               "$ref": "#/definitions/apiError"
             }
           },
           "409": {
-            "description": "Cannot create the OpenTelemetryMetricsIngestion because there is a conflict with an existing OpenTelemetryMetricsIngestion.",
+            "description": "Cannot create the OtelMetricsIngestion because there is a conflict with an existing OtelMetricsIngestion.",
             "schema": {
               "$ref": "#/definitions/apiError"
             }
@@ -3639,36 +3254,36 @@
           }
         },
         "tags": [
-          "OpenTelemetryMetricsIngestion"
+          "OtelMetricsIngestion"
         ]
       },
       "put": {
-        "operationId": "UpdateOpenTelemetryMetricsIngestion",
+        "operationId": "UpdateOtelMetricsIngestion",
         "parameters": [
           {
             "in": "body",
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/configunstableUpdateOpenTelemetryMetricsIngestionRequest"
+              "$ref": "#/definitions/configunstableUpdateOtelMetricsIngestionRequest"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "A successful response containing the updated OpenTelemetryMetricsIngestion.",
+            "description": "A successful response containing the updated OtelMetricsIngestion.",
             "schema": {
-              "$ref": "#/definitions/configunstableUpdateOpenTelemetryMetricsIngestionResponse"
+              "$ref": "#/definitions/configunstableUpdateOtelMetricsIngestionResponse"
             }
           },
           "400": {
-            "description": "Cannot update the OpenTelemetryMetricsIngestion because the request is invalid.",
+            "description": "Cannot update the OtelMetricsIngestion because the request is invalid.",
             "schema": {
               "$ref": "#/definitions/apiError"
             }
           },
           "404": {
-            "description": "Cannot update the OpenTelemetryMetricsIngestion because OpenTelemetryMetricsIngestion has not been created.",
+            "description": "Cannot update the OtelMetricsIngestion because OtelMetricsIngestion has not been created.",
             "schema": {
               "$ref": "#/definitions/apiError"
             }
@@ -3687,7 +3302,7 @@
           }
         },
         "tags": [
-          "OpenTelemetryMetricsIngestion"
+          "OtelMetricsIngestion"
         ]
       }
     },

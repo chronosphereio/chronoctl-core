@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // ListGcpMetricsIntegrationsReader is a Reader for the ListGcpMetricsIntegrations structure.
@@ -58,7 +58,7 @@ ListGcpMetricsIntegrationsOK describes a response with status code 200, with def
 A successful response.
 */
 type ListGcpMetricsIntegrationsOK struct {
-	Payload *models.ConfigunstableListGcpMetricsIntegrationsResponse
+	Payload *models.Configv1ListGcpMetricsIntegrationsResponse
 }
 
 // IsSuccess returns true when this list gcp metrics integrations o k response has a 2xx status code
@@ -92,20 +92,20 @@ func (o *ListGcpMetricsIntegrationsOK) Code() int {
 }
 
 func (o *ListGcpMetricsIntegrationsOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations][%d] listGcpMetricsIntegrationsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations][%d] listGcpMetricsIntegrationsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListGcpMetricsIntegrationsOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations][%d] listGcpMetricsIntegrationsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations][%d] listGcpMetricsIntegrationsOK  %+v", 200, o.Payload)
 }
 
-func (o *ListGcpMetricsIntegrationsOK) GetPayload() *models.ConfigunstableListGcpMetricsIntegrationsResponse {
+func (o *ListGcpMetricsIntegrationsOK) GetPayload() *models.Configv1ListGcpMetricsIntegrationsResponse {
 	return o.Payload
 }
 
 func (o *ListGcpMetricsIntegrationsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableListGcpMetricsIntegrationsResponse)
+	o.Payload = new(models.Configv1ListGcpMetricsIntegrationsResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -160,11 +160,11 @@ func (o *ListGcpMetricsIntegrationsInternalServerError) Code() int {
 }
 
 func (o *ListGcpMetricsIntegrationsInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations][%d] listGcpMetricsIntegrationsInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations][%d] listGcpMetricsIntegrationsInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ListGcpMetricsIntegrationsInternalServerError) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations][%d] listGcpMetricsIntegrationsInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations][%d] listGcpMetricsIntegrationsInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ListGcpMetricsIntegrationsInternalServerError) GetPayload() *models.APIError {
@@ -232,11 +232,11 @@ func (o *ListGcpMetricsIntegrationsDefault) Code() int {
 }
 
 func (o *ListGcpMetricsIntegrationsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations][%d] ListGcpMetricsIntegrations default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations][%d] ListGcpMetricsIntegrations default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListGcpMetricsIntegrationsDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations][%d] ListGcpMetricsIntegrations default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations][%d] ListGcpMetricsIntegrations default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListGcpMetricsIntegrationsDefault) GetPayload() models.GenericError {

@@ -146,6 +146,22 @@
       },
       "type": "object"
     },
+    "GcpMetricsIntegrationMetricGroup": {
+      "properties": {
+        "project_id": {
+          "description": "Project ID that has access to the metric data.",
+          "type": "string"
+        },
+        "prefixes": {
+          "description": "List of Gcp metric prefixes to ingest.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "GraphiteLabelPolicyReplace": {
       "properties": {
         "name": {
@@ -1618,6 +1634,26 @@
       },
       "type": "object"
     },
+    "configv1CreateGcpMetricsIntegrationRequest": {
+      "properties": {
+        "gcp_metrics_integration": {
+          "$ref": "#/definitions/configv1GcpMetricsIntegration"
+        },
+        "dry_run": {
+          "description": "If true, the GcpMetricsIntegration will not be created, and no response GcpMetricsIntegration will be returned. The response will return an error if the given GcpMetricsIntegration is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateGcpMetricsIntegrationResponse": {
+      "properties": {
+        "gcp_metrics_integration": {
+          "$ref": "#/definitions/configv1GcpMetricsIntegration"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateGrafanaDashboardRequest": {
       "properties": {
         "grafana_dashboard": {
@@ -2013,6 +2049,9 @@
     "configv1DeleteDropRuleResponse": {
       "type": "object"
     },
+    "configv1DeleteGcpMetricsIntegrationResponse": {
+      "type": "object"
+    },
     "configv1DeleteGrafanaDashboardResponse": {
       "type": "object"
     },
@@ -2216,6 +2255,50 @@
       ],
       "type": "string"
     },
+    "configv1GcpMetricsIntegration": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the GcpMetricsIntegration. If slug is not provided, one will be generated based of the name field. Cannot be modified after the GcpMetricsIntegration is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the GcpMetricsIntegration. May be modified after the GcpMetricsIntegration is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the GcpMetricsIntegration was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the GcpMetricsIntegration was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "service_account": {
+          "$ref": "#/definitions/configv1GcpMetricsIntegrationServiceAccount"
+        },
+        "metric_groups": {
+          "description": "Metric groups to be ingested for this integration.",
+          "items": {
+            "$ref": "#/definitions/GcpMetricsIntegrationMetricGroup"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1GcpMetricsIntegrationServiceAccount": {
+      "properties": {
+        "client_email": {
+          "description": "Email address of the service account to impersonate.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configv1GrafanaDashboard": {
       "properties": {
         "slug": {
@@ -2400,6 +2483,20 @@
         "drop_rules": {
           "items": {
             "$ref": "#/definitions/configv1DropRule"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListGcpMetricsIntegrationsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "gcp_metrics_integrations": {
+          "items": {
+            "$ref": "#/definitions/configv1GcpMetricsIntegration"
           },
           "type": "array"
         }
@@ -2961,6 +3058,14 @@
       "properties": {
         "drop_rule": {
           "$ref": "#/definitions/configv1DropRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadGcpMetricsIntegrationResponse": {
+      "properties": {
+        "gcp_metrics_integration": {
+          "$ref": "#/definitions/configv1GcpMetricsIntegration"
         }
       },
       "type": "object"
@@ -3647,6 +3752,14 @@
       "properties": {
         "drop_rule": {
           "$ref": "#/definitions/configv1DropRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateGcpMetricsIntegrationResponse": {
+      "properties": {
+        "gcp_metrics_integration": {
+          "$ref": "#/definitions/configv1GcpMetricsIntegration"
         }
       },
       "type": "object"
@@ -6058,6 +6171,278 @@
         },
         "tags": [
           "DropRule"
+        ]
+      }
+    },
+    "/api/v1/config/gcp-metrics-integrations": {
+      "get": {
+        "operationId": "ListGcpMetricsIntegrations",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any GcpMetricsIntegration with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any GcpMetricsIntegration with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListGcpMetricsIntegrationsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GcpMetricsIntegration"
+        ]
+      },
+      "post": {
+        "operationId": "CreateGcpMetricsIntegration",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateGcpMetricsIntegrationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created GcpMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateGcpMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the GcpMetricsIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the GcpMetricsIntegration because there is a conflict with an existing GcpMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GcpMetricsIntegration"
+        ]
+      }
+    },
+    "/api/v1/config/gcp-metrics-integrations/{slug}": {
+      "delete": {
+        "operationId": "DeleteGcpMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteGcpMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the GcpMetricsIntegration because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the GcpMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GcpMetricsIntegration"
+        ]
+      },
+      "get": {
+        "operationId": "ReadGcpMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadGcpMetricsIntegrationResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the GcpMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GcpMetricsIntegration"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateGcpMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "create_if_missing": {
+                  "description": "If true, the GcpMetricsIntegration will be created if it does not already exist, identified by slug. If false, an error will be returned if the GcpMetricsIntegration does not already exist.",
+                  "type": "boolean"
+                },
+                "dry_run": {
+                  "description": "If true, the GcpMetricsIntegration will not be created nor updated, and no response GcpMetricsIntegration will be returned. The response will return an error if the given GcpMetricsIntegration is invalid.",
+                  "type": "boolean"
+                },
+                "gcp_metrics_integration": {
+                  "$ref": "#/definitions/configv1GcpMetricsIntegration"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated GcpMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateGcpMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the GcpMetricsIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the GcpMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the GcpMetricsIntegration because there is a conflict with an existing GcpMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "GcpMetricsIntegration"
         ]
       }
     },

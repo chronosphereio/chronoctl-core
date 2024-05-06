@@ -15,7 +15,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // UpdateGcpMetricsIntegrationReader is a Reader for the UpdateGcpMetricsIntegration structure.
@@ -79,7 +79,7 @@ UpdateGcpMetricsIntegrationOK describes a response with status code 200, with de
 A successful response containing the updated GcpMetricsIntegration.
 */
 type UpdateGcpMetricsIntegrationOK struct {
-	Payload *models.ConfigunstableUpdateGcpMetricsIntegrationResponse
+	Payload *models.Configv1UpdateGcpMetricsIntegrationResponse
 }
 
 // IsSuccess returns true when this update gcp metrics integration o k response has a 2xx status code
@@ -113,20 +113,20 @@ func (o *UpdateGcpMetricsIntegrationOK) Code() int {
 }
 
 func (o *UpdateGcpMetricsIntegrationOK) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationOK) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateGcpMetricsIntegrationOK) GetPayload() *models.ConfigunstableUpdateGcpMetricsIntegrationResponse {
+func (o *UpdateGcpMetricsIntegrationOK) GetPayload() *models.Configv1UpdateGcpMetricsIntegrationResponse {
 	return o.Payload
 }
 
 func (o *UpdateGcpMetricsIntegrationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableUpdateGcpMetricsIntegrationResponse)
+	o.Payload = new(models.Configv1UpdateGcpMetricsIntegrationResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -181,11 +181,11 @@ func (o *UpdateGcpMetricsIntegrationBadRequest) Code() int {
 }
 
 func (o *UpdateGcpMetricsIntegrationBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationBadRequest) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationBadRequest) GetPayload() *models.APIError {
@@ -249,11 +249,11 @@ func (o *UpdateGcpMetricsIntegrationNotFound) Code() int {
 }
 
 func (o *UpdateGcpMetricsIntegrationNotFound) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationNotFound) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationNotFound) GetPayload() *models.APIError {
@@ -317,11 +317,11 @@ func (o *UpdateGcpMetricsIntegrationConflict) Code() int {
 }
 
 func (o *UpdateGcpMetricsIntegrationConflict) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationConflict  %+v", 409, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationConflict) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationConflict  %+v", 409, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationConflict) GetPayload() *models.APIError {
@@ -385,11 +385,11 @@ func (o *UpdateGcpMetricsIntegrationInternalServerError) Code() int {
 }
 
 func (o *UpdateGcpMetricsIntegrationInternalServerError) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationInternalServerError) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] updateGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationInternalServerError) GetPayload() *models.APIError {
@@ -457,11 +457,11 @@ func (o *UpdateGcpMetricsIntegrationDefault) Code() int {
 }
 
 func (o *UpdateGcpMetricsIntegrationDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] UpdateGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] UpdateGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationDefault) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/gcp-metrics-integrations/{slug}][%d] UpdateGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/gcp-metrics-integrations/{slug}][%d] UpdateGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateGcpMetricsIntegrationDefault) GetPayload() models.GenericError {
@@ -491,7 +491,7 @@ type UpdateGcpMetricsIntegrationBody struct {
 	DryRun bool `json:"dry_run,omitempty"`
 
 	// gcp metrics integration
-	GcpMetricsIntegration *models.ConfigunstableGcpMetricsIntegration `json:"gcp_metrics_integration,omitempty"`
+	GcpMetricsIntegration *models.Configv1GcpMetricsIntegration `json:"gcp_metrics_integration,omitempty"`
 }
 
 // Validate validates this update gcp metrics integration body

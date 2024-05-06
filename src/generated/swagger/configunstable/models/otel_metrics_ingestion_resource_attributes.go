@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// OpenTelemetryMetricsIngestionResourceAttributes open telemetry metrics ingestion resource attributes
+// OtelMetricsIngestionResourceAttributes otel metrics ingestion resource attributes
 //
-// swagger:model OpenTelemetryMetricsIngestionResourceAttributes
-type OpenTelemetryMetricsIngestionResourceAttributes struct {
+// swagger:model OtelMetricsIngestionResourceAttributes
+type OtelMetricsIngestionResourceAttributes struct {
 
 	// flatten mode
 	FlattenMode ResourceAttributesFlattenMode `json:"flatten_mode,omitempty"`
@@ -34,8 +34,8 @@ type OpenTelemetryMetricsIngestionResourceAttributes struct {
 	GenerateTargetInfo bool `json:"generate_target_info,omitempty"`
 }
 
-// Validate validates this open telemetry metrics ingestion resource attributes
-func (m *OpenTelemetryMetricsIngestionResourceAttributes) Validate(formats strfmt.Registry) error {
+// Validate validates this otel metrics ingestion resource attributes
+func (m *OtelMetricsIngestionResourceAttributes) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateFlattenMode(formats); err != nil {
@@ -52,7 +52,7 @@ func (m *OpenTelemetryMetricsIngestionResourceAttributes) Validate(formats strfm
 	return nil
 }
 
-func (m *OpenTelemetryMetricsIngestionResourceAttributes) validateFlattenMode(formats strfmt.Registry) error {
+func (m *OtelMetricsIngestionResourceAttributes) validateFlattenMode(formats strfmt.Registry) error {
 	if swag.IsZero(m.FlattenMode) { // not required
 		return nil
 	}
@@ -69,7 +69,7 @@ func (m *OpenTelemetryMetricsIngestionResourceAttributes) validateFlattenMode(fo
 	return nil
 }
 
-func (m *OpenTelemetryMetricsIngestionResourceAttributes) validateFilterMode(formats strfmt.Registry) error {
+func (m *OtelMetricsIngestionResourceAttributes) validateFilterMode(formats strfmt.Registry) error {
 	if swag.IsZero(m.FilterMode) { // not required
 		return nil
 	}
@@ -86,8 +86,8 @@ func (m *OpenTelemetryMetricsIngestionResourceAttributes) validateFilterMode(for
 	return nil
 }
 
-// ContextValidate validate this open telemetry metrics ingestion resource attributes based on the context it is used
-func (m *OpenTelemetryMetricsIngestionResourceAttributes) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this otel metrics ingestion resource attributes based on the context it is used
+func (m *OtelMetricsIngestionResourceAttributes) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateFlattenMode(ctx, formats); err != nil {
@@ -104,7 +104,7 @@ func (m *OpenTelemetryMetricsIngestionResourceAttributes) ContextValidate(ctx co
 	return nil
 }
 
-func (m *OpenTelemetryMetricsIngestionResourceAttributes) contextValidateFlattenMode(ctx context.Context, formats strfmt.Registry) error {
+func (m *OtelMetricsIngestionResourceAttributes) contextValidateFlattenMode(ctx context.Context, formats strfmt.Registry) error {
 
 	if swag.IsZero(m.FlattenMode) { // not required
 		return nil
@@ -122,7 +122,7 @@ func (m *OpenTelemetryMetricsIngestionResourceAttributes) contextValidateFlatten
 	return nil
 }
 
-func (m *OpenTelemetryMetricsIngestionResourceAttributes) contextValidateFilterMode(ctx context.Context, formats strfmt.Registry) error {
+func (m *OtelMetricsIngestionResourceAttributes) contextValidateFilterMode(ctx context.Context, formats strfmt.Registry) error {
 
 	if swag.IsZero(m.FilterMode) { // not required
 		return nil
@@ -141,7 +141,7 @@ func (m *OpenTelemetryMetricsIngestionResourceAttributes) contextValidateFilterM
 }
 
 // MarshalBinary interface implementation
-func (m *OpenTelemetryMetricsIngestionResourceAttributes) MarshalBinary() ([]byte, error) {
+func (m *OtelMetricsIngestionResourceAttributes) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -149,8 +149,8 @@ func (m *OpenTelemetryMetricsIngestionResourceAttributes) MarshalBinary() ([]byt
 }
 
 // UnmarshalBinary interface implementation
-func (m *OpenTelemetryMetricsIngestionResourceAttributes) UnmarshalBinary(b []byte) error {
-	var res OpenTelemetryMetricsIngestionResourceAttributes
+func (m *OtelMetricsIngestionResourceAttributes) UnmarshalBinary(b []byte) error {
+	var res OtelMetricsIngestionResourceAttributes
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

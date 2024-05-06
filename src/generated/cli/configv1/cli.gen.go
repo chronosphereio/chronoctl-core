@@ -20,6 +20,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewDerivedLabelCmd())
 	root.AddCommand(NewDerivedMetricCmd())
 	root.AddCommand(NewDropRuleCmd())
+	root.AddCommand(NewGcpMetricsIntegrationCmd())
 	root.AddCommand(NewGrafanaDashboardCmd())
 	root.AddCommand(NewMappingRuleCmd())
 	root.AddCommand(NewMonitorCmd())
@@ -161,6 +162,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateDropRule(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		GcpMetricsIntegrationTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*GcpMetricsIntegration)
+			if !ok {
+				return types.WrongObjectErr((&GcpMetricsIntegration{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateGcpMetricsIntegration(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

@@ -26,6 +26,7 @@ to a resource type.
 * `derived-labels`
 * `derived-metrics`
 * `drop-rules`
+* `gcp-metrics-integrations`
 * `mapping-rules`
 * `monitors`
 * `muting-rules`

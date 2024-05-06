@@ -13,17 +13,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableCreateGcpMetricsIntegrationResponse configunstable create gcp metrics integration response
+// Configv1CreateGcpMetricsIntegrationResponse configv1 create gcp metrics integration response
 //
-// swagger:model configunstableCreateGcpMetricsIntegrationResponse
-type ConfigunstableCreateGcpMetricsIntegrationResponse struct {
+// swagger:model configv1CreateGcpMetricsIntegrationResponse
+type Configv1CreateGcpMetricsIntegrationResponse struct {
 
 	// gcp metrics integration
-	GcpMetricsIntegration *ConfigunstableGcpMetricsIntegration `json:"gcp_metrics_integration,omitempty"`
+	GcpMetricsIntegration *Configv1GcpMetricsIntegration `json:"gcp_metrics_integration,omitempty"`
 }
 
-// Validate validates this configunstable create gcp metrics integration response
-func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 create gcp metrics integration response
+func (m *Configv1CreateGcpMetricsIntegrationResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateGcpMetricsIntegration(formats); err != nil {
@@ -36,7 +36,7 @@ func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) Validate(formats str
 	return nil
 }
 
-func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) validateGcpMetricsIntegration(formats strfmt.Registry) error {
+func (m *Configv1CreateGcpMetricsIntegrationResponse) validateGcpMetricsIntegration(formats strfmt.Registry) error {
 	if swag.IsZero(m.GcpMetricsIntegration) { // not required
 		return nil
 	}
@@ -55,8 +55,8 @@ func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) validateGcpMetricsIn
 	return nil
 }
 
-// ContextValidate validate this configunstable create gcp metrics integration response based on the context it is used
-func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 create gcp metrics integration response based on the context it is used
+func (m *Configv1CreateGcpMetricsIntegrationResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateGcpMetricsIntegration(ctx, formats); err != nil {
@@ -69,7 +69,7 @@ func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) ContextValidate(ctx 
 	return nil
 }
 
-func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) contextValidateGcpMetricsIntegration(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1CreateGcpMetricsIntegrationResponse) contextValidateGcpMetricsIntegration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.GcpMetricsIntegration != nil {
 
@@ -91,7 +91,7 @@ func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) contextValidateGcpMe
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) MarshalBinary() ([]byte, error) {
+func (m *Configv1CreateGcpMetricsIntegrationResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -99,8 +99,8 @@ func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) MarshalBinary() ([]b
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableCreateGcpMetricsIntegrationResponse) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableCreateGcpMetricsIntegrationResponse
+func (m *Configv1CreateGcpMetricsIntegrationResponse) UnmarshalBinary(b []byte) error {
+	var res Configv1CreateGcpMetricsIntegrationResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
