@@ -4,6 +4,7 @@
 
 * Added support for entity namespaces
 * Added support for datasets
+* Promote gcp-metrics-integration to stable
 
 ## v1.5.0
 

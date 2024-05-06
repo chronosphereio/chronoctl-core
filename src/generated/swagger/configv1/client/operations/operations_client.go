@@ -44,6 +44,8 @@ type ClientService interface {
 
 	CreateDropRule(params *CreateDropRuleParams, opts ...ClientOption) (*CreateDropRuleOK, error)
 
+	CreateGcpMetricsIntegration(params *CreateGcpMetricsIntegrationParams, opts ...ClientOption) (*CreateGcpMetricsIntegrationOK, error)
+
 	CreateGrafanaDashboard(params *CreateGrafanaDashboardParams, opts ...ClientOption) (*CreateGrafanaDashboardOK, error)
 
 	CreateMappingRule(params *CreateMappingRuleParams, opts ...ClientOption) (*CreateMappingRuleOK, error)
@@ -87,6 +89,8 @@ type ClientService interface {
 	DeleteDerivedMetric(params *DeleteDerivedMetricParams, opts ...ClientOption) (*DeleteDerivedMetricOK, error)
 
 	DeleteDropRule(params *DeleteDropRuleParams, opts ...ClientOption) (*DeleteDropRuleOK, error)
+
+	DeleteGcpMetricsIntegration(params *DeleteGcpMetricsIntegrationParams, opts ...ClientOption) (*DeleteGcpMetricsIntegrationOK, error)
 
 	DeleteGrafanaDashboard(params *DeleteGrafanaDashboardParams, opts ...ClientOption) (*DeleteGrafanaDashboardOK, error)
 
@@ -132,6 +136,8 @@ type ClientService interface {
 
 	ListDropRules(params *ListDropRulesParams, opts ...ClientOption) (*ListDropRulesOK, error)
 
+	ListGcpMetricsIntegrations(params *ListGcpMetricsIntegrationsParams, opts ...ClientOption) (*ListGcpMetricsIntegrationsOK, error)
+
 	ListGrafanaDashboards(params *ListGrafanaDashboardsParams, opts ...ClientOption) (*ListGrafanaDashboardsOK, error)
 
 	ListMappingRules(params *ListMappingRulesParams, opts ...ClientOption) (*ListMappingRulesOK, error)
@@ -171,6 +177,8 @@ type ClientService interface {
 	ReadDerivedMetric(params *ReadDerivedMetricParams, opts ...ClientOption) (*ReadDerivedMetricOK, error)
 
 	ReadDropRule(params *ReadDropRuleParams, opts ...ClientOption) (*ReadDropRuleOK, error)
+
+	ReadGcpMetricsIntegration(params *ReadGcpMetricsIntegrationParams, opts ...ClientOption) (*ReadGcpMetricsIntegrationOK, error)
 
 	ReadGrafanaDashboard(params *ReadGrafanaDashboardParams, opts ...ClientOption) (*ReadGrafanaDashboardOK, error)
 
@@ -217,6 +225,8 @@ type ClientService interface {
 	UpdateDerivedMetric(params *UpdateDerivedMetricParams, opts ...ClientOption) (*UpdateDerivedMetricOK, error)
 
 	UpdateDropRule(params *UpdateDropRuleParams, opts ...ClientOption) (*UpdateDropRuleOK, error)
+
+	UpdateGcpMetricsIntegration(params *UpdateGcpMetricsIntegrationParams, opts ...ClientOption) (*UpdateGcpMetricsIntegrationOK, error)
 
 	UpdateGrafanaDashboard(params *UpdateGrafanaDashboardParams, opts ...ClientOption) (*UpdateGrafanaDashboardOK, error)
 
@@ -540,6 +550,43 @@ func (a *Client) CreateDropRule(params *CreateDropRuleParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateDropRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateGcpMetricsIntegration create gcp metrics integration API
+*/
+func (a *Client) CreateGcpMetricsIntegration(params *CreateGcpMetricsIntegrationParams, opts ...ClientOption) (*CreateGcpMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateGcpMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateGcpMetricsIntegration",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/gcp-metrics-integrations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateGcpMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateGcpMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateGcpMetricsIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1361,6 +1408,43 @@ func (a *Client) DeleteDropRule(params *DeleteDropRuleParams, opts ...ClientOpti
 }
 
 /*
+DeleteGcpMetricsIntegration delete gcp metrics integration API
+*/
+func (a *Client) DeleteGcpMetricsIntegration(params *DeleteGcpMetricsIntegrationParams, opts ...ClientOption) (*DeleteGcpMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteGcpMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteGcpMetricsIntegration",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/gcp-metrics-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteGcpMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteGcpMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteGcpMetricsIntegrationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteGrafanaDashboard delete grafana dashboard API
 */
 func (a *Client) DeleteGrafanaDashboard(params *DeleteGrafanaDashboardParams, opts ...ClientOption) (*DeleteGrafanaDashboardOK, error) {
@@ -2175,6 +2259,43 @@ func (a *Client) ListDropRules(params *ListDropRulesParams, opts ...ClientOption
 }
 
 /*
+ListGcpMetricsIntegrations list gcp metrics integrations API
+*/
+func (a *Client) ListGcpMetricsIntegrations(params *ListGcpMetricsIntegrationsParams, opts ...ClientOption) (*ListGcpMetricsIntegrationsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListGcpMetricsIntegrationsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListGcpMetricsIntegrations",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/gcp-metrics-integrations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListGcpMetricsIntegrationsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListGcpMetricsIntegrationsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListGcpMetricsIntegrationsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListGrafanaDashboards list grafana dashboards API
 */
 func (a *Client) ListGrafanaDashboards(params *ListGrafanaDashboardsParams, opts ...ClientOption) (*ListGrafanaDashboardsOK, error) {
@@ -2911,6 +3032,43 @@ func (a *Client) ReadDropRule(params *ReadDropRuleParams, opts ...ClientOption) 
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadDropRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadGcpMetricsIntegration read gcp metrics integration API
+*/
+func (a *Client) ReadGcpMetricsIntegration(params *ReadGcpMetricsIntegrationParams, opts ...ClientOption) (*ReadGcpMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadGcpMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadGcpMetricsIntegration",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/gcp-metrics-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadGcpMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadGcpMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadGcpMetricsIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3762,6 +3920,43 @@ func (a *Client) UpdateDropRule(params *UpdateDropRuleParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateDropRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateGcpMetricsIntegration update gcp metrics integration API
+*/
+func (a *Client) UpdateGcpMetricsIntegration(params *UpdateGcpMetricsIntegrationParams, opts ...ClientOption) (*UpdateGcpMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateGcpMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateGcpMetricsIntegration",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/gcp-metrics-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateGcpMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateGcpMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateGcpMetricsIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

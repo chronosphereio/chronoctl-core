@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewCreateGcpMetricsIntegrationParams creates a new CreateGcpMetricsIntegrationParams object,
@@ -64,7 +64,7 @@ CreateGcpMetricsIntegrationParams contains all the parameters to send to the API
 type CreateGcpMetricsIntegrationParams struct {
 
 	// Body.
-	Body *models.ConfigunstableCreateGcpMetricsIntegrationRequest
+	Body *models.Configv1CreateGcpMetricsIntegrationRequest
 
 	timeout    time.Duration
 	Context    context.Context
@@ -120,13 +120,13 @@ func (o *CreateGcpMetricsIntegrationParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create gcp metrics integration params
-func (o *CreateGcpMetricsIntegrationParams) WithBody(body *models.ConfigunstableCreateGcpMetricsIntegrationRequest) *CreateGcpMetricsIntegrationParams {
+func (o *CreateGcpMetricsIntegrationParams) WithBody(body *models.Configv1CreateGcpMetricsIntegrationRequest) *CreateGcpMetricsIntegrationParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create gcp metrics integration params
-func (o *CreateGcpMetricsIntegrationParams) SetBody(body *models.ConfigunstableCreateGcpMetricsIntegrationRequest) {
+func (o *CreateGcpMetricsIntegrationParams) SetBody(body *models.Configv1CreateGcpMetricsIntegrationRequest) {
 	o.Body = body
 }
 

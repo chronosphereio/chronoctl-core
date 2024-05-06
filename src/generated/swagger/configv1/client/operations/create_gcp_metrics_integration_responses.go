@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // CreateGcpMetricsIntegrationReader is a Reader for the CreateGcpMetricsIntegration structure.
@@ -70,7 +70,7 @@ CreateGcpMetricsIntegrationOK describes a response with status code 200, with de
 A successful response containing the created GcpMetricsIntegration.
 */
 type CreateGcpMetricsIntegrationOK struct {
-	Payload *models.ConfigunstableCreateGcpMetricsIntegrationResponse
+	Payload *models.Configv1CreateGcpMetricsIntegrationResponse
 }
 
 // IsSuccess returns true when this create gcp metrics integration o k response has a 2xx status code
@@ -104,20 +104,20 @@ func (o *CreateGcpMetricsIntegrationOK) Code() int {
 }
 
 func (o *CreateGcpMetricsIntegrationOK) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateGcpMetricsIntegrationOK) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateGcpMetricsIntegrationOK) GetPayload() *models.ConfigunstableCreateGcpMetricsIntegrationResponse {
+func (o *CreateGcpMetricsIntegrationOK) GetPayload() *models.Configv1CreateGcpMetricsIntegrationResponse {
 	return o.Payload
 }
 
 func (o *CreateGcpMetricsIntegrationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableCreateGcpMetricsIntegrationResponse)
+	o.Payload = new(models.Configv1CreateGcpMetricsIntegrationResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -172,11 +172,11 @@ func (o *CreateGcpMetricsIntegrationBadRequest) Code() int {
 }
 
 func (o *CreateGcpMetricsIntegrationBadRequest) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *CreateGcpMetricsIntegrationBadRequest) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *CreateGcpMetricsIntegrationBadRequest) GetPayload() *models.APIError {
@@ -240,11 +240,11 @@ func (o *CreateGcpMetricsIntegrationConflict) Code() int {
 }
 
 func (o *CreateGcpMetricsIntegrationConflict) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationConflict  %+v", 409, o.Payload)
 }
 
 func (o *CreateGcpMetricsIntegrationConflict) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationConflict  %+v", 409, o.Payload)
 }
 
 func (o *CreateGcpMetricsIntegrationConflict) GetPayload() *models.APIError {
@@ -308,11 +308,11 @@ func (o *CreateGcpMetricsIntegrationInternalServerError) Code() int {
 }
 
 func (o *CreateGcpMetricsIntegrationInternalServerError) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *CreateGcpMetricsIntegrationInternalServerError) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] createGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *CreateGcpMetricsIntegrationInternalServerError) GetPayload() *models.APIError {
@@ -380,11 +380,11 @@ func (o *CreateGcpMetricsIntegrationDefault) Code() int {
 }
 
 func (o *CreateGcpMetricsIntegrationDefault) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] CreateGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] CreateGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateGcpMetricsIntegrationDefault) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/gcp-metrics-integrations][%d] CreateGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/gcp-metrics-integrations][%d] CreateGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateGcpMetricsIntegrationDefault) GetPayload() models.GenericError {

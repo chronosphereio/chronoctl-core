@@ -14,27 +14,27 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ConfigunstableOpenTelemetryMetricsIngestion configunstable open telemetry metrics ingestion
+// ConfigunstableOtelMetricsIngestion configunstable otel metrics ingestion
 //
-// swagger:model configunstableOpenTelemetryMetricsIngestion
-type ConfigunstableOpenTelemetryMetricsIngestion struct {
+// swagger:model configunstableOtelMetricsIngestion
+type ConfigunstableOtelMetricsIngestion struct {
 
-	// Timestamp of when the OpenTelemetryMetricsIngestion was created. Cannot be set by clients.
+	// Timestamp of when the OtelMetricsIngestion was created. Cannot be set by clients.
 	// Read Only: true
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
-	// Timestamp of when the OpenTelemetryMetricsIngestion was last updated. Cannot be set by clients.
+	// Timestamp of when the OtelMetricsIngestion was last updated. Cannot be set by clients.
 	// Read Only: true
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
 	// resource attributes
-	ResourceAttributes *OpenTelemetryMetricsIngestionResourceAttributes `json:"resource_attributes,omitempty"`
+	ResourceAttributes *OtelMetricsIngestionResourceAttributes `json:"resource_attributes,omitempty"`
 }
 
-// Validate validates this configunstable open telemetry metrics ingestion
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) Validate(formats strfmt.Registry) error {
+// Validate validates this configunstable otel metrics ingestion
+func (m *ConfigunstableOtelMetricsIngestion) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
@@ -55,7 +55,7 @@ func (m *ConfigunstableOpenTelemetryMetricsIngestion) Validate(formats strfmt.Re
 	return nil
 }
 
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) validateCreatedAt(formats strfmt.Registry) error {
+func (m *ConfigunstableOtelMetricsIngestion) validateCreatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -67,7 +67,7 @@ func (m *ConfigunstableOpenTelemetryMetricsIngestion) validateCreatedAt(formats 
 	return nil
 }
 
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *ConfigunstableOtelMetricsIngestion) validateUpdatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -79,7 +79,7 @@ func (m *ConfigunstableOpenTelemetryMetricsIngestion) validateUpdatedAt(formats 
 	return nil
 }
 
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) validateResourceAttributes(formats strfmt.Registry) error {
+func (m *ConfigunstableOtelMetricsIngestion) validateResourceAttributes(formats strfmt.Registry) error {
 	if swag.IsZero(m.ResourceAttributes) { // not required
 		return nil
 	}
@@ -98,8 +98,8 @@ func (m *ConfigunstableOpenTelemetryMetricsIngestion) validateResourceAttributes
 	return nil
 }
 
-// ContextValidate validate this configunstable open telemetry metrics ingestion based on the context it is used
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configunstable otel metrics ingestion based on the context it is used
+func (m *ConfigunstableOtelMetricsIngestion) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
@@ -120,7 +120,7 @@ func (m *ConfigunstableOpenTelemetryMetricsIngestion) ContextValidate(ctx contex
 	return nil
 }
 
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConfigunstableOtelMetricsIngestion) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
 		return err
@@ -129,7 +129,7 @@ func (m *ConfigunstableOpenTelemetryMetricsIngestion) contextValidateCreatedAt(c
 	return nil
 }
 
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConfigunstableOtelMetricsIngestion) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
 		return err
@@ -138,7 +138,7 @@ func (m *ConfigunstableOpenTelemetryMetricsIngestion) contextValidateUpdatedAt(c
 	return nil
 }
 
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) contextValidateResourceAttributes(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConfigunstableOtelMetricsIngestion) contextValidateResourceAttributes(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ResourceAttributes != nil {
 
@@ -160,7 +160,7 @@ func (m *ConfigunstableOpenTelemetryMetricsIngestion) contextValidateResourceAtt
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) MarshalBinary() ([]byte, error) {
+func (m *ConfigunstableOtelMetricsIngestion) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -168,8 +168,8 @@ func (m *ConfigunstableOpenTelemetryMetricsIngestion) MarshalBinary() ([]byte, e
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableOpenTelemetryMetricsIngestion) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableOpenTelemetryMetricsIngestion
+func (m *ConfigunstableOtelMetricsIngestion) UnmarshalBinary(b []byte) error {
+	var res ConfigunstableOtelMetricsIngestion
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

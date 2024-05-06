@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ConfigunstableGcpMetricsIntegration configunstable gcp metrics integration
+// Configv1GcpMetricsIntegration configv1 gcp metrics integration
 //
-// swagger:model configunstableGcpMetricsIntegration
-type ConfigunstableGcpMetricsIntegration struct {
+// swagger:model configv1GcpMetricsIntegration
+type Configv1GcpMetricsIntegration struct {
 
 	// Unique identifier of the GcpMetricsIntegration. If slug is not provided, one will be generated based of the name field. Cannot be modified after the GcpMetricsIntegration is created.
 	Slug string `json:"slug,omitempty"`
@@ -37,14 +37,14 @@ type ConfigunstableGcpMetricsIntegration struct {
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
 	// service account
-	ServiceAccount *GcpMetricsIntegrationServiceAccount `json:"service_account,omitempty"`
+	ServiceAccount *Configv1GcpMetricsIntegrationServiceAccount `json:"service_account,omitempty"`
 
 	// Metric groups to be ingested for this integration.
 	MetricGroups []*GcpMetricsIntegrationMetricGroup `json:"metric_groups"`
 }
 
-// Validate validates this configunstable gcp metrics integration
-func (m *ConfigunstableGcpMetricsIntegration) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 gcp metrics integration
+func (m *Configv1GcpMetricsIntegration) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
@@ -69,7 +69,7 @@ func (m *ConfigunstableGcpMetricsIntegration) Validate(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *ConfigunstableGcpMetricsIntegration) validateCreatedAt(formats strfmt.Registry) error {
+func (m *Configv1GcpMetricsIntegration) validateCreatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -81,7 +81,7 @@ func (m *ConfigunstableGcpMetricsIntegration) validateCreatedAt(formats strfmt.R
 	return nil
 }
 
-func (m *ConfigunstableGcpMetricsIntegration) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *Configv1GcpMetricsIntegration) validateUpdatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -93,7 +93,7 @@ func (m *ConfigunstableGcpMetricsIntegration) validateUpdatedAt(formats strfmt.R
 	return nil
 }
 
-func (m *ConfigunstableGcpMetricsIntegration) validateServiceAccount(formats strfmt.Registry) error {
+func (m *Configv1GcpMetricsIntegration) validateServiceAccount(formats strfmt.Registry) error {
 	if swag.IsZero(m.ServiceAccount) { // not required
 		return nil
 	}
@@ -112,7 +112,7 @@ func (m *ConfigunstableGcpMetricsIntegration) validateServiceAccount(formats str
 	return nil
 }
 
-func (m *ConfigunstableGcpMetricsIntegration) validateMetricGroups(formats strfmt.Registry) error {
+func (m *Configv1GcpMetricsIntegration) validateMetricGroups(formats strfmt.Registry) error {
 	if swag.IsZero(m.MetricGroups) { // not required
 		return nil
 	}
@@ -138,8 +138,8 @@ func (m *ConfigunstableGcpMetricsIntegration) validateMetricGroups(formats strfm
 	return nil
 }
 
-// ContextValidate validate this configunstable gcp metrics integration based on the context it is used
-func (m *ConfigunstableGcpMetricsIntegration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 gcp metrics integration based on the context it is used
+func (m *Configv1GcpMetricsIntegration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
@@ -164,7 +164,7 @@ func (m *ConfigunstableGcpMetricsIntegration) ContextValidate(ctx context.Contex
 	return nil
 }
 
-func (m *ConfigunstableGcpMetricsIntegration) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1GcpMetricsIntegration) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
 		return err
@@ -173,7 +173,7 @@ func (m *ConfigunstableGcpMetricsIntegration) contextValidateCreatedAt(ctx conte
 	return nil
 }
 
-func (m *ConfigunstableGcpMetricsIntegration) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1GcpMetricsIntegration) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
 		return err
@@ -182,7 +182,7 @@ func (m *ConfigunstableGcpMetricsIntegration) contextValidateUpdatedAt(ctx conte
 	return nil
 }
 
-func (m *ConfigunstableGcpMetricsIntegration) contextValidateServiceAccount(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1GcpMetricsIntegration) contextValidateServiceAccount(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ServiceAccount != nil {
 
@@ -203,7 +203,7 @@ func (m *ConfigunstableGcpMetricsIntegration) contextValidateServiceAccount(ctx 
 	return nil
 }
 
-func (m *ConfigunstableGcpMetricsIntegration) contextValidateMetricGroups(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1GcpMetricsIntegration) contextValidateMetricGroups(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.MetricGroups); i++ {
 
@@ -229,7 +229,7 @@ func (m *ConfigunstableGcpMetricsIntegration) contextValidateMetricGroups(ctx co
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableGcpMetricsIntegration) MarshalBinary() ([]byte, error) {
+func (m *Configv1GcpMetricsIntegration) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -237,8 +237,8 @@ func (m *ConfigunstableGcpMetricsIntegration) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableGcpMetricsIntegration) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableGcpMetricsIntegration
+func (m *Configv1GcpMetricsIntegration) UnmarshalBinary(b []byte) error {
+	var res Configv1GcpMetricsIntegration
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

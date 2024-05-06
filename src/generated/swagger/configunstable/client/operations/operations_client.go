@@ -32,15 +32,13 @@ type ClientService interface {
 
 	CreateDataset(params *CreateDatasetParams, opts ...ClientOption) (*CreateDatasetOK, error)
 
-	CreateGcpMetricsIntegration(params *CreateGcpMetricsIntegrationParams, opts ...ClientOption) (*CreateGcpMetricsIntegrationOK, error)
-
 	CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...ClientOption) (*CreateLinkTemplateOK, error)
 
 	CreateLogAllocationConfig(params *CreateLogAllocationConfigParams, opts ...ClientOption) (*CreateLogAllocationConfigOK, error)
 
 	CreateNoopEntity(params *CreateNoopEntityParams, opts ...ClientOption) (*CreateNoopEntityOK, error)
 
-	CreateOpenTelemetryMetricsIngestion(params *CreateOpenTelemetryMetricsIngestionParams, opts ...ClientOption) (*CreateOpenTelemetryMetricsIngestionOK, error)
+	CreateOtelMetricsIngestion(params *CreateOtelMetricsIngestionParams, opts ...ClientOption) (*CreateOtelMetricsIngestionOK, error)
 
 	CreateSavedTraceSearch(params *CreateSavedTraceSearchParams, opts ...ClientOption) (*CreateSavedTraceSearchOK, error)
 
@@ -58,15 +56,13 @@ type ClientService interface {
 
 	DeleteDataset(params *DeleteDatasetParams, opts ...ClientOption) (*DeleteDatasetOK, error)
 
-	DeleteGcpMetricsIntegration(params *DeleteGcpMetricsIntegrationParams, opts ...ClientOption) (*DeleteGcpMetricsIntegrationOK, error)
-
 	DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...ClientOption) (*DeleteLinkTemplateOK, error)
 
 	DeleteLogAllocationConfig(params *DeleteLogAllocationConfigParams, opts ...ClientOption) (*DeleteLogAllocationConfigOK, error)
 
 	DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...ClientOption) (*DeleteNoopEntityOK, error)
 
-	DeleteOpenTelemetryMetricsIngestion(params *DeleteOpenTelemetryMetricsIngestionParams, opts ...ClientOption) (*DeleteOpenTelemetryMetricsIngestionOK, error)
+	DeleteOtelMetricsIngestion(params *DeleteOtelMetricsIngestionParams, opts ...ClientOption) (*DeleteOtelMetricsIngestionOK, error)
 
 	DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error)
 
@@ -84,8 +80,6 @@ type ClientService interface {
 
 	ListDatasets(params *ListDatasetsParams, opts ...ClientOption) (*ListDatasetsOK, error)
 
-	ListGcpMetricsIntegrations(params *ListGcpMetricsIntegrationsParams, opts ...ClientOption) (*ListGcpMetricsIntegrationsOK, error)
-
 	ListLinkTemplates(params *ListLinkTemplatesParams, opts ...ClientOption) (*ListLinkTemplatesOK, error)
 
 	ListSavedTraceSearches(params *ListSavedTraceSearchesParams, opts ...ClientOption) (*ListSavedTraceSearchesOK, error)
@@ -100,15 +94,13 @@ type ClientService interface {
 
 	ReadDataset(params *ReadDatasetParams, opts ...ClientOption) (*ReadDatasetOK, error)
 
-	ReadGcpMetricsIntegration(params *ReadGcpMetricsIntegrationParams, opts ...ClientOption) (*ReadGcpMetricsIntegrationOK, error)
-
 	ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...ClientOption) (*ReadLinkTemplateOK, error)
 
 	ReadLogAllocationConfig(params *ReadLogAllocationConfigParams, opts ...ClientOption) (*ReadLogAllocationConfigOK, error)
 
 	ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOption) (*ReadNoopEntityOK, error)
 
-	ReadOpenTelemetryMetricsIngestion(params *ReadOpenTelemetryMetricsIngestionParams, opts ...ClientOption) (*ReadOpenTelemetryMetricsIngestionOK, error)
+	ReadOtelMetricsIngestion(params *ReadOtelMetricsIngestionParams, opts ...ClientOption) (*ReadOtelMetricsIngestionOK, error)
 
 	ReadSavedTraceSearch(params *ReadSavedTraceSearchParams, opts ...ClientOption) (*ReadSavedTraceSearchOK, error)
 
@@ -128,15 +120,13 @@ type ClientService interface {
 
 	UpdateDataset(params *UpdateDatasetParams, opts ...ClientOption) (*UpdateDatasetOK, error)
 
-	UpdateGcpMetricsIntegration(params *UpdateGcpMetricsIntegrationParams, opts ...ClientOption) (*UpdateGcpMetricsIntegrationOK, error)
-
 	UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error)
 
 	UpdateLogAllocationConfig(params *UpdateLogAllocationConfigParams, opts ...ClientOption) (*UpdateLogAllocationConfigOK, error)
 
 	UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...ClientOption) (*UpdateNoopEntityOK, error)
 
-	UpdateOpenTelemetryMetricsIngestion(params *UpdateOpenTelemetryMetricsIngestionParams, opts ...ClientOption) (*UpdateOpenTelemetryMetricsIngestionOK, error)
+	UpdateOtelMetricsIngestion(params *UpdateOtelMetricsIngestionParams, opts ...ClientOption) (*UpdateOtelMetricsIngestionOK, error)
 
 	UpdateSavedTraceSearch(params *UpdateSavedTraceSearchParams, opts ...ClientOption) (*UpdateSavedTraceSearchOK, error)
 
@@ -224,43 +214,6 @@ func (a *Client) CreateDataset(params *CreateDatasetParams, opts ...ClientOption
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateDatasetDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-CreateGcpMetricsIntegration create gcp metrics integration API
-*/
-func (a *Client) CreateGcpMetricsIntegration(params *CreateGcpMetricsIntegrationParams, opts ...ClientOption) (*CreateGcpMetricsIntegrationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateGcpMetricsIntegrationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateGcpMetricsIntegration",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/gcp-metrics-integrations",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateGcpMetricsIntegrationReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateGcpMetricsIntegrationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateGcpMetricsIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -376,22 +329,22 @@ func (a *Client) CreateNoopEntity(params *CreateNoopEntityParams, opts ...Client
 }
 
 /*
-CreateOpenTelemetryMetricsIngestion create open telemetry metrics ingestion API
+CreateOtelMetricsIngestion create otel metrics ingestion API
 */
-func (a *Client) CreateOpenTelemetryMetricsIngestion(params *CreateOpenTelemetryMetricsIngestionParams, opts ...ClientOption) (*CreateOpenTelemetryMetricsIngestionOK, error) {
+func (a *Client) CreateOtelMetricsIngestion(params *CreateOtelMetricsIngestionParams, opts ...ClientOption) (*CreateOtelMetricsIngestionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateOpenTelemetryMetricsIngestionParams()
+		params = NewCreateOtelMetricsIngestionParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "CreateOpenTelemetryMetricsIngestion",
+		ID:                 "CreateOtelMetricsIngestion",
 		Method:             "POST",
-		PathPattern:        "/api/unstable/config/open-telemetry-metrics-ingestion",
+		PathPattern:        "/api/unstable/config/otel-metrics-ingestion",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &CreateOpenTelemetryMetricsIngestionReader{formats: a.formats},
+		Reader:             &CreateOtelMetricsIngestionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -403,12 +356,12 @@ func (a *Client) CreateOpenTelemetryMetricsIngestion(params *CreateOpenTelemetry
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateOpenTelemetryMetricsIngestionOK)
+	success, ok := result.(*CreateOtelMetricsIngestionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*CreateOpenTelemetryMetricsIngestionDefault)
+	unexpectedSuccess := result.(*CreateOtelMetricsIngestionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -712,43 +665,6 @@ func (a *Client) DeleteDataset(params *DeleteDatasetParams, opts ...ClientOption
 }
 
 /*
-DeleteGcpMetricsIntegration delete gcp metrics integration API
-*/
-func (a *Client) DeleteGcpMetricsIntegration(params *DeleteGcpMetricsIntegrationParams, opts ...ClientOption) (*DeleteGcpMetricsIntegrationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteGcpMetricsIntegrationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteGcpMetricsIntegration",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/gcp-metrics-integrations/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteGcpMetricsIntegrationReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteGcpMetricsIntegrationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteGcpMetricsIntegrationDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 DeleteLinkTemplate delete link template API
 */
 func (a *Client) DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...ClientOption) (*DeleteLinkTemplateOK, error) {
@@ -860,22 +776,22 @@ func (a *Client) DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...Client
 }
 
 /*
-DeleteOpenTelemetryMetricsIngestion delete open telemetry metrics ingestion API
+DeleteOtelMetricsIngestion delete otel metrics ingestion API
 */
-func (a *Client) DeleteOpenTelemetryMetricsIngestion(params *DeleteOpenTelemetryMetricsIngestionParams, opts ...ClientOption) (*DeleteOpenTelemetryMetricsIngestionOK, error) {
+func (a *Client) DeleteOtelMetricsIngestion(params *DeleteOtelMetricsIngestionParams, opts ...ClientOption) (*DeleteOtelMetricsIngestionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewDeleteOpenTelemetryMetricsIngestionParams()
+		params = NewDeleteOtelMetricsIngestionParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "DeleteOpenTelemetryMetricsIngestion",
+		ID:                 "DeleteOtelMetricsIngestion",
 		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/open-telemetry-metrics-ingestion",
+		PathPattern:        "/api/unstable/config/otel-metrics-ingestion",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &DeleteOpenTelemetryMetricsIngestionReader{formats: a.formats},
+		Reader:             &DeleteOtelMetricsIngestionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -887,12 +803,12 @@ func (a *Client) DeleteOpenTelemetryMetricsIngestion(params *DeleteOpenTelemetry
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*DeleteOpenTelemetryMetricsIngestionOK)
+	success, ok := result.(*DeleteOtelMetricsIngestionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*DeleteOpenTelemetryMetricsIngestionDefault)
+	unexpectedSuccess := result.(*DeleteOtelMetricsIngestionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1193,43 +1109,6 @@ func (a *Client) ListDatasets(params *ListDatasetsParams, opts ...ClientOption) 
 }
 
 /*
-ListGcpMetricsIntegrations list gcp metrics integrations API
-*/
-func (a *Client) ListGcpMetricsIntegrations(params *ListGcpMetricsIntegrationsParams, opts ...ClientOption) (*ListGcpMetricsIntegrationsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListGcpMetricsIntegrationsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ListGcpMetricsIntegrations",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/gcp-metrics-integrations",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListGcpMetricsIntegrationsReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListGcpMetricsIntegrationsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListGcpMetricsIntegrationsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ListLinkTemplates list link templates API
 */
 func (a *Client) ListLinkTemplates(params *ListLinkTemplatesParams, opts ...ClientOption) (*ListLinkTemplatesOK, error) {
@@ -1489,43 +1368,6 @@ func (a *Client) ReadDataset(params *ReadDatasetParams, opts ...ClientOption) (*
 }
 
 /*
-ReadGcpMetricsIntegration read gcp metrics integration API
-*/
-func (a *Client) ReadGcpMetricsIntegration(params *ReadGcpMetricsIntegrationParams, opts ...ClientOption) (*ReadGcpMetricsIntegrationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadGcpMetricsIntegrationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadGcpMetricsIntegration",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/gcp-metrics-integrations/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadGcpMetricsIntegrationReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadGcpMetricsIntegrationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadGcpMetricsIntegrationDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ReadLinkTemplate read link template API
 */
 func (a *Client) ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...ClientOption) (*ReadLinkTemplateOK, error) {
@@ -1637,22 +1479,22 @@ func (a *Client) ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOpti
 }
 
 /*
-ReadOpenTelemetryMetricsIngestion read open telemetry metrics ingestion API
+ReadOtelMetricsIngestion read otel metrics ingestion API
 */
-func (a *Client) ReadOpenTelemetryMetricsIngestion(params *ReadOpenTelemetryMetricsIngestionParams, opts ...ClientOption) (*ReadOpenTelemetryMetricsIngestionOK, error) {
+func (a *Client) ReadOtelMetricsIngestion(params *ReadOtelMetricsIngestionParams, opts ...ClientOption) (*ReadOtelMetricsIngestionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewReadOpenTelemetryMetricsIngestionParams()
+		params = NewReadOtelMetricsIngestionParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "ReadOpenTelemetryMetricsIngestion",
+		ID:                 "ReadOtelMetricsIngestion",
 		Method:             "GET",
-		PathPattern:        "/api/unstable/config/open-telemetry-metrics-ingestion",
+		PathPattern:        "/api/unstable/config/otel-metrics-ingestion",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &ReadOpenTelemetryMetricsIngestionReader{formats: a.formats},
+		Reader:             &ReadOtelMetricsIngestionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -1664,12 +1506,12 @@ func (a *Client) ReadOpenTelemetryMetricsIngestion(params *ReadOpenTelemetryMetr
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ReadOpenTelemetryMetricsIngestionOK)
+	success, ok := result.(*ReadOtelMetricsIngestionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*ReadOpenTelemetryMetricsIngestionDefault)
+	unexpectedSuccess := result.(*ReadOtelMetricsIngestionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2010,43 +1852,6 @@ func (a *Client) UpdateDataset(params *UpdateDatasetParams, opts ...ClientOption
 }
 
 /*
-UpdateGcpMetricsIntegration update gcp metrics integration API
-*/
-func (a *Client) UpdateGcpMetricsIntegration(params *UpdateGcpMetricsIntegrationParams, opts ...ClientOption) (*UpdateGcpMetricsIntegrationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateGcpMetricsIntegrationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateGcpMetricsIntegration",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/gcp-metrics-integrations/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateGcpMetricsIntegrationReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateGcpMetricsIntegrationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateGcpMetricsIntegrationDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 UpdateLinkTemplate update link template API
 */
 func (a *Client) UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error) {
@@ -2158,22 +1963,22 @@ func (a *Client) UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...Client
 }
 
 /*
-UpdateOpenTelemetryMetricsIngestion update open telemetry metrics ingestion API
+UpdateOtelMetricsIngestion update otel metrics ingestion API
 */
-func (a *Client) UpdateOpenTelemetryMetricsIngestion(params *UpdateOpenTelemetryMetricsIngestionParams, opts ...ClientOption) (*UpdateOpenTelemetryMetricsIngestionOK, error) {
+func (a *Client) UpdateOtelMetricsIngestion(params *UpdateOtelMetricsIngestionParams, opts ...ClientOption) (*UpdateOtelMetricsIngestionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewUpdateOpenTelemetryMetricsIngestionParams()
+		params = NewUpdateOtelMetricsIngestionParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "UpdateOpenTelemetryMetricsIngestion",
+		ID:                 "UpdateOtelMetricsIngestion",
 		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/open-telemetry-metrics-ingestion",
+		PathPattern:        "/api/unstable/config/otel-metrics-ingestion",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &UpdateOpenTelemetryMetricsIngestionReader{formats: a.formats},
+		Reader:             &UpdateOtelMetricsIngestionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -2185,12 +1990,12 @@ func (a *Client) UpdateOpenTelemetryMetricsIngestion(params *UpdateOpenTelemetry
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*UpdateOpenTelemetryMetricsIngestionOK)
+	success, ok := result.(*UpdateOtelMetricsIngestionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*UpdateOpenTelemetryMetricsIngestionDefault)
+	unexpectedSuccess := result.(*UpdateOtelMetricsIngestionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

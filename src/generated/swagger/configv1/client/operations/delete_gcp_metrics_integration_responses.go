@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // DeleteGcpMetricsIntegrationReader is a Reader for the DeleteGcpMetricsIntegration structure.
@@ -70,7 +70,7 @@ DeleteGcpMetricsIntegrationOK describes a response with status code 200, with de
 A successful response.
 */
 type DeleteGcpMetricsIntegrationOK struct {
-	Payload models.ConfigunstableDeleteGcpMetricsIntegrationResponse
+	Payload models.Configv1DeleteGcpMetricsIntegrationResponse
 }
 
 // IsSuccess returns true when this delete gcp metrics integration o k response has a 2xx status code
@@ -104,14 +104,14 @@ func (o *DeleteGcpMetricsIntegrationOK) Code() int {
 }
 
 func (o *DeleteGcpMetricsIntegrationOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteGcpMetricsIntegrationOK) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteGcpMetricsIntegrationOK) GetPayload() models.ConfigunstableDeleteGcpMetricsIntegrationResponse {
+func (o *DeleteGcpMetricsIntegrationOK) GetPayload() models.Configv1DeleteGcpMetricsIntegrationResponse {
 	return o.Payload
 }
 
@@ -170,11 +170,11 @@ func (o *DeleteGcpMetricsIntegrationBadRequest) Code() int {
 }
 
 func (o *DeleteGcpMetricsIntegrationBadRequest) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteGcpMetricsIntegrationBadRequest) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteGcpMetricsIntegrationBadRequest) GetPayload() *models.APIError {
@@ -238,11 +238,11 @@ func (o *DeleteGcpMetricsIntegrationNotFound) Code() int {
 }
 
 func (o *DeleteGcpMetricsIntegrationNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteGcpMetricsIntegrationNotFound) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteGcpMetricsIntegrationNotFound) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *DeleteGcpMetricsIntegrationInternalServerError) Code() int {
 }
 
 func (o *DeleteGcpMetricsIntegrationInternalServerError) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteGcpMetricsIntegrationInternalServerError) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] deleteGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteGcpMetricsIntegrationInternalServerError) GetPayload() *models.APIError {
@@ -378,11 +378,11 @@ func (o *DeleteGcpMetricsIntegrationDefault) Code() int {
 }
 
 func (o *DeleteGcpMetricsIntegrationDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] DeleteGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] DeleteGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteGcpMetricsIntegrationDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/gcp-metrics-integrations/{slug}][%d] DeleteGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/gcp-metrics-integrations/{slug}][%d] DeleteGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteGcpMetricsIntegrationDefault) GetPayload() models.GenericError {

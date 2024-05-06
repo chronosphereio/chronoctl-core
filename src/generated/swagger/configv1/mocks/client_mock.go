@@ -195,6 +195,26 @@ func (mr *MockClientServiceMockRecorder) CreateDropRule(params interface{}, opts
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDropRule", reflect.TypeOf((*MockClientService)(nil).CreateDropRule), varargs...)
 }
 
+// CreateGcpMetricsIntegration mocks base method.
+func (m *MockClientService) CreateGcpMetricsIntegration(params *operations.CreateGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.CreateGcpMetricsIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateGcpMetricsIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.CreateGcpMetricsIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateGcpMetricsIntegration indicates an expected call of CreateGcpMetricsIntegration.
+func (mr *MockClientServiceMockRecorder) CreateGcpMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateGcpMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).CreateGcpMetricsIntegration), varargs...)
+}
+
 // CreateGrafanaDashboard mocks base method.
 func (m *MockClientService) CreateGrafanaDashboard(params *operations.CreateGrafanaDashboardParams, opts ...operations.ClientOption) (*operations.CreateGrafanaDashboardOK, error) {
 	m.ctrl.T.Helper()
@@ -633,6 +653,26 @@ func (mr *MockClientServiceMockRecorder) DeleteDropRule(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDropRule", reflect.TypeOf((*MockClientService)(nil).DeleteDropRule), varargs...)
+}
+
+// DeleteGcpMetricsIntegration mocks base method.
+func (m *MockClientService) DeleteGcpMetricsIntegration(params *operations.DeleteGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.DeleteGcpMetricsIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteGcpMetricsIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteGcpMetricsIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteGcpMetricsIntegration indicates an expected call of DeleteGcpMetricsIntegration.
+func (mr *MockClientServiceMockRecorder) DeleteGcpMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteGcpMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).DeleteGcpMetricsIntegration), varargs...)
 }
 
 // DeleteGrafanaDashboard mocks base method.
@@ -1075,6 +1115,26 @@ func (mr *MockClientServiceMockRecorder) ListDropRules(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDropRules", reflect.TypeOf((*MockClientService)(nil).ListDropRules), varargs...)
 }
 
+// ListGcpMetricsIntegrations mocks base method.
+func (m *MockClientService) ListGcpMetricsIntegrations(params *operations.ListGcpMetricsIntegrationsParams, opts ...operations.ClientOption) (*operations.ListGcpMetricsIntegrationsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListGcpMetricsIntegrations", varargs...)
+	ret0, _ := ret[0].(*operations.ListGcpMetricsIntegrationsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListGcpMetricsIntegrations indicates an expected call of ListGcpMetricsIntegrations.
+func (mr *MockClientServiceMockRecorder) ListGcpMetricsIntegrations(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListGcpMetricsIntegrations", reflect.TypeOf((*MockClientService)(nil).ListGcpMetricsIntegrations), varargs...)
+}
+
 // ListGrafanaDashboards mocks base method.
 func (m *MockClientService) ListGrafanaDashboards(params *operations.ListGrafanaDashboardsParams, opts ...operations.ClientOption) (*operations.ListGrafanaDashboardsOK, error) {
 	m.ctrl.T.Helper()
@@ -1473,6 +1533,26 @@ func (mr *MockClientServiceMockRecorder) ReadDropRule(params interface{}, opts .
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadDropRule", reflect.TypeOf((*MockClientService)(nil).ReadDropRule), varargs...)
+}
+
+// ReadGcpMetricsIntegration mocks base method.
+func (m *MockClientService) ReadGcpMetricsIntegration(params *operations.ReadGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.ReadGcpMetricsIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadGcpMetricsIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.ReadGcpMetricsIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadGcpMetricsIntegration indicates an expected call of ReadGcpMetricsIntegration.
+func (mr *MockClientServiceMockRecorder) ReadGcpMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadGcpMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).ReadGcpMetricsIntegration), varargs...)
 }
 
 // ReadGrafanaDashboard mocks base method.
@@ -1945,6 +2025,26 @@ func (mr *MockClientServiceMockRecorder) UpdateDropRule(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDropRule", reflect.TypeOf((*MockClientService)(nil).UpdateDropRule), varargs...)
+}
+
+// UpdateGcpMetricsIntegration mocks base method.
+func (m *MockClientService) UpdateGcpMetricsIntegration(params *operations.UpdateGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.UpdateGcpMetricsIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateGcpMetricsIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateGcpMetricsIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateGcpMetricsIntegration indicates an expected call of UpdateGcpMetricsIntegration.
+func (mr *MockClientServiceMockRecorder) UpdateGcpMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateGcpMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).UpdateGcpMetricsIntegration), varargs...)
 }
 
 // UpdateGrafanaDashboard mocks base method.

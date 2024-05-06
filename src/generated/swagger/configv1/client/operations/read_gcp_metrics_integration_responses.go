@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // ReadGcpMetricsIntegrationReader is a Reader for the ReadGcpMetricsIntegration structure.
@@ -64,7 +64,7 @@ ReadGcpMetricsIntegrationOK describes a response with status code 200, with defa
 A successful response.
 */
 type ReadGcpMetricsIntegrationOK struct {
-	Payload *models.ConfigunstableReadGcpMetricsIntegrationResponse
+	Payload *models.Configv1ReadGcpMetricsIntegrationResponse
 }
 
 // IsSuccess returns true when this read gcp metrics integration o k response has a 2xx status code
@@ -98,20 +98,20 @@ func (o *ReadGcpMetricsIntegrationOK) Code() int {
 }
 
 func (o *ReadGcpMetricsIntegrationOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
 func (o *ReadGcpMetricsIntegrationOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
-func (o *ReadGcpMetricsIntegrationOK) GetPayload() *models.ConfigunstableReadGcpMetricsIntegrationResponse {
+func (o *ReadGcpMetricsIntegrationOK) GetPayload() *models.Configv1ReadGcpMetricsIntegrationResponse {
 	return o.Payload
 }
 
 func (o *ReadGcpMetricsIntegrationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableReadGcpMetricsIntegrationResponse)
+	o.Payload = new(models.Configv1ReadGcpMetricsIntegrationResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -166,11 +166,11 @@ func (o *ReadGcpMetricsIntegrationNotFound) Code() int {
 }
 
 func (o *ReadGcpMetricsIntegrationNotFound) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadGcpMetricsIntegrationNotFound) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadGcpMetricsIntegrationNotFound) GetPayload() *models.APIError {
@@ -234,11 +234,11 @@ func (o *ReadGcpMetricsIntegrationInternalServerError) Code() int {
 }
 
 func (o *ReadGcpMetricsIntegrationInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadGcpMetricsIntegrationInternalServerError) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations/{slug}][%d] readGcpMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadGcpMetricsIntegrationInternalServerError) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *ReadGcpMetricsIntegrationDefault) Code() int {
 }
 
 func (o *ReadGcpMetricsIntegrationDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations/{slug}][%d] ReadGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations/{slug}][%d] ReadGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadGcpMetricsIntegrationDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/gcp-metrics-integrations/{slug}][%d] ReadGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/gcp-metrics-integrations/{slug}][%d] ReadGcpMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadGcpMetricsIntegrationDefault) GetPayload() models.GenericError {
