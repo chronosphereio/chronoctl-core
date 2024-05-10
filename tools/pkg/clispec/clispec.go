@@ -152,7 +152,8 @@ func (e *Entity) ScaffoldYAML() (string, error) {
 	}
 
 	entityKind := e.Type.Kind
-	if e.IsSingleton {
+	// Unlike other singletons, the base name of OtelMetricsIngestion is not plural.
+	if e.IsSingleton && entityKind != "OtelMetricsIngestion" {
 		entityKind = inflect.Pluralize(entityKind)
 	}
 

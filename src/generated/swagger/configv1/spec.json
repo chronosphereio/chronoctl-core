@@ -461,7 +461,7 @@
           "type": "string"
         },
         "proxy_url": {
-          "description": "Optional proxy URL.",
+          "description": "Optional proxy URL.\nDEPRECATED: Custom proxies are unsupported.",
           "type": "string"
         },
         "tls_config": {

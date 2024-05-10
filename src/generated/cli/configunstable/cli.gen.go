@@ -14,6 +14,7 @@ import (
 func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewDashboardCmd())
 	root.AddCommand(NewLinkTemplateCmd())
+	root.AddCommand(NewOtelMetricsIngestionCmd())
 	root.AddCommand(NewSavedTraceSearchCmd())
 	root.AddCommand(NewServiceCmd())
 	root.AddCommand(NewTraceTailSamplingRulesCmd())
@@ -48,6 +49,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateLinkTemplate(ctx, clients.ConfigUnstable, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		OtelMetricsIngestionTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*OtelMetricsIngestion)
+			if !ok {
+				return types.WrongObjectErr((&OtelMetricsIngestion{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateOtelMetricsIngestion(ctx, clients.ConfigUnstable, entity, updateOpts)
 			if err != nil {
 				return err
 			}

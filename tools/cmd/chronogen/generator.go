@@ -109,6 +109,10 @@ func (e entitySpec) ModelName() string {
 
 // NameP returns the pluralized name.
 func (e entitySpec) NameP() string {
+	// Unlike other singletons, the base name of OtelMetricsIngestion is not plural.
+	if e.Entity.Name == "otel-metrics-ingestion" {
+		return upperCamel(e.Entity.Name)
+	}
 	return inflect.Pluralize(upperCamel(e.Entity.Name))
 }
 
