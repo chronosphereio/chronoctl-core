@@ -90,11 +90,11 @@ type entitySpec struct {
 
 // Name returns the singularized name.
 func (e entitySpec) Name() string {
-	if e.Entity.IsNotSingleton() {
-		return inflect.Singularize(upperCamel(e.Entity.Name))
-	} else {
-		return e.NameP()
+	if e.Entity.IsSingleton {
+		// Singletons shouldn't have singular/plural applied.
+		return upperCamel(e.Entity.Name)
 	}
+	return inflect.Singularize(upperCamel(e.Entity.Name))
 }
 
 func (e entitySpec) ModelName() string {
@@ -109,8 +109,8 @@ func (e entitySpec) ModelName() string {
 
 // NameP returns the pluralized name.
 func (e entitySpec) NameP() string {
-	// Unlike other singletons, the base name of OtelMetricsIngestion is not plural.
-	if e.Entity.Name == "otel-metrics-ingestion" {
+	if e.Entity.IsSingleton {
+		// Singletons shouldn't have singular/plural applied.
 		return upperCamel(e.Entity.Name)
 	}
 	return inflect.Pluralize(upperCamel(e.Entity.Name))
