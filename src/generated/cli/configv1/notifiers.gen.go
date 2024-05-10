@@ -542,6 +542,7 @@ spec:
             # Bearer token authentication. Cannot be set if basic_auth is set.
             bearer_token: <string>
             # Optional proxy URL.
+            # DEPRECATED: Custom proxies are unsupported.
             proxy_url: <string>
             basic_auth:
                 username: <string>
@@ -590,6 +591,7 @@ spec:
             # Bearer token authentication. Cannot be set if basic_auth is set.
             bearer_token: <string>
             # Optional proxy URL.
+            # DEPRECATED: Custom proxies are unsupported.
             proxy_url: <string>
             basic_auth:
                 username: <string>
@@ -640,6 +642,7 @@ spec:
             # Bearer token authentication. Cannot be set if basic_auth is set.
             bearer_token: <string>
             # Optional proxy URL.
+            # DEPRECATED: Custom proxies are unsupported.
             proxy_url: <string>
             basic_auth:
                 username: <string>
@@ -668,6 +671,7 @@ spec:
             # Bearer token authentication. Cannot be set if basic_auth is set.
             bearer_token: <string>
             # Optional proxy URL.
+            # DEPRECATED: Custom proxies are unsupported.
             proxy_url: <string>
             basic_auth:
                 username: <string>
@@ -682,6 +686,7 @@ spec:
             # Bearer token authentication. Cannot be set if basic_auth is set.
             bearer_token: <string>
             # Optional proxy URL.
+            # DEPRECATED: Custom proxies are unsupported.
             proxy_url: <string>
             basic_auth:
                 username: <string>

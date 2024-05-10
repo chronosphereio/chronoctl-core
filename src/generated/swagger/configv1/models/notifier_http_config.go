@@ -25,6 +25,7 @@ type NotifierHTTPConfig struct {
 	BearerToken string `json:"bearer_token,omitempty"`
 
 	// Optional proxy URL.
+	// DEPRECATED: Custom proxies are unsupported.
 	ProxyURL string `json:"proxy_url,omitempty"`
 
 	// tls config
