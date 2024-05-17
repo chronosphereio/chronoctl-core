@@ -1,11 +1,11 @@
 # Releases
 
-## Unreleased
+## v1.6.0
 
-* Added support for entity namespaces
-* Added support for datasets
-* unstable: Added support for otel-metrics-ingestion
-* Promote gcp-metrics-integration to stable
+## Added
+* New config: `v1/config/Datasets`
+* New config: `v1/config/GcpMetricsIntegration`
+* Adds support for entity namespaces
 
 ## v1.5.0
 
