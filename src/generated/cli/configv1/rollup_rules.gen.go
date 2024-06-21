@@ -213,7 +213,7 @@ func UpdateRollupRule(
 	res, err := client.UpdateRollupRule(&config_v1.UpdateRollupRuleParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateRollupRuleBody{
+		Body: &models.ConfigV1UpdateRollupRuleBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			RollupRule:      entity.Spec,
@@ -535,6 +535,8 @@ spec:
               name: <string>
               # Required new value of the replaced label.
               new_value: <string>
+    # TODO: consolidate w/ RecordingRule.LabelPolicy once both of these
+    #  entities implement the same label semantics.
     label_policy:
         # Labels that should be retained in the output metric. If set, then the
         # discard field must be empty.
@@ -547,6 +549,8 @@ spec:
     # Must keep this around for backwards compatibility because terraform will
     # still send this key w/ a null value.
     label_replace: null
+    #  - CUMULATIVE_COUNTER: Alias of COUNTER.
+    #  - DELTA_COUNTER: Alias of DELTA.
     metric_type: <COUNTER|GAUGE|DELTA|DISTRIBUTION|CUMULATIVE_EXPONENTIAL_HISTOGRAM|MEASUREMENT|CUMULATIVE_COUNTER|DELTA_COUNTER|DELTA_EXPONENTIAL_HISTOGRAM>
     mode: <ENABLED|PREVIEW>
     storage_policy:

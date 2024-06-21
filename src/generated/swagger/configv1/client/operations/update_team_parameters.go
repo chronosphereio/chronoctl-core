@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateTeamParams creates a new UpdateTeamParams object,
@@ -62,7 +64,7 @@ UpdateTeamParams contains all the parameters to send to the API endpoint
 type UpdateTeamParams struct {
 
 	// Body.
-	Body UpdateTeamBody
+	Body *models.ConfigV1UpdateTeamBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateTeamParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update team params
-func (o *UpdateTeamParams) WithBody(body UpdateTeamBody) *UpdateTeamParams {
+func (o *UpdateTeamParams) WithBody(body *models.ConfigV1UpdateTeamBody) *UpdateTeamParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update team params
-func (o *UpdateTeamParams) SetBody(body UpdateTeamBody) {
+func (o *UpdateTeamParams) SetBody(body *models.ConfigV1UpdateTeamBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateTeamParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

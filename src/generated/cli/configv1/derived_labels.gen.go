@@ -213,7 +213,7 @@ func UpdateDerivedLabel(
 	res, err := client.UpdateDerivedLabel(&config_v1.UpdateDerivedLabelParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateDerivedLabelBody{
+		Body: &models.ConfigV1UpdateDerivedLabelBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			DerivedLabel:    entity.Spec,

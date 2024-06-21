@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateCollectionDefault) readResponse(response runtime.ClientResponse, 
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateCollectionBody update collection body
-swagger:model UpdateCollectionBody
-*/
-type UpdateCollectionBody struct {
-
-	// collection
-	Collection *models.Configv1Collection `json:"collection,omitempty"`
-
-	// If true, the Collection will be created if it does not already exist, identified by slug. If false, an error will be returned if the Collection does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the Collection will not be created nor updated, and no response Collection will be returned. The response will return an error if the given Collection is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-}
-
-// Validate validates this update collection body
-func (o *UpdateCollectionBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateCollection(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateCollectionBody) validateCollection(formats strfmt.Registry) error {
-	if swag.IsZero(o.Collection) { // not required
-		return nil
-	}
-
-	if o.Collection != nil {
-		if err := o.Collection.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "collection")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "collection")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update collection body based on the context it is used
-func (o *UpdateCollectionBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateCollection(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateCollectionBody) contextValidateCollection(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.Collection != nil {
-
-		if swag.IsZero(o.Collection) { // not required
-			return nil
-		}
-
-		if err := o.Collection.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "collection")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "collection")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateCollectionBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateCollectionBody) UnmarshalBinary(b []byte) error {
-	var res UpdateCollectionBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

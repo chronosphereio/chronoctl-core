@@ -213,7 +213,7 @@ func UpdateRecordingRule(
 	res, err := client.UpdateRecordingRule(&config_v1.UpdateRecordingRuleParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateRecordingRuleBody{
+		Body: &models.ConfigV1UpdateRecordingRuleBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			RecordingRule:   entity.Spec,

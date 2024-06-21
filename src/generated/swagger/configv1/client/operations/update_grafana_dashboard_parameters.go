@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateGrafanaDashboardParams creates a new UpdateGrafanaDashboardParams object,
@@ -62,7 +64,7 @@ UpdateGrafanaDashboardParams contains all the parameters to send to the API endp
 type UpdateGrafanaDashboardParams struct {
 
 	// Body.
-	Body UpdateGrafanaDashboardBody
+	Body *models.ConfigV1UpdateGrafanaDashboardBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateGrafanaDashboardParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update grafana dashboard params
-func (o *UpdateGrafanaDashboardParams) WithBody(body UpdateGrafanaDashboardBody) *UpdateGrafanaDashboardParams {
+func (o *UpdateGrafanaDashboardParams) WithBody(body *models.ConfigV1UpdateGrafanaDashboardBody) *UpdateGrafanaDashboardParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update grafana dashboard params
-func (o *UpdateGrafanaDashboardParams) SetBody(body UpdateGrafanaDashboardBody) {
+func (o *UpdateGrafanaDashboardParams) SetBody(body *models.ConfigV1UpdateGrafanaDashboardBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateGrafanaDashboardParams) WriteToRequest(r runtime.ClientRequest, r
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

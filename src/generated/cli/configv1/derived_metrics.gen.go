@@ -213,7 +213,7 @@ func UpdateDerivedMetric(
 	res, err := client.UpdateDerivedMetric(&config_v1.UpdateDerivedMetricParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateDerivedMetricBody{
+		Body: &models.ConfigV1UpdateDerivedMetricBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			DerivedMetric:   entity.Spec,

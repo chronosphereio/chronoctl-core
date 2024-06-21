@@ -211,7 +211,7 @@ func UpdateSavedTraceSearch(
 	res, err := client.UpdateSavedTraceSearch(&config_unstable.UpdateSavedTraceSearchParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_unstable.UpdateSavedTraceSearchBody{
+		Body: &models.ConfigUnstableUpdateSavedTraceSearchBody{
 			CreateIfMissing:  opts.CreateIfMissing,
 			SavedTraceSearch: entity.Spec,
 		},

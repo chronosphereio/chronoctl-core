@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateMutingRuleParams creates a new UpdateMutingRuleParams object,
@@ -62,7 +64,7 @@ UpdateMutingRuleParams contains all the parameters to send to the API endpoint
 type UpdateMutingRuleParams struct {
 
 	// Body.
-	Body UpdateMutingRuleBody
+	Body *models.ConfigV1UpdateMutingRuleBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateMutingRuleParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update muting rule params
-func (o *UpdateMutingRuleParams) WithBody(body UpdateMutingRuleBody) *UpdateMutingRuleParams {
+func (o *UpdateMutingRuleParams) WithBody(body *models.ConfigV1UpdateMutingRuleBody) *UpdateMutingRuleParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update muting rule params
-func (o *UpdateMutingRuleParams) SetBody(body UpdateMutingRuleBody) {
+func (o *UpdateMutingRuleParams) SetBody(body *models.ConfigV1UpdateMutingRuleBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateMutingRuleParams) WriteToRequest(r runtime.ClientRequest, reg str
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

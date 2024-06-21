@@ -49,7 +49,7 @@ type Configv1TraceMetricsRule struct {
 	TraceFilter *Configv1TraceSearchFilter `json:"trace_filter,omitempty"`
 
 	// Add labels to the resultant metrics based on these specified GroupBy messages.
-	GroupBy []*TraceMetricsRuleGroupBy `json:"group_by"`
+	GroupBy []*Configv1TraceMetricsRuleGroupBy `json:"group_by"`
 }
 
 // Validate validates this configv1 trace metrics rule

@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateGrafanaDashboardDefault) readResponse(response runtime.ClientResp
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateGrafanaDashboardBody update grafana dashboard body
-swagger:model UpdateGrafanaDashboardBody
-*/
-type UpdateGrafanaDashboardBody struct {
-
-	// If true, the GrafanaDashboard will be created if it does not already exist, identified by slug. If false, an error will be returned if the GrafanaDashboard does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the GrafanaDashboard will not be created nor updated, and no response GrafanaDashboard will be returned. The response will return an error if the given GrafanaDashboard is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// grafana dashboard
-	GrafanaDashboard *models.Configv1GrafanaDashboard `json:"grafana_dashboard,omitempty"`
-}
-
-// Validate validates this update grafana dashboard body
-func (o *UpdateGrafanaDashboardBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateGrafanaDashboard(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateGrafanaDashboardBody) validateGrafanaDashboard(formats strfmt.Registry) error {
-	if swag.IsZero(o.GrafanaDashboard) { // not required
-		return nil
-	}
-
-	if o.GrafanaDashboard != nil {
-		if err := o.GrafanaDashboard.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "grafana_dashboard")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "grafana_dashboard")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update grafana dashboard body based on the context it is used
-func (o *UpdateGrafanaDashboardBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateGrafanaDashboard(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateGrafanaDashboardBody) contextValidateGrafanaDashboard(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.GrafanaDashboard != nil {
-
-		if swag.IsZero(o.GrafanaDashboard) { // not required
-			return nil
-		}
-
-		if err := o.GrafanaDashboard.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "grafana_dashboard")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "grafana_dashboard")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateGrafanaDashboardBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateGrafanaDashboardBody) UnmarshalBinary(b []byte) error {
-	var res UpdateGrafanaDashboardBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

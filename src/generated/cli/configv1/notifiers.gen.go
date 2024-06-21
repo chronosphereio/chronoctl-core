@@ -213,7 +213,7 @@ func UpdateNotifier(
 	res, err := client.UpdateNotifier(&config_v1.UpdateNotifierParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateNotifierBody{
+		Body: &models.ConfigV1UpdateNotifierBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			Notifier:        entity.Spec,

@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
 
 // NewUpdateLinkTemplateParams creates a new UpdateLinkTemplateParams object,
@@ -62,7 +64,7 @@ UpdateLinkTemplateParams contains all the parameters to send to the API endpoint
 type UpdateLinkTemplateParams struct {
 
 	// Body.
-	Body UpdateLinkTemplateBody
+	Body *models.ConfigUnstableUpdateLinkTemplateBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateLinkTemplateParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update link template params
-func (o *UpdateLinkTemplateParams) WithBody(body UpdateLinkTemplateBody) *UpdateLinkTemplateParams {
+func (o *UpdateLinkTemplateParams) WithBody(body *models.ConfigUnstableUpdateLinkTemplateBody) *UpdateLinkTemplateParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update link template params
-func (o *UpdateLinkTemplateParams) SetBody(body UpdateLinkTemplateBody) {
+func (o *UpdateLinkTemplateParams) SetBody(body *models.ConfigUnstableUpdateLinkTemplateBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateLinkTemplateParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

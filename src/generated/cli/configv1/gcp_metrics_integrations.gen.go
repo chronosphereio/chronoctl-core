@@ -213,7 +213,7 @@ func UpdateGcpMetricsIntegration(
 	res, err := client.UpdateGcpMetricsIntegration(&config_v1.UpdateGcpMetricsIntegrationParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateGcpMetricsIntegrationBody{
+		Body: &models.ConfigV1UpdateGcpMetricsIntegrationBody{
 			CreateIfMissing:       opts.CreateIfMissing,
 			DryRun:                opts.DryRun,
 			GcpMetricsIntegration: entity.Spec,

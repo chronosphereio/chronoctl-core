@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateNotifierParams creates a new UpdateNotifierParams object,
@@ -62,7 +64,7 @@ UpdateNotifierParams contains all the parameters to send to the API endpoint
 type UpdateNotifierParams struct {
 
 	// Body.
-	Body UpdateNotifierBody
+	Body *models.ConfigV1UpdateNotifierBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateNotifierParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update notifier params
-func (o *UpdateNotifierParams) WithBody(body UpdateNotifierBody) *UpdateNotifierParams {
+func (o *UpdateNotifierParams) WithBody(body *models.ConfigV1UpdateNotifierBody) *UpdateNotifierParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update notifier params
-func (o *UpdateNotifierParams) SetBody(body UpdateNotifierBody) {
+func (o *UpdateNotifierParams) SetBody(body *models.ConfigV1UpdateNotifierBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateNotifierParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

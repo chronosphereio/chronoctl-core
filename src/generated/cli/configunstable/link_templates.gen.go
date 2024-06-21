@@ -213,7 +213,7 @@ func UpdateLinkTemplate(
 	res, err := client.UpdateLinkTemplate(&config_unstable.UpdateLinkTemplateParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_unstable.UpdateLinkTemplateBody{
+		Body: &models.ConfigUnstableUpdateLinkTemplateBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			LinkTemplate:    entity.Spec,

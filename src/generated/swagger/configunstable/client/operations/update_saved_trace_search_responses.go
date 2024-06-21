@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
@@ -475,104 +472,5 @@ func (o *UpdateSavedTraceSearchDefault) readResponse(response runtime.ClientResp
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateSavedTraceSearchBody update saved trace search body
-swagger:model UpdateSavedTraceSearchBody
-*/
-type UpdateSavedTraceSearchBody struct {
-
-	// If true, the SavedTraceSearch will be created if it does not already exist, identified by slug. If false, an error will be returned if the SavedTraceSearch does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// saved trace search
-	SavedTraceSearch *models.ConfigunstableSavedTraceSearch `json:"saved_trace_search,omitempty"`
-}
-
-// Validate validates this update saved trace search body
-func (o *UpdateSavedTraceSearchBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateSavedTraceSearch(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateSavedTraceSearchBody) validateSavedTraceSearch(formats strfmt.Registry) error {
-	if swag.IsZero(o.SavedTraceSearch) { // not required
-		return nil
-	}
-
-	if o.SavedTraceSearch != nil {
-		if err := o.SavedTraceSearch.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "saved_trace_search")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "saved_trace_search")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update saved trace search body based on the context it is used
-func (o *UpdateSavedTraceSearchBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateSavedTraceSearch(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateSavedTraceSearchBody) contextValidateSavedTraceSearch(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.SavedTraceSearch != nil {
-
-		if swag.IsZero(o.SavedTraceSearch) { // not required
-			return nil
-		}
-
-		if err := o.SavedTraceSearch.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "saved_trace_search")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "saved_trace_search")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateSavedTraceSearchBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateSavedTraceSearchBody) UnmarshalBinary(b []byte) error {
-	var res UpdateSavedTraceSearchBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

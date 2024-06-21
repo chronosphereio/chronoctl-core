@@ -213,7 +213,7 @@ func UpdateClassicDashboard(
 	res, err := client.UpdateClassicDashboard(&config_v1.UpdateClassicDashboardParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateClassicDashboardBody{
+		Body: &models.ConfigV1UpdateClassicDashboardBody{
 			CreateIfMissing:  opts.CreateIfMissing,
 			DryRun:           opts.DryRun,
 			ClassicDashboard: entity.Spec,

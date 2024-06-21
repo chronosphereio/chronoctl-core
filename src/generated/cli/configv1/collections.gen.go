@@ -213,7 +213,7 @@ func UpdateCollection(
 	res, err := client.UpdateCollection(&config_v1.UpdateCollectionParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateCollectionBody{
+		Body: &models.ConfigV1UpdateCollectionBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			Collection:      entity.Spec,

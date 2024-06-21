@@ -213,7 +213,7 @@ func UpdateDropRule(
 	res, err := client.UpdateDropRule(&config_v1.UpdateDropRuleParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateDropRuleBody{
+		Body: &models.ConfigV1UpdateDropRuleBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			DropRule:        entity.Spec,

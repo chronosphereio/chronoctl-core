@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
 
 // NewUpdateNoopEntityParams creates a new UpdateNoopEntityParams object,
@@ -62,7 +64,7 @@ UpdateNoopEntityParams contains all the parameters to send to the API endpoint
 type UpdateNoopEntityParams struct {
 
 	// Body.
-	Body UpdateNoopEntityBody
+	Body *models.ConfigUnstableUpdateNoopEntityBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateNoopEntityParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update noop entity params
-func (o *UpdateNoopEntityParams) WithBody(body UpdateNoopEntityBody) *UpdateNoopEntityParams {
+func (o *UpdateNoopEntityParams) WithBody(body *models.ConfigUnstableUpdateNoopEntityBody) *UpdateNoopEntityParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update noop entity params
-func (o *UpdateNoopEntityParams) SetBody(body UpdateNoopEntityBody) {
+func (o *UpdateNoopEntityParams) SetBody(body *models.ConfigUnstableUpdateNoopEntityBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateNoopEntityParams) WriteToRequest(r runtime.ClientRequest, reg str
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

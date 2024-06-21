@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateTraceBehaviorDefault) readResponse(response runtime.ClientRespons
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateTraceBehaviorBody update trace behavior body
-swagger:model UpdateTraceBehaviorBody
-*/
-type UpdateTraceBehaviorBody struct {
-
-	// If true, the TraceBehavior will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceBehavior does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the TraceBehavior will not be created nor updated, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// trace behavior
-	TraceBehavior *models.ConfigunstableTraceBehavior `json:"trace_behavior,omitempty"`
-}
-
-// Validate validates this update trace behavior body
-func (o *UpdateTraceBehaviorBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateTraceBehavior(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateTraceBehaviorBody) validateTraceBehavior(formats strfmt.Registry) error {
-	if swag.IsZero(o.TraceBehavior) { // not required
-		return nil
-	}
-
-	if o.TraceBehavior != nil {
-		if err := o.TraceBehavior.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "trace_behavior")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "trace_behavior")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update trace behavior body based on the context it is used
-func (o *UpdateTraceBehaviorBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateTraceBehavior(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateTraceBehaviorBody) contextValidateTraceBehavior(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.TraceBehavior != nil {
-
-		if swag.IsZero(o.TraceBehavior) { // not required
-			return nil
-		}
-
-		if err := o.TraceBehavior.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "trace_behavior")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "trace_behavior")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateTraceBehaviorBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateTraceBehaviorBody) UnmarshalBinary(b []byte) error {
-	var res UpdateTraceBehaviorBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

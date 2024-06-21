@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
 
 // NewUpdateTraceJaegerRemoteSamplingStrategyParams creates a new UpdateTraceJaegerRemoteSamplingStrategyParams object,
@@ -62,7 +64,7 @@ UpdateTraceJaegerRemoteSamplingStrategyParams contains all the parameters to sen
 type UpdateTraceJaegerRemoteSamplingStrategyParams struct {
 
 	// Body.
-	Body UpdateTraceJaegerRemoteSamplingStrategyBody
+	Body *models.ConfigUnstableUpdateTraceJaegerRemoteSamplingStrategyBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateTraceJaegerRemoteSamplingStrategyParams) SetHTTPClient(client *ht
 }
 
 // WithBody adds the body to the update trace jaeger remote sampling strategy params
-func (o *UpdateTraceJaegerRemoteSamplingStrategyParams) WithBody(body UpdateTraceJaegerRemoteSamplingStrategyBody) *UpdateTraceJaegerRemoteSamplingStrategyParams {
+func (o *UpdateTraceJaegerRemoteSamplingStrategyParams) WithBody(body *models.ConfigUnstableUpdateTraceJaegerRemoteSamplingStrategyBody) *UpdateTraceJaegerRemoteSamplingStrategyParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update trace jaeger remote sampling strategy params
-func (o *UpdateTraceJaegerRemoteSamplingStrategyParams) SetBody(body UpdateTraceJaegerRemoteSamplingStrategyBody) {
+func (o *UpdateTraceJaegerRemoteSamplingStrategyParams) SetBody(body *models.ConfigUnstableUpdateTraceJaegerRemoteSamplingStrategyBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateTraceJaegerRemoteSamplingStrategyParams) WriteToRequest(r runtime
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

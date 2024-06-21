@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateMutingRuleDefault) readResponse(response runtime.ClientResponse, 
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateMutingRuleBody update muting rule body
-swagger:model UpdateMutingRuleBody
-*/
-type UpdateMutingRuleBody struct {
-
-	// If true, the MutingRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the MutingRule does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the MutingRule will not be created nor updated, and no response MutingRule will be returned. The response will return an error if the given MutingRule is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// muting rule
-	MutingRule *models.Configv1MutingRule `json:"muting_rule,omitempty"`
-}
-
-// Validate validates this update muting rule body
-func (o *UpdateMutingRuleBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateMutingRule(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateMutingRuleBody) validateMutingRule(formats strfmt.Registry) error {
-	if swag.IsZero(o.MutingRule) { // not required
-		return nil
-	}
-
-	if o.MutingRule != nil {
-		if err := o.MutingRule.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "muting_rule")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "muting_rule")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update muting rule body based on the context it is used
-func (o *UpdateMutingRuleBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateMutingRule(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateMutingRuleBody) contextValidateMutingRule(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.MutingRule != nil {
-
-		if swag.IsZero(o.MutingRule) { // not required
-			return nil
-		}
-
-		if err := o.MutingRule.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "muting_rule")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "muting_rule")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateMutingRuleBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateMutingRuleBody) UnmarshalBinary(b []byte) error {
-	var res UpdateMutingRuleBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

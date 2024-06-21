@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateRecordingRuleParams creates a new UpdateRecordingRuleParams object,
@@ -62,7 +64,7 @@ UpdateRecordingRuleParams contains all the parameters to send to the API endpoin
 type UpdateRecordingRuleParams struct {
 
 	// Body.
-	Body UpdateRecordingRuleBody
+	Body *models.ConfigV1UpdateRecordingRuleBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateRecordingRuleParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update recording rule params
-func (o *UpdateRecordingRuleParams) WithBody(body UpdateRecordingRuleBody) *UpdateRecordingRuleParams {
+func (o *UpdateRecordingRuleParams) WithBody(body *models.ConfigV1UpdateRecordingRuleBody) *UpdateRecordingRuleParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update recording rule params
-func (o *UpdateRecordingRuleParams) SetBody(body UpdateRecordingRuleBody) {
+func (o *UpdateRecordingRuleParams) SetBody(body *models.ConfigV1UpdateRecordingRuleBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateRecordingRuleParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

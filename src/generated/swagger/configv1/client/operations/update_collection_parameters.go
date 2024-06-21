@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateCollectionParams creates a new UpdateCollectionParams object,
@@ -62,7 +64,7 @@ UpdateCollectionParams contains all the parameters to send to the API endpoint
 type UpdateCollectionParams struct {
 
 	// Body.
-	Body UpdateCollectionBody
+	Body *models.ConfigV1UpdateCollectionBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateCollectionParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update collection params
-func (o *UpdateCollectionParams) WithBody(body UpdateCollectionBody) *UpdateCollectionParams {
+func (o *UpdateCollectionParams) WithBody(body *models.ConfigV1UpdateCollectionBody) *UpdateCollectionParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update collection params
-func (o *UpdateCollectionParams) SetBody(body UpdateCollectionBody) {
+func (o *UpdateCollectionParams) SetBody(body *models.ConfigV1UpdateCollectionBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateCollectionParams) WriteToRequest(r runtime.ClientRequest, reg str
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

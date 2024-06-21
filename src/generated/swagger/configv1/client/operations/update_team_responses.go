@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateTeamDefault) readResponse(response runtime.ClientResponse, consum
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateTeamBody update team body
-swagger:model UpdateTeamBody
-*/
-type UpdateTeamBody struct {
-
-	// If true, the Team will be created if it does not already exist, identified by slug. If false, an error will be returned if the Team does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the Team will not be created nor updated, and no response Team will be returned. The response will return an error if the given Team is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// team
-	Team *models.Configv1Team `json:"team,omitempty"`
-}
-
-// Validate validates this update team body
-func (o *UpdateTeamBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateTeam(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateTeamBody) validateTeam(formats strfmt.Registry) error {
-	if swag.IsZero(o.Team) { // not required
-		return nil
-	}
-
-	if o.Team != nil {
-		if err := o.Team.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "team")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "team")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update team body based on the context it is used
-func (o *UpdateTeamBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateTeam(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateTeamBody) contextValidateTeam(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.Team != nil {
-
-		if swag.IsZero(o.Team) { // not required
-			return nil
-		}
-
-		if err := o.Team.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "team")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "team")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateTeamBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateTeamBody) UnmarshalBinary(b []byte) error {
-	var res UpdateTeamBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

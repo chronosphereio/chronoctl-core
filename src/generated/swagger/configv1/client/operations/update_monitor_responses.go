@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateMonitorDefault) readResponse(response runtime.ClientResponse, con
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateMonitorBody update monitor body
-swagger:model UpdateMonitorBody
-*/
-type UpdateMonitorBody struct {
-
-	// If true, the Monitor will be created if it does not already exist, identified by slug. If false, an error will be returned if the Monitor does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the Monitor will not be created nor updated, and no response Monitor will be returned. The response will return an error if the given Monitor is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// monitor
-	Monitor *models.Configv1Monitor `json:"monitor,omitempty"`
-}
-
-// Validate validates this update monitor body
-func (o *UpdateMonitorBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateMonitor(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateMonitorBody) validateMonitor(formats strfmt.Registry) error {
-	if swag.IsZero(o.Monitor) { // not required
-		return nil
-	}
-
-	if o.Monitor != nil {
-		if err := o.Monitor.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "monitor")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "monitor")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update monitor body based on the context it is used
-func (o *UpdateMonitorBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateMonitor(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateMonitorBody) contextValidateMonitor(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.Monitor != nil {
-
-		if swag.IsZero(o.Monitor) { // not required
-			return nil
-		}
-
-		if err := o.Monitor.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "monitor")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "monitor")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateMonitorBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateMonitorBody) UnmarshalBinary(b []byte) error {
-	var res UpdateMonitorBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

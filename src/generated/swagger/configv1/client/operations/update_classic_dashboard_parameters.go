@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateClassicDashboardParams creates a new UpdateClassicDashboardParams object,
@@ -62,7 +64,7 @@ UpdateClassicDashboardParams contains all the parameters to send to the API endp
 type UpdateClassicDashboardParams struct {
 
 	// Body.
-	Body UpdateClassicDashboardBody
+	Body *models.ConfigV1UpdateClassicDashboardBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateClassicDashboardParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update classic dashboard params
-func (o *UpdateClassicDashboardParams) WithBody(body UpdateClassicDashboardBody) *UpdateClassicDashboardParams {
+func (o *UpdateClassicDashboardParams) WithBody(body *models.ConfigV1UpdateClassicDashboardBody) *UpdateClassicDashboardParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update classic dashboard params
-func (o *UpdateClassicDashboardParams) SetBody(body UpdateClassicDashboardBody) {
+func (o *UpdateClassicDashboardParams) SetBody(body *models.ConfigV1UpdateClassicDashboardBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateClassicDashboardParams) WriteToRequest(r runtime.ClientRequest, r
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

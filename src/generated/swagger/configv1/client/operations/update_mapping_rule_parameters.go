@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateMappingRuleParams creates a new UpdateMappingRuleParams object,
@@ -62,7 +64,7 @@ UpdateMappingRuleParams contains all the parameters to send to the API endpoint
 type UpdateMappingRuleParams struct {
 
 	// Body.
-	Body UpdateMappingRuleBody
+	Body *models.ConfigV1UpdateMappingRuleBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateMappingRuleParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update mapping rule params
-func (o *UpdateMappingRuleParams) WithBody(body UpdateMappingRuleBody) *UpdateMappingRuleParams {
+func (o *UpdateMappingRuleParams) WithBody(body *models.ConfigV1UpdateMappingRuleBody) *UpdateMappingRuleParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update mapping rule params
-func (o *UpdateMappingRuleParams) SetBody(body UpdateMappingRuleBody) {
+func (o *UpdateMappingRuleParams) SetBody(body *models.ConfigV1UpdateMappingRuleBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateMappingRuleParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

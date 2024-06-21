@@ -29,7 +29,7 @@ type MappingRuleAggregationPolicy struct {
 	// set.
 	Interval string `json:"interval,omitempty"`
 
-	// Whether to drop the timestamp while writing the metric.
+	// Deprecated: This field is no longer supported.
 	DropTimestamp bool `json:"drop_timestamp,omitempty"`
 }
 

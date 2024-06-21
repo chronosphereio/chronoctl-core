@@ -213,7 +213,7 @@ func UpdateNotificationPolicy(
 	res, err := client.UpdateNotificationPolicy(&config_v1.UpdateNotificationPolicyParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateNotificationPolicyBody{
+		Body: &models.ConfigV1UpdateNotificationPolicyBody{
 			CreateIfMissing:    opts.CreateIfMissing,
 			DryRun:             opts.DryRun,
 			NotificationPolicy: entity.Spec,
@@ -530,12 +530,24 @@ spec:
                         - <string>
                     # Frequency at which to resend alerts.
                     repeat_interval_secs: <integer>
+                    group_by:
+                        # Set of label names used to group alerts.
+                        # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
+                        # will be grouped together.
+                        label_names:
+                            - <string>
                 warn:
                     # Slugs of notifiers that will receive the alerts.
                     notifier_slugs:
                         - <string>
                     # Frequency at which to resend alerts.
                     repeat_interval_secs: <integer>
+                    group_by:
+                        # Set of label names used to group alerts.
+                        # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
+                        # will be grouped together.
+                        label_names:
+                            - <string>
         defaults:
             critical:
                 # Slugs of notifiers that will receive the alerts.
@@ -543,12 +555,24 @@ spec:
                     - <string>
                 # Frequency at which to resend alerts.
                 repeat_interval_secs: <integer>
+                group_by:
+                    # Set of label names used to group alerts.
+                    # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
+                    # will be grouped together.
+                    label_names:
+                        - <string>
             warn:
                 # Slugs of notifiers that will receive the alerts.
                 notifier_slugs:
                     - <string>
                 # Frequency at which to resend alerts.
                 repeat_interval_secs: <integer>
+                group_by:
+                    # Set of label names used to group alerts.
+                    # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
+                    # will be grouped together.
+                    label_names:
+                        - <string>
 `
 
 func newNotificationPolicyScaffoldCmd() *cobra.Command {

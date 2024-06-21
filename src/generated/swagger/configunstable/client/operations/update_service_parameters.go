@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
 
 // NewUpdateServiceParams creates a new UpdateServiceParams object,
@@ -62,7 +64,7 @@ UpdateServiceParams contains all the parameters to send to the API endpoint
 type UpdateServiceParams struct {
 
 	// Body.
-	Body UpdateServiceBody
+	Body *models.ConfigUnstableUpdateServiceBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateServiceParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update service params
-func (o *UpdateServiceParams) WithBody(body UpdateServiceBody) *UpdateServiceParams {
+func (o *UpdateServiceParams) WithBody(body *models.ConfigUnstableUpdateServiceBody) *UpdateServiceParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update service params
-func (o *UpdateServiceParams) SetBody(body UpdateServiceBody) {
+func (o *UpdateServiceParams) SetBody(body *models.ConfigUnstableUpdateServiceBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateServiceParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

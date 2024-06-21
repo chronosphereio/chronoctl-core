@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateDropRuleParams creates a new UpdateDropRuleParams object,
@@ -62,7 +64,7 @@ UpdateDropRuleParams contains all the parameters to send to the API endpoint
 type UpdateDropRuleParams struct {
 
 	// Body.
-	Body UpdateDropRuleBody
+	Body *models.ConfigV1UpdateDropRuleBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateDropRuleParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update drop rule params
-func (o *UpdateDropRuleParams) WithBody(body UpdateDropRuleBody) *UpdateDropRuleParams {
+func (o *UpdateDropRuleParams) WithBody(body *models.ConfigV1UpdateDropRuleBody) *UpdateDropRuleParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update drop rule params
-func (o *UpdateDropRuleParams) SetBody(body UpdateDropRuleBody) {
+func (o *UpdateDropRuleParams) SetBody(body *models.ConfigV1UpdateDropRuleBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateDropRuleParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

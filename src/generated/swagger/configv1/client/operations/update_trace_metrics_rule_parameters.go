@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateTraceMetricsRuleParams creates a new UpdateTraceMetricsRuleParams object,
@@ -62,7 +64,7 @@ UpdateTraceMetricsRuleParams contains all the parameters to send to the API endp
 type UpdateTraceMetricsRuleParams struct {
 
 	// Body.
-	Body UpdateTraceMetricsRuleBody
+	Body *models.ConfigV1UpdateTraceMetricsRuleBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateTraceMetricsRuleParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update trace metrics rule params
-func (o *UpdateTraceMetricsRuleParams) WithBody(body UpdateTraceMetricsRuleBody) *UpdateTraceMetricsRuleParams {
+func (o *UpdateTraceMetricsRuleParams) WithBody(body *models.ConfigV1UpdateTraceMetricsRuleBody) *UpdateTraceMetricsRuleParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update trace metrics rule params
-func (o *UpdateTraceMetricsRuleParams) SetBody(body UpdateTraceMetricsRuleBody) {
+func (o *UpdateTraceMetricsRuleParams) SetBody(body *models.ConfigV1UpdateTraceMetricsRuleBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateTraceMetricsRuleParams) WriteToRequest(r runtime.ClientRequest, r
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

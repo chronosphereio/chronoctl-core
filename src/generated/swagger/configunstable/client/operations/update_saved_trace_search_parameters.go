@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
 
 // NewUpdateSavedTraceSearchParams creates a new UpdateSavedTraceSearchParams object,
@@ -62,7 +64,7 @@ UpdateSavedTraceSearchParams contains all the parameters to send to the API endp
 type UpdateSavedTraceSearchParams struct {
 
 	// Body.
-	Body UpdateSavedTraceSearchBody
+	Body *models.ConfigUnstableUpdateSavedTraceSearchBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateSavedTraceSearchParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update saved trace search params
-func (o *UpdateSavedTraceSearchParams) WithBody(body UpdateSavedTraceSearchBody) *UpdateSavedTraceSearchParams {
+func (o *UpdateSavedTraceSearchParams) WithBody(body *models.ConfigUnstableUpdateSavedTraceSearchBody) *UpdateSavedTraceSearchParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update saved trace search params
-func (o *UpdateSavedTraceSearchParams) SetBody(body UpdateSavedTraceSearchBody) {
+func (o *UpdateSavedTraceSearchParams) SetBody(body *models.ConfigUnstableUpdateSavedTraceSearchBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateSavedTraceSearchParams) WriteToRequest(r runtime.ClientRequest, r
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

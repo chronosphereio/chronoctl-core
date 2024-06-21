@@ -213,7 +213,7 @@ func UpdateService(
 	res, err := client.UpdateService(&config_unstable.UpdateServiceParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_unstable.UpdateServiceBody{
+		Body: &models.ConfigUnstableUpdateServiceBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			Service:         entity.Spec,

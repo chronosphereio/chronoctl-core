@@ -68,6 +68,8 @@ type ClientService interface {
 
 	CreateTeam(params *CreateTeamParams, opts ...ClientOption) (*CreateTeamOK, error)
 
+	CreateTraceBehaviorConfig(params *CreateTraceBehaviorConfigParams, opts ...ClientOption) (*CreateTraceBehaviorConfigOK, error)
+
 	CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*CreateTraceJaegerRemoteSamplingStrategyOK, error)
 
 	CreateTraceMetricsRule(params *CreateTraceMetricsRuleParams, opts ...ClientOption) (*CreateTraceMetricsRuleOK, error)
@@ -113,6 +115,8 @@ type ClientService interface {
 	DeleteServiceAccount(params *DeleteServiceAccountParams, opts ...ClientOption) (*DeleteServiceAccountOK, error)
 
 	DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*DeleteTeamOK, error)
+
+	DeleteTraceBehaviorConfig(params *DeleteTraceBehaviorConfigParams, opts ...ClientOption) (*DeleteTraceBehaviorConfigOK, error)
 
 	DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error)
 
@@ -204,6 +208,8 @@ type ClientService interface {
 
 	ReadTeam(params *ReadTeamParams, opts ...ClientOption) (*ReadTeamOK, error)
 
+	ReadTraceBehaviorConfig(params *ReadTraceBehaviorConfigParams, opts ...ClientOption) (*ReadTraceBehaviorConfigOK, error)
+
 	ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*ReadTraceJaegerRemoteSamplingStrategyOK, error)
 
 	ReadTraceMetricsRule(params *ReadTraceMetricsRuleParams, opts ...ClientOption) (*ReadTraceMetricsRuleOK, error)
@@ -247,6 +253,8 @@ type ClientService interface {
 	UpdateRollupRule(params *UpdateRollupRuleParams, opts ...ClientOption) (*UpdateRollupRuleOK, error)
 
 	UpdateTeam(params *UpdateTeamParams, opts ...ClientOption) (*UpdateTeamOK, error)
+
+	UpdateTraceBehaviorConfig(params *UpdateTraceBehaviorConfigParams, opts ...ClientOption) (*UpdateTraceBehaviorConfigOK, error)
 
 	UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*UpdateTraceJaegerRemoteSamplingStrategyOK, error)
 
@@ -994,6 +1002,43 @@ func (a *Client) CreateTeam(params *CreateTeamParams, opts ...ClientOption) (*Cr
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateTeamDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateTraceBehaviorConfig create trace behavior config API
+*/
+func (a *Client) CreateTraceBehaviorConfig(params *CreateTraceBehaviorConfigParams, opts ...ClientOption) (*CreateTraceBehaviorConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateTraceBehaviorConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateTraceBehaviorConfig",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/trace-behavior-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateTraceBehaviorConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateTraceBehaviorConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateTraceBehaviorConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1848,6 +1893,43 @@ func (a *Client) DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*De
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteTeamDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteTraceBehaviorConfig delete trace behavior config API
+*/
+func (a *Client) DeleteTraceBehaviorConfig(params *DeleteTraceBehaviorConfigParams, opts ...ClientOption) (*DeleteTraceBehaviorConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteTraceBehaviorConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteTraceBehaviorConfig",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/trace-behavior-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteTraceBehaviorConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteTraceBehaviorConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteTraceBehaviorConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3517,6 +3599,43 @@ func (a *Client) ReadTeam(params *ReadTeamParams, opts ...ClientOption) (*ReadTe
 }
 
 /*
+ReadTraceBehaviorConfig read trace behavior config API
+*/
+func (a *Client) ReadTraceBehaviorConfig(params *ReadTraceBehaviorConfigParams, opts ...ClientOption) (*ReadTraceBehaviorConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadTraceBehaviorConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadTraceBehaviorConfig",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/trace-behavior-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadTraceBehaviorConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadTraceBehaviorConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadTraceBehaviorConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadTraceJaegerRemoteSamplingStrategy read trace jaeger remote sampling strategy API
 */
 func (a *Client) ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*ReadTraceJaegerRemoteSamplingStrategyOK, error) {
@@ -4327,6 +4446,43 @@ func (a *Client) UpdateTeam(params *UpdateTeamParams, opts ...ClientOption) (*Up
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateTeamDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateTraceBehaviorConfig update trace behavior config API
+*/
+func (a *Client) UpdateTraceBehaviorConfig(params *UpdateTraceBehaviorConfigParams, opts ...ClientOption) (*UpdateTraceBehaviorConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateTraceBehaviorConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateTraceBehaviorConfig",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/trace-behavior-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateTraceBehaviorConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateTraceBehaviorConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateTraceBehaviorConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

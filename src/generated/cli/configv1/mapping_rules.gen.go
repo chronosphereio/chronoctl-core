@@ -213,7 +213,7 @@ func UpdateMappingRule(
 	res, err := client.UpdateMappingRule(&config_v1.UpdateMappingRuleParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateMappingRuleBody{
+		Body: &models.ConfigV1UpdateMappingRuleBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			MappingRule:     entity.Spec,
@@ -515,7 +515,7 @@ spec:
         # field in storage policy. If set, then the storage_policy field can't be
         # set.
         interval: <string>
-        # Whether to drop the timestamp while writing the metric.
+        # Deprecated: This field is no longer supported.
         drop_timestamp: <true|false>
         aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES|HISTOGRAM>
         storage_policy:

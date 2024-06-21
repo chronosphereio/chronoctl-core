@@ -68,16 +68,19 @@ type Configv1Monitor struct {
 	// If this is not set, it will default to 60s.
 	IntervalSecs int32 `json:"interval_secs,omitempty"`
 
-	// PromQL query. If set, graphite_query cannot be set.
+	// PromQL query. If set, no other queries can be set.
 	// Example: up{job=\"prometheus\"} == 0
 	PrometheusQuery string `json:"prometheus_query,omitempty"`
 
-	// Graphite query. If set, prometheus_query cannot be set.
+	// Graphite query. If set, no other queries can be set.
 	// Example: sumSeries(stats.timers.*.mean_90)
 	GraphiteQuery string `json:"graphite_query,omitempty"`
 
 	// schedule
 	Schedule *MonitorSchedule `json:"schedule,omitempty"`
+
+	// Logging query. If set, no other queries can be set.
+	LoggingQuery string `json:"logging_query,omitempty"`
 }
 
 // Validate validates this configv1 monitor
