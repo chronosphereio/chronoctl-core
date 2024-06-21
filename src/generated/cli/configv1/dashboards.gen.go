@@ -213,7 +213,7 @@ func UpdateDashboard(
 	res, err := client.UpdateDashboard(&config_v1.UpdateDashboardParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateDashboardBody{
+		Body: &models.ConfigV1UpdateDashboardBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			Dashboard:       entity.Spec,

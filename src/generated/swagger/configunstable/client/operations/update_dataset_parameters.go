@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
 
 // NewUpdateDatasetParams creates a new UpdateDatasetParams object,
@@ -62,7 +64,7 @@ UpdateDatasetParams contains all the parameters to send to the API endpoint
 type UpdateDatasetParams struct {
 
 	// Body.
-	Body UpdateDatasetBody
+	Body *models.ConfigUnstableUpdateDatasetBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateDatasetParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update dataset params
-func (o *UpdateDatasetParams) WithBody(body UpdateDatasetBody) *UpdateDatasetParams {
+func (o *UpdateDatasetParams) WithBody(body *models.ConfigUnstableUpdateDatasetBody) *UpdateDatasetParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update dataset params
-func (o *UpdateDatasetParams) SetBody(body UpdateDatasetBody) {
+func (o *UpdateDatasetParams) SetBody(body *models.ConfigUnstableUpdateDatasetBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateDatasetParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

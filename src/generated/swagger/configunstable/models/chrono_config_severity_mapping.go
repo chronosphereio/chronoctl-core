@@ -22,7 +22,7 @@ type ChronoConfigSeverityMapping struct {
 	Severity string `json:"severity,omitempty"`
 
 	// chronosphere severity
-	ChronosphereSeverity SeverityMappingSeverity `json:"chronosphere_severity,omitempty"`
+	ChronosphereSeverity ChronoConfigSeverityMappingSeverity `json:"chronosphere_severity,omitempty"`
 }
 
 // Validate validates this chrono config severity mapping

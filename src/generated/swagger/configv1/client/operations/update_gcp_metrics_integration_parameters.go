@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateGcpMetricsIntegrationParams creates a new UpdateGcpMetricsIntegrationParams object,
@@ -62,7 +64,7 @@ UpdateGcpMetricsIntegrationParams contains all the parameters to send to the API
 type UpdateGcpMetricsIntegrationParams struct {
 
 	// Body.
-	Body UpdateGcpMetricsIntegrationBody
+	Body *models.ConfigV1UpdateGcpMetricsIntegrationBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateGcpMetricsIntegrationParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update gcp metrics integration params
-func (o *UpdateGcpMetricsIntegrationParams) WithBody(body UpdateGcpMetricsIntegrationBody) *UpdateGcpMetricsIntegrationParams {
+func (o *UpdateGcpMetricsIntegrationParams) WithBody(body *models.ConfigV1UpdateGcpMetricsIntegrationBody) *UpdateGcpMetricsIntegrationParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update gcp metrics integration params
-func (o *UpdateGcpMetricsIntegrationParams) SetBody(body UpdateGcpMetricsIntegrationBody) {
+func (o *UpdateGcpMetricsIntegrationParams) SetBody(body *models.ConfigV1UpdateGcpMetricsIntegrationBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateGcpMetricsIntegrationParams) WriteToRequest(r runtime.ClientReque
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

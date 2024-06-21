@@ -213,7 +213,7 @@ func UpdateMonitor(
 	res, err := client.UpdateMonitor(&config_v1.UpdateMonitorParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateMonitorBody{
+		Body: &models.ConfigV1UpdateMonitorBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			Monitor:         entity.Spec,
@@ -527,10 +527,12 @@ spec:
     # Optional setting for configuring how often alerts are evaluated.
     # If this is not set, it will default to 60s.
     interval_secs: <integer>
-    # PromQL query. If set, graphite_query cannot be set.
+    # PromQL query. If set, no other queries can be set.
     prometheus_query: <string>
-    # Graphite query. If set, prometheus_query cannot be set.
+    # Graphite query. If set, no other queries can be set.
     graphite_query: <string>
+    # Logging query. If set, no other queries can be set.
+    logging_query: <string>
     collection:
         slug: <string>
         # Type values must match entitiespb.Collection.CollectionType.

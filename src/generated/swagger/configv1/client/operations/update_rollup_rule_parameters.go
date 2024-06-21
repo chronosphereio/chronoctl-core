@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateRollupRuleParams creates a new UpdateRollupRuleParams object,
@@ -62,7 +64,7 @@ UpdateRollupRuleParams contains all the parameters to send to the API endpoint
 type UpdateRollupRuleParams struct {
 
 	// Body.
-	Body UpdateRollupRuleBody
+	Body *models.ConfigV1UpdateRollupRuleBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateRollupRuleParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update rollup rule params
-func (o *UpdateRollupRuleParams) WithBody(body UpdateRollupRuleBody) *UpdateRollupRuleParams {
+func (o *UpdateRollupRuleParams) WithBody(body *models.ConfigV1UpdateRollupRuleBody) *UpdateRollupRuleParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update rollup rule params
-func (o *UpdateRollupRuleParams) SetBody(body UpdateRollupRuleBody) {
+func (o *UpdateRollupRuleParams) SetBody(body *models.ConfigV1UpdateRollupRuleBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateRollupRuleParams) WriteToRequest(r runtime.ClientRequest, reg str
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

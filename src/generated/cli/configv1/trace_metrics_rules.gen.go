@@ -213,7 +213,7 @@ func UpdateTraceMetricsRule(
 	res, err := client.UpdateTraceMetricsRule(&config_v1.UpdateTraceMetricsRuleParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateTraceMetricsRuleBody{
+		Body: &models.ConfigV1UpdateTraceMetricsRuleBody{
 			CreateIfMissing:  opts.CreateIfMissing,
 			DryRun:           opts.DryRun,
 			TraceMetricsRule: entity.Spec,

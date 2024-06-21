@@ -14,7 +14,8 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// RollupRuleMetricType rollup rule metric type
+// RollupRuleMetricType  - CUMULATIVE_COUNTER: Alias of COUNTER.
+//   - DELTA_COUNTER: Alias of DELTA.
 //
 // swagger:model RollupRuleMetricType
 type RollupRuleMetricType string

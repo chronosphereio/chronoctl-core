@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateGcpMetricsIntegrationDefault) readResponse(response runtime.Clien
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateGcpMetricsIntegrationBody update gcp metrics integration body
-swagger:model UpdateGcpMetricsIntegrationBody
-*/
-type UpdateGcpMetricsIntegrationBody struct {
-
-	// If true, the GcpMetricsIntegration will be created if it does not already exist, identified by slug. If false, an error will be returned if the GcpMetricsIntegration does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the GcpMetricsIntegration will not be created nor updated, and no response GcpMetricsIntegration will be returned. The response will return an error if the given GcpMetricsIntegration is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// gcp metrics integration
-	GcpMetricsIntegration *models.Configv1GcpMetricsIntegration `json:"gcp_metrics_integration,omitempty"`
-}
-
-// Validate validates this update gcp metrics integration body
-func (o *UpdateGcpMetricsIntegrationBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateGcpMetricsIntegration(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateGcpMetricsIntegrationBody) validateGcpMetricsIntegration(formats strfmt.Registry) error {
-	if swag.IsZero(o.GcpMetricsIntegration) { // not required
-		return nil
-	}
-
-	if o.GcpMetricsIntegration != nil {
-		if err := o.GcpMetricsIntegration.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "gcp_metrics_integration")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "gcp_metrics_integration")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update gcp metrics integration body based on the context it is used
-func (o *UpdateGcpMetricsIntegrationBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateGcpMetricsIntegration(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateGcpMetricsIntegrationBody) contextValidateGcpMetricsIntegration(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.GcpMetricsIntegration != nil {
-
-		if swag.IsZero(o.GcpMetricsIntegration) { // not required
-			return nil
-		}
-
-		if err := o.GcpMetricsIntegration.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "gcp_metrics_integration")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "gcp_metrics_integration")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateGcpMetricsIntegrationBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateGcpMetricsIntegrationBody) UnmarshalBinary(b []byte) error {
-	var res UpdateGcpMetricsIntegrationBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

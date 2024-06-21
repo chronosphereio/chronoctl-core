@@ -1,5 +1,12 @@
 # Releases
 
+## Unreleased
+
+### Added
+* Adds new resource `v1/config/TraceBehaviorConfig`
+* Adds new field `logging_query` to `v1/config/Monitor`
+* Adds new field `group_by` to `v1/config/NotificationPolicy`
+
 ## v1.6.0
 
 ## Added

@@ -211,7 +211,7 @@ func UpdateDashboard(
 	res, err := client.UpdateDashboard(&config_unstable.UpdateDashboardParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_unstable.UpdateDashboardBody{
+		Body: &models.ConfigUnstableUpdateDashboardBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			Dashboard:       entity.Spec,
 		},

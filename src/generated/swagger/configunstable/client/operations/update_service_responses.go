@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateServiceDefault) readResponse(response runtime.ClientResponse, con
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateServiceBody update service body
-swagger:model UpdateServiceBody
-*/
-type UpdateServiceBody struct {
-
-	// If true, the Service will be created if it does not already exist, identified by slug. If false, an error will be returned if the Service does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the Service will not be created nor updated, and no response Service will be returned. The response will return an error if the given Service is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// service
-	Service *models.ConfigunstableService `json:"service,omitempty"`
-}
-
-// Validate validates this update service body
-func (o *UpdateServiceBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateService(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateServiceBody) validateService(formats strfmt.Registry) error {
-	if swag.IsZero(o.Service) { // not required
-		return nil
-	}
-
-	if o.Service != nil {
-		if err := o.Service.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "service")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "service")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update service body based on the context it is used
-func (o *UpdateServiceBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateService(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateServiceBody) contextValidateService(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.Service != nil {
-
-		if swag.IsZero(o.Service) { // not required
-			return nil
-		}
-
-		if err := o.Service.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "service")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "service")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateServiceBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateServiceBody) UnmarshalBinary(b []byte) error {
-	var res UpdateServiceBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

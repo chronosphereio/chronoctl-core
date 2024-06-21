@@ -213,7 +213,7 @@ func UpdateBucket(
 	res, err := client.UpdateBucket(&config_v1.UpdateBucketParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateBucketBody{
+		Body: &models.ConfigV1UpdateBucketBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			Bucket:          entity.Spec,

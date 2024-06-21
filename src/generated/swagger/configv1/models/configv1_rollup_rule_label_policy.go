@@ -12,7 +12,9 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Configv1RollupRuleLabelPolicy configv1 rollup rule label policy
+// Configv1RollupRuleLabelPolicy TODO: consolidate w/ RecordingRule.LabelPolicy once both of these
+//
+//	entities implement the same label semantics.
 //
 // swagger:model configv1RollupRuleLabelPolicy
 type Configv1RollupRuleLabelPolicy struct {

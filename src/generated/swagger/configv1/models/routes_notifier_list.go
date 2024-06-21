@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -22,15 +23,76 @@ type RoutesNotifierList struct {
 
 	// Frequency at which to resend alerts.
 	RepeatIntervalSecs int32 `json:"repeat_interval_secs,omitempty"`
+
+	// group by
+	GroupBy *NotificationPolicyRoutesGroupBy `json:"group_by,omitempty"`
 }
 
 // Validate validates this routes notifier list
 func (m *RoutesNotifierList) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateGroupBy(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this routes notifier list based on context it is used
+func (m *RoutesNotifierList) validateGroupBy(formats strfmt.Registry) error {
+	if swag.IsZero(m.GroupBy) { // not required
+		return nil
+	}
+
+	if m.GroupBy != nil {
+		if err := m.GroupBy.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("group_by")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("group_by")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this routes notifier list based on the context it is used
 func (m *RoutesNotifierList) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateGroupBy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RoutesNotifierList) contextValidateGroupBy(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GroupBy != nil {
+
+		if swag.IsZero(m.GroupBy) { // not required
+			return nil
+		}
+
+		if err := m.GroupBy.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("group_by")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("group_by")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

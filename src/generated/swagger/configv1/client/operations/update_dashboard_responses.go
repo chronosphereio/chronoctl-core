@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateDashboardDefault) readResponse(response runtime.ClientResponse, c
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateDashboardBody update dashboard body
-swagger:model UpdateDashboardBody
-*/
-type UpdateDashboardBody struct {
-
-	// If true, the Dashboard will be created if it does not already exist, identified by slug. If false, an error will be returned if the Dashboard does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// dashboard
-	Dashboard *models.Configv1Dashboard `json:"dashboard,omitempty"`
-
-	// If true, the Dashboard will not be created nor updated, and no response Dashboard will be returned. The response will return an error if the given Dashboard is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-}
-
-// Validate validates this update dashboard body
-func (o *UpdateDashboardBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateDashboard(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateDashboardBody) validateDashboard(formats strfmt.Registry) error {
-	if swag.IsZero(o.Dashboard) { // not required
-		return nil
-	}
-
-	if o.Dashboard != nil {
-		if err := o.Dashboard.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "dashboard")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "dashboard")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update dashboard body based on the context it is used
-func (o *UpdateDashboardBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateDashboard(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateDashboardBody) contextValidateDashboard(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.Dashboard != nil {
-
-		if swag.IsZero(o.Dashboard) { // not required
-			return nil
-		}
-
-		if err := o.Dashboard.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "dashboard")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "dashboard")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateDashboardBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateDashboardBody) UnmarshalBinary(b []byte) error {
-	var res UpdateDashboardBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

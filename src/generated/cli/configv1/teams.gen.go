@@ -213,7 +213,7 @@ func UpdateTeam(
 	res, err := client.UpdateTeam(&config_v1.UpdateTeamParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateTeamBody{
+		Body: &models.ConfigV1UpdateTeamBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			Team:            entity.Spec,

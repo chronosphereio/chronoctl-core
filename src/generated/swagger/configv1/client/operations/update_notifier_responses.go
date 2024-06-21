@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateNotifierDefault) readResponse(response runtime.ClientResponse, co
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateNotifierBody update notifier body
-swagger:model UpdateNotifierBody
-*/
-type UpdateNotifierBody struct {
-
-	// If true, the Notifier will be created if it does not already exist, identified by slug. If false, an error will be returned if the Notifier does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the Notifier will not be created nor updated, and no response Notifier will be returned. The response will return an error if the given Notifier is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// notifier
-	Notifier *models.Configv1Notifier `json:"notifier,omitempty"`
-}
-
-// Validate validates this update notifier body
-func (o *UpdateNotifierBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateNotifier(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateNotifierBody) validateNotifier(formats strfmt.Registry) error {
-	if swag.IsZero(o.Notifier) { // not required
-		return nil
-	}
-
-	if o.Notifier != nil {
-		if err := o.Notifier.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "notifier")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "notifier")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update notifier body based on the context it is used
-func (o *UpdateNotifierBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateNotifier(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateNotifierBody) contextValidateNotifier(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.Notifier != nil {
-
-		if swag.IsZero(o.Notifier) { // not required
-			return nil
-		}
-
-		if err := o.Notifier.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "notifier")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "notifier")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateNotifierBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateNotifierBody) UnmarshalBinary(b []byte) error {
-	var res UpdateNotifierBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

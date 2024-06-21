@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateRollupRuleDefault) readResponse(response runtime.ClientResponse, 
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateRollupRuleBody update rollup rule body
-swagger:model UpdateRollupRuleBody
-*/
-type UpdateRollupRuleBody struct {
-
-	// If true, the RollupRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the RollupRule does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the RollupRule will not be created nor updated, and no response RollupRule will be returned. The response will return an error if the given RollupRule is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// rollup rule
-	RollupRule *models.Configv1RollupRule `json:"rollup_rule,omitempty"`
-}
-
-// Validate validates this update rollup rule body
-func (o *UpdateRollupRuleBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateRollupRule(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateRollupRuleBody) validateRollupRule(formats strfmt.Registry) error {
-	if swag.IsZero(o.RollupRule) { // not required
-		return nil
-	}
-
-	if o.RollupRule != nil {
-		if err := o.RollupRule.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "rollup_rule")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "rollup_rule")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update rollup rule body based on the context it is used
-func (o *UpdateRollupRuleBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateRollupRule(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateRollupRuleBody) contextValidateRollupRule(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.RollupRule != nil {
-
-		if swag.IsZero(o.RollupRule) { // not required
-			return nil
-		}
-
-		if err := o.RollupRule.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "rollup_rule")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "rollup_rule")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateRollupRuleBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateRollupRuleBody) UnmarshalBinary(b []byte) error {
-	var res UpdateRollupRuleBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

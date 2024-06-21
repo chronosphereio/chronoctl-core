@@ -230,7 +230,7 @@ func UpdateMutingRule(
 	res, err := client.UpdateMutingRule(&config_v1.UpdateMutingRuleParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateMutingRuleBody{
+		Body: &models.ConfigV1UpdateMutingRuleBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			MutingRule:      entity.Spec,

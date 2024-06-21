@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateBucketDefault) readResponse(response runtime.ClientResponse, cons
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateBucketBody update bucket body
-swagger:model UpdateBucketBody
-*/
-type UpdateBucketBody struct {
-
-	// bucket
-	Bucket *models.Configv1Bucket `json:"bucket,omitempty"`
-
-	// If true, the Bucket will be created if it does not already exist, identified by slug. If false, an error will be returned if the Bucket does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the Bucket will not be created nor updated, and no response Bucket will be returned. The response will return an error if the given Bucket is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-}
-
-// Validate validates this update bucket body
-func (o *UpdateBucketBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateBucket(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateBucketBody) validateBucket(formats strfmt.Registry) error {
-	if swag.IsZero(o.Bucket) { // not required
-		return nil
-	}
-
-	if o.Bucket != nil {
-		if err := o.Bucket.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "bucket")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "bucket")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update bucket body based on the context it is used
-func (o *UpdateBucketBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateBucket(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateBucketBody) contextValidateBucket(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.Bucket != nil {
-
-		if swag.IsZero(o.Bucket) { // not required
-			return nil
-		}
-
-		if err := o.Bucket.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "bucket")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "bucket")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateBucketBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateBucketBody) UnmarshalBinary(b []byte) error {
-	var res UpdateBucketBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

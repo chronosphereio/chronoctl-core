@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateRecordingRuleDefault) readResponse(response runtime.ClientRespons
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateRecordingRuleBody update recording rule body
-swagger:model UpdateRecordingRuleBody
-*/
-type UpdateRecordingRuleBody struct {
-
-	// If true, the RecordingRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the RecordingRule does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the RecordingRule will not be created nor updated, and no response RecordingRule will be returned. The response will return an error if the given RecordingRule is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// recording rule
-	RecordingRule *models.Configv1RecordingRule `json:"recording_rule,omitempty"`
-}
-
-// Validate validates this update recording rule body
-func (o *UpdateRecordingRuleBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateRecordingRule(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateRecordingRuleBody) validateRecordingRule(formats strfmt.Registry) error {
-	if swag.IsZero(o.RecordingRule) { // not required
-		return nil
-	}
-
-	if o.RecordingRule != nil {
-		if err := o.RecordingRule.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "recording_rule")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "recording_rule")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update recording rule body based on the context it is used
-func (o *UpdateRecordingRuleBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateRecordingRule(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateRecordingRuleBody) contextValidateRecordingRule(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.RecordingRule != nil {
-
-		if swag.IsZero(o.RecordingRule) { // not required
-			return nil
-		}
-
-		if err := o.RecordingRule.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "recording_rule")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "recording_rule")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateRecordingRuleBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateRecordingRuleBody) UnmarshalBinary(b []byte) error {
-	var res UpdateRecordingRuleBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

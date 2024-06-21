@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateDatasetDefault) readResponse(response runtime.ClientResponse, con
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateDatasetBody update dataset body
-swagger:model UpdateDatasetBody
-*/
-type UpdateDatasetBody struct {
-
-	// If true, the Dataset will be created if it does not already exist, identified by slug. If false, an error will be returned if the Dataset does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// dataset
-	Dataset *models.Configv1Dataset `json:"dataset,omitempty"`
-
-	// If true, the Dataset will not be created nor updated, and no response Dataset will be returned. The response will return an error if the given Dataset is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-}
-
-// Validate validates this update dataset body
-func (o *UpdateDatasetBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateDataset(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateDatasetBody) validateDataset(formats strfmt.Registry) error {
-	if swag.IsZero(o.Dataset) { // not required
-		return nil
-	}
-
-	if o.Dataset != nil {
-		if err := o.Dataset.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "dataset")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "dataset")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update dataset body based on the context it is used
-func (o *UpdateDatasetBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateDataset(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateDatasetBody) contextValidateDataset(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.Dataset != nil {
-
-		if swag.IsZero(o.Dataset) { // not required
-			return nil
-		}
-
-		if err := o.Dataset.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "dataset")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "dataset")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateDatasetBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateDatasetBody) UnmarshalBinary(b []byte) error {
-	var res UpdateDatasetBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

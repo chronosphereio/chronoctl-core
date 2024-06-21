@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
@@ -475,104 +472,5 @@ func (o *UpdateNoopEntityDefault) readResponse(response runtime.ClientResponse, 
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateNoopEntityBody update noop entity body
-swagger:model UpdateNoopEntityBody
-*/
-type UpdateNoopEntityBody struct {
-
-	// If true, the NoopEntity will be created if it does not already exist, identified by slug. If false, an error will be returned if the NoopEntity does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// noop entity
-	NoopEntity *models.ConfigunstableNoopEntity `json:"noop_entity,omitempty"`
-}
-
-// Validate validates this update noop entity body
-func (o *UpdateNoopEntityBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateNoopEntity(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateNoopEntityBody) validateNoopEntity(formats strfmt.Registry) error {
-	if swag.IsZero(o.NoopEntity) { // not required
-		return nil
-	}
-
-	if o.NoopEntity != nil {
-		if err := o.NoopEntity.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "noop_entity")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "noop_entity")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update noop entity body based on the context it is used
-func (o *UpdateNoopEntityBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateNoopEntity(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateNoopEntityBody) contextValidateNoopEntity(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.NoopEntity != nil {
-
-		if swag.IsZero(o.NoopEntity) { // not required
-			return nil
-		}
-
-		if err := o.NoopEntity.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "noop_entity")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "noop_entity")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateNoopEntityBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateNoopEntityBody) UnmarshalBinary(b []byte) error {
-	var res UpdateNoopEntityBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateMonitorParams creates a new UpdateMonitorParams object,
@@ -62,7 +64,7 @@ UpdateMonitorParams contains all the parameters to send to the API endpoint
 type UpdateMonitorParams struct {
 
 	// Body.
-	Body UpdateMonitorBody
+	Body *models.ConfigV1UpdateMonitorBody
 
 	// Slug.
 	Slug string
@@ -121,13 +123,13 @@ func (o *UpdateMonitorParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update monitor params
-func (o *UpdateMonitorParams) WithBody(body UpdateMonitorBody) *UpdateMonitorParams {
+func (o *UpdateMonitorParams) WithBody(body *models.ConfigV1UpdateMonitorBody) *UpdateMonitorParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update monitor params
-func (o *UpdateMonitorParams) SetBody(body UpdateMonitorBody) {
+func (o *UpdateMonitorParams) SetBody(body *models.ConfigV1UpdateMonitorBody) {
 	o.Body = body
 }
 
@@ -149,8 +151,10 @@ func (o *UpdateMonitorParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
 	}
 
 	// path param slug

@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateDerivedLabelDefault) readResponse(response runtime.ClientResponse
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateDerivedLabelBody update derived label body
-swagger:model UpdateDerivedLabelBody
-*/
-type UpdateDerivedLabelBody struct {
-
-	// If true, the DerivedLabel will be created if it does not already exist, identified by slug. If false, an error will be returned if the DerivedLabel does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// derived label
-	DerivedLabel *models.Configv1DerivedLabel `json:"derived_label,omitempty"`
-
-	// If true, the DerivedLabel will not be created nor updated, and no response DerivedLabel will be returned. The response will return an error if the given DerivedLabel is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-}
-
-// Validate validates this update derived label body
-func (o *UpdateDerivedLabelBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateDerivedLabel(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateDerivedLabelBody) validateDerivedLabel(formats strfmt.Registry) error {
-	if swag.IsZero(o.DerivedLabel) { // not required
-		return nil
-	}
-
-	if o.DerivedLabel != nil {
-		if err := o.DerivedLabel.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "derived_label")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "derived_label")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update derived label body based on the context it is used
-func (o *UpdateDerivedLabelBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateDerivedLabel(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateDerivedLabelBody) contextValidateDerivedLabel(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.DerivedLabel != nil {
-
-		if swag.IsZero(o.DerivedLabel) { // not required
-			return nil
-		}
-
-		if err := o.DerivedLabel.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "derived_label")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "derived_label")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateDerivedLabelBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateDerivedLabelBody) UnmarshalBinary(b []byte) error {
-	var res UpdateDerivedLabelBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

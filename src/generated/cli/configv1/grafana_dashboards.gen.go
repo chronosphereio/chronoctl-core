@@ -213,7 +213,7 @@ func UpdateGrafanaDashboard(
 	res, err := client.UpdateGrafanaDashboard(&config_v1.UpdateGrafanaDashboardParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateGrafanaDashboardBody{
+		Body: &models.ConfigV1UpdateGrafanaDashboardBody{
 			CreateIfMissing:  opts.CreateIfMissing,
 			DryRun:           opts.DryRun,
 			GrafanaDashboard: entity.Spec,

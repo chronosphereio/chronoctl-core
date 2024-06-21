@@ -346,7 +346,7 @@ func newResourcePoolsDeleteCmd() *cobra.Command {
 const ResourcePoolsScaffoldYAML = `api_version: v1/config
 kind: ResourcePools
 spec:
-    # Optional pools.
+    # Optional pools. Cannot set more than 20 pools.
     pools:
         - # Required name of the pool. Must be unique.
           name: <string>

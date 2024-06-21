@@ -6,14 +6,11 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
@@ -475,107 +472,5 @@ func (o *UpdateNotificationPolicyDefault) readResponse(response runtime.ClientRe
 		return err
 	}
 
-	return nil
-}
-
-/*
-UpdateNotificationPolicyBody update notification policy body
-swagger:model UpdateNotificationPolicyBody
-*/
-type UpdateNotificationPolicyBody struct {
-
-	// If true, the NotificationPolicy will be created if it does not already exist, identified by slug. If false, an error will be returned if the NotificationPolicy does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If true, the NotificationPolicy will not be created nor updated, and no response NotificationPolicy will be returned. The response will return an error if the given NotificationPolicy is invalid.
-	DryRun bool `json:"dry_run,omitempty"`
-
-	// notification policy
-	NotificationPolicy *models.Configv1NotificationPolicy `json:"notification_policy,omitempty"`
-}
-
-// Validate validates this update notification policy body
-func (o *UpdateNotificationPolicyBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateNotificationPolicy(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateNotificationPolicyBody) validateNotificationPolicy(formats strfmt.Registry) error {
-	if swag.IsZero(o.NotificationPolicy) { // not required
-		return nil
-	}
-
-	if o.NotificationPolicy != nil {
-		if err := o.NotificationPolicy.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "notification_policy")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "notification_policy")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this update notification policy body based on the context it is used
-func (o *UpdateNotificationPolicyBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.contextValidateNotificationPolicy(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UpdateNotificationPolicyBody) contextValidateNotificationPolicy(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.NotificationPolicy != nil {
-
-		if swag.IsZero(o.NotificationPolicy) { // not required
-			return nil
-		}
-
-		if err := o.NotificationPolicy.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("body" + "." + "notification_policy")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("body" + "." + "notification_policy")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *UpdateNotificationPolicyBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *UpdateNotificationPolicyBody) UnmarshalBinary(b []byte) error {
-	var res UpdateNotificationPolicyBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

@@ -213,7 +213,7 @@ func UpdateDataset(
 	res, err := client.UpdateDataset(&config_v1.UpdateDatasetParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateDatasetBody{
+		Body: &models.ConfigV1UpdateDatasetBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
 			Dataset:         entity.Spec,

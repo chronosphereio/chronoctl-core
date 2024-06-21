@@ -215,7 +215,7 @@ func UpdateTraceJaegerRemoteSamplingStrategy(
 	res, err := client.UpdateTraceJaegerRemoteSamplingStrategy(&config_v1.UpdateTraceJaegerRemoteSamplingStrategyParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: config_v1.UpdateTraceJaegerRemoteSamplingStrategyBody{
+		Body: &models.ConfigV1UpdateTraceJaegerRemoteSamplingStrategyBody{
 			CreateIfMissing:                   opts.CreateIfMissing,
 			DryRun:                            opts.DryRun,
 			TraceJaegerRemoteSamplingStrategy: entity.Spec,

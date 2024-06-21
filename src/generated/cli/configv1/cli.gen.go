@@ -32,6 +32,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewRollupRuleCmd())
 	root.AddCommand(NewServiceAccountCmd())
 	root.AddCommand(NewTeamCmd())
+	root.AddCommand(NewTraceBehaviorConfigCmd())
 	root.AddCommand(NewTraceJaegerRemoteSamplingStrategyCmd())
 	root.AddCommand(NewTraceMetricsRuleCmd())
 	root.AddCommand(NewTraceTailSamplingRulesCmd())
@@ -338,6 +339,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateTeam(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		TraceBehaviorConfigTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*TraceBehaviorConfig)
+			if !ok {
+				return types.WrongObjectErr((&TraceBehaviorConfig{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateTraceBehaviorConfig(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}
