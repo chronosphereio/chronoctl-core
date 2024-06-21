@@ -53,7 +53,7 @@ func (p pkgMetadata) Swagger() string {
 	return inflect.Camelize(fmt.Sprintf("%s_%s", p.Type, p.APIVersion))
 }
 
-// Model returns the model with the api version uncapitolized, e.g. "Configv1".
+// Model returns the model with the api version uncapitalized, e.g. "Configv1".
 func (p pkgMetadata) Model() string {
 	return fmt.Sprintf("%s%s", inflect.Camelize(p.Type), p.APIVersion)
 }
