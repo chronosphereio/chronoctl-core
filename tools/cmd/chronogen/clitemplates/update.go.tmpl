@@ -9,7 +9,7 @@ func Update{{ .Name }}(
 		Context: ctx,
 		{{- if .Entity.IsNotSingleton }}
 		Slug: entity.Spec.Slug,
-		Body: {{ .Pkg.Client }}.Update{{ .Name }}Body{
+		Body: &models.{{.Pkg.Swagger}}Update{{ .Name }}Body{
 		{{ else }}
 		Body: &models.{{.Pkg.Model}}Update{{ .Name }}Request{
 		{{- end }}
