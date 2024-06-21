@@ -1,6 +1,6 @@
 # Releases
 
-## Unreleased
+## v1.7.0
 
 ### Added
 * Adds new resource `v1/config/TraceBehaviorConfig`
