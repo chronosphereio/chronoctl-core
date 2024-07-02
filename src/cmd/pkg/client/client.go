@@ -19,6 +19,7 @@ package client
 import (
 	"errors"
 	"fmt"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -119,8 +120,7 @@ func (f *Flags) Transport(component transport.Component, basePath string) (*http
 	if err != nil {
 		return nil, err
 	}
-
-	apiToken, err := f.getAPIToken()
+	apiToken, err := f.getAPIToken(apiURL)
 	if err != nil {
 		return nil, err
 	}
@@ -170,7 +170,7 @@ func (f *Flags) getEntityNamespace() string {
 	return ""
 }
 
-func (f *Flags) getAPIToken() (string, error) {
+func (f *Flags) getAPIToken(apiURL string) (string, error) {
 	if f.APIToken != "" && f.APITokenFilename != "" {
 		return "", errors.New("only one of --api-token and --api-token-filename can be set")
 	}
@@ -191,7 +191,29 @@ func (f *Flags) getAPIToken() (string, error) {
 		return key, nil
 	}
 
-	return "", errors.New("client API token must be provided via --api-token, --api-token-filename, or " + env.ChronosphereAPITokenKey + " environment variable")
+	// Determine the org from the API URL to determine if we have a token stored for that org
+	URL, err := url.Parse(apiURL)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse API url %q: %w", apiURL, err)
+	}
+	orgSubdomain := strings.Split(URL.Hostname(), ".")[0]
+	t, err := getTokenFromStore(orgSubdomain)
+	if err != nil {
+		return "", errors.Join(err, errors.New("client API token must be provided via --api-token, --api-token-filename, "+env.ChronosphereAPITokenKey+" environment variable, or by authenticating with 'auth login'"))
+	}
+	return t, nil
+}
+
+func getTokenFromStore(org string) (string, error) {
+	store, err := auth.NewChronoctlStore()
+	if err != nil {
+		return "", fmt.Errorf("unable to get chronoctl store: %v", err)
+	}
+	t, err := store.Get(org)
+	if err != nil {
+		return "", fmt.Errorf("unable to get token for org %q from store: %v", org, err)
+	}
+	return string(t.Value), nil
 }
 
 func (f *Flags) getAPIURL(basePath string) (string, error) {

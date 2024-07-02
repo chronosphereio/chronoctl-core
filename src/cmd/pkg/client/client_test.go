@@ -181,12 +181,30 @@ func TestClientFlagsTransport(t *testing.T) {
 			wantBasePath: "/api",
 		},
 		{
-			name: "token not set",
+			name: "token and store not set",
 			flags: &Flags{
 				APIUrl: TestChronosphereURL,
 				store:  newTempStore(t),
 			},
-			wantErr: "client API token must be provided via --api-token, --api-token-filename, or CHRONOSPHERE_API_TOKEN environment variable",
+			wantErr: "client API token must be provided via --api-token, --api-token-filename, CHRONOSPHERE_API_TOKEN environment variable, or by authenticating with 'auth login'",
+		},
+		{
+			name: "token not set falls back to token store",
+			flags: &Flags{
+				APIUrl: TestChronosphereURL,
+				store: func() *token.Store {
+					store, err := token.NewFileStore(t.TempDir())
+					require.NoError(t, err)
+					require.NoError(t, store.Put("myorg", token.Token{
+						Value:  []byte("token"),
+						Expiry: time.Now().Add(time.Hour),
+					}))
+					return store
+				}(),
+			},
+			apiToken:     "token",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
 		},
 		{
 			name: "organization and default org not set",
