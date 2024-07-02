@@ -61,6 +61,10 @@ func Wrap(err error) error {
 	if !ok {
 		return errors.WithStack(err)
 	}
+	// If the error suggests the user is unauthenticated, recommend running auth login
+	if code == 401 {
+		msg = fmt.Sprintf("%s\n%s", msg, "You may want to authenticate with `auth login`.")
+	}
 	return errors.WithStack(&Error{
 		cause:     err,
 		Operation: getOperation(err),
