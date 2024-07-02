@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/client"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/token"
 
 	"github.com/stretchr/testify/require"
@@ -277,8 +277,8 @@ func TestAuthLogin(t *testing.T) {
 				}()
 			}
 
-			t.Setenv(client.ChronosphereOrgNameKey, tt.envChronosphereOrgName)
-			t.Setenv(client.ChronosphereOrgKey, tt.envChronosphereOrg)
+			t.Setenv(env.ChronosphereOrgNameKey, tt.envChronosphereOrgName)
+			t.Setenv(env.ChronosphereOrgKey, tt.envChronosphereOrg)
 			cmd.SetArgs(tt.flags)
 			err = cmd.Execute()
 			if tt.wantErr != nil {

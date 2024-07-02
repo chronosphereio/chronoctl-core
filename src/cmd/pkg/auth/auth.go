@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"cmp"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/client"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/output"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/token"
@@ -82,7 +81,7 @@ type loginOpts struct {
 
 func (o *loginOpts) registerFlags(cmd *cobra.Command) {
 	const loginPathFlag = "login-path"
-	cmd.Flags().StringVar(&o.orgName, "org-name", "", "The name of your team's Chronosphere organization. Defaults to "+client.ChronosphereOrgNameKey+" environment variable.")
+	cmd.Flags().StringVar(&o.orgName, "org-name", "", "The name of your team's Chronosphere organization. Defaults to "+env.ChronosphereOrgNameKey+" environment variable.")
 	cmd.Flags().StringVar(&o.loginPath, loginPathFlag, defaultLoginPath, "the path to the org's chronoctl login page")
 	cmd.Flags().MarkHidden(loginPathFlag) //nolint:errcheck
 	cmd.Flags().BoolVar(&o.skipSetDefaultOrg, "skip-set-default-org", false, "When true, will not the current org as default for future commands")

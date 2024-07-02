@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/client"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/token"
 
 	"github.com/pkg/errors"
@@ -50,8 +50,8 @@ func newLoginServer(store *token.Store, openFunc browserOpenFunc, opts *loginOpt
 
 	orgName := cmp.Or(
 		opts.orgName,
-		os.Getenv(client.ChronosphereOrgNameKey),
-		os.Getenv(client.ChronosphereOrgKey),
+		os.Getenv(env.ChronosphereOrgNameKey),
+		os.Getenv(env.ChronosphereOrgKey),
 		defaultOrg,
 	)
 	if orgName == "" {

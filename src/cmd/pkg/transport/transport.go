@@ -28,16 +28,13 @@ import (
 	httptransport "github.com/go-openapi/runtime/client"
 
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/buildinfo"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	xswagger "github.com/chronosphereio/chronoctl-core/src/x/swagger"
 )
 
 const (
 	apiURLFormat   = "https://%s.chronosphere.io%s"
 	apiTokenHeader = "api-token"
-
-	// OrgNameEnvVar is the name of the environment variable that can be used to set the
-	// Chronosphere organization name.
-	OrgNameEnvVar = "CHRONOSPHERE_ORG_NAME"
 )
 
 // Component is a value that indicates the part of the CLI that is invoking an
@@ -67,8 +64,8 @@ type RuntimeConfig struct {
 func New(config RuntimeConfig) (*httptransport.Runtime, error) {
 	if config.APIUrl == "" {
 		if config.OrgName == "" {
-			if config.OrgName = os.Getenv(OrgNameEnvVar); config.OrgName == "" {
-				return nil, errors.New("organization must be provided as a flag or via " + OrgNameEnvVar + " environment variable when the API URL isn't set")
+			if config.OrgName = os.Getenv(env.ChronosphereOrgNameKey); config.OrgName == "" {
+				return nil, errors.New("organization must be provided as a flag or via " + env.ChronosphereOrgNameKey + " environment variable when the API URL isn't set")
 			}
 		}
 		config.APIUrl = fmt.Sprintf(apiURLFormat, config.OrgName, config.DefaultBasePath)

@@ -21,11 +21,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/transport"
 	api "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/client/operations"
 	"github.com/chronosphereio/chronoctl-core/src/x/swagger"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestClientFlagsClient(t *testing.T) {
@@ -213,8 +215,8 @@ func TestClientFlagsTransport(t *testing.T) {
 	for _, tt := range tests {
 		for _, tp := range transports {
 			t.Run(fmt.Sprintf("%s %s", tt.name, tp.name), func(t *testing.T) {
-				t.Setenv(ChronosphereAPITokenKey, tt.apiToken)
-				t.Setenv(ChronosphereOrgNameKey, tt.orgName)
+				t.Setenv(env.ChronosphereAPITokenKey, tt.apiToken)
+				t.Setenv(env.ChronosphereOrgNameKey, tt.orgName)
 
 				tp, err := tt.flags.Transport(tp.component, "/api")
 				if tt.wantErr != "" {

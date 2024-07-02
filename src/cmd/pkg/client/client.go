@@ -27,6 +27,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/spf13/cobra"
 
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/transport"
 	config_unstable "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/client/operations"
 	config_v1 "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/client/operations"
@@ -41,15 +42,6 @@ const (
 	TestBadURL = "://bad.domain.io"
 
 	defaultTimeoutSeconds = 30
-
-	// ChronosphereOrgNameKey is the environment variable that specifies the Chronosphere customer organization
-	ChronosphereOrgNameKey = "CHRONOSPHERE_ORG_NAME"
-	// ChronosphereOrgKey is the environment variable that specifies the Chronosphere customer organization
-	ChronosphereOrgKey = "CHRONOSPHERE_ORG" // fallback for CHRONOSPHERE_ORG_NAME
-	// ChronosphereAPITokenKey is the environment variable that specifies the Chronosphere API token
-	ChronosphereAPITokenKey = "CHRONOSPHERE_API_TOKEN"
-	// ChronosphereEntityNamespace is the environment variable that specifies the Chronosphere entity namespace
-	ChronosphereEntityNamespace = "CHRONOSPHERE_ENTITY_NAMESPACE"
 )
 
 // Clients is a list of clients our generated CLI needs access to.
@@ -142,9 +134,9 @@ func (f *Flags) Transport(component transport.Component, basePath string) (*http
 
 // AddFlags adds client flags to a Cobra command.
 func (f *Flags) AddFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&f.APIToken, "api-token", "", "The client API token used to authenticate to user. Mutally exclusive with --api-token-filename. If both --api-token and --api-token-filename are unset, the "+ChronosphereAPITokenKey+" environment variable is used.")
-	cmd.Flags().StringVar(&f.APITokenFilename, "api-token-filename", "", "A file containing the API token used for authentication. Mutally exclusive with --api-token. If both --api-token and --api-token-filename are unset, the "+ChronosphereAPITokenKey+" environment variable is used.")
-	cmd.Flags().StringVar(&f.OrgName, "org-name", "", "The name of your team's Chronosphere organization. Defaults to "+ChronosphereOrgNameKey+" environment variable.")
+	cmd.Flags().StringVar(&f.APIToken, "api-token", "", "The client API token used to authenticate to user. Mutally exclusive with --api-token-filename. If both --api-token and --api-token-filename are unset, the "+env.ChronosphereAPITokenKey+" environment variable is used.")
+	cmd.Flags().StringVar(&f.APITokenFilename, "api-token-filename", "", "A file containing the API token used for authentication. Mutally exclusive with --api-token. If both --api-token and --api-token-filename are unset, the "+env.ChronosphereAPITokenKey+" environment variable is used.")
+	cmd.Flags().StringVar(&f.OrgName, "org-name", "", "The name of your team's Chronosphere organization. Defaults to "+env.ChronosphereOrgNameKey+" environment variable.")
 	cmd.Flags().IntVar(&f.TimeoutSeconds, "timeout", defaultTimeoutSeconds, "The timeout of the request in seconds, defaults to 30 seconds")
 
 	cmd.Flags().StringVar(&f.APIUrl, "api-url", f.APIUrl, "The URL of the Chronosphere API. Defaults to https://<organization>.chronosphere.io/api.")
@@ -163,7 +155,7 @@ func (f *Flags) Timeout() time.Duration {
 }
 
 func (f *Flags) getEntityNamespace() string {
-	if ns := os.Getenv(ChronosphereEntityNamespace); ns != "" {
+	if ns := os.Getenv(env.ChronosphereEntityNamespace); ns != "" {
 		return ns
 	}
 	return ""
@@ -186,9 +178,9 @@ func (f *Flags) getAPIToken() (string, error) {
 		return strings.TrimSpace(string(b)), nil
 	}
 
-	if key := os.Getenv(ChronosphereAPITokenKey); key != "" {
+	if key := os.Getenv(env.ChronosphereAPITokenKey); key != "" {
 		return key, nil
 	}
 
-	return "", errors.New("client API token must be provided via --api-token, --api-token-filename, or " + ChronosphereAPITokenKey + " environment variable")
+	return "", errors.New("client API token must be provided via --api-token, --api-token-filename, or " + env.ChronosphereAPITokenKey + " environment variable")
 }
