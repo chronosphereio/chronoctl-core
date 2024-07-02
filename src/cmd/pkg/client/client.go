@@ -27,7 +27,9 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/spf13/cobra"
 
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/auth"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/token"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/transport"
 	config_unstable "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/client/operations"
 	config_v1 "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/client/operations"
@@ -60,6 +62,8 @@ type Flags struct {
 	APIUrl             string // dev flag
 	AllowHTTP          bool   // dev flag
 	InsecureSkipVerify bool   // dev flag
+
+	store *token.Store
 }
 
 // NewClientFlags returns a new Flags object.
@@ -196,8 +200,36 @@ func (f *Flags) getAPIURL(basePath string) (string, error) {
 	}
 	if f.OrgName == "" {
 		if f.OrgName = os.Getenv(env.ChronosphereOrgNameKey); f.OrgName == "" {
-			return "", errors.New("organization must be provided as a flag or via " + env.ChronosphereOrgNameKey + " environment variable when the API URL isn't set")
+			defaultOrg, err := f.checkDefaultOrg()
+			if err != nil {
+				return "", errors.Join(err, errors.New("organization must be provided as a flag, via the "+env.ChronosphereOrgNameKey+" environment variable, or by setting a default org when the API URL isn't set"))
+			}
+			fmt.Fprintf(os.Stderr, "assuming default org %q\n", defaultOrg) //nolint:errcheck
+			f.OrgName = defaultOrg
 		}
 	}
 	return fmt.Sprintf(apiURLFormat, f.OrgName, basePath), nil
+}
+
+func (f *Flags) checkDefaultOrg() (string, error) {
+	store, err := f.getStore()
+	if err != nil {
+		return "", err
+	}
+	defaultOrg, err := auth.GetDefaultOrg(store)
+	if err != nil {
+		return "", fmt.Errorf("unable to get default organization: %v", err)
+	}
+	return defaultOrg, nil
+}
+
+func (f *Flags) getStore() (*token.Store, error) {
+	if f.store != nil {
+		return f.store, nil
+	}
+	store, err := auth.NewChronoctlStore()
+	if err != nil {
+		return nil, fmt.Errorf("unable to get chronoctl store: %v", err)
+	}
+	return store, nil
 }
