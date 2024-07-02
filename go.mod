@@ -16,6 +16,7 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/karrick/tparse/v2 v2.8.2
 	github.com/olekukonko/tablewriter v0.0.5
+	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/spf13/cobra v1.6.1
