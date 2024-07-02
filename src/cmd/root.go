@@ -15,11 +15,13 @@
 package cmd
 
 import (
+	"github.com/spf13/cobra"
+
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/auth"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/ruleevaluations"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/unstable"
 	"github.com/chronosphereio/chronoctl-core/src/generated/cli/configv1"
-	"github.com/spf13/cobra"
 )
 
 // Options contain all the options for creating a new chronoctl command.
@@ -47,6 +49,7 @@ func New(options Options) (*cobra.Command, error) {
 	cmd.AddCommand(NewApplyCommand(options.ApplyOptions))
 	cmd.AddCommand(unstable.NewCommand())
 	cmd.AddCommand(ruleevaluations.NewCommand())
+	cmd.AddCommand(auth.NewCommand())
 	configv1.AddCommandsTo(cmd)
 
 	return cmd, nil
