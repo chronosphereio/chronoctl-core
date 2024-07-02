@@ -60,6 +60,7 @@ Chronosphere:
 | `completion` | Generate the autocompletion script for the specified shell |
 | `help` | Help about any command |
 | `version` | Print the current version of chronoctl |
+| `auth` | Authenticate the chronoctl session |
 
 ## Building
 

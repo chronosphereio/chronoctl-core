@@ -1,5 +1,9 @@
 # Releases
 
+## Unreleased
+
+* New command: auth
+
 ## v1.7.0
 
 ### Added
