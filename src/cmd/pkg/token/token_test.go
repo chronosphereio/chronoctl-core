@@ -20,9 +20,7 @@ func TestFileStore(t *testing.T) {
 	require.NoError(t, err)
 	defer os.RemoveAll(root) // nolint:errcheck,gosec
 
-	store, err := NewFileStore(root)
-	assert.NoError(t, err)
-
+	store := NewFileStore(root)
 	_, err = store.Get("foo/bar")
 	assert.True(t, errors.Is(err, ErrNotExist))
 
@@ -128,9 +126,7 @@ func TestList(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			store, err := NewFileStore(t.TempDir())
-			require.NoError(t, err)
-
+			store := NewFileStore(t.TempDir())
 			for name, token := range tt.tokens {
 				require.NoError(t, store.Put(name, token))
 			}
@@ -144,8 +140,7 @@ func TestList(t *testing.T) {
 
 func TestList_NonTokenFileNotReturned(t *testing.T) {
 	tempDir := t.TempDir()
-	store, err := NewFileStore(tempDir)
-	require.NoError(t, err)
+	store := NewFileStore(tempDir)
 
 	// Create a file in the same directory that the token store uses and ensure it's not returned as a token entry
 	fd, err := os.Create(path.Join(tempDir, "randomFile"))

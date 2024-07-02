@@ -56,10 +56,10 @@ type Store struct {
 //
 // Paths passed to storage methods must be valid filesystem paths. Paths also
 // must be file paths, not directories.
-func NewFileStore(root string) (*Store, error) {
+func NewFileStore(root string) *Store {
 	return &Store{
 		root: root,
-	}, nil
+	}
 }
 
 // Get retrieves a token from the local file system.

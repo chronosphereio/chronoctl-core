@@ -47,10 +47,7 @@ func NewChronoctlStore() (*token.Store, error) {
 		return nil, errors.WithStack(err)
 	}
 	chronoctlCacheDir := filepath.Join(cacheDir, "chronoctl")
-	store, err := token.NewFileStore(chronoctlCacheDir)
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
+	store := token.NewFileStore(chronoctlCacheDir)
 	return store, nil
 }
 

@@ -254,8 +254,7 @@ func TestAuthLogin(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			store, err := token.NewFileStore(tmpDir)
-			require.NoError(t, err)
+			store := token.NewFileStore(tmpDir)
 			if tt.defaultOrg != "" {
 				require.NoError(t, store.Put(defaultOrgPath, token.Token{
 					Value:  []byte(tt.defaultOrg),
@@ -271,7 +270,7 @@ func TestAuthLogin(t *testing.T) {
 			// Send input to pipe asynchronously, as Write will block until reader.Read is called
 			if tt.dataFromStdin != "" {
 				go func() {
-					_, err = writer.Write([]byte(tt.dataFromStdin))
+					_, err := writer.Write([]byte(tt.dataFromStdin))
 					require.NoError(t, err)
 					require.NoError(t, writer.Close())
 				}()
@@ -280,7 +279,7 @@ func TestAuthLogin(t *testing.T) {
 			t.Setenv(env.ChronosphereOrgNameKey, tt.envChronosphereOrgName)
 			t.Setenv(env.ChronosphereOrgKey, tt.envChronosphereOrg)
 			cmd.SetArgs(tt.flags)
-			err = cmd.Execute()
+			err := cmd.Execute()
 			if tt.wantErr != nil {
 				require.ErrorContains(t, err, tt.wantErr.Error())
 				return
@@ -332,8 +331,7 @@ func TestAuthSetDefaultOrg(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			store, err := token.NewFileStore(t.TempDir())
-			require.NoError(t, err)
+			store := token.NewFileStore(t.TempDir())
 			if tt.existingDefaultOrg != "" {
 				require.NoError(t, store.Put(defaultOrgPath, token.Token{
 					Value:  []byte(tt.existingDefaultOrg),
@@ -344,7 +342,7 @@ func TestAuthSetDefaultOrg(t *testing.T) {
 			c := subcommand{store: store}
 			cmd := c.newSetDefaultOrgCmd()
 			cmd.SetArgs(tt.args)
-			err = cmd.Execute()
+			err := cmd.Execute()
 			if tt.wantErr != nil {
 				require.ErrorIs(t, err, tt.wantErr)
 				return
@@ -370,8 +368,7 @@ func TestAuthPrintSessionID(t *testing.T) {
 			name: "valid session id",
 			args: []string{tenantName},
 			store: func() *token.Store {
-				store, err := token.NewFileStore(t.TempDir())
-				require.NoError(t, err)
+				store := token.NewFileStore(t.TempDir())
 				require.NoError(t, store.Put(tenantName, token.Token{
 					Value:  []byte(validSessionID),
 					Expiry: time.Now().Add(time.Hour * 24),
@@ -384,8 +381,7 @@ func TestAuthPrintSessionID(t *testing.T) {
 			name: "expired session id",
 			args: []string{tenantName},
 			store: func() *token.Store {
-				store, err := token.NewFileStore(t.TempDir())
-				require.NoError(t, err)
+				store := token.NewFileStore(t.TempDir())
 				require.NoError(t, store.Put(tenantName, token.Token{
 					Value: []byte(validSessionID),
 					// Token expired an hour ago
@@ -396,31 +392,22 @@ func TestAuthPrintSessionID(t *testing.T) {
 			wantErr: token.ErrTokenExpired,
 		},
 		{
-			name: "session id doesn't exist",
-			args: []string{tenantName},
-			store: func() *token.Store {
-				store, err := token.NewFileStore(t.TempDir())
-				require.NoError(t, err)
-				return store
-			}(),
+			name:    "session id doesn't exist",
+			args:    []string{tenantName},
+			store:   token.NewFileStore(t.TempDir()),
 			wantErr: token.ErrNotExist,
 		},
 		{
-			name: "empty org fails",
-			args: []string{},
-			store: func() *token.Store {
-				store, err := token.NewFileStore(t.TempDir())
-				require.NoError(t, err)
-				return store
-			}(),
+			name:    "empty org fails",
+			args:    []string{},
+			store:   token.NewFileStore(t.TempDir()),
 			wantErr: errMustIncludeOrgName,
 		},
 		{
 			name: "multiple orgs fails",
 			args: []string{"fakeOrg1", "fakeOrg2"},
 			store: func() *token.Store {
-				store, err := token.NewFileStore(t.TempDir())
-				require.NoError(t, err)
+				store := token.NewFileStore(t.TempDir())
 				// Store contains both orgs, but we don't allow printing multiple orgs for simplicity
 				require.NoError(t, store.Put("fakeOrg1", token.Token{
 					Value:  []byte(validSessionID),
@@ -571,8 +558,7 @@ func TestAuthList(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			store, err := token.NewFileStore(t.TempDir())
-			require.NoError(t, err)
+			store := token.NewFileStore(t.TempDir())
 			for name, tok := range tt.tokens {
 				require.NoError(t, store.Put(name, tok))
 			}
@@ -583,7 +569,7 @@ func TestAuthList(t *testing.T) {
 			cmd.SetOut(stdout)
 			cmd.SetArgs([]string{"-o", "json"})
 
-			err = cmd.Execute()
+			err := cmd.Execute()
 			require.NoError(t, err)
 
 			if tt.wantNoOutput {
