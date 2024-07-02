@@ -263,7 +263,8 @@ func TestAuthLogin(t *testing.T) {
 				}))
 			}
 
-			cmd := newAuthLoginCmd(store, tt.openFunc)
+			c := subcommand{store: store}
+			cmd := c.newAuthLoginCmd(tt.openFunc)
 			reader, writer := io.Pipe()
 			cmd.SetIn(reader)
 
@@ -340,7 +341,8 @@ func TestAuthSetDefaultOrg(t *testing.T) {
 				}))
 			}
 
-			cmd := newSetDefaultOrgCmd(store)
+			c := subcommand{store: store}
+			cmd := c.newSetDefaultOrgCmd()
 			cmd.SetArgs(tt.args)
 			err = cmd.Execute()
 			if tt.wantErr != nil {
@@ -435,7 +437,8 @@ func TestAuthPrintSessionID(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cmd := newPrintAccessTokenCmd(tt.store)
+			c := subcommand{store: tt.store}
+			cmd := c.newPrintAccessTokenCmd()
 			cmd.SetArgs(tt.args)
 			stdout := &bytes.Buffer{}
 			cmd.SetOut(stdout)
@@ -574,7 +577,8 @@ func TestAuthList(t *testing.T) {
 				require.NoError(t, store.Put(name, tok))
 			}
 
-			cmd := newListCmd(store)
+			c := subcommand{store: store}
+			cmd := c.newListCmd()
 			stdout := &bytes.Buffer{}
 			cmd.SetOut(stdout)
 			cmd.SetArgs([]string{"-o", "json"})

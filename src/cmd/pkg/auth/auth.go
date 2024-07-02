@@ -11,7 +11,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"github.com/chronosphereio/chronoctl-core/src/cmd"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/client"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/output"
@@ -42,20 +41,37 @@ func NewChronoctlStore() (*token.Store, error) {
 }
 
 // NewCommand returns a command for Chronosphere authentication
-func NewCommand(store *token.Store) *cobra.Command {
+func NewCommand() *cobra.Command {
 	root := &cobra.Command{
 		Use:   "auth",
 		Short: "All commands related to authenticating the chronoctl session.",
 	}
 
 	root.AddGroup(groups.Commands)
+	c := subcommand{}
 	root.AddCommand(
-		newAuthLoginCmd(store, browser.OpenURL),
-		newSetDefaultOrgCmd(store),
-		newPrintAccessTokenCmd(store),
-		newListCmd(store),
+		c.newAuthLoginCmd(browser.OpenURL),
+		c.newSetDefaultOrgCmd(),
+		c.newPrintAccessTokenCmd(),
+		c.newListCmd(),
 	)
 	return root
+}
+
+type subcommand struct {
+	store *token.Store
+}
+
+// getStore returns a token store contained in the subcommand if one is defined, otherwise returns a NewChronoctlStore
+func (c *subcommand) getStore() (*token.Store, error) {
+	if c.store != nil {
+		return c.store, nil
+	}
+	store, err := NewChronoctlStore()
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	return store, nil
 }
 
 type loginOpts struct {
@@ -75,14 +91,18 @@ func (o *loginOpts) registerFlags(cmd *cobra.Command) {
 // browserOpenFunc is used to set the function that will be run to open the browser. Useful for testing with a fake browser.
 type browserOpenFunc func(URL string) error
 
-func newAuthLoginCmd(store *token.Store, openFunc browserOpenFunc) *cobra.Command {
+func (c *subcommand) newAuthLoginCmd(openFunc browserOpenFunc) *cobra.Command {
 	opts := &loginOpts{}
 	cmd := &cobra.Command{
 		Use:     "login",
 		GroupID: groups.Commands.ID,
 		Short:   "Authenticate the chronoctl session as your Chronosphere user.",
 		RunE: func(command *cobra.Command, strings []string) error {
-			ls, err := cmd.newLoginServer(store, openFunc, opts)
+			store, err := c.getStore()
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			ls, err := newLoginServer(store, openFunc, opts)
 			if err != nil {
 				return errors.WithStack(err)
 			}
@@ -94,12 +114,16 @@ func newAuthLoginCmd(store *token.Store, openFunc browserOpenFunc) *cobra.Comman
 	return cmd
 }
 
-func newSetDefaultOrgCmd(store *token.Store) *cobra.Command {
+func (c *subcommand) newSetDefaultOrgCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "set-default-org ORG_NAME",
 		GroupID: groups.Commands.ID,
 		Short:   "Sets the default Chronosphere organization for future commands.",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			store, err := c.getStore()
+			if err != nil {
+				return errors.WithStack(err)
+			}
 			if len(args) != 1 {
 				return errors.WithStack(errMustIncludeOrgName)
 			}
@@ -109,12 +133,16 @@ func newSetDefaultOrgCmd(store *token.Store) *cobra.Command {
 	return cmd
 }
 
-func newPrintAccessTokenCmd(store *token.Store) *cobra.Command {
+func (c *subcommand) newPrintAccessTokenCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "print-session-id ORG_NAME",
 		GroupID: groups.Commands.ID,
 		Short:   "Print the stored session id for a Chronosphere organization.",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			store, err := c.getStore()
+			if err != nil {
+				return errors.WithStack(err)
+			}
 			if len(args) != 1 {
 				return errors.WithStack(errMustIncludeOrgName)
 			}
@@ -135,7 +163,7 @@ type listEntry struct {
 	Default      bool
 }
 
-func newListCmd(store *token.Store) *cobra.Command {
+func (c *subcommand) newListCmd() *cobra.Command {
 	outputFlags := output.NewFlags()
 	cmd := &cobra.Command{
 		Use:     "list",
@@ -143,6 +171,10 @@ func newListCmd(store *token.Store) *cobra.Command {
 		Short:   "List all authenticated Chronosphere organizations.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			defer outputFlags.Close(cmd.OutOrStdout()) //nolint:errcheck
+			store, err := c.getStore()
+			if err != nil {
+				return errors.WithStack(err)
+			}
 			orgs, err := store.List()
 			if err != nil {
 				return errors.WithStack(err)
