@@ -42,6 +42,7 @@ const (
 	TestBadURL = "://bad.domain.io"
 
 	defaultTimeoutSeconds = 30
+	apiURLFormat          = "https://%s.chronosphere.io%s"
 )
 
 // Clients is a list of clients our generated CLI needs access to.
@@ -110,6 +111,11 @@ func (f *Flags) ConfigV1Client() (config_v1.ClientService, error) {
 
 // Transport returns a new transport for the given api base path.
 func (f *Flags) Transport(component transport.Component, basePath string) (*httptransport.Runtime, error) {
+	apiURL, err := f.getAPIURL(basePath)
+	if err != nil {
+		return nil, err
+	}
+
 	apiToken, err := f.getAPIToken()
 	if err != nil {
 		return nil, err
@@ -117,9 +123,8 @@ func (f *Flags) Transport(component transport.Component, basePath string) (*http
 
 	transport, err := transport.New(transport.RuntimeConfig{
 		Component:          component,
-		OrgName:            f.OrgName,
 		APIToken:           apiToken,
-		APIUrl:             f.APIUrl,
+		APIUrl:             apiURL,
 		InsecureSkipVerify: f.InsecureSkipVerify,
 		AllowHTTP:          f.AllowHTTP,
 		DefaultBasePath:    basePath,
@@ -183,4 +188,16 @@ func (f *Flags) getAPIToken() (string, error) {
 	}
 
 	return "", errors.New("client API token must be provided via --api-token, --api-token-filename, or " + env.ChronosphereAPITokenKey + " environment variable")
+}
+
+func (f *Flags) getAPIURL(basePath string) (string, error) {
+	if f.APIUrl != "" {
+		return f.APIUrl, nil
+	}
+	if f.OrgName == "" {
+		if f.OrgName = os.Getenv(env.ChronosphereOrgNameKey); f.OrgName == "" {
+			return "", errors.New("organization must be provided as a flag or via " + env.ChronosphereOrgNameKey + " environment variable when the API URL isn't set")
+		}
+	}
+	return fmt.Sprintf(apiURLFormat, f.OrgName, basePath), nil
 }

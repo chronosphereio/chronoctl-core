@@ -178,7 +178,7 @@ func (c *subcommand) newListCmd() *cobra.Command {
 			if err != nil {
 				return errors.WithStack(err)
 			}
-			defaultOrg, err := getDefaultOrg(store)
+			defaultOrg, err := GetDefaultOrg(store)
 			if err != nil {
 				// Proceed to list orgs even if we fail to get the default
 				defaultOrg = ""
@@ -212,63 +212,11 @@ func setDefaultOrg(store *token.Store, org string) error {
 	}))
 }
 
-func getDefaultOrg(store *token.Store) (string, error) {
+// GetDefaultOrg returns the default org within the store
+func GetDefaultOrg(store *token.Store) (string, error) {
 	org, err := store.Get(defaultOrgPath)
 	if err != nil {
 		return "", errors.WithStack(err)
 	}
 	return string(org.Value), nil
-}
-
-// trySetOrgSessionEnv sets Chronosphere environment variables if they are currently unset.
-// This only lasts for the duration of the command execution and does not persist.
-// TODO(sc-84204) This is a temporary fix while we're developing this feature outside of chronoctl-core.
-// Remove this when chronoctl-core sets transport config based on token store
-func trySetOrgSessionEnv(store *token.Store) error {
-	// Only try to set the API token if the environment variable is not already set to avoid interfering with the
-	// user's desired configuration.
-	if os.Getenv(client.ChronosphereAPITokenKey) != "" {
-		return nil
-	}
-
-	// Check if org is unset, otherwise use default org
-	org := cmp.Or(
-		os.Getenv(client.ChronosphereOrgNameKey),
-		os.Getenv(client.ChronosphereOrgKey),
-	)
-	if org == "" {
-		// The org is unset in environment variables, set the default org so we can use it in downstream commands if necessary
-		var err error
-		org, err = getDefaultOrg(store)
-		if err != nil {
-			// Swallow the error if the default org name expired or doesn't exist yet - this will happen during normal operation
-			if errors.Is(err, token.ErrTokenExpired) || errors.Is(err, token.ErrNotExist) {
-				return nil
-			}
-			return err
-		}
-		if org == "" {
-			// return early as there won't be a valid session id for an empty org
-			return errors.New("default org is unset")
-		}
-		if err := os.Setenv(client.ChronosphereOrgNameKey, org); err != nil {
-			// Best-effort attempt to reset the org name env var if we fail to set the environment variable
-			os.Setenv(client.ChronosphereOrgNameKey, "") //nolint:errcheck
-			return errors.WithStack(err)
-		}
-	}
-
-	sessionID, err := store.Get(org)
-	if err != nil {
-		// Swallow the error if the token expired or the token doesn't exist yet - these will happen during normal operation
-		if errors.Is(err, token.ErrTokenExpired) || errors.Is(err, token.ErrNotExist) {
-			return nil
-		}
-		return errors.WithStack(err)
-	}
-
-	if err := os.Setenv(client.ChronosphereAPITokenKey, string(sessionID.Value)); err != nil {
-		return errors.WithStack(err)
-	}
-	return nil
 }

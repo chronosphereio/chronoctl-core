@@ -21,19 +21,16 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 	"runtime"
 
 	httpruntime "github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
 
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/buildinfo"
-	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	xswagger "github.com/chronosphereio/chronoctl-core/src/x/swagger"
 )
 
 const (
-	apiURLFormat   = "https://%s.chronosphere.io%s"
 	apiTokenHeader = "api-token"
 )
 
@@ -51,7 +48,6 @@ var (
 // RuntimeConfig is a struct that contains the configuration for creating a new HTTP transport
 type RuntimeConfig struct {
 	Component          Component
-	OrgName            string
 	APIToken           string
 	APIUrl             string
 	InsecureSkipVerify bool
@@ -62,15 +58,6 @@ type RuntimeConfig struct {
 
 // New creates a new HTTP transport that can communicate with the Chronosphere API.
 func New(config RuntimeConfig) (*httptransport.Runtime, error) {
-	if config.APIUrl == "" {
-		if config.OrgName == "" {
-			if config.OrgName = os.Getenv(env.ChronosphereOrgNameKey); config.OrgName == "" {
-				return nil, errors.New("organization must be provided as a flag or via " + env.ChronosphereOrgNameKey + " environment variable when the API URL isn't set")
-			}
-		}
-		config.APIUrl = fmt.Sprintf(apiURLFormat, config.OrgName, config.DefaultBasePath)
-	}
-
 	apiURL, err := url.Parse(config.APIUrl)
 	if err != nil {
 		return nil, fmt.Errorf("unable to parse URL of Chronosphere URL: %v", err)
