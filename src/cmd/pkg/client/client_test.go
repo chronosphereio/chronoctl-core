@@ -85,9 +85,9 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "all necessary flags specified",
 			flags: &Flags{
-				APIUrl:   TestChronosphereURL,
-				APIToken: "token",
-				store:    token.NewFileStore(t.TempDir()),
+				APIUrl:        TestChronosphereURL,
+				APIToken:      "token",
+				TokenStoreDir: t.TempDir(),
 			},
 			wantHost:     "myorg.chronosphere.io",
 			wantBasePath: "/api",
@@ -95,9 +95,9 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "fall back to environment variable for organization name",
 			flags: &Flags{
-				APIToken: "token",
-				OrgName:  "specialorg",
-				store:    token.NewFileStore(t.TempDir()),
+				APIToken:      "token",
+				OrgName:       "specialorg",
+				TokenStoreDir: t.TempDir(),
 			},
 			wantHost:     "specialorg.chronosphere.io",
 			wantBasePath: "/api",
@@ -105,10 +105,10 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "use HTTP",
 			flags: &Flags{
-				APIUrl:    "http://localhost:8000/",
-				APIToken:  "token",
-				AllowHTTP: true,
-				store:     token.NewFileStore(t.TempDir()),
+				APIUrl:        "http://localhost:8000/",
+				APIToken:      "token",
+				AllowHTTP:     true,
+				TokenStoreDir: t.TempDir(),
 			},
 			wantHost:     "localhost:8000",
 			wantBasePath: "/",
@@ -119,7 +119,7 @@ func TestClientFlagsTransport(t *testing.T) {
 				APIUrl:             TestChronosphereURL,
 				APIToken:           "token",
 				InsecureSkipVerify: true,
-				store:              token.NewFileStore(t.TempDir()),
+				TokenStoreDir:      t.TempDir(),
 			},
 			wantHost:               "myorg.chronosphere.io",
 			wantBasePath:           "/api",
@@ -131,7 +131,7 @@ func TestClientFlagsTransport(t *testing.T) {
 				APIUrl:           TestChronosphereURL,
 				APIToken:         "token-param",
 				APITokenFilename: "./testdata/token",
-				store:            token.NewFileStore(t.TempDir()),
+				TokenStoreDir:    t.TempDir(),
 			},
 
 			wantErr: "only one of --api-token and --api-token-filename can be set",
@@ -139,9 +139,9 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "--api-token overrides environment variable",
 			flags: &Flags{
-				APIUrl:   TestChronosphereURL,
-				APIToken: "token-param",
-				store:    token.NewFileStore(t.TempDir()),
+				APIUrl:        TestChronosphereURL,
+				APIToken:      "token-param",
+				TokenStoreDir: t.TempDir(),
 			},
 
 			apiToken:     "token-param",
@@ -153,7 +153,7 @@ func TestClientFlagsTransport(t *testing.T) {
 			flags: &Flags{
 				APIUrl:           TestChronosphereURL,
 				APITokenFilename: "./testdata/token",
-				store:            token.NewFileStore(t.TempDir()),
+				TokenStoreDir:    t.TempDir(),
 			},
 
 			apiToken:     "token-from-file",
@@ -165,7 +165,7 @@ func TestClientFlagsTransport(t *testing.T) {
 			flags: &Flags{
 				APIUrl:           TestChronosphereURL,
 				APITokenFilename: "./testdata/no_token",
-				store:            token.NewFileStore(t.TempDir()),
+				TokenStoreDir:    t.TempDir(),
 			},
 
 			wantErr: "reading api token from file ./testdata/no_token: open ./testdata/no_token: no such file or directory",
@@ -173,8 +173,8 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "fall back to environment variable for API token",
 			flags: &Flags{
-				APIUrl: TestChronosphereURL,
-				store:  token.NewFileStore(t.TempDir()),
+				APIUrl:        TestChronosphereURL,
+				TokenStoreDir: t.TempDir(),
 			},
 			apiToken:     "token",
 			wantHost:     "myorg.chronosphere.io",
@@ -183,8 +183,8 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "token and store not set",
 			flags: &Flags{
-				APIUrl: TestChronosphereURL,
-				store:  token.NewFileStore(t.TempDir()),
+				APIUrl:        TestChronosphereURL,
+				TokenStoreDir: t.TempDir(),
 			},
 			wantErr: "client API token must be provided via --api-token, --api-token-filename, CHRONOSPHERE_API_TOKEN environment variable, or by authenticating with 'auth login'",
 		},
@@ -192,13 +192,15 @@ func TestClientFlagsTransport(t *testing.T) {
 			name: "token not set falls back to token store",
 			flags: &Flags{
 				APIUrl: TestChronosphereURL,
-				store: func() *token.Store {
-					store := token.NewFileStore(t.TempDir())
+				TokenStoreDir: func() string {
+					dir := t.TempDir()
+					// Populate store directory with a token
+					store := token.NewFileStore(dir)
 					require.NoError(t, store.Put("myorg", token.Token{
 						Value:  []byte("token"),
 						Expiry: time.Now().Add(time.Hour),
 					}))
-					return store
+					return dir
 				}(),
 			},
 			apiToken:     "token",
@@ -208,8 +210,8 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "organization and default org not set",
 			flags: &Flags{
-				APIToken: "token",
-				store:    token.NewFileStore(t.TempDir()),
+				APIToken:      "token",
+				TokenStoreDir: t.TempDir(),
 			},
 			wantErr: "organization must be provided as a flag, via the CHRONOSPHERE_ORG_NAME environment variable, or by setting a default org when the API URL isn't set",
 		},
@@ -217,13 +219,15 @@ func TestClientFlagsTransport(t *testing.T) {
 			name: "organization not set falls back to default",
 			flags: &Flags{
 				APIToken: "token",
-				store: func() *token.Store {
-					store := token.NewFileStore(t.TempDir())
+				TokenStoreDir: func() string {
+					dir := t.TempDir()
+					// Populate store directory with a token
+					store := token.NewFileStore(dir)
 					require.NoError(t, store.Put("default-org", token.Token{
 						Value:  []byte("myorg"),
 						Expiry: time.Now().Add(time.Hour),
 					}))
-					return store
+					return dir
 				}(),
 			},
 			wantHost:     "myorg.chronosphere.io",
@@ -232,18 +236,18 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "invalid URL",
 			flags: &Flags{
-				APIUrl:   TestBadURL,
-				APIToken: "token",
-				store:    token.NewFileStore(t.TempDir()),
+				APIUrl:        TestBadURL,
+				APIToken:      "token",
+				TokenStoreDir: t.TempDir(),
 			},
 			wantErr: `unable to parse URL of Chronosphere URL: parse "://bad.domain.io": missing protocol scheme`,
 		},
 		{
 			name: "URL scheme is HTTP but HTTP wasn't allowed",
 			flags: &Flags{
-				APIUrl:   "http://localhost:8000",
-				APIToken: "token",
-				store:    token.NewFileStore(t.TempDir()),
+				APIUrl:        "http://localhost:8000",
+				APIToken:      "token",
+				TokenStoreDir: t.TempDir(),
 			},
 			wantErr: "the scheme of the API URL is HTTP but the --allow-http flag was not set",
 		},

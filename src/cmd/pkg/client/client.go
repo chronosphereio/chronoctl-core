@@ -63,8 +63,7 @@ type Flags struct {
 	APIUrl             string // dev flag
 	AllowHTTP          bool   // dev flag
 	InsecureSkipVerify bool   // dev flag
-
-	store *token.Store
+	TokenStoreDir      string // dev flag
 }
 
 // NewClientFlags returns a new Flags object.
@@ -156,6 +155,9 @@ func (f *Flags) AddFlags(cmd *cobra.Command) {
 
 	cmd.Flags().BoolVar(&f.InsecureSkipVerify, "insecure-skip-verify", false, "If true, TLS accepts any certificate presented by the server and any host name in that certificate. This should be used only for testing..")
 	cmd.Flags().MarkHidden("insecure-skip-verify") //nolint:errcheck
+
+	cmd.Flags().StringVar(&f.TokenStoreDir, "token-store-dir", "", "If set, overwrites the token store directory used to obtain a token for requests. This should be used only for testing..")
+	cmd.Flags().MarkHidden("token-store-dir") //nolint:errcheck
 }
 
 // Timeout returns the value of the timeout flag as a time.Duration.
@@ -197,17 +199,17 @@ func (f *Flags) getAPIToken(apiURL string) (string, error) {
 		return "", fmt.Errorf("failed to parse API url %q: %w", apiURL, err)
 	}
 	orgSubdomain := strings.Split(URL.Hostname(), ".")[0]
-	t, err := getTokenFromStore(orgSubdomain)
+	t, err := f.getTokenFromStore(orgSubdomain)
 	if err != nil {
 		return "", errors.Join(err, errors.New("client API token must be provided via --api-token, --api-token-filename, "+env.ChronosphereAPITokenKey+" environment variable, or by authenticating with 'auth login'"))
 	}
 	return t, nil
 }
 
-func getTokenFromStore(org string) (string, error) {
-	store, err := auth.NewChronoctlStore()
+func (f *Flags) getTokenFromStore(org string) (string, error) {
+	store, err := f.getStore()
 	if err != nil {
-		return "", fmt.Errorf("unable to get chronoctl store: %v", err)
+		return "", err
 	}
 	t, err := store.Get(org)
 	if err != nil {
@@ -246,8 +248,8 @@ func (f *Flags) checkDefaultOrg() (string, error) {
 }
 
 func (f *Flags) getStore() (*token.Store, error) {
-	if f.store != nil {
-		return f.store, nil
+	if f.TokenStoreDir != "" {
+		return token.NewFileStore(f.TokenStoreDir), nil
 	}
 	store, err := auth.NewChronoctlStore()
 	if err != nil {
