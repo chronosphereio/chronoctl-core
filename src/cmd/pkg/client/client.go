@@ -213,7 +213,7 @@ func (f *Flags) getTokenFromStore(org string) (string, error) {
 	}
 	t, err := store.Get(org)
 	if err != nil {
-		return "", fmt.Errorf("unable to get token for org %q from store: %v", org, err)
+		return "", fmt.Errorf("unable to get session ID for org %q from store: %v", org, err)
 	}
 	return string(t.Value), nil
 }

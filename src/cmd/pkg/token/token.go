@@ -33,10 +33,10 @@ const (
 
 var (
 	// ErrTokenExpired is returned from Get when a token is past its expiration.
-	ErrTokenExpired = errors.New("token expired")
+	ErrTokenExpired = errors.New("expired")
 
 	// ErrNotExist is returned when a token doesn't exist.
-	ErrNotExist = errors.New("token does not exist")
+	ErrNotExist = errors.New("does not exist")
 )
 
 // Token is a generic token stored with an expiration time.
@@ -71,13 +71,13 @@ func (s *Store) Get(path string) (Token, error) {
 			return Token{}, errors.WithStack(ErrNotExist)
 		}
 
-		return Token{}, errors.WithMessagef(err, "error opening %q to decode token", full)
+		return Token{}, errors.WithMessagef(err, "error opening %q to decode", full)
 	}
 	defer f.Close() // nolint:errcheck
 
 	var token Token
 	if err := json.NewDecoder(f).Decode(&token); err != nil {
-		return Token{}, errors.WithMessagef(err, "error decoding token from %q", full)
+		return Token{}, errors.WithMessagef(err, "error decoding from %q", full)
 	}
 
 	if time.Now().After(token.Expiry) {
@@ -125,7 +125,7 @@ func (s *Store) Put(path string, token Token) (putErr error) {
 	}
 
 	if err := json.NewEncoder(tmp).Encode(token); err != nil {
-		return errors.WithMessage(err, "error encoding token")
+		return errors.WithMessage(err, "error encoding")
 	}
 
 	if err := tmp.Close(); err != nil {
