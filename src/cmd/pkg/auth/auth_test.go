@@ -3,6 +3,7 @@ package auth
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -321,12 +322,12 @@ func TestAuthSetDefaultOrg(t *testing.T) {
 		{
 			name:    "empty org",
 			args:    []string{},
-			wantErr: errMustIncludeOrgName,
+			wantErr: errors.New("accepts 1 arg(s), received 0"),
 		},
 		{
 			name:    "multiple orgs",
 			args:    []string{"fakeOrg1", "fakeOrg2"},
-			wantErr: errMustIncludeOrgName,
+			wantErr: errors.New("accepts 1 arg(s), received 2"),
 		},
 	}
 	for _, tt := range tests {
@@ -344,7 +345,7 @@ func TestAuthSetDefaultOrg(t *testing.T) {
 			cmd.SetArgs(tt.args)
 			err := cmd.Execute()
 			if tt.wantErr != nil {
-				require.ErrorIs(t, err, tt.wantErr)
+				require.EqualError(t, err, tt.wantErr.Error())
 				return
 			}
 			require.NoError(t, err)
@@ -401,7 +402,7 @@ func TestAuthPrintSessionID(t *testing.T) {
 			name:    "empty org fails",
 			args:    []string{},
 			store:   token.NewFileStore(t.TempDir()),
-			wantErr: errMustIncludeOrgName,
+			wantErr: errors.New("accepts 1 arg(s), received 0"),
 		},
 		{
 			name: "multiple orgs fails",
@@ -419,7 +420,7 @@ func TestAuthPrintSessionID(t *testing.T) {
 				}))
 				return store
 			}(),
-			wantErr: errMustIncludeOrgName,
+			wantErr: errors.New("accepts 1 arg(s), received 2"),
 		},
 	}
 	for _, tt := range tests {
@@ -432,7 +433,7 @@ func TestAuthPrintSessionID(t *testing.T) {
 
 			err := cmd.Execute()
 			if tt.wantErr != nil {
-				require.ErrorIs(t, err, tt.wantErr)
+				require.EqualError(t, err, tt.wantErr.Error())
 				return
 			}
 			require.NoError(t, err)

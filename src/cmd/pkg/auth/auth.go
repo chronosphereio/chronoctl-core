@@ -130,13 +130,11 @@ func (c *subcommand) newSetDefaultOrgCmd() *cobra.Command {
 		Use:     "set-default-org ORG_NAME",
 		GroupID: groups.Commands.ID,
 		Short:   "Sets the default Chronosphere organization for future commands.",
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			store, err := c.getStore()
 			if err != nil {
 				return errors.WithStack(err)
-			}
-			if len(args) != 1 {
-				return errors.WithStack(errMustIncludeOrgName)
 			}
 			return setDefaultOrg(store, args[0])
 		},
@@ -149,13 +147,11 @@ func (c *subcommand) newPrintAccessTokenCmd() *cobra.Command {
 		Use:     "print-session-id ORG_NAME",
 		GroupID: groups.Commands.ID,
 		Short:   "Print the stored session id for a Chronosphere organization.",
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			store, err := c.getStore()
 			if err != nil {
 				return errors.WithStack(err)
-			}
-			if len(args) != 1 {
-				return errors.WithStack(errMustIncludeOrgName)
 			}
 			sessionIDToken, err := store.Get(args[0])
 			if err != nil {
