@@ -36,10 +36,6 @@ const (
 	defaultOrgPath   = "default-org"
 )
 
-var (
-	errMustIncludeOrgName = errors.New("A single organization name is required")
-)
-
 // NewChronoctlStore creates a new token store in the user's local cache directory to store short-lived chronoctl credentials
 func NewChronoctlStore() (*token.Store, error) {
 	cacheDir, err := os.UserCacheDir()
