@@ -91,7 +91,7 @@ type loginOpts struct {
 	skipSetDefaultOrg bool
 }
 
-func (o *loginOpts) registerFlags(cmd *cobra.Command) {
+func (o *loginOpts) addFlags(cmd *cobra.Command) {
 	const loginPathFlag = "login-path"
 	cmd.Flags().StringVar(&o.orgName, "org-name", "", "The name of your team's Chronosphere organization. Defaults to "+env.ChronosphereOrgNameKey+" environment variable.")
 	cmd.Flags().StringVar(&o.loginPath, loginPathFlag, defaultLoginPath, "the path to the org's chronoctl login page")
@@ -121,7 +121,7 @@ func (c *subcommand) newAuthLoginCmd(openFunc browserOpenFunc) *cobra.Command {
 		},
 	}
 
-	opts.registerFlags(cmd)
+	opts.addFlags(cmd)
 	return cmd
 }
 
