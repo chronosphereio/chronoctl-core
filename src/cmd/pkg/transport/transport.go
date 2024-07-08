@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 	"runtime"
 
 	httpruntime "github.com/go-openapi/runtime"
@@ -32,12 +31,7 @@ import (
 )
 
 const (
-	apiURLFormat   = "https://%s.chronosphere.io%s"
 	apiTokenHeader = "api-token"
-
-	// OrgNameEnvVar is the name of the environment variable that can be used to set the
-	// Chronosphere organization name.
-	OrgNameEnvVar = "CHRONOSPHERE_ORG_NAME"
 )
 
 // Component is a value that indicates the part of the CLI that is invoking an
@@ -54,7 +48,6 @@ var (
 // RuntimeConfig is a struct that contains the configuration for creating a new HTTP transport
 type RuntimeConfig struct {
 	Component          Component
-	OrgName            string
 	APIToken           string
 	APIUrl             string
 	InsecureSkipVerify bool
@@ -65,15 +58,6 @@ type RuntimeConfig struct {
 
 // New creates a new HTTP transport that can communicate with the Chronosphere API.
 func New(config RuntimeConfig) (*httptransport.Runtime, error) {
-	if config.APIUrl == "" {
-		if config.OrgName == "" {
-			if config.OrgName = os.Getenv(OrgNameEnvVar); config.OrgName == "" {
-				return nil, errors.New("organization must be provided as a flag or via " + OrgNameEnvVar + " environment variable when the API URL isn't set")
-			}
-		}
-		config.APIUrl = fmt.Sprintf(apiURLFormat, config.OrgName, config.DefaultBasePath)
-	}
-
 	apiURL, err := url.Parse(config.APIUrl)
 	if err != nil {
 		return nil, fmt.Errorf("unable to parse URL of Chronosphere URL: %v", err)

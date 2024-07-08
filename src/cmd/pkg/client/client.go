@@ -19,6 +19,7 @@ package client
 import (
 	"errors"
 	"fmt"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -27,6 +28,9 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/spf13/cobra"
 
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/auth"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/token"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/transport"
 	config_unstable "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/client/operations"
 	config_v1 "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/client/operations"
@@ -41,15 +45,7 @@ const (
 	TestBadURL = "://bad.domain.io"
 
 	defaultTimeoutSeconds = 30
-
-	// ChronosphereOrgNameKey is the environment variable that specifies the Chronosphere customer organization
-	ChronosphereOrgNameKey = "CHRONOSPHERE_ORG_NAME"
-	// ChronosphereOrgKey is the environment variable that specifies the Chronosphere customer organization
-	ChronosphereOrgKey = "CHRONOSPHERE_ORG" // fallback for CHRONOSPHERE_ORG_NAME
-	// ChronosphereAPITokenKey is the environment variable that specifies the Chronosphere API token
-	ChronosphereAPITokenKey = "CHRONOSPHERE_API_TOKEN"
-	// ChronosphereEntityNamespace is the environment variable that specifies the Chronosphere entity namespace
-	ChronosphereEntityNamespace = "CHRONOSPHERE_ENTITY_NAMESPACE"
+	apiURLFormat          = "https://%s.chronosphere.io%s"
 )
 
 // Clients is a list of clients our generated CLI needs access to.
@@ -67,6 +63,7 @@ type Flags struct {
 	APIUrl             string // dev flag
 	AllowHTTP          bool   // dev flag
 	InsecureSkipVerify bool   // dev flag
+	TokenStoreDir      string // dev flag
 }
 
 // NewClientFlags returns a new Flags object.
@@ -118,16 +115,19 @@ func (f *Flags) ConfigV1Client() (config_v1.ClientService, error) {
 
 // Transport returns a new transport for the given api base path.
 func (f *Flags) Transport(component transport.Component, basePath string) (*httptransport.Runtime, error) {
-	apiToken, err := f.getAPIToken()
+	apiURL, err := f.getAPIURL(basePath)
+	if err != nil {
+		return nil, err
+	}
+	apiToken, err := f.getAPIToken(apiURL)
 	if err != nil {
 		return nil, err
 	}
 
 	transport, err := transport.New(transport.RuntimeConfig{
 		Component:          component,
-		OrgName:            f.OrgName,
 		APIToken:           apiToken,
-		APIUrl:             f.APIUrl,
+		APIUrl:             apiURL,
 		InsecureSkipVerify: f.InsecureSkipVerify,
 		AllowHTTP:          f.AllowHTTP,
 		DefaultBasePath:    basePath,
@@ -142,9 +142,9 @@ func (f *Flags) Transport(component transport.Component, basePath string) (*http
 
 // AddFlags adds client flags to a Cobra command.
 func (f *Flags) AddFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&f.APIToken, "api-token", "", "The client API token used to authenticate to user. Mutally exclusive with --api-token-filename. If both --api-token and --api-token-filename are unset, the "+ChronosphereAPITokenKey+" environment variable is used.")
-	cmd.Flags().StringVar(&f.APITokenFilename, "api-token-filename", "", "A file containing the API token used for authentication. Mutally exclusive with --api-token. If both --api-token and --api-token-filename are unset, the "+ChronosphereAPITokenKey+" environment variable is used.")
-	cmd.Flags().StringVar(&f.OrgName, "org-name", "", "The name of your team's Chronosphere organization. Defaults to "+ChronosphereOrgNameKey+" environment variable.")
+	cmd.Flags().StringVar(&f.APIToken, "api-token", "", "The client API token used to authenticate to user. Mutally exclusive with --api-token-filename. If both --api-token and --api-token-filename are unset, the "+env.ChronosphereAPITokenKey+" environment variable is used.")
+	cmd.Flags().StringVar(&f.APITokenFilename, "api-token-filename", "", "A file containing the API token used for authentication. Mutally exclusive with --api-token. If both --api-token and --api-token-filename are unset, the "+env.ChronosphereAPITokenKey+" environment variable is used.")
+	cmd.Flags().StringVar(&f.OrgName, "org-name", "", "The name of your team's Chronosphere organization. Defaults to "+env.ChronosphereOrgNameKey+" environment variable.")
 	cmd.Flags().IntVar(&f.TimeoutSeconds, "timeout", defaultTimeoutSeconds, "The timeout of the request in seconds, defaults to 30 seconds")
 
 	cmd.Flags().StringVar(&f.APIUrl, "api-url", f.APIUrl, "The URL of the Chronosphere API. Defaults to https://<organization>.chronosphere.io/api.")
@@ -155,6 +155,9 @@ func (f *Flags) AddFlags(cmd *cobra.Command) {
 
 	cmd.Flags().BoolVar(&f.InsecureSkipVerify, "insecure-skip-verify", false, "If true, TLS accepts any certificate presented by the server and any host name in that certificate. This should be used only for testing..")
 	cmd.Flags().MarkHidden("insecure-skip-verify") //nolint:errcheck
+
+	cmd.Flags().StringVar(&f.TokenStoreDir, "token-store-dir", "", "If set, overwrites the token store directory used to obtain a token for requests. This should be used only for testing..")
+	cmd.Flags().MarkHidden("token-store-dir") //nolint:errcheck
 }
 
 // Timeout returns the value of the timeout flag as a time.Duration.
@@ -163,13 +166,13 @@ func (f *Flags) Timeout() time.Duration {
 }
 
 func (f *Flags) getEntityNamespace() string {
-	if ns := os.Getenv(ChronosphereEntityNamespace); ns != "" {
+	if ns := os.Getenv(env.ChronosphereEntityNamespace); ns != "" {
 		return ns
 	}
 	return ""
 }
 
-func (f *Flags) getAPIToken() (string, error) {
+func (f *Flags) getAPIToken(apiURL string) (string, error) {
 	if f.APIToken != "" && f.APITokenFilename != "" {
 		return "", errors.New("only one of --api-token and --api-token-filename can be set")
 	}
@@ -186,9 +189,71 @@ func (f *Flags) getAPIToken() (string, error) {
 		return strings.TrimSpace(string(b)), nil
 	}
 
-	if key := os.Getenv(ChronosphereAPITokenKey); key != "" {
+	if key := os.Getenv(env.ChronosphereAPITokenKey); key != "" {
 		return key, nil
 	}
 
-	return "", errors.New("client API token must be provided via --api-token, --api-token-filename, or " + ChronosphereAPITokenKey + " environment variable")
+	// Determine the org from the API URL to determine if we have a token stored for that org
+	URL, err := url.Parse(apiURL)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse API url %q: %w", apiURL, err)
+	}
+	orgSubdomain := strings.Split(URL.Hostname(), ".")[0]
+	t, err := f.getTokenFromStore(orgSubdomain)
+	if err != nil {
+		return "", errors.Join(err, errors.New("client API token must be provided via --api-token, --api-token-filename, "+env.ChronosphereAPITokenKey+" environment variable, or by authenticating with 'auth login'"))
+	}
+	return t, nil
+}
+
+func (f *Flags) getTokenFromStore(org string) (string, error) {
+	store, err := f.getStore()
+	if err != nil {
+		return "", err
+	}
+	t, err := store.Get(org)
+	if err != nil {
+		return "", fmt.Errorf("unable to get session ID for org %q from store: %v", org, err)
+	}
+	return string(t.Value), nil
+}
+
+func (f *Flags) getAPIURL(basePath string) (string, error) {
+	if f.APIUrl != "" {
+		return f.APIUrl, nil
+	}
+	if f.OrgName == "" {
+		if f.OrgName = os.Getenv(env.ChronosphereOrgNameKey); f.OrgName == "" {
+			defaultOrg, err := f.checkDefaultOrg()
+			if err != nil {
+				return "", errors.Join(err, errors.New("organization must be provided as a flag, via the "+env.ChronosphereOrgNameKey+" environment variable, or by setting a default org when the API URL isn't set"))
+			}
+			fmt.Fprintf(os.Stderr, "assuming default org %q\n", defaultOrg) //nolint:errcheck
+			f.OrgName = defaultOrg
+		}
+	}
+	return fmt.Sprintf(apiURLFormat, f.OrgName, basePath), nil
+}
+
+func (f *Flags) checkDefaultOrg() (string, error) {
+	store, err := f.getStore()
+	if err != nil {
+		return "", err
+	}
+	defaultOrg, err := auth.GetDefaultOrg(store)
+	if err != nil {
+		return "", fmt.Errorf("unable to get default organization: %v", err)
+	}
+	return defaultOrg, nil
+}
+
+func (f *Flags) getStore() (*token.Store, error) {
+	if f.TokenStoreDir != "" {
+		return token.NewFileStore(f.TokenStoreDir), nil
+	}
+	store, err := auth.NewChronoctlStore()
+	if err != nil {
+		return nil, fmt.Errorf("unable to get chronoctl store: %v", err)
+	}
+	return store, nil
 }

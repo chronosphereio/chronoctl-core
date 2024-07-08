@@ -20,12 +20,16 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/token"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/transport"
 	api "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/client/operations"
 	"github.com/chronosphereio/chronoctl-core/src/x/swagger"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestClientFlagsClient(t *testing.T) {
@@ -81,8 +85,9 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "all necessary flags specified",
 			flags: &Flags{
-				APIUrl:   TestChronosphereURL,
-				APIToken: "token",
+				APIUrl:        TestChronosphereURL,
+				APIToken:      "token",
+				TokenStoreDir: t.TempDir(),
 			},
 			wantHost:     "myorg.chronosphere.io",
 			wantBasePath: "/api",
@@ -90,8 +95,9 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "fall back to environment variable for organization name",
 			flags: &Flags{
-				APIToken: "token",
-				OrgName:  "specialorg",
+				APIToken:      "token",
+				OrgName:       "specialorg",
+				TokenStoreDir: t.TempDir(),
 			},
 			wantHost:     "specialorg.chronosphere.io",
 			wantBasePath: "/api",
@@ -99,9 +105,10 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "use HTTP",
 			flags: &Flags{
-				APIUrl:    "http://localhost:8000/",
-				APIToken:  "token",
-				AllowHTTP: true,
+				APIUrl:        "http://localhost:8000/",
+				APIToken:      "token",
+				AllowHTTP:     true,
+				TokenStoreDir: t.TempDir(),
 			},
 			wantHost:     "localhost:8000",
 			wantBasePath: "/",
@@ -112,6 +119,7 @@ func TestClientFlagsTransport(t *testing.T) {
 				APIUrl:             TestChronosphereURL,
 				APIToken:           "token",
 				InsecureSkipVerify: true,
+				TokenStoreDir:      t.TempDir(),
 			},
 			wantHost:               "myorg.chronosphere.io",
 			wantBasePath:           "/api",
@@ -123,6 +131,7 @@ func TestClientFlagsTransport(t *testing.T) {
 				APIUrl:           TestChronosphereURL,
 				APIToken:         "token-param",
 				APITokenFilename: "./testdata/token",
+				TokenStoreDir:    t.TempDir(),
 			},
 
 			wantErr: "only one of --api-token and --api-token-filename can be set",
@@ -130,8 +139,9 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "--api-token overrides environment variable",
 			flags: &Flags{
-				APIUrl:   TestChronosphereURL,
-				APIToken: "token-param",
+				APIUrl:        TestChronosphereURL,
+				APIToken:      "token-param",
+				TokenStoreDir: t.TempDir(),
 			},
 
 			apiToken:     "token-param",
@@ -143,6 +153,7 @@ func TestClientFlagsTransport(t *testing.T) {
 			flags: &Flags{
 				APIUrl:           TestChronosphereURL,
 				APITokenFilename: "./testdata/token",
+				TokenStoreDir:    t.TempDir(),
 			},
 
 			apiToken:     "token-from-file",
@@ -154,6 +165,7 @@ func TestClientFlagsTransport(t *testing.T) {
 			flags: &Flags{
 				APIUrl:           TestChronosphereURL,
 				APITokenFilename: "./testdata/no_token",
+				TokenStoreDir:    t.TempDir(),
 			},
 
 			wantErr: "reading api token from file ./testdata/no_token: open ./testdata/no_token: no such file or directory",
@@ -161,39 +173,81 @@ func TestClientFlagsTransport(t *testing.T) {
 		{
 			name: "fall back to environment variable for API token",
 			flags: &Flags{
-				APIUrl: TestChronosphereURL,
+				APIUrl:        TestChronosphereURL,
+				TokenStoreDir: t.TempDir(),
 			},
 			apiToken:     "token",
 			wantHost:     "myorg.chronosphere.io",
 			wantBasePath: "/api",
 		},
 		{
-			name: "token not set",
+			name: "token and store not set",
 			flags: &Flags{
-				APIUrl: TestChronosphereURL,
+				APIUrl:        TestChronosphereURL,
+				TokenStoreDir: t.TempDir(),
 			},
-			wantErr: "client API token must be provided via --api-token, --api-token-filename, or CHRONOSPHERE_API_TOKEN environment variable",
+			wantErr: "client API token must be provided via --api-token, --api-token-filename, CHRONOSPHERE_API_TOKEN environment variable, or by authenticating with 'auth login'",
 		},
 		{
-			name: "organization not set",
+			name: "token not set falls back to token store",
+			flags: &Flags{
+				APIUrl: TestChronosphereURL,
+				TokenStoreDir: func() string {
+					dir := t.TempDir()
+					// Populate store directory with a token
+					store := token.NewFileStore(dir)
+					require.NoError(t, store.Put("myorg", token.Token{
+						Value:  []byte("token"),
+						Expiry: time.Now().Add(time.Hour),
+					}))
+					return dir
+				}(),
+			},
+			apiToken:     "token",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
+		},
+		{
+			name: "organization and default org not set",
+			flags: &Flags{
+				APIToken:      "token",
+				TokenStoreDir: t.TempDir(),
+			},
+			wantErr: "organization must be provided as a flag, via the CHRONOSPHERE_ORG_NAME environment variable, or by setting a default org when the API URL isn't set",
+		},
+		{
+			name: "organization not set falls back to default",
 			flags: &Flags{
 				APIToken: "token",
+				TokenStoreDir: func() string {
+					dir := t.TempDir()
+					// Populate store directory with a token
+					store := token.NewFileStore(dir)
+					require.NoError(t, store.Put("default-org", token.Token{
+						Value:  []byte("myorg"),
+						Expiry: time.Now().Add(time.Hour),
+					}))
+					return dir
+				}(),
 			},
-			wantErr: "organization must be provided as a flag or via CHRONOSPHERE_ORG_NAME environment variable when the API URL isn't set",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
 		},
 		{
 			name: "invalid URL",
 			flags: &Flags{
-				APIUrl:   TestBadURL,
-				APIToken: "token",
+				APIUrl:        TestBadURL,
+				APIToken:      "token",
+				TokenStoreDir: t.TempDir(),
 			},
 			wantErr: `unable to parse URL of Chronosphere URL: parse "://bad.domain.io": missing protocol scheme`,
 		},
 		{
 			name: "URL scheme is HTTP but HTTP wasn't allowed",
 			flags: &Flags{
-				APIUrl:   "http://localhost:8000",
-				APIToken: "token",
+				APIUrl:        "http://localhost:8000",
+				APIToken:      "token",
+				TokenStoreDir: t.TempDir(),
 			},
 			wantErr: "the scheme of the API URL is HTTP but the --allow-http flag was not set",
 		},
@@ -213,12 +267,12 @@ func TestClientFlagsTransport(t *testing.T) {
 	for _, tt := range tests {
 		for _, tp := range transports {
 			t.Run(fmt.Sprintf("%s %s", tt.name, tp.name), func(t *testing.T) {
-				t.Setenv(ChronosphereAPITokenKey, tt.apiToken)
-				t.Setenv(ChronosphereOrgNameKey, tt.orgName)
+				t.Setenv(env.ChronosphereAPITokenKey, tt.apiToken)
+				t.Setenv(env.ChronosphereOrgNameKey, tt.orgName)
 
 				tp, err := tt.flags.Transport(tp.component, "/api")
 				if tt.wantErr != "" {
-					assert.EqualError(t, err, tt.wantErr)
+					assert.ErrorContains(t, err, tt.wantErr)
 					return
 				}
 
