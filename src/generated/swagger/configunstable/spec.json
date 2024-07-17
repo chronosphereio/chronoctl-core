@@ -127,22 +127,6 @@
       },
       "type": "object"
     },
-    "ConfigUnstableUpdateDatasetBody": {
-      "properties": {
-        "dataset": {
-          "$ref": "#/definitions/configunstableDataset"
-        },
-        "create_if_missing": {
-          "description": "If true, the Dataset will be created if it does not already exist, identified by slug. If false, an error will be returned if the Dataset does not already exist.",
-          "type": "boolean"
-        },
-        "dry_run": {
-          "description": "If true, the Dataset will not be created nor updated, and no response Dataset will be returned. The response will return an error if the given Dataset is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
     "ConfigUnstableUpdateLinkTemplateBody": {
       "properties": {
         "link_template": {
@@ -263,27 +247,6 @@
       },
       "type": "object"
     },
-    "DatasetDatasetConfiguration": {
-      "properties": {
-        "type": {
-          "$ref": "#/definitions/DatasetDatasetType"
-        },
-        "trace_dataset": {
-          "$ref": "#/definitions/configunstableTraceDataset"
-        },
-        "log_dataset": {
-          "$ref": "#/definitions/configunstableLogDataset"
-        }
-      },
-      "type": "object"
-    },
-    "DatasetDatasetType": {
-      "enum": [
-        "TRACES",
-        "LOGS"
-      ],
-      "type": "string"
-    },
     "LogAllocationConfigAllocation": {
       "description": "Configuration for allocating resources to a dataset.",
       "properties": {
@@ -302,6 +265,9 @@
         },
         "allocation": {
           "$ref": "#/definitions/LogAllocationConfigAllocation"
+        },
+        "priorities": {
+          "$ref": "#/definitions/LogAllocationConfigHighLowPriorities"
         }
       },
       "type": "object"
@@ -311,6 +277,29 @@
       "properties": {
         "allocation": {
           "$ref": "#/definitions/LogAllocationConfigAllocation"
+        },
+        "priorities": {
+          "$ref": "#/definitions/LogAllocationConfigHighLowPriorities"
+        }
+      },
+      "type": "object"
+    },
+    "LogAllocationConfigHighLowPriorities": {
+      "description": "HighLowPriorities defines explicit high and low priority match criteria to define which logs\nshould be dropped first (low) and dropped last (high). Anything not matched by either set of rules\nis considered default priority and thus dropped after low but before high.",
+      "properties": {
+        "high_priority_filters": {
+          "description": "A list of search filters defining which logs are considered high priority in this dataset.\nThe filters are ORed together so only one given filter needs to match.",
+          "items": {
+            "$ref": "#/definitions/configv1LogSearchFilter"
+          },
+          "type": "array"
+        },
+        "low_priority_filters": {
+          "description": "A list of search filters defining which logs are considered low priority in this dataset.\nThe filters are ORed together so only one given filter needs to match.",
+          "items": {
+            "$ref": "#/definitions/configv1LogSearchFilter"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -509,28 +498,6 @@
       ],
       "type": "string"
     },
-    "OtelMetricsIngestionResourceAttributes": {
-      "properties": {
-        "flatten_mode": {
-          "$ref": "#/definitions/ResourceAttributesFlattenMode"
-        },
-        "filter_mode": {
-          "$ref": "#/definitions/ResourceAttributesFilterMode"
-        },
-        "exclude_keys": {
-          "description": "Do not copy any resource attribute whose key exactly matches one of the\nstrings in this list.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "generate_target_info": {
-          "description": "Generate a target_info time series with labels derived from resource\nattributes. The filter_mode and exclude_keys settings apply in the same way as\nfor the \"flatten\" operation. The default is false.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
     "PerOperationSamplingStrategiesPerOperationSamplingStrategy": {
       "properties": {
         "operation": {
@@ -542,21 +509,6 @@
         }
       },
       "type": "object"
-    },
-    "ResourceAttributesFilterMode": {
-      "enum": [
-        "APPEND_DEFAULT_EXCLUDE_KEYS",
-        "CUSTOM_EXCLUDE_KEYS"
-      ],
-      "type": "string"
-    },
-    "ResourceAttributesFlattenMode": {
-      "enum": [
-        "MERGE",
-        "OVERWRITE",
-        "IGNORE"
-      ],
-      "type": "string"
     },
     "SavedTraceSearchBetweenTimeFilter": {
       "properties": {
@@ -964,6 +916,19 @@
       },
       "type": "object"
     },
+    "TraceTopTagConfigTraceTopTag": {
+      "properties": {
+        "tag_name": {
+          "description": "Tag name that uniquely identifies a tag.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Human readable description of the tag.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "WebhookActionHTTPMethod": {
       "enum": [
         "GET",
@@ -1002,26 +967,6 @@
       "properties": {
         "dashboard": {
           "$ref": "#/definitions/configunstableDashboard"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateDatasetRequest": {
-      "properties": {
-        "dataset": {
-          "$ref": "#/definitions/configunstableDataset"
-        },
-        "dry_run": {
-          "description": "If true, the Dataset will not be created, and no response Dataset will be returned. The response will return an error if the given Dataset is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateDatasetResponse": {
-      "properties": {
-        "dataset": {
-          "$ref": "#/definitions/configunstableDataset"
         }
       },
       "type": "object"
@@ -1122,26 +1067,6 @@
       },
       "type": "object"
     },
-    "configunstableCreateOtelMetricsIngestionRequest": {
-      "properties": {
-        "otel_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
-        },
-        "dry_run": {
-          "description": "If true, the OtelMetricsIngestion will not be created, and no response OtelMetricsIngestion will be returned. The response will return an error if the given OtelMetricsIngestion is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateOtelMetricsIngestionResponse": {
-      "properties": {
-        "otel_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
-        }
-      },
-      "type": "object"
-    },
     "configunstableCreateSavedTraceSearchRequest": {
       "properties": {
         "saved_trace_search": {
@@ -1238,6 +1163,26 @@
       },
       "type": "object"
     },
+    "configunstableCreateTraceTopTagConfigRequest": {
+      "properties": {
+        "trace_top_tag_config": {
+          "$ref": "#/definitions/configunstableTraceTopTagConfig"
+        },
+        "dry_run": {
+          "description": "If true, the TraceTopTagConfig will not be created, and no response TraceTopTagConfig will be returned. The response will return an error if the given TraceTopTagConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateTraceTopTagConfigResponse": {
+      "properties": {
+        "trace_top_tag_config": {
+          "$ref": "#/definitions/configunstableTraceTopTagConfig"
+        }
+      },
+      "type": "object"
+    },
     "configunstableDashboard": {
       "properties": {
         "slug": {
@@ -1271,38 +1216,6 @@
       },
       "type": "object"
     },
-    "configunstableDataset": {
-      "properties": {
-        "name": {
-          "description": "Required name of the Dataset. May be modified after the Dataset is created.",
-          "type": "string"
-        },
-        "slug": {
-          "description": "Unique identifier of the Dataset. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Dataset is created.",
-          "type": "string"
-        },
-        "created_at": {
-          "description": "Timestamp of when the Dataset was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the Dataset was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "description": {
-          "description": "Optional longer-form description of the dataset.",
-          "type": "string"
-        },
-        "configuration": {
-          "$ref": "#/definitions/DatasetDatasetConfiguration"
-        }
-      },
-      "type": "object"
-    },
     "configunstableDefaultSampleRate": {
       "properties": {
         "enabled": {
@@ -1318,9 +1231,6 @@
       "type": "object"
     },
     "configunstableDeleteDashboardResponse": {
-      "type": "object"
-    },
-    "configunstableDeleteDatasetResponse": {
       "type": "object"
     },
     "configunstableDeleteLinkTemplateResponse": {
@@ -1343,9 +1253,6 @@
       },
       "type": "object"
     },
-    "configunstableDeleteOtelMetricsIngestionResponse": {
-      "type": "object"
-    },
     "configunstableDeleteSavedTraceSearchResponse": {
       "type": "object"
     },
@@ -1359,6 +1266,9 @@
       "type": "object"
     },
     "configunstableDeleteTraceTailSamplingRulesResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteTraceTopTagConfigResponse": {
       "type": "object"
     },
     "configunstableLinkTemplate": {
@@ -1402,20 +1312,6 @@
         "dashboards": {
           "items": {
             "$ref": "#/definitions/configunstableDashboard"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableListDatasetsResponse": {
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/configv1PageResult"
-        },
-        "datasets": {
-          "items": {
-            "$ref": "#/definitions/configunstableDataset"
           },
           "type": "array"
         }
@@ -1563,14 +1459,6 @@
       },
       "type": "object"
     },
-    "configunstableLogDataset": {
-      "properties": {
-        "match_criteria": {
-          "$ref": "#/definitions/configunstableLogSearchFilter"
-        }
-      },
-      "type": "object"
-    },
     "configunstableLogScaleAction": {
       "properties": {
         "slug": {
@@ -1700,15 +1588,6 @@
       },
       "type": "object"
     },
-    "configunstableLogSearchFilter": {
-      "properties": {
-        "query": {
-          "description": "Matches logs which match this query.\nQuery may only include top level operations (no nested clauses).\nOnly one type of operator AND/OR is allowed.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "configunstableNoopEntity": {
       "properties": {
         "slug": {
@@ -1746,38 +1625,10 @@
       ],
       "type": "string"
     },
-    "configunstableOtelMetricsIngestion": {
-      "properties": {
-        "created_at": {
-          "description": "Timestamp of when the OtelMetricsIngestion was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the OtelMetricsIngestion was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "resource_attributes": {
-          "$ref": "#/definitions/OtelMetricsIngestionResourceAttributes"
-        }
-      },
-      "type": "object"
-    },
     "configunstableReadDashboardResponse": {
       "properties": {
         "dashboard": {
           "$ref": "#/definitions/configunstableDashboard"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableReadDatasetResponse": {
-      "properties": {
-        "dataset": {
-          "$ref": "#/definitions/configunstableDataset"
         }
       },
       "type": "object"
@@ -1822,14 +1673,6 @@
       },
       "type": "object"
     },
-    "configunstableReadOtelMetricsIngestionResponse": {
-      "properties": {
-        "otel_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
-        }
-      },
-      "type": "object"
-    },
     "configunstableReadSavedTraceSearchResponse": {
       "properties": {
         "saved_trace_search": {
@@ -1866,6 +1709,14 @@
       "properties": {
         "trace_tail_sampling_rules": {
           "$ref": "#/definitions/configunstableTraceTailSamplingRules"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadTraceTopTagConfigResponse": {
+      "properties": {
+        "trace_top_tag_config": {
+          "$ref": "#/definitions/configunstableTraceTopTagConfig"
         }
       },
       "type": "object"
@@ -2009,14 +1860,6 @@
       },
       "type": "object"
     },
-    "configunstableTraceDataset": {
-      "properties": {
-        "match_criteria": {
-          "$ref": "#/definitions/configv1TraceSearchFilter"
-        }
-      },
-      "type": "object"
-    },
     "configunstableTraceJaegerRemoteSamplingStrategy": {
       "properties": {
         "slug": {
@@ -2109,18 +1952,41 @@
       },
       "type": "object"
     },
-    "configunstableUpdateDashboardResponse": {
+    "configunstableTraceTopTagConfig": {
+      "description": "TraceTopTagConfig is a singleton configuration object that specifies the\nconfiguration for top tracing tags.",
       "properties": {
-        "dashboard": {
-          "$ref": "#/definitions/configunstableDashboard"
+        "id": {
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the TraceTopTagConfig was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the TraceTopTagConfig was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "source_client": {
+          "type": "string"
+        },
+        "top_tags": {
+          "description": "The list of \"top\" tags. Must be unique by tag_name.",
+          "items": {
+            "$ref": "#/definitions/TraceTopTagConfigTraceTopTag"
+          },
+          "type": "array"
         }
       },
       "type": "object"
     },
-    "configunstableUpdateDatasetResponse": {
+    "configunstableUpdateDashboardResponse": {
       "properties": {
-        "dataset": {
-          "$ref": "#/definitions/configunstableDataset"
+        "dashboard": {
+          "$ref": "#/definitions/configunstableDashboard"
         }
       },
       "type": "object"
@@ -2181,30 +2047,6 @@
       },
       "type": "object"
     },
-    "configunstableUpdateOtelMetricsIngestionRequest": {
-      "properties": {
-        "otel_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
-        },
-        "create_if_missing": {
-          "description": "If true, the OtelMetricsIngestion will be created if it does not already exist. If false, an error will be returned if the OtelMetricsIngestion does not already exist.",
-          "type": "boolean"
-        },
-        "dry_run": {
-          "description": "If true, the OtelMetricsIngestion will not be created nor updated, and no response OtelMetricsIngestion will be returned. The response will return an error if the given OtelMetricsIngestion is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableUpdateOtelMetricsIngestionResponse": {
-      "properties": {
-        "otel_metrics_ingestion": {
-          "$ref": "#/definitions/configunstableOtelMetricsIngestion"
-        }
-      },
-      "type": "object"
-    },
     "configunstableUpdateSavedTraceSearchResponse": {
       "properties": {
         "saved_trace_search": {
@@ -2257,6 +2099,39 @@
       "properties": {
         "trace_tail_sampling_rules": {
           "$ref": "#/definitions/configunstableTraceTailSamplingRules"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateTraceTopTagConfigRequest": {
+      "properties": {
+        "trace_top_tag_config": {
+          "$ref": "#/definitions/configunstableTraceTopTagConfig"
+        },
+        "create_if_missing": {
+          "description": "If true, the TraceTopTagConfig will be created if it does not already exist. If false, an error will be returned if the TraceTopTagConfig does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the TraceTopTagConfig will not be created nor updated, and no response TraceTopTagConfig will be returned. The response will return an error if the given TraceTopTagConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateTraceTopTagConfigResponse": {
+      "properties": {
+        "trace_top_tag_config": {
+          "$ref": "#/definitions/configunstableTraceTopTagConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configv1LogSearchFilter": {
+      "properties": {
+        "query": {
+          "description": "Matches logs which match this query.\nQuery may only include top level operations (no nested clauses).\nOnly one type of operator AND/OR is allowed.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2591,275 +2466,6 @@
         },
         "tags": [
           "Dashboard"
-        ]
-      }
-    },
-    "/api/unstable/config/datasets": {
-      "get": {
-        "operationId": "ListDatasets",
-        "parameters": [
-          {
-            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
-            "format": "int64",
-            "in": "query",
-            "name": "page.max_size",
-            "type": "integer"
-          },
-          {
-            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
-            "in": "query",
-            "name": "page.token",
-            "type": "string"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by slug, where any Dataset with a matching slug in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "slugs",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by name, where any Dataset with a matching name in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "names",
-            "type": "array"
-          },
-          {
-            "description": "Custom filtering option: list filtered down to a specific telemetry type.",
-            "enum": [
-              "TRACES",
-              "LOGS"
-            ],
-            "in": "query",
-            "name": "type",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableListDatasetsResponse"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "Dataset"
-        ]
-      },
-      "post": {
-        "operationId": "CreateDataset",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateDatasetRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created Dataset.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateDatasetResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the Dataset because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the Dataset because there is a conflict with an existing Dataset.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "Dataset"
-        ]
-      }
-    },
-    "/api/unstable/config/datasets/{slug}": {
-      "delete": {
-        "operationId": "DeleteDataset",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteDatasetResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot delete the Dataset because it is in use.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the Dataset because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "Dataset"
-        ]
-      },
-      "get": {
-        "operationId": "ReadDataset",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadDatasetResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the Dataset because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "Dataset"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateDataset",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ConfigUnstableUpdateDatasetBody"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated Dataset.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateDatasetResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the Dataset because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the Dataset because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot update the Dataset because there is a conflict with an existing Dataset.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "Dataset"
         ]
       }
     },
@@ -4020,174 +3626,6 @@
         },
         "tags": [
           "NoopEntity"
-        ]
-      }
-    },
-    "/api/unstable/config/otel-metrics-ingestion": {
-      "delete": {
-        "operationId": "DeleteOtelMetricsIngestion",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteOtelMetricsIngestionResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot delete the OtelMetricsIngestion because it is in use.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the OtelMetricsIngestion because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "OtelMetricsIngestion"
-        ]
-      },
-      "get": {
-        "operationId": "ReadOtelMetricsIngestion",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadOtelMetricsIngestionResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the OtelMetricsIngestion because OtelMetricsIngestion has not been created.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "OtelMetricsIngestion"
-        ]
-      },
-      "post": {
-        "operationId": "CreateOtelMetricsIngestion",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateOtelMetricsIngestionRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created OtelMetricsIngestion.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateOtelMetricsIngestionResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the OtelMetricsIngestion because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the OtelMetricsIngestion because there is a conflict with an existing OtelMetricsIngestion.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "OtelMetricsIngestion"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateOtelMetricsIngestion",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateOtelMetricsIngestionRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated OtelMetricsIngestion.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateOtelMetricsIngestionResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the OtelMetricsIngestion because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the OtelMetricsIngestion because OtelMetricsIngestion has not been created.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "OtelMetricsIngestion"
         ]
       }
     },
@@ -5475,6 +4913,181 @@
         },
         "tags": [
           "TraceTailSamplingRules"
+        ]
+      }
+    },
+    "/api/unstable/config/trace-top-tag-config": {
+      "delete": {
+        "operationId": "DeleteTraceTopTagConfig",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "dry_run",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteTraceTopTagConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the TraceTopTagConfig because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the TraceTopTagConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTopTagConfig"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceTopTagConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadTraceTopTagConfigResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the TraceTopTagConfig because TraceTopTagConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTopTagConfig"
+        ]
+      },
+      "post": {
+        "operationId": "CreateTraceTopTagConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceTopTagConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created TraceTopTagConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateTraceTopTagConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the TraceTopTagConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceTopTagConfig because there is a conflict with an existing TraceTopTagConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTopTagConfig"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceTopTagConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateTraceTopTagConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated TraceTopTagConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateTraceTopTagConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the TraceTopTagConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceTopTagConfig because TraceTopTagConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceTopTagConfig"
         ]
       }
     }

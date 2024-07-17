@@ -20,6 +20,9 @@ type LogAllocationConfigDefaultDataset struct {
 
 	// allocation
 	Allocation *LogAllocationConfigAllocation `json:"allocation,omitempty"`
+
+	// priorities
+	Priorities *LogAllocationConfigHighLowPriorities `json:"priorities,omitempty"`
 }
 
 // Validate validates this log allocation config default dataset
@@ -27,6 +30,10 @@ func (m *LogAllocationConfigDefaultDataset) Validate(formats strfmt.Registry) er
 	var res []error
 
 	if err := m.validateAllocation(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePriorities(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -55,11 +62,34 @@ func (m *LogAllocationConfigDefaultDataset) validateAllocation(formats strfmt.Re
 	return nil
 }
 
+func (m *LogAllocationConfigDefaultDataset) validatePriorities(formats strfmt.Registry) error {
+	if swag.IsZero(m.Priorities) { // not required
+		return nil
+	}
+
+	if m.Priorities != nil {
+		if err := m.Priorities.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("priorities")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("priorities")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this log allocation config default dataset based on the context it is used
 func (m *LogAllocationConfigDefaultDataset) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateAllocation(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePriorities(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -82,6 +112,27 @@ func (m *LogAllocationConfigDefaultDataset) contextValidateAllocation(ctx contex
 				return ve.ValidateName("allocation")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("allocation")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LogAllocationConfigDefaultDataset) contextValidatePriorities(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Priorities != nil {
+
+		if swag.IsZero(m.Priorities) { // not required
+			return nil
+		}
+
+		if err := m.Priorities.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("priorities")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("priorities")
 			}
 			return err
 		}

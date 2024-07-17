@@ -23,6 +23,9 @@ type DatasetDatasetConfiguration struct {
 
 	// trace dataset
 	TraceDataset *Configv1TraceDataset `json:"trace_dataset,omitempty"`
+
+	// log dataset
+	LogDataset *Configv1LogDataset `json:"log_dataset,omitempty"`
 }
 
 // Validate validates this dataset dataset configuration
@@ -34,6 +37,10 @@ func (m *DatasetDatasetConfiguration) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateTraceDataset(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLogDataset(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -79,6 +86,25 @@ func (m *DatasetDatasetConfiguration) validateTraceDataset(formats strfmt.Regist
 	return nil
 }
 
+func (m *DatasetDatasetConfiguration) validateLogDataset(formats strfmt.Registry) error {
+	if swag.IsZero(m.LogDataset) { // not required
+		return nil
+	}
+
+	if m.LogDataset != nil {
+		if err := m.LogDataset.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("log_dataset")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("log_dataset")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this dataset dataset configuration based on the context it is used
 func (m *DatasetDatasetConfiguration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -88,6 +114,10 @@ func (m *DatasetDatasetConfiguration) ContextValidate(ctx context.Context, forma
 	}
 
 	if err := m.contextValidateTraceDataset(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLogDataset(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -128,6 +158,27 @@ func (m *DatasetDatasetConfiguration) contextValidateTraceDataset(ctx context.Co
 				return ve.ValidateName("trace_dataset")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("trace_dataset")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatasetDatasetConfiguration) contextValidateLogDataset(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.LogDataset != nil {
+
+		if swag.IsZero(m.LogDataset) { // not required
+			return nil
+		}
+
+		if err := m.LogDataset.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("log_dataset")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("log_dataset")
 			}
 			return err
 		}

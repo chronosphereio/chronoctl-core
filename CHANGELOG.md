@@ -1,5 +1,10 @@
 # Releases
 
+## Unreleased
+
+### Added
+* Adds new resource `v1/config/OtelMetricsIngestion`
+
 ## v1.8.0
 
 * New command: auth

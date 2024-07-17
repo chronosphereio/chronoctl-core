@@ -335,6 +335,26 @@ func (mr *MockClientServiceMockRecorder) CreateNotifier(params interface{}, opts
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNotifier", reflect.TypeOf((*MockClientService)(nil).CreateNotifier), varargs...)
 }
 
+// CreateOtelMetricsIngestion mocks base method.
+func (m *MockClientService) CreateOtelMetricsIngestion(params *operations.CreateOtelMetricsIngestionParams, opts ...operations.ClientOption) (*operations.CreateOtelMetricsIngestionOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateOtelMetricsIngestion", varargs...)
+	ret0, _ := ret[0].(*operations.CreateOtelMetricsIngestionOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateOtelMetricsIngestion indicates an expected call of CreateOtelMetricsIngestion.
+func (mr *MockClientServiceMockRecorder) CreateOtelMetricsIngestion(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOtelMetricsIngestion", reflect.TypeOf((*MockClientService)(nil).CreateOtelMetricsIngestion), varargs...)
+}
+
 // CreateRecordingRule mocks base method.
 func (m *MockClientService) CreateRecordingRule(params *operations.CreateRecordingRuleParams, opts ...operations.ClientOption) (*operations.CreateRecordingRuleOK, error) {
 	m.ctrl.T.Helper()
@@ -813,6 +833,26 @@ func (mr *MockClientServiceMockRecorder) DeleteNotifier(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNotifier", reflect.TypeOf((*MockClientService)(nil).DeleteNotifier), varargs...)
+}
+
+// DeleteOtelMetricsIngestion mocks base method.
+func (m *MockClientService) DeleteOtelMetricsIngestion(params *operations.DeleteOtelMetricsIngestionParams, opts ...operations.ClientOption) (*operations.DeleteOtelMetricsIngestionOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteOtelMetricsIngestion", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteOtelMetricsIngestionOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteOtelMetricsIngestion indicates an expected call of DeleteOtelMetricsIngestion.
+func (mr *MockClientServiceMockRecorder) DeleteOtelMetricsIngestion(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteOtelMetricsIngestion", reflect.TypeOf((*MockClientService)(nil).DeleteOtelMetricsIngestion), varargs...)
 }
 
 // DeleteRecordingRule mocks base method.
@@ -1715,6 +1755,26 @@ func (mr *MockClientServiceMockRecorder) ReadNotifier(params interface{}, opts .
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadNotifier", reflect.TypeOf((*MockClientService)(nil).ReadNotifier), varargs...)
 }
 
+// ReadOtelMetricsIngestion mocks base method.
+func (m *MockClientService) ReadOtelMetricsIngestion(params *operations.ReadOtelMetricsIngestionParams, opts ...operations.ClientOption) (*operations.ReadOtelMetricsIngestionOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadOtelMetricsIngestion", varargs...)
+	ret0, _ := ret[0].(*operations.ReadOtelMetricsIngestionOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadOtelMetricsIngestion indicates an expected call of ReadOtelMetricsIngestion.
+func (mr *MockClientServiceMockRecorder) ReadOtelMetricsIngestion(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadOtelMetricsIngestion", reflect.TypeOf((*MockClientService)(nil).ReadOtelMetricsIngestion), varargs...)
+}
+
 // ReadRecordingRule mocks base method.
 func (m *MockClientService) ReadRecordingRule(params *operations.ReadRecordingRuleParams, opts ...operations.ClientOption) (*operations.ReadRecordingRuleOK, error) {
 	m.ctrl.T.Helper()
@@ -2225,6 +2285,26 @@ func (mr *MockClientServiceMockRecorder) UpdateNotifier(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNotifier", reflect.TypeOf((*MockClientService)(nil).UpdateNotifier), varargs...)
+}
+
+// UpdateOtelMetricsIngestion mocks base method.
+func (m *MockClientService) UpdateOtelMetricsIngestion(params *operations.UpdateOtelMetricsIngestionParams, opts ...operations.ClientOption) (*operations.UpdateOtelMetricsIngestionOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateOtelMetricsIngestion", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateOtelMetricsIngestionOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateOtelMetricsIngestion indicates an expected call of UpdateOtelMetricsIngestion.
+func (mr *MockClientServiceMockRecorder) UpdateOtelMetricsIngestion(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateOtelMetricsIngestion", reflect.TypeOf((*MockClientService)(nil).UpdateOtelMetricsIngestion), varargs...)
 }
 
 // UpdateRecordingRule mocks base method.

@@ -502,6 +502,12 @@ spec:
     # Optional longer-form description of the dataset.
     description: <string>
     configuration:
+        log_dataset:
+            match_criteria:
+                # Matches logs which match this query.
+                # Query may only include top level operations (no nested clauses).
+                # Only one type of operator AND/OR is allowed.
+                query: <string>
         trace_dataset:
             match_criteria:
                 # Each SpanFilter object represents all conditions that need to be true on
@@ -576,7 +582,7 @@ spec:
                     error:
                         # The value the filter compares to the target trace or span field.
                         value: <true|false>
-        type: <TRACES>
+        type: <TRACES|LOGS>
 `
 
 func newDatasetScaffoldCmd() *cobra.Command {
