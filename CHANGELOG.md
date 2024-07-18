@@ -1,5 +1,11 @@
 # Releases
 
+## Unreleased
+
+### Added
+* Adds new resource `v1/config/OtelMetricsIngestion`
+* Adds support for logs in `v1/config/Dataset`
+
 ## v1.8.0
 
 * New command: auth

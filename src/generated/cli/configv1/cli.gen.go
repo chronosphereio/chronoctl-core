@@ -27,6 +27,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewMutingRuleCmd())
 	root.AddCommand(NewNotificationPolicyCmd())
 	root.AddCommand(NewNotifierCmd())
+	root.AddCommand(NewOtelMetricsIngestionCmd())
 	root.AddCommand(NewRecordingRuleCmd())
 	root.AddCommand(NewResourcePoolsCmd())
 	root.AddCommand(NewRollupRuleCmd())
@@ -275,6 +276,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateNotifier(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		OtelMetricsIngestionTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*OtelMetricsIngestion)
+			if !ok {
+				return types.WrongObjectErr((&OtelMetricsIngestion{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateOtelMetricsIngestion(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

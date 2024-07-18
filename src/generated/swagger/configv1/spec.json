@@ -357,13 +357,17 @@
         },
         "trace_dataset": {
           "$ref": "#/definitions/configv1TraceDataset"
+        },
+        "log_dataset": {
+          "$ref": "#/definitions/configv1LogDataset"
         }
       },
       "type": "object"
     },
     "DatasetDatasetType": {
       "enum": [
-        "TRACES"
+        "TRACES",
+        "LOGS"
       ],
       "type": "string"
     },
@@ -1116,6 +1120,28 @@
       },
       "type": "object"
     },
+    "OtelMetricsIngestionResourceAttributes": {
+      "properties": {
+        "flatten_mode": {
+          "$ref": "#/definitions/ResourceAttributesFlattenMode"
+        },
+        "filter_mode": {
+          "$ref": "#/definitions/ResourceAttributesFilterMode"
+        },
+        "exclude_keys": {
+          "description": "Do not copy any resource attribute whose key exactly matches one of the\nstrings in this list.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "generate_target_info": {
+          "description": "Generate a target_info time series with labels derived from resource\nattributes. The filter_mode and exclude_keys settings apply in the same way as\nfor the \"flatten\" operation. The default is false.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "PagerdutyConfigImage": {
       "properties": {
         "src": {
@@ -1152,6 +1178,21 @@
         }
       },
       "type": "object"
+    },
+    "ResourceAttributesFilterMode": {
+      "enum": [
+        "APPEND_DEFAULT_EXCLUDE_KEYS",
+        "CUSTOM_EXCLUDE_KEYS"
+      ],
+      "type": "string"
+    },
+    "ResourceAttributesFlattenMode": {
+      "enum": [
+        "MERGE",
+        "OVERWRITE",
+        "IGNORE"
+      ],
+      "type": "string"
     },
     "ResourceChange": {
       "properties": {
@@ -2165,6 +2206,26 @@
       },
       "type": "object"
     },
+    "configv1CreateOtelMetricsIngestionRequest": {
+      "properties": {
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configv1OtelMetricsIngestion"
+        },
+        "dry_run": {
+          "description": "If true, the OtelMetricsIngestion will not be created, and no response OtelMetricsIngestion will be returned. The response will return an error if the given OtelMetricsIngestion is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateOtelMetricsIngestionResponse": {
+      "properties": {
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configv1OtelMetricsIngestion"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateRecordingRuleRequest": {
       "properties": {
         "recording_rule": {
@@ -2479,6 +2540,9 @@
       "type": "object"
     },
     "configv1DeleteNotifierResponse": {
+      "type": "object"
+    },
+    "configv1DeleteOtelMetricsIngestionResponse": {
       "type": "object"
     },
     "configv1DeleteRecordingRuleResponse": {
@@ -3086,6 +3150,23 @@
       },
       "type": "object"
     },
+    "configv1LogDataset": {
+      "properties": {
+        "match_criteria": {
+          "$ref": "#/definitions/configv1LogSearchFilter"
+        }
+      },
+      "type": "object"
+    },
+    "configv1LogSearchFilter": {
+      "properties": {
+        "query": {
+          "description": "Matches logs which match this query.\nQuery may only include top level operations (no nested clauses).\nOnly one type of operator AND/OR is allowed.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configv1MappingRule": {
       "properties": {
         "slug": {
@@ -3393,6 +3474,26 @@
       },
       "type": "object"
     },
+    "configv1OtelMetricsIngestion": {
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the OtelMetricsIngestion was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the OtelMetricsIngestion was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "resource_attributes": {
+          "$ref": "#/definitions/OtelMetricsIngestionResourceAttributes"
+        }
+      },
+      "type": "object"
+    },
     "configv1PageParams": {
       "properties": {
         "max_size": {
@@ -3532,6 +3633,14 @@
       "properties": {
         "notifier": {
           "$ref": "#/definitions/configv1Notifier"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadOtelMetricsIngestionResponse": {
+      "properties": {
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configv1OtelMetricsIngestion"
         }
       },
       "type": "object"
@@ -4291,6 +4400,30 @@
       "properties": {
         "notifier": {
           "$ref": "#/definitions/configv1Notifier"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateOtelMetricsIngestionRequest": {
+      "properties": {
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configv1OtelMetricsIngestion"
+        },
+        "create_if_missing": {
+          "description": "If true, the OtelMetricsIngestion will be created if it does not already exist. If false, an error will be returned if the OtelMetricsIngestion does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the OtelMetricsIngestion will not be created nor updated, and no response OtelMetricsIngestion will be returned. The response will return an error if the given OtelMetricsIngestion is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateOtelMetricsIngestionResponse": {
+      "properties": {
+        "otel_metrics_ingestion": {
+          "$ref": "#/definitions/configv1OtelMetricsIngestion"
         }
       },
       "type": "object"
@@ -8488,6 +8621,174 @@
         },
         "tags": [
           "Notifier"
+        ]
+      }
+    },
+    "/api/v1/config/otel-metrics-ingestion": {
+      "delete": {
+        "operationId": "DeleteOtelMetricsIngestion",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteOtelMetricsIngestionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the OtelMetricsIngestion because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the OtelMetricsIngestion because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "OtelMetricsIngestion"
+        ]
+      },
+      "get": {
+        "operationId": "ReadOtelMetricsIngestion",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadOtelMetricsIngestionResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the OtelMetricsIngestion because OtelMetricsIngestion has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "OtelMetricsIngestion"
+        ]
+      },
+      "post": {
+        "operationId": "CreateOtelMetricsIngestion",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateOtelMetricsIngestionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created OtelMetricsIngestion.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateOtelMetricsIngestionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the OtelMetricsIngestion because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the OtelMetricsIngestion because there is a conflict with an existing OtelMetricsIngestion.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "OtelMetricsIngestion"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateOtelMetricsIngestion",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateOtelMetricsIngestionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated OtelMetricsIngestion.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateOtelMetricsIngestionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the OtelMetricsIngestion because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the OtelMetricsIngestion because OtelMetricsIngestion has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "OtelMetricsIngestion"
         ]
       }
     },

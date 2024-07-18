@@ -30,8 +30,6 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error)
 
-	CreateDataset(params *CreateDatasetParams, opts ...ClientOption) (*CreateDatasetOK, error)
-
 	CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...ClientOption) (*CreateLinkTemplateOK, error)
 
 	CreateLogAllocationConfig(params *CreateLogAllocationConfigParams, opts ...ClientOption) (*CreateLogAllocationConfigOK, error)
@@ -41,8 +39,6 @@ type ClientService interface {
 	CreateLogScaleAlert(params *CreateLogScaleAlertParams, opts ...ClientOption) (*CreateLogScaleAlertOK, error)
 
 	CreateNoopEntity(params *CreateNoopEntityParams, opts ...ClientOption) (*CreateNoopEntityOK, error)
-
-	CreateOtelMetricsIngestion(params *CreateOtelMetricsIngestionParams, opts ...ClientOption) (*CreateOtelMetricsIngestionOK, error)
 
 	CreateSavedTraceSearch(params *CreateSavedTraceSearchParams, opts ...ClientOption) (*CreateSavedTraceSearchOK, error)
 
@@ -54,9 +50,9 @@ type ClientService interface {
 
 	CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRulesParams, opts ...ClientOption) (*CreateTraceTailSamplingRulesOK, error)
 
-	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error)
+	CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, opts ...ClientOption) (*CreateTraceTopTagConfigOK, error)
 
-	DeleteDataset(params *DeleteDatasetParams, opts ...ClientOption) (*DeleteDatasetOK, error)
+	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error)
 
 	DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...ClientOption) (*DeleteLinkTemplateOK, error)
 
@@ -68,8 +64,6 @@ type ClientService interface {
 
 	DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...ClientOption) (*DeleteNoopEntityOK, error)
 
-	DeleteOtelMetricsIngestion(params *DeleteOtelMetricsIngestionParams, opts ...ClientOption) (*DeleteOtelMetricsIngestionOK, error)
-
 	DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error)
 
 	DeleteService(params *DeleteServiceParams, opts ...ClientOption) (*DeleteServiceOK, error)
@@ -80,9 +74,9 @@ type ClientService interface {
 
 	DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRulesParams, opts ...ClientOption) (*DeleteTraceTailSamplingRulesOK, error)
 
-	ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error)
+	DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, opts ...ClientOption) (*DeleteTraceTopTagConfigOK, error)
 
-	ListDatasets(params *ListDatasetsParams, opts ...ClientOption) (*ListDatasetsOK, error)
+	ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error)
 
 	ListLinkTemplates(params *ListLinkTemplatesParams, opts ...ClientOption) (*ListLinkTemplatesOK, error)
 
@@ -100,8 +94,6 @@ type ClientService interface {
 
 	ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error)
 
-	ReadDataset(params *ReadDatasetParams, opts ...ClientOption) (*ReadDatasetOK, error)
-
 	ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...ClientOption) (*ReadLinkTemplateOK, error)
 
 	ReadLogAllocationConfig(params *ReadLogAllocationConfigParams, opts ...ClientOption) (*ReadLogAllocationConfigOK, error)
@@ -111,8 +103,6 @@ type ClientService interface {
 	ReadLogScaleAlert(params *ReadLogScaleAlertParams, opts ...ClientOption) (*ReadLogScaleAlertOK, error)
 
 	ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOption) (*ReadNoopEntityOK, error)
-
-	ReadOtelMetricsIngestion(params *ReadOtelMetricsIngestionParams, opts ...ClientOption) (*ReadOtelMetricsIngestionOK, error)
 
 	ReadSavedTraceSearch(params *ReadSavedTraceSearchParams, opts ...ClientOption) (*ReadSavedTraceSearchOK, error)
 
@@ -124,11 +114,11 @@ type ClientService interface {
 
 	ReadTraceTailSamplingRules(params *ReadTraceTailSamplingRulesParams, opts ...ClientOption) (*ReadTraceTailSamplingRulesOK, error)
 
+	ReadTraceTopTagConfig(params *ReadTraceTopTagConfigParams, opts ...ClientOption) (*ReadTraceTopTagConfigOK, error)
+
 	SyncPrometheus(params *SyncPrometheusParams, opts ...ClientOption) (*SyncPrometheusOK, error)
 
 	UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOption) (*UpdateDashboardOK, error)
-
-	UpdateDataset(params *UpdateDatasetParams, opts ...ClientOption) (*UpdateDatasetOK, error)
 
 	UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error)
 
@@ -140,8 +130,6 @@ type ClientService interface {
 
 	UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...ClientOption) (*UpdateNoopEntityOK, error)
 
-	UpdateOtelMetricsIngestion(params *UpdateOtelMetricsIngestionParams, opts ...ClientOption) (*UpdateOtelMetricsIngestionOK, error)
-
 	UpdateSavedTraceSearch(params *UpdateSavedTraceSearchParams, opts ...ClientOption) (*UpdateSavedTraceSearchOK, error)
 
 	UpdateService(params *UpdateServiceParams, opts ...ClientOption) (*UpdateServiceOK, error)
@@ -151,6 +139,8 @@ type ClientService interface {
 	UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*UpdateTraceJaegerRemoteSamplingStrategyOK, error)
 
 	UpdateTraceTailSamplingRules(params *UpdateTraceTailSamplingRulesParams, opts ...ClientOption) (*UpdateTraceTailSamplingRulesOK, error)
+
+	UpdateTraceTopTagConfig(params *UpdateTraceTopTagConfigParams, opts ...ClientOption) (*UpdateTraceTopTagConfigOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -189,43 +179,6 @@ func (a *Client) CreateDashboard(params *CreateDashboardParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateDashboardDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-CreateDataset create dataset API
-*/
-func (a *Client) CreateDataset(params *CreateDatasetParams, opts ...ClientOption) (*CreateDatasetOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateDatasetParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateDataset",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/datasets",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateDatasetReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateDatasetOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateDatasetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -411,43 +364,6 @@ func (a *Client) CreateNoopEntity(params *CreateNoopEntityParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateNoopEntityDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-CreateOtelMetricsIngestion create otel metrics ingestion API
-*/
-func (a *Client) CreateOtelMetricsIngestion(params *CreateOtelMetricsIngestionParams, opts ...ClientOption) (*CreateOtelMetricsIngestionOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateOtelMetricsIngestionParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateOtelMetricsIngestion",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/otel-metrics-ingestion",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateOtelMetricsIngestionReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateOtelMetricsIngestionOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateOtelMetricsIngestionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -640,6 +556,43 @@ func (a *Client) CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRul
 }
 
 /*
+CreateTraceTopTagConfig create trace top tag config API
+*/
+func (a *Client) CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, opts ...ClientOption) (*CreateTraceTopTagConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateTraceTopTagConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateTraceTopTagConfig",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/trace-top-tag-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateTraceTopTagConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateTraceTopTagConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateTraceTopTagConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteDashboard delete dashboard API
 */
 func (a *Client) DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error) {
@@ -673,43 +626,6 @@ func (a *Client) DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteDashboardDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-DeleteDataset delete dataset API
-*/
-func (a *Client) DeleteDataset(params *DeleteDatasetParams, opts ...ClientOption) (*DeleteDatasetOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteDatasetParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteDataset",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/datasets/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteDatasetReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteDatasetOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteDatasetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -899,43 +815,6 @@ func (a *Client) DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...Client
 }
 
 /*
-DeleteOtelMetricsIngestion delete otel metrics ingestion API
-*/
-func (a *Client) DeleteOtelMetricsIngestion(params *DeleteOtelMetricsIngestionParams, opts ...ClientOption) (*DeleteOtelMetricsIngestionOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteOtelMetricsIngestionParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteOtelMetricsIngestion",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/otel-metrics-ingestion",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteOtelMetricsIngestionReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteOtelMetricsIngestionOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteOtelMetricsIngestionDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 DeleteSavedTraceSearch delete saved trace search API
 */
 func (a *Client) DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error) {
@@ -1121,6 +1000,43 @@ func (a *Client) DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRul
 }
 
 /*
+DeleteTraceTopTagConfig delete trace top tag config API
+*/
+func (a *Client) DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, opts ...ClientOption) (*DeleteTraceTopTagConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteTraceTopTagConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteTraceTopTagConfig",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/trace-top-tag-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteTraceTopTagConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteTraceTopTagConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteTraceTopTagConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListDashboards list dashboards API
 */
 func (a *Client) ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error) {
@@ -1154,43 +1070,6 @@ func (a *Client) ListDashboards(params *ListDashboardsParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListDashboardsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListDatasets list datasets API
-*/
-func (a *Client) ListDatasets(params *ListDatasetsParams, opts ...ClientOption) (*ListDatasetsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListDatasetsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ListDatasets",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/datasets",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListDatasetsReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListDatasetsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListDatasetsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1491,43 +1370,6 @@ func (a *Client) ReadDashboard(params *ReadDashboardParams, opts ...ClientOption
 }
 
 /*
-ReadDataset read dataset API
-*/
-func (a *Client) ReadDataset(params *ReadDatasetParams, opts ...ClientOption) (*ReadDatasetOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadDatasetParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadDataset",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/datasets/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadDatasetReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadDatasetOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadDatasetDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ReadLinkTemplate read link template API
 */
 func (a *Client) ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...ClientOption) (*ReadLinkTemplateOK, error) {
@@ -1709,43 +1551,6 @@ func (a *Client) ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadNoopEntityDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ReadOtelMetricsIngestion read otel metrics ingestion API
-*/
-func (a *Client) ReadOtelMetricsIngestion(params *ReadOtelMetricsIngestionParams, opts ...ClientOption) (*ReadOtelMetricsIngestionOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadOtelMetricsIngestionParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadOtelMetricsIngestion",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/otel-metrics-ingestion",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadOtelMetricsIngestionReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadOtelMetricsIngestionOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadOtelMetricsIngestionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1935,6 +1740,43 @@ func (a *Client) ReadTraceTailSamplingRules(params *ReadTraceTailSamplingRulesPa
 }
 
 /*
+ReadTraceTopTagConfig read trace top tag config API
+*/
+func (a *Client) ReadTraceTopTagConfig(params *ReadTraceTopTagConfigParams, opts ...ClientOption) (*ReadTraceTopTagConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadTraceTopTagConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadTraceTopTagConfig",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/trace-top-tag-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadTraceTopTagConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadTraceTopTagConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadTraceTopTagConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 	SyncPrometheus ***
 
 Sync Prometheus Configuration
@@ -2008,43 +1850,6 @@ func (a *Client) UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateDashboardDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-UpdateDataset update dataset API
-*/
-func (a *Client) UpdateDataset(params *UpdateDatasetParams, opts ...ClientOption) (*UpdateDatasetOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateDatasetParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateDataset",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/datasets/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateDatasetReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateDatasetOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateDatasetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2234,43 +2039,6 @@ func (a *Client) UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...Client
 }
 
 /*
-UpdateOtelMetricsIngestion update otel metrics ingestion API
-*/
-func (a *Client) UpdateOtelMetricsIngestion(params *UpdateOtelMetricsIngestionParams, opts ...ClientOption) (*UpdateOtelMetricsIngestionOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateOtelMetricsIngestionParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateOtelMetricsIngestion",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/otel-metrics-ingestion",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateOtelMetricsIngestionReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateOtelMetricsIngestionOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateOtelMetricsIngestionDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 UpdateSavedTraceSearch update saved trace search API
 */
 func (a *Client) UpdateSavedTraceSearch(params *UpdateSavedTraceSearchParams, opts ...ClientOption) (*UpdateSavedTraceSearchOK, error) {
@@ -2452,6 +2220,43 @@ func (a *Client) UpdateTraceTailSamplingRules(params *UpdateTraceTailSamplingRul
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateTraceTailSamplingRulesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateTraceTopTagConfig update trace top tag config API
+*/
+func (a *Client) UpdateTraceTopTagConfig(params *UpdateTraceTopTagConfigParams, opts ...ClientOption) (*UpdateTraceTopTagConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateTraceTopTagConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateTraceTopTagConfig",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/trace-top-tag-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateTraceTopTagConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateTraceTopTagConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateTraceTopTagConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

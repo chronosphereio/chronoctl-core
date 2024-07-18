@@ -55,26 +55,6 @@ func (mr *MockClientServiceMockRecorder) CreateDashboard(params interface{}, opt
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDashboard", reflect.TypeOf((*MockClientService)(nil).CreateDashboard), varargs...)
 }
 
-// CreateDataset mocks base method.
-func (m *MockClientService) CreateDataset(params *operations.CreateDatasetParams, opts ...operations.ClientOption) (*operations.CreateDatasetOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateDataset", varargs...)
-	ret0, _ := ret[0].(*operations.CreateDatasetOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateDataset indicates an expected call of CreateDataset.
-func (mr *MockClientServiceMockRecorder) CreateDataset(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDataset", reflect.TypeOf((*MockClientService)(nil).CreateDataset), varargs...)
-}
-
 // CreateLinkTemplate mocks base method.
 func (m *MockClientService) CreateLinkTemplate(params *operations.CreateLinkTemplateParams, opts ...operations.ClientOption) (*operations.CreateLinkTemplateOK, error) {
 	m.ctrl.T.Helper()
@@ -173,26 +153,6 @@ func (mr *MockClientServiceMockRecorder) CreateNoopEntity(params interface{}, op
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNoopEntity", reflect.TypeOf((*MockClientService)(nil).CreateNoopEntity), varargs...)
-}
-
-// CreateOtelMetricsIngestion mocks base method.
-func (m *MockClientService) CreateOtelMetricsIngestion(params *operations.CreateOtelMetricsIngestionParams, opts ...operations.ClientOption) (*operations.CreateOtelMetricsIngestionOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateOtelMetricsIngestion", varargs...)
-	ret0, _ := ret[0].(*operations.CreateOtelMetricsIngestionOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateOtelMetricsIngestion indicates an expected call of CreateOtelMetricsIngestion.
-func (mr *MockClientServiceMockRecorder) CreateOtelMetricsIngestion(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOtelMetricsIngestion", reflect.TypeOf((*MockClientService)(nil).CreateOtelMetricsIngestion), varargs...)
 }
 
 // CreateSavedTraceSearch mocks base method.
@@ -295,6 +255,26 @@ func (mr *MockClientServiceMockRecorder) CreateTraceTailSamplingRules(params int
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceTailSamplingRules", reflect.TypeOf((*MockClientService)(nil).CreateTraceTailSamplingRules), varargs...)
 }
 
+// CreateTraceTopTagConfig mocks base method.
+func (m *MockClientService) CreateTraceTopTagConfig(params *operations.CreateTraceTopTagConfigParams, opts ...operations.ClientOption) (*operations.CreateTraceTopTagConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateTraceTopTagConfig", varargs...)
+	ret0, _ := ret[0].(*operations.CreateTraceTopTagConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateTraceTopTagConfig indicates an expected call of CreateTraceTopTagConfig.
+func (mr *MockClientServiceMockRecorder) CreateTraceTopTagConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).CreateTraceTopTagConfig), varargs...)
+}
+
 // DeleteDashboard mocks base method.
 func (m *MockClientService) DeleteDashboard(params *operations.DeleteDashboardParams, opts ...operations.ClientOption) (*operations.DeleteDashboardOK, error) {
 	m.ctrl.T.Helper()
@@ -313,26 +293,6 @@ func (mr *MockClientServiceMockRecorder) DeleteDashboard(params interface{}, opt
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDashboard", reflect.TypeOf((*MockClientService)(nil).DeleteDashboard), varargs...)
-}
-
-// DeleteDataset mocks base method.
-func (m *MockClientService) DeleteDataset(params *operations.DeleteDatasetParams, opts ...operations.ClientOption) (*operations.DeleteDatasetOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteDataset", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteDatasetOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteDataset indicates an expected call of DeleteDataset.
-func (mr *MockClientServiceMockRecorder) DeleteDataset(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDataset", reflect.TypeOf((*MockClientService)(nil).DeleteDataset), varargs...)
 }
 
 // DeleteLinkTemplate mocks base method.
@@ -435,26 +395,6 @@ func (mr *MockClientServiceMockRecorder) DeleteNoopEntity(params interface{}, op
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNoopEntity", reflect.TypeOf((*MockClientService)(nil).DeleteNoopEntity), varargs...)
 }
 
-// DeleteOtelMetricsIngestion mocks base method.
-func (m *MockClientService) DeleteOtelMetricsIngestion(params *operations.DeleteOtelMetricsIngestionParams, opts ...operations.ClientOption) (*operations.DeleteOtelMetricsIngestionOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteOtelMetricsIngestion", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteOtelMetricsIngestionOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteOtelMetricsIngestion indicates an expected call of DeleteOtelMetricsIngestion.
-func (mr *MockClientServiceMockRecorder) DeleteOtelMetricsIngestion(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteOtelMetricsIngestion", reflect.TypeOf((*MockClientService)(nil).DeleteOtelMetricsIngestion), varargs...)
-}
-
 // DeleteSavedTraceSearch mocks base method.
 func (m *MockClientService) DeleteSavedTraceSearch(params *operations.DeleteSavedTraceSearchParams, opts ...operations.ClientOption) (*operations.DeleteSavedTraceSearchOK, error) {
 	m.ctrl.T.Helper()
@@ -555,6 +495,26 @@ func (mr *MockClientServiceMockRecorder) DeleteTraceTailSamplingRules(params int
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceTailSamplingRules", reflect.TypeOf((*MockClientService)(nil).DeleteTraceTailSamplingRules), varargs...)
 }
 
+// DeleteTraceTopTagConfig mocks base method.
+func (m *MockClientService) DeleteTraceTopTagConfig(params *operations.DeleteTraceTopTagConfigParams, opts ...operations.ClientOption) (*operations.DeleteTraceTopTagConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteTraceTopTagConfig", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteTraceTopTagConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteTraceTopTagConfig indicates an expected call of DeleteTraceTopTagConfig.
+func (mr *MockClientServiceMockRecorder) DeleteTraceTopTagConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).DeleteTraceTopTagConfig), varargs...)
+}
+
 // ListDashboards mocks base method.
 func (m *MockClientService) ListDashboards(params *operations.ListDashboardsParams, opts ...operations.ClientOption) (*operations.ListDashboardsOK, error) {
 	m.ctrl.T.Helper()
@@ -573,26 +533,6 @@ func (mr *MockClientServiceMockRecorder) ListDashboards(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDashboards", reflect.TypeOf((*MockClientService)(nil).ListDashboards), varargs...)
-}
-
-// ListDatasets mocks base method.
-func (m *MockClientService) ListDatasets(params *operations.ListDatasetsParams, opts ...operations.ClientOption) (*operations.ListDatasetsOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ListDatasets", varargs...)
-	ret0, _ := ret[0].(*operations.ListDatasetsOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListDatasets indicates an expected call of ListDatasets.
-func (mr *MockClientServiceMockRecorder) ListDatasets(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDatasets", reflect.TypeOf((*MockClientService)(nil).ListDatasets), varargs...)
 }
 
 // ListLinkTemplates mocks base method.
@@ -755,26 +695,6 @@ func (mr *MockClientServiceMockRecorder) ReadDashboard(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadDashboard", reflect.TypeOf((*MockClientService)(nil).ReadDashboard), varargs...)
 }
 
-// ReadDataset mocks base method.
-func (m *MockClientService) ReadDataset(params *operations.ReadDatasetParams, opts ...operations.ClientOption) (*operations.ReadDatasetOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadDataset", varargs...)
-	ret0, _ := ret[0].(*operations.ReadDatasetOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadDataset indicates an expected call of ReadDataset.
-func (mr *MockClientServiceMockRecorder) ReadDataset(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadDataset", reflect.TypeOf((*MockClientService)(nil).ReadDataset), varargs...)
-}
-
 // ReadLinkTemplate mocks base method.
 func (m *MockClientService) ReadLinkTemplate(params *operations.ReadLinkTemplateParams, opts ...operations.ClientOption) (*operations.ReadLinkTemplateOK, error) {
 	m.ctrl.T.Helper()
@@ -873,26 +793,6 @@ func (mr *MockClientServiceMockRecorder) ReadNoopEntity(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadNoopEntity", reflect.TypeOf((*MockClientService)(nil).ReadNoopEntity), varargs...)
-}
-
-// ReadOtelMetricsIngestion mocks base method.
-func (m *MockClientService) ReadOtelMetricsIngestion(params *operations.ReadOtelMetricsIngestionParams, opts ...operations.ClientOption) (*operations.ReadOtelMetricsIngestionOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadOtelMetricsIngestion", varargs...)
-	ret0, _ := ret[0].(*operations.ReadOtelMetricsIngestionOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadOtelMetricsIngestion indicates an expected call of ReadOtelMetricsIngestion.
-func (mr *MockClientServiceMockRecorder) ReadOtelMetricsIngestion(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadOtelMetricsIngestion", reflect.TypeOf((*MockClientService)(nil).ReadOtelMetricsIngestion), varargs...)
 }
 
 // ReadSavedTraceSearch mocks base method.
@@ -995,6 +895,26 @@ func (mr *MockClientServiceMockRecorder) ReadTraceTailSamplingRules(params inter
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadTraceTailSamplingRules", reflect.TypeOf((*MockClientService)(nil).ReadTraceTailSamplingRules), varargs...)
 }
 
+// ReadTraceTopTagConfig mocks base method.
+func (m *MockClientService) ReadTraceTopTagConfig(params *operations.ReadTraceTopTagConfigParams, opts ...operations.ClientOption) (*operations.ReadTraceTopTagConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadTraceTopTagConfig", varargs...)
+	ret0, _ := ret[0].(*operations.ReadTraceTopTagConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadTraceTopTagConfig indicates an expected call of ReadTraceTopTagConfig.
+func (mr *MockClientServiceMockRecorder) ReadTraceTopTagConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).ReadTraceTopTagConfig), varargs...)
+}
+
 // SetTransport mocks base method.
 func (m *MockClientService) SetTransport(transport runtime.ClientTransport) {
 	m.ctrl.T.Helper()
@@ -1045,26 +965,6 @@ func (mr *MockClientServiceMockRecorder) UpdateDashboard(params interface{}, opt
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDashboard", reflect.TypeOf((*MockClientService)(nil).UpdateDashboard), varargs...)
-}
-
-// UpdateDataset mocks base method.
-func (m *MockClientService) UpdateDataset(params *operations.UpdateDatasetParams, opts ...operations.ClientOption) (*operations.UpdateDatasetOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateDataset", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateDatasetOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateDataset indicates an expected call of UpdateDataset.
-func (mr *MockClientServiceMockRecorder) UpdateDataset(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDataset", reflect.TypeOf((*MockClientService)(nil).UpdateDataset), varargs...)
 }
 
 // UpdateLinkTemplate mocks base method.
@@ -1167,26 +1067,6 @@ func (mr *MockClientServiceMockRecorder) UpdateNoopEntity(params interface{}, op
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNoopEntity", reflect.TypeOf((*MockClientService)(nil).UpdateNoopEntity), varargs...)
 }
 
-// UpdateOtelMetricsIngestion mocks base method.
-func (m *MockClientService) UpdateOtelMetricsIngestion(params *operations.UpdateOtelMetricsIngestionParams, opts ...operations.ClientOption) (*operations.UpdateOtelMetricsIngestionOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateOtelMetricsIngestion", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateOtelMetricsIngestionOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateOtelMetricsIngestion indicates an expected call of UpdateOtelMetricsIngestion.
-func (mr *MockClientServiceMockRecorder) UpdateOtelMetricsIngestion(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateOtelMetricsIngestion", reflect.TypeOf((*MockClientService)(nil).UpdateOtelMetricsIngestion), varargs...)
-}
-
 // UpdateSavedTraceSearch mocks base method.
 func (m *MockClientService) UpdateSavedTraceSearch(params *operations.UpdateSavedTraceSearchParams, opts ...operations.ClientOption) (*operations.UpdateSavedTraceSearchOK, error) {
 	m.ctrl.T.Helper()
@@ -1285,4 +1165,24 @@ func (mr *MockClientServiceMockRecorder) UpdateTraceTailSamplingRules(params int
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTraceTailSamplingRules", reflect.TypeOf((*MockClientService)(nil).UpdateTraceTailSamplingRules), varargs...)
+}
+
+// UpdateTraceTopTagConfig mocks base method.
+func (m *MockClientService) UpdateTraceTopTagConfig(params *operations.UpdateTraceTopTagConfigParams, opts ...operations.ClientOption) (*operations.UpdateTraceTopTagConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateTraceTopTagConfig", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateTraceTopTagConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateTraceTopTagConfig indicates an expected call of UpdateTraceTopTagConfig.
+func (mr *MockClientServiceMockRecorder) UpdateTraceTopTagConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).UpdateTraceTopTagConfig), varargs...)
 }

@@ -58,6 +58,8 @@ type ClientService interface {
 
 	CreateNotifier(params *CreateNotifierParams, opts ...ClientOption) (*CreateNotifierOK, error)
 
+	CreateOtelMetricsIngestion(params *CreateOtelMetricsIngestionParams, opts ...ClientOption) (*CreateOtelMetricsIngestionOK, error)
+
 	CreateRecordingRule(params *CreateRecordingRuleParams, opts ...ClientOption) (*CreateRecordingRuleOK, error)
 
 	CreateResourcePools(params *CreateResourcePoolsParams, opts ...ClientOption) (*CreateResourcePoolsOK, error)
@@ -105,6 +107,8 @@ type ClientService interface {
 	DeleteNotificationPolicy(params *DeleteNotificationPolicyParams, opts ...ClientOption) (*DeleteNotificationPolicyOK, error)
 
 	DeleteNotifier(params *DeleteNotifierParams, opts ...ClientOption) (*DeleteNotifierOK, error)
+
+	DeleteOtelMetricsIngestion(params *DeleteOtelMetricsIngestionParams, opts ...ClientOption) (*DeleteOtelMetricsIngestionOK, error)
 
 	DeleteRecordingRule(params *DeleteRecordingRuleParams, opts ...ClientOption) (*DeleteRecordingRuleOK, error)
 
@@ -196,6 +200,8 @@ type ClientService interface {
 
 	ReadNotifier(params *ReadNotifierParams, opts ...ClientOption) (*ReadNotifierOK, error)
 
+	ReadOtelMetricsIngestion(params *ReadOtelMetricsIngestionParams, opts ...ClientOption) (*ReadOtelMetricsIngestionOK, error)
+
 	ReadRecordingRule(params *ReadRecordingRuleParams, opts ...ClientOption) (*ReadRecordingRuleOK, error)
 
 	ReadResourcePools(params *ReadResourcePoolsParams, opts ...ClientOption) (*ReadResourcePoolsOK, error)
@@ -245,6 +251,8 @@ type ClientService interface {
 	UpdateNotificationPolicy(params *UpdateNotificationPolicyParams, opts ...ClientOption) (*UpdateNotificationPolicyOK, error)
 
 	UpdateNotifier(params *UpdateNotifierParams, opts ...ClientOption) (*UpdateNotifierOK, error)
+
+	UpdateOtelMetricsIngestion(params *UpdateOtelMetricsIngestionParams, opts ...ClientOption) (*UpdateOtelMetricsIngestionOK, error)
 
 	UpdateRecordingRule(params *UpdateRecordingRuleParams, opts ...ClientOption) (*UpdateRecordingRuleOK, error)
 
@@ -817,6 +825,43 @@ func (a *Client) CreateNotifier(params *CreateNotifierParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateNotifierDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateOtelMetricsIngestion create otel metrics ingestion API
+*/
+func (a *Client) CreateOtelMetricsIngestion(params *CreateOtelMetricsIngestionParams, opts ...ClientOption) (*CreateOtelMetricsIngestionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateOtelMetricsIngestionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateOtelMetricsIngestion",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/otel-metrics-ingestion",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateOtelMetricsIngestionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateOtelMetricsIngestionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateOtelMetricsIngestionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1708,6 +1753,43 @@ func (a *Client) DeleteNotifier(params *DeleteNotifierParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteNotifierDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteOtelMetricsIngestion delete otel metrics ingestion API
+*/
+func (a *Client) DeleteOtelMetricsIngestion(params *DeleteOtelMetricsIngestionParams, opts ...ClientOption) (*DeleteOtelMetricsIngestionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteOtelMetricsIngestionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteOtelMetricsIngestion",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/otel-metrics-ingestion",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteOtelMetricsIngestionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteOtelMetricsIngestionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteOtelMetricsIngestionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3377,6 +3459,43 @@ func (a *Client) ReadNotifier(params *ReadNotifierParams, opts ...ClientOption) 
 }
 
 /*
+ReadOtelMetricsIngestion read otel metrics ingestion API
+*/
+func (a *Client) ReadOtelMetricsIngestion(params *ReadOtelMetricsIngestionParams, opts ...ClientOption) (*ReadOtelMetricsIngestionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadOtelMetricsIngestionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadOtelMetricsIngestion",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/otel-metrics-ingestion",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadOtelMetricsIngestionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadOtelMetricsIngestionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadOtelMetricsIngestionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadRecordingRule read recording rule API
 */
 func (a *Client) ReadRecordingRule(params *ReadRecordingRuleParams, opts ...ClientOption) (*ReadRecordingRuleOK, error) {
@@ -4298,6 +4417,43 @@ func (a *Client) UpdateNotifier(params *UpdateNotifierParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateNotifierDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateOtelMetricsIngestion update otel metrics ingestion API
+*/
+func (a *Client) UpdateOtelMetricsIngestion(params *UpdateOtelMetricsIngestionParams, opts ...ClientOption) (*UpdateOtelMetricsIngestionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateOtelMetricsIngestionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateOtelMetricsIngestion",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/otel-metrics-ingestion",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateOtelMetricsIngestionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateOtelMetricsIngestionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateOtelMetricsIngestionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
