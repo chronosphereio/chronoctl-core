@@ -4,6 +4,8 @@
 
 ### Added
 * Adds new resource `v1/config/OtelMetricsIngestion`
+* Adds new resource `v1/config/LogScaleAction`
+* Adds new resource `v1/config/LogScaleAlert`
 * Adds support for logs in `v1/config/Dataset`
 
 ## v1.8.0

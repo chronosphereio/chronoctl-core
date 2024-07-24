@@ -22,6 +22,8 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewDropRuleCmd())
 	root.AddCommand(NewGcpMetricsIntegrationCmd())
 	root.AddCommand(NewGrafanaDashboardCmd())
+	root.AddCommand(NewLogScaleActionCmd())
+	root.AddCommand(NewLogScaleAlertCmd())
 	root.AddCommand(NewMappingRuleCmd())
 	root.AddCommand(NewMonitorCmd())
 	root.AddCommand(NewMutingRuleCmd())
@@ -196,6 +198,38 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateGrafanaDashboard(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		LogScaleActionTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*LogScaleAction)
+			if !ok {
+				return types.WrongObjectErr((&LogScaleAction{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateLogScaleAction(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		LogScaleAlertTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*LogScaleAlert)
+			if !ok {
+				return types.WrongObjectErr((&LogScaleAlert{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateLogScaleAlert(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}
