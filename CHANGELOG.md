@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.9.0
+
 ### Added
 * Adds new resource `v1/config/OtelMetricsIngestion`
 * Adds support for logs in `v1/config/Dataset`
