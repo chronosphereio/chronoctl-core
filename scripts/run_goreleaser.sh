@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-set -x
+
 [[ -z ${DEBUG:-} ]] || set -o xtrace
 
 # get the absolute path of the chronoctl-core directory no matter where the
@@ -19,7 +19,6 @@ if [[ "${BUILDKITE:-}" == "true" ]]; then
     SSH_CONFIG_DIR_VOLUME="/var/lib/buildkite-agent/.ssh"
 fi
 
-
 DOCKER_OPTS=(
     -w "${GO_RELEASER_WORKING_DIR}"
     -e "GITHUB_TOKEN" # Set by CI
@@ -32,7 +31,12 @@ DOCKER_OPTS=(
     -v "${DIR}:${GO_RELEASER_WORKING_DIR}"
 )
 
-if [[ "${BUILDKITE:-}" != "true" ]]; then
+if [[ -n "${GOOGLE_APPLICATION_CREDENTIALS:-}" ]]; then
+    DOCKER_OPTS+=(
+        -e "GOOGLE_APPLICATION_CREDENTIALS"
+        -v "${GOOGLE_APPLICATION_CREDENTIALS}:${GOOGLE_APPLICATION_CREDENTIALS}"
+    )
+else
     DOCKER_OPTS+=(-v "${GCLOUD_CONFIG_DIR}:/root/.config/gcloud")
 fi
 
