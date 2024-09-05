@@ -73,19 +73,19 @@ linters-settings:
     # minimal occurrences count to trigger, 3 by default
     min-occurrences: 3
   depguard:
-    list-type: blacklist
-    include-go-root: false
-    packages:
-      - hash/fnv
-      - github.com/sirupsen/logrus
-      - github.com/tj/assert
-      - github.com/golang/protobuf/jsonpb
-    packages-with-error-messages:
-      # specify an error message to output when a blacklisted package is used
-      hash/fnv: "use github.com/cespare/xxhash/v2"
-      github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
-      github.com/tj/assert: "use github.com/stretchr/testify/assert"
-      github.com/golang/protobuf/jsonpb: "replace with github.com/gogo/protobuf/jsonpb"
+    rules:
+      main:
+        deny:
+          - pkg: "hash/fnv"
+            desc: "use github.com/cespare/xxhash/v2"
+          - pkg: "github.com/sirupsen/logrus"
+            desc: "logging is allowed only by logutils.Log"
+          - pkg: "github.com/tj/assert"
+            desc: "use github.com/stretchr/testify/assert"
+          - pkg: "github.com/golang/protobuf/jsonpb"
+            desc: "replace with github.com/gogo/protobuf/jsonpb"
+          - pkg: "golang.org/x/net/context"
+            desc: "replace with context"
   misspell:
     # Correct spellings using locale preferences for US or UK.
     # Default is to use a neutral variety of English.
