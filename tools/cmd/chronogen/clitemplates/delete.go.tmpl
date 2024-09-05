@@ -27,11 +27,16 @@ func new{{ .Name }}DeleteCmd() *cobra.Command {
 	{{- end }}
 
 	cmd := &cobra.Command{
+		{{- if .Entity.IsNotSingleton }}
 		Use: "delete <slug>",
 		GroupID: groups.Commands.ID,
 		Short: "Deletes a single {{ .Name }} by slug",
-		{{- if .Entity.IsNotSingleton }}
 		Args: cobra.ExactArgs(1),
+		{{- else }}
+		Use: "delete",
+		GroupID: groups.Commands.ID,
+		Short: "Deletes the {{ .Name }} singleton",
+		Args: cobra.NoArgs,
 		{{- end }}
 		RunE: func(cmd *cobra.Command, args []string) error{
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
