@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* New unstable state: metric-usages-by-metric-name
+* New unstable state: metric-usages-by-label-name
+
 ## v1.9.0
 
 ### Added
