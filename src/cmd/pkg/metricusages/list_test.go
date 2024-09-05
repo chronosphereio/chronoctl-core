@@ -16,6 +16,7 @@ package metricusages
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	state_unstable "github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/client/operations"
@@ -141,5 +142,29 @@ cardinality: 1
 dpps: 2
 `
 	assert.Equal(t, expected, buf.String())
+	buf.Reset()
+
+	// All results paginated.
+	first := cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByMetricNameOK{
+		Payload: &models.StateunstableListMetricUsagesByMetricNameResponse{
+			Usages: []*models.StateunstableMetricUsageByMetricName{
+				newFn("metric-a"),
+				newFn("metric-b"),
+			},
+			Page: &models.Configv1PageResult{
+				NextToken: "foo",
+			},
+		},
+	}, nil)
+	second := cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByMetricNameOK{
+		Payload: &models.StateunstableListMetricUsagesByMetricNameResponse{
+			Usages: []*models.StateunstableMetricUsageByMetricName{
+				newFn("metric-c"),
+			},
+		},
+	}, nil)
+	gomock.InOrder(first, second)
+	require.NoError(t, o.run(&buf))
+	assert.Equal(t, expected, strings.TrimPrefix(buf.String(), "---\n"))
 	buf.Reset()
 }
