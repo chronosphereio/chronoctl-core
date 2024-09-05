@@ -12,162 +12,134 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ruleevaluations
+package metricusages
 
 import (
 	"bytes"
 	"testing"
 
-	state_v1 "github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/client/operations"
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/mocks"
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/models"
-	"github.com/go-openapi/strfmt"
+	state_unstable "github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/client/operations"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/mocks"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/models"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
-func TestListRuleEvaluations(t *testing.T) {
-	base := models.Statev1RuleEvaluation{
-		RuleSlug:   "slug-one",
-		RuleType:   models.RuleEvaluationRuleTypeMONITOR,
-		Count:      5,
-		Message:    "error-one",
-		DetectedAt: strfmt.NewDateTime(),
-	}
-
-	tests := []struct {
-		name     string
-		opts     func(*gomock.Controller) *listOptions
-		expected string
-		err      error
-	}{
-		{
-			name: "get all rule evaluations",
-			opts: func(ctrl *gomock.Controller) *listOptions {
-				o := newListOptions()
-				cli := mocks.NewMockClientService(ctrl)
-				cli.EXPECT().ListRuleEvaluations(gomock.Any()).Return(&state_v1.ListRuleEvaluationsOK{
-					Payload: &models.Statev1ListRuleEvaluationsResponse{
-						RuleEvaluations: []*models.Statev1RuleEvaluation{
-							createTestRuleEvaluation(base),
-							createTestRuleEvaluation(base, withRuleSlug("slug-two"), withCount(20), withRuleType(models.RuleEvaluationRuleTypeRECORDING)),
-						},
-					},
-				}, nil)
-				o.client = cli
-				return o
+func TestListMetricUsagesByMetricName(t *testing.T) {
+	newFn := func(name string) *models.StateunstableMetricUsageByMetricName {
+		return &models.StateunstableMetricUsageByMetricName{
+			MetricName: name,
+			Usage: &models.StateunstableMetricUsage{
+				TotalReferences:      1,
+				TotalQueryExecutions: 2,
+				TotalUniqueUsers:     3,
+				UtilityScore:         4,
+				ReferenceCountsByType: &models.MetricUsageReferenceCountsByType{
+					Dashboards:       1,
+					Monitors:         2,
+					RecordingRules:   3,
+					DropRules:        4,
+					AggregationRules: 5,
+				},
+				QueryExecutionCountsByType: &models.MetricUsageQueryExecutionCountsByType{
+					Explorer:  1,
+					Dashboard: 2,
+					External:  3,
+				},
 			},
-			expected: `rule_slug: slug-one
-rule_type: MONITOR
-detected_at: "1970-01-01T00:00:00.000Z"
-count: 5
-message: error-one
----
-rule_slug: slug-two
-rule_type: RECORDING
-detected_at: "1970-01-01T00:00:00.000Z"
-count: 20
-message: error-one
-`,
+			Cardinality: 1,
+			Dpps:        2,
+		}
+	}
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	o := newListOptions(listMetricUsageByMetricName)
+	cli := mocks.NewMockClientService(ctrl)
+	o.client = cli
+
+	var buf bytes.Buffer
+
+	// Nil result.
+	cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByMetricNameOK{
+		Payload: &models.StateunstableListMetricUsagesByMetricNameResponse{
+			Usages: nil,
 		},
-		{
-			name: "get all rule evaluations with pagination",
-			opts: func(ctrl *gomock.Controller) *listOptions {
-				o := newListOptions()
-				cli := mocks.NewMockClientService(ctrl)
+	}, nil)
+	require.NoError(t, o.run(&buf))
+	require.Empty(t, buf.String())
+	buf.Reset()
 
-				first := cli.EXPECT().ListRuleEvaluations(gomock.Any()).Return(&state_v1.ListRuleEvaluationsOK{
-					Payload: &models.Statev1ListRuleEvaluationsResponse{
-						RuleEvaluations: []*models.Statev1RuleEvaluation{
-							createTestRuleEvaluation(base),
-							createTestRuleEvaluation(base, withRuleSlug("slug-two"), withCount(20), withRuleType(models.RuleEvaluationRuleTypeRECORDING)),
-						},
-						Page: &models.Configv1PageResult{ // indication of next page
-							NextToken: "next-page",
-						},
-					},
-				}, nil)
-
-				second := cli.EXPECT().ListRuleEvaluations(gomock.Any()).DoAndReturn(func(params *state_v1.ListRuleEvaluationsParams, _ ...state_v1.ClientOption) (*state_v1.ListRuleEvaluationsOK, error) {
-					require.NotEmpty(t, params.PageToken)
-					return &state_v1.ListRuleEvaluationsOK{
-						Payload: &models.Statev1ListRuleEvaluationsResponse{
-							RuleEvaluations: []*models.Statev1RuleEvaluation{
-								createTestRuleEvaluation(base, withRuleSlug("slug-three")),
-							},
-						},
-					}, nil
-				})
-
-				gomock.InOrder(first, second)
-				o.client = cli
-				return o
+	// All results.
+	cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByMetricNameOK{
+		Payload: &models.StateunstableListMetricUsagesByMetricNameResponse{
+			Usages: []*models.StateunstableMetricUsageByMetricName{
+				newFn("metric-a"),
+				newFn("metric-b"),
+				newFn("metric-c"),
 			},
-			expected: `rule_slug: slug-one
-rule_type: MONITOR
-detected_at: "1970-01-01T00:00:00.000Z"
-count: 5
-message: error-one
----
-rule_slug: slug-two
-rule_type: RECORDING
-detected_at: "1970-01-01T00:00:00.000Z"
-count: 20
-message: error-one
----
-rule_slug: slug-three
-rule_type: MONITOR
-detected_at: "1970-01-01T00:00:00.000Z"
-count: 5
-message: error-one
-`,
 		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			ctrl := gomock.NewController(t)
-			defer ctrl.Finish()
-
-			var (
-				buf  bytes.Buffer
-				opts = tt.opts(ctrl)
-			)
-			err := opts.run(&buf)
-			require.Equal(t, tt.err, err)
-			assert.Equal(t, tt.expected, buf.String())
-		})
-	}
-}
-
-type modifierFn func(models.Statev1RuleEvaluation) models.Statev1RuleEvaluation
-
-func withRuleSlug(slug string) modifierFn {
-	return func(sre models.Statev1RuleEvaluation) models.Statev1RuleEvaluation {
-		sre.RuleSlug = slug
-		return sre
-	}
-}
-
-func withRuleType(ruleType models.RuleEvaluationRuleType) modifierFn {
-	return func(sre models.Statev1RuleEvaluation) models.Statev1RuleEvaluation {
-		sre.RuleType = ruleType
-		return sre
-	}
-}
-
-func withCount(count int32) modifierFn {
-	return func(sre models.Statev1RuleEvaluation) models.Statev1RuleEvaluation {
-		sre.Count = count
-		return sre
-	}
-}
-
-func createTestRuleEvaluation(base models.Statev1RuleEvaluation, modifiers ...modifierFn) *models.Statev1RuleEvaluation {
-	for _, modifierFn := range modifiers {
-		base = modifierFn(base)
-	}
-
-	return &base
+	}, nil)
+	require.NoError(t, o.run(&buf))
+	expected := `metric_name: metric-a
+usage:
+  total_references: 1
+  total_query_executions: 2
+  total_unique_users: 3
+  utility_score: 4
+  reference_counts_by_type:
+    dashboards: 1
+    monitors: 2
+    recording_rules: 3
+    drop_rules: 4
+    aggregation_rules: 5
+  query_execution_counts_by_type:
+    explorer: 1
+    dashboard: 2
+    external: 3
+cardinality: 1
+dpps: 2
+---
+metric_name: metric-b
+usage:
+  total_references: 1
+  total_query_executions: 2
+  total_unique_users: 3
+  utility_score: 4
+  reference_counts_by_type:
+    dashboards: 1
+    monitors: 2
+    recording_rules: 3
+    drop_rules: 4
+    aggregation_rules: 5
+  query_execution_counts_by_type:
+    explorer: 1
+    dashboard: 2
+    external: 3
+cardinality: 1
+dpps: 2
+---
+metric_name: metric-c
+usage:
+  total_references: 1
+  total_query_executions: 2
+  total_unique_users: 3
+  utility_score: 4
+  reference_counts_by_type:
+    dashboards: 1
+    monitors: 2
+    recording_rules: 3
+    drop_rules: 4
+    aggregation_rules: 5
+  query_execution_counts_by_type:
+    explorer: 1
+    dashboard: 2
+    external: 3
+cardinality: 1
+dpps: 2
+`
+	assert.Equal(t, expected, buf.String())
+	buf.Reset()
 }

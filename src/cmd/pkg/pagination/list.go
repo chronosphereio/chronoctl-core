@@ -1,7 +1,5 @@
 package pagination
 
-import "github.com/chronosphereio/chronoctl/src/cmd/pkg/pagination"
-
 // Page is a list page.
 type Page struct {
 	Size  int64
@@ -37,7 +35,7 @@ func List[T any](p Page,
 			return items, nextToken, nil
 		}
 
-		pageSize = int64(pagination.CalculatePageSize(pagination.Calculation{
+		pageSize = int64(CalculatePageSize(Calculation{
 			GotItems:    len(items),
 			MaxItems:    int(p.Size),
 			MaxPageSize: len(current),

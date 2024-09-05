@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package ruleevaluations contains all commands related to rule evaluations
-package ruleevaluations
+// Package metricusages contains all commands related to metric usages
+package metricusages
 
 import (
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
@@ -22,13 +22,38 @@ import (
 
 // NewCommand returns a new cobra command for managing rule evaluations
 func NewCommands() []*cobra.Command {
-	root := &cobra.Command{
+	return []*cobra.Command{
+		newCommandByMetricName(),
+		newCommandByLabelName(),
+	}
+}
+
+func newCommandByMetricName() *cobra.Command {
+	cmd := &cobra.Command{
 		Use:     "metric-usages-by-metric-name",
 		GroupID: groups.State.ID,
 		Short:   "All commands related to metric usages by metric name",
 		Example: `# List all metric usages by metric name.
 chronoctl metric-usages-by-metric-name list`,
 	}
-	root.AddCommand(newListCommand())
-	return root
+	cmd.AddCommand(newListOptions(listMetricUsageByMetricName).buildCmd(
+		"List all metric usages by metric name.",
+		`# List all metric usages by metric name.
+chronoctl metric-usages-by-metric-name list`))
+	return cmd
+}
+
+func newCommandByLabelName() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "metric-usages-by-label-name",
+		GroupID: groups.State.ID,
+		Short:   "All commands related to metric usages by label name",
+		Example: `# List all metric usages by label name.
+chronoctl metric-usages-by-label-name list`,
+	}
+	cmd.AddCommand(newListOptions(listMetricUsageByLabelName).buildCmd(
+		"List all metric usages by metric name.",
+		`# List all metric usages by metric name.
+chronoctl metric-usages-by-metric-name list`))
+	return cmd
 }

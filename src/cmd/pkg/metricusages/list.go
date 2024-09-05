@@ -30,33 +30,7 @@ import (
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/models"
 )
 
-func newListCommand() *cobra.Command {
-	opts := newListOptions()
-
-	cmd := &cobra.Command{
-		Use:   "list",
-		Short: "List all rule evaluations",
-		Example: `# List all rule evaluations.
-chronoctl rule-evaluations list`,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			opts.originalCommandString = cli.BuildCommandString(cmd, []string{"next-token"} /* ignoreFlags */)
-
-			if err := opts.validate(); err != nil {
-				return err
-			}
-			if err := opts.runByMetric(os.Stdout); err != nil {
-				return err
-			}
-			return nil
-		},
-	}
-
-	opts.addFlags(cmd)
-
-	return cmd
-}
-
-type listOptions struct {
+type listOptions[T any] struct {
 	outputFlags *output.Flags
 	clientFlags *client.Flags
 
@@ -65,16 +39,42 @@ type listOptions struct {
 	originalCommandString string
 
 	client state_unstable.ClientService
+
+	listFn listFn[T]
 }
 
-func newListOptions() *listOptions {
-	return &listOptions{
+type listFn[T any] func(ctx context.Context, client state_unstable.ClientService, p pagination.Page) (items []T, token string, err error)
+
+func newListOptions[T any](listFn listFn[T]) *listOptions[T] {
+	return &listOptions[T]{
 		clientFlags: client.NewClientFlags(),
 		outputFlags: output.NewFlags(),
+		listFn:      listFn,
 	}
 }
 
-func (o *listOptions) validate() error {
+func (o *listOptions[T]) buildCmd(short, example string) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "list",
+		Short:   short,
+		Example: example,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			o.originalCommandString = cli.BuildCommandString(cmd, []string{"next-token"} /* ignoreFlags */)
+
+			if err := o.validate(); err != nil {
+				return err
+			}
+			if err := o.run(os.Stdout); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+	o.addFlags(cmd)
+	return cmd
+}
+
+func (o *listOptions[T]) validate() error {
 	client, err := o.clientFlags.StateUnstableClient()
 	if err != nil {
 		return err
@@ -84,7 +84,7 @@ func (o *listOptions) validate() error {
 	return nil
 }
 
-func (o *listOptions) addFlags(cmd *cobra.Command) {
+func (o *listOptions[T]) addFlags(cmd *cobra.Command) {
 	o.clientFlags.AddFlags(cmd)
 	o.outputFlags.AddFlags(cmd)
 
@@ -92,13 +92,13 @@ func (o *listOptions) addFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVar(&o.nextToken, "next-token", "", "Pagination token to use")
 }
 
-func (o *listOptions) runByMetric(w io.Writer) error {
+func (o *listOptions[T]) run(w io.Writer) error {
 	defer o.outputFlags.Close(w) //nolint:errcheck
 
 	ctx, cancel := context.WithTimeout(context.Background(), o.clientFlags.Timeout())
 	defer cancel()
 
-	byMetric, nextToken, err := o.queryByMetric(ctx)
+	byMetric, nextToken, err := o.query(ctx)
 	if err != nil {
 		return err
 	}
@@ -115,71 +115,53 @@ func (o *listOptions) runByMetric(w io.Writer) error {
 	return nil
 }
 
-func (o *listOptions) runByLabel(w io.Writer) error {
-	defer o.outputFlags.Close(w) //nolint:errcheck
+func (o *listOptions[T]) query(ctx context.Context) (usages []T, token string, _ error) {
+	return pagination.List(
+		pagination.Page{
+			Size:  o.maxItems,
+			Token: o.nextToken,
+		},
+		func(p pagination.Page) (items []T, token string, err error) {
+			return o.listFn(ctx, o.client, p)
+		})
+}
 
-	ctx, cancel := context.WithTimeout(context.Background(), o.clientFlags.Timeout())
-	defer cancel()
-
-	byMetric, nextToken, err := o.queryByLabel(ctx)
+func listMetricUsageByMetricName(
+	ctx context.Context,
+	client state_unstable.ClientService,
+	p pagination.Page,
+) (items []*models.StateunstableMetricUsageByMetricName, token string, err error) {
+	resp, err := client.ListMetricUsagesByMetricName(&state_unstable.ListMetricUsagesByMetricNameParams{
+		Context:     ctx,
+		PageMaxSize: &p.Size,
+		PageToken:   &p.Token,
+	})
 	if err != nil {
-		return err
+		return nil, "", err
 	}
-	for _, ruleEvaluation := range byMetric {
-		if err := o.outputFlags.WriteObject(ruleEvaluation, w); err != nil {
-			return err
-		}
+	t := ""
+	if page := resp.GetPayload().Page; page != nil {
+		t = page.NextToken
 	}
-
-	if nextToken != "" {
-		o.outputFlags.WriteAfterClose(fmt.Sprintf("\nThere are additional metric usages. To continue getting more, run: %v --next-token %v\n", o.originalCommandString, nextToken))
-	}
-
-	return nil
+	return resp.GetPayload().Usages, t, nil
 }
 
-func (o *listOptions) queryByMetric(ctx context.Context) (usages []*models.StateunstableMetricUsageByMetricName, token string, _ error) {
-	return pagination.List(
-		pagination.Page{
-			Size:  o.maxItems,
-			Token: o.nextToken,
-		},
-		func(p pagination.Page) (items []*models.StateunstableMetricUsageByMetricName, token string, err error) {
-			resp, err := o.client.ListMetricUsagesByMetricName(&state_unstable.ListMetricUsagesByMetricNameParams{
-				Context:     ctx,
-				PageMaxSize: &p.Size,
-				PageToken:   &p.Token,
-			})
-			if err != nil {
-				return nil, "", err
-			}
-			t := ""
-			if page := resp.GetPayload().Page; page != nil {
-				t = page.NextToken
-			}
-			return resp.GetPayload().Usages, t, nil
-		})
-}
-
-func (o *listOptions) queryByLabel(ctx context.Context) (usages []*models.StateunstableMetricUsageByLabelName, token string, _ error) {
-	return pagination.List(
-		pagination.Page{
-			Size:  o.maxItems,
-			Token: o.nextToken,
-		},
-		func(p pagination.Page) (items []*models.StateunstableMetricUsageByLabelName, token string, err error) {
-			resp, err := o.client.ListMetricUsagesByLabelName(&state_unstable.ListMetricUsagesByLabelNameParams{
-				Context:     ctx,
-				PageMaxSize: &p.Size,
-				PageToken:   &p.Token,
-			})
-			if err != nil {
-				return nil, "", err
-			}
-			t := ""
-			if page := resp.GetPayload().Page; page != nil {
-				t = page.NextToken
-			}
-			return resp.GetPayload().Usages, t, nil
-		})
+func listMetricUsageByLabelName(
+	ctx context.Context,
+	client state_unstable.ClientService,
+	p pagination.Page,
+) (items []*models.StateunstableMetricUsageByLabelName, token string, err error) {
+	resp, err := client.ListMetricUsagesByLabelName(&state_unstable.ListMetricUsagesByLabelNameParams{
+		Context:     ctx,
+		PageMaxSize: &p.Size,
+		PageToken:   &p.Token,
+	})
+	if err != nil {
+		return nil, "", err
+	}
+	t := ""
+	if page := resp.GetPayload().Page; page != nil {
+		t = page.NextToken
+	}
+	return resp.GetPayload().Usages, t, nil
 }
