@@ -139,12 +139,3 @@ func (o *listOptions) queryRuleEvaluations(ctx context.Context) (evals []*models
 			return resp.GetPayload().RuleEvaluations, t, nil
 		})
 }
-
-// getNextToken safely extracts the next token from the pagination result
-func getNextToken(resp *state_v1.ListRuleEvaluationsOK) string {
-	if resp.GetPayload().Page == nil {
-		return ""
-	}
-
-	return resp.GetPayload().Page.NextToken
-}

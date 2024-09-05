@@ -20,7 +20,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// NewCommand returns a new cobra command for managing rule evaluations
+// NewCommands returns a new cobra command for metric usages.
 func NewCommands() []*cobra.Command {
 	return []*cobra.Command{
 		newCommandByMetricName(),
