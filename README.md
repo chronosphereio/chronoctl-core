@@ -64,7 +64,7 @@ Chronosphere:
 
 ## Building
 
-To build chronoctl, you must have Go 1.22 installed. A download link can be found at
+To build chronoctl, you must have Go 1.23 installed. A download link can be found at
 [go.dev](https://go.dev/doc/install).
 
 Run `make chronoctl` to build the binary. It will be found under

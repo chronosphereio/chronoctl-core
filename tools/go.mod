@@ -1,6 +1,6 @@
 module github.com/chronosphereio/chronoctl-core/tools
 
-go 1.22
+go 1.23
 
 replace github.com/chronosphereio/chronoctl-core => ../
 
