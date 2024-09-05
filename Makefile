@@ -12,7 +12,7 @@ GO_BUILD_COMMON_ENV       := CGO_ENABLED=0
 GO_RELEASER_WORKING_DIR   := /go/src/github.com/chronosphere/chronoctl
 GO_RELEASER_RELEASE_ARGS  ?= --rm-dist
 
-UNSTABLE_ENTITIES := link-templates,saved-trace-searches,dashboards,trace-tail-sampling-rules,services,metric-usages-by-name,metric-usages-by-label
+UNSTABLE_ENTITIES := link-templates,saved-trace-searches,dashboards,trace-tail-sampling-rules,services,metric-usages-by-metric-name,metric-usages-by-label-name
 
 .PHONY: clean-build
 clean-build:

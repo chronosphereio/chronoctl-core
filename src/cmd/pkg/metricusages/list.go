@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ruleevaluations
+package metricusages
 
 import (
 	"context"
@@ -26,8 +26,8 @@ import (
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/client"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/output"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/pagination"
-	state_v1 "github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/client/operations"
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/models"
+	state_unstable "github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/client/operations"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/models"
 )
 
 func newListCommand() *cobra.Command {
@@ -44,7 +44,7 @@ chronoctl rule-evaluations list`,
 			if err := opts.validate(); err != nil {
 				return err
 			}
-			if err := opts.run(os.Stdout); err != nil {
+			if err := opts.runByMetric(os.Stdout); err != nil {
 				return err
 			}
 			return nil
@@ -52,6 +52,7 @@ chronoctl rule-evaluations list`,
 	}
 
 	opts.addFlags(cmd)
+
 	return cmd
 }
 
@@ -63,7 +64,7 @@ type listOptions struct {
 	nextToken             string
 	originalCommandString string
 
-	client state_v1.ClientService
+	client state_unstable.ClientService
 }
 
 func newListOptions() *listOptions {
@@ -74,7 +75,7 @@ func newListOptions() *listOptions {
 }
 
 func (o *listOptions) validate() error {
-	client, err := o.clientFlags.StateV1Client()
+	client, err := o.clientFlags.StateUnstableClient()
 	if err != nil {
 		return err
 	}
@@ -91,40 +92,60 @@ func (o *listOptions) addFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVar(&o.nextToken, "next-token", "", "Pagination token to use")
 }
 
-func (o *listOptions) run(w io.Writer) error {
+func (o *listOptions) runByMetric(w io.Writer) error {
 	defer o.outputFlags.Close(w) //nolint:errcheck
 
 	ctx, cancel := context.WithTimeout(context.Background(), o.clientFlags.Timeout())
 	defer cancel()
 
-	ruleEvaluations, nextToken, err := o.queryRuleEvaluations(ctx)
+	byMetric, nextToken, err := o.queryByMetric(ctx)
 	if err != nil {
 		return err
 	}
-
-	// output all results
-	for _, ruleEvaluation := range ruleEvaluations {
+	for _, ruleEvaluation := range byMetric {
 		if err := o.outputFlags.WriteObject(ruleEvaluation, w); err != nil {
 			return err
 		}
 	}
 
 	if nextToken != "" {
-		o.outputFlags.WriteAfterClose(fmt.Sprintf("\nThere are additional rule evaluations. To continue getting more, run: %v --next-token %v\n", o.originalCommandString, nextToken))
+		o.outputFlags.WriteAfterClose(fmt.Sprintf("\nThere are additional metric usages. To continue getting more, run: %v --next-token %v\n", o.originalCommandString, nextToken))
 	}
 
 	return nil
 }
 
-// queryRuleEvaluations fetches all rule evaluations given the input parameters
-func (o *listOptions) queryRuleEvaluations(ctx context.Context) (evals []*models.Statev1RuleEvaluation, token string, _ error) {
+func (o *listOptions) runByLabel(w io.Writer) error {
+	defer o.outputFlags.Close(w) //nolint:errcheck
+
+	ctx, cancel := context.WithTimeout(context.Background(), o.clientFlags.Timeout())
+	defer cancel()
+
+	byMetric, nextToken, err := o.queryByLabel(ctx)
+	if err != nil {
+		return err
+	}
+	for _, ruleEvaluation := range byMetric {
+		if err := o.outputFlags.WriteObject(ruleEvaluation, w); err != nil {
+			return err
+		}
+	}
+
+	if nextToken != "" {
+		o.outputFlags.WriteAfterClose(fmt.Sprintf("\nThere are additional metric usages. To continue getting more, run: %v --next-token %v\n", o.originalCommandString, nextToken))
+	}
+
+	return nil
+}
+
+func (o *listOptions) queryByMetric(ctx context.Context) (usages []*models.StateunstableMetricUsageByMetricName, token string, _ error) {
 	return pagination.List(
 		pagination.Page{
 			Size:  o.maxItems,
 			Token: o.nextToken,
 		},
-		func(p pagination.Page) (items []*models.Statev1RuleEvaluation, token string, err error) {
-			resp, err := o.client.ListRuleEvaluations(&state_v1.ListRuleEvaluationsParams{
+		func(p pagination.Page) (items []*models.StateunstableMetricUsageByMetricName, token string, err error) {
+			resp, err := o.client.ListMetricUsagesByMetricName(&state_unstable.ListMetricUsagesByMetricNameParams{
 				Context:     ctx,
 				PageMaxSize: &p.Size,
 				PageToken:   &p.Token,
@@ -136,15 +157,29 @@ func (o *listOptions) queryRuleEvaluations(ctx context.Context) (evals []*models
 			if page := resp.GetPayload().Page; page != nil {
 				t = page.NextToken
 			}
-			return resp.GetPayload().RuleEvaluations, t, nil
+			return resp.GetPayload().Usages, t, nil
 		})
 }
 
-// getNextToken safely extracts the next token from the pagination result
-func getNextToken(resp *state_v1.ListRuleEvaluationsOK) string {
-	if resp.GetPayload().Page == nil {
-		return ""
-	}
-
-	return resp.GetPayload().Page.NextToken
+func (o *listOptions) queryByLabel(ctx context.Context) (usages []*models.StateunstableMetricUsageByLabelName, token string, _ error) {
+	return pagination.List(
+		pagination.Page{
+			Size:  o.maxItems,
+			Token: o.nextToken,
+		},
+		func(p pagination.Page) (items []*models.StateunstableMetricUsageByLabelName, token string, err error) {
+			resp, err := o.client.ListMetricUsagesByLabelName(&state_unstable.ListMetricUsagesByLabelNameParams{
+				Context:     ctx,
+				PageMaxSize: &p.Size,
+				PageToken:   &p.Token,
+			})
+			if err != nil {
+				return nil, "", err
+			}
+			t := ""
+			if page := resp.GetPayload().Page; page != nil {
+				t = page.NextToken
+			}
+			return resp.GetPayload().Usages, t, nil
+		})
 }
