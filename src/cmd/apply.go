@@ -163,7 +163,7 @@ func (o *ApplyCommand) Run(stdout io.Writer, stderr io.Writer) error {
 		if dryRun {
 			dryRunPrefix = "[dry run] "
 		}
-		fmt.Fprintf(stdout, "%sApplying %s ", dryRunPrefix, obj.Description())
+		fmt.Fprintf(stdout, "%sApplying %s ", dryRunPrefix, obj.Description()) //nolint:errcheck
 
 		if err := o.Applier(o, obj, stdout, stderr); err != nil {
 			if errors.Is(err, ErrNoApplyMapping) {
@@ -199,7 +199,7 @@ func DefaultApplier(o *ApplyCommand, obj types.Object, out, err io.Writer) error
 		return err
 	}
 
-	fmt.Fprintf(out, "(applied successfully)\n")
+	fmt.Fprintf(out, "(applied successfully)\n") //nolint:errcheck
 	return nil
 }
 

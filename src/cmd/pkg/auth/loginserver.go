@@ -149,7 +149,7 @@ func (s *loginServer) login(ctx context.Context, stdin io.Reader, stdout, stderr
 			return nil
 		}
 		if err := setDefaultOrg(s.store, s.org); err != nil {
-			fmt.Fprintf(stderr, "Failed to set default organization: %s\n", err)
+			fmt.Fprintf(stderr, "Failed to set default organization: %s\n", err) //nolint:errcheck
 		}
 		return nil
 	case err := <-errCh:
