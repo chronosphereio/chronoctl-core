@@ -311,9 +311,10 @@ func newOtelMetricsIngestionDeleteCmd() *cobra.Command {
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
-		Use:     "delete <slug>",
+		Use:     "delete",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes a single OtelMetricsIngestion by slug",
+		Short:   "Deletes the OtelMetricsIngestion singleton",
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
 			defer cancel()
