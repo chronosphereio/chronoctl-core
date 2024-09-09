@@ -55,6 +55,46 @@ func (mr *MockClientServiceMockRecorder) Echo(params interface{}, opts ...interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Echo", reflect.TypeOf((*MockClientService)(nil).Echo), varargs...)
 }
 
+// ListMetricUsagesByLabelName mocks base method.
+func (m *MockClientService) ListMetricUsagesByLabelName(params *operations.ListMetricUsagesByLabelNameParams, opts ...operations.ClientOption) (*operations.ListMetricUsagesByLabelNameOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListMetricUsagesByLabelName", varargs...)
+	ret0, _ := ret[0].(*operations.ListMetricUsagesByLabelNameOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListMetricUsagesByLabelName indicates an expected call of ListMetricUsagesByLabelName.
+func (mr *MockClientServiceMockRecorder) ListMetricUsagesByLabelName(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMetricUsagesByLabelName", reflect.TypeOf((*MockClientService)(nil).ListMetricUsagesByLabelName), varargs...)
+}
+
+// ListMetricUsagesByMetricName mocks base method.
+func (m *MockClientService) ListMetricUsagesByMetricName(params *operations.ListMetricUsagesByMetricNameParams, opts ...operations.ClientOption) (*operations.ListMetricUsagesByMetricNameOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListMetricUsagesByMetricName", varargs...)
+	ret0, _ := ret[0].(*operations.ListMetricUsagesByMetricNameOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListMetricUsagesByMetricName indicates an expected call of ListMetricUsagesByMetricName.
+func (mr *MockClientServiceMockRecorder) ListMetricUsagesByMetricName(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMetricUsagesByMetricName", reflect.TypeOf((*MockClientService)(nil).ListMetricUsagesByMetricName), varargs...)
+}
+
 // SetTransport mocks base method.
 func (m *MockClientService) SetTransport(transport runtime.ClientTransport) {
 	m.ctrl.T.Helper()

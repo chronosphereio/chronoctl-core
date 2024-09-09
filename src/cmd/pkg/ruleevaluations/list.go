@@ -118,48 +118,24 @@ func (o *listOptions) run(w io.Writer) error {
 
 // queryRuleEvaluations fetches all rule evaluations given the input parameters
 func (o *listOptions) queryRuleEvaluations(ctx context.Context) (evals []*models.Statev1RuleEvaluation, token string, _ error) {
-	var (
-		ruleEvaluations []*models.Statev1RuleEvaluation
-		pageSize        = o.maxItems
-		nextToken       = o.nextToken
-	)
-
-	// loop until we've fetched enough results
-	for {
-		resp, err := o.client.ListRuleEvaluations(&state_v1.ListRuleEvaluationsParams{
-			Context:     ctx,
-			PageMaxSize: &pageSize,
-			PageToken:   &nextToken,
+	return pagination.List(
+		pagination.Page{
+			Size:  o.maxItems,
+			Token: o.nextToken,
+		},
+		func(p pagination.Page) (items []*models.Statev1RuleEvaluation, token string, err error) {
+			resp, err := o.client.ListRuleEvaluations(&state_v1.ListRuleEvaluationsParams{
+				Context:     ctx,
+				PageMaxSize: &p.Size,
+				PageToken:   &p.Token,
+			})
+			if err != nil {
+				return nil, "", err
+			}
+			t := ""
+			if page := resp.GetPayload().Page; page != nil {
+				t = page.NextToken
+			}
+			return resp.GetPayload().RuleEvaluations, t, nil
 		})
-		if err != nil {
-			return nil, "", err
-		}
-
-		nextToken = getNextToken(resp)
-		ruleEvaluations = append(ruleEvaluations, resp.GetPayload().RuleEvaluations...)
-
-		if o.maxItems > 0 && len(ruleEvaluations) >= int(o.maxItems) {
-			return ruleEvaluations, nextToken, nil
-		}
-
-		// no more results to fetch
-		if nextToken == "" {
-			return ruleEvaluations, nextToken, nil
-		}
-
-		pageSize = int64(pagination.CalculatePageSize(pagination.Calculation{
-			GotItems:    len(ruleEvaluations),
-			MaxItems:    int(o.maxItems),
-			MaxPageSize: len(resp.GetPayload().RuleEvaluations),
-		}))
-	}
-}
-
-// getNextToken safely extracts the next token from the pagination result
-func getNextToken(resp *state_v1.ListRuleEvaluationsOK) string {
-	if resp.GetPayload().Page == nil {
-		return ""
-	}
-
-	return resp.GetPayload().Page.NextToken
 }
