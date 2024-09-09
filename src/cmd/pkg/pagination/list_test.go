@@ -87,3 +87,21 @@ func TestListExactPageSize(t *testing.T) {
 	assert.Equal(t, []string{"item1", "item2"}, items)
 	assert.Equal(t, "", token) // no next token since results are exhausted
 }
+
+func TestListZeroPageSize(t *testing.T) {
+	mockExactPageSizeFn := func(p Page) ([]string, string, error) {
+		if p.Token == "t1" {
+			return []string{"item3", "item4"}, "", nil
+		}
+		return []string{"item1", "item2"}, "t1", nil
+	}
+
+	page := Page{}
+
+	// Call List with mock function that returns exactly the page size
+	items, token, err := List(page, mockExactPageSizeFn)
+
+	assert.Nil(t, err)
+	assert.Equal(t, []string{"item1", "item2", "item3", "item4"}, items)
+	assert.Equal(t, "", token) // no next token since results are exhausted
+}
