@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Adds new resource `v1/config/LogScaleAction`
+* Adds new resource `v1/config/LogScaleAlert`
+* Adds new field `pool.allocation.fixed_values` to `v1/config/ResourcePools`
 * New unstable state: metric-usages-by-metric-name
 * New unstable state: metric-usages-by-label-name
 

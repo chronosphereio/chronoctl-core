@@ -3,6 +3,18 @@
     "application/json"
   ],
   "definitions": {
+    "AllocationFixedValue": {
+      "properties": {
+        "license": {
+          "$ref": "#/definitions/ResourcePoolsLicense"
+        },
+        "value": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ConditionOp": {
       "enum": [
         "GEQ",
@@ -171,6 +183,38 @@
         },
         "dry_run": {
           "description": "If true, the GrafanaDashboard will not be created nor updated, and no response GrafanaDashboard will be returned. The response will return an error if the given GrafanaDashboard is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "ConfigV1UpdateLogScaleActionBody": {
+      "properties": {
+        "log_scale_action": {
+          "$ref": "#/definitions/configv1LogScaleAction"
+        },
+        "create_if_missing": {
+          "description": "If true, the LogScaleAction will be created if it does not already exist, identified by slug. If false, an error will be returned if the LogScaleAction does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the LogScaleAction will not be created nor updated, and no response LogScaleAction will be returned. The response will return an error if the given LogScaleAction is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "ConfigV1UpdateLogScaleAlertBody": {
+      "properties": {
+        "log_scale_alert": {
+          "$ref": "#/definitions/configv1LogScaleAlert"
+        },
+        "create_if_missing": {
+          "description": "If true, the LogScaleAlert will be created if it does not already exist, identified by slug. If false, an error will be returned if the LogScaleAlert does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the LogScaleAlert will not be created nor updated, and no response LogScaleAlert will be returned. The response will return an error if the given LogScaleAlert is invalid.",
           "type": "boolean"
         }
       },
@@ -548,6 +592,201 @@
         "PENDING",
         "ACTIVE",
         "EXPIRED"
+      ],
+      "type": "string"
+    },
+    "LogScaleActionActionType": {
+      "enum": [
+        "EMAIL",
+        "HUMIO_REPO",
+        "OPS_GENIE",
+        "PAGER_DUTY",
+        "SLACK",
+        "SLACK_POST_MESSAGE",
+        "VICTOR_OPS",
+        "WEBHOOK",
+        "UPLOAD_FILE"
+      ],
+      "type": "string"
+    },
+    "LogScaleActionEmailAction": {
+      "properties": {
+        "recipients": {
+          "description": "List of email addresses to send an email to.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "subject_template": {
+          "description": "Subject of the email. Can be templated with values from the query result.",
+          "type": "string"
+        },
+        "body_template": {
+          "description": "Body of the email. Can be templated with values from the query result.",
+          "type": "string"
+        },
+        "attach_csv": {
+          "description": "Whether the result set should be attached as a CSV file.",
+          "type": "boolean"
+        },
+        "use_proxy": {
+          "description": "Defines whether the action should use the configured proxy to make web requests.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "LogScaleActionHumioRepoAction": {
+      "properties": {
+        "ingest_token": {
+          "description": "Ingest token for the repository that the action should ingest into.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LogScaleActionOpsGenieAction": {
+      "properties": {
+        "api_url": {
+          "description": "OpsGenie webhook URL to send the request to.",
+          "type": "string"
+        },
+        "ops_genie_key": {
+          "description": "Key to authenticate with OpsGenie.",
+          "type": "string"
+        },
+        "use_proxy": {
+          "description": "Defines whether the action should use the configured proxy to make web requests.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "LogScaleActionPagerDutyAction": {
+      "properties": {
+        "severity": {
+          "$ref": "#/definitions/PagerDutyActionSeverity"
+        },
+        "routing_key": {
+          "description": "Routing key to authenticate with PagerDuty.",
+          "type": "string"
+        },
+        "use_proxy": {
+          "description": "Defines whether the action should use the configured proxy to make web requests.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "LogScaleActionSlackAction": {
+      "properties": {
+        "url": {
+          "description": "Slack webhook URL to send the request to.",
+          "type": "string"
+        },
+        "fields": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Fields to include within the Slack message. Can be templated with values from the query result.",
+          "type": "object"
+        },
+        "use_proxy": {
+          "description": "Defines whether the action should use the configured proxy to make web requests.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "LogScaleActionSlackPostMessageAction": {
+      "properties": {
+        "api_token": {
+          "description": "API token to authenticate with Slack.",
+          "type": "string"
+        },
+        "channels": {
+          "description": "List of Slack channels to message.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Fields to include within the Slack message. Can be templated with values from the query result.",
+          "type": "object"
+        },
+        "use_proxy": {
+          "description": "Defines whether the action should use the configured proxy to make web requests.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "LogScaleActionUploadFileAction": {
+      "properties": {
+        "file_name": {
+          "description": "File name for the uploaded file.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LogScaleActionVictorOpsAction": {
+      "properties": {
+        "message_type": {
+          "description": "Type of the VictorOps message to make.",
+          "type": "string"
+        },
+        "notify_url": {
+          "description": "VictorOps webhook URL to send the request to.",
+          "type": "string"
+        },
+        "use_proxy": {
+          "description": "Defines whether the action should use the configured proxy to make web requests.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "LogScaleActionWebhookAction": {
+      "properties": {
+        "method": {
+          "$ref": "#/definitions/WebhookActionHTTPMethod"
+        },
+        "url": {
+          "description": "URL to send the HTTP or HTTPS request to.",
+          "type": "string"
+        },
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Headers of the HTTP or HTTPS request.",
+          "type": "object"
+        },
+        "body_template": {
+          "description": "Body of the HTTP or HTTPS request. Can be templated with values from the query result.",
+          "type": "string"
+        },
+        "ignore_ssl": {
+          "description": "Flag indicating whether SSL should be ignored for the request.",
+          "type": "boolean"
+        },
+        "use_proxy": {
+          "description": "Defines whether the action should use the configured proxy to make web requests.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "LogScaleAlertAlertType": {
+      "enum": [
+        "STANDARD",
+        "FILTER"
       ],
       "type": "string"
     },
@@ -1142,6 +1381,15 @@
       },
       "type": "object"
     },
+    "PagerDutyActionSeverity": {
+      "enum": [
+        "CRITICAL",
+        "ERROR",
+        "WARNING",
+        "INFO"
+      ],
+      "type": "string"
+    },
     "PagerdutyConfigImage": {
       "properties": {
         "src": {
@@ -1220,9 +1468,16 @@
     "ResourcePoolsAllocation": {
       "properties": {
         "percent_of_license": {
-          "description": "Percentage of the license to allocate to this pool. Must be between 0\nand 100 inclusive. The percent_of_license values across all pools\n(including the default pool) must add up to exactly 100.",
+          "description": "Percent of the license to allocate to this pool. Must be between 0\nand 100 inclusive. The percent_of_license values across all pools\n(excluding the default pool) must be \u003c= 100. default_pool need not specify\nan allocation, and implicitly receives any remaining allocation. If default_pool does\nexplicitly specify an allocation, the sum of percent_of_license across all pools\n(including the default pool) must exactly equal 100.",
           "format": "double",
           "type": "number"
+        },
+        "fixed_values": {
+          "description": "Fixed values optionally override `percent_of_license` allocations for specified licenses.\nWhen defining fixed values for a license, all pools must have an explicit fixed value\nspecification for that given license. The default pool receives all remaining quota left\nwithin the license, after subtracting the sum of fixed values across pools for that license.",
+          "items": {
+            "$ref": "#/definitions/AllocationFixedValue"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1237,6 +1492,15 @@
         }
       },
       "type": "object"
+    },
+    "ResourcePoolsLicense": {
+      "enum": [
+        "PERSISTED_WRITES_STANDARD",
+        "PERSISTED_WRITES_HISTOGRAM",
+        "MATCHED_WRITES_STANDARD",
+        "MATCHED_WRITES_HISTOGRAM"
+      ],
+      "type": "string"
     },
     "ResourcePoolsPool": {
       "properties": {
@@ -1761,6 +2025,18 @@
       },
       "type": "object"
     },
+    "WebhookActionHTTPMethod": {
+      "enum": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "HEAD",
+        "OPTIONS"
+      ],
+      "type": "string"
+    },
     "apiError": {
       "properties": {
         "code": {
@@ -2102,6 +2378,46 @@
       "properties": {
         "grafana_dashboard": {
           "$ref": "#/definitions/configv1GrafanaDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateLogScaleActionRequest": {
+      "properties": {
+        "log_scale_action": {
+          "$ref": "#/definitions/configv1LogScaleAction"
+        },
+        "dry_run": {
+          "description": "If true, the LogScaleAction will not be created, and no response LogScaleAction will be returned. The response will return an error if the given LogScaleAction is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateLogScaleActionResponse": {
+      "properties": {
+        "log_scale_action": {
+          "$ref": "#/definitions/configv1LogScaleAction"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateLogScaleAlertRequest": {
+      "properties": {
+        "log_scale_alert": {
+          "$ref": "#/definitions/configv1LogScaleAlert"
+        },
+        "dry_run": {
+          "description": "If true, the LogScaleAlert will not be created, and no response LogScaleAlert will be returned. The response will return an error if the given LogScaleAlert is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateLogScaleAlertResponse": {
+      "properties": {
+        "log_scale_alert": {
+          "$ref": "#/definitions/configv1LogScaleAlert"
         }
       },
       "type": "object"
@@ -2525,6 +2841,12 @@
       "type": "object"
     },
     "configv1DeleteGrafanaDashboardResponse": {
+      "type": "object"
+    },
+    "configv1DeleteLogScaleActionResponse": {
+      "type": "object"
+    },
+    "configv1DeleteLogScaleAlertResponse": {
       "type": "object"
     },
     "configv1DeleteMappingRuleResponse": {
@@ -2995,6 +3317,34 @@
       },
       "type": "object"
     },
+    "configv1ListLogScaleActionsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "log_scale_actions": {
+          "items": {
+            "$ref": "#/definitions/configv1LogScaleAction"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListLogScaleAlertsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "log_scale_alerts": {
+          "items": {
+            "$ref": "#/definitions/configv1LogScaleAlert"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configv1ListMappingRulesResponse": {
       "properties": {
         "page": {
@@ -3154,6 +3504,143 @@
       "properties": {
         "match_criteria": {
           "$ref": "#/definitions/configv1LogSearchFilter"
+        }
+      },
+      "type": "object"
+    },
+    "configv1LogScaleAction": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the LogScaleAction. If slug is not provided, one will be generated based of the name field. Cannot be modified after the LogScaleAction is created.",
+          "type": "string"
+        },
+        "repository": {
+          "description": "Name of the LogScale repository the alerts belongs to. Required.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of an action.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the LogScaleAction was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the LogScaleAction was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "action_type": {
+          "$ref": "#/definitions/LogScaleActionActionType"
+        },
+        "email_action": {
+          "$ref": "#/definitions/LogScaleActionEmailAction"
+        },
+        "humio_action": {
+          "$ref": "#/definitions/LogScaleActionHumioRepoAction"
+        },
+        "ops_genie_action": {
+          "$ref": "#/definitions/LogScaleActionOpsGenieAction"
+        },
+        "pager_duty_action": {
+          "$ref": "#/definitions/LogScaleActionPagerDutyAction"
+        },
+        "slack_action": {
+          "$ref": "#/definitions/LogScaleActionSlackAction"
+        },
+        "slack_post_message_action": {
+          "$ref": "#/definitions/LogScaleActionSlackPostMessageAction"
+        },
+        "victor_ops_action": {
+          "$ref": "#/definitions/LogScaleActionVictorOpsAction"
+        },
+        "webhook_action": {
+          "$ref": "#/definitions/LogScaleActionWebhookAction"
+        },
+        "upload_file_action": {
+          "$ref": "#/definitions/LogScaleActionUploadFileAction"
+        }
+      },
+      "type": "object"
+    },
+    "configv1LogScaleAlert": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the LogScaleAlert. If slug is not provided, one will be generated based of the name field. Cannot be modified after the LogScaleAlert is created.",
+          "type": "string"
+        },
+        "repository": {
+          "description": "Name of LogScale repository the alerts belongs to. Required.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the alert.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the LogScaleAlert was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the LogScaleAlert was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the alert.",
+          "type": "string"
+        },
+        "disabled": {
+          "description": "Flag indicating whether the alert is disabled.",
+          "type": "boolean"
+        },
+        "log_scale_query": {
+          "description": "LogScale query to execute.",
+          "example": "level = ERROR | severity \u003e 3 | count(as=numErrors) | numErrors \u003e 500",
+          "type": "string"
+        },
+        "time_window_secs": {
+          "description": "Lookback window used for an alert's evaluation.\nIf this is set to 86400 seconds (24 hours), only the events from the last 24 hours will be considered when the alert query is run.",
+          "example": "3600",
+          "format": "int32",
+          "type": "integer"
+        },
+        "throttle_secs": {
+          "description": "Throttle time in seconds. The alert is triggered at most once per throttle period.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "throttle_field": {
+          "description": "Field to throttle on. Optional.",
+          "type": "string"
+        },
+        "log_scale_action_slugs": {
+          "description": "Slugs of LogScale actions that will receive the alerts. When the value is empty\nthis alert won't trigger. Optional.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "description": "Tags attached to the alert.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "run_as_user": {
+          "description": "Email of the user that the alert runs on behalf of. Required.",
+          "type": "string"
+        },
+        "alert_type": {
+          "$ref": "#/definitions/LogScaleAlertAlertType"
         }
       },
       "type": "object"
@@ -3593,6 +4080,22 @@
       "properties": {
         "grafana_dashboard": {
           "$ref": "#/definitions/configv1GrafanaDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadLogScaleActionResponse": {
+      "properties": {
+        "log_scale_action": {
+          "$ref": "#/definitions/configv1LogScaleAction"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadLogScaleAlertResponse": {
+      "properties": {
+        "log_scale_alert": {
+          "$ref": "#/definitions/configv1LogScaleAlert"
         }
       },
       "type": "object"
@@ -4360,6 +4863,22 @@
       "properties": {
         "grafana_dashboard": {
           "$ref": "#/definitions/configv1GrafanaDashboard"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateLogScaleActionResponse": {
+      "properties": {
+        "log_scale_action": {
+          "$ref": "#/definitions/configv1LogScaleAction"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateLogScaleAlertResponse": {
+      "properties": {
+        "log_scale_alert": {
+          "$ref": "#/definitions/configv1LogScaleAlert"
         }
       },
       "type": "object"
@@ -7251,6 +7770,524 @@
         },
         "tags": [
           "GrafanaDashboard"
+        ]
+      }
+    },
+    "/api/v1/config/log-scale-actions": {
+      "get": {
+        "operationId": "ListLogScaleActions",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any LogScaleAction with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any LogScaleAction with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListLogScaleActionsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAction"
+        ]
+      },
+      "post": {
+        "operationId": "CreateLogScaleAction",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogScaleActionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created LogScaleAction.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogScaleActionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the LogScaleAction because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the LogScaleAction because there is a conflict with an existing LogScaleAction.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAction"
+        ]
+      }
+    },
+    "/api/v1/config/log-scale-actions/{slug}": {
+      "delete": {
+        "operationId": "DeleteLogScaleAction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteLogScaleActionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the LogScaleAction because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the LogScaleAction because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAction"
+        ]
+      },
+      "get": {
+        "operationId": "ReadLogScaleAction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadLogScaleActionResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the LogScaleAction because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAction"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateLogScaleAction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateLogScaleActionBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated LogScaleAction.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateLogScaleActionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the LogScaleAction because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the LogScaleAction because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the LogScaleAction because there is a conflict with an existing LogScaleAction.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAction"
+        ]
+      }
+    },
+    "/api/v1/config/log-scale-alerts": {
+      "get": {
+        "operationId": "ListLogScaleAlerts",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any LogScaleAlert with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any LogScaleAlert with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListLogScaleAlertsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAlert"
+        ]
+      },
+      "post": {
+        "operationId": "CreateLogScaleAlert",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogScaleAlertRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created LogScaleAlert.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogScaleAlertResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the LogScaleAlert because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the LogScaleAlert because there is a conflict with an existing LogScaleAlert.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAlert"
+        ]
+      }
+    },
+    "/api/v1/config/log-scale-alerts/{slug}": {
+      "delete": {
+        "operationId": "DeleteLogScaleAlert",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteLogScaleAlertResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the LogScaleAlert because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the LogScaleAlert because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAlert"
+        ]
+      },
+      "get": {
+        "operationId": "ReadLogScaleAlert",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadLogScaleAlertResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the LogScaleAlert because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAlert"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateLogScaleAlert",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateLogScaleAlertBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated LogScaleAlert.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateLogScaleAlertResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the LogScaleAlert because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the LogScaleAlert because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the LogScaleAlert because there is a conflict with an existing LogScaleAlert.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogScaleAlert"
         ]
       }
     },

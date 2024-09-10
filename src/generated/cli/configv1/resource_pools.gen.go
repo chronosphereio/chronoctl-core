@@ -359,10 +359,20 @@ spec:
               # Glob value of the label to match.
               value_glob: <string>
           allocation:
-            # Percentage of the license to allocate to this pool. Must be between 0
+            # Percent of the license to allocate to this pool. Must be between 0
             # and 100 inclusive. The percent_of_license values across all pools
-            # (including the default pool) must add up to exactly 100.
+            # (excluding the default pool) must be <= 100. default_pool need not specify
+            # an allocation, and implicitly receives any remaining allocation. If default_pool does
+            # explicitly specify an allocation, the sum of percent_of_license across all pools
+            # (including the default pool) must exactly equal 100.
             percent_of_license: <number>
+            # Fixed values optionally override 'percent_of_license' allocations for specified licenses.
+            # When defining fixed values for a license, all pools must have an explicit fixed value
+            # specification for that given license. The default pool receives all remaining quota left
+            # within the license, after subtracting the sum of fixed values across pools for that license.
+            fixed_values:
+                - value: <int64>
+                  license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
           priorities:
             # Required filters which define which metrics are high priority, where any
             # metric which matches at least one filter is considered high priority.
@@ -382,10 +392,20 @@ spec:
                   value_glob: <string>
     default_pool:
         allocation:
-            # Percentage of the license to allocate to this pool. Must be between 0
+            # Percent of the license to allocate to this pool. Must be between 0
             # and 100 inclusive. The percent_of_license values across all pools
-            # (including the default pool) must add up to exactly 100.
+            # (excluding the default pool) must be <= 100. default_pool need not specify
+            # an allocation, and implicitly receives any remaining allocation. If default_pool does
+            # explicitly specify an allocation, the sum of percent_of_license across all pools
+            # (including the default pool) must exactly equal 100.
             percent_of_license: <number>
+            # Fixed values optionally override 'percent_of_license' allocations for specified licenses.
+            # When defining fixed values for a license, all pools must have an explicit fixed value
+            # specification for that given license. The default pool receives all remaining quota left
+            # within the license, after subtracting the sum of fixed values across pools for that license.
+            fixed_values:
+                - value: <int64>
+                  license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
         priorities:
             # Required filters which define which metrics are high priority, where any
             # metric which matches at least one filter is considered high priority.

@@ -48,6 +48,10 @@ type ClientService interface {
 
 	CreateGrafanaDashboard(params *CreateGrafanaDashboardParams, opts ...ClientOption) (*CreateGrafanaDashboardOK, error)
 
+	CreateLogScaleAction(params *CreateLogScaleActionParams, opts ...ClientOption) (*CreateLogScaleActionOK, error)
+
+	CreateLogScaleAlert(params *CreateLogScaleAlertParams, opts ...ClientOption) (*CreateLogScaleAlertOK, error)
+
 	CreateMappingRule(params *CreateMappingRuleParams, opts ...ClientOption) (*CreateMappingRuleOK, error)
 
 	CreateMonitor(params *CreateMonitorParams, opts ...ClientOption) (*CreateMonitorOK, error)
@@ -97,6 +101,10 @@ type ClientService interface {
 	DeleteGcpMetricsIntegration(params *DeleteGcpMetricsIntegrationParams, opts ...ClientOption) (*DeleteGcpMetricsIntegrationOK, error)
 
 	DeleteGrafanaDashboard(params *DeleteGrafanaDashboardParams, opts ...ClientOption) (*DeleteGrafanaDashboardOK, error)
+
+	DeleteLogScaleAction(params *DeleteLogScaleActionParams, opts ...ClientOption) (*DeleteLogScaleActionOK, error)
+
+	DeleteLogScaleAlert(params *DeleteLogScaleAlertParams, opts ...ClientOption) (*DeleteLogScaleAlertOK, error)
 
 	DeleteMappingRule(params *DeleteMappingRuleParams, opts ...ClientOption) (*DeleteMappingRuleOK, error)
 
@@ -148,6 +156,10 @@ type ClientService interface {
 
 	ListGrafanaDashboards(params *ListGrafanaDashboardsParams, opts ...ClientOption) (*ListGrafanaDashboardsOK, error)
 
+	ListLogScaleActions(params *ListLogScaleActionsParams, opts ...ClientOption) (*ListLogScaleActionsOK, error)
+
+	ListLogScaleAlerts(params *ListLogScaleAlertsParams, opts ...ClientOption) (*ListLogScaleAlertsOK, error)
+
 	ListMappingRules(params *ListMappingRulesParams, opts ...ClientOption) (*ListMappingRulesOK, error)
 
 	ListMonitors(params *ListMonitorsParams, opts ...ClientOption) (*ListMonitorsOK, error)
@@ -189,6 +201,10 @@ type ClientService interface {
 	ReadGcpMetricsIntegration(params *ReadGcpMetricsIntegrationParams, opts ...ClientOption) (*ReadGcpMetricsIntegrationOK, error)
 
 	ReadGrafanaDashboard(params *ReadGrafanaDashboardParams, opts ...ClientOption) (*ReadGrafanaDashboardOK, error)
+
+	ReadLogScaleAction(params *ReadLogScaleActionParams, opts ...ClientOption) (*ReadLogScaleActionOK, error)
+
+	ReadLogScaleAlert(params *ReadLogScaleAlertParams, opts ...ClientOption) (*ReadLogScaleAlertOK, error)
 
 	ReadMappingRule(params *ReadMappingRuleParams, opts ...ClientOption) (*ReadMappingRuleOK, error)
 
@@ -241,6 +257,10 @@ type ClientService interface {
 	UpdateGcpMetricsIntegration(params *UpdateGcpMetricsIntegrationParams, opts ...ClientOption) (*UpdateGcpMetricsIntegrationOK, error)
 
 	UpdateGrafanaDashboard(params *UpdateGrafanaDashboardParams, opts ...ClientOption) (*UpdateGrafanaDashboardOK, error)
+
+	UpdateLogScaleAction(params *UpdateLogScaleActionParams, opts ...ClientOption) (*UpdateLogScaleActionOK, error)
+
+	UpdateLogScaleAlert(params *UpdateLogScaleAlertParams, opts ...ClientOption) (*UpdateLogScaleAlertOK, error)
 
 	UpdateMappingRule(params *UpdateMappingRuleParams, opts ...ClientOption) (*UpdateMappingRuleOK, error)
 
@@ -640,6 +660,80 @@ func (a *Client) CreateGrafanaDashboard(params *CreateGrafanaDashboardParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateGrafanaDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateLogScaleAction create log scale action API
+*/
+func (a *Client) CreateLogScaleAction(params *CreateLogScaleActionParams, opts ...ClientOption) (*CreateLogScaleActionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateLogScaleActionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateLogScaleAction",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/log-scale-actions",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateLogScaleActionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateLogScaleActionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateLogScaleActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateLogScaleAlert create log scale alert API
+*/
+func (a *Client) CreateLogScaleAlert(params *CreateLogScaleAlertParams, opts ...ClientOption) (*CreateLogScaleAlertOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateLogScaleAlertParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateLogScaleAlert",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/log-scale-alerts",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateLogScaleAlertReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateLogScaleAlertOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateLogScaleAlertDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1572,6 +1666,80 @@ func (a *Client) DeleteGrafanaDashboard(params *DeleteGrafanaDashboardParams, op
 }
 
 /*
+DeleteLogScaleAction delete log scale action API
+*/
+func (a *Client) DeleteLogScaleAction(params *DeleteLogScaleActionParams, opts ...ClientOption) (*DeleteLogScaleActionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteLogScaleActionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteLogScaleAction",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/log-scale-actions/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteLogScaleActionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteLogScaleActionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteLogScaleActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteLogScaleAlert delete log scale alert API
+*/
+func (a *Client) DeleteLogScaleAlert(params *DeleteLogScaleAlertParams, opts ...ClientOption) (*DeleteLogScaleAlertOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteLogScaleAlertParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteLogScaleAlert",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/log-scale-alerts/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteLogScaleAlertReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteLogScaleAlertOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteLogScaleAlertDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteMappingRule delete mapping rule API
 */
 func (a *Client) DeleteMappingRule(params *DeleteMappingRuleParams, opts ...ClientOption) (*DeleteMappingRuleOK, error) {
@@ -2497,6 +2665,80 @@ func (a *Client) ListGrafanaDashboards(params *ListGrafanaDashboardsParams, opts
 }
 
 /*
+ListLogScaleActions list log scale actions API
+*/
+func (a *Client) ListLogScaleActions(params *ListLogScaleActionsParams, opts ...ClientOption) (*ListLogScaleActionsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListLogScaleActionsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListLogScaleActions",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/log-scale-actions",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListLogScaleActionsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListLogScaleActionsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListLogScaleActionsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListLogScaleAlerts list log scale alerts API
+*/
+func (a *Client) ListLogScaleAlerts(params *ListLogScaleAlertsParams, opts ...ClientOption) (*ListLogScaleAlertsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListLogScaleAlertsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListLogScaleAlerts",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/log-scale-alerts",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListLogScaleAlertsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListLogScaleAlertsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListLogScaleAlertsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListMappingRules list mapping rules API
 */
 func (a *Client) ListMappingRules(params *ListMappingRulesParams, opts ...ClientOption) (*ListMappingRulesOK, error) {
@@ -3270,6 +3512,80 @@ func (a *Client) ReadGrafanaDashboard(params *ReadGrafanaDashboardParams, opts .
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadGrafanaDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadLogScaleAction read log scale action API
+*/
+func (a *Client) ReadLogScaleAction(params *ReadLogScaleActionParams, opts ...ClientOption) (*ReadLogScaleActionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadLogScaleActionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadLogScaleAction",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/log-scale-actions/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadLogScaleActionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadLogScaleActionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadLogScaleActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadLogScaleAlert read log scale alert API
+*/
+func (a *Client) ReadLogScaleAlert(params *ReadLogScaleAlertParams, opts ...ClientOption) (*ReadLogScaleAlertOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadLogScaleAlertParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadLogScaleAlert",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/log-scale-alerts/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadLogScaleAlertReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadLogScaleAlertOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadLogScaleAlertDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -4232,6 +4548,80 @@ func (a *Client) UpdateGrafanaDashboard(params *UpdateGrafanaDashboardParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateGrafanaDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateLogScaleAction update log scale action API
+*/
+func (a *Client) UpdateLogScaleAction(params *UpdateLogScaleActionParams, opts ...ClientOption) (*UpdateLogScaleActionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateLogScaleActionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateLogScaleAction",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/log-scale-actions/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateLogScaleActionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateLogScaleActionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateLogScaleActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateLogScaleAlert update log scale alert API
+*/
+func (a *Client) UpdateLogScaleAlert(params *UpdateLogScaleAlertParams, opts ...ClientOption) (*UpdateLogScaleAlertOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateLogScaleAlertParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateLogScaleAlert",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/log-scale-alerts/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateLogScaleAlertReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateLogScaleAlertOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateLogScaleAlertDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

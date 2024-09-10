@@ -7,7 +7,9 @@ package models
 
 import (
 	"context"
+	"strconv"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -17,19 +19,97 @@ import (
 // swagger:model ResourcePoolsAllocation
 type ResourcePoolsAllocation struct {
 
-	// Percentage of the license to allocate to this pool. Must be between 0
+	// Percent of the license to allocate to this pool. Must be between 0
 	// and 100 inclusive. The percent_of_license values across all pools
-	// (including the default pool) must add up to exactly 100.
+	// (excluding the default pool) must be <= 100. default_pool need not specify
+	// an allocation, and implicitly receives any remaining allocation. If default_pool does
+	// explicitly specify an allocation, the sum of percent_of_license across all pools
+	// (including the default pool) must exactly equal 100.
 	PercentOfLicense float64 `json:"percent_of_license,omitempty"`
+
+	// Fixed values optionally override `percent_of_license` allocations for specified licenses.
+	// When defining fixed values for a license, all pools must have an explicit fixed value
+	// specification for that given license. The default pool receives all remaining quota left
+	// within the license, after subtracting the sum of fixed values across pools for that license.
+	FixedValues []*AllocationFixedValue `json:"fixed_values"`
 }
 
 // Validate validates this resource pools allocation
 func (m *ResourcePoolsAllocation) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateFixedValues(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this resource pools allocation based on context it is used
+func (m *ResourcePoolsAllocation) validateFixedValues(formats strfmt.Registry) error {
+	if swag.IsZero(m.FixedValues) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.FixedValues); i++ {
+		if swag.IsZero(m.FixedValues[i]) { // not required
+			continue
+		}
+
+		if m.FixedValues[i] != nil {
+			if err := m.FixedValues[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("fixed_values" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("fixed_values" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this resource pools allocation based on the context it is used
 func (m *ResourcePoolsAllocation) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateFixedValues(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ResourcePoolsAllocation) contextValidateFixedValues(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.FixedValues); i++ {
+
+		if m.FixedValues[i] != nil {
+
+			if swag.IsZero(m.FixedValues[i]) { // not required
+				return nil
+			}
+
+			if err := m.FixedValues[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("fixed_values" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("fixed_values" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
