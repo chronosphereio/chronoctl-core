@@ -13,26 +13,23 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// StateunstableMetricUsageByMetricName stateunstable metric usage by metric name
+// Statev1MetricUsageByMetricName statev1 metric usage by metric name
 //
-// swagger:model stateunstableMetricUsageByMetricName
-type StateunstableMetricUsageByMetricName struct {
+// swagger:model statev1MetricUsageByMetricName
+type Statev1MetricUsageByMetricName struct {
 
 	// metric name
 	MetricName string `json:"metric_name,omitempty"`
 
 	// usage
-	Usage *StateunstableMetricUsage `json:"usage,omitempty"`
-
-	// cardinality
-	Cardinality int32 `json:"cardinality,omitempty"`
+	Usage *Statev1MetricUsage `json:"usage,omitempty"`
 
 	// dpps
 	Dpps float64 `json:"dpps,omitempty"`
 }
 
-// Validate validates this stateunstable metric usage by metric name
-func (m *StateunstableMetricUsageByMetricName) Validate(formats strfmt.Registry) error {
+// Validate validates this statev1 metric usage by metric name
+func (m *Statev1MetricUsageByMetricName) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateUsage(formats); err != nil {
@@ -45,7 +42,7 @@ func (m *StateunstableMetricUsageByMetricName) Validate(formats strfmt.Registry)
 	return nil
 }
 
-func (m *StateunstableMetricUsageByMetricName) validateUsage(formats strfmt.Registry) error {
+func (m *Statev1MetricUsageByMetricName) validateUsage(formats strfmt.Registry) error {
 	if swag.IsZero(m.Usage) { // not required
 		return nil
 	}
@@ -64,8 +61,8 @@ func (m *StateunstableMetricUsageByMetricName) validateUsage(formats strfmt.Regi
 	return nil
 }
 
-// ContextValidate validate this stateunstable metric usage by metric name based on the context it is used
-func (m *StateunstableMetricUsageByMetricName) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this statev1 metric usage by metric name based on the context it is used
+func (m *Statev1MetricUsageByMetricName) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateUsage(ctx, formats); err != nil {
@@ -78,7 +75,7 @@ func (m *StateunstableMetricUsageByMetricName) ContextValidate(ctx context.Conte
 	return nil
 }
 
-func (m *StateunstableMetricUsageByMetricName) contextValidateUsage(ctx context.Context, formats strfmt.Registry) error {
+func (m *Statev1MetricUsageByMetricName) contextValidateUsage(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Usage != nil {
 
@@ -100,7 +97,7 @@ func (m *StateunstableMetricUsageByMetricName) contextValidateUsage(ctx context.
 }
 
 // MarshalBinary interface implementation
-func (m *StateunstableMetricUsageByMetricName) MarshalBinary() ([]byte, error) {
+func (m *Statev1MetricUsageByMetricName) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -108,8 +105,8 @@ func (m *StateunstableMetricUsageByMetricName) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *StateunstableMetricUsageByMetricName) UnmarshalBinary(b []byte) error {
-	var res StateunstableMetricUsageByMetricName
+func (m *Statev1MetricUsageByMetricName) UnmarshalBinary(b []byte) error {
+	var res Statev1MetricUsageByMetricName
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

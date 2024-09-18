@@ -13,16 +13,16 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// StateunstableMetricUsageByLabelName stateunstable metric usage by label name
+// Statev1MetricUsageByLabelName statev1 metric usage by label name
 //
-// swagger:model stateunstableMetricUsageByLabelName
-type StateunstableMetricUsageByLabelName struct {
+// swagger:model statev1MetricUsageByLabelName
+type Statev1MetricUsageByLabelName struct {
 
 	// label name
 	LabelName string `json:"label_name,omitempty"`
 
 	// usage
-	Usage *StateunstableMetricUsage `json:"usage,omitempty"`
+	Usage *Statev1MetricUsage `json:"usage,omitempty"`
 
 	// total unique values
 	TotalUniqueValues int32 `json:"total_unique_values,omitempty"`
@@ -35,8 +35,8 @@ type StateunstableMetricUsageByLabelName struct {
 	PercentOfSeriesWithLabelName float64 `json:"percent_of_series_with_label_name,omitempty"`
 }
 
-// Validate validates this stateunstable metric usage by label name
-func (m *StateunstableMetricUsageByLabelName) Validate(formats strfmt.Registry) error {
+// Validate validates this statev1 metric usage by label name
+func (m *Statev1MetricUsageByLabelName) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateUsage(formats); err != nil {
@@ -49,7 +49,7 @@ func (m *StateunstableMetricUsageByLabelName) Validate(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *StateunstableMetricUsageByLabelName) validateUsage(formats strfmt.Registry) error {
+func (m *Statev1MetricUsageByLabelName) validateUsage(formats strfmt.Registry) error {
 	if swag.IsZero(m.Usage) { // not required
 		return nil
 	}
@@ -68,8 +68,8 @@ func (m *StateunstableMetricUsageByLabelName) validateUsage(formats strfmt.Regis
 	return nil
 }
 
-// ContextValidate validate this stateunstable metric usage by label name based on the context it is used
-func (m *StateunstableMetricUsageByLabelName) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this statev1 metric usage by label name based on the context it is used
+func (m *Statev1MetricUsageByLabelName) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateUsage(ctx, formats); err != nil {
@@ -82,7 +82,7 @@ func (m *StateunstableMetricUsageByLabelName) ContextValidate(ctx context.Contex
 	return nil
 }
 
-func (m *StateunstableMetricUsageByLabelName) contextValidateUsage(ctx context.Context, formats strfmt.Registry) error {
+func (m *Statev1MetricUsageByLabelName) contextValidateUsage(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Usage != nil {
 
@@ -104,7 +104,7 @@ func (m *StateunstableMetricUsageByLabelName) contextValidateUsage(ctx context.C
 }
 
 // MarshalBinary interface implementation
-func (m *StateunstableMetricUsageByLabelName) MarshalBinary() ([]byte, error) {
+func (m *Statev1MetricUsageByLabelName) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -112,8 +112,8 @@ func (m *StateunstableMetricUsageByLabelName) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *StateunstableMetricUsageByLabelName) UnmarshalBinary(b []byte) error {
-	var res StateunstableMetricUsageByLabelName
+func (m *Statev1MetricUsageByLabelName) UnmarshalBinary(b []byte) error {
+	var res Statev1MetricUsageByLabelName
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

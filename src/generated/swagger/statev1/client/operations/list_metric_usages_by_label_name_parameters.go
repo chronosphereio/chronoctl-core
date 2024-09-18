@@ -64,20 +64,19 @@ type ListMetricUsagesByLabelNameParams struct {
 
 	/* IncludeCountsByType.
 
-	     include_counts_by_type if true response will include the fields `reference_counts_by_type` and `query_execution_counts_by_type`.
-	otherwise these fields are returned empty.
+	   If `true`, responses include the fields `reference_counts_by_type` and `query_execution_counts_by_type`. If `false`, these fields are returned empty.
 	*/
 	IncludeCountsByType *bool
 
 	/* LabelNameGlob.
 
-	   label_name_glob is a glob match string to filter results by label name.
+	   Glob match string for filtering results by label name.
 	*/
 	LabelNameGlob *string
 
 	/* LookbackSecs.
 
-	   lookback_secs controls the time range from now over which query executions are included in usages.
+	   Controls the time range over which query executions are included in usages. Defaults to `2592000` (30 days).
 
 	   Format: int32
 	*/

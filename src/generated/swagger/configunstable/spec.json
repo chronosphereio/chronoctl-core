@@ -149,6 +149,18 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateObjectDiscoveryRuleBody": {
+      "properties": {
+        "object_discovery_rule": {
+          "$ref": "#/definitions/configunstableObjectDiscoveryRule"
+        },
+        "create_if_missing": {
+          "description": "If true, the ObjectDiscoveryRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the ObjectDiscoveryRule does not already exist.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateSavedTraceSearchBody": {
       "properties": {
         "saved_trace_search": {
@@ -339,6 +351,23 @@
         "LESS_THAN_OR_EQUAL"
       ],
       "type": "string"
+    },
+    "ObjectDiscoveryRuleMetricRule": {
+      "properties": {
+        "expr": {
+          "type": "string"
+        },
+        "objectLabels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "objectMappingLabel": {
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "PerOperationSamplingStrategiesPerOperationSamplingStrategy": {
       "properties": {
@@ -995,6 +1024,22 @@
       },
       "type": "object"
     },
+    "configunstableCreateObjectDiscoveryRuleRequest": {
+      "properties": {
+        "object_discovery_rule": {
+          "$ref": "#/definitions/configunstableObjectDiscoveryRule"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateObjectDiscoveryRuleResponse": {
+      "properties": {
+        "object_discovery_rule": {
+          "$ref": "#/definitions/configunstableObjectDiscoveryRule"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateSavedTraceSearchRequest": {
       "properties": {
         "saved_trace_search": {
@@ -1178,6 +1223,9 @@
       },
       "type": "object"
     },
+    "configunstableDeleteObjectDiscoveryRuleResponse": {
+      "type": "object"
+    },
     "configunstableDeleteSavedTraceSearchResponse": {
       "type": "object"
     },
@@ -1295,6 +1343,20 @@
         },
         "page": {
           "$ref": "#/definitions/configv1PageResult"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListObjectDiscoveryRulesResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "object_discovery_rules": {
+          "items": {
+            "$ref": "#/definitions/configunstableObjectDiscoveryRule"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1446,6 +1508,22 @@
       ],
       "type": "string"
     },
+    "configunstableObjectDiscoveryRule": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the ObjectDiscoveryRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the ObjectDiscoveryRule is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the ObjectDiscoveryRule. May be modified after the ObjectDiscoveryRule is created.",
+          "type": "string"
+        },
+        "metric": {
+          "$ref": "#/definitions/ObjectDiscoveryRuleMetricRule"
+        }
+      },
+      "type": "object"
+    },
     "configunstableReadDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -1482,6 +1560,14 @@
       "properties": {
         "noop_entity": {
           "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadObjectDiscoveryRuleResponse": {
+      "properties": {
+        "object_discovery_rule": {
+          "$ref": "#/definitions/configunstableObjectDiscoveryRule"
         }
       },
       "type": "object"
@@ -1888,6 +1974,14 @@
       "properties": {
         "noop_entity": {
           "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateObjectDiscoveryRuleResponse": {
+      "properties": {
+        "object_discovery_rule": {
+          "$ref": "#/definitions/configunstableObjectDiscoveryRule"
         }
       },
       "type": "object"
@@ -3128,6 +3222,245 @@
         },
         "tags": [
           "NoopEntity"
+        ]
+      }
+    },
+    "/api/unstable/config/object-discovery-rules": {
+      "get": {
+        "operationId": "ListObjectDiscoveryRule",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListObjectDiscoveryRulesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ObjectDiscoveryRule"
+        ]
+      },
+      "post": {
+        "operationId": "CreateObjectDiscoveryRule",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateObjectDiscoveryRuleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created ObjectDiscoveryRule.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateObjectDiscoveryRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the ObjectDiscoveryRule because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the ObjectDiscoveryRule because there is a conflict with an existing ObjectDiscoveryRule.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ObjectDiscoveryRule"
+        ]
+      }
+    },
+    "/api/unstable/config/object-discovery-rules/{slug}": {
+      "delete": {
+        "operationId": "DeleteObjectDiscoveryRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteObjectDiscoveryRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the ObjectDiscoveryRule because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the ObjectDiscoveryRule because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ObjectDiscoveryRule"
+        ]
+      },
+      "get": {
+        "operationId": "ReadObjectDiscoveryRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadObjectDiscoveryRuleResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the ObjectDiscoveryRule because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ObjectDiscoveryRule"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateObjectDiscoveryRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateObjectDiscoveryRuleBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated ObjectDiscoveryRule.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateObjectDiscoveryRuleResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the ObjectDiscoveryRule because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the ObjectDiscoveryRule because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the ObjectDiscoveryRule because there is a conflict with an existing ObjectDiscoveryRule.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ObjectDiscoveryRule"
         ]
       }
     },

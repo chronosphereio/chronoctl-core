@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/models"
 )
 
 // ListMetricUsagesByLabelNameReader is a Reader for the ListMetricUsagesByLabelName structure.
@@ -52,7 +52,7 @@ ListMetricUsagesByLabelNameOK describes a response with status code 200, with de
 A successful response.
 */
 type ListMetricUsagesByLabelNameOK struct {
-	Payload *models.StateunstableListMetricUsagesByLabelNameResponse
+	Payload *models.Statev1ListMetricUsagesByLabelNameResponse
 }
 
 // IsSuccess returns true when this list metric usages by label name o k response has a 2xx status code
@@ -93,13 +93,13 @@ func (o *ListMetricUsagesByLabelNameOK) String() string {
 	return fmt.Sprintf("[GET /api/v1/state/metric-usages-by-label-name][%d] listMetricUsagesByLabelNameOK  %+v", 200, o.Payload)
 }
 
-func (o *ListMetricUsagesByLabelNameOK) GetPayload() *models.StateunstableListMetricUsagesByLabelNameResponse {
+func (o *ListMetricUsagesByLabelNameOK) GetPayload() *models.Statev1ListMetricUsagesByLabelNameResponse {
 	return o.Payload
 }
 
 func (o *ListMetricUsagesByLabelNameOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.StateunstableListMetricUsagesByLabelNameResponse)
+	o.Payload = new(models.Statev1ListMetricUsagesByLabelNameResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

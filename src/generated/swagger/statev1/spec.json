@@ -3,6 +3,60 @@
     "application/json"
   ],
   "definitions": {
+    "MetricUsageOrderBy": {
+      "enum": [
+        "VALUABLE",
+        "DPPS",
+        "UTILITY",
+        "REFERENCES",
+        "EXECUTIONS",
+        "UNIQUE_VALUES",
+        "UNIQUE_USERS"
+      ],
+      "type": "string"
+    },
+    "MetricUsageQueryExecutionCountsByType": {
+      "properties": {
+        "explorer": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "dashboard": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "external": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "MetricUsageReferenceCountsByType": {
+      "properties": {
+        "dashboards": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "monitors": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "recording_rules": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "drop_rules": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "aggregation_rules": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "RuleEvaluationRuleType": {
       "enum": [
         "MONITOR",
@@ -60,6 +114,34 @@
       },
       "type": "object"
     },
+    "statev1ListMetricUsagesByLabelNameResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "usages": {
+          "items": {
+            "$ref": "#/definitions/statev1MetricUsageByLabelName"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "statev1ListMetricUsagesByMetricNameResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "usages": {
+          "items": {
+            "$ref": "#/definitions/statev1MetricUsageByMetricName"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "statev1ListRuleEvaluationsResponse": {
       "properties": {
         "page": {
@@ -70,6 +152,83 @@
             "$ref": "#/definitions/statev1RuleEvaluation"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "statev1MetricUsage": {
+      "properties": {
+        "total_references": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "total_query_executions": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "total_unique_users": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "utility_score": {
+          "format": "double",
+          "type": "number"
+        },
+        "reference_counts_by_type": {
+          "$ref": "#/definitions/MetricUsageReferenceCountsByType"
+        },
+        "query_execution_counts_by_type": {
+          "$ref": "#/definitions/MetricUsageQueryExecutionCountsByType"
+        }
+      },
+      "type": "object"
+    },
+    "statev1MetricUsageByLabelName": {
+      "properties": {
+        "label_name": {
+          "type": "string"
+        },
+        "usage": {
+          "$ref": "#/definitions/statev1MetricUsage"
+        },
+        "total_unique_values": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "dpps": {
+          "format": "double",
+          "type": "number"
+        },
+        "percent_of_series_with_label_name": {
+          "description": "Percent of persisted series observed to have the label name.\nReturns in format: [0.0, 100.0]",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "statev1MetricUsageByMetricName": {
+      "properties": {
+        "metric_name": {
+          "type": "string"
+        },
+        "usage": {
+          "$ref": "#/definitions/statev1MetricUsage"
+        },
+        "dpps": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "statev1MetricUsageOrder": {
+      "properties": {
+        "ascending": {
+          "type": "boolean"
+        },
+        "by": {
+          "$ref": "#/definitions/MetricUsageOrderBy"
         }
       },
       "type": "object"
@@ -107,6 +266,156 @@
     "version": "v1"
   },
   "paths": {
+    "/api/v1/state/metric-usages-by-label-name": {
+      "get": {
+        "operationId": "ListMetricUsagesByLabelName",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "order.ascending",
+            "type": "boolean"
+          },
+          {
+            "enum": [
+              "VALUABLE",
+              "DPPS",
+              "UTILITY",
+              "REFERENCES",
+              "EXECUTIONS",
+              "UNIQUE_VALUES",
+              "UNIQUE_USERS"
+            ],
+            "in": "query",
+            "name": "order.by",
+            "type": "string"
+          },
+          {
+            "description": "Controls the time range over which query executions are included in usages. Defaults to `2592000` (30 days).",
+            "format": "int32",
+            "in": "query",
+            "name": "lookback_secs",
+            "type": "integer"
+          },
+          {
+            "description": "Glob match string for filtering results by label name.",
+            "in": "query",
+            "name": "label_name_glob",
+            "type": "string"
+          },
+          {
+            "description": "If `true`, responses include the fields `reference_counts_by_type` and `query_execution_counts_by_type`. If `false`, these fields are returned empty.",
+            "in": "query",
+            "name": "include_counts_by_type",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/statev1ListMetricUsagesByLabelNameResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "MetricUsagesByLabelName"
+        ]
+      }
+    },
+    "/api/v1/state/metric-usages-by-metric-name": {
+      "get": {
+        "operationId": "ListMetricUsagesByMetricName",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "order.ascending",
+            "type": "boolean"
+          },
+          {
+            "enum": [
+              "VALUABLE",
+              "DPPS",
+              "UTILITY",
+              "REFERENCES",
+              "EXECUTIONS",
+              "UNIQUE_VALUES",
+              "UNIQUE_USERS"
+            ],
+            "in": "query",
+            "name": "order.by",
+            "type": "string"
+          },
+          {
+            "description": "Controls the time range over which query executions are included in usages. Defaults to `2592000` (30 days).",
+            "format": "int32",
+            "in": "query",
+            "name": "lookback_secs",
+            "type": "integer"
+          },
+          {
+            "description": "Glob match string for filtering results by metric name.",
+            "in": "query",
+            "name": "metric_name_glob",
+            "type": "string"
+          },
+          {
+            "description": "If `true`, responses include the fields `reference_counts_by_type` and `query_execution_counts_by_type`. If `false`, these fields are returned empty.",
+            "in": "query",
+            "name": "include_counts_by_type",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/statev1ListMetricUsagesByMetricNameResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "MetricUsagesByMetricName"
+        ]
+      }
+    },
     "/api/v1/state/rule-evaluations": {
       "get": {
         "operationId": "ListRuleEvaluations",
