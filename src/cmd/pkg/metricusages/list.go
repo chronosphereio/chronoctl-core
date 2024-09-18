@@ -26,8 +26,8 @@ import (
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/client"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/output"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/pagination"
-	state_unstable "github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/client/operations"
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/models"
+	statev1 "github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/client/operations"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/models"
 )
 
 type listOptions[T any] struct {
@@ -38,12 +38,12 @@ type listOptions[T any] struct {
 	nextToken             string
 	originalCommandString string
 
-	client state_unstable.ClientService
+	client statev1.ClientService
 
 	listFn listFn[T]
 }
 
-type listFn[T any] func(ctx context.Context, client state_unstable.ClientService, p pagination.Page) (items []T, token string, err error)
+type listFn[T any] func(ctx context.Context, client statev1.ClientService, p pagination.Page) (items []T, token string, err error)
 
 func newListOptions[T any](listFn listFn[T]) *listOptions[T] {
 	return &listOptions[T]{
@@ -75,7 +75,7 @@ func (o *listOptions[T]) buildCmd(short, example string) *cobra.Command {
 }
 
 func (o *listOptions[T]) validate() error {
-	client, err := o.clientFlags.StateUnstableClient()
+	client, err := o.clientFlags.StateV1Client()
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func (o *listOptions[T]) addFlags(cmd *cobra.Command) {
 	o.clientFlags.AddFlags(cmd)
 	o.outputFlags.AddFlags(cmd)
 
-	cmd.Flags().Int64Var(&o.maxItems, "max-items", 0, "Maximum number of rule evaluations to return. If omitted, all rule evaluations will be returned.")
+	cmd.Flags().Int64Var(&o.maxItems, "max-items", 0, "Maximum number of metric usages to return. If omitted, default is used.")
 	cmd.Flags().StringVar(&o.nextToken, "next-token", "", "Pagination token to use")
 }
 
@@ -102,8 +102,8 @@ func (o *listOptions[T]) run(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	for _, ruleEvaluation := range byMetric {
-		if err := o.outputFlags.WriteObject(ruleEvaluation, w); err != nil {
+	for _, metricUsage := range byMetric {
+		if err := o.outputFlags.WriteObject(metricUsage, w); err != nil {
 			return err
 		}
 	}
@@ -128,10 +128,10 @@ func (o *listOptions[T]) query(ctx context.Context) (usages []T, token string, _
 
 func listMetricUsageByMetricName(
 	ctx context.Context,
-	client state_unstable.ClientService,
+	client statev1.ClientService,
 	p pagination.Page,
-) (items []*models.StateunstableMetricUsageByMetricName, token string, err error) {
-	resp, err := client.ListMetricUsagesByMetricName(&state_unstable.ListMetricUsagesByMetricNameParams{
+) (items []*models.Statev1MetricUsageByMetricName, token string, err error) {
+	resp, err := client.ListMetricUsagesByMetricName(&statev1.ListMetricUsagesByMetricNameParams{
 		Context:     ctx,
 		PageMaxSize: &p.Size,
 		PageToken:   &p.Token,
@@ -148,10 +148,10 @@ func listMetricUsageByMetricName(
 
 func listMetricUsageByLabelName(
 	ctx context.Context,
-	client state_unstable.ClientService,
+	client statev1.ClientService,
 	p pagination.Page,
-) (items []*models.StateunstableMetricUsageByLabelName, token string, err error) {
-	resp, err := client.ListMetricUsagesByLabelName(&state_unstable.ListMetricUsagesByLabelNameParams{
+) (items []*models.Statev1MetricUsageByLabelName, token string, err error) {
+	resp, err := client.ListMetricUsagesByLabelName(&statev1.ListMetricUsagesByLabelNameParams{
 		Context:     ctx,
 		PageMaxSize: &p.Size,
 		PageToken:   &p.Token,

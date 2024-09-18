@@ -19,19 +19,19 @@ import (
 	"strings"
 	"testing"
 
-	state_unstable "github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/client/operations"
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/mocks"
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/stateunstable/models"
+	statev1 "github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/client/operations"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/mocks"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/statev1/models"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestListMetricUsagesByMetricName(t *testing.T) {
-	newFn := func(name string) *models.StateunstableMetricUsageByMetricName {
-		return &models.StateunstableMetricUsageByMetricName{
+	newFn := func(name string) *models.Statev1MetricUsageByMetricName {
+		return &models.Statev1MetricUsageByMetricName{
 			MetricName: name,
-			Usage: &models.StateunstableMetricUsage{
+			Usage: &models.Statev1MetricUsage{
 				TotalReferences:      1,
 				TotalQueryExecutions: 2,
 				TotalUniqueUsers:     3,
@@ -49,8 +49,7 @@ func TestListMetricUsagesByMetricName(t *testing.T) {
 					External:  3,
 				},
 			},
-			Cardinality: 1,
-			Dpps:        2,
+			Dpps: 2,
 		}
 	}
 
@@ -64,8 +63,8 @@ func TestListMetricUsagesByMetricName(t *testing.T) {
 	var buf bytes.Buffer
 
 	// Nil result.
-	cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByMetricNameOK{
-		Payload: &models.StateunstableListMetricUsagesByMetricNameResponse{
+	cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&statev1.ListMetricUsagesByMetricNameOK{
+		Payload: &models.Statev1ListMetricUsagesByMetricNameResponse{
 			Usages: nil,
 		},
 	}, nil)
@@ -74,9 +73,9 @@ func TestListMetricUsagesByMetricName(t *testing.T) {
 	buf.Reset()
 
 	// All results.
-	cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByMetricNameOK{
-		Payload: &models.StateunstableListMetricUsagesByMetricNameResponse{
-			Usages: []*models.StateunstableMetricUsageByMetricName{
+	cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&statev1.ListMetricUsagesByMetricNameOK{
+		Payload: &models.Statev1ListMetricUsagesByMetricNameResponse{
+			Usages: []*models.Statev1MetricUsageByMetricName{
 				newFn("metric-a"),
 				newFn("metric-b"),
 				newFn("metric-c"),
@@ -145,9 +144,9 @@ dpps: 2
 	buf.Reset()
 
 	// All results paginated.
-	first := cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByMetricNameOK{
-		Payload: &models.StateunstableListMetricUsagesByMetricNameResponse{
-			Usages: []*models.StateunstableMetricUsageByMetricName{
+	first := cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&statev1.ListMetricUsagesByMetricNameOK{
+		Payload: &models.Statev1ListMetricUsagesByMetricNameResponse{
+			Usages: []*models.Statev1MetricUsageByMetricName{
 				newFn("metric-a"),
 				newFn("metric-b"),
 			},
@@ -156,9 +155,9 @@ dpps: 2
 			},
 		},
 	}, nil)
-	second := cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByMetricNameOK{
-		Payload: &models.StateunstableListMetricUsagesByMetricNameResponse{
-			Usages: []*models.StateunstableMetricUsageByMetricName{
+	second := cli.EXPECT().ListMetricUsagesByMetricName(gomock.Any()).Return(&statev1.ListMetricUsagesByMetricNameOK{
+		Payload: &models.Statev1ListMetricUsagesByMetricNameResponse{
+			Usages: []*models.Statev1MetricUsageByMetricName{
 				newFn("metric-c"),
 			},
 		},
@@ -170,10 +169,10 @@ dpps: 2
 }
 
 func TestListMetricUsagesByLabelName(t *testing.T) {
-	newFn := func(name string) *models.StateunstableMetricUsageByLabelName {
-		return &models.StateunstableMetricUsageByLabelName{
+	newFn := func(name string) *models.Statev1MetricUsageByLabelName {
+		return &models.Statev1MetricUsageByLabelName{
 			LabelName: name,
-			Usage: &models.StateunstableMetricUsage{
+			Usage: &models.Statev1MetricUsage{
 				TotalReferences:      1,
 				TotalQueryExecutions: 2,
 				TotalUniqueUsers:     3,
@@ -207,8 +206,8 @@ func TestListMetricUsagesByLabelName(t *testing.T) {
 	var buf bytes.Buffer
 
 	// Nil result.
-	cli.EXPECT().ListMetricUsagesByLabelName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByLabelNameOK{
-		Payload: &models.StateunstableListMetricUsagesByLabelNameResponse{
+	cli.EXPECT().ListMetricUsagesByLabelName(gomock.Any()).Return(&statev1.ListMetricUsagesByLabelNameOK{
+		Payload: &models.Statev1ListMetricUsagesByLabelNameResponse{
 			Usages: nil,
 		},
 	}, nil)
@@ -217,9 +216,9 @@ func TestListMetricUsagesByLabelName(t *testing.T) {
 	buf.Reset()
 
 	// All results.
-	cli.EXPECT().ListMetricUsagesByLabelName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByLabelNameOK{
-		Payload: &models.StateunstableListMetricUsagesByLabelNameResponse{
-			Usages: []*models.StateunstableMetricUsageByLabelName{
+	cli.EXPECT().ListMetricUsagesByLabelName(gomock.Any()).Return(&statev1.ListMetricUsagesByLabelNameOK{
+		Payload: &models.Statev1ListMetricUsagesByLabelNameResponse{
+			Usages: []*models.Statev1MetricUsageByLabelName{
 				newFn("label-a"),
 				newFn("label-b"),
 				newFn("label-c"),
@@ -291,9 +290,9 @@ percent_of_series_with_label_name: 3
 	buf.Reset()
 
 	// All results paginated.
-	first := cli.EXPECT().ListMetricUsagesByLabelName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByLabelNameOK{
-		Payload: &models.StateunstableListMetricUsagesByLabelNameResponse{
-			Usages: []*models.StateunstableMetricUsageByLabelName{
+	first := cli.EXPECT().ListMetricUsagesByLabelName(gomock.Any()).Return(&statev1.ListMetricUsagesByLabelNameOK{
+		Payload: &models.Statev1ListMetricUsagesByLabelNameResponse{
+			Usages: []*models.Statev1MetricUsageByLabelName{
 				newFn("label-a"),
 				newFn("label-b"),
 			},
@@ -302,9 +301,9 @@ percent_of_series_with_label_name: 3
 			},
 		},
 	}, nil)
-	second := cli.EXPECT().ListMetricUsagesByLabelName(gomock.Any()).Return(&state_unstable.ListMetricUsagesByLabelNameOK{
-		Payload: &models.StateunstableListMetricUsagesByLabelNameResponse{
-			Usages: []*models.StateunstableMetricUsageByLabelName{
+	second := cli.EXPECT().ListMetricUsagesByLabelName(gomock.Any()).Return(&statev1.ListMetricUsagesByLabelNameOK{
+		Payload: &models.Statev1ListMetricUsagesByLabelNameResponse{
+			Usages: []*models.Statev1MetricUsageByLabelName{
 				newFn("label-c"),
 			},
 		},
