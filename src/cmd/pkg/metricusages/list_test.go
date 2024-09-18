@@ -99,7 +99,6 @@ usage:
     explorer: 1
     dashboard: 2
     external: 3
-cardinality: 1
 dpps: 2
 ---
 metric_name: metric-b
@@ -118,7 +117,6 @@ usage:
     explorer: 1
     dashboard: 2
     external: 3
-cardinality: 1
 dpps: 2
 ---
 metric_name: metric-c
@@ -137,7 +135,6 @@ usage:
     explorer: 1
     dashboard: 2
     external: 3
-cardinality: 1
 dpps: 2
 `
 	assert.Equal(t, expected, buf.String())
