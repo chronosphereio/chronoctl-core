@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// StateunstableMetricUsage stateunstable metric usage
+// Statev1MetricUsage statev1 metric usage
 //
-// swagger:model stateunstableMetricUsage
-type StateunstableMetricUsage struct {
+// swagger:model statev1MetricUsage
+type Statev1MetricUsage struct {
 
 	// total references
 	TotalReferences int32 `json:"total_references,omitempty"`
@@ -37,8 +37,8 @@ type StateunstableMetricUsage struct {
 	QueryExecutionCountsByType *MetricUsageQueryExecutionCountsByType `json:"query_execution_counts_by_type,omitempty"`
 }
 
-// Validate validates this stateunstable metric usage
-func (m *StateunstableMetricUsage) Validate(formats strfmt.Registry) error {
+// Validate validates this statev1 metric usage
+func (m *Statev1MetricUsage) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateReferenceCountsByType(formats); err != nil {
@@ -55,7 +55,7 @@ func (m *StateunstableMetricUsage) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *StateunstableMetricUsage) validateReferenceCountsByType(formats strfmt.Registry) error {
+func (m *Statev1MetricUsage) validateReferenceCountsByType(formats strfmt.Registry) error {
 	if swag.IsZero(m.ReferenceCountsByType) { // not required
 		return nil
 	}
@@ -74,7 +74,7 @@ func (m *StateunstableMetricUsage) validateReferenceCountsByType(formats strfmt.
 	return nil
 }
 
-func (m *StateunstableMetricUsage) validateQueryExecutionCountsByType(formats strfmt.Registry) error {
+func (m *Statev1MetricUsage) validateQueryExecutionCountsByType(formats strfmt.Registry) error {
 	if swag.IsZero(m.QueryExecutionCountsByType) { // not required
 		return nil
 	}
@@ -93,8 +93,8 @@ func (m *StateunstableMetricUsage) validateQueryExecutionCountsByType(formats st
 	return nil
 }
 
-// ContextValidate validate this stateunstable metric usage based on the context it is used
-func (m *StateunstableMetricUsage) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this statev1 metric usage based on the context it is used
+func (m *Statev1MetricUsage) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateReferenceCountsByType(ctx, formats); err != nil {
@@ -111,7 +111,7 @@ func (m *StateunstableMetricUsage) ContextValidate(ctx context.Context, formats 
 	return nil
 }
 
-func (m *StateunstableMetricUsage) contextValidateReferenceCountsByType(ctx context.Context, formats strfmt.Registry) error {
+func (m *Statev1MetricUsage) contextValidateReferenceCountsByType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ReferenceCountsByType != nil {
 
@@ -132,7 +132,7 @@ func (m *StateunstableMetricUsage) contextValidateReferenceCountsByType(ctx cont
 	return nil
 }
 
-func (m *StateunstableMetricUsage) contextValidateQueryExecutionCountsByType(ctx context.Context, formats strfmt.Registry) error {
+func (m *Statev1MetricUsage) contextValidateQueryExecutionCountsByType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.QueryExecutionCountsByType != nil {
 
@@ -154,7 +154,7 @@ func (m *StateunstableMetricUsage) contextValidateQueryExecutionCountsByType(ctx
 }
 
 // MarshalBinary interface implementation
-func (m *StateunstableMetricUsage) MarshalBinary() ([]byte, error) {
+func (m *Statev1MetricUsage) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -162,8 +162,8 @@ func (m *StateunstableMetricUsage) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *StateunstableMetricUsage) UnmarshalBinary(b []byte) error {
-	var res StateunstableMetricUsage
+func (m *Statev1MetricUsage) UnmarshalBinary(b []byte) error {
+	var res Statev1MetricUsage
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

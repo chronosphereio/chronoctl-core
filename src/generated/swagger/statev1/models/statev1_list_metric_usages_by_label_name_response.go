@@ -14,20 +14,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// StateunstableListMetricUsagesByLabelNameResponse stateunstable list metric usages by label name response
+// Statev1ListMetricUsagesByLabelNameResponse statev1 list metric usages by label name response
 //
-// swagger:model stateunstableListMetricUsagesByLabelNameResponse
-type StateunstableListMetricUsagesByLabelNameResponse struct {
+// swagger:model statev1ListMetricUsagesByLabelNameResponse
+type Statev1ListMetricUsagesByLabelNameResponse struct {
 
 	// page
 	Page *Configv1PageResult `json:"page,omitempty"`
 
 	// usages
-	Usages []*StateunstableMetricUsageByLabelName `json:"usages"`
+	Usages []*Statev1MetricUsageByLabelName `json:"usages"`
 }
 
-// Validate validates this stateunstable list metric usages by label name response
-func (m *StateunstableListMetricUsagesByLabelNameResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this statev1 list metric usages by label name response
+func (m *Statev1ListMetricUsagesByLabelNameResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validatePage(formats); err != nil {
@@ -44,7 +44,7 @@ func (m *StateunstableListMetricUsagesByLabelNameResponse) Validate(formats strf
 	return nil
 }
 
-func (m *StateunstableListMetricUsagesByLabelNameResponse) validatePage(formats strfmt.Registry) error {
+func (m *Statev1ListMetricUsagesByLabelNameResponse) validatePage(formats strfmt.Registry) error {
 	if swag.IsZero(m.Page) { // not required
 		return nil
 	}
@@ -63,7 +63,7 @@ func (m *StateunstableListMetricUsagesByLabelNameResponse) validatePage(formats 
 	return nil
 }
 
-func (m *StateunstableListMetricUsagesByLabelNameResponse) validateUsages(formats strfmt.Registry) error {
+func (m *Statev1ListMetricUsagesByLabelNameResponse) validateUsages(formats strfmt.Registry) error {
 	if swag.IsZero(m.Usages) { // not required
 		return nil
 	}
@@ -89,8 +89,8 @@ func (m *StateunstableListMetricUsagesByLabelNameResponse) validateUsages(format
 	return nil
 }
 
-// ContextValidate validate this stateunstable list metric usages by label name response based on the context it is used
-func (m *StateunstableListMetricUsagesByLabelNameResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this statev1 list metric usages by label name response based on the context it is used
+func (m *Statev1ListMetricUsagesByLabelNameResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidatePage(ctx, formats); err != nil {
@@ -107,7 +107,7 @@ func (m *StateunstableListMetricUsagesByLabelNameResponse) ContextValidate(ctx c
 	return nil
 }
 
-func (m *StateunstableListMetricUsagesByLabelNameResponse) contextValidatePage(ctx context.Context, formats strfmt.Registry) error {
+func (m *Statev1ListMetricUsagesByLabelNameResponse) contextValidatePage(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Page != nil {
 
@@ -128,7 +128,7 @@ func (m *StateunstableListMetricUsagesByLabelNameResponse) contextValidatePage(c
 	return nil
 }
 
-func (m *StateunstableListMetricUsagesByLabelNameResponse) contextValidateUsages(ctx context.Context, formats strfmt.Registry) error {
+func (m *Statev1ListMetricUsagesByLabelNameResponse) contextValidateUsages(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Usages); i++ {
 
@@ -154,7 +154,7 @@ func (m *StateunstableListMetricUsagesByLabelNameResponse) contextValidateUsages
 }
 
 // MarshalBinary interface implementation
-func (m *StateunstableListMetricUsagesByLabelNameResponse) MarshalBinary() ([]byte, error) {
+func (m *Statev1ListMetricUsagesByLabelNameResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -162,8 +162,8 @@ func (m *StateunstableListMetricUsagesByLabelNameResponse) MarshalBinary() ([]by
 }
 
 // UnmarshalBinary interface implementation
-func (m *StateunstableListMetricUsagesByLabelNameResponse) UnmarshalBinary(b []byte) error {
-	var res StateunstableListMetricUsagesByLabelNameResponse
+func (m *Statev1ListMetricUsagesByLabelNameResponse) UnmarshalBinary(b []byte) error {
+	var res Statev1ListMetricUsagesByLabelNameResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

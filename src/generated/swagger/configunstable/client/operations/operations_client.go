@@ -38,6 +38,8 @@ type ClientService interface {
 
 	CreateNoopEntity(params *CreateNoopEntityParams, opts ...ClientOption) (*CreateNoopEntityOK, error)
 
+	CreateObjectDiscoveryRule(params *CreateObjectDiscoveryRuleParams, opts ...ClientOption) (*CreateObjectDiscoveryRuleOK, error)
+
 	CreateSavedTraceSearch(params *CreateSavedTraceSearchParams, opts ...ClientOption) (*CreateSavedTraceSearchOK, error)
 
 	CreateService(params *CreateServiceParams, opts ...ClientOption) (*CreateServiceOK, error)
@@ -60,6 +62,8 @@ type ClientService interface {
 
 	DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...ClientOption) (*DeleteNoopEntityOK, error)
 
+	DeleteObjectDiscoveryRule(params *DeleteObjectDiscoveryRuleParams, opts ...ClientOption) (*DeleteObjectDiscoveryRuleOK, error)
+
 	DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error)
 
 	DeleteService(params *DeleteServiceParams, opts ...ClientOption) (*DeleteServiceOK, error)
@@ -75,6 +79,8 @@ type ClientService interface {
 	ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error)
 
 	ListLinkTemplates(params *ListLinkTemplatesParams, opts ...ClientOption) (*ListLinkTemplatesOK, error)
+
+	ListObjectDiscoveryRule(params *ListObjectDiscoveryRuleParams, opts ...ClientOption) (*ListObjectDiscoveryRuleOK, error)
 
 	ListSavedTraceSearches(params *ListSavedTraceSearchesParams, opts ...ClientOption) (*ListSavedTraceSearchesOK, error)
 
@@ -93,6 +99,8 @@ type ClientService interface {
 	ReadLogControlConfig(params *ReadLogControlConfigParams, opts ...ClientOption) (*ReadLogControlConfigOK, error)
 
 	ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOption) (*ReadNoopEntityOK, error)
+
+	ReadObjectDiscoveryRule(params *ReadObjectDiscoveryRuleParams, opts ...ClientOption) (*ReadObjectDiscoveryRuleOK, error)
 
 	ReadSavedTraceSearch(params *ReadSavedTraceSearchParams, opts ...ClientOption) (*ReadSavedTraceSearchOK, error)
 
@@ -117,6 +125,8 @@ type ClientService interface {
 	UpdateLogControlConfig(params *UpdateLogControlConfigParams, opts ...ClientOption) (*UpdateLogControlConfigOK, error)
 
 	UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...ClientOption) (*UpdateNoopEntityOK, error)
+
+	UpdateObjectDiscoveryRule(params *UpdateObjectDiscoveryRuleParams, opts ...ClientOption) (*UpdateObjectDiscoveryRuleOK, error)
 
 	UpdateSavedTraceSearch(params *UpdateSavedTraceSearchParams, opts ...ClientOption) (*UpdateSavedTraceSearchOK, error)
 
@@ -315,6 +325,43 @@ func (a *Client) CreateNoopEntity(params *CreateNoopEntityParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateNoopEntityDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateObjectDiscoveryRule create object discovery rule API
+*/
+func (a *Client) CreateObjectDiscoveryRule(params *CreateObjectDiscoveryRuleParams, opts ...ClientOption) (*CreateObjectDiscoveryRuleOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateObjectDiscoveryRuleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateObjectDiscoveryRule",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/object-discovery-rules",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateObjectDiscoveryRuleReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateObjectDiscoveryRuleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateObjectDiscoveryRuleDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -729,6 +776,43 @@ func (a *Client) DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...Client
 }
 
 /*
+DeleteObjectDiscoveryRule delete object discovery rule API
+*/
+func (a *Client) DeleteObjectDiscoveryRule(params *DeleteObjectDiscoveryRuleParams, opts ...ClientOption) (*DeleteObjectDiscoveryRuleOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteObjectDiscoveryRuleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteObjectDiscoveryRule",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/object-discovery-rules/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteObjectDiscoveryRuleReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteObjectDiscoveryRuleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteObjectDiscoveryRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteSavedTraceSearch delete saved trace search API
 */
 func (a *Client) DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error) {
@@ -1021,6 +1105,43 @@ func (a *Client) ListLinkTemplates(params *ListLinkTemplatesParams, opts ...Clie
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListLinkTemplatesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListObjectDiscoveryRule list object discovery rule API
+*/
+func (a *Client) ListObjectDiscoveryRule(params *ListObjectDiscoveryRuleParams, opts ...ClientOption) (*ListObjectDiscoveryRuleOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListObjectDiscoveryRuleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListObjectDiscoveryRule",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/object-discovery-rules",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListObjectDiscoveryRuleReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListObjectDiscoveryRuleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListObjectDiscoveryRuleDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1354,6 +1475,43 @@ func (a *Client) ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadNoopEntityDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadObjectDiscoveryRule read object discovery rule API
+*/
+func (a *Client) ReadObjectDiscoveryRule(params *ReadObjectDiscoveryRuleParams, opts ...ClientOption) (*ReadObjectDiscoveryRuleOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadObjectDiscoveryRuleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadObjectDiscoveryRule",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/object-discovery-rules/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadObjectDiscoveryRuleReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadObjectDiscoveryRuleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadObjectDiscoveryRuleDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1801,6 +1959,43 @@ func (a *Client) UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateNoopEntityDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateObjectDiscoveryRule update object discovery rule API
+*/
+func (a *Client) UpdateObjectDiscoveryRule(params *UpdateObjectDiscoveryRuleParams, opts ...ClientOption) (*UpdateObjectDiscoveryRuleOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateObjectDiscoveryRuleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateObjectDiscoveryRule",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/object-discovery-rules/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateObjectDiscoveryRuleReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateObjectDiscoveryRuleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateObjectDiscoveryRuleDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

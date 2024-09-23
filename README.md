@@ -48,10 +48,11 @@ For details about these resource types, see their
 
 ## State
 
-Chronoctl also provides a command to review the state of rule evaluations in
-Chronosphere:
+Chronoctl also provides commands to review state in Chronosphere:
 
 * `rule-evaluations`
+* `metric-usages-by-metric-name`
+* `metric-usages-by-label-name`
 
 ## Additional commands
 

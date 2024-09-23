@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// StateunstableMetricUsageOrder stateunstable metric usage order
+// Statev1MetricUsageOrder statev1 metric usage order
 //
-// swagger:model stateunstableMetricUsageOrder
-type StateunstableMetricUsageOrder struct {
+// swagger:model statev1MetricUsageOrder
+type Statev1MetricUsageOrder struct {
 
 	// ascending
 	Ascending bool `json:"ascending,omitempty"`
@@ -25,8 +25,8 @@ type StateunstableMetricUsageOrder struct {
 	By MetricUsageOrderBy `json:"by,omitempty"`
 }
 
-// Validate validates this stateunstable metric usage order
-func (m *StateunstableMetricUsageOrder) Validate(formats strfmt.Registry) error {
+// Validate validates this statev1 metric usage order
+func (m *Statev1MetricUsageOrder) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateBy(formats); err != nil {
@@ -39,7 +39,7 @@ func (m *StateunstableMetricUsageOrder) Validate(formats strfmt.Registry) error 
 	return nil
 }
 
-func (m *StateunstableMetricUsageOrder) validateBy(formats strfmt.Registry) error {
+func (m *Statev1MetricUsageOrder) validateBy(formats strfmt.Registry) error {
 	if swag.IsZero(m.By) { // not required
 		return nil
 	}
@@ -56,8 +56,8 @@ func (m *StateunstableMetricUsageOrder) validateBy(formats strfmt.Registry) erro
 	return nil
 }
 
-// ContextValidate validate this stateunstable metric usage order based on the context it is used
-func (m *StateunstableMetricUsageOrder) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this statev1 metric usage order based on the context it is used
+func (m *Statev1MetricUsageOrder) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateBy(ctx, formats); err != nil {
@@ -70,7 +70,7 @@ func (m *StateunstableMetricUsageOrder) ContextValidate(ctx context.Context, for
 	return nil
 }
 
-func (m *StateunstableMetricUsageOrder) contextValidateBy(ctx context.Context, formats strfmt.Registry) error {
+func (m *Statev1MetricUsageOrder) contextValidateBy(ctx context.Context, formats strfmt.Registry) error {
 
 	if swag.IsZero(m.By) { // not required
 		return nil
@@ -89,7 +89,7 @@ func (m *StateunstableMetricUsageOrder) contextValidateBy(ctx context.Context, f
 }
 
 // MarshalBinary interface implementation
-func (m *StateunstableMetricUsageOrder) MarshalBinary() ([]byte, error) {
+func (m *Statev1MetricUsageOrder) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -97,8 +97,8 @@ func (m *StateunstableMetricUsageOrder) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *StateunstableMetricUsageOrder) UnmarshalBinary(b []byte) error {
-	var res StateunstableMetricUsageOrder
+func (m *Statev1MetricUsageOrder) UnmarshalBinary(b []byte) error {
+	var res Statev1MetricUsageOrder
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

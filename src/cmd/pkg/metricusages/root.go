@@ -16,8 +16,9 @@
 package metricusages
 
 import (
-	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
 	"github.com/spf13/cobra"
+
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
 )
 
 // NewCommands returns a new cobra command for metric usages.
@@ -52,8 +53,8 @@ func newCommandByLabelName() *cobra.Command {
 chronoctl metric-usages-by-label-name list`,
 	}
 	cmd.AddCommand(newListOptions(listMetricUsageByLabelName).buildCmd(
-		"List all metric usages by metric name.",
-		`# List all metric usages by metric name.
-chronoctl metric-usages-by-metric-name list`))
+		"List all metric usages by label name.",
+		`# List all metric usages by label name.
+chronoctl metric-usages-by-label-name list`))
 	return cmd
 }

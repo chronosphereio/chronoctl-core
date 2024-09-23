@@ -19,6 +19,7 @@ import (
 
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/auth"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/metricusages"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/ruleevaluations"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/unstable"
 	"github.com/chronosphereio/chronoctl-core/src/generated/cli/configv1"
@@ -49,6 +50,7 @@ func New(options Options) (*cobra.Command, error) {
 	cmd.AddCommand(NewApplyCommand(options.ApplyOptions))
 	cmd.AddCommand(unstable.NewCommand())
 	cmd.AddCommand(ruleevaluations.NewCommand())
+	cmd.AddCommand(metricusages.NewCommands()...)
 	cmd.AddCommand(auth.NewCommand())
 	configv1.AddCommandsTo(cmd)
 
