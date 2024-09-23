@@ -5,7 +5,7 @@
 * Adds new resource `v1/config/LogScaleAction`
 * Adds new resource `v1/config/LogScaleAlert`
 * Adds new field `pool.allocation.fixed_values` to `v1/config/ResourcePools`
-* New statev1: metric-usages-by-metric-name
+* Adds new state command `metric-usages-by-metric-name`
 * New statev1: metric-usages-by-label-name
 
 ## v1.9.0
