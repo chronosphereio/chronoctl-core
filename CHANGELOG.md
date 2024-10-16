@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v1.10.0
+
+### Added 
 * Adds new resource `v1/config/LogScaleAction`
 * Adds new resource `v1/config/LogScaleAlert`
 * Adds new field `pool.allocation.fixed_values` to `v1/config/ResourcePools`
