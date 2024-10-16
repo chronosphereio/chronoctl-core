@@ -10,7 +10,7 @@ GO_BUILD_LDFLAGS          := $(shell $(GO_BUILD_LDFLAGS_CMD))
 GO_BUILD_COMMON_ENV       := CGO_ENABLED=0
 
 GO_RELEASER_WORKING_DIR   := /go/src/github.com/chronosphere/chronoctl
-GO_RELEASER_RELEASE_ARGS  ?= --rm-dist
+GO_RELEASER_RELEASE_ARGS  ?= --clean
 
 UNSTABLE_ENTITIES := link-templates,saved-trace-searches,dashboards,trace-tail-sampling-rules,services,metric-usages-by-metric-name,metric-usages-by-label-name
 
@@ -102,4 +102,4 @@ release:
 release-snapshot:
 	@echo Building binaries with goreleaser
 	# --snapshot mode allows building artifacts w/o release tag present and w/ publishing mode disabled useful when we want to test whether we can build binaries, but not publish yet.
-	make release GO_RELEASER_RELEASE_ARGS="--snapshot --rm-dist --skip-publish"
+	make release GO_RELEASER_RELEASE_ARGS="--snapshot --clean --skip=publish"
