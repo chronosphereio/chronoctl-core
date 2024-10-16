@@ -25,10 +25,10 @@ archives:
 blobs:
   - provider: gs
     bucket: chronosphere-release
-    folder: "{{.Version}}"
+    directory: "{{.Version}}"
   - provider: gs
     bucket: chronosphere-release
-    folder: "latest"
+    directory: "latest"
 checksum:
   name_template: "{{ .ProjectName}}-checksums.txt"
 release:
