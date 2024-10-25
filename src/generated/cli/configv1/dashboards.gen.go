@@ -507,6 +507,8 @@ spec:
     collection_slug: <string>
     # Required raw JSON of the dashboard.
     dashboard_json: <string>
+    labels:
+        key_1: <string>
     collection:
         slug: <string>
         # Type values must match entitiespb.Collection.CollectionType.

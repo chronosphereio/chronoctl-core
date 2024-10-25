@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+Added:
+* Adds support for labels to `v1/config/Dashboard`
+
 ## v1.10.1
 
 No changes
