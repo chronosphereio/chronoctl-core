@@ -3,73 +3,6 @@
     "application/json"
   ],
   "definitions": {
-    "BaselineBehaviorOptionsErrorSampleOptions": {
-      "properties": {
-        "sample_rate": {
-          "description": "Sample rate for traces with errors.",
-          "format": "double",
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "BaselineBehaviorOptionsFastSampleOptions": {
-      "properties": {
-        "max_duration_seconds": {
-          "description": "Duration in seconds under which traces are sampled\naccording to the given sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sample_rate": {
-          "description": "Sample rate for traces under the given duration.",
-          "format": "double",
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "BaselineBehaviorOptionsLargeTraceSampleOptions": {
-      "properties": {
-        "span_count_threshold": {
-          "description": "For N = number of spans in the trace, if N \u003e= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
-          "format": "int64",
-          "type": "integer"
-        },
-        "sample_rate": {
-          "format": "double",
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "BaselineBehaviorOptionsSlowSampleOptions": {
-      "properties": {
-        "min_duration_seconds": {
-          "description": "Duration in seconds over which traces are sampled\naccording to the given sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sample_rate": {
-          "format": "double",
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "BaselineBehaviorOptionsSmallTraceSampleOptions": {
-      "properties": {
-        "span_count_threshold": {
-          "description": "For N = number of spans in the trace, if N \u003c= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
-          "format": "int64",
-          "type": "integer"
-        },
-        "sample_rate": {
-          "format": "double",
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
     "ChronoConfigCollectionsConfig": {
       "properties": {
         "group_teams": {
@@ -656,7 +589,7 @@
     "TraceBehaviorBaselineBehaviorOptions": {
       "properties": {
         "base_tail_sample_rate": {
-          "description": "Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.\nIf they do apply to one or more of these options, the smallest sample rate is used.",
+          "description": "Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.",
           "format": "double",
           "type": "number"
         },
@@ -666,29 +599,143 @@
           "type": "number"
         },
         "error_sample_options": {
-          "$ref": "#/definitions/BaselineBehaviorOptionsErrorSampleOptions"
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsErrorSampleOptions"
         },
         "fast_sample_options": {
-          "$ref": "#/definitions/BaselineBehaviorOptionsFastSampleOptions"
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsFastSampleOptions"
         },
         "slow_sample_options": {
-          "$ref": "#/definitions/BaselineBehaviorOptionsSlowSampleOptions"
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSlowSampleOptions"
         },
         "large_trace_sample_options": {
-          "$ref": "#/definitions/BaselineBehaviorOptionsLargeTraceSampleOptions"
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsLargeTraceSampleOptions"
         },
         "small_trace_sample_options": {
-          "$ref": "#/definitions/BaselineBehaviorOptionsSmallTraceSampleOptions"
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSmallTraceSampleOptions"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorBaselineBehaviorOptionsErrorSampleOptions": {
+      "properties": {
+        "sample_rate": {
+          "description": "Sample rate for traces with errors.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorBaselineBehaviorOptionsFastSampleOptions": {
+      "properties": {
+        "max_duration_seconds": {
+          "description": "Duration in seconds under which traces are sampled\naccording to the given sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sample_rate": {
+          "description": "Sample rate for traces under the given duration.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorBaselineBehaviorOptionsLargeTraceSampleOptions": {
+      "properties": {
+        "span_count_threshold": {
+          "description": "For N = number of spans in the trace, if N \u003e= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "sample_rate": {
+          "description": "Sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorBaselineBehaviorOptionsSamplingType": {
+      "description": " - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.\n - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.",
+      "enum": [
+        "LOW_VALUE",
+        "HIGH_VALUE"
+      ],
+      "type": "string"
+    },
+    "TraceBehaviorBaselineBehaviorOptionsSlowSampleOptions": {
+      "properties": {
+        "min_duration_seconds": {
+          "description": "Duration in seconds over which traces are sampled\naccording to the given sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sample_rate": {
+          "description": "Sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorBaselineBehaviorOptionsSmallTraceSampleOptions": {
+      "properties": {
+        "span_count_threshold": {
+          "description": "For N = number of spans in the trace, if N \u003c= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "sample_rate": {
+          "description": "Sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
         }
       },
       "type": "object"
     },
     "TraceBehaviorTraceBehaviorType": {
-      "description": " - TYPE_KEEP_ALL: Keep all traces.\n - TYPE_DROP_ALL: Drop all traces.\n - TYPE_BASELINE: Keep traces based on a default sample rate and additional sample rates for fast, slow, and error traces.",
+      "description": " - TYPE_KEEP_ALL: Keep all traces.\n - TYPE_DROP_ALL: Drop all traces.\n - TYPE_BASELINE: Keep traces based on a default sample rate and additional sample rates for fast, slow, and error traces.\n - TYPE_DEPRECATED: Used for none of the above - i.e. using the non-deprecated, baseline-style fields.",
       "enum": [
         "TYPE_KEEP_ALL",
         "TYPE_DROP_ALL",
-        "TYPE_BASELINE"
+        "TYPE_BASELINE",
+        "TYPE_DEPRECATED"
       ],
       "type": "string"
     },
@@ -1779,6 +1826,147 @@
         },
         "baseline_behavior_options": {
           "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptions"
+        },
+        "description": {
+          "type": "string"
+        },
+        "base_tail_sample_rate": {
+          "description": "Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.",
+          "format": "double",
+          "type": "number"
+        },
+        "base_head_sample_rate": {
+          "description": "Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,\nbut do not have a specific rule defined for their service.",
+          "format": "double",
+          "type": "number"
+        },
+        "error_sample_options": {
+          "$ref": "#/definitions/configunstableTraceBehaviorErrorSampleOptions"
+        },
+        "fast_sample_options": {
+          "$ref": "#/definitions/configunstableTraceBehaviorFastSampleOptions"
+        },
+        "slow_sample_options": {
+          "$ref": "#/definitions/configunstableTraceBehaviorSlowSampleOptions"
+        },
+        "large_trace_sample_options": {
+          "$ref": "#/definitions/configunstableTraceBehaviorLargeTraceSampleOptions"
+        },
+        "small_trace_sample_options": {
+          "$ref": "#/definitions/configunstableTraceBehaviorSmallTraceSampleOptions"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceBehaviorErrorSampleOptions": {
+      "properties": {
+        "sample_rate": {
+          "description": "Sample rate for traces with errors.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceBehaviorFastSampleOptions": {
+      "properties": {
+        "max_duration_seconds": {
+          "description": "Duration in seconds under which traces are sampled\naccording to the given sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sample_rate": {
+          "description": "Sample rate for traces under the given duration.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceBehaviorLargeTraceSampleOptions": {
+      "properties": {
+        "span_count_threshold": {
+          "description": "For N = number of spans in the trace, if N \u003e= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "sample_rate": {
+          "description": "Sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceBehaviorSamplingType": {
+      "description": " - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.\n - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.",
+      "enum": [
+        "LOW_VALUE",
+        "HIGH_VALUE"
+      ],
+      "type": "string"
+    },
+    "configunstableTraceBehaviorSlowSampleOptions": {
+      "properties": {
+        "min_duration_seconds": {
+          "description": "Duration in seconds over which traces are sampled\naccording to the given sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sample_rate": {
+          "description": "Sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableTraceBehaviorSmallTraceSampleOptions": {
+      "properties": {
+        "span_count_threshold": {
+          "description": "For N = number of spans in the trace, if N \u003c= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "sample_rate": {
+          "description": "Sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
         }
       },
       "type": "object"

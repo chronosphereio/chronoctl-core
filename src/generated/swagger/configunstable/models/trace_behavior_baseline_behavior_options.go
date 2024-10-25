@@ -19,7 +19,6 @@ import (
 type TraceBehaviorBaselineBehaviorOptions struct {
 
 	// Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.
-	// If they do apply to one or more of these options, the smallest sample rate is used.
 	BaseTailSampleRate float64 `json:"base_tail_sample_rate,omitempty"`
 
 	// Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,
@@ -27,19 +26,19 @@ type TraceBehaviorBaselineBehaviorOptions struct {
 	BaseHeadSampleRate float64 `json:"base_head_sample_rate,omitempty"`
 
 	// error sample options
-	ErrorSampleOptions *BaselineBehaviorOptionsErrorSampleOptions `json:"error_sample_options,omitempty"`
+	ErrorSampleOptions *TraceBehaviorBaselineBehaviorOptionsErrorSampleOptions `json:"error_sample_options,omitempty"`
 
 	// fast sample options
-	FastSampleOptions *BaselineBehaviorOptionsFastSampleOptions `json:"fast_sample_options,omitempty"`
+	FastSampleOptions *TraceBehaviorBaselineBehaviorOptionsFastSampleOptions `json:"fast_sample_options,omitempty"`
 
 	// slow sample options
-	SlowSampleOptions *BaselineBehaviorOptionsSlowSampleOptions `json:"slow_sample_options,omitempty"`
+	SlowSampleOptions *TraceBehaviorBaselineBehaviorOptionsSlowSampleOptions `json:"slow_sample_options,omitempty"`
 
 	// large trace sample options
-	LargeTraceSampleOptions *BaselineBehaviorOptionsLargeTraceSampleOptions `json:"large_trace_sample_options,omitempty"`
+	LargeTraceSampleOptions *TraceBehaviorBaselineBehaviorOptionsLargeTraceSampleOptions `json:"large_trace_sample_options,omitempty"`
 
 	// small trace sample options
-	SmallTraceSampleOptions *BaselineBehaviorOptionsSmallTraceSampleOptions `json:"small_trace_sample_options,omitempty"`
+	SmallTraceSampleOptions *TraceBehaviorBaselineBehaviorOptionsSmallTraceSampleOptions `json:"small_trace_sample_options,omitempty"`
 }
 
 // Validate validates this trace behavior baseline behavior options

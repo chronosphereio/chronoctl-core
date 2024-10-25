@@ -43,6 +43,9 @@ type Configv1Dashboard struct {
 
 	// Required raw JSON of the dashboard.
 	DashboardJSON string `json:"dashboard_json,omitempty"`
+
+	// labels
+	Labels map[string]string `json:"labels,omitempty"`
 }
 
 // Validate validates this configv1 dashboard
