@@ -17,6 +17,7 @@ import (
 // TraceBehaviorTraceBehaviorType  - TYPE_KEEP_ALL: Keep all traces.
 //   - TYPE_DROP_ALL: Drop all traces.
 //   - TYPE_BASELINE: Keep traces based on a default sample rate and additional sample rates for fast, slow, and error traces.
+//   - TYPE_DEPRECATED: Used for none of the above - i.e. using the non-deprecated, baseline-style fields.
 //
 // swagger:model TraceBehaviorTraceBehaviorType
 type TraceBehaviorTraceBehaviorType string
@@ -40,6 +41,9 @@ const (
 
 	// TraceBehaviorTraceBehaviorTypeTYPEBASELINE captures enum value "TYPE_BASELINE"
 	TraceBehaviorTraceBehaviorTypeTYPEBASELINE TraceBehaviorTraceBehaviorType = "TYPE_BASELINE"
+
+	// TraceBehaviorTraceBehaviorTypeTYPEDEPRECATED captures enum value "TYPE_DEPRECATED"
+	TraceBehaviorTraceBehaviorTypeTYPEDEPRECATED TraceBehaviorTraceBehaviorType = "TYPE_DEPRECATED"
 )
 
 // for schema
@@ -47,7 +51,7 @@ var traceBehaviorTraceBehaviorTypeEnum []interface{}
 
 func init() {
 	var res []TraceBehaviorTraceBehaviorType
-	if err := json.Unmarshal([]byte(`["TYPE_KEEP_ALL","TYPE_DROP_ALL","TYPE_BASELINE"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["TYPE_KEEP_ALL","TYPE_DROP_ALL","TYPE_BASELINE","TYPE_DEPRECATED"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

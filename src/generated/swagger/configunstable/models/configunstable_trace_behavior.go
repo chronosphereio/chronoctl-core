@@ -40,6 +40,31 @@ type ConfigunstableTraceBehavior struct {
 
 	// baseline behavior options
 	BaselineBehaviorOptions *TraceBehaviorBaselineBehaviorOptions `json:"baseline_behavior_options,omitempty"`
+
+	// description
+	Description string `json:"description,omitempty"`
+
+	// Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.
+	BaseTailSampleRate float64 `json:"base_tail_sample_rate,omitempty"`
+
+	// Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,
+	// but do not have a specific rule defined for their service.
+	BaseHeadSampleRate float64 `json:"base_head_sample_rate,omitempty"`
+
+	// error sample options
+	ErrorSampleOptions *ConfigunstableTraceBehaviorErrorSampleOptions `json:"error_sample_options,omitempty"`
+
+	// fast sample options
+	FastSampleOptions *ConfigunstableTraceBehaviorFastSampleOptions `json:"fast_sample_options,omitempty"`
+
+	// slow sample options
+	SlowSampleOptions *ConfigunstableTraceBehaviorSlowSampleOptions `json:"slow_sample_options,omitempty"`
+
+	// large trace sample options
+	LargeTraceSampleOptions *ConfigunstableTraceBehaviorLargeTraceSampleOptions `json:"large_trace_sample_options,omitempty"`
+
+	// small trace sample options
+	SmallTraceSampleOptions *ConfigunstableTraceBehaviorSmallTraceSampleOptions `json:"small_trace_sample_options,omitempty"`
 }
 
 // Validate validates this configunstable trace behavior
@@ -59,6 +84,26 @@ func (m *ConfigunstableTraceBehavior) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateBaselineBehaviorOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateErrorSampleOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFastSampleOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSlowSampleOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLargeTraceSampleOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSmallTraceSampleOptions(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -128,6 +173,101 @@ func (m *ConfigunstableTraceBehavior) validateBaselineBehaviorOptions(formats st
 	return nil
 }
 
+func (m *ConfigunstableTraceBehavior) validateErrorSampleOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.ErrorSampleOptions) { // not required
+		return nil
+	}
+
+	if m.ErrorSampleOptions != nil {
+		if err := m.ErrorSampleOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("error_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("error_sample_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceBehavior) validateFastSampleOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.FastSampleOptions) { // not required
+		return nil
+	}
+
+	if m.FastSampleOptions != nil {
+		if err := m.FastSampleOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("fast_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("fast_sample_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceBehavior) validateSlowSampleOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.SlowSampleOptions) { // not required
+		return nil
+	}
+
+	if m.SlowSampleOptions != nil {
+		if err := m.SlowSampleOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("slow_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("slow_sample_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceBehavior) validateLargeTraceSampleOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.LargeTraceSampleOptions) { // not required
+		return nil
+	}
+
+	if m.LargeTraceSampleOptions != nil {
+		if err := m.LargeTraceSampleOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("large_trace_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("large_trace_sample_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceBehavior) validateSmallTraceSampleOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.SmallTraceSampleOptions) { // not required
+		return nil
+	}
+
+	if m.SmallTraceSampleOptions != nil {
+		if err := m.SmallTraceSampleOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("small_trace_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("small_trace_sample_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configunstable trace behavior based on the context it is used
 func (m *ConfigunstableTraceBehavior) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -145,6 +285,26 @@ func (m *ConfigunstableTraceBehavior) ContextValidate(ctx context.Context, forma
 	}
 
 	if err := m.contextValidateBaselineBehaviorOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrorSampleOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFastSampleOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSlowSampleOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLargeTraceSampleOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSmallTraceSampleOptions(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -203,6 +363,111 @@ func (m *ConfigunstableTraceBehavior) contextValidateBaselineBehaviorOptions(ctx
 				return ve.ValidateName("baseline_behavior_options")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("baseline_behavior_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceBehavior) contextValidateErrorSampleOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ErrorSampleOptions != nil {
+
+		if swag.IsZero(m.ErrorSampleOptions) { // not required
+			return nil
+		}
+
+		if err := m.ErrorSampleOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("error_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("error_sample_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceBehavior) contextValidateFastSampleOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.FastSampleOptions != nil {
+
+		if swag.IsZero(m.FastSampleOptions) { // not required
+			return nil
+		}
+
+		if err := m.FastSampleOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("fast_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("fast_sample_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceBehavior) contextValidateSlowSampleOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SlowSampleOptions != nil {
+
+		if swag.IsZero(m.SlowSampleOptions) { // not required
+			return nil
+		}
+
+		if err := m.SlowSampleOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("slow_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("slow_sample_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceBehavior) contextValidateLargeTraceSampleOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.LargeTraceSampleOptions != nil {
+
+		if swag.IsZero(m.LargeTraceSampleOptions) { // not required
+			return nil
+		}
+
+		if err := m.LargeTraceSampleOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("large_trace_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("large_trace_sample_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableTraceBehavior) contextValidateSmallTraceSampleOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SmallTraceSampleOptions != nil {
+
+		if swag.IsZero(m.SmallTraceSampleOptions) { // not required
+			return nil
+		}
+
+		if err := m.SmallTraceSampleOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("small_trace_sample_options")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("small_trace_sample_options")
 			}
 			return err
 		}

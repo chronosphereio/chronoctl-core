@@ -2754,6 +2754,12 @@
         "dashboard_json": {
           "description": "Required raw JSON of the dashboard.",
           "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
         }
       },
       "type": "object"
