@@ -1,0 +1,177 @@
+alertmanager:
+    route:
+     receiver: blackhole
+     routes:
+     - receiver: a
+       matchers:
+       - a1=z1
+       - a2=z2
+       continue: true
+     - receiver: b
+       matchers:
+       - b1=y1
+       - a2=z2
+       continue: true
+     - receiver: c
+       matchers:
+       - c1=x1
+       - a2=z2
+       continue: true
+    receivers:
+    - name: a
+    - name: b
+    - name: c
+    - name: blackhole
+notificationPolicy:
+    slug: default
+    name: Default
+    bucketslug: ""
+    teamslug: ""
+    routes:
+        defaults:
+            warn:
+                notifierslugs:
+                    - blackhole
+                repeatintervalsecs: 14400
+            critical:
+                notifierslugs:
+                    - blackhole
+                repeatintervalsecs: 14400
+        overrides:
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a1
+                  value: z1
+                - type: EXACT
+                  name: a2
+                  value: z2
+                - type: EXACT
+                  name: b1
+                  value: y1
+                - type: EXACT
+                  name: c1
+                  value: x1
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a1
+                  value: z1
+                - type: EXACT
+                  name: a2
+                  value: z2
+                - type: EXACT
+                  name: b1
+                  value: y1
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a1
+                  value: z1
+                - type: EXACT
+                  name: a2
+                  value: z2
+                - type: EXACT
+                  name: c1
+                  value: x1
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a2
+                  value: z2
+                - type: EXACT
+                  name: b1
+                  value: y1
+                - type: EXACT
+                  name: c1
+                  value: x1
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a2
+                  value: z2
+                - type: EXACT
+                  name: c1
+                  value: x1
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a1
+                  value: z1
+                - type: EXACT
+                  name: a2
+                  value: z2
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a2
+                  value: z2
+                - type: EXACT
+                  name: b1
+                  value: y1
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                    repeatintervalsecs: 14400

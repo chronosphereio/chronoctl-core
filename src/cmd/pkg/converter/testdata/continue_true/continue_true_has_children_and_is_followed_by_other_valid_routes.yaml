@@ -1,0 +1,59 @@
+alertmanager:
+  route:
+    receiver: blackhole
+    continue: false
+    routes:
+      - receiver: a
+        continue: true
+        routes: 
+          - receiver: b
+            match_re:
+              foo: .*bar.*
+            continue: true
+          - receiver: c
+            continue: true
+          - receiver: d
+            continue: true
+          - receiver: e
+            continue: false
+  receivers:
+    - name: blackhole
+    - name: a
+    - name: b
+    - name: c
+    - name: d
+    - name: e
+  templates: []
+notificationPolicy:
+    slug: default
+    name: Default
+    bucketslug: ""
+    teamslug: ""
+    routes:
+        defaults:
+            warn:
+                notifierslugs:
+                    - c
+                    - d
+                    - e
+                repeatintervalsecs: 14400
+            critical:
+                notifierslugs:
+                    - c
+                    - d
+                    - e
+                repeatintervalsecs: 14400
+        overrides:
+            - alertlabelmatchers:
+                - type: REGEX
+                  name: foo
+                  value: ^(?:.*bar.*)$
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                    repeatintervalsecs: 14400

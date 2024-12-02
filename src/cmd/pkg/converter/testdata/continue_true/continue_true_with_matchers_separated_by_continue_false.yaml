@@ -1,0 +1,120 @@
+alertmanager:
+    route:
+     receiver: blackhole
+     routes:
+     - receiver: parent
+       matchers:
+       - foo=bar
+       routes:
+       - receiver: a
+         matchers:
+         - foo=bar
+         - bar=foo
+         continue: true
+       - receiver: b
+         continue: false
+       - receiver: c
+         continue: true
+     - receiver: sibling
+       matchers:
+       - baz=qux
+       routes:
+       - receiver: sa
+         continue: true
+       - receiver: sb
+         continue: false
+       - receiver: sc
+         matchers:
+         - baz=qux
+         - qux=baz
+         continue: true
+    receivers:
+    - name: a
+    - name: b
+    - name: c
+    - name: parent
+    - name: sibling
+    - name: sa
+    - name: sb
+    - name: sc
+    - name: blackhole
+notificationPolicy:
+    slug: default
+    name: Default
+    bucketslug: ""
+    teamslug: ""
+    routes:
+        defaults:
+            warn:
+                notifierslugs:
+                    - blackhole
+                repeatintervalsecs: 14400
+            critical:
+                notifierslugs:
+                    - blackhole
+                repeatintervalsecs: 14400
+        overrides:
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: bar
+                  value: foo
+                - type: EXACT
+                  name: foo
+                  value: bar
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: foo
+                  value: bar
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: baz
+                  value: qux
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - sa
+                        - sb
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - sa
+                        - sb
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: baz
+                  value: qux
+                - type: EXACT
+                  name: qux
+                  value: baz
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - sc
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - sc
+                    repeatintervalsecs: 14400

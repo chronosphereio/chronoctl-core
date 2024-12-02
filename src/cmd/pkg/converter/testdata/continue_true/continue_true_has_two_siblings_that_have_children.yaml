@@ -1,0 +1,111 @@
+alertmanager:
+    route:
+     receiver: blackhole
+     routes:
+     - receiver: a
+       continue: true
+     - receiver: b
+       matchers:
+       - foo=bar
+       routes:
+       - receiver: c
+         matchers:
+         - foo=bar
+         - baz=ram
+     - receiver: d
+       matchers:
+       - qux=bar
+       routes:
+       - receiver: e
+         matchers:
+         - qux=bar
+         - fred=ram
+    receivers:
+    - name: a
+    - name: b
+    - name: c
+    - name: d
+    - name: e
+    - name: blackhole
+notificationPolicy:
+    slug: default
+    name: Default
+    bucketslug: ""
+    teamslug: ""
+    routes:
+        defaults:
+            warn:
+                notifierslugs:
+                    - a
+                repeatintervalsecs: 14400
+            critical:
+                notifierslugs:
+                    - a
+                repeatintervalsecs: 14400
+        overrides:
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: baz
+                  value: ram
+                - type: EXACT
+                  name: foo
+                  value: bar
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: foo
+                  value: bar
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: fred
+                  value: ram
+                - type: EXACT
+                  name: qux
+                  value: bar
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: qux
+                  value: bar
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - d
+                    repeatintervalsecs: 14400

@@ -1,0 +1,82 @@
+alertmanager:
+    route:
+     receiver: blackhole
+     routes:
+     - receiver: a
+       continue: true
+     - receiver: b
+       matchers:
+       - foo=bar
+       continue: false
+     - receiver: c
+       continue: true
+     - receiver: d
+       continue: false
+       matchers:
+       - baz=qux
+     - receiver: e
+       continue: true
+     - receiver: f
+       continue: false
+    receivers:
+    - name: a
+    - name: b
+    - name: c
+    - name: d
+    - name: e
+    - name: f
+    - name: blackhole
+notificationPolicy:
+    slug: default
+    name: Default
+    bucketslug: ""
+    teamslug: ""
+    routes:
+        defaults:
+            warn:
+                notifierslugs:
+                    - a
+                    - c
+                    - e
+                    - f
+                repeatintervalsecs: 14400
+            critical:
+                notifierslugs:
+                    - a
+                    - c
+                    - e
+                    - f
+                repeatintervalsecs: 14400
+        overrides:
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: foo
+                  value: bar
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: baz
+                  value: qux
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - c
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - c
+                        - d
+                    repeatintervalsecs: 14400

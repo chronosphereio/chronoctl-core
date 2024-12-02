@@ -1,0 +1,61 @@
+input: |
+  route:
+   receiver: blackhole
+   routes:
+   - receiver: a
+     matchers:
+     - a=b
+     continue: true
+   - receiver: b
+     matchers:
+     - c=d
+     continue: true
+   - receiver: c
+     matchers:
+     - e=f
+     continue: true
+   - receiver: d
+     matchers:
+     - g=h
+     continue: true
+   - receiver: e
+     matchers:
+     - i=j
+     continue: true
+   - receiver: f
+     matchers:
+     - k=l
+     continue: true
+   - receiver: g
+     matchers:
+     - m=n
+     continue: true
+   - receiver: h
+     matchers:
+     - o=p
+     continue: true
+   - receiver: i
+     matchers:
+     - q=r
+     continue: true
+   - receiver: j
+     matchers:
+     - s=t
+     continue: true
+   - receiver: k
+     matchers:
+     - u=v
+     continue: true
+  receivers:
+  - name: a
+  - name: b
+  - name: c
+  - name: d
+  - name: e
+  - name: f
+  - name: g
+  - name: h
+  - name: i
+  - name: j
+  - name: k
+  - name: blackhole
