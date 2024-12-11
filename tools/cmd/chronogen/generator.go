@@ -122,6 +122,9 @@ func (e entitySpec) NameP() string {
 	return inflect.Pluralize(upperCamel(e.Entity.Name))
 }
 
+// PayloadNameP returns the pluralized name for the entity when generating code
+// for accessing API response Payloads. In some rare cases (SLOs) the pluralized
+// name is in agreement to our typical pluralization rules.
 func (e entitySpec) PayloadNameP() string {
 	if e.Entity.Name == "slos" {
 		return "Slos"
