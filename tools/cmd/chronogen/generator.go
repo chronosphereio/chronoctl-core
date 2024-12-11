@@ -94,6 +94,9 @@ func (e entitySpec) Name() string {
 		// Singletons shouldn't have singular/plural applied.
 		return upperCamel(e.Entity.Name)
 	}
+	if e.Entity.Name == "slos" {
+		return "SLO"
+	}
 	return inflect.Singularize(upperCamel(e.Entity.Name))
 }
 
@@ -113,7 +116,17 @@ func (e entitySpec) NameP() string {
 		// Singletons shouldn't have singular/plural applied.
 		return upperCamel(e.Entity.Name)
 	}
+	if e.Entity.Name == "slos" {
+		return "SLOs"
+	}
 	return inflect.Pluralize(upperCamel(e.Entity.Name))
+}
+
+func (e entitySpec) PayloadNameP() string {
+	if e.Entity.Name == "slos" {
+		return "Slos"
+	}
+	return e.NameP()
 }
 
 // FileFlagRequired marks the file flags as required if shorthand is not supported.

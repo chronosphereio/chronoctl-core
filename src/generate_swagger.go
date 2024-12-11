@@ -15,8 +15,8 @@
 // Package src is the root of the chronoctl source code
 package src
 
-//go:generate ${REPO_ROOT}/_tools/bin/swagger generate client --spec=./generated/swagger/configunstable/spec.json --target=./generated/swagger/configunstable --keep-spec-order --skip-tag-packages
-//go:generate ${REPO_ROOT}/_tools/bin/swagger generate client --spec=./generated/swagger/configv1/spec.json --target=./generated/swagger/configv1 --keep-spec-order --skip-tag-packages
+//go:generate ${REPO_ROOT}/_tools/bin/swagger generate client --spec=./generated/swagger/configunstable/spec.json --target=./generated/swagger/configunstable --keep-spec-order --skip-tag-packages --additional-initialism=SLO
+//go:generate ${REPO_ROOT}/_tools/bin/swagger generate client --spec=./generated/swagger/configv1/spec.json --target=./generated/swagger/configv1 --keep-spec-order --skip-tag-packages --additional-initialism=SLO
 //go:generate ${REPO_ROOT}/_tools/bin/swagger generate client --spec=./generated/swagger/stateunstable/spec.json --target=./generated/swagger/stateunstable --keep-spec-order --skip-tag-packages
 //go:generate ${REPO_ROOT}/_tools/bin/swagger generate client --spec=./generated/swagger/statev1/spec.json --target=./generated/swagger/statev1 --keep-spec-order --skip-tag-packages
 

@@ -51,7 +51,7 @@ func List{{ .NameP }}(
 			return pagination.Token(""), clienterror.Wrap(err)
 		}
 
-		for _, v := range res.Payload.{{ .NameP }} {
+		for _, v := range res.Payload.{{ .PayloadNameP }} {
 			if err := streamer(New{{ .Name }}(v)); err != nil {
 				return pagination.Token(""), err
 			}
@@ -70,7 +70,7 @@ func List{{ .NameP }}(
 		pageMaxSize = pagination.CalculatePageSize(pagination.Calculation{
 			GotItems:    gotItems,
 			MaxItems:    opts.Limit,
-			MaxPageSize: len(res.Payload.{{ .NameP }}),
+			MaxPageSize: len(res.Payload.{{ .PayloadNameP }}),
 		})
 	}
 }

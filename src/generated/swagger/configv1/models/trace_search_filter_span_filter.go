@@ -45,6 +45,9 @@ type TraceSearchFilterSpanFilter struct {
 
 	// span count
 	SpanCount *TraceSearchFilterCountFilter `json:"span_count,omitempty"`
+
+	// is root span
+	IsRootSpan *TraceSearchFilterBoolFilter `json:"is_root_span,omitempty"`
 }
 
 // Validate validates this trace search filter span filter
@@ -84,6 +87,10 @@ func (m *TraceSearchFilterSpanFilter) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSpanCount(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateIsRootSpan(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -269,6 +276,25 @@ func (m *TraceSearchFilterSpanFilter) validateSpanCount(formats strfmt.Registry)
 	return nil
 }
 
+func (m *TraceSearchFilterSpanFilter) validateIsRootSpan(formats strfmt.Registry) error {
+	if swag.IsZero(m.IsRootSpan) { // not required
+		return nil
+	}
+
+	if m.IsRootSpan != nil {
+		if err := m.IsRootSpan.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("is_root_span")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("is_root_span")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this trace search filter span filter based on the context it is used
 func (m *TraceSearchFilterSpanFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -306,6 +332,10 @@ func (m *TraceSearchFilterSpanFilter) ContextValidate(ctx context.Context, forma
 	}
 
 	if err := m.contextValidateSpanCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsRootSpan(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -497,6 +527,27 @@ func (m *TraceSearchFilterSpanFilter) contextValidateSpanCount(ctx context.Conte
 				return ve.ValidateName("span_count")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("span_count")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TraceSearchFilterSpanFilter) contextValidateIsRootSpan(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.IsRootSpan != nil {
+
+		if swag.IsZero(m.IsRootSpan) { // not required
+			return nil
+		}
+
+		if err := m.IsRootSpan.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("is_root_span")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("is_root_span")
 			}
 			return err
 		}
