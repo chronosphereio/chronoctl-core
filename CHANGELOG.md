@@ -5,6 +5,11 @@
 Added:
 * Adds support for labels to `v1/config/Dashboard`
 * Adds new unstable resource `unstable/config/SLO`
+* add `is_root_span` to trace search span filter in entities:
+  * `v1/config/TraceMetricRules`
+  * `v1/config/TraceTailSamplingRules`
+  * `v1/config/Dataset` trace datasets
+* Adds `preview_behavior_assignments` to `v1/config/TraceBehaviorConfig` for previewing changes to trace behavior assignments
 
 ## v1.10.1
 
