@@ -156,6 +156,9 @@ func (e *Entity) ScaffoldYAML() (string, error) {
 	if e.IsSingleton && entityKind != "OtelMetricsIngestion" {
 		entityKind = inflect.Pluralize(entityKind)
 	}
+	if entityKind == "Slo" {
+		entityKind = "SLO"
+	}
 
 	root.Content = append(root.Content,
 		newKeyNode("api_version", "" /* description */),
@@ -214,6 +217,7 @@ func (p *Parameter) SwaggerName() string {
 		{"Json", "JSON"},
 		{"Id", "ID"},
 		{"Ui", "UI"},
+		{"Slo", "SLO"},
 	}
 	for _, r := range replaces {
 		if strings.HasSuffix(name, r[0]) {

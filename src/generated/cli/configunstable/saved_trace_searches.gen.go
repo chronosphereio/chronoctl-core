@@ -526,6 +526,9 @@ spec:
                   error:
                     # The value the filter compares to the target trace or span field.
                     value: <true|false>
+                  is_root_span:
+                    # The value the filter compares to the target trace or span field.
+                    value: <true|false>
                   match_type: <INCLUDE|EXCLUDE>
                   operation:
                     # The value the filter compares to the target trace or span field.
@@ -612,6 +615,9 @@ spec:
                     # Maximum duration, in seconds, required for a span or trace to match.
                     max_secs: <number>
                   error:
+                    # The value the filter compares to the target trace or span field.
+                    value: <true|false>
+                  is_root_span:
                     # The value the filter compares to the target trace or span field.
                     value: <true|false>
                   match_type: <INCLUDE|EXCLUDE>

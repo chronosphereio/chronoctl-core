@@ -1976,6 +1976,9 @@
         },
         "span_count": {
           "$ref": "#/definitions/TraceSearchFilterCountFilter"
+        },
+        "is_root_span": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
         }
       },
       "type": "object"
@@ -4607,6 +4610,13 @@
         "baseline_behavior_slug": {
           "description": "The baseline behavior to use for behavior assignments and base head sampling rates. Must reference a\nTraceBehavior entity with type: TYPE_BASELINE.",
           "type": "string"
+        },
+        "preview_behavior_assignments": {
+          "description": "List of assignments for the preview behavior. The\nreferenced behaviors are in preview mode for the assigned dataset.\nYou can assign only one preview behavior to a dataset.",
+          "items": {
+            "$ref": "#/definitions/TraceBehaviorConfigOverrideBehaviorAssignment"
+          },
+          "type": "array"
         }
       },
       "type": "object"

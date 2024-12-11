@@ -94,6 +94,22 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateSLOBody": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configunstableSLO"
+        },
+        "create_if_missing": {
+          "description": "If true, the SLO will be created if it does not already exist, identified by slug. If false, an error will be returned if the SLO does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the SLO will not be created nor updated, and no response SLO will be returned. The response will return an error if the given SLO is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateSavedTraceSearchBody": {
       "properties": {
         "saved_trace_search": {
@@ -160,6 +176,15 @@
         "MODE_DISABLED"
       ],
       "type": "string"
+    },
+    "DefinitionTimeWindow": {
+      "properties": {
+        "duration": {
+          "description": "duration as a string in the format \"28d\" or \"24h\", etc.",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "EmitMetricscounterMetric": {
       "properties": {
@@ -264,6 +289,23 @@
             "$ref": "#/definitions/configv1LogSearchFilter"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "MonitorSignalGrouping": {
+      "description": "SignalGrouping defines how the set of series from the query are split into signals.",
+      "properties": {
+        "label_names": {
+          "description": "Set of labels names used to split series into signals.\nEach unique combination of labels will result in its own signal.\nFor example, if label_names is [\"service\", \"code\"] then all series including labels {service=\"foo\",code=\"404\"}\nwill be grouped together in the same signal.\n\nCannot be used if graphite_query is set.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "signal_per_series": {
+          "description": "If this is true, each series will have its own signal.\nIf this is true then label_names cannot be set.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -403,6 +445,96 @@
         "windowSecs": {
           "format": "int32",
           "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SLICustomIndicatorConfig": {
+      "properties": {
+        "good_query_template": {
+          "description": "A PromQL query that measures the number of \"good\" events for this SLI.\nEither this or the bad_query_template must be set.",
+          "type": "string"
+        },
+        "bad_query_template": {
+          "description": "A PromQL query that measures the number of \"bad\" events for this SLI.\nEither this or the good_query_template must be set.",
+          "type": "string"
+        },
+        "total_query_template": {
+          "description": "A PromQL query that measures the total number of events for this SLI.\nThis is required for all advanced SLIs.",
+          "type": "string"
+        }
+      },
+      "title": "CustomIndicatorConfig is for SLIs that are not associated with Chronosphere\nLens supported SLO types. They are provided with several variables that can\nbe used in the template to generate the query:\n- Window (required)\n- GroupBy (required)\n- LensService (optional)",
+      "type": "object"
+    },
+    "SLIEndpointAvailabilityConfig": {
+      "description": "Configuration for an endpoint availability SLI.",
+      "properties": {
+        "endpoints_monitored": {
+          "description": "The endpoints that are monitored by this SLI.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "error_codes": {
+          "description": "A list of result codes that indicate an unsuccessful event. Either this\nor success_codes must be set.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "additional_promql_filters": {
+          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`",
+          "items": {
+            "$ref": "#/definitions/configunstablePromQLMatcher"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SLIEndpointLatencyConfig": {
+      "description": "Configuration for an endpoint latency SLI.",
+      "properties": {
+        "endpoints_monitored": {
+          "description": "The endpoints that are monitored by this SLI.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "latency_bucket": {
+          "description": "The name of the histogram metric that measures latency.",
+          "type": "string"
+        },
+        "additional_promql_filters": {
+          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`",
+          "items": {
+            "$ref": "#/definitions/configunstablePromQLMatcher"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SLODefinition": {
+      "properties": {
+        "objective": {
+          "description": "The SLO objective",
+          "format": "double",
+          "type": "number"
+        },
+        "reporting_windows": {
+          "description": "The reporting windows for this SLO. The SLO is considered breached if the\nerror budget is depleted in any of these windows.",
+          "items": {
+            "$ref": "#/definitions/DefinitionTimeWindow"
+          },
+          "type": "array"
+        },
+        "low_volume": {
+          "description": "Configured whether this SLO is for a low volume event (\u003c 1/s). This will\nadjust the SLI queries to account for the low volume nature of the event.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -884,6 +1016,9 @@
         },
         "span_count": {
           "$ref": "#/definitions/TraceSearchFilterCountFilter"
+        },
+        "is_root_span": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
         }
       },
       "type": "object"
@@ -1087,6 +1222,26 @@
       },
       "type": "object"
     },
+    "configunstableCreateSLORequest": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configunstableSLO"
+        },
+        "dry_run": {
+          "description": "If true, the SLO will not be created, and no response SLO will be returned. The response will return an error if the given SLO is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateSLOResponse": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configunstableSLO"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateSavedTraceSearchRequest": {
       "properties": {
         "saved_trace_search": {
@@ -1273,6 +1428,9 @@
     "configunstableDeleteObjectDiscoveryRuleResponse": {
       "type": "object"
     },
+    "configunstableDeleteSLOResponse": {
+      "type": "object"
+    },
     "configunstableDeleteSavedTraceSearchResponse": {
       "type": "object"
     },
@@ -1402,6 +1560,20 @@
         "object_discovery_rules": {
           "items": {
             "$ref": "#/definitions/configunstableObjectDiscoveryRule"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListSLOsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "slos": {
+          "items": {
+            "$ref": "#/definitions/configunstableSLO"
           },
           "type": "array"
         }
@@ -1571,6 +1743,31 @@
       },
       "type": "object"
     },
+    "configunstablePromQLMatcher": {
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/configunstablePromQLMatcherType"
+        },
+        "name": {
+          "description": "Prometheus label name for the matcher",
+          "type": "string"
+        },
+        "value": {
+          "description": "Prometheus label value for the matcher",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstablePromQLMatcherType": {
+      "enum": [
+        "MatchEqual",
+        "MatchRegexp",
+        "MatchNotEqual",
+        "MatchNotRegexp"
+      ],
+      "type": "string"
+    },
     "configunstableReadDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -1615,6 +1812,14 @@
       "properties": {
         "object_discovery_rule": {
           "$ref": "#/definitions/configunstableObjectDiscoveryRule"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadSLOResponse": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configunstableSLO"
         }
       },
       "type": "object"
@@ -1687,6 +1892,87 @@
         },
         "drop": {
           "$ref": "#/definitions/RuleDrop"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableSLI": {
+      "description": "SLI is a service level indicator. The contents of this proto are intended to\nbe used to generate queries necessary to measure SLOs.",
+      "properties": {
+        "lens_template_indicator": {
+          "description": "Indicates which Chronosphere service discovery template is used to build\nthe SLI queries",
+          "type": "string"
+        },
+        "endpoint_label": {
+          "description": "This overrides the equivalent ComponentDiscovery.MetricMetadata field as it\nis common to change",
+          "type": "string"
+        },
+        "custom_indicator": {
+          "$ref": "#/definitions/SLICustomIndicatorConfig"
+        },
+        "endpoint_availability": {
+          "$ref": "#/definitions/SLIEndpointAvailabilityConfig"
+        },
+        "endpoint_latency": {
+          "$ref": "#/definitions/SLIEndpointLatencyConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableSLO": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the SLO. If slug is not provided, one will be generated based of the name field. Cannot be modified after the SLO is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the SLO. May be modified after the SLO is created.",
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the SLO was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the SLO was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "collection_ref": {
+          "$ref": "#/definitions/configv1CollectionReference"
+        },
+        "notification_policy_slug": {
+          "description": "Optional notification policy to explicitly apply to the generated monitors.\nIf this is not set then the team this SLO will belong to must have a\ndefault notification policy",
+          "type": "string"
+        },
+        "sli": {
+          "$ref": "#/definitions/configunstableSLI"
+        },
+        "definition": {
+          "$ref": "#/definitions/SLODefinition"
+        },
+        "signal_grouping": {
+          "$ref": "#/definitions/MonitorSignalGrouping"
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Annotations are visible in notifications generated by this SLO\nThey can be be templated with labels from notifications.",
+          "type": "object"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are visible in notifications generated by this SLO,\nand can be used to route alerts with notification overrides.",
+          "type": "object"
         }
       },
       "type": "object"
@@ -2174,6 +2460,14 @@
       },
       "type": "object"
     },
+    "configunstableUpdateSLOResponse": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configunstableSLO"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateSavedTraceSearchResponse": {
       "properties": {
         "saved_trace_search": {
@@ -2253,6 +2547,25 @@
         }
       },
       "type": "object"
+    },
+    "configv1CollectionReference": {
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/configv1CollectionReferenceType"
+        },
+        "slug": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CollectionReferenceType": {
+      "description": "Type values must match entitiespb.Collection.CollectionType.",
+      "enum": [
+        "SIMPLE",
+        "SERVICE"
+      ],
+      "type": "string"
     },
     "configv1LogSearchFilter": {
       "properties": {
@@ -4194,6 +4507,283 @@
         },
         "tags": [
           "Service"
+        ]
+      }
+    },
+    "/api/unstable/config/slos": {
+      "get": {
+        "operationId": "ListSLOs",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any SLO with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any SLO with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "collection_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "service_slugs",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListSLOsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
+        ]
+      },
+      "post": {
+        "operationId": "CreateSLO",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateSLORequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created SLO.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateSLOResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the SLO because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the SLO because there is a conflict with an existing SLO.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
+        ]
+      }
+    },
+    "/api/unstable/config/slos/{slug}": {
+      "delete": {
+        "operationId": "DeleteSLO",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteSLOResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the SLO because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the SLO because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
+        ]
+      },
+      "get": {
+        "operationId": "ReadSLO",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadSLOResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the SLO because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateSLO",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateSLOBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated SLO.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateSLOResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the SLO because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the SLO because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the SLO because there is a conflict with an existing SLO.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
         ]
       }
     },

@@ -40,6 +40,8 @@ type ClientService interface {
 
 	CreateObjectDiscoveryRule(params *CreateObjectDiscoveryRuleParams, opts ...ClientOption) (*CreateObjectDiscoveryRuleOK, error)
 
+	CreateSLO(params *CreateSLOParams, opts ...ClientOption) (*CreateSLOOK, error)
+
 	CreateSavedTraceSearch(params *CreateSavedTraceSearchParams, opts ...ClientOption) (*CreateSavedTraceSearchOK, error)
 
 	CreateService(params *CreateServiceParams, opts ...ClientOption) (*CreateServiceOK, error)
@@ -64,6 +66,8 @@ type ClientService interface {
 
 	DeleteObjectDiscoveryRule(params *DeleteObjectDiscoveryRuleParams, opts ...ClientOption) (*DeleteObjectDiscoveryRuleOK, error)
 
+	DeleteSLO(params *DeleteSLOParams, opts ...ClientOption) (*DeleteSLOOK, error)
+
 	DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error)
 
 	DeleteService(params *DeleteServiceParams, opts ...ClientOption) (*DeleteServiceOK, error)
@@ -81,6 +85,8 @@ type ClientService interface {
 	ListLinkTemplates(params *ListLinkTemplatesParams, opts ...ClientOption) (*ListLinkTemplatesOK, error)
 
 	ListObjectDiscoveryRule(params *ListObjectDiscoveryRuleParams, opts ...ClientOption) (*ListObjectDiscoveryRuleOK, error)
+
+	ListSLOs(params *ListSLOsParams, opts ...ClientOption) (*ListSLOsOK, error)
 
 	ListSavedTraceSearches(params *ListSavedTraceSearchesParams, opts ...ClientOption) (*ListSavedTraceSearchesOK, error)
 
@@ -101,6 +107,8 @@ type ClientService interface {
 	ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOption) (*ReadNoopEntityOK, error)
 
 	ReadObjectDiscoveryRule(params *ReadObjectDiscoveryRuleParams, opts ...ClientOption) (*ReadObjectDiscoveryRuleOK, error)
+
+	ReadSLO(params *ReadSLOParams, opts ...ClientOption) (*ReadSLOOK, error)
 
 	ReadSavedTraceSearch(params *ReadSavedTraceSearchParams, opts ...ClientOption) (*ReadSavedTraceSearchOK, error)
 
@@ -127,6 +135,8 @@ type ClientService interface {
 	UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...ClientOption) (*UpdateNoopEntityOK, error)
 
 	UpdateObjectDiscoveryRule(params *UpdateObjectDiscoveryRuleParams, opts ...ClientOption) (*UpdateObjectDiscoveryRuleOK, error)
+
+	UpdateSLO(params *UpdateSLOParams, opts ...ClientOption) (*UpdateSLOOK, error)
 
 	UpdateSavedTraceSearch(params *UpdateSavedTraceSearchParams, opts ...ClientOption) (*UpdateSavedTraceSearchOK, error)
 
@@ -362,6 +372,43 @@ func (a *Client) CreateObjectDiscoveryRule(params *CreateObjectDiscoveryRulePara
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateObjectDiscoveryRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateSLO create SLO API
+*/
+func (a *Client) CreateSLO(params *CreateSLOParams, opts ...ClientOption) (*CreateSLOOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateSLOParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateSLO",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/slos",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateSLOReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateSLOOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateSLODefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -813,6 +860,43 @@ func (a *Client) DeleteObjectDiscoveryRule(params *DeleteObjectDiscoveryRulePara
 }
 
 /*
+DeleteSLO delete SLO API
+*/
+func (a *Client) DeleteSLO(params *DeleteSLOParams, opts ...ClientOption) (*DeleteSLOOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteSLOParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteSLO",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/slos/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteSLOReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteSLOOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteSLODefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteSavedTraceSearch delete saved trace search API
 */
 func (a *Client) DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error) {
@@ -1142,6 +1226,43 @@ func (a *Client) ListObjectDiscoveryRule(params *ListObjectDiscoveryRuleParams, 
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListObjectDiscoveryRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListSLOs list s l os API
+*/
+func (a *Client) ListSLOs(params *ListSLOsParams, opts ...ClientOption) (*ListSLOsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListSLOsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListSLOs",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/slos",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListSLOsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListSLOsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListSLOsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1512,6 +1633,43 @@ func (a *Client) ReadObjectDiscoveryRule(params *ReadObjectDiscoveryRuleParams, 
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadObjectDiscoveryRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadSLO read SLO API
+*/
+func (a *Client) ReadSLO(params *ReadSLOParams, opts ...ClientOption) (*ReadSLOOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadSLOParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadSLO",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/slos/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadSLOReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadSLOOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadSLODefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1996,6 +2154,43 @@ func (a *Client) UpdateObjectDiscoveryRule(params *UpdateObjectDiscoveryRulePara
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateObjectDiscoveryRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateSLO update SLO API
+*/
+func (a *Client) UpdateSLO(params *UpdateSLOParams, opts ...ClientOption) (*UpdateSLOOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateSLOParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateSLO",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/slos/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateSLOReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateSLOOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateSLODefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

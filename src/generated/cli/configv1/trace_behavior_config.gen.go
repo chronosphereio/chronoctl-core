@@ -399,6 +399,24 @@ spec:
     # The baseline behavior to use for behavior assignments and base head sampling rates. Must reference a
     # TraceBehavior entity with type: TYPE_BASELINE.
     baseline_behavior_slug: <string>
+    # List of assignments for the preview behavior. The
+    # referenced behaviors are in preview mode for the assigned dataset.
+    # You can assign only one preview behavior to a dataset.
+    preview_behavior_assignments:
+        - created_at: <date-time>
+          updated_at: <date-time>
+          # The slug reference of a TraceDataset
+          dataset_slug: <string>
+          # The slug reference of a TraceBehavior
+          behavior_slug: <string>
+          # The starting time of the override.
+          start_time: <date-time>
+          # The ending time of the override.
+          end_time: <date-time>
+          # The author or creator of the entry.
+          created_by: <string>
+          # A description of the entry.
+          description: <string>
 `
 
 func newTraceBehaviorConfigScaffoldCmd() *cobra.Command {

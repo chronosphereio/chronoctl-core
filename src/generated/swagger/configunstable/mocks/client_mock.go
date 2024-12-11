@@ -155,6 +155,26 @@ func (mr *MockClientServiceMockRecorder) CreateObjectDiscoveryRule(params interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateObjectDiscoveryRule", reflect.TypeOf((*MockClientService)(nil).CreateObjectDiscoveryRule), varargs...)
 }
 
+// CreateSLO mocks base method.
+func (m *MockClientService) CreateSLO(params *operations.CreateSLOParams, opts ...operations.ClientOption) (*operations.CreateSLOOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateSLO", varargs...)
+	ret0, _ := ret[0].(*operations.CreateSLOOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateSLO indicates an expected call of CreateSLO.
+func (mr *MockClientServiceMockRecorder) CreateSLO(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSLO", reflect.TypeOf((*MockClientService)(nil).CreateSLO), varargs...)
+}
+
 // CreateSavedTraceSearch mocks base method.
 func (m *MockClientService) CreateSavedTraceSearch(params *operations.CreateSavedTraceSearchParams, opts ...operations.ClientOption) (*operations.CreateSavedTraceSearchOK, error) {
 	m.ctrl.T.Helper()
@@ -395,6 +415,26 @@ func (mr *MockClientServiceMockRecorder) DeleteObjectDiscoveryRule(params interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteObjectDiscoveryRule", reflect.TypeOf((*MockClientService)(nil).DeleteObjectDiscoveryRule), varargs...)
 }
 
+// DeleteSLO mocks base method.
+func (m *MockClientService) DeleteSLO(params *operations.DeleteSLOParams, opts ...operations.ClientOption) (*operations.DeleteSLOOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteSLO", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteSLOOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteSLO indicates an expected call of DeleteSLO.
+func (mr *MockClientServiceMockRecorder) DeleteSLO(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSLO", reflect.TypeOf((*MockClientService)(nil).DeleteSLO), varargs...)
+}
+
 // DeleteSavedTraceSearch mocks base method.
 func (m *MockClientService) DeleteSavedTraceSearch(params *operations.DeleteSavedTraceSearchParams, opts ...operations.ClientOption) (*operations.DeleteSavedTraceSearchOK, error) {
 	m.ctrl.T.Helper()
@@ -573,6 +613,26 @@ func (mr *MockClientServiceMockRecorder) ListObjectDiscoveryRule(params interfac
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListObjectDiscoveryRule", reflect.TypeOf((*MockClientService)(nil).ListObjectDiscoveryRule), varargs...)
+}
+
+// ListSLOs mocks base method.
+func (m *MockClientService) ListSLOs(params *operations.ListSLOsParams, opts ...operations.ClientOption) (*operations.ListSLOsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListSLOs", varargs...)
+	ret0, _ := ret[0].(*operations.ListSLOsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListSLOs indicates an expected call of ListSLOs.
+func (mr *MockClientServiceMockRecorder) ListSLOs(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSLOs", reflect.TypeOf((*MockClientService)(nil).ListSLOs), varargs...)
 }
 
 // ListSavedTraceSearches mocks base method.
@@ -773,6 +833,26 @@ func (mr *MockClientServiceMockRecorder) ReadObjectDiscoveryRule(params interfac
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadObjectDiscoveryRule", reflect.TypeOf((*MockClientService)(nil).ReadObjectDiscoveryRule), varargs...)
+}
+
+// ReadSLO mocks base method.
+func (m *MockClientService) ReadSLO(params *operations.ReadSLOParams, opts ...operations.ClientOption) (*operations.ReadSLOOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadSLO", varargs...)
+	ret0, _ := ret[0].(*operations.ReadSLOOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadSLO indicates an expected call of ReadSLO.
+func (mr *MockClientServiceMockRecorder) ReadSLO(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadSLO", reflect.TypeOf((*MockClientService)(nil).ReadSLO), varargs...)
 }
 
 // ReadSavedTraceSearch mocks base method.
@@ -1045,6 +1125,26 @@ func (mr *MockClientServiceMockRecorder) UpdateObjectDiscoveryRule(params interf
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateObjectDiscoveryRule", reflect.TypeOf((*MockClientService)(nil).UpdateObjectDiscoveryRule), varargs...)
+}
+
+// UpdateSLO mocks base method.
+func (m *MockClientService) UpdateSLO(params *operations.UpdateSLOParams, opts ...operations.ClientOption) (*operations.UpdateSLOOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateSLO", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateSLOOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateSLO indicates an expected call of UpdateSLO.
+func (mr *MockClientServiceMockRecorder) UpdateSLO(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSLO", reflect.TypeOf((*MockClientService)(nil).UpdateSLO), varargs...)
 }
 
 // UpdateSavedTraceSearch mocks base method.
