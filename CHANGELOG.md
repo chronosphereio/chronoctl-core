@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.11.0
+
 Added:
 * Adds support for labels to `v1/config/Dashboard`
 * Adds new unstable resource `unstable/config/SLO`
