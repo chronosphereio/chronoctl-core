@@ -565,7 +565,8 @@ spec:
             total_query_template: <string>
         # Configuration for an endpoint availability SLI.
         endpoint_availability:
-            # The endpoints that are monitored by this SLI.
+            # the API endpoints to monitor in the SLO. If this is left empty then all
+            # endpoints will be monitored.
             endpoints_monitored:
                 - <string>
             # A list of result codes that indicate an unsuccessful event. Either this
@@ -582,7 +583,8 @@ spec:
                   type: <MatchEqual|MatchRegexp|MatchNotEqual|MatchNotRegexp>
         # Configuration for an endpoint latency SLI.
         endpoint_latency:
-            # The endpoints that are monitored by this SLI.
+            # the API endpoints to monitor in the SLO. If this is left empty then all
+            # endpoints will be monitored.
             endpoints_monitored:
                 - <string>
             # The name of the histogram metric that measures latency.

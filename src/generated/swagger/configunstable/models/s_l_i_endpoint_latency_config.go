@@ -19,7 +19,8 @@ import (
 // swagger:model SLIEndpointLatencyConfig
 type SLIEndpointLatencyConfig struct {
 
-	// The endpoints that are monitored by this SLI.
+	// the API endpoints to monitor in the SLO. If this is left empty then all
+	// endpoints will be monitored.
 	EndpointsMonitored []string `json:"endpoints_monitored"`
 
 	// The name of the histogram metric that measures latency.

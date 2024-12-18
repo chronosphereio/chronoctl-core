@@ -471,7 +471,7 @@
       "description": "Configuration for an endpoint availability SLI.",
       "properties": {
         "endpoints_monitored": {
-          "description": "The endpoints that are monitored by this SLI.",
+          "description": "the API endpoints to monitor in the SLO. If this is left empty then all\nendpoints will be monitored.",
           "items": {
             "type": "string"
           },
@@ -498,7 +498,7 @@
       "description": "Configuration for an endpoint latency SLI.",
       "properties": {
         "endpoints_monitored": {
-          "description": "The endpoints that are monitored by this SLI.",
+          "description": "the API endpoints to monitor in the SLO. If this is left empty then all\nendpoints will be monitored.",
           "items": {
             "type": "string"
           },
