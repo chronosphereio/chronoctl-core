@@ -1,0 +1,97 @@
+alertmanager:
+    route:
+     receiver: blackhole
+     routes:
+     - receiver: a
+       matchers:
+       - a1=z1
+       - a2=z2
+       continue: true
+     - receiver: s1
+       continue: true
+     - receiver: s2
+       continue: true
+     - receiver: s3
+       continue: true
+     - receiver: s4
+       continue: true
+     - receiver: s5
+       continue: true
+     - receiver: s6
+       continue: true
+     - receiver: s7
+       continue: true
+     - receiver: s8
+       continue: true
+     - receiver: s9
+       continue: true
+     - receiver: s10
+       continue: true
+     - receiver: s11
+       continue: true
+    receivers:
+    - name: a
+    - name: s1
+    - name: s2
+    - name: s3
+    - name: s4
+    - name: s5
+    - name: s6
+    - name: s7
+    - name: s8
+    - name: s9
+    - name: s10
+    - name: s11
+    - name: blackhole
+notificationPolicy:
+    slug: default
+    name: Default
+    bucketslug: ""
+    teamslug: ""
+    routes:
+        defaults:
+            warn:
+                notifierslugs:
+                    - s1
+                    - s10
+                    - s11
+                    - s2
+                    - s3
+                    - s4
+                    - s5
+                    - s6
+                    - s7
+                    - s8
+                    - s9
+                repeatintervalsecs: 14400
+            critical:
+                notifierslugs:
+                    - s1
+                    - s10
+                    - s11
+                    - s2
+                    - s3
+                    - s4
+                    - s5
+                    - s6
+                    - s7
+                    - s8
+                    - s9
+                repeatintervalsecs: 14400
+        overrides:
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a1
+                  value: z1
+                - type: EXACT
+                  name: a2
+                  value: z2
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                    repeatintervalsecs: 14400

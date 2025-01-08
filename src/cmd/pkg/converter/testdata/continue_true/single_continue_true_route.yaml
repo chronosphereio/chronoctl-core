@@ -1,0 +1,25 @@
+alertmanager:
+    route:
+      receiver: blackhole
+      routes:
+        - receiver: a
+          continue: true
+    receivers:
+      - name: a
+      - name: blackhole
+notificationPolicy:
+    slug: default
+    name: Default
+    bucketslug: ""
+    teamslug: ""
+    routes:
+        defaults:
+            warn:
+                notifierslugs:
+                    - a
+                repeatintervalsecs: 14400
+            critical:
+                notifierslugs:
+                    - a
+                repeatintervalsecs: 14400
+        overrides: []

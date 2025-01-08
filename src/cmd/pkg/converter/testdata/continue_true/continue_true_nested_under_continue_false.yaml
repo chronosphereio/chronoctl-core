@@ -1,0 +1,48 @@
+input: |
+  route:
+   receiver: blackhole
+   routes:
+   - receivers:
+     - b
+     matchers:
+     - foo=bar
+     continue: false
+     routes:
+     - receiver: c
+       continue: true
+     - receiver: d
+       matchers:
+       - foo=bar
+       - baz=quz
+       continue: false
+  receivers:
+  - name: a
+  - name: b
+  - name: c
+  - name: d
+  - name: blackhole
+output: |
+  route:
+   receiver: blackhole
+   routes:
+   - receivers:
+     - b
+     matchers:
+     - foo=bar
+     routes:
+     - receivers:
+       - c
+       - d
+       matchers:
+       - baz=quz
+       - foo=bar
+       continue: false
+     - receivers:
+       - c
+       continue: false
+  receivers:
+  - name: a
+  - name: b
+  - name: c
+  - name: d
+  - name: blackhole

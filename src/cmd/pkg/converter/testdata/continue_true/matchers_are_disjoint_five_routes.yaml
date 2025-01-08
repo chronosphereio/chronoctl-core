@@ -1,0 +1,695 @@
+alertmanager:
+    route:
+     receiver: blackhole
+     routes:
+     - receiver: a
+       matchers:
+       - a=b
+       continue: true
+     - receiver: b
+       matchers:
+       - c=d
+       continue: true
+     - receiver: c
+       matchers:
+       - e=f
+       continue: true
+     - receiver: d
+       matchers:
+       - g=h
+       continue: true
+     - receiver: e
+       matchers:
+       - i=j
+       continue: true
+    receivers:
+    - name: a
+    - name: b
+    - name: c
+    - name: d
+    - name: e
+    - name: blackhole
+notificationPolicy:
+    slug: default
+    name: Default
+    bucketslug: ""
+    teamslug: ""
+    routes:
+        defaults:
+            warn:
+                notifierslugs:
+                    - blackhole
+                repeatintervalsecs: 14400
+            critical:
+                notifierslugs:
+                    - blackhole
+                repeatintervalsecs: 14400
+        overrides:
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: g
+                  value: h
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: g
+                  value: h
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                        - d
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: g
+                  value: h
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: g
+                  value: h
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - c
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - c
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: g
+                  value: h
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                        - c
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                        - c
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: e
+                  value: f
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: g
+                  value: h
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                        - d
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: g
+                  value: h
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - c
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - c
+                        - d
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: g
+                  value: h
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                        - c
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                        - c
+                        - d
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - c
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - c
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                        - c
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                        - c
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: g
+                  value: h
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - c
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - c
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: g
+                  value: h
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: g
+                  value: h
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: c
+                  value: d
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - b
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: e
+                  value: f
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: e
+                  value: f
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: g
+                  value: h
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - c
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - c
+                        - d
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: g
+                  value: h
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - d
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: g
+                  value: h
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                        - d
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: g
+                  value: h
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - d
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: e
+                  value: f
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - c
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - c
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: c
+                  value: d
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: i
+                  value: j
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - e
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - e
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: g
+                  value: h
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - d
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - d
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: e
+                  value: f
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - c
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - c
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: a
+                  value: b
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - a
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - a
+                    repeatintervalsecs: 14400
+            - alertlabelmatchers:
+                - type: EXACT
+                  name: c
+                  value: d
+              notifiers:
+                warn:
+                    notifierslugs:
+                        - b
+                    repeatintervalsecs: 14400
+                critical:
+                    notifierslugs:
+                        - b
+                    repeatintervalsecs: 14400
