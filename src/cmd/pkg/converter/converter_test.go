@@ -190,9 +190,9 @@ func TestConvertPrometheus_SeverityOptions(t *testing.T) {
 					},
 				},
 			},
-			Receivers: []*config.Receiver{
-				&config.Receiver{Name: "blackhole"},
-				&config.Receiver{Name: "pagerduty"},
+			Receivers: []config.Receiver{
+				config.Receiver{Name: "blackhole"},
+				config.Receiver{Name: "pagerduty"},
 			},
 		}
 	}
@@ -775,7 +775,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 					Receiver: "multiple",
 					GroupBy:  []model.LabelName{"alertname", "severity"},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{
 						Name: "multiple",
 						EmailConfigs: []*config.EmailConfig{
@@ -813,7 +813,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 					GroupBy:  []model.LabelName{"alertname"},
 					Match:    map[string]string{chronoSeverityLabelName: criticalLabel},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 				},
 			},
@@ -851,7 +851,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "pagerduty"},
 					{Name: "slack"},
@@ -896,7 +896,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "slack_triage"},
 					{Name: "slack"},
@@ -989,7 +989,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "triage_pagerduty"},
 					{Name: "triage_email"},
@@ -1095,7 +1095,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "a"},
 					{Name: "b"},
@@ -1160,7 +1160,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "a"},
 					{Name: "b"},
@@ -1277,7 +1277,7 @@ func TestConvertAlertManagerConfig_GroupBy(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "pagerduty"},
 				},
@@ -1314,7 +1314,7 @@ func TestConvertAlertManagerConfig_GroupBy(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "pagerduty"},
 				},
@@ -1359,7 +1359,7 @@ func TestConvertAlertManagerConfig_GroupBy(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "a"},
 					{Name: "b"},
 					{Name: "c"},
@@ -1454,7 +1454,7 @@ func TestConvertAlertManagerConfig_GroupBy(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "a"},
 					{Name: "b"},
 					{Name: "c"},
@@ -1570,12 +1570,12 @@ func TestExpandReceiver(t *testing.T) {
 				},
 			},
 		}),
-		expandReceiver(&config.Receiver{
+		expandReceiver(config.Receiver{
 			Name: "rname",
 			WebhookConfigs: []*config.WebhookConfig{
 				{
 					NotifierConfig: config.NotifierConfig{VSendResolved: true},
-					URL:            &config.URL{URL: mustParseURL(t, "wh-one")},
+					URL:            &config.SecretURL{URL: mustParseURL(t, "wh-one")},
 				},
 			},
 		}))
@@ -1600,11 +1600,11 @@ func TestExpandReceiver(t *testing.T) {
 				},
 			},
 		}),
-		expandReceiver(&config.Receiver{
+		expandReceiver(config.Receiver{
 			Name: "rname",
 			WebhookConfigs: []*config.WebhookConfig{
-				{URL: &config.URL{URL: mustParseURL(t, "wh-one")}},
-				{URL: &config.URL{URL: mustParseURL(t, "wh-two")}},
+				{URL: &config.SecretURL{URL: mustParseURL(t, "wh-one")}},
+				{URL: &config.SecretURL{URL: mustParseURL(t, "wh-two")}},
 			},
 		}))
 
@@ -1638,11 +1638,11 @@ func TestExpandReceiver(t *testing.T) {
 				},
 			},
 		}),
-		expandReceiver(&config.Receiver{
+		expandReceiver(config.Receiver{
 			Name: "rname",
 			WebhookConfigs: []*config.WebhookConfig{
-				{URL: &config.URL{URL: mustParseURL(t, "wh-one")}},
-				{URL: &config.URL{URL: mustParseURL(t, "wh-two")}},
+				{URL: &config.SecretURL{URL: mustParseURL(t, "wh-one")}},
+				{URL: &config.SecretURL{URL: mustParseURL(t, "wh-two")}},
 			},
 			SlackConfigs: []*config.SlackConfig{
 				{Channel: "s-one"},
@@ -2081,7 +2081,7 @@ func TestConvertAlertManagerConfig_ContinueEqualsTrue_FuzzyTesting(t *testing.T)
 						Receiver: "blackhole",
 						Routes:   updatedRoutes,
 					},
-					Receivers: []*config.Receiver{
+					Receivers: []config.Receiver{
 						{Name: "blackhole"},
 						{Name: "0"},
 						{Name: "1"},
