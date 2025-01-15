@@ -65,13 +65,6 @@ var (
 	validNonPreferred = regexp.MustCompile("[_]+")
 )
 
-// RecordingGroup is a group of recording rules, used only when use_buckets=true
-// and use_declarative_types is true.
-type RecordingGroup struct {
-	Name  string
-	Rules []*models.Configv1RecordingRule
-}
-
 // Notifier wraps a models.Configv1Notifier with additional fields that
 // were not carried over to the config API.
 type Notifier struct {
@@ -88,7 +81,6 @@ type ConvertedAlerts struct {
 	NotificationPolicy *models.Configv1NotificationPolicy
 	Receivers          []*Notifier
 	Monitors           []*models.Configv1Monitor
-	RecordingGroups    []*RecordingGroup
 	RecordingRules     []*models.Configv1RecordingRule
 }
 
@@ -114,7 +106,6 @@ type Opts struct {
 	ExistsOpNotSupported         bool
 	DisableContinueTrueExpansion bool
 	UseBuckets                   bool
-	UseDeclarativeTypes          bool
 
 	groupTeamMatcher groupTeamMatcher
 }
@@ -249,7 +240,6 @@ func ConvertPrometheus(
 		NotificationPolicy: notificationPolicy,
 		Receivers:          alertReceivers,
 		Monitors:           promResult.monitors,
-		RecordingGroups:    promResult.recordingGroups,
 		RecordingRules:     promResult.recordingRules,
 	}
 
@@ -1378,11 +1368,10 @@ func mergeNotifiers(trunk, toMerge *models.RoutesNotifierList) (*models.RoutesNo
 }
 
 type convertPrometheusRulesResult struct {
-	entityGroups    []*models.Configv1Collection
-	collections     []*models.Configv1Collection
-	monitors        []*models.Configv1Monitor
-	recordingGroups []*RecordingGroup
-	recordingRules  []*models.Configv1RecordingRule
+	entityGroups   []*models.Configv1Collection
+	collections    []*models.Configv1Collection
+	monitors       []*models.Configv1Monitor
+	recordingRules []*models.Configv1RecordingRule
 }
 
 // convertPrometheusRuleGroups converts Prometheus rule groups to entity groups, monitors, and recording groups.
@@ -1405,7 +1394,6 @@ func convertPrometheusRuleGroups(
 
 	// used if opts.UseBuckets == true
 	var entityGroups []*models.Configv1Collection
-	var recGroups []*RecordingGroup
 
 	// used if opts.UseBuckets == false
 	var collections []*models.Configv1Collection
@@ -1460,17 +1448,7 @@ func convertPrometheusRuleGroups(
 			if err != nil {
 				return nil, fmt.Errorf("convert rules, use_collections=false: %w", err)
 			}
-
-			if len(groupRecRules) > 0 {
-				if opts.UseDeclarativeTypes {
-					recGroups = append(recGroups, &RecordingGroup{
-						Name:  entityGroup.Name,
-						Rules: uniquifyRecordingRuleNames(groupRecRules),
-					})
-				} else {
-					recRules = append(recRules, groupRecRules...)
-				}
-			}
+			recRules = append(recRules, groupRecRules...)
 
 			monitors = append(monitors, uniquifyMonitorNames(groupMonitors)...)
 		}
@@ -1478,11 +1456,10 @@ func convertPrometheusRuleGroups(
 	}
 
 	return &convertPrometheusRulesResult{
-		entityGroups:    entityGroups,
-		monitors:        monitors,
-		recordingGroups: recGroups,
-		recordingRules:  recRules,
-		collections:     collections,
+		entityGroups:   entityGroups,
+		monitors:       monitors,
+		recordingRules: recRules,
+		collections:    collections,
 	}, nil
 }
 
@@ -1645,30 +1622,6 @@ func uniquifyMonitorNames(monitors []*models.Configv1Monitor) []*models.Configv1
 	}
 
 	return updatedMonitors
-}
-
-func uniquifyRecordingRuleNames(groupRules []*models.Configv1RecordingRule) []*models.Configv1RecordingRule {
-	names := make([]string, 0, len(groupRules))
-	rulesByName := make(map[string][]*models.Configv1RecordingRule)
-	updatedRules := make([]*models.Configv1RecordingRule, 0, len(groupRules))
-	for _, rule := range groupRules {
-		if _, ok := rulesByName[rule.Name]; !ok {
-			names = append(names, rule.Name)
-		}
-		rulesByName[rule.Name] = append(rulesByName[rule.Name], rule)
-	}
-
-	for _, name := range names {
-		rules := rulesByName[name]
-		if len(rules) > 1 {
-			for i, rule := range rules {
-				rule.Name = fmt.Sprintf("%s (%d)", rule.Name, i+1)
-			}
-		}
-		updatedRules = append(updatedRules, rules...)
-	}
-
-	return updatedRules
 }
 
 func setReceiverSlugs(
