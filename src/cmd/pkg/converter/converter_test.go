@@ -26,6 +26,115 @@ import (
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
+func TestConvertPrometheus_RecordingRules(t *testing.T) {
+	testRuleGroup := func(rules []rulefmt.RuleNode) rulefmt.RuleGroup {
+		return rulefmt.RuleGroup{
+			Name:  "test-group",
+			Rules: rules,
+		}
+	}
+
+	tests := []struct {
+		name               string
+		opts               Opts
+		rules              []rulefmt.RuleNode
+		wantRecordingRules []*models.Configv1RecordingRule
+	}{
+		{
+			name: "collections",
+			rules: []rulefmt.RuleNode{
+				{
+					Record: node("test-rule"),
+					Expr:   node("sum(rate(errors[5m]))"),
+					Labels: map[string]string{"zone": "us-east-1a"},
+				},
+			},
+			wantRecordingRules: []*models.Configv1RecordingRule{
+				{
+					ExecutionGroup: "test-group",
+					Name:           "test-rule",
+					MetricName:     "test-rule",
+					Slug:           "test-rule",
+					PrometheusExpr: "sum(rate(errors[5m]))",
+					LabelPolicy: &models.Configv1RecordingRuleLabelPolicy{
+						Add: map[string]string{"zone": "us-east-1a"},
+					},
+				},
+			},
+		},
+		{
+			name: "buckets",
+			opts: Opts{UseBuckets: true},
+			rules: []rulefmt.RuleNode{
+				{
+					Record: node("test-rule"),
+					Expr:   node("sum(rate(errors[5m]))"),
+					Labels: map[string]string{"zone": "us-east-1a"},
+				},
+			},
+			wantRecordingRules: []*models.Configv1RecordingRule{
+				{
+					Name:           "test-rule",
+					MetricName:     "test-rule",
+					Slug:           "test-rule",
+					PrometheusExpr: "sum(rate(errors[5m]))",
+					LabelPolicy: &models.Configv1RecordingRuleLabelPolicy{
+						Add: map[string]string{"zone": "us-east-1a"},
+					},
+				},
+			},
+		},
+		{
+			name: "multiple recording rules, same name",
+			rules: []rulefmt.RuleNode{
+				{
+					Record: node("test-rule"),
+					Expr:   node("sum(rate(errors{zone='us-east-1a'}[5m]))"),
+					Labels: map[string]string{"zone": "us-east-1a"},
+				},
+				{
+					Record: node("test-rule"),
+					Expr:   node("sum(rate(errors{zone='us-west-1a'}[5m]))"),
+					Labels: map[string]string{"zone": "us-west-1a"},
+				},
+			},
+			wantRecordingRules: []*models.Configv1RecordingRule{
+				{
+					ExecutionGroup: "test-group",
+					Name:           "test-rule",
+					MetricName:     "test-rule",
+					Slug:           "test-rule",
+					PrometheusExpr: "sum(rate(errors{zone='us-east-1a'}[5m]))",
+					LabelPolicy: &models.Configv1RecordingRuleLabelPolicy{
+						Add: map[string]string{"zone": "us-east-1a"},
+					},
+				},
+				{
+					ExecutionGroup: "test-group",
+					Name:           "test-rule",
+					MetricName:     "test-rule",
+					Slug:           "test-rule-1",
+					PrometheusExpr: "sum(rate(errors{zone='us-west-1a'}[5m]))",
+					LabelPolicy: &models.Configv1RecordingRuleLabelPolicy{
+						Add: map[string]string{"zone": "us-west-1a"},
+					},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			promYAML, err := yaml.Marshal(rulefmt.RuleGroups{
+				Groups: []rulefmt.RuleGroup{testRuleGroup(tt.rules)},
+			})
+			require.NoError(t, err)
+			out, _, err := ConvertPrometheus(string(promYAML), "", tt.opts)
+			require.NoError(t, err)
+			require.Equal(t, tt.wantRecordingRules, out.RecordingRules)
+		})
+	}
+}
+
 func TestConvertPrometheus_SeverityOptions(t *testing.T) {
 	t.Parallel()
 
