@@ -18,10 +18,10 @@ import (
 type RuleSample struct {
 
 	// rate
-	Rate float32 `json:"rate,omitempty"`
+	Rate float64 `json:"rate,omitempty"`
 
 	// window secs
-	WindowSecs int32 `json:"windowSecs,omitempty"`
+	WindowSecs int32 `json:"window_secs,omitempty"`
 }
 
 // Validate validates this rule sample

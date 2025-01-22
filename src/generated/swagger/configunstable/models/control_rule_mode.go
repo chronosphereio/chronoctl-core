@@ -30,11 +30,11 @@ func (m ControlRuleMode) Pointer() *ControlRuleMode {
 
 const (
 
-	// ControlRuleModeMODEENABLED captures enum value "MODE_ENABLED"
-	ControlRuleModeMODEENABLED ControlRuleMode = "MODE_ENABLED"
+	// ControlRuleModeENABLED captures enum value "ENABLED"
+	ControlRuleModeENABLED ControlRuleMode = "ENABLED"
 
-	// ControlRuleModeMODEDISABLED captures enum value "MODE_DISABLED"
-	ControlRuleModeMODEDISABLED ControlRuleMode = "MODE_DISABLED"
+	// ControlRuleModeDISABLED captures enum value "DISABLED"
+	ControlRuleModeDISABLED ControlRuleMode = "DISABLED"
 )
 
 // for schema
@@ -42,7 +42,7 @@ var controlRuleModeEnum []interface{}
 
 func init() {
 	var res []ControlRuleMode
-	if err := json.Unmarshal([]byte(`["MODE_ENABLED","MODE_DISABLED"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ENABLED","DISABLED"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

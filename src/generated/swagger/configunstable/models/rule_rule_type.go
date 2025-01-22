@@ -30,20 +30,20 @@ func (m RuleRuleType) Pointer() *RuleRuleType {
 
 const (
 
-	// RuleRuleTypeRULETYPESAMPLE captures enum value "RULE_TYPE_SAMPLE"
-	RuleRuleTypeRULETYPESAMPLE RuleRuleType = "RULE_TYPE_SAMPLE"
+	// RuleRuleTypeSAMPLE captures enum value "SAMPLE"
+	RuleRuleTypeSAMPLE RuleRuleType = "SAMPLE"
 
-	// RuleRuleTypeRULETYPEDELTEFIELDS captures enum value "RULE_TYPE_DELTE_FIELDS"
-	RuleRuleTypeRULETYPEDELTEFIELDS RuleRuleType = "RULE_TYPE_DELTE_FIELDS"
+	// RuleRuleTypeDELETEFIELDS captures enum value "DELETE_FIELDS"
+	RuleRuleTypeDELETEFIELDS RuleRuleType = "DELETE_FIELDS"
 
-	// RuleRuleTypeRULETYPEDEDUPE captures enum value "RULE_TYPE_DE_DUPE"
-	RuleRuleTypeRULETYPEDEDUPE RuleRuleType = "RULE_TYPE_DE_DUPE"
+	// RuleRuleTypeDEDUPE captures enum value "DE_DUPE"
+	RuleRuleTypeDEDUPE RuleRuleType = "DE_DUPE"
 
-	// RuleRuleTypeRULETYPEEMITMETRICS captures enum value "RULE_TYPE_EMIT_METRICS"
-	RuleRuleTypeRULETYPEEMITMETRICS RuleRuleType = "RULE_TYPE_EMIT_METRICS"
+	// RuleRuleTypeEMITMETRICS captures enum value "EMIT_METRICS"
+	RuleRuleTypeEMITMETRICS RuleRuleType = "EMIT_METRICS"
 
-	// RuleRuleTypeRULETYPEDROP captures enum value "RULE_TYPE_DROP"
-	RuleRuleTypeRULETYPEDROP RuleRuleType = "RULE_TYPE_DROP"
+	// RuleRuleTypeDROP captures enum value "DROP"
+	RuleRuleTypeDROP RuleRuleType = "DROP"
 )
 
 // for schema
@@ -51,7 +51,7 @@ var ruleRuleTypeEnum []interface{}
 
 func init() {
 	var res []RuleRuleType
-	if err := json.Unmarshal([]byte(`["RULE_TYPE_SAMPLE","RULE_TYPE_DELTE_FIELDS","RULE_TYPE_DE_DUPE","RULE_TYPE_EMIT_METRICS","RULE_TYPE_DROP"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["SAMPLE","DELETE_FIELDS","DE_DUPE","EMIT_METRICS","DROP"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

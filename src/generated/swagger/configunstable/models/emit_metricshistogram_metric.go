@@ -21,7 +21,7 @@ type EmitMetricshistogramMetric struct {
 	ValueField string `json:"value_field,omitempty"`
 
 	// Buckets specify the buckets to use for the histogram.
-	Buckets []float32 `json:"buckets"`
+	Buckets []float64 `json:"buckets"`
 }
 
 // Validate validates this emit metricshistogram metric
