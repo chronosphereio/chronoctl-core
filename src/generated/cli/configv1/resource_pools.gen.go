@@ -372,7 +372,7 @@ spec:
             # within the license, after subtracting the sum of fixed values across pools for that license.
             fixed_values:
                 - value: <int64>
-                  license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
+                  license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
           priorities:
             # Required filters which define which metrics are high priority, where any
             # metric which matches at least one filter is considered high priority.
@@ -405,7 +405,7 @@ spec:
             # within the license, after subtracting the sum of fixed values across pools for that license.
             fixed_values:
                 - value: <int64>
-                  license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
+                  license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
         priorities:
             # Required filters which define which metrics are high priority, where any
             # metric which matches at least one filter is considered high priority.

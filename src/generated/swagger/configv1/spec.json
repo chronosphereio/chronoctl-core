@@ -15,6 +15,34 @@
       },
       "type": "object"
     },
+    "AllocationThreshold": {
+      "properties": {
+        "percent_of_pool_allocation": {
+          "description": "Threshold expressed as a percent of the license allocated to a pool.\nA value of `100` represents a threshold that is the pool's full allocation.\nValues over `100` indicate thresholds that exceed the pool's allocation.\nFor example, a value of `50` represents a threshold that is half the pool's\nallocation and a value of `200` represents a threshold that is double the\npool's allocation.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "AllocationThresholds": {
+      "properties": {
+        "license": {
+          "$ref": "#/definitions/ResourcePoolsLicense"
+        },
+        "all_priorities": {
+          "$ref": "#/definitions/AllocationThreshold"
+        },
+        "default_and_low_priority": {
+          "$ref": "#/definitions/AllocationThreshold"
+        },
+        "low_priority": {
+          "$ref": "#/definitions/AllocationThreshold"
+        }
+      },
+      "title": "Thresholds define strict quota limits for each metrics license.\n**This feature is part of pre-release functionality and is subject to change.**",
+      "type": "object"
+    },
     "ConditionOp": {
       "enum": [
         "GEQ",
@@ -1497,6 +1525,8 @@
       "enum": [
         "PERSISTED_WRITES_STANDARD",
         "PERSISTED_WRITES_HISTOGRAM",
+        "PERSISTED_CARDINALITY_STANDARD",
+        "PERSISTED_CARDINALITY_HISTOGRAM",
         "MATCHED_WRITES_STANDARD",
         "MATCHED_WRITES_HISTOGRAM"
       ],

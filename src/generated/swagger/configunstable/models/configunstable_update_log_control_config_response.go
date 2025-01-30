@@ -18,15 +18,15 @@ import (
 // swagger:model configunstableUpdateLogControlConfigResponse
 type ConfigunstableUpdateLogControlConfigResponse struct {
 
-	// log control configconfig
-	LogControlConfigconfig *ConfigunstableLogControlConfig `json:"log_control_configconfig,omitempty"`
+	// log control config
+	LogControlConfig *ConfigunstableLogControlConfig `json:"log_control_config,omitempty"`
 }
 
 // Validate validates this configunstable update log control config response
 func (m *ConfigunstableUpdateLogControlConfigResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLogControlConfigconfig(formats); err != nil {
+	if err := m.validateLogControlConfig(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -36,17 +36,17 @@ func (m *ConfigunstableUpdateLogControlConfigResponse) Validate(formats strfmt.R
 	return nil
 }
 
-func (m *ConfigunstableUpdateLogControlConfigResponse) validateLogControlConfigconfig(formats strfmt.Registry) error {
-	if swag.IsZero(m.LogControlConfigconfig) { // not required
+func (m *ConfigunstableUpdateLogControlConfigResponse) validateLogControlConfig(formats strfmt.Registry) error {
+	if swag.IsZero(m.LogControlConfig) { // not required
 		return nil
 	}
 
-	if m.LogControlConfigconfig != nil {
-		if err := m.LogControlConfigconfig.Validate(formats); err != nil {
+	if m.LogControlConfig != nil {
+		if err := m.LogControlConfig.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("log_control_configconfig")
+				return ve.ValidateName("log_control_config")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("log_control_configconfig")
+				return ce.ValidateName("log_control_config")
 			}
 			return err
 		}
@@ -59,7 +59,7 @@ func (m *ConfigunstableUpdateLogControlConfigResponse) validateLogControlConfigc
 func (m *ConfigunstableUpdateLogControlConfigResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateLogControlConfigconfig(ctx, formats); err != nil {
+	if err := m.contextValidateLogControlConfig(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -69,19 +69,19 @@ func (m *ConfigunstableUpdateLogControlConfigResponse) ContextValidate(ctx conte
 	return nil
 }
 
-func (m *ConfigunstableUpdateLogControlConfigResponse) contextValidateLogControlConfigconfig(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConfigunstableUpdateLogControlConfigResponse) contextValidateLogControlConfig(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.LogControlConfigconfig != nil {
+	if m.LogControlConfig != nil {
 
-		if swag.IsZero(m.LogControlConfigconfig) { // not required
+		if swag.IsZero(m.LogControlConfig) { // not required
 			return nil
 		}
 
-		if err := m.LogControlConfigconfig.ContextValidate(ctx, formats); err != nil {
+		if err := m.LogControlConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("log_control_configconfig")
+				return ve.ValidateName("log_control_config")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("log_control_configconfig")
+				return ce.ValidateName("log_control_config")
 			}
 			return err
 		}

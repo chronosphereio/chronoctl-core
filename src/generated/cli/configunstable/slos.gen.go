@@ -553,6 +553,14 @@ spec:
         # This overrides the equivalent ComponentDiscovery.MetricMetadata field as it
         # is common to change
         endpoint_label: <string>
+        # Custom dimensions are used to configure additional labels to export from
+        # the underlying queries. This feature provides a logical budget to group
+        # unique combination of dimensions. For example, if you want to track a
+        # budget per endpoint, add the endpoint label as a dimension. These dimensions
+        # are provided on the top-level SLI so that queryful SLOs will receive them
+        # in '.GroupBy'.
+        custom_dimension_labels:
+            - <string>
         custom_indicator:
             # A PromQL query that measures the number of "good" events for this SLI.
             # Either this or the bad_query_template must be set.

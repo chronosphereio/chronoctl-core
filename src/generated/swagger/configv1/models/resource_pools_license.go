@@ -36,6 +36,12 @@ const (
 	// ResourcePoolsLicensePERSISTEDWRITESHISTOGRAM captures enum value "PERSISTED_WRITES_HISTOGRAM"
 	ResourcePoolsLicensePERSISTEDWRITESHISTOGRAM ResourcePoolsLicense = "PERSISTED_WRITES_HISTOGRAM"
 
+	// ResourcePoolsLicensePERSISTEDCARDINALITYSTANDARD captures enum value "PERSISTED_CARDINALITY_STANDARD"
+	ResourcePoolsLicensePERSISTEDCARDINALITYSTANDARD ResourcePoolsLicense = "PERSISTED_CARDINALITY_STANDARD"
+
+	// ResourcePoolsLicensePERSISTEDCARDINALITYHISTOGRAM captures enum value "PERSISTED_CARDINALITY_HISTOGRAM"
+	ResourcePoolsLicensePERSISTEDCARDINALITYHISTOGRAM ResourcePoolsLicense = "PERSISTED_CARDINALITY_HISTOGRAM"
+
 	// ResourcePoolsLicenseMATCHEDWRITESSTANDARD captures enum value "MATCHED_WRITES_STANDARD"
 	ResourcePoolsLicenseMATCHEDWRITESSTANDARD ResourcePoolsLicense = "MATCHED_WRITES_STANDARD"
 
@@ -48,7 +54,7 @@ var resourcePoolsLicenseEnum []interface{}
 
 func init() {
 	var res []ResourcePoolsLicense
-	if err := json.Unmarshal([]byte(`["PERSISTED_WRITES_STANDARD","PERSISTED_WRITES_HISTOGRAM","MATCHED_WRITES_STANDARD","MATCHED_WRITES_HISTOGRAM"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["PERSISTED_WRITES_STANDARD","PERSISTED_WRITES_HISTOGRAM","PERSISTED_CARDINALITY_STANDARD","PERSISTED_CARDINALITY_HISTOGRAM","MATCHED_WRITES_STANDARD","MATCHED_WRITES_HISTOGRAM"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

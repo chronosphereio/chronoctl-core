@@ -18,7 +18,7 @@ import (
 type RuleDeleteFields struct {
 
 	// field regex
-	FieldRegex string `json:"fieldRegex,omitempty"`
+	FieldRegex string `json:"field_regex,omitempty"`
 }
 
 // Validate validates this rule delete fields

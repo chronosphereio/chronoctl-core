@@ -172,8 +172,8 @@
     },
     "ControlRuleMode": {
       "enum": [
-        "MODE_ENABLED",
-        "MODE_DISABLED"
+        "ENABLED",
+        "DISABLED"
       ],
       "type": "string"
     },
@@ -213,7 +213,7 @@
         "buckets": {
           "description": "Buckets specify the buckets to use for the histogram.",
           "items": {
-            "format": "float",
+            "format": "double",
             "type": "number"
           },
           "type": "array"
@@ -374,21 +374,13 @@
     "RuleDeleteFields": {
       "description": "DeleteFields is the configuration for a delete fields rule.",
       "properties": {
-        "fieldRegex": {
+        "field_regex": {
           "type": "string"
         }
       },
       "type": "object"
     },
     "RuleDrop": {
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-        "label": {
-          "$ref": "#/definitions/configunstableLabel"
-        }
-      },
       "title": "Drop is the configuration for a drop filter",
       "type": "object"
     },
@@ -427,11 +419,11 @@
     },
     "RuleRuleType": {
       "enum": [
-        "RULE_TYPE_SAMPLE",
-        "RULE_TYPE_DELTE_FIELDS",
-        "RULE_TYPE_DE_DUPE",
-        "RULE_TYPE_EMIT_METRICS",
-        "RULE_TYPE_DROP"
+        "SAMPLE",
+        "DELETE_FIELDS",
+        "DE_DUPE",
+        "EMIT_METRICS",
+        "DROP"
       ],
       "type": "string"
     },
@@ -439,10 +431,10 @@
       "description": "Sample is the configuration for a sample rule.",
       "properties": {
         "rate": {
-          "format": "float",
+          "format": "double",
           "type": "number"
         },
-        "windowSecs": {
+        "window_secs": {
           "format": "int32",
           "type": "integer"
         }
@@ -1178,6 +1170,10 @@
       "properties": {
         "log_control_config": {
           "$ref": "#/definitions/configunstableLogControlConfig"
+        },
+        "dry_run": {
+          "description": "If true, the LogControlConfig will not be created, and no response LogControlConfig will be returned. The response will return an error if the given LogControlConfig is invalid.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -1915,6 +1911,13 @@
         },
         "endpoint_latency": {
           "$ref": "#/definitions/SLIEndpointLatencyConfig"
+        },
+        "custom_dimension_labels": {
+          "description": "Custom dimensions are used to configure additional labels to export from\nthe underlying queries. This feature provides a logical budget to group\nunique combination of dimensions. For example, if you want to track a\nbudget per endpoint, add the endpoint label as a dimension. These dimensions\nare provided on the top-level SLI so that queryful SLOs will receive them\nin `.GroupBy`.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -2438,7 +2441,7 @@
     },
     "configunstableUpdateLogControlConfigResponse": {
       "properties": {
-        "log_control_configconfig": {
+        "log_control_config": {
           "$ref": "#/definitions/configunstableLogControlConfig"
         }
       },
