@@ -1684,7 +1684,7 @@ func setReceiverSlugs(
 // each receiver has at most one target. Returned receivers also have slugs set.
 // The returned map indexes the original receivers names the new receivers for that name.
 func expandReceivers(
-	receivers []*config.Receiver,
+	receivers []config.Receiver,
 	opts Opts,
 ) (
 	[]*Notifier,
@@ -1707,7 +1707,7 @@ func expandReceivers(
 	return allReceivers, recvByInputName, nil
 }
 
-func expandReceiver(r *config.Receiver) []*Notifier {
+func expandReceiver(r config.Receiver) []*Notifier {
 	receivers := make([]*Notifier, 0)
 	for _, w := range r.WebhookConfigs {
 		receivers = append(receivers, &Notifier{
