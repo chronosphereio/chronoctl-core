@@ -1374,6 +1374,22 @@ type convertPrometheusRulesResult struct {
 	recordingRules []*models.Configv1RecordingRule
 }
 
+func newSlugGenerators() slugGenerators {
+	return slugGenerators{
+		monitor:       newSlugGenerator(),
+		recordingRule: newSlugGenerator(),
+		collection:    newSlugGenerator(),
+		entityGroup:   newSlugGenerator(),
+	}
+}
+
+type slugGenerators struct {
+	monitor       *slugGenerator
+	recordingRule *slugGenerator
+	collection    *slugGenerator
+	entityGroup   *slugGenerator
+}
+
 // convertPrometheusRuleGroups converts Prometheus rule groups to entity groups, monitors, and recording groups.
 // An entity group is created from each rule group. Each alert rule within a rule group is converted to
 // a separate monitor.
@@ -1383,9 +1399,7 @@ func convertPrometheusRuleGroups(
 	opts Opts,
 	promRules *rulefmt.RuleGroups,
 ) (*convertPrometheusRulesResult, error) {
-	entityGroupSlugGenerator := newSlugGenerator()
-	collectionSlugGenerator := newSlugGenerator()
-	monitorSlugGenerator := newSlugGenerator()
+	slugs := newSlugGenerators()
 
 	var monitors []*models.Configv1Monitor
 
@@ -1412,10 +1426,10 @@ func convertPrometheusRuleGroups(
 
 		if !opts.UseBuckets {
 			// Create the slug first to pass into the convertRules function
-			collectionSlug := collectionSlugGenerator.generateV1(ruleGroup.Name)
+			collectionSlug := slugs.collection.generateV1(ruleGroup.Name)
 
 			// Convert the rules to recording rules and monitors
-			groupRecRules, groupMonitors, err := convertRules(ruleGroup, ruleGroupPath, opts, monitorSlugGenerator, collectionSlug)
+			groupRecRules, groupMonitors, err := convertRules(ruleGroup, ruleGroupPath, opts, slugs, collectionSlug)
 			if err != nil {
 				return nil, fmt.Errorf("convert rules, use_collections=true: %w", err)
 			}
@@ -1438,13 +1452,13 @@ func convertPrometheusRuleGroups(
 			// Create an entity group for this rule group
 			entityGroup := &models.Configv1Collection{
 				Name: groupName,
-				Slug: entityGroupSlugGenerator.generateV1(ruleGroup.Name),
+				Slug: slugs.entityGroup.generateV1(ruleGroup.Name),
 			}
 			entityGroups = append(entityGroups, entityGroup)
 			groupCounts[ruleGroup.Name]++
 
 			// Convert the rules to recording rules and monitors
-			groupRecRules, groupMonitors, err := convertRules(ruleGroup, ruleGroupPath, opts, monitorSlugGenerator, entityGroup.Slug)
+			groupRecRules, groupMonitors, err := convertRules(ruleGroup, ruleGroupPath, opts, slugs, entityGroup.Slug)
 			if err != nil {
 				return nil, fmt.Errorf("convert rules, use_collections=false: %w", err)
 			}
@@ -1467,7 +1481,7 @@ func convertRules(
 	ruleGroup rulefmt.RuleGroup,
 	ruleGroupPath fieldPath,
 	opts Opts,
-	monitorSlugGenerator *slugGenerator,
+	slugs slugGenerators,
 	parentSlug string,
 ) (
 	[]*models.Configv1RecordingRule,
@@ -1484,11 +1498,13 @@ func convertRules(
 		}
 
 		if rule.Record.Value != "" {
-			recRules = append(recRules, convertRecordingRule(rule, ruleGroup, opts))
+			rr := convertRecordingRule(rule, ruleGroup, opts)
+			rr.Slug = slugs.recordingRule.generateV2(rr.Name)
+			recRules = append(recRules, rr)
 		} else {
 			var monitorSlug string
 			if !opts.DisableMonitorSlugAssignment {
-				monitorSlug = monitorSlugGenerator.generateV1(rule.Alert.Value)
+				monitorSlug = slugs.monitor.generateV1(rule.Alert.Value)
 			}
 
 			monitor, err := convertAlertingRule(rule, monitorSlug, parentSlug, ruleGroup, rulePath, opts)
