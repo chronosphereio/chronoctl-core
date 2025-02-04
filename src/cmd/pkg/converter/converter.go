@@ -1498,7 +1498,7 @@ func convertRules(
 		}
 
 		if rule.Record.Value != "" {
-			rr := convertRecordingRule(rule, ruleGroup, opts)
+			rr := convertRecordingRule(rule, ruleGroup)
 			rr.Slug = slugs.recordingRule.generateV2(rr.Name)
 			recRules = append(recRules, rr)
 		} else {
@@ -1596,9 +1596,8 @@ func convertAlertingRule(
 func convertRecordingRule(
 	rule rulefmt.RuleNode,
 	ruleGroup rulefmt.RuleGroup,
-	opts Opts,
 ) *models.Configv1RecordingRule {
-	recRule := &models.Configv1RecordingRule{
+	return &models.Configv1RecordingRule{
 		Name:           rule.Record.Value,
 		MetricName:     rule.Record.Value,
 		PrometheusExpr: rule.Expr.Value,
@@ -1606,14 +1605,8 @@ func convertRecordingRule(
 		LabelPolicy: &models.Configv1RecordingRuleLabelPolicy{
 			Add: rule.Labels,
 		},
+		ExecutionGroup: ruleGroup.Name,
 	}
-
-	if !opts.UseBuckets {
-		// set execution group if we are generating collection compatible recording rules
-		recRule.ExecutionGroup = ruleGroup.Name
-	}
-
-	return recRule
 }
 
 func uniquifyMonitorNames(monitors []*models.Configv1Monitor) []*models.Configv1Monitor {

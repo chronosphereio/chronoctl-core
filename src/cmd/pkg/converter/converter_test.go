@@ -74,6 +74,7 @@ func TestConvertPrometheus_RecordingRules(t *testing.T) {
 			},
 			wantRecordingRules: []*models.Configv1RecordingRule{
 				{
+					ExecutionGroup: "test-group",
 					Name:           "test-rule",
 					MetricName:     "test-rule",
 					Slug:           "test-rule",
