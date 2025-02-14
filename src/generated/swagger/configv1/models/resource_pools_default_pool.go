@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -19,10 +20,16 @@ import (
 type ResourcePoolsDefaultPool struct {
 
 	// allocation
-	Allocation *ResourcePoolsAllocation `json:"allocation,omitempty"`
+	Allocation *Configv1ResourcePoolsAllocation `json:"allocation,omitempty"`
 
 	// priorities
 	Priorities *ResourcePoolsPriorities `json:"priorities,omitempty"`
+
+	// Optional. For supported licenses, defines thresholds with strict limits for
+	// when to drop new consumption of the license for a pool. Currently, only
+	// `PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are
+	// supported.
+	PriorityThresholds []*AllocationThresholds `json:"priority_thresholds"`
 }
 
 // Validate validates this resource pools default pool
@@ -34,6 +41,10 @@ func (m *ResourcePoolsDefaultPool) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePriorities(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePriorityThresholds(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -81,6 +92,32 @@ func (m *ResourcePoolsDefaultPool) validatePriorities(formats strfmt.Registry) e
 	return nil
 }
 
+func (m *ResourcePoolsDefaultPool) validatePriorityThresholds(formats strfmt.Registry) error {
+	if swag.IsZero(m.PriorityThresholds) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.PriorityThresholds); i++ {
+		if swag.IsZero(m.PriorityThresholds[i]) { // not required
+			continue
+		}
+
+		if m.PriorityThresholds[i] != nil {
+			if err := m.PriorityThresholds[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("priority_thresholds" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("priority_thresholds" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 // ContextValidate validate this resource pools default pool based on the context it is used
 func (m *ResourcePoolsDefaultPool) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -90,6 +127,10 @@ func (m *ResourcePoolsDefaultPool) ContextValidate(ctx context.Context, formats 
 	}
 
 	if err := m.contextValidatePriorities(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePriorityThresholds(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -136,6 +177,31 @@ func (m *ResourcePoolsDefaultPool) contextValidatePriorities(ctx context.Context
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *ResourcePoolsDefaultPool) contextValidatePriorityThresholds(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.PriorityThresholds); i++ {
+
+		if m.PriorityThresholds[i] != nil {
+
+			if swag.IsZero(m.PriorityThresholds[i]) { // not required
+				return nil
+			}
+
+			if err := m.PriorityThresholds[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("priority_thresholds" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("priority_thresholds" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

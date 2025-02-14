@@ -22,6 +22,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewDropRuleCmd())
 	root.AddCommand(NewGcpMetricsIntegrationCmd())
 	root.AddCommand(NewGrafanaDashboardCmd())
+	root.AddCommand(NewLogAllocationConfigCmd())
 	root.AddCommand(NewLogScaleActionCmd())
 	root.AddCommand(NewLogScaleAlertCmd())
 	root.AddCommand(NewMappingRuleCmd())
@@ -35,6 +36,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewRollupRuleCmd())
 	root.AddCommand(NewServiceAccountCmd())
 	root.AddCommand(NewTeamCmd())
+	root.AddCommand(NewTraceBehaviorCmd())
 	root.AddCommand(NewTraceBehaviorConfigCmd())
 	root.AddCommand(NewTraceJaegerRemoteSamplingStrategyCmd())
 	root.AddCommand(NewTraceMetricsRuleCmd())
@@ -198,6 +200,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateGrafanaDashboard(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		LogAllocationConfigTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*LogAllocationConfig)
+			if !ok {
+				return types.WrongObjectErr((&LogAllocationConfig{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateLogAllocationConfig(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}
@@ -390,6 +408,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateTeam(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		TraceBehaviorTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*TraceBehavior)
+			if !ok {
+				return types.WrongObjectErr((&TraceBehavior{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateTraceBehavior(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

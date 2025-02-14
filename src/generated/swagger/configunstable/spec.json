@@ -138,22 +138,6 @@
       },
       "type": "object"
     },
-    "ConfigUnstableUpdateTraceBehaviorBody": {
-      "properties": {
-        "trace_behavior": {
-          "$ref": "#/definitions/configunstableTraceBehavior"
-        },
-        "create_if_missing": {
-          "description": "If true, the TraceBehavior will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceBehavior does not already exist.",
-          "type": "boolean"
-        },
-        "dry_run": {
-          "description": "If true, the TraceBehavior will not be created nor updated, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
     "ConfigUnstableUpdateTraceJaegerRemoteSamplingStrategyBody": {
       "properties": {
         "trace_jaeger_remote_sampling_strategy": {
@@ -235,63 +219,6 @@
         "OR"
       ],
       "type": "string"
-    },
-    "LogAllocationConfigAllocation": {
-      "description": "Configuration for allocating resources to a dataset.",
-      "properties": {
-        "percent_of_license": {
-          "format": "double",
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "LogAllocationConfigDatasetAllocation": {
-      "properties": {
-        "dataset_slug": {
-          "description": "Slug of the dataset.",
-          "type": "string"
-        },
-        "allocation": {
-          "$ref": "#/definitions/LogAllocationConfigAllocation"
-        },
-        "priorities": {
-          "$ref": "#/definitions/LogAllocationConfigHighLowPriorities"
-        }
-      },
-      "type": "object"
-    },
-    "LogAllocationConfigDefaultDataset": {
-      "description": "Configuration for default dataset.",
-      "properties": {
-        "allocation": {
-          "$ref": "#/definitions/LogAllocationConfigAllocation"
-        },
-        "priorities": {
-          "$ref": "#/definitions/LogAllocationConfigHighLowPriorities"
-        }
-      },
-      "type": "object"
-    },
-    "LogAllocationConfigHighLowPriorities": {
-      "description": "HighLowPriorities defines explicit high and low priority match criteria to define which logs\nshould be dropped first (low) and dropped last (high). Anything not matched by either set of rules\nis considered default priority and thus dropped after low but before high.",
-      "properties": {
-        "high_priority_filters": {
-          "description": "A list of search filters defining which logs are considered high priority in this dataset.\nThe filters are ORed together so only one given filter needs to match.",
-          "items": {
-            "$ref": "#/definitions/configv1LogSearchFilter"
-          },
-          "type": "array"
-        },
-        "low_priority_filters": {
-          "description": "A list of search filters defining which logs are considered low priority in this dataset.\nThe filters are ORed together so only one given filter needs to match.",
-          "items": {
-            "$ref": "#/definitions/configv1LogSearchFilter"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
     },
     "MonitorSignalGrouping": {
       "description": "SignalGrouping defines how the set of series from the query are split into signals.",
@@ -710,159 +637,6 @@
       "title": "TODO: confirm naming with InfoModel team",
       "type": "string"
     },
-    "TraceBehaviorBaselineBehaviorOptions": {
-      "properties": {
-        "base_tail_sample_rate": {
-          "description": "Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.",
-          "format": "double",
-          "type": "number"
-        },
-        "base_head_sample_rate": {
-          "description": "Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,\nbut do not have a specific rule defined for their service.",
-          "format": "double",
-          "type": "number"
-        },
-        "error_sample_options": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsErrorSampleOptions"
-        },
-        "fast_sample_options": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsFastSampleOptions"
-        },
-        "slow_sample_options": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSlowSampleOptions"
-        },
-        "large_trace_sample_options": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsLargeTraceSampleOptions"
-        },
-        "small_trace_sample_options": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSmallTraceSampleOptions"
-        }
-      },
-      "type": "object"
-    },
-    "TraceBehaviorBaselineBehaviorOptionsErrorSampleOptions": {
-      "properties": {
-        "sample_rate": {
-          "description": "Sample rate for traces with errors.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "TraceBehaviorBaselineBehaviorOptionsFastSampleOptions": {
-      "properties": {
-        "max_duration_seconds": {
-          "description": "Duration in seconds under which traces are sampled\naccording to the given sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sample_rate": {
-          "description": "Sample rate for traces under the given duration.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "TraceBehaviorBaselineBehaviorOptionsLargeTraceSampleOptions": {
-      "properties": {
-        "span_count_threshold": {
-          "description": "For N = number of spans in the trace, if N \u003e= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
-          "format": "int64",
-          "type": "integer"
-        },
-        "sample_rate": {
-          "description": "Sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "TraceBehaviorBaselineBehaviorOptionsSamplingType": {
-      "description": " - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.\n - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.",
-      "enum": [
-        "LOW_VALUE",
-        "HIGH_VALUE"
-      ],
-      "type": "string"
-    },
-    "TraceBehaviorBaselineBehaviorOptionsSlowSampleOptions": {
-      "properties": {
-        "min_duration_seconds": {
-          "description": "Duration in seconds over which traces are sampled\naccording to the given sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sample_rate": {
-          "description": "Sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "TraceBehaviorBaselineBehaviorOptionsSmallTraceSampleOptions": {
-      "properties": {
-        "span_count_threshold": {
-          "description": "For N = number of spans in the trace, if N \u003c= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
-          "format": "int64",
-          "type": "integer"
-        },
-        "sample_rate": {
-          "description": "Sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptionsSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "TraceBehaviorTraceBehaviorType": {
-      "description": " - TYPE_KEEP_ALL: Keep all traces.\n - TYPE_DROP_ALL: Drop all traces.\n - TYPE_BASELINE: Keep traces based on a default sample rate and additional sample rates for fast, slow, and error traces.\n - TYPE_DEPRECATED: Used for none of the above - i.e. using the non-deprecated, baseline-style fields.",
-      "enum": [
-        "TYPE_KEEP_ALL",
-        "TYPE_DROP_ALL",
-        "TYPE_BASELINE",
-        "TYPE_DEPRECATED"
-      ],
-      "type": "string"
-    },
     "TraceJaegerRemoteSamplingStrategyAppliedStrategy": {
       "properties": {
         "probabilistic_strategy": {
@@ -1146,26 +920,6 @@
       },
       "type": "object"
     },
-    "configunstableCreateLogAllocationConfigRequest": {
-      "properties": {
-        "log_allocation_config": {
-          "$ref": "#/definitions/configunstableLogAllocationConfig"
-        },
-        "dry_run": {
-          "description": "If true, the LogAllocationConfig will not be created, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateLogAllocationConfigResponse": {
-      "properties": {
-        "log_allocation_config": {
-          "$ref": "#/definitions/configunstableLogAllocationConfig"
-        }
-      },
-      "type": "object"
-    },
     "configunstableCreateLogControlConfigRequest": {
       "properties": {
         "log_control_config": {
@@ -1270,26 +1024,6 @@
       "properties": {
         "service": {
           "$ref": "#/definitions/configunstableService"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateTraceBehaviorRequest": {
-      "properties": {
-        "trace_behavior": {
-          "$ref": "#/definitions/configunstableTraceBehavior"
-        },
-        "dry_run": {
-          "description": "If true, the TraceBehavior will not be created, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateTraceBehaviorResponse": {
-      "properties": {
-        "trace_behavior": {
-          "$ref": "#/definitions/configunstableTraceBehavior"
         }
       },
       "type": "object"
@@ -1407,9 +1141,6 @@
     "configunstableDeleteLinkTemplateResponse": {
       "type": "object"
     },
-    "configunstableDeleteLogAllocationConfigResponse": {
-      "type": "object"
-    },
     "configunstableDeleteLogControlConfigResponse": {
       "type": "object"
     },
@@ -1431,9 +1162,6 @@
       "type": "object"
     },
     "configunstableDeleteServiceResponse": {
-      "type": "object"
-    },
-    "configunstableDeleteTraceBehaviorResponse": {
       "type": "object"
     },
     "configunstableDeleteTraceJaegerRemoteSamplingStrategyResponse": {
@@ -1605,20 +1333,6 @@
       },
       "type": "object"
     },
-    "configunstableListTraceBehaviorsResponse": {
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/configv1PageResult"
-        },
-        "trace_behaviors": {
-          "items": {
-            "$ref": "#/definitions/configunstableTraceBehavior"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "configunstableListTraceJaegerRemoteSamplingStrategiesResponse": {
       "properties": {
         "page": {
@@ -1627,34 +1341,6 @@
         "trace_jaeger_remote_sampling_strategies": {
           "items": {
             "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableLogAllocationConfig": {
-      "description": "LogAllocationConfig is a singleton configuration object that specifies the\nconfiguration for Log budget allocations.",
-      "properties": {
-        "created_at": {
-          "description": "Timestamp of when the LogAllocationConfig was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the LogAllocationConfig was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "default_dataset": {
-          "$ref": "#/definitions/LogAllocationConfigDefaultDataset"
-        },
-        "dataset_allocations": {
-          "description": "Defines datasets and budget allocations. Datasets are evaluated in order.",
-          "items": {
-            "$ref": "#/definitions/LogAllocationConfigDatasetAllocation"
           },
           "type": "array"
         }
@@ -1780,14 +1466,6 @@
       },
       "type": "object"
     },
-    "configunstableReadLogAllocationConfigResponse": {
-      "properties": {
-        "log_allocation_config": {
-          "$ref": "#/definitions/configunstableLogAllocationConfig"
-        }
-      },
-      "type": "object"
-    },
     "configunstableReadLogControlConfigResponse": {
       "properties": {
         "log_control_config": {
@@ -1832,14 +1510,6 @@
       "properties": {
         "service": {
           "$ref": "#/definitions/configunstableService"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableReadTraceBehaviorResponse": {
-      "properties": {
-        "trace_behavior": {
-          "$ref": "#/definitions/configunstableTraceBehavior"
         }
       },
       "type": "object"
@@ -1918,6 +1588,9 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "source_service": {
+          "$ref": "#/definitions/configv1CollectionReference"
         }
       },
       "type": "object"
@@ -2088,178 +1761,6 @@
       },
       "type": "object"
     },
-    "configunstableTraceBehavior": {
-      "properties": {
-        "name": {
-          "description": "Required name of the TraceBehavior. May be modified after the TraceBehavior is created.",
-          "type": "string"
-        },
-        "slug": {
-          "description": "Unique identifier of the TraceBehavior. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceBehavior is created.",
-          "type": "string"
-        },
-        "created_at": {
-          "description": "Timestamp of when the TraceBehavior was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the TraceBehavior was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "type": {
-          "$ref": "#/definitions/TraceBehaviorTraceBehaviorType"
-        },
-        "baseline_behavior_options": {
-          "$ref": "#/definitions/TraceBehaviorBaselineBehaviorOptions"
-        },
-        "description": {
-          "type": "string"
-        },
-        "base_tail_sample_rate": {
-          "description": "Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.",
-          "format": "double",
-          "type": "number"
-        },
-        "base_head_sample_rate": {
-          "description": "Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,\nbut do not have a specific rule defined for their service.",
-          "format": "double",
-          "type": "number"
-        },
-        "error_sample_options": {
-          "$ref": "#/definitions/configunstableTraceBehaviorErrorSampleOptions"
-        },
-        "fast_sample_options": {
-          "$ref": "#/definitions/configunstableTraceBehaviorFastSampleOptions"
-        },
-        "slow_sample_options": {
-          "$ref": "#/definitions/configunstableTraceBehaviorSlowSampleOptions"
-        },
-        "large_trace_sample_options": {
-          "$ref": "#/definitions/configunstableTraceBehaviorLargeTraceSampleOptions"
-        },
-        "small_trace_sample_options": {
-          "$ref": "#/definitions/configunstableTraceBehaviorSmallTraceSampleOptions"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableTraceBehaviorErrorSampleOptions": {
-      "properties": {
-        "sample_rate": {
-          "description": "Sample rate for traces with errors.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableTraceBehaviorFastSampleOptions": {
-      "properties": {
-        "max_duration_seconds": {
-          "description": "Duration in seconds under which traces are sampled\naccording to the given sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sample_rate": {
-          "description": "Sample rate for traces under the given duration.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableTraceBehaviorLargeTraceSampleOptions": {
-      "properties": {
-        "span_count_threshold": {
-          "description": "For N = number of spans in the trace, if N \u003e= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
-          "format": "int64",
-          "type": "integer"
-        },
-        "sample_rate": {
-          "description": "Sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableTraceBehaviorSamplingType": {
-      "description": " - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.\n - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.",
-      "enum": [
-        "LOW_VALUE",
-        "HIGH_VALUE"
-      ],
-      "type": "string"
-    },
-    "configunstableTraceBehaviorSlowSampleOptions": {
-      "properties": {
-        "min_duration_seconds": {
-          "description": "Duration in seconds over which traces are sampled\naccording to the given sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sample_rate": {
-          "description": "Sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableTraceBehaviorSmallTraceSampleOptions": {
-      "properties": {
-        "span_count_threshold": {
-          "description": "For N = number of spans in the trace, if N \u003c= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
-          "format": "int64",
-          "type": "integer"
-        },
-        "sample_rate": {
-          "description": "Sample rate.",
-          "format": "double",
-          "type": "number"
-        },
-        "sampling_type": {
-          "$ref": "#/definitions/configunstableTraceBehaviorSamplingType"
-        },
-        "enabled": {
-          "description": "Whether or not to use these options.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
     "configunstableTraceJaegerRemoteSamplingStrategy": {
       "properties": {
         "slug": {
@@ -2399,30 +1900,6 @@
       },
       "type": "object"
     },
-    "configunstableUpdateLogAllocationConfigRequest": {
-      "properties": {
-        "log_allocation_config": {
-          "$ref": "#/definitions/configunstableLogAllocationConfig"
-        },
-        "create_if_missing": {
-          "description": "If true, the LogAllocationConfig will be created if it does not already exist. If false, an error will be returned if the LogAllocationConfig does not already exist.",
-          "type": "boolean"
-        },
-        "dry_run": {
-          "description": "If true, the LogAllocationConfig will not be created nor updated, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableUpdateLogAllocationConfigResponse": {
-      "properties": {
-        "log_allocation_config": {
-          "$ref": "#/definitions/configunstableLogAllocationConfig"
-        }
-      },
-      "type": "object"
-    },
     "configunstableUpdateLogControlConfigRequest": {
       "properties": {
         "log_control_config": {
@@ -2483,14 +1960,6 @@
       "properties": {
         "service": {
           "$ref": "#/definitions/configunstableService"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableUpdateTraceBehaviorResponse": {
-      "properties": {
-        "trace_behavior": {
-          "$ref": "#/definitions/configunstableTraceBehavior"
         }
       },
       "type": "object"
@@ -2569,15 +2038,6 @@
         "SERVICE"
       ],
       "type": "string"
-    },
-    "configv1LogSearchFilter": {
-      "properties": {
-        "query": {
-          "description": "Matches logs which match this query.\nQuery may only include top level operations (no nested clauses).\nOnly one type of operator AND/OR is allowed.",
-          "type": "string"
-        }
-      },
-      "type": "object"
     },
     "configv1PageParams": {
       "properties": {
@@ -3178,181 +2638,6 @@
         },
         "tags": [
           "LinkTemplate"
-        ]
-      }
-    },
-    "/api/unstable/config/log-allocation-config": {
-      "delete": {
-        "operationId": "DeleteLogAllocationConfig",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "dry_run",
-            "type": "boolean"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteLogAllocationConfigResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot delete the LogAllocationConfig because it is in use.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the LogAllocationConfig because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogAllocationConfig"
-        ]
-      },
-      "get": {
-        "operationId": "ReadLogAllocationConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadLogAllocationConfigResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the LogAllocationConfig because LogAllocationConfig has not been created.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogAllocationConfig"
-        ]
-      },
-      "post": {
-        "operationId": "CreateLogAllocationConfig",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateLogAllocationConfigRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created LogAllocationConfig.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateLogAllocationConfigResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the LogAllocationConfig because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the LogAllocationConfig because there is a conflict with an existing LogAllocationConfig.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogAllocationConfig"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateLogAllocationConfig",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateLogAllocationConfigRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated LogAllocationConfig.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateLogAllocationConfigResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the LogAllocationConfig because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the LogAllocationConfig because LogAllocationConfig has not been created.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogAllocationConfig"
         ]
       }
     },
@@ -4820,265 +4105,6 @@
         },
         "tags": [
           "SyncPrometheus"
-        ]
-      }
-    },
-    "/api/unstable/config/trace-behaviors": {
-      "get": {
-        "operationId": "ListTraceBehaviors",
-        "parameters": [
-          {
-            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
-            "format": "int64",
-            "in": "query",
-            "name": "page.max_size",
-            "type": "integer"
-          },
-          {
-            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
-            "in": "query",
-            "name": "page.token",
-            "type": "string"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by slug, where any TraceBehavior with a matching slug in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "slugs",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by name, where any TraceBehavior with a matching name in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "names",
-            "type": "array"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableListTraceBehaviorsResponse"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceBehavior"
-        ]
-      },
-      "post": {
-        "operationId": "CreateTraceBehavior",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateTraceBehaviorRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created TraceBehavior.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateTraceBehaviorResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the TraceBehavior because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the TraceBehavior because there is a conflict with an existing TraceBehavior.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceBehavior"
-        ]
-      }
-    },
-    "/api/unstable/config/trace-behaviors/{slug}": {
-      "delete": {
-        "operationId": "DeleteTraceBehavior",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteTraceBehaviorResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot delete the TraceBehavior because it is in use.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the TraceBehavior because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceBehavior"
-        ]
-      },
-      "get": {
-        "operationId": "ReadTraceBehavior",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadTraceBehaviorResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the TraceBehavior because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceBehavior"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateTraceBehavior",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ConfigUnstableUpdateTraceBehaviorBody"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated TraceBehavior.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateTraceBehaviorResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the TraceBehavior because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the TraceBehavior because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot update the TraceBehavior because there is a conflict with an existing TraceBehavior.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "TraceBehavior"
         ]
       }
     },

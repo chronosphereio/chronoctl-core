@@ -21,6 +21,11 @@
           "description": "Threshold expressed as a percent of the license allocated to a pool.\nA value of `100` represents a threshold that is the pool's full allocation.\nValues over `100` indicate thresholds that exceed the pool's allocation.\nFor example, a value of `50` represents a threshold that is half the pool's\nallocation and a value of `200` represents a threshold that is double the\npool's allocation.",
           "format": "double",
           "type": "number"
+        },
+        "fixed_value": {
+          "description": "Threshold expressed as a fixed value of the license.",
+          "format": "int64",
+          "type": "string"
         }
       },
       "type": "object"
@@ -376,6 +381,22 @@
       },
       "type": "object"
     },
+    "ConfigV1UpdateTraceBehaviorBody": {
+      "properties": {
+        "trace_behavior": {
+          "$ref": "#/definitions/configv1TraceBehavior"
+        },
+        "create_if_missing": {
+          "description": "If true, the TraceBehavior will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceBehavior does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the TraceBehavior will not be created nor updated, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateTraceJaegerRemoteSamplingStrategyBody": {
       "properties": {
         "trace_jaeger_remote_sampling_strategy": {
@@ -510,6 +531,7 @@
       "type": "object"
     },
     "DropRuleConditionalRateBasedDrop": {
+      "description": "No longer supported and cannot be used.\nDefines behavior for conditional drop policies.",
       "properties": {
         "enabled": {
           "description": "Enables rate-based metric dropping.",
@@ -622,6 +644,53 @@
         "EXPIRED"
       ],
       "type": "string"
+    },
+    "LogAllocationConfigDatasetAllocation": {
+      "properties": {
+        "dataset_slug": {
+          "description": "Slug of the dataset.",
+          "type": "string"
+        },
+        "allocation": {
+          "$ref": "#/definitions/configv1LogAllocationConfigAllocation"
+        },
+        "priorities": {
+          "$ref": "#/definitions/LogAllocationConfigHighLowPriorities"
+        }
+      },
+      "type": "object"
+    },
+    "LogAllocationConfigDefaultDataset": {
+      "description": "Configuration for default dataset.",
+      "properties": {
+        "allocation": {
+          "$ref": "#/definitions/configv1LogAllocationConfigAllocation"
+        },
+        "priorities": {
+          "$ref": "#/definitions/LogAllocationConfigHighLowPriorities"
+        }
+      },
+      "type": "object"
+    },
+    "LogAllocationConfigHighLowPriorities": {
+      "description": "HighLowPriorities defines explicit high and low priority match criteria to define which logs\nshould be dropped first (low) and dropped last (high). Anything not matched by either set of rules\nis considered default priority and thus dropped after low but before high.",
+      "properties": {
+        "high_priority_filters": {
+          "description": "A list of search filters defining which logs are considered high priority in this dataset.\nThe filters are ORed together so only one given filter needs to match.",
+          "items": {
+            "$ref": "#/definitions/configv1LogSearchFilter"
+          },
+          "type": "array"
+        },
+        "low_priority_filters": {
+          "description": "A list of search filters defining which logs are considered low priority in this dataset.\nThe filters are ORed together so only one given filter needs to match.",
+          "items": {
+            "$ref": "#/definitions/configv1LogSearchFilter"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
     },
     "LogScaleActionActionType": {
       "enum": [
@@ -1493,30 +1562,20 @@
       ],
       "type": "string"
     },
-    "ResourcePoolsAllocation": {
-      "properties": {
-        "percent_of_license": {
-          "description": "Percent of the license to allocate to this pool. Must be between 0\nand 100 inclusive. The percent_of_license values across all pools\n(excluding the default pool) must be \u003c= 100. default_pool need not specify\nan allocation, and implicitly receives any remaining allocation. If default_pool does\nexplicitly specify an allocation, the sum of percent_of_license across all pools\n(including the default pool) must exactly equal 100.",
-          "format": "double",
-          "type": "number"
-        },
-        "fixed_values": {
-          "description": "Fixed values optionally override `percent_of_license` allocations for specified licenses.\nWhen defining fixed values for a license, all pools must have an explicit fixed value\nspecification for that given license. The default pool receives all remaining quota left\nwithin the license, after subtracting the sum of fixed values across pools for that license.",
-          "items": {
-            "$ref": "#/definitions/AllocationFixedValue"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "ResourcePoolsDefaultPool": {
       "properties": {
         "allocation": {
-          "$ref": "#/definitions/ResourcePoolsAllocation"
+          "$ref": "#/definitions/configv1ResourcePoolsAllocation"
         },
         "priorities": {
           "$ref": "#/definitions/ResourcePoolsPriorities"
+        },
+        "priority_thresholds": {
+          "description": "Optional. For supported licenses, defines thresholds with strict limits for\nwhen to drop new consumption of the license for a pool. Currently, only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported.",
+          "items": {
+            "$ref": "#/definitions/AllocationThresholds"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1539,7 +1598,7 @@
           "type": "string"
         },
         "allocation": {
-          "$ref": "#/definitions/ResourcePoolsAllocation"
+          "$ref": "#/definitions/configv1ResourcePoolsAllocation"
         },
         "filters": {
           "description": "Required filters which define which metrics map to this pool, where any\nmetric which matches at least one filter will map to the pool.",
@@ -1857,6 +1916,119 @@
         "description": {
           "description": "A description of the entry.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorErrorSampleOptions": {
+      "properties": {
+        "sample_rate": {
+          "description": "Sample rate for traces with errors.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorFastSampleOptions": {
+      "properties": {
+        "max_duration_seconds": {
+          "description": "Duration in seconds under which traces are sampled\naccording to the given sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sample_rate": {
+          "description": "Sample rate for traces under the given duration.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorLargeTraceSampleOptions": {
+      "properties": {
+        "span_count_threshold": {
+          "description": "For N = number of spans in the trace, if N \u003e= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "sample_rate": {
+          "description": "Sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorSamplingType": {
+      "description": " - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.\n - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.",
+      "enum": [
+        "LOW_VALUE",
+        "HIGH_VALUE"
+      ],
+      "type": "string"
+    },
+    "TraceBehaviorSlowSampleOptions": {
+      "properties": {
+        "min_duration_seconds": {
+          "description": "Duration in seconds over which traces are sampled\naccording to the given sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sample_rate": {
+          "description": "Sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TraceBehaviorSmallTraceSampleOptions": {
+      "properties": {
+        "span_count_threshold": {
+          "description": "For N = number of spans in the trace, if N \u003c= span_count_threshold, the trace is sampled according to the\ngiven sample rate.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "sample_rate": {
+          "description": "Sample rate.",
+          "format": "double",
+          "type": "number"
+        },
+        "sampling_type": {
+          "$ref": "#/definitions/TraceBehaviorSamplingType"
+        },
+        "enabled": {
+          "description": "Whether or not to use these options.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -2415,6 +2587,26 @@
       },
       "type": "object"
     },
+    "configv1CreateLogAllocationConfigRequest": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configv1LogAllocationConfig"
+        },
+        "dry_run": {
+          "description": "If true, the LogAllocationConfig will not be created, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateLogAllocationConfigResponse": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configv1LogAllocationConfig"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateLogScaleActionRequest": {
       "properties": {
         "log_scale_action": {
@@ -2695,6 +2887,26 @@
       },
       "type": "object"
     },
+    "configv1CreateTraceBehaviorRequest": {
+      "properties": {
+        "trace_behavior": {
+          "$ref": "#/definitions/configv1TraceBehavior"
+        },
+        "dry_run": {
+          "description": "If true, the TraceBehavior will not be created, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateTraceBehaviorResponse": {
+      "properties": {
+        "trace_behavior": {
+          "$ref": "#/definitions/configv1TraceBehavior"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateTraceJaegerRemoteSamplingStrategyRequest": {
       "properties": {
         "trace_jaeger_remote_sampling_strategy": {
@@ -2882,6 +3094,9 @@
     "configv1DeleteGrafanaDashboardResponse": {
       "type": "object"
     },
+    "configv1DeleteLogAllocationConfigResponse": {
+      "type": "object"
+    },
     "configv1DeleteLogScaleActionResponse": {
       "type": "object"
     },
@@ -2922,6 +3137,9 @@
       "type": "object"
     },
     "configv1DeleteTraceBehaviorConfigResponse": {
+      "type": "object"
+    },
+    "configv1DeleteTraceBehaviorResponse": {
       "type": "object"
     },
     "configv1DeleteTraceJaegerRemoteSamplingStrategyResponse": {
@@ -3510,6 +3728,20 @@
       },
       "type": "object"
     },
+    "configv1ListTraceBehaviorsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "trace_behaviors": {
+          "items": {
+            "$ref": "#/definitions/configv1TraceBehavior"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configv1ListTraceJaegerRemoteSamplingStrategiesResponse": {
       "properties": {
         "page": {
@@ -3535,6 +3767,44 @@
             "$ref": "#/definitions/configv1TraceMetricsRule"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1LogAllocationConfig": {
+      "description": "LogAllocationConfig is a singleton configuration object that specifies the\nconfiguration for Log budget allocations.",
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the LogAllocationConfig was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the LogAllocationConfig was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "default_dataset": {
+          "$ref": "#/definitions/LogAllocationConfigDefaultDataset"
+        },
+        "dataset_allocations": {
+          "description": "Defines datasets and budget allocations. Datasets are evaluated in order.",
+          "items": {
+            "$ref": "#/definitions/LogAllocationConfigDatasetAllocation"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1LogAllocationConfigAllocation": {
+      "description": "Configuration for allocating resources to a dataset.",
+      "properties": {
+        "percent_of_license": {
+          "format": "double",
+          "type": "number"
         }
       },
       "type": "object"
@@ -4123,6 +4393,14 @@
       },
       "type": "object"
     },
+    "configv1ReadLogAllocationConfigResponse": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configv1LogAllocationConfig"
+        }
+      },
+      "type": "object"
+    },
     "configv1ReadLogScaleActionResponse": {
       "properties": {
         "log_scale_action": {
@@ -4243,6 +4521,14 @@
       },
       "type": "object"
     },
+    "configv1ReadTraceBehaviorResponse": {
+      "properties": {
+        "trace_behavior": {
+          "$ref": "#/definitions/configv1TraceBehavior"
+        }
+      },
+      "type": "object"
+    },
     "configv1ReadTraceJaegerRemoteSamplingStrategyResponse": {
       "properties": {
         "trace_jaeger_remote_sampling_strategy": {
@@ -4355,6 +4641,30 @@
       },
       "type": "object"
     },
+    "configv1ResourcePoolsAllocation": {
+      "properties": {
+        "percent_of_license": {
+          "description": "Percent of the license to allocate to this pool. Must be between 0\nand 100 inclusive. The percent_of_license values across all pools\n(excluding the default pool) must be \u003c= 100. default_pool need not specify\nan allocation, and implicitly receives any remaining allocation. If default_pool does\nexplicitly specify an allocation, the sum of percent_of_license across all pools\n(including the default pool) must exactly equal 100.",
+          "format": "double",
+          "type": "number"
+        },
+        "fixed_values": {
+          "description": "Fixed values optionally override `percent_of_license` allocations for specified licenses.\nWhen defining fixed values for a license, all pools must have an explicit fixed value\nspecification for that given license. The default pool receives all remaining quota left\nwithin the license, after subtracting the sum of fixed values across pools for that license.",
+          "items": {
+            "$ref": "#/definitions/AllocationFixedValue"
+          },
+          "type": "array"
+        },
+        "priority_thresholds": {
+          "description": "Optional. For supported licenses, defines thresholds with strict limits for\nwhen to drop new consumption of the license for a pool. Currently, only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported.",
+          "items": {
+            "$ref": "#/definitions/AllocationThresholds"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configv1ResourceType": {
       "enum": [
         "BUCKET",
@@ -4395,14 +4705,14 @@
           "type": "string"
         },
         "filters": {
-          "description": "Filters that determine to which metrics to apply the rule.",
+          "description": "Filters incoming metrics by label. If multiple label filters are specified, an\nincoming metric must match every label filter to match the rule. Label values\nsupport glob patterns, including matching multiple patterns with an `OR`, such\nas `service:{svc1,svc2}`. These special filters are available for matching\nmetrics by non-label request metadata:\n * `__metric_type__`: Matches the incoming metric's [Observability Platform\n   metric\n   type](https://docs.chronosphere.io/control/shaping/types#observability-platform-types).\n   This is the recommended method for filtering on metric type. Valid values:\n   `cumulative_counter`, `cumulative_exponential_histogram`, `delta_counter`,\n   `delta_exponential_histogram`, `gauge`, `measurement`.\n * `__metric_source__`: Matches the incoming metric's [source\n   format](https://docs.chronosphere.io/control/shaping/types#supported-formats).\n   Valid values: `carbon`, `chrono_gcp`, `dogstatsd`, `open_metrics`,\n   `open_telemetry`, `prometheus`, `signalfx`, `statsd`, `wavefront`.\n * `__m3_prom_type__`: When ingesting with Prometheus, matches the incoming\n   metric's [Prometheus metric\n   type](https://docs.chronosphere.io/control/shaping/types#prometheus). Valid\n   values: `counter`, `gauge`, `histogram`, `gauge_histogram`, `summary`,\n   `info`, `state_set`, `quantile`.\n * `__otel_type__`: When ingesting with OpenTelemetry, matches on the incoming\n   metric's [OpenTelemetry metric type](https://docs.chronosphere.io/control/shaping/types#opentelemetry).\n   Valid values: `sum`, `monotonic_sum`, `gauge`, `histogram`, `exp_histogram`,\n   `summary`.\nFor example, the following filter matches any cumulative counter metric with a\n`service=gateway` label whose metric name starts with `http_requests_`:\n```\n__metric_type__:cumulative_counter service:gateway __name__:http_requests_*\n```",
           "items": {
             "$ref": "#/definitions/configv1LabelFilter"
           },
           "type": "array"
         },
         "metric_name": {
-          "description": "Name of the new metric created as a result of the rollup.",
+          "description": "This field is optional for Graphite rollup rules.",
           "type": "string"
         },
         "metric_type": {
@@ -4415,11 +4725,11 @@
           "$ref": "#/definitions/configv1RollupRuleStoragePolicy"
         },
         "interval": {
-          "description": "Interval between aggregated data points, equivalent to the resolution\nfield in storage policy. If set, then the storage_policy field can't be\nset.",
+          "description": "The distance in time between aggregated data points. Intervals are based on your\n[retention policy](https://docs.chronosphere.io/administer/licensing#retention-policies).\nUse this optional field to set a custom interval.\nThis field was known as `storage_policies` in version\n0.286.0-2023-01-06-release.1 and earlier.",
           "type": "string"
         },
         "expansive_match": {
-          "description": "Enables expansive label matching behavior for the provided filters and\nlabel_policy.keep or graphite_label_policy.replace (if set). By default\n(expansive_match=false), a series matches and aggregates only if each label\ndefined by filters and label_policy.keep or graphite_label_policy.replace\n(respectively) exist in said series. Setting expansive_match=true removes\nthis restriction.",
+          "description": "A series matches and aggregates only if each label defined by filters and\n`label_policy.keep` or `graphite_label_policy.replace` (respectively) exist in\nthe series. Setting `expansive_match=true` removes this restriction. Default:\n`expansive_match=false`.\n\nIf `false`, a series matches and aggregates only if each label defined by the\nprovided `filters` and the `label_policy.keep` or\n`graphite_label_policy.replace` settings exist in the series.",
           "type": "boolean"
         },
         "add_metric_type_label": {
@@ -4427,7 +4737,7 @@
           "type": "boolean"
         },
         "drop_raw": {
-          "description": "Defines whether to automatically generate drop rules for this rollup.",
+          "description": "Defines whether to automatically generate drop rules for this rollup rule.\nSet to `true` to remove raw metrics that match this rollup rule. Default: `false`.",
           "type": "boolean"
         },
         "label_policy": {
@@ -4601,6 +4911,59 @@
       },
       "type": "object"
     },
+    "configv1TraceBehavior": {
+      "properties": {
+        "name": {
+          "description": "Required name of the TraceBehavior. May be modified after the TraceBehavior is created.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "Unique identifier of the TraceBehavior. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceBehavior is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the TraceBehavior was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the TraceBehavior was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "base_tail_sample_rate": {
+          "description": "Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.",
+          "format": "double",
+          "type": "number"
+        },
+        "base_head_sample_rate": {
+          "description": "Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,\nbut do not have a specific rule defined for their service.",
+          "format": "double",
+          "type": "number"
+        },
+        "error_sample_options": {
+          "$ref": "#/definitions/TraceBehaviorErrorSampleOptions"
+        },
+        "fast_sample_options": {
+          "$ref": "#/definitions/TraceBehaviorFastSampleOptions"
+        },
+        "slow_sample_options": {
+          "$ref": "#/definitions/TraceBehaviorSlowSampleOptions"
+        },
+        "large_trace_sample_options": {
+          "$ref": "#/definitions/TraceBehaviorLargeTraceSampleOptions"
+        },
+        "small_trace_sample_options": {
+          "$ref": "#/definitions/TraceBehaviorSmallTraceSampleOptions"
+        }
+      },
+      "type": "object"
+    },
     "configv1TraceBehaviorConfig": {
       "description": "TraceBehaviorConfig is a singleton configuration object that specifies the\nconfiguration for trace behaviors.",
       "properties": {
@@ -4617,14 +4980,14 @@
           "type": "string"
         },
         "main_behavior_assignments": {
-          "description": "List of assignments for the main behavior. The referenced datasets are datasets \nto be enrolled in behaviors. The referenced behaviors are the active behaviors\nfor the dataset when there is no override in place. \n* Only one main behavior can be assigned to a dataset.\n* Only one referenced `TraceBehavior` with `type` field set to `TYPE_BASELINE` can\nbe set, which must match the slug referenced by `baseline_behavior_slug`.",
+          "description": "List of assignments for the main behavior. The referenced datasets are datasets \nto be enrolled in behaviors. The referenced behaviors are the active behaviors\nfor the dataset when there is no override in place. \n* Only one main behavior can be assigned to a dataset.",
           "items": {
             "$ref": "#/definitions/TraceBehaviorConfigMainBehaviorAssignment"
           },
           "type": "array"
         },
         "override_behavior_assignments": {
-          "description": "List of assignments for the override behavior. OverrideBehaviorAssignments are used to\nspecify the active behavior for a dataset over a specific time range.\n* Only one override behavior can be assigned to a dataset.\n* Only one referenced `TraceBehavior` with `type` field set to `TYPE_BASELINE` can\nbe set, which must match the slug referenced by `baseline_behavior_slug`, and any\nbaseline behavior referenced in `main_behavior_assignments`.",
+          "description": "List of assignments for the override behavior. OverrideBehaviorAssignments are used to\nspecify the active behavior for a dataset over a specific time range.\n* Only one override behavior can be assigned to a dataset.",
           "items": {
             "$ref": "#/definitions/TraceBehaviorConfigOverrideBehaviorAssignment"
           },
@@ -4638,7 +5001,7 @@
           "type": "array"
         },
         "baseline_behavior_slug": {
-          "description": "The baseline behavior to use for behavior assignments and base head sampling rates. Must reference a\nTraceBehavior entity with type: TYPE_BASELINE.",
+          "description": "The baseline behavior to use for behavior assignments and base head sampling rates.",
           "type": "string"
         },
         "preview_behavior_assignments": {
@@ -4913,6 +5276,30 @@
       },
       "type": "object"
     },
+    "configv1UpdateLogAllocationConfigRequest": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configv1LogAllocationConfig"
+        },
+        "create_if_missing": {
+          "description": "If true, the LogAllocationConfig will be created if it does not already exist. If false, an error will be returned if the LogAllocationConfig does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the LogAllocationConfig will not be created nor updated, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateLogAllocationConfigResponse": {
+      "properties": {
+        "log_allocation_config": {
+          "$ref": "#/definitions/configv1LogAllocationConfig"
+        }
+      },
+      "type": "object"
+    },
     "configv1UpdateLogScaleActionResponse": {
       "properties": {
         "log_scale_action": {
@@ -5061,6 +5448,14 @@
       "properties": {
         "trace_behavior_config": {
           "$ref": "#/definitions/configv1TraceBehaviorConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateTraceBehaviorResponse": {
+      "properties": {
+        "trace_behavior": {
+          "$ref": "#/definitions/configv1TraceBehavior"
         }
       },
       "type": "object"
@@ -7816,6 +8211,181 @@
         },
         "tags": [
           "GrafanaDashboard"
+        ]
+      }
+    },
+    "/api/v1/config/log-allocation-config": {
+      "delete": {
+        "operationId": "DeleteLogAllocationConfig",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "dry_run",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteLogAllocationConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the LogAllocationConfig because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the LogAllocationConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogAllocationConfig"
+        ]
+      },
+      "get": {
+        "operationId": "ReadLogAllocationConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadLogAllocationConfigResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the LogAllocationConfig because LogAllocationConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogAllocationConfig"
+        ]
+      },
+      "post": {
+        "operationId": "CreateLogAllocationConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogAllocationConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created LogAllocationConfig.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogAllocationConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the LogAllocationConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the LogAllocationConfig because there is a conflict with an existing LogAllocationConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogAllocationConfig"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateLogAllocationConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateLogAllocationConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated LogAllocationConfig.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateLogAllocationConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the LogAllocationConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the LogAllocationConfig because LogAllocationConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogAllocationConfig"
         ]
       }
     },
@@ -11271,6 +11841,265 @@
         },
         "tags": [
           "TraceBehaviorConfig"
+        ]
+      }
+    },
+    "/api/v1/config/trace-behaviors": {
+      "get": {
+        "operationId": "ListTraceBehaviors",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any TraceBehavior with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any TraceBehavior with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListTraceBehaviorsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
+        ]
+      },
+      "post": {
+        "operationId": "CreateTraceBehavior",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTraceBehaviorRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created TraceBehavior.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateTraceBehaviorResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the TraceBehavior because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the TraceBehavior because there is a conflict with an existing TraceBehavior.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
+        ]
+      }
+    },
+    "/api/v1/config/trace-behaviors/{slug}": {
+      "delete": {
+        "operationId": "DeleteTraceBehavior",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteTraceBehaviorResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the TraceBehavior because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the TraceBehavior because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
+        ]
+      },
+      "get": {
+        "operationId": "ReadTraceBehavior",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadTraceBehaviorResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the TraceBehavior because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateTraceBehavior",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateTraceBehaviorBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated TraceBehavior.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateTraceBehaviorResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the TraceBehavior because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the TraceBehavior because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the TraceBehavior because there is a conflict with an existing TraceBehavior.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "TraceBehavior"
         ]
       }
     },

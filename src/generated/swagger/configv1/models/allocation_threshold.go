@@ -24,6 +24,9 @@ type AllocationThreshold struct {
 	// allocation and a value of `200` represents a threshold that is double the
 	// pool's allocation.
 	PercentOfPoolAllocation float64 `json:"percent_of_pool_allocation,omitempty"`
+
+	// Threshold expressed as a fixed value of the license.
+	FixedValue string `json:"fixed_value,omitempty"`
 }
 
 // Validate validates this allocation threshold

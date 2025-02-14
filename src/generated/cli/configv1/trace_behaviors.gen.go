@@ -21,55 +21,55 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-func init() { types.MustRegisterObject(DropRuleTypeMeta, &DropRule{}) }
+func init() { types.MustRegisterObject(TraceBehaviorTypeMeta, &TraceBehavior{}) }
 
-var _ types.Object = &DropRule{}
+var _ types.Object = &TraceBehavior{}
 
-var DropRuleTypeMeta = types.TypeMeta{
+var TraceBehaviorTypeMeta = types.TypeMeta{
 	APIVersion: "v1/config",
-	Kind:       "DropRule",
+	Kind:       "TraceBehavior",
 }
 
-type DropRule struct {
+type TraceBehavior struct {
 	types.TypeMeta `json:",inline"`
-	Spec           *models.Configv1DropRule `json:"spec"`
+	Spec           *models.Configv1TraceBehavior `json:"spec"`
 }
 
-func NewDropRule(spec *models.Configv1DropRule) *DropRule {
-	return &DropRule{
-		TypeMeta: DropRuleTypeMeta,
+func NewTraceBehavior(spec *models.Configv1TraceBehavior) *TraceBehavior {
+	return &TraceBehavior{
+		TypeMeta: TraceBehaviorTypeMeta,
 		Spec:     spec,
 	}
 }
 
-func (e *DropRule) Description() string {
+func (e *TraceBehavior) Description() string {
 	return types.TypeDescription(e, "name", e.Spec.Name, "slug", e.Spec.Slug)
 }
 
-func (e *DropRule) Identifier() string {
+func (e *TraceBehavior) Identifier() string {
 	return e.Spec.Slug
 }
 
-func CreateDropRule(
+func CreateTraceBehavior(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *DropRule,
+	entity *TraceBehavior,
 	dryRun bool,
-) (*DropRule, error) {
-	res, err := client.CreateDropRule(&config_v1.CreateDropRuleParams{
+) (*TraceBehavior, error) {
+	res, err := client.CreateTraceBehavior(&config_v1.CreateTraceBehaviorParams{
 		Context: ctx,
-		Body: &models.Configv1CreateDropRuleRequest{
-			DryRun:   dryRun,
-			DropRule: entity.Spec,
+		Body: &models.Configv1CreateTraceBehaviorRequest{
+			DryRun:        dryRun,
+			TraceBehavior: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewDropRule(res.Payload.DropRule), nil
+	return NewTraceBehavior(res.Payload.TraceBehavior), nil
 }
 
-func newDropRuleCreateCmd() *cobra.Command {
+func newTraceBehaviorCreateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		dryRunFlags       = dry.NewFlags()
@@ -83,7 +83,7 @@ func newDropRuleCreateCmd() *cobra.Command {
 		short string
 	)
 	use = "create -f <file>"
-	short = "Creates a single DropRule."
+	short = "Creates a single TraceBehavior."
 
 	cmd := &cobra.Command{
 		Use:     use,
@@ -103,13 +103,13 @@ func newDropRuleCreateCmd() *cobra.Command {
 				return err
 			}
 
-			var dropRule *DropRule
+			var traceBehavior *TraceBehavior
 			file, err := fileFlags.File()
 			if err != nil {
 				return err
 			}
 			defer file.Close() //nolint:errcheck
-			dropRule, err = types.MustDecodeSingleObject[*DropRule](file, permissiveParsing)
+			traceBehavior, err = types.MustDecodeSingleObject[*TraceBehavior](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -117,18 +117,18 @@ func newDropRuleCreateCmd() *cobra.Command {
 			if dryRunFlags.DryRun {
 				stderr.Println("--dry-run is set")
 			}
-			fullDropRule, err := CreateDropRule(ctx, client, dropRule, dryRunFlags.DryRun)
+			fullTraceBehavior, err := CreateTraceBehavior(ctx, client, traceBehavior, dryRunFlags.DryRun)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("DropRule is valid and can be created")
+				stderr.Println("TraceBehavior is valid and can be created")
 				return nil
 			}
-			stderr.Printf("DropRule with slug %q created successfully\n", fullDropRule.Spec.Slug)
+			stderr.Printf("TraceBehavior with slug %q created successfully\n", fullTraceBehavior.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullDropRule, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullTraceBehavior, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -143,22 +143,22 @@ func newDropRuleCreateCmd() *cobra.Command {
 	return cmd
 }
 
-func GetDropRule(
+func GetTraceBehavior(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
-) (*DropRule, error) {
-	res, err := client.ReadDropRule(&config_v1.ReadDropRuleParams{
+) (*TraceBehavior, error) {
+	res, err := client.ReadTraceBehavior(&config_v1.ReadTraceBehaviorParams{
 		Context: ctx,
 		Slug:    slug,
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewDropRule(res.GetPayload().DropRule), nil
+	return NewTraceBehavior(res.GetPayload().TraceBehavior), nil
 }
 
-func newDropRuleReadCmd() *cobra.Command {
+func newTraceBehaviorReadCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 	var (
@@ -166,7 +166,7 @@ func newDropRuleReadCmd() *cobra.Command {
 		use   string
 		args  cobra.PositionalArgs
 	)
-	short = "Reads a single DropRule by slug"
+	short = "Reads a single TraceBehavior by slug"
 	use = "read <slug>"
 	args = cobra.ExactArgs(1)
 
@@ -187,7 +187,7 @@ func newDropRuleReadCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			entity, err := GetDropRule(ctx, client, args[0])
+			entity, err := GetTraceBehavior(ctx, client, args[0])
 			if err != nil {
 				return err
 			}
@@ -204,29 +204,29 @@ func newDropRuleReadCmd() *cobra.Command {
 	return cmd
 }
 
-func UpdateDropRule(
+func UpdateTraceBehavior(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *DropRule,
+	entity *TraceBehavior,
 	opts UpdateOptions,
-) (*DropRule, error) {
-	res, err := client.UpdateDropRule(&config_v1.UpdateDropRuleParams{
+) (*TraceBehavior, error) {
+	res, err := client.UpdateTraceBehavior(&config_v1.UpdateTraceBehaviorParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: &models.ConfigV1UpdateDropRuleBody{
+		Body: &models.ConfigV1UpdateTraceBehaviorBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun:          opts.DryRun,
-			DropRule:        entity.Spec,
+			TraceBehavior:   entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
 
-	return NewDropRule(res.Payload.DropRule), nil
+	return NewTraceBehavior(res.Payload.TraceBehavior), nil
 }
 
-func newDropRuleUpdateCmd() *cobra.Command {
+func newTraceBehaviorUpdateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		createIfMissing   bool
@@ -239,7 +239,7 @@ func newDropRuleUpdateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "update -f <filename>",
 		GroupID: groups.Commands.ID,
-		Short:   "Updates an existing DropRule.",
+		Short:   "Updates an existing TraceBehavior.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
 			defer cancel()
@@ -260,7 +260,7 @@ func newDropRuleUpdateCmd() *cobra.Command {
 			}
 			defer file.Close() //nolint:errcheck
 
-			dropRule, err := types.MustDecodeSingleObject[*DropRule](file, permissiveParsing)
+			traceBehavior, err := types.MustDecodeSingleObject[*TraceBehavior](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -274,18 +274,18 @@ func newDropRuleUpdateCmd() *cobra.Command {
 				stderr.Println("--dry-run is set, update not persisted")
 			}
 
-			fullDropRule, err := UpdateDropRule(ctx, client, dropRule, updateOpts)
+			fullTraceBehavior, err := UpdateTraceBehavior(ctx, client, traceBehavior, updateOpts)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("DropRule is valid and can be updated")
+				stderr.Println("TraceBehavior is valid and can be updated")
 				return nil
 			}
-			stderr.Printf("DropRule with slug %q applied successfully\n", fullDropRule.Spec.Slug)
+			stderr.Printf("TraceBehavior with slug %q applied successfully\n", fullTraceBehavior.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullDropRule, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullTraceBehavior, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -296,17 +296,17 @@ func newDropRuleUpdateCmd() *cobra.Command {
 	outputFlags.AddFlags(cmd)
 	fileFlags.AddFlags(cmd)
 	cmd.Flags().BoolVar(&permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are allowed. Defaults to false.")
-	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the DropRule if it does not already exist. Defaults to false.")
+	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the TraceBehavior if it does not already exist. Defaults to false.")
 
 	return cmd
 }
 
-func DeleteDropRule(
+func DeleteTraceBehavior(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
 ) error {
-	_, err := client.DeleteDropRule(&config_v1.DeleteDropRuleParams{
+	_, err := client.DeleteTraceBehavior(&config_v1.DeleteTraceBehaviorParams{
 		Context: ctx,
 		Slug:    slug,
 	})
@@ -316,14 +316,14 @@ func DeleteDropRule(
 	return nil
 }
 
-func newDropRuleDeleteCmd() *cobra.Command {
+func newTraceBehaviorDeleteCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
 		Use:     "delete <slug>",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes a single DropRule by slug",
+		Short:   "Deletes a single TraceBehavior by slug",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -338,7 +338,7 @@ func newDropRuleDeleteCmd() *cobra.Command {
 				return err
 			}
 
-			res, err := client.DeleteDropRule(&config_v1.DeleteDropRuleParams{
+			res, err := client.DeleteTraceBehavior(&config_v1.DeleteTraceBehaviorParams{
 				Context: ctx,
 				Slug:    args[0],
 			})
@@ -346,7 +346,7 @@ func newDropRuleDeleteCmd() *cobra.Command {
 				return clienterror.Wrap(err)
 			}
 			_ = res
-			fmt.Fprintf(cmd.OutOrStdout(), "deleted DropRule with slug %q\n", args[0])
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted TraceBehavior with slug %q\n", args[0])
 
 			return nil
 		},
@@ -356,7 +356,7 @@ func newDropRuleDeleteCmd() *cobra.Command {
 	return cmd
 }
 
-type DropRuleListOpts struct {
+type TraceBehaviorListOpts struct {
 	// Limit represents that maximum number of items we wish to return.
 	Limit int
 	// PageToken is the pagination token we want to start our request at.
@@ -367,21 +367,21 @@ type DropRuleListOpts struct {
 	Slugs       []string
 }
 
-func (r *DropRuleListOpts) registerFlags(flags *flag.FlagSet) {
+func (r *TraceBehaviorListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any DropRule with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any TraceBehavior with a matching name in the given list (and matches all other filters) is returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any DropRule with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any TraceBehavior with a matching slug in the given list (and matches all other filters) is returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
 }
 
-func ListDropRules(
+func ListTraceBehaviors(
 	ctx context.Context,
 	client config_v1.ClientService,
-	streamer output.Streamer[*DropRule],
-	opts DropRuleListOpts,
+	streamer output.Streamer[*TraceBehavior],
+	opts TraceBehaviorListOpts,
 ) (pagination.Token, error) {
 	var (
 		gotItems    = 0
@@ -395,7 +395,7 @@ func ListDropRules(
 	}
 
 	for {
-		res, err := client.ListDropRules(&config_v1.ListDropRulesParams{
+		res, err := client.ListTraceBehaviors(&config_v1.ListTraceBehaviorsParams{
 			Context:     ctx,
 			PageToken:   &nextToken,
 			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
@@ -406,8 +406,8 @@ func ListDropRules(
 			return pagination.Token(""), clienterror.Wrap(err)
 		}
 
-		for _, v := range res.Payload.DropRules {
-			if err := streamer(NewDropRule(v)); err != nil {
+		for _, v := range res.Payload.TraceBehaviors {
+			if err := streamer(NewTraceBehavior(v)); err != nil {
 				return pagination.Token(""), err
 			}
 			gotItems++
@@ -425,19 +425,19 @@ func ListDropRules(
 		pageMaxSize = pagination.CalculatePageSize(pagination.Calculation{
 			GotItems:    gotItems,
 			MaxItems:    opts.Limit,
-			MaxPageSize: len(res.Payload.DropRules),
+			MaxPageSize: len(res.Payload.TraceBehaviors),
 		})
 	}
 }
 
-func newDropRuleListCmd() *cobra.Command {
-	var listOptions DropRuleListOpts
+func newTraceBehaviorListCmd() *cobra.Command {
+	var listOptions TraceBehaviorListOpts
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags()
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   "Lists all DropRules and applies optional filters",
+		Short:   "Lists all TraceBehaviors and applies optional filters",
 		GroupID: groups.Commands.ID,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -457,8 +457,8 @@ func newDropRuleListCmd() *cobra.Command {
 				return err
 			}
 
-			streamer := output.NewWriteObjectStreamer[*DropRule](writer)
-			nextToken, err := ListDropRules(ctx, client, streamer, listOptions)
+			streamer := output.NewWriteObjectStreamer[*TraceBehavior](writer)
+			nextToken, err := ListTraceBehaviors(ctx, client, streamer, listOptions)
 			if err != nil {
 				return err
 			}
@@ -466,7 +466,7 @@ func newDropRuleListCmd() *cobra.Command {
 			if nextToken != "" {
 				nextPage := pagination.Result{
 					Kind:          pagination.ResultKind,
-					Message:       "There are additional dropRules. To view more, use the next page token or run the full command.",
+					Message:       "There are additional traceBehaviors. To view more, use the next page token or run the full command.",
 					NextPageToken: nextToken,
 					FullCommand: fmt.Sprintf("%s --page-token %q",
 						cli.BuildCommandString(cmd, []string{"page-token"}),
@@ -488,67 +488,100 @@ func newDropRuleListCmd() *cobra.Command {
 	return cmd
 }
 
-const DropRuleScaffoldYAML = `api_version: v1/config
-kind: DropRule
+const TraceBehaviorScaffoldYAML = `api_version: v1/config
+kind: TraceBehavior
 spec:
-    # Unique identifier of the DropRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the DropRule is created.
-    slug: <string>
-    # Required name of the DropRule. May be modified after the DropRule is created.
+    # Required name of the TraceBehavior. May be modified after the TraceBehavior is created.
     name: <string>
-    # Series that match this filter are dropped.
-    filters:
-        - # Name of the label to match.
-          name: <string>
-          # Glob value of the label to match.
-          value_glob: <string>
-    # Drops datapoints if datapoint values are NaN.
-    drop_nan_value: <true|false>
-    # No longer supported and cannot be used.
-    # Defines behavior for conditional drop policies.
-    conditional_rate_based_drop:
-        # Enables rate-based metric dropping.
+    # Unique identifier of the TraceBehavior. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceBehavior is created.
+    slug: <string>
+    description: <string>
+    # Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.
+    base_tail_sample_rate: <number>
+    # Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,
+    # but do not have a specific rule defined for their service.
+    base_head_sample_rate: <number>
+    error_sample_options:
+        # Sample rate for traces with errors.
+        sample_rate: <number>
+        # Whether or not to use these options.
         enabled: <true|false>
-        # Percentage of the licensed limit reached in order to activate the drop
-        # rule, between 0 and 100.
-        rate_limit_threshold: <number>
-        # Once activated, activated_drop_duration_secs defines how long the drop
-        # rule stays activated before rechecking against the rate_limit_threshold.
-        activated_drop_duration_secs: <integer>
-    mode: <ENABLED|DISABLED>
-    value_based_drop:
-        # Enables value-based metric dropping.
+        #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
+        #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.
+        sampling_type: <LOW_VALUE|HIGH_VALUE>
+    fast_sample_options:
+        # Duration in seconds under which traces are sampled
+        # according to the given sample rate.
+        max_duration_seconds: <number>
+        # Sample rate for traces under the given duration.
+        sample_rate: <number>
+        # Whether or not to use these options.
         enabled: <true|false>
-        # The target datapoint value at which to drop metrics.
-        target_drop_value: <number>
+        #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
+        #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.
+        sampling_type: <LOW_VALUE|HIGH_VALUE>
+    large_trace_sample_options:
+        # For N = number of spans in the trace, if N >= span_count_threshold, the trace is sampled according to the
+        # given sample rate.
+        span_count_threshold: <integer>
+        # Sample rate.
+        sample_rate: <number>
+        # Whether or not to use these options.
+        enabled: <true|false>
+        #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
+        #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.
+        sampling_type: <LOW_VALUE|HIGH_VALUE>
+    slow_sample_options:
+        # Duration in seconds over which traces are sampled
+        # according to the given sample rate.
+        min_duration_seconds: <number>
+        # Sample rate.
+        sample_rate: <number>
+        # Whether or not to use these options.
+        enabled: <true|false>
+        #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
+        #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.
+        sampling_type: <LOW_VALUE|HIGH_VALUE>
+    small_trace_sample_options:
+        # For N = number of spans in the trace, if N <= span_count_threshold, the trace is sampled according to the
+        # given sample rate.
+        span_count_threshold: <integer>
+        # Sample rate.
+        sample_rate: <number>
+        # Whether or not to use these options.
+        enabled: <true|false>
+        #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
+        #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.
+        sampling_type: <LOW_VALUE|HIGH_VALUE>
 `
 
-func newDropRuleScaffoldCmd() *cobra.Command {
+func newTraceBehaviorScaffoldCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "scaffold",
 		GroupID: groups.Commands.ID,
 		Short:   "Scaffolds a complete object with placeholder values",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Fprint(cmd.OutOrStdout(), DropRuleScaffoldYAML)
+			fmt.Fprint(cmd.OutOrStdout(), TraceBehaviorScaffoldYAML)
 		},
 	}
 	return cmd
 }
 
-func NewDropRuleCmd() *cobra.Command {
+func NewTraceBehaviorCmd() *cobra.Command {
 	root := &cobra.Command{
-		Use:     "drop-rules",
+		Use:     "trace-behaviors",
 		GroupID: groups.Config.ID,
-		Short:   "All commands for DropRules",
+		Short:   "All commands for TraceBehaviors",
 	}
 
 	root.AddGroup(groups.Commands)
 	root.AddCommand(
-		newDropRuleCreateCmd(),
-		newDropRuleReadCmd(),
-		newDropRuleUpdateCmd(),
-		newDropRuleDeleteCmd(),
-		newDropRuleListCmd(),
-		newDropRuleScaffoldCmd(),
+		newTraceBehaviorCreateCmd(),
+		newTraceBehaviorReadCmd(),
+		newTraceBehaviorUpdateCmd(),
+		newTraceBehaviorDeleteCmd(),
+		newTraceBehaviorListCmd(),
+		newTraceBehaviorScaffoldCmd(),
 	)
 	return root
 }

@@ -12,7 +12,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// DropRuleConditionalRateBasedDrop drop rule conditional rate based drop
+// DropRuleConditionalRateBasedDrop No longer supported and cannot be used.
+// Defines behavior for conditional drop policies.
 //
 // swagger:model DropRuleConditionalRateBasedDrop
 type DropRuleConditionalRateBasedDrop struct {

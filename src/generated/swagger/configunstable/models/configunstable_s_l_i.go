@@ -43,6 +43,9 @@ type ConfigunstableSLI struct {
 	// are provided on the top-level SLI so that queryful SLOs will receive them
 	// in `.GroupBy`.
 	CustomDimensionLabels []string `json:"custom_dimension_labels"`
+
+	// source service
+	SourceService *Configv1CollectionReference `json:"source_service,omitempty"`
 }
 
 // Validate validates this configunstable s l i
@@ -58,6 +61,10 @@ func (m *ConfigunstableSLI) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEndpointLatency(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSourceService(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -124,6 +131,25 @@ func (m *ConfigunstableSLI) validateEndpointLatency(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *ConfigunstableSLI) validateSourceService(formats strfmt.Registry) error {
+	if swag.IsZero(m.SourceService) { // not required
+		return nil
+	}
+
+	if m.SourceService != nil {
+		if err := m.SourceService.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("source_service")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("source_service")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configunstable s l i based on the context it is used
 func (m *ConfigunstableSLI) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -137,6 +163,10 @@ func (m *ConfigunstableSLI) ContextValidate(ctx context.Context, formats strfmt.
 	}
 
 	if err := m.contextValidateEndpointLatency(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSourceService(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -201,6 +231,27 @@ func (m *ConfigunstableSLI) contextValidateEndpointLatency(ctx context.Context, 
 				return ve.ValidateName("endpoint_latency")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("endpoint_latency")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableSLI) contextValidateSourceService(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SourceService != nil {
+
+		if swag.IsZero(m.SourceService) { // not required
+			return nil
+		}
+
+		if err := m.SourceService.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("source_service")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("source_service")
 			}
 			return err
 		}
