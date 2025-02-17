@@ -1,8 +1,7 @@
 # Releases
 
 ## Unreleased
-* Pre-release: Adds support for strict cardinality quotes to
-  `v1/config/ResourcePools`.
+* Pre-release: Adds support for pool PriorityThresholds in `v1/config/ResourcePools`
 
 ## v1.11.0
 
