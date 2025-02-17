@@ -32,8 +32,6 @@ type ClientService interface {
 
 	CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...ClientOption) (*CreateLinkTemplateOK, error)
 
-	CreateLogAllocationConfig(params *CreateLogAllocationConfigParams, opts ...ClientOption) (*CreateLogAllocationConfigOK, error)
-
 	CreateLogControlConfig(params *CreateLogControlConfigParams, opts ...ClientOption) (*CreateLogControlConfigOK, error)
 
 	CreateNoopEntity(params *CreateNoopEntityParams, opts ...ClientOption) (*CreateNoopEntityOK, error)
@@ -46,8 +44,6 @@ type ClientService interface {
 
 	CreateService(params *CreateServiceParams, opts ...ClientOption) (*CreateServiceOK, error)
 
-	CreateTraceBehavior(params *CreateTraceBehaviorParams, opts ...ClientOption) (*CreateTraceBehaviorOK, error)
-
 	CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*CreateTraceJaegerRemoteSamplingStrategyOK, error)
 
 	CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRulesParams, opts ...ClientOption) (*CreateTraceTailSamplingRulesOK, error)
@@ -57,8 +53,6 @@ type ClientService interface {
 	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error)
 
 	DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...ClientOption) (*DeleteLinkTemplateOK, error)
-
-	DeleteLogAllocationConfig(params *DeleteLogAllocationConfigParams, opts ...ClientOption) (*DeleteLogAllocationConfigOK, error)
 
 	DeleteLogControlConfig(params *DeleteLogControlConfigParams, opts ...ClientOption) (*DeleteLogControlConfigOK, error)
 
@@ -71,8 +65,6 @@ type ClientService interface {
 	DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error)
 
 	DeleteService(params *DeleteServiceParams, opts ...ClientOption) (*DeleteServiceOK, error)
-
-	DeleteTraceBehavior(params *DeleteTraceBehaviorParams, opts ...ClientOption) (*DeleteTraceBehaviorOK, error)
 
 	DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error)
 
@@ -92,15 +84,11 @@ type ClientService interface {
 
 	ListServices(params *ListServicesParams, opts ...ClientOption) (*ListServicesOK, error)
 
-	ListTraceBehaviors(params *ListTraceBehaviorsParams, opts ...ClientOption) (*ListTraceBehaviorsOK, error)
-
 	ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error)
 
 	ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error)
 
 	ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...ClientOption) (*ReadLinkTemplateOK, error)
-
-	ReadLogAllocationConfig(params *ReadLogAllocationConfigParams, opts ...ClientOption) (*ReadLogAllocationConfigOK, error)
 
 	ReadLogControlConfig(params *ReadLogControlConfigParams, opts ...ClientOption) (*ReadLogControlConfigOK, error)
 
@@ -114,8 +102,6 @@ type ClientService interface {
 
 	ReadService(params *ReadServiceParams, opts ...ClientOption) (*ReadServiceOK, error)
 
-	ReadTraceBehavior(params *ReadTraceBehaviorParams, opts ...ClientOption) (*ReadTraceBehaviorOK, error)
-
 	ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*ReadTraceJaegerRemoteSamplingStrategyOK, error)
 
 	ReadTraceTailSamplingRules(params *ReadTraceTailSamplingRulesParams, opts ...ClientOption) (*ReadTraceTailSamplingRulesOK, error)
@@ -128,8 +114,6 @@ type ClientService interface {
 
 	UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error)
 
-	UpdateLogAllocationConfig(params *UpdateLogAllocationConfigParams, opts ...ClientOption) (*UpdateLogAllocationConfigOK, error)
-
 	UpdateLogControlConfig(params *UpdateLogControlConfigParams, opts ...ClientOption) (*UpdateLogControlConfigOK, error)
 
 	UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...ClientOption) (*UpdateNoopEntityOK, error)
@@ -141,8 +125,6 @@ type ClientService interface {
 	UpdateSavedTraceSearch(params *UpdateSavedTraceSearchParams, opts ...ClientOption) (*UpdateSavedTraceSearchOK, error)
 
 	UpdateService(params *UpdateServiceParams, opts ...ClientOption) (*UpdateServiceOK, error)
-
-	UpdateTraceBehavior(params *UpdateTraceBehaviorParams, opts ...ClientOption) (*UpdateTraceBehaviorOK, error)
 
 	UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*UpdateTraceJaegerRemoteSamplingStrategyOK, error)
 
@@ -224,43 +206,6 @@ func (a *Client) CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...Cl
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateLinkTemplateDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-CreateLogAllocationConfig create log allocation config API
-*/
-func (a *Client) CreateLogAllocationConfig(params *CreateLogAllocationConfigParams, opts ...ClientOption) (*CreateLogAllocationConfigOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateLogAllocationConfigParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateLogAllocationConfig",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/log-allocation-config",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateLogAllocationConfigReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateLogAllocationConfigOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateLogAllocationConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -490,43 +435,6 @@ func (a *Client) CreateService(params *CreateServiceParams, opts ...ClientOption
 }
 
 /*
-CreateTraceBehavior create trace behavior API
-*/
-func (a *Client) CreateTraceBehavior(params *CreateTraceBehaviorParams, opts ...ClientOption) (*CreateTraceBehaviorOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateTraceBehaviorParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateTraceBehavior",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/trace-behaviors",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateTraceBehaviorReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateTraceBehaviorOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateTraceBehaviorDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 CreateTraceJaegerRemoteSamplingStrategy create trace jaeger remote sampling strategy API
 */
 func (a *Client) CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*CreateTraceJaegerRemoteSamplingStrategyOK, error) {
@@ -708,43 +616,6 @@ func (a *Client) DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...Cl
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteLinkTemplateDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-DeleteLogAllocationConfig delete log allocation config API
-*/
-func (a *Client) DeleteLogAllocationConfig(params *DeleteLogAllocationConfigParams, opts ...ClientOption) (*DeleteLogAllocationConfigOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteLogAllocationConfigParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteLogAllocationConfig",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/log-allocation-config",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteLogAllocationConfigReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteLogAllocationConfigOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteLogAllocationConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -967,43 +838,6 @@ func (a *Client) DeleteService(params *DeleteServiceParams, opts ...ClientOption
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteServiceDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-DeleteTraceBehavior delete trace behavior API
-*/
-func (a *Client) DeleteTraceBehavior(params *DeleteTraceBehaviorParams, opts ...ClientOption) (*DeleteTraceBehaviorOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteTraceBehaviorParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteTraceBehavior",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/trace-behaviors/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteTraceBehaviorReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteTraceBehaviorOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteTraceBehaviorDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1341,43 +1175,6 @@ func (a *Client) ListServices(params *ListServicesParams, opts ...ClientOption) 
 }
 
 /*
-ListTraceBehaviors list trace behaviors API
-*/
-func (a *Client) ListTraceBehaviors(params *ListTraceBehaviorsParams, opts ...ClientOption) (*ListTraceBehaviorsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListTraceBehaviorsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ListTraceBehaviors",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/trace-behaviors",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListTraceBehaviorsReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListTraceBehaviorsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListTraceBehaviorsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ListTraceJaegerRemoteSamplingStrategies list trace jaeger remote sampling strategies API
 */
 func (a *Client) ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error) {
@@ -1485,43 +1282,6 @@ func (a *Client) ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadLinkTemplateDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ReadLogAllocationConfig read log allocation config API
-*/
-func (a *Client) ReadLogAllocationConfig(params *ReadLogAllocationConfigParams, opts ...ClientOption) (*ReadLogAllocationConfigOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadLogAllocationConfigParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadLogAllocationConfig",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/log-allocation-config",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadLogAllocationConfigReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadLogAllocationConfigOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadLogAllocationConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1744,43 +1504,6 @@ func (a *Client) ReadService(params *ReadServiceParams, opts ...ClientOption) (*
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadServiceDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ReadTraceBehavior read trace behavior API
-*/
-func (a *Client) ReadTraceBehavior(params *ReadTraceBehaviorParams, opts ...ClientOption) (*ReadTraceBehaviorOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadTraceBehaviorParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadTraceBehavior",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/trace-behaviors/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadTraceBehaviorReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadTraceBehaviorOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadTraceBehaviorDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2010,43 +1733,6 @@ func (a *Client) UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...Cl
 }
 
 /*
-UpdateLogAllocationConfig update log allocation config API
-*/
-func (a *Client) UpdateLogAllocationConfig(params *UpdateLogAllocationConfigParams, opts ...ClientOption) (*UpdateLogAllocationConfigOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateLogAllocationConfigParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateLogAllocationConfig",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/log-allocation-config",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateLogAllocationConfigReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateLogAllocationConfigOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateLogAllocationConfigDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 UpdateLogControlConfig update log control config API
 */
 func (a *Client) UpdateLogControlConfig(params *UpdateLogControlConfigParams, opts ...ClientOption) (*UpdateLogControlConfigOK, error) {
@@ -2265,43 +1951,6 @@ func (a *Client) UpdateService(params *UpdateServiceParams, opts ...ClientOption
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateServiceDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-UpdateTraceBehavior update trace behavior API
-*/
-func (a *Client) UpdateTraceBehavior(params *UpdateTraceBehaviorParams, opts ...ClientOption) (*UpdateTraceBehaviorOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateTraceBehaviorParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateTraceBehavior",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/trace-behaviors/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateTraceBehaviorReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateTraceBehaviorOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateTraceBehaviorDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

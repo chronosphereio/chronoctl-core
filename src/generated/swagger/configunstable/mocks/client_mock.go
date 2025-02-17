@@ -75,26 +75,6 @@ func (mr *MockClientServiceMockRecorder) CreateLinkTemplate(params interface{}, 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLinkTemplate", reflect.TypeOf((*MockClientService)(nil).CreateLinkTemplate), varargs...)
 }
 
-// CreateLogAllocationConfig mocks base method.
-func (m *MockClientService) CreateLogAllocationConfig(params *operations.CreateLogAllocationConfigParams, opts ...operations.ClientOption) (*operations.CreateLogAllocationConfigOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateLogAllocationConfig", varargs...)
-	ret0, _ := ret[0].(*operations.CreateLogAllocationConfigOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateLogAllocationConfig indicates an expected call of CreateLogAllocationConfig.
-func (mr *MockClientServiceMockRecorder) CreateLogAllocationConfig(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLogAllocationConfig", reflect.TypeOf((*MockClientService)(nil).CreateLogAllocationConfig), varargs...)
-}
-
 // CreateLogControlConfig mocks base method.
 func (m *MockClientService) CreateLogControlConfig(params *operations.CreateLogControlConfigParams, opts ...operations.ClientOption) (*operations.CreateLogControlConfigOK, error) {
 	m.ctrl.T.Helper()
@@ -215,26 +195,6 @@ func (mr *MockClientServiceMockRecorder) CreateService(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateService", reflect.TypeOf((*MockClientService)(nil).CreateService), varargs...)
 }
 
-// CreateTraceBehavior mocks base method.
-func (m *MockClientService) CreateTraceBehavior(params *operations.CreateTraceBehaviorParams, opts ...operations.ClientOption) (*operations.CreateTraceBehaviorOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateTraceBehavior", varargs...)
-	ret0, _ := ret[0].(*operations.CreateTraceBehaviorOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateTraceBehavior indicates an expected call of CreateTraceBehavior.
-func (mr *MockClientServiceMockRecorder) CreateTraceBehavior(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceBehavior", reflect.TypeOf((*MockClientService)(nil).CreateTraceBehavior), varargs...)
-}
-
 // CreateTraceJaegerRemoteSamplingStrategy mocks base method.
 func (m *MockClientService) CreateTraceJaegerRemoteSamplingStrategy(params *operations.CreateTraceJaegerRemoteSamplingStrategyParams, opts ...operations.ClientOption) (*operations.CreateTraceJaegerRemoteSamplingStrategyOK, error) {
 	m.ctrl.T.Helper()
@@ -333,26 +293,6 @@ func (mr *MockClientServiceMockRecorder) DeleteLinkTemplate(params interface{}, 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLinkTemplate", reflect.TypeOf((*MockClientService)(nil).DeleteLinkTemplate), varargs...)
-}
-
-// DeleteLogAllocationConfig mocks base method.
-func (m *MockClientService) DeleteLogAllocationConfig(params *operations.DeleteLogAllocationConfigParams, opts ...operations.ClientOption) (*operations.DeleteLogAllocationConfigOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteLogAllocationConfig", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteLogAllocationConfigOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteLogAllocationConfig indicates an expected call of DeleteLogAllocationConfig.
-func (mr *MockClientServiceMockRecorder) DeleteLogAllocationConfig(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLogAllocationConfig", reflect.TypeOf((*MockClientService)(nil).DeleteLogAllocationConfig), varargs...)
 }
 
 // DeleteLogControlConfig mocks base method.
@@ -473,26 +413,6 @@ func (mr *MockClientServiceMockRecorder) DeleteService(params interface{}, opts 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteService", reflect.TypeOf((*MockClientService)(nil).DeleteService), varargs...)
-}
-
-// DeleteTraceBehavior mocks base method.
-func (m *MockClientService) DeleteTraceBehavior(params *operations.DeleteTraceBehaviorParams, opts ...operations.ClientOption) (*operations.DeleteTraceBehaviorOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteTraceBehavior", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteTraceBehaviorOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteTraceBehavior indicates an expected call of DeleteTraceBehavior.
-func (mr *MockClientServiceMockRecorder) DeleteTraceBehavior(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceBehavior", reflect.TypeOf((*MockClientService)(nil).DeleteTraceBehavior), varargs...)
 }
 
 // DeleteTraceJaegerRemoteSamplingStrategy mocks base method.
@@ -675,26 +595,6 @@ func (mr *MockClientServiceMockRecorder) ListServices(params interface{}, opts .
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListServices", reflect.TypeOf((*MockClientService)(nil).ListServices), varargs...)
 }
 
-// ListTraceBehaviors mocks base method.
-func (m *MockClientService) ListTraceBehaviors(params *operations.ListTraceBehaviorsParams, opts ...operations.ClientOption) (*operations.ListTraceBehaviorsOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ListTraceBehaviors", varargs...)
-	ret0, _ := ret[0].(*operations.ListTraceBehaviorsOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListTraceBehaviors indicates an expected call of ListTraceBehaviors.
-func (mr *MockClientServiceMockRecorder) ListTraceBehaviors(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTraceBehaviors", reflect.TypeOf((*MockClientService)(nil).ListTraceBehaviors), varargs...)
-}
-
 // ListTraceJaegerRemoteSamplingStrategies mocks base method.
 func (m *MockClientService) ListTraceJaegerRemoteSamplingStrategies(params *operations.ListTraceJaegerRemoteSamplingStrategiesParams, opts ...operations.ClientOption) (*operations.ListTraceJaegerRemoteSamplingStrategiesOK, error) {
 	m.ctrl.T.Helper()
@@ -753,26 +653,6 @@ func (mr *MockClientServiceMockRecorder) ReadLinkTemplate(params interface{}, op
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLinkTemplate", reflect.TypeOf((*MockClientService)(nil).ReadLinkTemplate), varargs...)
-}
-
-// ReadLogAllocationConfig mocks base method.
-func (m *MockClientService) ReadLogAllocationConfig(params *operations.ReadLogAllocationConfigParams, opts ...operations.ClientOption) (*operations.ReadLogAllocationConfigOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadLogAllocationConfig", varargs...)
-	ret0, _ := ret[0].(*operations.ReadLogAllocationConfigOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadLogAllocationConfig indicates an expected call of ReadLogAllocationConfig.
-func (mr *MockClientServiceMockRecorder) ReadLogAllocationConfig(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLogAllocationConfig", reflect.TypeOf((*MockClientService)(nil).ReadLogAllocationConfig), varargs...)
 }
 
 // ReadLogControlConfig mocks base method.
@@ -893,26 +773,6 @@ func (mr *MockClientServiceMockRecorder) ReadService(params interface{}, opts ..
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadService", reflect.TypeOf((*MockClientService)(nil).ReadService), varargs...)
-}
-
-// ReadTraceBehavior mocks base method.
-func (m *MockClientService) ReadTraceBehavior(params *operations.ReadTraceBehaviorParams, opts ...operations.ClientOption) (*operations.ReadTraceBehaviorOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadTraceBehavior", varargs...)
-	ret0, _ := ret[0].(*operations.ReadTraceBehaviorOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadTraceBehavior indicates an expected call of ReadTraceBehavior.
-func (mr *MockClientServiceMockRecorder) ReadTraceBehavior(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadTraceBehavior", reflect.TypeOf((*MockClientService)(nil).ReadTraceBehavior), varargs...)
 }
 
 // ReadTraceJaegerRemoteSamplingStrategy mocks base method.
@@ -1047,26 +907,6 @@ func (mr *MockClientServiceMockRecorder) UpdateLinkTemplate(params interface{}, 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLinkTemplate", reflect.TypeOf((*MockClientService)(nil).UpdateLinkTemplate), varargs...)
 }
 
-// UpdateLogAllocationConfig mocks base method.
-func (m *MockClientService) UpdateLogAllocationConfig(params *operations.UpdateLogAllocationConfigParams, opts ...operations.ClientOption) (*operations.UpdateLogAllocationConfigOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateLogAllocationConfig", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateLogAllocationConfigOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateLogAllocationConfig indicates an expected call of UpdateLogAllocationConfig.
-func (mr *MockClientServiceMockRecorder) UpdateLogAllocationConfig(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLogAllocationConfig", reflect.TypeOf((*MockClientService)(nil).UpdateLogAllocationConfig), varargs...)
-}
-
 // UpdateLogControlConfig mocks base method.
 func (m *MockClientService) UpdateLogControlConfig(params *operations.UpdateLogControlConfigParams, opts ...operations.ClientOption) (*operations.UpdateLogControlConfigOK, error) {
 	m.ctrl.T.Helper()
@@ -1185,26 +1025,6 @@ func (mr *MockClientServiceMockRecorder) UpdateService(params interface{}, opts 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateService", reflect.TypeOf((*MockClientService)(nil).UpdateService), varargs...)
-}
-
-// UpdateTraceBehavior mocks base method.
-func (m *MockClientService) UpdateTraceBehavior(params *operations.UpdateTraceBehaviorParams, opts ...operations.ClientOption) (*operations.UpdateTraceBehaviorOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateTraceBehavior", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateTraceBehaviorOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateTraceBehavior indicates an expected call of UpdateTraceBehavior.
-func (mr *MockClientServiceMockRecorder) UpdateTraceBehavior(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTraceBehavior", reflect.TypeOf((*MockClientService)(nil).UpdateTraceBehavior), varargs...)
 }
 
 // UpdateTraceJaegerRemoteSamplingStrategy mocks base method.

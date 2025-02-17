@@ -605,6 +605,10 @@ spec:
                   # Prometheus label value for the matcher
                   value: <string>
                   type: <MatchEqual|MatchRegexp|MatchNotEqual|MatchNotRegexp>
+        source_service:
+            slug: <string>
+            # Type values must match entitiespb.Collection.CollectionType.
+            type: <SIMPLE|SERVICE>
 `
 
 func newSLOScaffoldCmd() *cobra.Command {

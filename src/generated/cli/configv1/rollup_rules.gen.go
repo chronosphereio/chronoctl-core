@@ -501,28 +501,61 @@ spec:
     name: <string>
     # Required slug of the bucket the RollupRule belongs to.
     bucket_slug: <string>
-    # Filters that determine to which metrics to apply the rule.
+    # Filters incoming metrics by label. If multiple label filters are specified, an
+    # incoming metric must match every label filter to match the rule. Label values
+    # support glob patterns, including matching multiple patterns with an 'OR', such
+    # as 'service:{svc1,svc2}'. These special filters are available for matching
+    # metrics by non-label request metadata:
+    #  * '__metric_type__': Matches the incoming metric's [Observability Platform
+    #    metric
+    #    type](https://docs.chronosphere.io/control/shaping/types#observability-platform-types).
+    #    This is the recommended method for filtering on metric type. Valid values:
+    #    'cumulative_counter', 'cumulative_exponential_histogram', 'delta_counter',
+    #    'delta_exponential_histogram', 'gauge', 'measurement'.
+    #  * '__metric_source__': Matches the incoming metric's [source
+    #    format](https://docs.chronosphere.io/control/shaping/types#supported-formats).
+    #    Valid values: 'carbon', 'chrono_gcp', 'dogstatsd', 'open_metrics',
+    #    'open_telemetry', 'prometheus', 'signalfx', 'statsd', 'wavefront'.
+    #  * '__m3_prom_type__': When ingesting with Prometheus, matches the incoming
+    #    metric's [Prometheus metric
+    #    type](https://docs.chronosphere.io/control/shaping/types#prometheus). Valid
+    #    values: 'counter', 'gauge', 'histogram', 'gauge_histogram', 'summary',
+    #    'info', 'state_set', 'quantile'.
+    #  * '__otel_type__': When ingesting with OpenTelemetry, matches on the incoming
+    #    metric's [OpenTelemetry metric type](https://docs.chronosphere.io/control/shaping/types#opentelemetry).
+    #    Valid values: 'sum', 'monotonic_sum', 'gauge', 'histogram', 'exp_histogram',
+    #    'summary'.
+    # For example, the following filter matches any cumulative counter metric with a
+    # 'service=gateway' label whose metric name starts with 'http_requests_':
+    # '''
+    # __metric_type__:cumulative_counter service:gateway __name__:http_requests_*
+    # '''
     filters:
         - # Name of the label to match.
           name: <string>
           # Glob value of the label to match.
           value_glob: <string>
-    # Name of the new metric created as a result of the rollup.
+    # This field is optional for Graphite rollup rules.
     metric_name: <string>
-    # Interval between aggregated data points, equivalent to the resolution
-    # field in storage policy. If set, then the storage_policy field can't be
-    # set.
+    # The distance in time between aggregated data points. Intervals are based on your
+    # [retention policy](https://docs.chronosphere.io/administer/licensing#retention-policies).
+    # Use this optional field to set a custom interval.
+    # This field was known as 'storage_policies' in version
+    # 0.286.0-2023-01-06-release.1 and earlier.
     interval: <string>
-    # Enables expansive label matching behavior for the provided filters and
-    # label_policy.keep or graphite_label_policy.replace (if set). By default
-    # (expansive_match=false), a series matches and aggregates only if each label
-    # defined by filters and label_policy.keep or graphite_label_policy.replace
-    # (respectively) exist in said series. Setting expansive_match=true removes
-    # this restriction.
+    # A series matches and aggregates only if each label defined by filters and
+    # 'label_policy.keep' or 'graphite_label_policy.replace' (respectively) exist in
+    # the series. Setting 'expansive_match=true' removes this restriction. Default:
+    # 'expansive_match=false'.
+
+    # If 'false', a series matches and aggregates only if each label defined by the
+    # provided 'filters' and the 'label_policy.keep' or
+    # 'graphite_label_policy.replace' settings exist in the series.
     expansive_match: <true|false>
     # Defines whether to add a '__rollup_type__' label in the new metric.
     add_metric_type_label: <true|false>
-    # Defines whether to automatically generate drop rules for this rollup.
+    # Defines whether to automatically generate drop rules for this rollup rule.
+    # Set to 'true' to remove raw metrics that match this rollup rule. Default: 'false'.
     drop_raw: <true|false>
     aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES|HISTOGRAM>
     graphite_label_policy:
