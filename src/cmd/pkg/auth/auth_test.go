@@ -257,10 +257,7 @@ func TestAuthLogin(t *testing.T) {
 			tmpDir := t.TempDir()
 			store := token.NewFileStore(tmpDir)
 			if tt.defaultOrg != "" {
-				require.NoError(t, store.Put(defaultOrgPath, token.Token{
-					Value:  []byte(tt.defaultOrg),
-					Expiry: time.Now().Add(time.Hour * 24 * 365),
-				}))
+				require.NoError(t, store.SetDefaultOrg(tt.defaultOrg))
 			}
 
 			c := subcommand{store: store}
@@ -292,10 +289,10 @@ func TestAuthLogin(t *testing.T) {
 			require.Equal(t, tt.wantSessionID, string(sessionToken.Value))
 
 			// Verify that the correct org is set as default if applicable
-			defaultOrg, err := store.Get(defaultOrgPath)
+			defaultOrg, err := store.GetDefaultOrg()
 			if tt.wantDefaultTenant {
 				require.NoError(t, err)
-				require.Equal(t, tenantName, string(defaultOrg.Value))
+				require.Equal(t, tenantName, defaultOrg)
 			} else {
 				require.ErrorIs(t, err, token.ErrNotExist)
 			}
@@ -334,10 +331,7 @@ func TestAuthSetDefaultOrg(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			store := token.NewFileStore(t.TempDir())
 			if tt.existingDefaultOrg != "" {
-				require.NoError(t, store.Put(defaultOrgPath, token.Token{
-					Value:  []byte(tt.existingDefaultOrg),
-					Expiry: time.Now().Add(time.Hour * 24 * 365),
-				}))
+				require.NoError(t, store.SetDefaultOrg(tt.existingDefaultOrg))
 			}
 
 			c := subcommand{store: store}
@@ -350,9 +344,9 @@ func TestAuthSetDefaultOrg(t *testing.T) {
 			}
 			require.NoError(t, err)
 
-			defaultOrg, err := store.Get(defaultOrgPath)
+			defaultOrg, err := store.GetDefaultOrg()
 			require.NoError(t, err)
-			require.Equal(t, tt.args[0], string(defaultOrg.Value))
+			require.Equal(t, tt.args[0], defaultOrg)
 		})
 	}
 }
@@ -452,7 +446,7 @@ func TestAuthList(t *testing.T) {
 		{
 			name: "tokens with default",
 			tokens: map[string]token.Token{
-				defaultOrgPath: {
+				"default-org": {
 					Value:  []byte(tenantName),
 					Expiry: time.Now().Add(time.Hour),
 				},
@@ -524,7 +518,7 @@ func TestAuthList(t *testing.T) {
 		{
 			name: "expired default",
 			tokens: map[string]token.Token{
-				defaultOrgPath: {
+				"default-org": {
 					Value:  []byte(tenantName),
 					Expiry: time.Now().Add(-time.Hour),
 				},
@@ -549,7 +543,7 @@ func TestAuthList(t *testing.T) {
 		{
 			name: "default set but no tokens",
 			tokens: map[string]token.Token{
-				defaultOrgPath: {
+				"default-org": {
 					Value:  []byte(tenantName),
 					Expiry: time.Now().Add(time.Hour),
 				},

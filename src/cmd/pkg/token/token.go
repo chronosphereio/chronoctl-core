@@ -28,7 +28,8 @@ const (
 	// Directory that's user read-write-execute, but read-execute for all others.
 	dirRWPublic os.FileMode = 0755
 	// File that's user read-write, but no group/world perms.
-	fileRWPrivate os.FileMode = 0600
+	fileRWPrivate  os.FileMode = 0600
+	defaultOrgPath             = "default-org"
 )
 
 var (
@@ -60,6 +61,16 @@ func NewFileStore(root string) *Store {
 	return &Store{
 		root: root,
 	}
+}
+
+// NewChronoctlStore creates a new token store in the user's local cache directory to store short-lived chronoctl credentials
+func NewChronoctlStore() (*Store, error) {
+	cacheDir, err := os.UserCacheDir()
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	chronoctlCacheDir := filepath.Join(cacheDir, "chronoctl")
+	return NewFileStore(chronoctlCacheDir), nil
 }
 
 // Get retrieves a token from the local file system.
@@ -164,10 +175,31 @@ func (s *Store) List() ([]Entry, error) {
 		if err != nil && !expired {
 			continue
 		}
+		// Don't list the default-org token, as it doesn't contain a session id
+		if file.Name() == defaultOrgPath {
+			continue
+		}
 		entries = append(entries, Entry{
 			Name:  file.Name(),
 			Valid: !expired,
 		})
 	}
 	return entries, nil
+}
+
+// GetDefaultOrg returns the default org within the store
+func (s *Store) GetDefaultOrg() (string, error) {
+	org, err := s.Get(defaultOrgPath)
+	if err != nil {
+		return "", errors.WithStack(err)
+	}
+	return string(org.Value), nil
+}
+
+func (s *Store) SetDefaultOrg(org string) error {
+	return errors.WithStack(s.Put(defaultOrgPath, Token{
+		Value: []byte(org),
+		// Expire the default org if not updated for 1 year
+		Expiry: time.Now().Add(time.Hour * 24 * 365),
+	}))
 }

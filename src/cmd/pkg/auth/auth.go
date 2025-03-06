@@ -17,9 +17,6 @@ package auth
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
-	"time"
 
 	"github.com/pkg/browser"
 	"github.com/pkg/errors"
@@ -33,19 +30,7 @@ import (
 
 const (
 	defaultLoginPath = "/login/cli"
-	defaultOrgPath   = "default-org"
 )
-
-// NewChronoctlStore creates a new token store in the user's local cache directory to store short-lived chronoctl credentials
-func NewChronoctlStore() (*token.Store, error) {
-	cacheDir, err := os.UserCacheDir()
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-	chronoctlCacheDir := filepath.Join(cacheDir, "chronoctl")
-	store := token.NewFileStore(chronoctlCacheDir)
-	return store, nil
-}
 
 // NewCommand returns a command for Chronosphere authentication
 func NewCommand() *cobra.Command {
@@ -74,7 +59,7 @@ func (c *subcommand) getStore() (*token.Store, error) {
 	if c.store != nil {
 		return c.store, nil
 	}
-	store, err := NewChronoctlStore()
+	store, err := token.NewChronoctlStore()
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -132,7 +117,7 @@ func (c *subcommand) newSetDefaultOrgCmd() *cobra.Command {
 			if err != nil {
 				return errors.WithStack(err)
 			}
-			return setDefaultOrg(store, args[0])
+			return store.SetDefaultOrg(args[0])
 		},
 	}
 	return cmd
@@ -182,16 +167,12 @@ func (c *subcommand) newListCmd() *cobra.Command {
 			if err != nil {
 				return errors.WithStack(err)
 			}
-			defaultOrg, err := GetDefaultOrg(store)
+			defaultOrg, err := store.GetDefaultOrg()
 			if err != nil {
 				// Proceed to list orgs even if we fail to get the default
 				defaultOrg = ""
 			}
 			for _, org := range orgs {
-				// Don't list the default-org token, as it doesn't contain a session id
-				if org.Name == defaultOrgPath {
-					continue
-				}
 				e := listEntry{
 					Organization: org.Name,
 					Valid:        org.Valid,
@@ -206,21 +187,4 @@ func (c *subcommand) newListCmd() *cobra.Command {
 	}
 	outputFlags.AddFlags(cmd)
 	return cmd
-}
-
-func setDefaultOrg(store *token.Store, org string) error {
-	return errors.WithStack(store.Put(defaultOrgPath, token.Token{
-		Value: []byte(org),
-		// Expire the default org if not updated for 1 year
-		Expiry: time.Now().Add(time.Hour * 24 * 365),
-	}))
-}
-
-// GetDefaultOrg returns the default org within the store
-func GetDefaultOrg(store *token.Store) (string, error) {
-	org, err := store.Get(defaultOrgPath)
-	if err != nil {
-		return "", errors.WithStack(err)
-	}
-	return string(org.Value), nil
 }

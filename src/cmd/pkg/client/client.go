@@ -28,7 +28,6 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/spf13/cobra"
 
-	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/auth"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/token"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/transport"
@@ -240,7 +239,7 @@ func (f *Flags) checkDefaultOrg() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defaultOrg, err := auth.GetDefaultOrg(store)
+	defaultOrg, err := store.GetDefaultOrg()
 	if err != nil {
 		return "", fmt.Errorf("unable to get default organization: %v", err)
 	}
@@ -251,7 +250,7 @@ func (f *Flags) getStore() (*token.Store, error) {
 	if f.TokenStoreDir != "" {
 		return token.NewFileStore(f.TokenStoreDir), nil
 	}
-	store, err := auth.NewChronoctlStore()
+	store, err := token.NewChronoctlStore()
 	if err != nil {
 		return nil, fmt.Errorf("unable to get chronoctl store: %v", err)
 	}
