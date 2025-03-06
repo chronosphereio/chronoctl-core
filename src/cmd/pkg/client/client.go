@@ -19,6 +19,8 @@ package client
 import (
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
 	"net/url"
 	"os"
 	"strings"
@@ -137,6 +139,24 @@ func (f *Flags) Transport(component transport.Component, basePath string) (*http
 	}
 
 	return transport, nil
+}
+
+// NewRequest decorates stdlib http.NewRequest with the API url and auth headers.
+func (f *Flags) NewRequest(method, basePath string, body io.Reader) (*http.Request, error) {
+	apiURL, err := f.getAPIURL(basePath)
+	if err != nil {
+		return nil, err
+	}
+	apiToken, err := f.getAPIToken(apiURL)
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest(method, apiURL, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("API-Token", apiToken)
+	return req, nil
 }
 
 // AddFlags adds client flags to a Cobra command.

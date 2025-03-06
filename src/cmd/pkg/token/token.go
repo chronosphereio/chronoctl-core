@@ -196,6 +196,7 @@ func (s *Store) GetDefaultOrg() (string, error) {
 	return string(org.Value), nil
 }
 
+// SetDefaultOrg sets the token for the default org
 func (s *Store) SetDefaultOrg(org string) error {
 	return errors.WithStack(s.Put(defaultOrgPath, Token{
 		Value: []byte(org),

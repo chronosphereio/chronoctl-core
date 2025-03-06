@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"regexp"
 	"strings"
@@ -576,4 +577,77 @@ func TestAuthList(t *testing.T) {
 			require.ElementsMatch(t, tt.wantEntries, gotEntries)
 		})
 	}
+}
+
+func TestAuthWhoAmI(t *testing.T) {
+	validToken := "valid-token"
+	tests := []struct {
+		name        string
+		tokenArg    string
+		tokenEnvVar string
+		wantUser    string
+		wantErr     string
+	}{
+		{
+			name:        "success, command line arg",
+			tokenEnvVar: validToken,
+			wantUser:    "john.doe@chronosphere.io\n",
+		},
+		{
+			name:     "success, env var",
+			tokenArg: validToken,
+			wantUser: "john.doe@chronosphere.io\n",
+		},
+		{
+			name:        "invalid token",
+			tokenEnvVar: "invalid-token",
+			wantErr:     "401: Unauthenticated",
+		},
+		{
+			name:        "success, command line arg overrides env var",
+			tokenArg:    validToken,
+			tokenEnvVar: "invalid-token",
+			wantUser:    "john.doe@chronosphere.io",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				tok := r.Header.Get("API-Token")
+				if tok != validToken {
+					w.WriteHeader(http.StatusUnauthorized)
+					_, err := w.Write([]byte("Unauthenticated"))
+					require.NoError(t, err)
+					return
+				}
+				w.WriteHeader(http.StatusOK)
+				err := json.NewEncoder(w).Encode(whoAmIResponse{Email: tt.wantUser})
+				require.NoError(t, err)
+			}))
+			defer ts.Close()
+
+			store := token.NewFileStore(t.TempDir())
+			c := subcommand{store: store}
+			cmd := c.newWhoAmICmd()
+			require.NoError(t, cmd.Flags().Set("insecure-skip-verify", "true"))
+			require.NoError(t, cmd.Flags().Set("api-url", ts.URL))
+			if tt.tokenArg != "" {
+				require.NoError(t, cmd.Flags().Set("api-token", tt.tokenArg))
+			}
+			if tt.tokenEnvVar != "" {
+				t.Setenv(env.ChronosphereAPITokenKey, tt.tokenEnvVar)
+			}
+			stdout := &bytes.Buffer{}
+			cmd.SetOut(stdout)
+
+			err := cmd.Execute()
+			if tt.wantErr != "" {
+				require.EqualError(t, err, tt.wantErr)
+				return
+			}
+			require.NoError(t, err)
+			require.Equal(t, tt.wantUser+"\n", stdout.String())
+		})
+	}
+
 }

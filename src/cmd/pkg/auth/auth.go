@@ -16,12 +16,16 @@
 package auth
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/pkg/browser"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/client"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/output"
@@ -46,6 +50,7 @@ func NewCommand() *cobra.Command {
 		c.newSetDefaultOrgCmd(),
 		c.newPrintAccessTokenCmd(),
 		c.newListCmd(),
+		c.newWhoAmICmd(),
 	)
 	return root
 }
@@ -186,5 +191,46 @@ func (c *subcommand) newListCmd() *cobra.Command {
 		},
 	}
 	outputFlags.AddFlags(cmd)
+	return cmd
+}
+
+type whoAmIResponse struct {
+	Email string `json:"email"`
+}
+
+func (c *subcommand) newWhoAmICmd() *cobra.Command {
+	authFlags := client.NewClientFlags()
+	cmd := &cobra.Command{
+		Use:     "whoami",
+		GroupID: groups.Commands.ID,
+		Short:   "Print the currently authenticated user.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			req, err := authFlags.NewRequest(http.MethodGet, "/auth/whoami", nil /* body */)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			client := http.Client{}
+			resp, err := client.Do(req)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			defer resp.Body.Close()
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			if resp.StatusCode != http.StatusOK {
+				return errors.Errorf("%d: %s", resp.StatusCode, string(body))
+			}
+			var whoAmI whoAmIResponse
+			err = json.Unmarshal(body, &whoAmI)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			_, err = fmt.Fprintln(cmd.OutOrStdout(), whoAmI.Email)
+			return errors.WithStack(err)
+		},
+	}
+	authFlags.AddFlags(cmd)
 	return cmd
 }
