@@ -19,6 +19,8 @@ package client
 import (
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
 	"net/url"
 	"os"
 	"strings"
@@ -28,7 +30,6 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/spf13/cobra"
 
-	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/auth"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/token"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/transport"
@@ -140,6 +141,24 @@ func (f *Flags) Transport(component transport.Component, basePath string) (*http
 	return transport, nil
 }
 
+// NewRequest decorates stdlib http.NewRequest with the API url and auth headers.
+func (f *Flags) NewRequest(method, basePath string, body io.Reader) (*http.Request, error) {
+	apiURL, err := f.getAPIURL(basePath)
+	if err != nil {
+		return nil, err
+	}
+	apiToken, err := f.getAPIToken(apiURL)
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest(method, apiURL, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("API-Token", apiToken)
+	return req, nil
+}
+
 // AddFlags adds client flags to a Cobra command.
 func (f *Flags) AddFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVar(&f.APIToken, "api-token", "", "The client API token used to authenticate to user. Mutally exclusive with --api-token-filename. If both --api-token and --api-token-filename are unset, the "+env.ChronosphereAPITokenKey+" environment variable is used.")
@@ -240,7 +259,7 @@ func (f *Flags) checkDefaultOrg() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defaultOrg, err := auth.GetDefaultOrg(store)
+	defaultOrg, err := store.GetDefaultOrg()
 	if err != nil {
 		return "", fmt.Errorf("unable to get default organization: %v", err)
 	}
@@ -251,7 +270,7 @@ func (f *Flags) getStore() (*token.Store, error) {
 	if f.TokenStoreDir != "" {
 		return token.NewFileStore(f.TokenStoreDir), nil
 	}
-	store, err := auth.NewChronoctlStore()
+	store, err := token.NewChronoctlStore()
 	if err != nil {
 		return nil, fmt.Errorf("unable to get chronoctl store: %v", err)
 	}

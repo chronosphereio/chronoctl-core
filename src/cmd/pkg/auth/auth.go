@@ -16,15 +16,16 @@
 package auth
 
 import (
+	"encoding/json"
 	"fmt"
-	"os"
-	"path/filepath"
-	"time"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/pkg/browser"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/client"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/env"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/output"
@@ -33,19 +34,7 @@ import (
 
 const (
 	defaultLoginPath = "/login/cli"
-	defaultOrgPath   = "default-org"
 )
-
-// NewChronoctlStore creates a new token store in the user's local cache directory to store short-lived chronoctl credentials
-func NewChronoctlStore() (*token.Store, error) {
-	cacheDir, err := os.UserCacheDir()
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-	chronoctlCacheDir := filepath.Join(cacheDir, "chronoctl")
-	store := token.NewFileStore(chronoctlCacheDir)
-	return store, nil
-}
 
 // NewCommand returns a command for Chronosphere authentication
 func NewCommand() *cobra.Command {
@@ -61,6 +50,7 @@ func NewCommand() *cobra.Command {
 		c.newSetDefaultOrgCmd(),
 		c.newPrintAccessTokenCmd(),
 		c.newListCmd(),
+		c.newWhoAmICmd(),
 	)
 	return root
 }
@@ -74,7 +64,7 @@ func (c *subcommand) getStore() (*token.Store, error) {
 	if c.store != nil {
 		return c.store, nil
 	}
-	store, err := NewChronoctlStore()
+	store, err := token.NewChronoctlStore()
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -132,7 +122,7 @@ func (c *subcommand) newSetDefaultOrgCmd() *cobra.Command {
 			if err != nil {
 				return errors.WithStack(err)
 			}
-			return setDefaultOrg(store, args[0])
+			return store.SetDefaultOrg(args[0])
 		},
 	}
 	return cmd
@@ -182,16 +172,12 @@ func (c *subcommand) newListCmd() *cobra.Command {
 			if err != nil {
 				return errors.WithStack(err)
 			}
-			defaultOrg, err := GetDefaultOrg(store)
+			defaultOrg, err := store.GetDefaultOrg()
 			if err != nil {
 				// Proceed to list orgs even if we fail to get the default
 				defaultOrg = ""
 			}
 			for _, org := range orgs {
-				// Don't list the default-org token, as it doesn't contain a session id
-				if org.Name == defaultOrgPath {
-					continue
-				}
 				e := listEntry{
 					Organization: org.Name,
 					Valid:        org.Valid,
@@ -208,19 +194,43 @@ func (c *subcommand) newListCmd() *cobra.Command {
 	return cmd
 }
 
-func setDefaultOrg(store *token.Store, org string) error {
-	return errors.WithStack(store.Put(defaultOrgPath, token.Token{
-		Value: []byte(org),
-		// Expire the default org if not updated for 1 year
-		Expiry: time.Now().Add(time.Hour * 24 * 365),
-	}))
+type whoAmIResponse struct {
+	Email string `json:"email"`
 }
 
-// GetDefaultOrg returns the default org within the store
-func GetDefaultOrg(store *token.Store) (string, error) {
-	org, err := store.Get(defaultOrgPath)
-	if err != nil {
-		return "", errors.WithStack(err)
+func (c *subcommand) newWhoAmICmd() *cobra.Command {
+	authFlags := client.NewClientFlags()
+	cmd := &cobra.Command{
+		Use:     "whoami",
+		GroupID: groups.Commands.ID,
+		Short:   "Print the currently authenticated user.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			req, err := authFlags.NewRequest(http.MethodGet, "/auth/whoami", nil /* body */)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			client := http.Client{}
+			resp, err := client.Do(req)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			defer resp.Body.Close()
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			if resp.StatusCode != http.StatusOK {
+				return errors.Errorf("%d: %s", resp.StatusCode, string(body))
+			}
+			var whoAmI whoAmIResponse
+			err = json.Unmarshal(body, &whoAmI)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			_, err = fmt.Fprintln(cmd.OutOrStdout(), whoAmI.Email)
+			return errors.WithStack(err)
+		},
 	}
-	return string(org.Value), nil
+	authFlags.AddFlags(cmd)
+	return cmd
 }

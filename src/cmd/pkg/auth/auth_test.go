@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"regexp"
 	"strings"
@@ -257,10 +258,7 @@ func TestAuthLogin(t *testing.T) {
 			tmpDir := t.TempDir()
 			store := token.NewFileStore(tmpDir)
 			if tt.defaultOrg != "" {
-				require.NoError(t, store.Put(defaultOrgPath, token.Token{
-					Value:  []byte(tt.defaultOrg),
-					Expiry: time.Now().Add(time.Hour * 24 * 365),
-				}))
+				require.NoError(t, store.SetDefaultOrg(tt.defaultOrg))
 			}
 
 			c := subcommand{store: store}
@@ -292,10 +290,10 @@ func TestAuthLogin(t *testing.T) {
 			require.Equal(t, tt.wantSessionID, string(sessionToken.Value))
 
 			// Verify that the correct org is set as default if applicable
-			defaultOrg, err := store.Get(defaultOrgPath)
+			defaultOrg, err := store.GetDefaultOrg()
 			if tt.wantDefaultTenant {
 				require.NoError(t, err)
-				require.Equal(t, tenantName, string(defaultOrg.Value))
+				require.Equal(t, tenantName, defaultOrg)
 			} else {
 				require.ErrorIs(t, err, token.ErrNotExist)
 			}
@@ -334,10 +332,7 @@ func TestAuthSetDefaultOrg(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			store := token.NewFileStore(t.TempDir())
 			if tt.existingDefaultOrg != "" {
-				require.NoError(t, store.Put(defaultOrgPath, token.Token{
-					Value:  []byte(tt.existingDefaultOrg),
-					Expiry: time.Now().Add(time.Hour * 24 * 365),
-				}))
+				require.NoError(t, store.SetDefaultOrg(tt.existingDefaultOrg))
 			}
 
 			c := subcommand{store: store}
@@ -350,9 +345,9 @@ func TestAuthSetDefaultOrg(t *testing.T) {
 			}
 			require.NoError(t, err)
 
-			defaultOrg, err := store.Get(defaultOrgPath)
+			defaultOrg, err := store.GetDefaultOrg()
 			require.NoError(t, err)
-			require.Equal(t, tt.args[0], string(defaultOrg.Value))
+			require.Equal(t, tt.args[0], defaultOrg)
 		})
 	}
 }
@@ -452,7 +447,7 @@ func TestAuthList(t *testing.T) {
 		{
 			name: "tokens with default",
 			tokens: map[string]token.Token{
-				defaultOrgPath: {
+				"default-org": {
 					Value:  []byte(tenantName),
 					Expiry: time.Now().Add(time.Hour),
 				},
@@ -524,7 +519,7 @@ func TestAuthList(t *testing.T) {
 		{
 			name: "expired default",
 			tokens: map[string]token.Token{
-				defaultOrgPath: {
+				"default-org": {
 					Value:  []byte(tenantName),
 					Expiry: time.Now().Add(-time.Hour),
 				},
@@ -549,7 +544,7 @@ func TestAuthList(t *testing.T) {
 		{
 			name: "default set but no tokens",
 			tokens: map[string]token.Token{
-				defaultOrgPath: {
+				"default-org": {
 					Value:  []byte(tenantName),
 					Expiry: time.Now().Add(time.Hour),
 				},
@@ -582,4 +577,77 @@ func TestAuthList(t *testing.T) {
 			require.ElementsMatch(t, tt.wantEntries, gotEntries)
 		})
 	}
+}
+
+func TestAuthWhoAmI(t *testing.T) {
+	validToken := "valid-token"
+	tests := []struct {
+		name        string
+		tokenArg    string
+		tokenEnvVar string
+		wantUser    string
+		wantErr     string
+	}{
+		{
+			name:        "success, command line arg",
+			tokenEnvVar: validToken,
+			wantUser:    "john.doe@chronosphere.io\n",
+		},
+		{
+			name:     "success, env var",
+			tokenArg: validToken,
+			wantUser: "john.doe@chronosphere.io\n",
+		},
+		{
+			name:        "invalid token",
+			tokenEnvVar: "invalid-token",
+			wantErr:     "401: Unauthenticated",
+		},
+		{
+			name:        "success, command line arg overrides env var",
+			tokenArg:    validToken,
+			tokenEnvVar: "invalid-token",
+			wantUser:    "john.doe@chronosphere.io",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				tok := r.Header.Get("API-Token")
+				if tok != validToken {
+					w.WriteHeader(http.StatusUnauthorized)
+					_, err := w.Write([]byte("Unauthenticated"))
+					require.NoError(t, err)
+					return
+				}
+				w.WriteHeader(http.StatusOK)
+				err := json.NewEncoder(w).Encode(whoAmIResponse{Email: tt.wantUser})
+				require.NoError(t, err)
+			}))
+			defer ts.Close()
+
+			store := token.NewFileStore(t.TempDir())
+			c := subcommand{store: store}
+			cmd := c.newWhoAmICmd()
+			require.NoError(t, cmd.Flags().Set("insecure-skip-verify", "true"))
+			require.NoError(t, cmd.Flags().Set("api-url", ts.URL))
+			if tt.tokenArg != "" {
+				require.NoError(t, cmd.Flags().Set("api-token", tt.tokenArg))
+			}
+			if tt.tokenEnvVar != "" {
+				t.Setenv(env.ChronosphereAPITokenKey, tt.tokenEnvVar)
+			}
+			stdout := &bytes.Buffer{}
+			cmd.SetOut(stdout)
+
+			err := cmd.Execute()
+			if tt.wantErr != "" {
+				require.EqualError(t, err, tt.wantErr)
+				return
+			}
+			require.NoError(t, err)
+			require.Equal(t, tt.wantUser+"\n", stdout.String())
+		})
+	}
+
 }

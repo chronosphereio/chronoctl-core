@@ -43,10 +43,7 @@ func (w *wrongTenantError) Error() string {
 }
 
 func newLoginServer(store *token.Store, openFunc browserOpenFunc, opts *loginOpts) (*loginServer, error) {
-	var defaultOrg string
-	if defaultOrgToken, err := store.Get(defaultOrgPath); err == nil {
-		defaultOrg = string(defaultOrgToken.Value)
-	}
+	defaultOrg, _ := store.GetDefaultOrg()
 
 	orgName := cmp.Or(
 		opts.orgName,
@@ -148,7 +145,7 @@ func (s *loginServer) login(ctx context.Context, stdin io.Reader, stdout, stderr
 		if s.skipSetDefaultOrg {
 			return nil
 		}
-		if err := setDefaultOrg(s.store, s.org); err != nil {
+		if err := s.store.SetDefaultOrg(s.org); err != nil {
 			fmt.Fprintf(stderr, "Failed to set default organization: %s\n", err) //nolint:errcheck
 		}
 		return nil
