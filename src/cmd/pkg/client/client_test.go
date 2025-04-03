@@ -347,6 +347,9 @@ func TestClientFlagsNewRequest(t *testing.T) {
 				APITokenFilename: "./testdata/token",
 				TokenStoreDir:    t.TempDir(),
 			},
+			env: envVars{
+				token: "bad-token",
+			},
 			basePath:     "/api",
 			wantToken:    "token-from-file",
 			wantHost:     "myorg.chronosphere.io",
