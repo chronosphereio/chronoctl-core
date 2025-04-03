@@ -93,7 +93,7 @@ func TestClientFlagsTransport(t *testing.T) {
 			wantBasePath: "/api",
 		},
 		{
-			name: "fall back to environment variable for organization name",
+			name: "fall back to org name flag for organization name",
 			flags: &Flags{
 				APIToken:      "token",
 				OrgName:       "specialorg",
@@ -287,6 +287,197 @@ func TestClientFlagsTransport(t *testing.T) {
 				}
 			})
 		}
+	}
+}
+
+func TestClientFlagsNewRequest(t *testing.T) {
+	type envVars struct {
+		token string
+		org   string
+	}
+	tests := []struct {
+		name         string
+		flags        *Flags
+		env          envVars
+		basePath     string
+		wantToken    string
+		wantErr      string
+		wantHost     string
+		wantBasePath string
+	}{
+		{
+			name: "all necessary flags specified",
+			flags: &Flags{
+				APIUrl:   TestChronosphereURL,
+				APIToken: "token",
+			},
+			basePath:     "/api",
+			wantToken:    "token",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
+		},
+		{
+			name: "--api-token and --api-token-filename are exclusive",
+			flags: &Flags{
+				APIUrl:           TestChronosphereURL,
+				APIToken:         "token-param",
+				APITokenFilename: "./testdata/token",
+			},
+			basePath: "/api",
+			wantErr:  "only one of --api-token and --api-token-filename can be set",
+		},
+		{
+			name: "--api-token overrides environment variable",
+			flags: &Flags{
+				APIUrl:   TestChronosphereURL,
+				APIToken: "token-param",
+			},
+			basePath:     "/api",
+			wantToken:    "token-param",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
+		},
+		{
+			name: "--api-token-filename parameter overrides environment variable",
+			flags: &Flags{
+				APIUrl:           TestChronosphereURL,
+				APITokenFilename: "./testdata/token",
+			},
+			env: envVars{
+				token: "bad-token",
+			},
+			basePath:     "/api",
+			wantToken:    "token-from-file",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
+		},
+		{
+			name: "invalid --api-token-filename parameter returns error",
+			flags: &Flags{
+				APIUrl:           TestChronosphereURL,
+				APITokenFilename: "./testdata/no_token",
+			},
+			basePath: "/api",
+			wantErr:  "reading api token from file ./testdata/no_token: open ./testdata/no_token: no such file or directory",
+		},
+		{
+			name: "fall back to environment variable for API token",
+			flags: &Flags{
+				APIUrl: TestChronosphereURL,
+			},
+			env:          envVars{token: "token"},
+			basePath:     "/api",
+			wantToken:    "token",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
+		},
+		{
+			name: "token and store not set",
+			flags: &Flags{
+				APIUrl: TestChronosphereURL,
+			},
+			basePath: "/api",
+			wantErr:  "client API token must be provided via --api-token, --api-token-filename, CHRONOSPHERE_API_TOKEN environment variable, or by authenticating with 'auth login'",
+		},
+		{
+			name: "token not set falls back to token store",
+			flags: &Flags{
+				APIUrl: TestChronosphereURL,
+				TokenStoreDir: func() string {
+					dir := t.TempDir()
+					// Populate store directory with a token
+					store := token.NewFileStore(dir)
+					require.NoError(t, store.Put("myorg", token.Token{
+						Value:  []byte("token"),
+						Expiry: time.Now().Add(time.Hour),
+					}))
+					return dir
+				}(),
+			},
+			basePath:     "/api",
+			wantToken:    "token",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
+		},
+		{
+			name: "organization and default org not set",
+			flags: &Flags{
+				APIToken: "token",
+			},
+			basePath: "/api",
+			wantErr:  "organization must be provided as a flag, via the CHRONOSPHERE_ORG_NAME environment variable, or by setting a default org when the API URL isn't set",
+		},
+		{
+			name: "fall back to org name flag for organization name",
+			flags: &Flags{
+				APIToken: "token",
+				OrgName:  "specialorg",
+			},
+			basePath:     "/api",
+			wantToken:    "token",
+			wantHost:     "specialorg.chronosphere.io",
+			wantBasePath: "/api",
+		},
+		{
+			name: "organization not set falls back to default",
+			flags: &Flags{
+				APIToken: "token",
+				TokenStoreDir: func() string {
+					dir := t.TempDir()
+					// Populate store directory with a token
+					store := token.NewFileStore(dir)
+					require.NoError(t, store.Put("default-org", token.Token{
+						Value:  []byte("myorg"),
+						Expiry: time.Now().Add(time.Hour),
+					}))
+					return dir
+				}(),
+			},
+			basePath:     "/api",
+			wantToken:    "token",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
+		},
+		{
+			name: "api url overrides the base path",
+			flags: &Flags{
+				APIUrl:   "https://myorg.chronosphere.io/notthebasepath",
+				APIToken: "token",
+			},
+			basePath:     "/api",
+			wantToken:    "token",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/notthebasepath",
+		},
+		{
+			name: "invalid URL",
+			flags: &Flags{
+				APIUrl:   TestBadURL,
+				APIToken: "token",
+			},
+			basePath: "/api",
+			wantErr:  `parse "://bad.domain.io": missing protocol scheme`,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv(env.ChronosphereAPITokenKey, tt.env.token)
+			t.Setenv(env.ChronosphereOrgNameKey, tt.env.org)
+
+			if tt.flags.TokenStoreDir == "" {
+				tt.flags.TokenStoreDir = t.TempDir()
+			}
+			req, err := tt.flags.NewRequest(http.MethodGet, tt.basePath, nil /* body */)
+			if tt.wantErr != "" {
+				assert.ErrorContains(t, err, tt.wantErr)
+				return
+			}
+
+			require.NoError(t, err)
+			assert.Equal(t, tt.wantHost, req.Host)
+			assert.Equal(t, tt.wantBasePath, req.URL.Path)
+			assert.Equal(t, tt.wantToken, req.Header.Get("API-Token"))
+		})
 	}
 }
 
