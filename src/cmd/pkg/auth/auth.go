@@ -18,6 +18,7 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 
@@ -51,6 +52,7 @@ func NewCommand() *cobra.Command {
 		c.newPrintAccessTokenCmd(),
 		c.newListCmd(),
 		c.newWhoAmICmd(),
+		c.newLogoutCmd(),
 	)
 	return root
 }
@@ -229,6 +231,38 @@ func (c *subcommand) newWhoAmICmd() *cobra.Command {
 			}
 			_, err = fmt.Fprintln(cmd.OutOrStdout(), whoAmI.Email)
 			return errors.WithStack(err)
+		},
+	}
+	authFlags.AddFlags(cmd)
+	return cmd
+}
+
+func (c *subcommand) newLogoutCmd() *cobra.Command {
+	authFlags := client.NewClientFlags()
+	cmd := &cobra.Command{
+		Use:     "logout",
+		GroupID: groups.Commands.ID,
+		Short:   "Logs out an authenticated chronoctl session.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			req, err := authFlags.NewRequest(http.MethodGet, "/auth/logout", nil /* body */)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			client := http.Client{}
+			resp, err := client.Do(req)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			defer resp.Body.Close() //nolint: errcheck
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			if resp.StatusCode != http.StatusOK {
+				return errors.Errorf("%d: %s", resp.StatusCode, string(body))
+			}
+			cmd.OutOrStdout().Write(body) //nolint: errcheck
+			return nil
 		},
 	}
 	authFlags.AddFlags(cmd)

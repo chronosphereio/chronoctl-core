@@ -651,3 +651,30 @@ func TestAuthWhoAmI(t *testing.T) {
 	}
 
 }
+
+func TestAuthLogout(t *testing.T) {
+	apiToken := "test-token"
+
+	requestReceived := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestReceived = true
+		require.Equal(t, http.MethodGet, r.Method)
+		require.Equal(t, "/auth/logout", r.URL.Path)
+		require.Equal(t, apiToken, r.Header.Get("API-Token"))
+
+		w.WriteHeader(http.StatusOK)
+	}))
+	t.Cleanup(ts.Close)
+
+	store := token.NewFileStore(t.TempDir())
+	c := subcommand{store: store}
+	cmd := c.newLogoutCmd()
+
+	require.NoError(t, cmd.Flags().Set("api-url", ts.URL+"/auth/logout"))
+	require.NoError(t, cmd.Flags().Set("api-token", apiToken))
+
+	stdout := &bytes.Buffer{}
+	cmd.SetOut(stdout)
+	require.NoError(t, cmd.Execute())
+	require.True(t, requestReceived)
+}
