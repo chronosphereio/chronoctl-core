@@ -308,9 +308,8 @@ func TestClientFlagsNewRequest(t *testing.T) {
 		{
 			name: "all necessary flags specified",
 			flags: &Flags{
-				APIUrl:        TestChronosphereURL,
-				APIToken:      "token",
-				TokenStoreDir: t.TempDir(),
+				APIUrl:   TestChronosphereURL,
+				APIToken: "token",
 			},
 			basePath:     "/api",
 			wantToken:    "token",
@@ -323,7 +322,6 @@ func TestClientFlagsNewRequest(t *testing.T) {
 				APIUrl:           TestChronosphereURL,
 				APIToken:         "token-param",
 				APITokenFilename: "./testdata/token",
-				TokenStoreDir:    t.TempDir(),
 			},
 			basePath: "/api",
 			wantErr:  "only one of --api-token and --api-token-filename can be set",
@@ -331,9 +329,8 @@ func TestClientFlagsNewRequest(t *testing.T) {
 		{
 			name: "--api-token overrides environment variable",
 			flags: &Flags{
-				APIUrl:        TestChronosphereURL,
-				APIToken:      "token-param",
-				TokenStoreDir: t.TempDir(),
+				APIUrl:   TestChronosphereURL,
+				APIToken: "token-param",
 			},
 			basePath:     "/api",
 			wantToken:    "token-param",
@@ -345,7 +342,6 @@ func TestClientFlagsNewRequest(t *testing.T) {
 			flags: &Flags{
 				APIUrl:           TestChronosphereURL,
 				APITokenFilename: "./testdata/token",
-				TokenStoreDir:    t.TempDir(),
 			},
 			env: envVars{
 				token: "bad-token",
@@ -360,7 +356,6 @@ func TestClientFlagsNewRequest(t *testing.T) {
 			flags: &Flags{
 				APIUrl:           TestChronosphereURL,
 				APITokenFilename: "./testdata/no_token",
-				TokenStoreDir:    t.TempDir(),
 			},
 			basePath: "/api",
 			wantErr:  "reading api token from file ./testdata/no_token: open ./testdata/no_token: no such file or directory",
@@ -368,8 +363,7 @@ func TestClientFlagsNewRequest(t *testing.T) {
 		{
 			name: "fall back to environment variable for API token",
 			flags: &Flags{
-				APIUrl:        TestChronosphereURL,
-				TokenStoreDir: t.TempDir(),
+				APIUrl: TestChronosphereURL,
 			},
 			env:          envVars{token: "token"},
 			basePath:     "/api",
@@ -380,8 +374,7 @@ func TestClientFlagsNewRequest(t *testing.T) {
 		{
 			name: "token and store not set",
 			flags: &Flags{
-				APIUrl:        TestChronosphereURL,
-				TokenStoreDir: t.TempDir(),
+				APIUrl: TestChronosphereURL,
 			},
 			basePath: "/api",
 			wantErr:  "client API token must be provided via --api-token, --api-token-filename, CHRONOSPHERE_API_TOKEN environment variable, or by authenticating with 'auth login'",
@@ -409,8 +402,7 @@ func TestClientFlagsNewRequest(t *testing.T) {
 		{
 			name: "organization and default org not set",
 			flags: &Flags{
-				APIToken:      "token",
-				TokenStoreDir: t.TempDir(),
+				APIToken: "token",
 			},
 			basePath: "/api",
 			wantErr:  "organization must be provided as a flag, via the CHRONOSPHERE_ORG_NAME environment variable, or by setting a default org when the API URL isn't set",
@@ -418,9 +410,8 @@ func TestClientFlagsNewRequest(t *testing.T) {
 		{
 			name: "fall back to org name flag for organization name",
 			flags: &Flags{
-				APIToken:      "token",
-				OrgName:       "specialorg",
-				TokenStoreDir: t.TempDir(),
+				APIToken: "token",
+				OrgName:  "specialorg",
 			},
 			basePath:     "/api",
 			wantToken:    "token",
@@ -461,9 +452,8 @@ func TestClientFlagsNewRequest(t *testing.T) {
 		{
 			name: "invalid URL",
 			flags: &Flags{
-				APIUrl:        TestBadURL,
-				APIToken:      "token",
-				TokenStoreDir: t.TempDir(),
+				APIUrl:   TestBadURL,
+				APIToken: "token",
 			},
 			basePath: "/api",
 			wantErr:  `parse "://bad.domain.io": missing protocol scheme`,
@@ -474,6 +464,9 @@ func TestClientFlagsNewRequest(t *testing.T) {
 			t.Setenv(env.ChronosphereAPITokenKey, tt.env.token)
 			t.Setenv(env.ChronosphereOrgNameKey, tt.env.org)
 
+			if tt.flags.TokenStoreDir == "" {
+				tt.flags.TokenStoreDir = t.TempDir()
+			}
 			req, err := tt.flags.NewRequest(http.MethodGet, tt.basePath, nil /* body */)
 			if tt.wantErr != "" {
 				assert.ErrorContains(t, err, tt.wantErr)
