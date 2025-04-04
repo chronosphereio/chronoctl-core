@@ -154,12 +154,29 @@
       },
       "type": "object"
     },
-    "ControlRuleMode": {
-      "enum": [
-        "ENABLED",
-        "DISABLED"
-      ],
-      "type": "string"
+    "DefinitionBurnRateDefinition": {
+      "properties": {
+        "window": {
+          "type": "string"
+        },
+        "budget": {
+          "description": "budget defines the amount of errors that are allowed during a given\ntime window. It is a value between 0.0 and 100.0 exclusive.",
+          "format": "double",
+          "type": "number"
+        },
+        "severity": {
+          "description": "Severity may only be one of: critical, warn.\nThis is also a string in the monitor schema",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "labels to attach to the burn rate alerts.",
+          "type": "object"
+        }
+      },
+      "type": "object"
     },
     "DefinitionTimeWindow": {
       "properties": {
@@ -170,55 +187,36 @@
       },
       "type": "object"
     },
-    "EmitMetricscounterMetric": {
+    "LogControlRuleDrop": {
+      "description": "Drop is the configuration for a drop logs action.",
+      "type": "object"
+    },
+    "LogControlRuleDropField": {
+      "description": "DropField is the configuration for a drop field action.",
       "properties": {
-        "label_field": {
-          "description": "Label field is the label field to count.",
+        "field_regex": {
           "type": "string"
         }
       },
       "type": "object"
     },
-    "EmitMetricsgaugeMetric": {
-      "properties": {
-        "value_field": {
-          "description": "Value field is used to specify what field holds the numerical value.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "EmitMetricshistogramMetric": {
-      "properties": {
-        "value_field": {
-          "description": "Value field is used to specify what field holds the numerical value.",
-          "type": "string"
-        },
-        "buckets": {
-          "description": "Buckets specify the buckets to use for the histogram.",
-          "items": {
-            "format": "double",
-            "type": "number"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "EmitMetricsmetricMode": {
+    "LogControlRuleMode": {
       "enum": [
-        "COUNTER",
-        "GAUGE",
-        "HISTOGRAM"
+        "ENABLED",
+        "DISABLED"
       ],
       "type": "string"
     },
-    "FilterOperator": {
-      "enum": [
-        "AND",
-        "OR"
-      ],
-      "type": "string"
+    "LogControlRuleSample": {
+      "description": "Sample is the configuration for the sample logs action.",
+      "properties": {
+        "rate": {
+          "description": "Percentage of matching logs to keep. Must be in the range [0, 1].",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
     },
     "MonitorSignalGrouping": {
       "description": "SignalGrouping defines how the set of series from the query are split into signals.",
@@ -283,91 +281,6 @@
       },
       "type": "object"
     },
-    "RuleDeDupe": {
-      "description": "DeDupe is the configuration for a dedupe filter.",
-      "properties": {
-        "window_secs": {
-          "description": "window over which to dedupe",
-          "format": "int32",
-          "type": "integer"
-        },
-        "select_key": {
-          "description": "key to use for deduplication",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "RuleDeleteFields": {
-      "description": "DeleteFields is the configuration for a delete fields rule.",
-      "properties": {
-        "field_regex": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "RuleDrop": {
-      "title": "Drop is the configuration for a drop filter",
-      "type": "object"
-    },
-    "RuleEmitMetrics": {
-      "description": "EmitMetrics is the configuration for a rule to convert logs to metrics.",
-      "properties": {
-        "metric_mode": {
-          "$ref": "#/definitions/EmitMetricsmetricMode"
-        },
-        "name": {
-          "description": "Name is the name of the metric to emit.",
-          "type": "string"
-        },
-        "metric_description": {
-          "description": "Metric description is the description of the metric.",
-          "type": "string"
-        },
-        "labels": {
-          "description": "Labels specify the labels to add to the metric.\n\nonly one of the following should be specified depending on the type of metric",
-          "items": {
-            "$ref": "#/definitions/configunstableLabel"
-          },
-          "type": "array"
-        },
-        "counter_metric": {
-          "$ref": "#/definitions/EmitMetricscounterMetric"
-        },
-        "gauge_metric": {
-          "$ref": "#/definitions/EmitMetricsgaugeMetric"
-        },
-        "histogram_metric": {
-          "$ref": "#/definitions/EmitMetricshistogramMetric"
-        }
-      },
-      "type": "object"
-    },
-    "RuleRuleType": {
-      "enum": [
-        "SAMPLE",
-        "DELETE_FIELDS",
-        "DE_DUPE",
-        "EMIT_METRICS",
-        "DROP"
-      ],
-      "type": "string"
-    },
-    "RuleSample": {
-      "description": "Sample is the configuration for a sample rule.",
-      "properties": {
-        "rate": {
-          "format": "double",
-          "type": "number"
-        },
-        "window_secs": {
-          "format": "int32",
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
     "SLICustomIndicatorConfig": {
       "properties": {
         "good_query_template": {
@@ -404,7 +317,7 @@
           "type": "array"
         },
         "additional_promql_filters": {
-          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`",
+          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`\ndeprecated: Use the top level SLI field",
           "items": {
             "$ref": "#/definitions/configunstablePromQLMatcher"
           },
@@ -428,7 +341,7 @@
           "type": "string"
         },
         "additional_promql_filters": {
-          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`",
+          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`\ndeprecated: Use the top level SLI field",
           "items": {
             "$ref": "#/definitions/configunstablePromQLMatcher"
           },
@@ -445,14 +358,24 @@
           "type": "number"
         },
         "reporting_windows": {
-          "description": "The reporting windows for this SLO. The SLO is considered breached if the\nerror budget is depleted in any of these windows.",
+          "description": "This is deprecated.",
           "items": {
             "$ref": "#/definitions/DefinitionTimeWindow"
           },
           "type": "array"
         },
-        "low_volume": {
-          "description": "Configured whether this SLO is for a low volume event (\u003c 1/s). This will\nadjust the SLI queries to account for the low volume nature of the event.",
+        "time_window": {
+          "$ref": "#/definitions/DefinitionTimeWindow"
+        },
+        "burn_rate_alerting_config": {
+          "description": "Provides the burn rate alert configuration for the SLO. If not provided the\ndefault burn rates will be used. The configuration is only valid if the\nenable_burn_rate_alerting flag is set to true.",
+          "items": {
+            "$ref": "#/definitions/DefinitionBurnRateDefinition"
+          },
+          "type": "array"
+        },
+        "enable_burn_rate_alerting": {
+          "description": "If true enables burn rate alerting.",
           "type": "boolean"
         }
       },
@@ -861,29 +784,6 @@
       },
       "type": "object"
     },
-    "configunstableControlRule": {
-      "description": "ControlRule is the configuration for an ordered set of rules.",
-      "properties": {
-        "name": {
-          "description": "Name is the name of the control rule.",
-          "type": "string"
-        },
-        "mode": {
-          "$ref": "#/definitions/ControlRuleMode"
-        },
-        "filter": {
-          "$ref": "#/definitions/configunstableFilter"
-        },
-        "rules": {
-          "description": "Rules are the rules operating on the filtered logs.",
-          "items": {
-            "$ref": "#/definitions/configunstableRule"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "configunstableCreateDashboardRequest": {
       "properties": {
         "dashboard": {
@@ -1173,34 +1073,6 @@
     "configunstableDeleteTraceTopTagConfigResponse": {
       "type": "object"
     },
-    "configunstableFilter": {
-      "description": "Filter is the filter configuration for a control rule.",
-      "properties": {
-        "labels": {
-          "description": "Labels are the key value pairs to specify which logs to control.",
-          "items": {
-            "$ref": "#/definitions/configunstableLabel"
-          },
-          "type": "array"
-        },
-        "operator": {
-          "$ref": "#/definitions/FilterOperator"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableLabel": {
-      "description": "Label is a key, value pair used for filtering.",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "configunstableLinkTemplate": {
       "properties": {
         "slug": {
@@ -1362,12 +1234,38 @@
           "readOnly": true,
           "type": "string"
         },
-        "control_rules": {
+        "rules": {
           "description": "Control Rules are the ordered list of control rules.",
           "items": {
-            "$ref": "#/definitions/configunstableControlRule"
+            "$ref": "#/definitions/configunstableLogControlRule"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableLogControlRule": {
+      "description": "LogControlRule is the configuration for a log control rule.",
+      "properties": {
+        "name": {
+          "description": "Name is the name of the control rule.",
+          "type": "string"
+        },
+        "mode": {
+          "$ref": "#/definitions/LogControlRuleMode"
+        },
+        "filter": {
+          "description": "LogQL query to select logs. Only matching logs will have control action applied.",
+          "type": "string"
+        },
+        "drop": {
+          "$ref": "#/definitions/LogControlRuleDrop"
+        },
+        "sample": {
+          "$ref": "#/definitions/LogControlRuleSample"
+        },
+        "drop_field": {
+          "$ref": "#/definitions/LogControlRuleDropField"
         }
       },
       "type": "object"
@@ -1538,30 +1436,6 @@
       },
       "type": "object"
     },
-    "configunstableRule": {
-      "description": "Rule is the configuration for a rule.",
-      "properties": {
-        "rule_type": {
-          "$ref": "#/definitions/RuleRuleType"
-        },
-        "sample": {
-          "$ref": "#/definitions/RuleSample"
-        },
-        "delete_fields": {
-          "$ref": "#/definitions/RuleDeleteFields"
-        },
-        "de_dupe": {
-          "$ref": "#/definitions/RuleDeDupe"
-        },
-        "emit_metrics": {
-          "$ref": "#/definitions/RuleEmitMetrics"
-        },
-        "drop": {
-          "$ref": "#/definitions/RuleDrop"
-        }
-      },
-      "type": "object"
-    },
     "configunstableSLI": {
       "description": "SLI is a service level indicator. The contents of this proto are intended to\nbe used to generate queries necessary to measure SLOs.",
       "properties": {
@@ -1591,6 +1465,13 @@
         },
         "source_service": {
           "$ref": "#/definitions/configv1CollectionReference"
+        },
+        "additional_promql_filters": {
+          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`",
+          "items": {
+            "$ref": "#/definitions/configunstablePromQLMatcher"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -2682,13 +2563,6 @@
       },
       "get": {
         "operationId": "ReadLogControlConfig",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "slug",
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "A successful response.",

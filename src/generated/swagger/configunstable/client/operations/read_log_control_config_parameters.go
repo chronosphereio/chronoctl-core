@@ -60,10 +60,6 @@ ReadLogControlConfigParams contains all the parameters to send to the API endpoi
 	Typically these are written to a http.Request.
 */
 type ReadLogControlConfigParams struct {
-
-	// Slug.
-	Slug *string
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -117,17 +113,6 @@ func (o *ReadLogControlConfigParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithSlug adds the slug to the read log control config params
-func (o *ReadLogControlConfigParams) WithSlug(slug *string) *ReadLogControlConfigParams {
-	o.SetSlug(slug)
-	return o
-}
-
-// SetSlug adds the slug to the read log control config params
-func (o *ReadLogControlConfigParams) SetSlug(slug *string) {
-	o.Slug = slug
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *ReadLogControlConfigParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -135,23 +120,6 @@ func (o *ReadLogControlConfigParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
-
-	if o.Slug != nil {
-
-		// query param slug
-		var qrSlug string
-
-		if o.Slug != nil {
-			qrSlug = *o.Slug
-		}
-		qSlug := qrSlug
-		if qSlug != "" {
-
-			if err := r.SetQueryParam("slug", qSlug); err != nil {
-				return err
-			}
-		}
-	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

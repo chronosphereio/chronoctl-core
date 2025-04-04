@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -46,6 +47,10 @@ type ConfigunstableSLI struct {
 
 	// source service
 	SourceService *Configv1CollectionReference `json:"source_service,omitempty"`
+
+	// These are added to _every_ query and are intended to be used for things
+	// like `cluster!~"dev"`
+	AdditionalPromqlFilters []*ConfigunstablePromQLMatcher `json:"additional_promql_filters"`
 }
 
 // Validate validates this configunstable s l i
@@ -65,6 +70,10 @@ func (m *ConfigunstableSLI) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSourceService(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateAdditionalPromqlFilters(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -150,6 +159,32 @@ func (m *ConfigunstableSLI) validateSourceService(formats strfmt.Registry) error
 	return nil
 }
 
+func (m *ConfigunstableSLI) validateAdditionalPromqlFilters(formats strfmt.Registry) error {
+	if swag.IsZero(m.AdditionalPromqlFilters) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.AdditionalPromqlFilters); i++ {
+		if swag.IsZero(m.AdditionalPromqlFilters[i]) { // not required
+			continue
+		}
+
+		if m.AdditionalPromqlFilters[i] != nil {
+			if err := m.AdditionalPromqlFilters[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("additional_promql_filters" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("additional_promql_filters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configunstable s l i based on the context it is used
 func (m *ConfigunstableSLI) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -167,6 +202,10 @@ func (m *ConfigunstableSLI) ContextValidate(ctx context.Context, formats strfmt.
 	}
 
 	if err := m.contextValidateSourceService(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAdditionalPromqlFilters(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -255,6 +294,31 @@ func (m *ConfigunstableSLI) contextValidateSourceService(ctx context.Context, fo
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableSLI) contextValidateAdditionalPromqlFilters(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AdditionalPromqlFilters); i++ {
+
+		if m.AdditionalPromqlFilters[i] != nil {
+
+			if swag.IsZero(m.AdditionalPromqlFilters[i]) { // not required
+				return nil
+			}
+
+			if err := m.AdditionalPromqlFilters[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("additional_promql_filters" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("additional_promql_filters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

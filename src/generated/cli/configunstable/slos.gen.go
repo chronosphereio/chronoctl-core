@@ -523,14 +523,29 @@ spec:
     definition:
         # The SLO objective
         objective: <number>
-        # The reporting windows for this SLO. The SLO is considered breached if the
-        # error budget is depleted in any of these windows.
+        # This is deprecated.
         reporting_windows:
             - # duration as a string in the format "28d" or "24h", etc.
               duration: <string>
-        # Configured whether this SLO is for a low volume event (< 1/s). This will
-        # adjust the SLI queries to account for the low volume nature of the event.
-        low_volume: <true|false>
+        # Provides the burn rate alert configuration for the SLO. If not provided the
+        # default burn rates will be used. The configuration is only valid if the
+        # enable_burn_rate_alerting flag is set to true.
+        burn_rate_alerting_config:
+            - window: <string>
+              # budget defines the amount of errors that are allowed during a given
+              # time window. It is a value between 0.0 and 100.0 exclusive.
+              budget: <number>
+              # Severity may only be one of: critical, warn.
+              # This is also a string in the monitor schema
+              severity: <string>
+              # labels to attach to the burn rate alerts.
+              labels:
+                key_1: <string>
+        # If true enables burn rate alerting.
+        enable_burn_rate_alerting: <true|false>
+        time_window:
+            # duration as a string in the format "28d" or "24h", etc.
+            duration: <string>
     # SignalGrouping defines how the set of series from the query are split into signals.
     signal_grouping:
         # Set of labels names used to split series into signals.
@@ -561,6 +576,14 @@ spec:
         # in '.GroupBy'.
         custom_dimension_labels:
             - <string>
+        # These are added to _every_ query and are intended to be used for things
+        # like 'cluster!~"dev"'
+        additional_promql_filters:
+            - # Prometheus label name for the matcher
+              name: <string>
+              # Prometheus label value for the matcher
+              value: <string>
+              type: <MatchEqual|MatchRegexp|MatchNotEqual|MatchNotRegexp>
         custom_indicator:
             # A PromQL query that measures the number of "good" events for this SLI.
             # Either this or the bad_query_template must be set.
@@ -583,6 +606,7 @@ spec:
                 - <string>
             # These are added to _every_ query and are intended to be used for things
             # like 'cluster!~"dev"'
+            # deprecated: Use the top level SLI field
             additional_promql_filters:
                 - # Prometheus label name for the matcher
                   name: <string>
@@ -599,6 +623,7 @@ spec:
             latency_bucket: <string>
             # These are added to _every_ query and are intended to be used for things
             # like 'cluster!~"dev"'
+            # deprecated: Use the top level SLI field
             additional_promql_filters:
                 - # Prometheus label name for the matcher
                   name: <string>

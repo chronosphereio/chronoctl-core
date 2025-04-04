@@ -29,6 +29,7 @@ type SLIEndpointAvailabilityConfig struct {
 
 	// These are added to _every_ query and are intended to be used for things
 	// like `cluster!~"dev"`
+	// deprecated: Use the top level SLI field
 	AdditionalPromqlFilters []*ConfigunstablePromQLMatcher `json:"additional_promql_filters"`
 }
 
