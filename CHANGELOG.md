@@ -2,9 +2,11 @@
 
 ## Unreleased
 
+## v1.12.0
+
 Added:
 * Adds support for pool PriorityThresholds in `v1/config/ResourcePools`
-* Adds `chronoctl auth whoami` which prints the current user 
+* Adds `chronoctl auth whoami` which prints the current user
 * Adds `chronoctl auth logout` which logs out an authenticated chronoctl session
 
 ## v1.11.0
