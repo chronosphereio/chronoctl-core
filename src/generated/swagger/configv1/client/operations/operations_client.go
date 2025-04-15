@@ -72,6 +72,8 @@ type ClientService interface {
 
 	CreateRollupRule(params *CreateRollupRuleParams, opts ...ClientOption) (*CreateRollupRuleOK, error)
 
+	CreateSLO(params *CreateSLOParams, opts ...ClientOption) (*CreateSLOOK, error)
+
 	CreateServiceAccount(params *CreateServiceAccountParams, opts ...ClientOption) (*CreateServiceAccountOK, error)
 
 	CreateTeam(params *CreateTeamParams, opts ...ClientOption) (*CreateTeamOK, error)
@@ -130,6 +132,8 @@ type ClientService interface {
 
 	DeleteRollupRule(params *DeleteRollupRuleParams, opts ...ClientOption) (*DeleteRollupRuleOK, error)
 
+	DeleteSLO(params *DeleteSLOParams, opts ...ClientOption) (*DeleteSLOOK, error)
+
 	DeleteServiceAccount(params *DeleteServiceAccountParams, opts ...ClientOption) (*DeleteServiceAccountOK, error)
 
 	DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*DeleteTeamOK, error)
@@ -181,6 +185,8 @@ type ClientService interface {
 	ListRecordingRules(params *ListRecordingRulesParams, opts ...ClientOption) (*ListRecordingRulesOK, error)
 
 	ListRollupRules(params *ListRollupRulesParams, opts ...ClientOption) (*ListRollupRulesOK, error)
+
+	ListSLOs(params *ListSLOsParams, opts ...ClientOption) (*ListSLOsOK, error)
 
 	ListServiceAccounts(params *ListServiceAccountsParams, opts ...ClientOption) (*ListServiceAccountsOK, error)
 
@@ -235,6 +241,8 @@ type ClientService interface {
 	ReadResourcePools(params *ReadResourcePoolsParams, opts ...ClientOption) (*ReadResourcePoolsOK, error)
 
 	ReadRollupRule(params *ReadRollupRuleParams, opts ...ClientOption) (*ReadRollupRuleOK, error)
+
+	ReadSLO(params *ReadSLOParams, opts ...ClientOption) (*ReadSLOOK, error)
 
 	ReadService(params *ReadServiceParams, opts ...ClientOption) (*ReadServiceOK, error)
 
@@ -295,6 +303,8 @@ type ClientService interface {
 	UpdateResourcePools(params *UpdateResourcePoolsParams, opts ...ClientOption) (*UpdateResourcePoolsOK, error)
 
 	UpdateRollupRule(params *UpdateRollupRuleParams, opts ...ClientOption) (*UpdateRollupRuleOK, error)
+
+	UpdateSLO(params *UpdateSLOParams, opts ...ClientOption) (*UpdateSLOOK, error)
 
 	UpdateTeam(params *UpdateTeamParams, opts ...ClientOption) (*UpdateTeamOK, error)
 
@@ -1122,6 +1132,43 @@ func (a *Client) CreateRollupRule(params *CreateRollupRuleParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateRollupRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateSLO create SLO API
+*/
+func (a *Client) CreateSLO(params *CreateSLOParams, opts ...ClientOption) (*CreateSLOOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateSLOParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateSLO",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/slos",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateSLOReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateSLOOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateSLODefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2202,6 +2249,43 @@ func (a *Client) DeleteRollupRule(params *DeleteRollupRuleParams, opts ...Client
 }
 
 /*
+DeleteSLO delete SLO API
+*/
+func (a *Client) DeleteSLO(params *DeleteSLOParams, opts ...ClientOption) (*DeleteSLOOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteSLOParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteSLO",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/slos/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteSLOReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteSLOOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteSLODefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteServiceAccount delete service account API
 */
 func (a *Client) DeleteServiceAccount(params *DeleteServiceAccountParams, opts ...ClientOption) (*DeleteServiceAccountOK, error) {
@@ -3160,6 +3244,43 @@ func (a *Client) ListRollupRules(params *ListRollupRulesParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListRollupRulesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListSLOs list s l os API
+*/
+func (a *Client) ListSLOs(params *ListSLOsParams, opts ...ClientOption) (*ListSLOsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListSLOsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListSLOs",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/slos",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListSLOsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListSLOsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListSLOsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -4159,6 +4280,43 @@ func (a *Client) ReadRollupRule(params *ReadRollupRuleParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadRollupRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadSLO read SLO API
+*/
+func (a *Client) ReadSLO(params *ReadSLOParams, opts ...ClientOption) (*ReadSLOOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadSLOParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadSLO",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/slos/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadSLOReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadSLOOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadSLODefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5269,6 +5427,43 @@ func (a *Client) UpdateRollupRule(params *UpdateRollupRuleParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateRollupRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateSLO update SLO API
+*/
+func (a *Client) UpdateSLO(params *UpdateSLOParams, opts ...ClientOption) (*UpdateSLOOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateSLOParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateSLO",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/slos/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateSLOReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateSLOOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateSLODefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

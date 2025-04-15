@@ -195,7 +195,15 @@
       "description": "DropField is the configuration for a drop field action.",
       "properties": {
         "field_regex": {
+          "description": "Regular expression to match the field(s) to drop.",
           "type": "string"
+        },
+        "parent_path": {
+          "description": "Fully specified path to the the field(s) to drop.\nIf empty, the field(s) to drop are at the root level of the log.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -840,6 +848,26 @@
       },
       "type": "object"
     },
+    "configunstableCreateLogParserConfigRequest": {
+      "properties": {
+        "log_parser_config": {
+          "$ref": "#/definitions/configunstableLogParserConfig"
+        },
+        "dry_run": {
+          "description": "If true, the LogParserConfig will not be created, and no response LogParserConfig will be returned. The response will return an error if the given LogParserConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateLogParserConfigResponse": {
+      "properties": {
+        "log_parser_config": {
+          "$ref": "#/definitions/configunstableLogParserConfig"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateNoopEntityRequest": {
       "properties": {
         "noop_entity": {
@@ -1042,6 +1070,9 @@
       "type": "object"
     },
     "configunstableDeleteLogControlConfigResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteLogParserConfigResponse": {
       "type": "object"
     },
     "configunstableDeleteNoopEntityResponse": {
@@ -1270,6 +1301,44 @@
       },
       "type": "object"
     },
+    "configunstableLogParser": {
+      "properties": {
+        "name": {
+          "description": "Name is the name of the parser.",
+          "type": "string"
+        },
+        "regex": {
+          "description": "Regex is the Re2 regex pattern to apply to incoming logs.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableLogParserConfig": {
+      "description": "LogParserConfig specifies the parsers to run on inputted logs.",
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the LogParserConfig was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the LogParserConfig was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "parsers": {
+          "description": "The list of parsers to run in order. The first parser which matches the log is used.",
+          "items": {
+            "$ref": "#/definitions/configunstableLogParser"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configunstableNoopEntity": {
       "properties": {
         "slug": {
@@ -1368,6 +1437,14 @@
       "properties": {
         "log_control_config": {
           "$ref": "#/definitions/configunstableLogControlConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadLogParserConfigResponse": {
+      "properties": {
+        "log_parser_config": {
+          "$ref": "#/definitions/configunstableLogParserConfig"
         }
       },
       "type": "object"
@@ -1801,6 +1878,30 @@
       "properties": {
         "log_control_config": {
           "$ref": "#/definitions/configunstableLogControlConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateLogParserConfigRequest": {
+      "properties": {
+        "log_parser_config": {
+          "$ref": "#/definitions/configunstableLogParserConfig"
+        },
+        "create_if_missing": {
+          "description": "If true, the LogParserConfig will be created if it does not already exist. If false, an error will be returned if the LogParserConfig does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the LogParserConfig will not be created nor updated, and no response LogParserConfig will be returned. The response will return an error if the given LogParserConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateLogParserConfigResponse": {
+      "properties": {
+        "log_parser_config": {
+          "$ref": "#/definitions/configunstableLogParserConfig"
         }
       },
       "type": "object"
@@ -2687,6 +2788,174 @@
         },
         "tags": [
           "LogControlConfig"
+        ]
+      }
+    },
+    "/api/unstable/config/log-parser-config": {
+      "delete": {
+        "operationId": "DeleteLogParserConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteLogParserConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the LogParserConfig because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the LogParserConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogParserConfig"
+        ]
+      },
+      "get": {
+        "operationId": "ReadLogParserConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadLogParserConfigResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the LogParserConfig because LogParserConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogParserConfig"
+        ]
+      },
+      "post": {
+        "operationId": "CreateLogParserConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateLogParserConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created LogParserConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateLogParserConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the LogParserConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the LogParserConfig because there is a conflict with an existing LogParserConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogParserConfig"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateLogParserConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateLogParserConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated LogParserConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateLogParserConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the LogParserConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the LogParserConfig because LogParserConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogParserConfig"
         ]
       }
     },

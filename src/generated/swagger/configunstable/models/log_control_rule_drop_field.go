@@ -17,8 +17,12 @@ import (
 // swagger:model LogControlRuleDropField
 type LogControlRuleDropField struct {
 
-	// field regex
+	// Regular expression to match the field(s) to drop.
 	FieldRegex string `json:"field_regex,omitempty"`
+
+	// Fully specified path to the the field(s) to drop.
+	// If empty, the field(s) to drop are at the root level of the log.
+	ParentPath []string `json:"parent_path"`
 }
 
 // Validate validates this log control rule drop field
