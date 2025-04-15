@@ -475,6 +475,26 @@ func (mr *MockClientServiceMockRecorder) CreateRollupRule(params interface{}, op
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRollupRule", reflect.TypeOf((*MockClientService)(nil).CreateRollupRule), varargs...)
 }
 
+// CreateSLO mocks base method.
+func (m *MockClientService) CreateSLO(params *operations.CreateSLOParams, opts ...operations.ClientOption) (*operations.CreateSLOOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateSLO", varargs...)
+	ret0, _ := ret[0].(*operations.CreateSLOOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateSLO indicates an expected call of CreateSLO.
+func (mr *MockClientServiceMockRecorder) CreateSLO(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSLO", reflect.TypeOf((*MockClientService)(nil).CreateSLO), varargs...)
+}
+
 // CreateServiceAccount mocks base method.
 func (m *MockClientService) CreateServiceAccount(params *operations.CreateServiceAccountParams, opts ...operations.ClientOption) (*operations.CreateServiceAccountOK, error) {
 	m.ctrl.T.Helper()
@@ -1055,6 +1075,26 @@ func (mr *MockClientServiceMockRecorder) DeleteRollupRule(params interface{}, op
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRollupRule", reflect.TypeOf((*MockClientService)(nil).DeleteRollupRule), varargs...)
 }
 
+// DeleteSLO mocks base method.
+func (m *MockClientService) DeleteSLO(params *operations.DeleteSLOParams, opts ...operations.ClientOption) (*operations.DeleteSLOOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteSLO", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteSLOOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteSLO indicates an expected call of DeleteSLO.
+func (mr *MockClientServiceMockRecorder) DeleteSLO(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSLO", reflect.TypeOf((*MockClientService)(nil).DeleteSLO), varargs...)
+}
+
 // DeleteServiceAccount mocks base method.
 func (m *MockClientService) DeleteServiceAccount(params *operations.DeleteServiceAccountParams, opts ...operations.ClientOption) (*operations.DeleteServiceAccountOK, error) {
 	m.ctrl.T.Helper()
@@ -1573,6 +1613,26 @@ func (mr *MockClientServiceMockRecorder) ListRollupRules(params interface{}, opt
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRollupRules", reflect.TypeOf((*MockClientService)(nil).ListRollupRules), varargs...)
+}
+
+// ListSLOs mocks base method.
+func (m *MockClientService) ListSLOs(params *operations.ListSLOsParams, opts ...operations.ClientOption) (*operations.ListSLOsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListSLOs", varargs...)
+	ret0, _ := ret[0].(*operations.ListSLOsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListSLOs indicates an expected call of ListSLOs.
+func (mr *MockClientServiceMockRecorder) ListSLOs(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSLOs", reflect.TypeOf((*MockClientService)(nil).ListSLOs), varargs...)
 }
 
 // ListServiceAccounts mocks base method.
@@ -2113,6 +2173,26 @@ func (mr *MockClientServiceMockRecorder) ReadRollupRule(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadRollupRule", reflect.TypeOf((*MockClientService)(nil).ReadRollupRule), varargs...)
+}
+
+// ReadSLO mocks base method.
+func (m *MockClientService) ReadSLO(params *operations.ReadSLOParams, opts ...operations.ClientOption) (*operations.ReadSLOOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadSLO", varargs...)
+	ret0, _ := ret[0].(*operations.ReadSLOOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadSLO indicates an expected call of ReadSLO.
+func (mr *MockClientServiceMockRecorder) ReadSLO(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadSLO", reflect.TypeOf((*MockClientService)(nil).ReadSLO), varargs...)
 }
 
 // ReadService mocks base method.
@@ -2725,6 +2805,26 @@ func (mr *MockClientServiceMockRecorder) UpdateRollupRule(params interface{}, op
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRollupRule", reflect.TypeOf((*MockClientService)(nil).UpdateRollupRule), varargs...)
+}
+
+// UpdateSLO mocks base method.
+func (m *MockClientService) UpdateSLO(params *operations.UpdateSLOParams, opts ...operations.ClientOption) (*operations.UpdateSLOOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateSLO", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateSLOOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateSLO indicates an expected call of UpdateSLO.
+func (mr *MockClientServiceMockRecorder) UpdateSLO(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSLO", reflect.TypeOf((*MockClientService)(nil).UpdateSLO), varargs...)
 }
 
 // UpdateTeam mocks base method.

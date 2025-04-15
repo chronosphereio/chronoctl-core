@@ -365,6 +365,22 @@
       },
       "type": "object"
     },
+    "ConfigV1UpdateSLOBody": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configv1SLO"
+        },
+        "create_if_missing": {
+          "description": "If true, the SLO will be created if it does not already exist, identified by slug. If false, an error will be returned if the SLO does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the SLO will not be created nor updated, and no response SLO will be returned. The response will return an error if the given SLO is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateTeamBody": {
       "properties": {
         "team": {
@@ -463,6 +479,39 @@
         "LOGS"
       ],
       "type": "string"
+    },
+    "DefinitionBurnRateDefinition": {
+      "properties": {
+        "window": {
+          "type": "string"
+        },
+        "budget": {
+          "description": "budget defines the amount of errors that are allowed during a given\ntime window. It is a value between 0.0 and 100.0 exclusive.",
+          "format": "double",
+          "type": "number"
+        },
+        "severity": {
+          "description": "Severity may only be one of: critical, warn.\nThis is also a string in the monitor schema",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "labels to attach to the burn rate alerts.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "DefinitionTimeWindow": {
+      "properties": {
+        "duration": {
+          "description": "duration as a string in the format \"28d\" or \"24h\", etc.",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "DerivedLabelMetricLabel": {
       "properties": {
@@ -1703,6 +1752,48 @@
       },
       "type": "object"
     },
+    "SLICustomIndicatorConfig": {
+      "properties": {
+        "good_query_template": {
+          "description": "A PromQL query that measures the number of \"good\" events for this SLI.\nEither this or the bad_query_template must be set.",
+          "type": "string"
+        },
+        "bad_query_template": {
+          "description": "A PromQL query that measures the number of \"bad\" events for this SLI.\nEither this or the good_query_template must be set.",
+          "type": "string"
+        },
+        "total_query_template": {
+          "description": "A PromQL query that measures the total number of events for this SLI.\nThis is required for all advanced SLIs.",
+          "type": "string"
+        }
+      },
+      "title": "CustomIndicatorConfig is for SLIs that are not associated with Chronosphere\nLens supported SLO types. They are provided with several variables that can\nbe used in the template to generate the query:\n- Window (required)\n- GroupBy (required)\n- LensService (optional)",
+      "type": "object"
+    },
+    "SLODefinition": {
+      "properties": {
+        "objective": {
+          "description": "The SLO objective",
+          "format": "double",
+          "type": "number"
+        },
+        "time_window": {
+          "$ref": "#/definitions/DefinitionTimeWindow"
+        },
+        "burn_rate_alerting_config": {
+          "description": "Provides the burn rate alert configuration for the SLO. If not provided the\ndefault burn rates will be used. The configuration is only valid if the\nenable_burn_rate_alerting flag is set to true.",
+          "items": {
+            "$ref": "#/definitions/DefinitionBurnRateDefinition"
+          },
+          "type": "array"
+        },
+        "enable_burn_rate_alerting": {
+          "description": "If true enables burn rate alerting.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ScheduleDayActive": {
       "enum": [
         "ALL_DAY",
@@ -2827,6 +2918,26 @@
       },
       "type": "object"
     },
+    "configv1CreateSLORequest": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configv1SLO"
+        },
+        "dry_run": {
+          "description": "If true, the SLO will not be created, and no response SLO will be returned. The response will return an error if the given SLO is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateSLOResponse": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configv1SLO"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateServiceAccountRequest": {
       "properties": {
         "service_account": {
@@ -3128,6 +3239,9 @@
       "type": "object"
     },
     "configv1DeleteRollupRuleResponse": {
+      "type": "object"
+    },
+    "configv1DeleteSLOResponse": {
       "type": "object"
     },
     "configv1DeleteServiceAccountResponse": {
@@ -3694,6 +3808,20 @@
         "rollup_rules": {
           "items": {
             "$ref": "#/definitions/configv1RollupRule"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListSLOsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "slos": {
+          "items": {
+            "$ref": "#/definitions/configv1SLO"
           },
           "type": "array"
         }
@@ -4313,6 +4441,31 @@
       },
       "type": "object"
     },
+    "configv1PromQLMatcher": {
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/configv1PromQLMatcherType"
+        },
+        "name": {
+          "description": "Prometheus label name for the matcher",
+          "type": "string"
+        },
+        "value": {
+          "description": "Prometheus label value for the matcher",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1PromQLMatcherType": {
+      "enum": [
+        "MatchEqual",
+        "MatchRegexp",
+        "MatchNotEqual",
+        "MatchNotRegexp"
+      ],
+      "type": "string"
+    },
     "configv1ReadBucketResponse": {
       "properties": {
         "bucket": {
@@ -4485,6 +4638,14 @@
       "properties": {
         "rollup_rule": {
           "$ref": "#/definitions/configv1RollupRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadSLOResponse": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configv1SLO"
         }
       },
       "type": "object"
@@ -4792,6 +4953,87 @@
         "retention": {
           "description": "Required retention of the aggregated metrics.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1SLI": {
+      "description": "SLI is a service level indicator. The contents of this proto are intended to\nbe used to generate queries necessary to measure SLOs.",
+      "properties": {
+        "custom_indicator": {
+          "$ref": "#/definitions/SLICustomIndicatorConfig"
+        },
+        "custom_dimension_labels": {
+          "description": "Custom dimensions are used to configure additional labels to export from\nthe underlying queries. This feature provides a logical budget to group\nunique combination of dimensions. For example, if you want to track a\nbudget per endpoint, add the endpoint label as a dimension. These dimensions\nare provided on the top-level SLI so that SLOs will receive them\nin `.GroupBy`.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "additional_promql_filters": {
+          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`",
+          "items": {
+            "$ref": "#/definitions/configv1PromQLMatcher"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1SLO": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the SLO. If slug is not provided, one will be generated based of the name field. Cannot be modified after the SLO is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the SLO. May be modified after the SLO is created.",
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the SLO was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the SLO was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "collection_ref": {
+          "$ref": "#/definitions/configv1CollectionReference"
+        },
+        "notification_policy_slug": {
+          "description": "Optional notification policy to explicitly apply to the generated monitors.\nIf this is not set then the team this SLO will belong to must have a\ndefault notification policy",
+          "type": "string"
+        },
+        "signal_grouping": {
+          "$ref": "#/definitions/MonitorSignalGrouping"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are visible in notifications generated by this SLO,\nand can be used to route alerts with notification overrides.",
+          "type": "object"
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Annotations are visible in notifications generated by this SLO\nThey can be be templated with labels from notifications.",
+          "type": "object"
+        },
+        "sli": {
+          "$ref": "#/definitions/configv1SLI"
+        },
+        "definition": {
+          "$ref": "#/definitions/SLODefinition"
         }
       },
       "type": "object"
@@ -5416,6 +5658,14 @@
       "properties": {
         "rollup_rule": {
           "$ref": "#/definitions/configv1RollupRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateSLOResponse": {
+      "properties": {
+        "slo": {
+          "$ref": "#/definitions/configv1SLO"
         }
       },
       "type": "object"
@@ -8217,13 +8467,6 @@
     "/api/v1/config/log-allocation-config": {
       "delete": {
         "operationId": "DeleteLogAllocationConfig",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "dry_run",
-            "type": "boolean"
-          }
-        ],
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -11407,6 +11650,283 @@
         },
         "tags": [
           "Service"
+        ]
+      }
+    },
+    "/api/v1/config/slos": {
+      "get": {
+        "operationId": "ListSLOs",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any SLO with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any SLO with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "collection_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "service_slugs",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListSLOsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
+        ]
+      },
+      "post": {
+        "operationId": "CreateSLO",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateSLORequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created SLO.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateSLOResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the SLO because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the SLO because there is a conflict with an existing SLO.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
+        ]
+      }
+    },
+    "/api/v1/config/slos/{slug}": {
+      "delete": {
+        "operationId": "DeleteSLO",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteSLOResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the SLO because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the SLO because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
+        ]
+      },
+      "get": {
+        "operationId": "ReadSLO",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadSLOResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the SLO because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateSLO",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateSLOBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated SLO.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateSLOResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the SLO because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the SLO because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the SLO because there is a conflict with an existing SLO.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SLO"
         ]
       }
     },

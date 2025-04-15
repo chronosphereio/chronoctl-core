@@ -34,6 +34,8 @@ type ClientService interface {
 
 	CreateLogControlConfig(params *CreateLogControlConfigParams, opts ...ClientOption) (*CreateLogControlConfigOK, error)
 
+	CreateLogParserConfig(params *CreateLogParserConfigParams, opts ...ClientOption) (*CreateLogParserConfigOK, error)
+
 	CreateNoopEntity(params *CreateNoopEntityParams, opts ...ClientOption) (*CreateNoopEntityOK, error)
 
 	CreateObjectDiscoveryRule(params *CreateObjectDiscoveryRuleParams, opts ...ClientOption) (*CreateObjectDiscoveryRuleOK, error)
@@ -55,6 +57,8 @@ type ClientService interface {
 	DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...ClientOption) (*DeleteLinkTemplateOK, error)
 
 	DeleteLogControlConfig(params *DeleteLogControlConfigParams, opts ...ClientOption) (*DeleteLogControlConfigOK, error)
+
+	DeleteLogParserConfig(params *DeleteLogParserConfigParams, opts ...ClientOption) (*DeleteLogParserConfigOK, error)
 
 	DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...ClientOption) (*DeleteNoopEntityOK, error)
 
@@ -92,6 +96,8 @@ type ClientService interface {
 
 	ReadLogControlConfig(params *ReadLogControlConfigParams, opts ...ClientOption) (*ReadLogControlConfigOK, error)
 
+	ReadLogParserConfig(params *ReadLogParserConfigParams, opts ...ClientOption) (*ReadLogParserConfigOK, error)
+
 	ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOption) (*ReadNoopEntityOK, error)
 
 	ReadObjectDiscoveryRule(params *ReadObjectDiscoveryRuleParams, opts ...ClientOption) (*ReadObjectDiscoveryRuleOK, error)
@@ -115,6 +121,8 @@ type ClientService interface {
 	UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error)
 
 	UpdateLogControlConfig(params *UpdateLogControlConfigParams, opts ...ClientOption) (*UpdateLogControlConfigOK, error)
+
+	UpdateLogParserConfig(params *UpdateLogParserConfigParams, opts ...ClientOption) (*UpdateLogParserConfigOK, error)
 
 	UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...ClientOption) (*UpdateNoopEntityOK, error)
 
@@ -243,6 +251,43 @@ func (a *Client) CreateLogControlConfig(params *CreateLogControlConfigParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateLogControlConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateLogParserConfig create log parser config API
+*/
+func (a *Client) CreateLogParserConfig(params *CreateLogParserConfigParams, opts ...ClientOption) (*CreateLogParserConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateLogParserConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateLogParserConfig",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/log-parser-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateLogParserConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateLogParserConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateLogParserConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -653,6 +698,43 @@ func (a *Client) DeleteLogControlConfig(params *DeleteLogControlConfigParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteLogControlConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteLogParserConfig delete log parser config API
+*/
+func (a *Client) DeleteLogParserConfig(params *DeleteLogParserConfigParams, opts ...ClientOption) (*DeleteLogParserConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteLogParserConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteLogParserConfig",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/log-parser-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteLogParserConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteLogParserConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteLogParserConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1323,6 +1405,43 @@ func (a *Client) ReadLogControlConfig(params *ReadLogControlConfigParams, opts .
 }
 
 /*
+ReadLogParserConfig read log parser config API
+*/
+func (a *Client) ReadLogParserConfig(params *ReadLogParserConfigParams, opts ...ClientOption) (*ReadLogParserConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadLogParserConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadLogParserConfig",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/log-parser-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadLogParserConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadLogParserConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadLogParserConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadNoopEntity read noop entity API
 */
 func (a *Client) ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOption) (*ReadNoopEntityOK, error) {
@@ -1766,6 +1885,43 @@ func (a *Client) UpdateLogControlConfig(params *UpdateLogControlConfigParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateLogControlConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateLogParserConfig update log parser config API
+*/
+func (a *Client) UpdateLogParserConfig(params *UpdateLogParserConfigParams, opts ...ClientOption) (*UpdateLogParserConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateLogParserConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateLogParserConfig",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/log-parser-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateLogParserConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateLogParserConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateLogParserConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

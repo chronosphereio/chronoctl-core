@@ -95,6 +95,26 @@ func (mr *MockClientServiceMockRecorder) CreateLogControlConfig(params interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLogControlConfig", reflect.TypeOf((*MockClientService)(nil).CreateLogControlConfig), varargs...)
 }
 
+// CreateLogParserConfig mocks base method.
+func (m *MockClientService) CreateLogParserConfig(params *operations.CreateLogParserConfigParams, opts ...operations.ClientOption) (*operations.CreateLogParserConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateLogParserConfig", varargs...)
+	ret0, _ := ret[0].(*operations.CreateLogParserConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateLogParserConfig indicates an expected call of CreateLogParserConfig.
+func (mr *MockClientServiceMockRecorder) CreateLogParserConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLogParserConfig", reflect.TypeOf((*MockClientService)(nil).CreateLogParserConfig), varargs...)
+}
+
 // CreateNoopEntity mocks base method.
 func (m *MockClientService) CreateNoopEntity(params *operations.CreateNoopEntityParams, opts ...operations.ClientOption) (*operations.CreateNoopEntityOK, error) {
 	m.ctrl.T.Helper()
@@ -313,6 +333,26 @@ func (mr *MockClientServiceMockRecorder) DeleteLogControlConfig(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLogControlConfig", reflect.TypeOf((*MockClientService)(nil).DeleteLogControlConfig), varargs...)
+}
+
+// DeleteLogParserConfig mocks base method.
+func (m *MockClientService) DeleteLogParserConfig(params *operations.DeleteLogParserConfigParams, opts ...operations.ClientOption) (*operations.DeleteLogParserConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteLogParserConfig", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteLogParserConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteLogParserConfig indicates an expected call of DeleteLogParserConfig.
+func (mr *MockClientServiceMockRecorder) DeleteLogParserConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLogParserConfig", reflect.TypeOf((*MockClientService)(nil).DeleteLogParserConfig), varargs...)
 }
 
 // DeleteNoopEntity mocks base method.
@@ -675,6 +715,26 @@ func (mr *MockClientServiceMockRecorder) ReadLogControlConfig(params interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLogControlConfig", reflect.TypeOf((*MockClientService)(nil).ReadLogControlConfig), varargs...)
 }
 
+// ReadLogParserConfig mocks base method.
+func (m *MockClientService) ReadLogParserConfig(params *operations.ReadLogParserConfigParams, opts ...operations.ClientOption) (*operations.ReadLogParserConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadLogParserConfig", varargs...)
+	ret0, _ := ret[0].(*operations.ReadLogParserConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadLogParserConfig indicates an expected call of ReadLogParserConfig.
+func (mr *MockClientServiceMockRecorder) ReadLogParserConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLogParserConfig", reflect.TypeOf((*MockClientService)(nil).ReadLogParserConfig), varargs...)
+}
+
 // ReadNoopEntity mocks base method.
 func (m *MockClientService) ReadNoopEntity(params *operations.ReadNoopEntityParams, opts ...operations.ClientOption) (*operations.ReadNoopEntityOK, error) {
 	m.ctrl.T.Helper()
@@ -925,6 +985,26 @@ func (mr *MockClientServiceMockRecorder) UpdateLogControlConfig(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLogControlConfig", reflect.TypeOf((*MockClientService)(nil).UpdateLogControlConfig), varargs...)
+}
+
+// UpdateLogParserConfig mocks base method.
+func (m *MockClientService) UpdateLogParserConfig(params *operations.UpdateLogParserConfigParams, opts ...operations.ClientOption) (*operations.UpdateLogParserConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateLogParserConfig", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateLogParserConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateLogParserConfig indicates an expected call of UpdateLogParserConfig.
+func (mr *MockClientServiceMockRecorder) UpdateLogParserConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLogParserConfig", reflect.TypeOf((*MockClientService)(nil).UpdateLogParserConfig), varargs...)
 }
 
 // UpdateNoopEntity mocks base method.

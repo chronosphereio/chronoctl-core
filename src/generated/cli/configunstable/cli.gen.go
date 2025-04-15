@@ -14,7 +14,6 @@ import (
 func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewDashboardCmd())
 	root.AddCommand(NewLinkTemplateCmd())
-	root.AddCommand(NewSLOCmd())
 	root.AddCommand(NewSavedTraceSearchCmd())
 	root.AddCommand(NewServiceCmd())
 	root.AddCommand(NewTraceTailSamplingRulesCmd())
@@ -49,22 +48,6 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateLinkTemplate(ctx, clients.ConfigUnstable, entity, updateOpts)
-			if err != nil {
-				return err
-			}
-			return nil
-		},
-		SLOTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
-			entity, ok := obj.(*SLO)
-			if !ok {
-				return types.WrongObjectErr((&SLO{}), obj)
-			}
-
-			updateOpts := UpdateOptions{
-				DryRun:          dryRun,
-				CreateIfMissing: true,
-			}
-			_, err := UpdateSLO(ctx, clients.ConfigUnstable, entity, updateOpts)
 			if err != nil {
 				return err
 			}

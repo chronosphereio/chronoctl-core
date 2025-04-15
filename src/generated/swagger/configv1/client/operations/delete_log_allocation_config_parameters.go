@@ -14,7 +14,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 )
 
 // NewDeleteLogAllocationConfigParams creates a new DeleteLogAllocationConfigParams object,
@@ -61,10 +60,6 @@ DeleteLogAllocationConfigParams contains all the parameters to send to the API e
 	Typically these are written to a http.Request.
 */
 type DeleteLogAllocationConfigParams struct {
-
-	// DryRun.
-	DryRun *bool
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -118,17 +113,6 @@ func (o *DeleteLogAllocationConfigParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithDryRun adds the dryRun to the delete log allocation config params
-func (o *DeleteLogAllocationConfigParams) WithDryRun(dryRun *bool) *DeleteLogAllocationConfigParams {
-	o.SetDryRun(dryRun)
-	return o
-}
-
-// SetDryRun adds the dryRun to the delete log allocation config params
-func (o *DeleteLogAllocationConfigParams) SetDryRun(dryRun *bool) {
-	o.DryRun = dryRun
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *DeleteLogAllocationConfigParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -136,23 +120,6 @@ func (o *DeleteLogAllocationConfigParams) WriteToRequest(r runtime.ClientRequest
 		return err
 	}
 	var res []error
-
-	if o.DryRun != nil {
-
-		// query param dry_run
-		var qrDryRun bool
-
-		if o.DryRun != nil {
-			qrDryRun = *o.DryRun
-		}
-		qDryRun := swag.FormatBool(qrDryRun)
-		if qDryRun != "" {
-
-			if err := r.SetQueryParam("dry_run", qDryRun); err != nil {
-				return err
-			}
-		}
-	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
