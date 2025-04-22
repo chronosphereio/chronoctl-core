@@ -584,6 +584,32 @@ spec:
             # A PromQL query that measures the total number of events for this SLI.
             # This is required for all advanced SLIs.
             total_query_template: <string>
+        # Configuration for the different supported templated indicators.
+        templated_indicator:
+            # Indicates which Chronosphere discovery job is used to build the
+            # SLI queries.
+            discovery_job_slug: <string>
+            # This overrides the equivalent ComponentDiscovery.MetricMetadata field
+            # when present. This is a common change for RPC components.
+            endpoint_label: <string>
+            # Configuration for an availability SLI.
+            availability_indicator:
+                # the API endpoints to monitor in the SLO. If this is left empty then all
+                # endpoints will be monitored.
+                endpoints_monitored:
+                    - <string>
+                # A list of result codes that indicate an unsuccessful event. Either this
+                # or success_codes must be set.
+                error_codes:
+                    - <string>
+            # Configuration for a latency SLI.
+            latency_indicator:
+                # the API endpoints to monitor in the SLO. If this is left empty then all
+                # endpoints will be monitored.
+                endpoints_monitored:
+                    - <string>
+                # The name of the histogram metric that measures latency.
+                latency_bucket: <string>
 `
 
 func newSLOScaffoldCmd() *cobra.Command {

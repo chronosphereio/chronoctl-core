@@ -3,6 +3,34 @@
     "application/json"
   ],
   "definitions": {
+    "BudgetControlBehavior": {
+      "properties": {
+        "tolerance_amount": {
+          "format": "int64",
+          "type": "string"
+        },
+        "target_amount": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BudgetControlPriority": {
+      "enum": [
+        "LOW",
+        "DEFAULT",
+        "HIGH"
+      ],
+      "type": "string"
+    },
+    "BudgetControlResource": {
+      "enum": [
+        "MATCHED_WRITES_STANDARD",
+        "MATCHED_WRITES_HISTOGRAM"
+      ],
+      "type": "string"
+    },
     "ChronoConfigCollectionsConfig": {
       "properties": {
         "group_teams": {
@@ -38,6 +66,22 @@
         },
         "team_slug": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ConfigUnstableUpdateBudgetControlBody": {
+      "properties": {
+        "budget_control": {
+          "$ref": "#/definitions/configunstableBudgetControl"
+        },
+        "create_if_missing": {
+          "description": "If true, the BudgetControl will be created if it does not already exist, identified by slug. If false, an error will be returned if the BudgetControl does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the BudgetControl will not be created nor updated, and no response BudgetControl will be returned. The response will return an error if the given BudgetControl is invalid.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -792,6 +836,63 @@
       },
       "type": "object"
     },
+    "configunstableBudgetControl": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the BudgetControl. If slug is not provided, one will be generated based of the name field. Cannot be modified after the BudgetControl is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Required name of the BudgetControl. May be modified after the BudgetControl is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the BudgetControl was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the BudgetControl was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "resource": {
+          "$ref": "#/definitions/BudgetControlResource"
+        },
+        "pool_name": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/definitions/BudgetControlPriority"
+        },
+        "behavior": {
+          "$ref": "#/definitions/BudgetControlBehavior"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateBudgetControlRequest": {
+      "properties": {
+        "budget_control": {
+          "$ref": "#/definitions/configunstableBudgetControl"
+        },
+        "dry_run": {
+          "description": "If true, the BudgetControl will not be created, and no response BudgetControl will be returned. The response will return an error if the given BudgetControl is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateBudgetControlResponse": {
+      "properties": {
+        "budget_control": {
+          "$ref": "#/definitions/configunstableBudgetControl"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateDashboardRequest": {
       "properties": {
         "dashboard": {
@@ -844,26 +945,6 @@
       "properties": {
         "log_control_config": {
           "$ref": "#/definitions/configunstableLogControlConfig"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateLogParserConfigRequest": {
-      "properties": {
-        "log_parser_config": {
-          "$ref": "#/definitions/configunstableLogParserConfig"
-        },
-        "dry_run": {
-          "description": "If true, the LogParserConfig will not be created, and no response LogParserConfig will be returned. The response will return an error if the given LogParserConfig is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateLogParserConfigResponse": {
-      "properties": {
-        "log_parser_config": {
-          "$ref": "#/definitions/configunstableLogParserConfig"
         }
       },
       "type": "object"
@@ -1063,6 +1144,9 @@
       },
       "type": "object"
     },
+    "configunstableDeleteBudgetControlResponse": {
+      "type": "object"
+    },
     "configunstableDeleteDashboardResponse": {
       "type": "object"
     },
@@ -1070,9 +1154,6 @@
       "type": "object"
     },
     "configunstableDeleteLogControlConfigResponse": {
-      "type": "object"
-    },
-    "configunstableDeleteLogParserConfigResponse": {
       "type": "object"
     },
     "configunstableDeleteNoopEntityResponse": {
@@ -1133,6 +1214,20 @@
         "ui_component": {
           "description": "Link template is scoped to the specified string representing a UI component here.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListBudgetControlsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "budget_controls": {
+          "items": {
+            "$ref": "#/definitions/configunstableBudgetControl"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1301,44 +1396,6 @@
       },
       "type": "object"
     },
-    "configunstableLogParser": {
-      "properties": {
-        "name": {
-          "description": "Name is the name of the parser.",
-          "type": "string"
-        },
-        "regex": {
-          "description": "Regex is the Re2 regex pattern to apply to incoming logs.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableLogParserConfig": {
-      "description": "LogParserConfig specifies the parsers to run on inputted logs.",
-      "properties": {
-        "created_at": {
-          "description": "Timestamp of when the LogParserConfig was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the LogParserConfig was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "parsers": {
-          "description": "The list of parsers to run in order. The first parser which matches the log is used.",
-          "items": {
-            "$ref": "#/definitions/configunstableLogParser"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "configunstableNoopEntity": {
       "properties": {
         "slug": {
@@ -1417,6 +1474,14 @@
       ],
       "type": "string"
     },
+    "configunstableReadBudgetControlResponse": {
+      "properties": {
+        "budget_control": {
+          "$ref": "#/definitions/configunstableBudgetControl"
+        }
+      },
+      "type": "object"
+    },
     "configunstableReadDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -1437,14 +1502,6 @@
       "properties": {
         "log_control_config": {
           "$ref": "#/definitions/configunstableLogControlConfig"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableReadLogParserConfigResponse": {
-      "properties": {
-        "log_parser_config": {
-          "$ref": "#/definitions/configunstableLogParserConfig"
         }
       },
       "type": "object"
@@ -1842,6 +1899,14 @@
       },
       "type": "object"
     },
+    "configunstableUpdateBudgetControlResponse": {
+      "properties": {
+        "budget_control": {
+          "$ref": "#/definitions/configunstableBudgetControl"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -1878,30 +1943,6 @@
       "properties": {
         "log_control_config": {
           "$ref": "#/definitions/configunstableLogControlConfig"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableUpdateLogParserConfigRequest": {
-      "properties": {
-        "log_parser_config": {
-          "$ref": "#/definitions/configunstableLogParserConfig"
-        },
-        "create_if_missing": {
-          "description": "If true, the LogParserConfig will be created if it does not already exist. If false, an error will be returned if the LogParserConfig does not already exist.",
-          "type": "boolean"
-        },
-        "dry_run": {
-          "description": "If true, the LogParserConfig will not be created nor updated, and no response LogParserConfig will be returned. The response will return an error if the given LogParserConfig is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableUpdateLogParserConfigResponse": {
-      "properties": {
-        "log_parser_config": {
-          "$ref": "#/definitions/configunstableLogParserConfig"
         }
       },
       "type": "object"
@@ -2079,6 +2120,265 @@
     "version": "UNSTABLE"
   },
   "paths": {
+    "/api/unstable/config/budget-controls": {
+      "get": {
+        "operationId": "ListBudgetControls",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any BudgetControl with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any BudgetControl with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListBudgetControlsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "BudgetControl"
+        ]
+      },
+      "post": {
+        "operationId": "CreateBudgetControl",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateBudgetControlRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created BudgetControl.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateBudgetControlResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the BudgetControl because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the BudgetControl because there is a conflict with an existing BudgetControl.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "BudgetControl"
+        ]
+      }
+    },
+    "/api/unstable/config/budget-controls/{slug}": {
+      "delete": {
+        "operationId": "DeleteBudgetControl",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteBudgetControlResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the BudgetControl because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the BudgetControl because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "BudgetControl"
+        ]
+      },
+      "get": {
+        "operationId": "ReadBudgetControl",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadBudgetControlResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the BudgetControl because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "BudgetControl"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateBudgetControl",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateBudgetControlBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated BudgetControl.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateBudgetControlResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the BudgetControl because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the BudgetControl because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the BudgetControl because there is a conflict with an existing BudgetControl.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "BudgetControl"
+        ]
+      }
+    },
     "/api/unstable/config/dashboards": {
       "get": {
         "operationId": "ListDashboards",
@@ -2788,174 +3088,6 @@
         },
         "tags": [
           "LogControlConfig"
-        ]
-      }
-    },
-    "/api/unstable/config/log-parser-config": {
-      "delete": {
-        "operationId": "DeleteLogParserConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteLogParserConfigResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot delete the LogParserConfig because it is in use.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the LogParserConfig because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogParserConfig"
-        ]
-      },
-      "get": {
-        "operationId": "ReadLogParserConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadLogParserConfigResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the LogParserConfig because LogParserConfig has not been created.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogParserConfig"
-        ]
-      },
-      "post": {
-        "operationId": "CreateLogParserConfig",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateLogParserConfigRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created LogParserConfig.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateLogParserConfigResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the LogParserConfig because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the LogParserConfig because there is a conflict with an existing LogParserConfig.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogParserConfig"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateLogParserConfig",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateLogParserConfigRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated LogParserConfig.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateLogParserConfigResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the LogParserConfig because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the LogParserConfig because LogParserConfig has not been created.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogParserConfig"
         ]
       }
     },
