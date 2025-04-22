@@ -1752,6 +1752,26 @@
       },
       "type": "object"
     },
+    "SLIAvailabilityIndicatorConfig": {
+      "description": "Configuration for an availability SLI.",
+      "properties": {
+        "endpoints_monitored": {
+          "description": "the API endpoints to monitor in the SLO. If this is left empty then all\nendpoints will be monitored.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "error_codes": {
+          "description": "A list of result codes that indicate an unsuccessful event. Either this\nor success_codes must be set.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "SLICustomIndicatorConfig": {
       "properties": {
         "good_query_template": {
@@ -1768,6 +1788,43 @@
         }
       },
       "title": "CustomIndicatorConfig is for SLIs that are not associated with Chronosphere\nLens supported SLO types. They are provided with several variables that can\nbe used in the template to generate the query:\n- Window (required)\n- GroupBy (required)\n- LensService (optional)",
+      "type": "object"
+    },
+    "SLILatencyIndicatorConfig": {
+      "description": "Configuration for a latency SLI.",
+      "properties": {
+        "endpoints_monitored": {
+          "description": "the API endpoints to monitor in the SLO. If this is left empty then all\nendpoints will be monitored.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "latency_bucket": {
+          "description": "The name of the histogram metric that measures latency.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SLITemplatedIndicatorConfig": {
+      "description": "Configuration for the different supported templated indicators.",
+      "properties": {
+        "discovery_job_slug": {
+          "description": "Indicates which Chronosphere discovery job is used to build the\nSLI queries.",
+          "type": "string"
+        },
+        "endpoint_label": {
+          "description": "This overrides the equivalent ComponentDiscovery.MetricMetadata field\nwhen present. This is a common change for RPC components.",
+          "type": "string"
+        },
+        "availability_indicator": {
+          "$ref": "#/definitions/SLIAvailabilityIndicatorConfig"
+        },
+        "latency_indicator": {
+          "$ref": "#/definitions/SLILatencyIndicatorConfig"
+        }
+      },
       "type": "object"
     },
     "SLODefinition": {
@@ -2698,6 +2755,26 @@
       },
       "type": "object"
     },
+    "configv1CreateLogIngestConfigRequest": {
+      "properties": {
+        "log_ingest_config": {
+          "$ref": "#/definitions/configv1LogIngestConfig"
+        },
+        "dry_run": {
+          "description": "If true, the LogIngestConfig will not be created, and no response LogIngestConfig will be returned. The response will return an error if the given LogIngestConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateLogIngestConfigResponse": {
+      "properties": {
+        "log_ingest_config": {
+          "$ref": "#/definitions/configv1LogIngestConfig"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateLogScaleActionRequest": {
       "properties": {
         "log_scale_action": {
@@ -3206,6 +3283,9 @@
       "type": "object"
     },
     "configv1DeleteLogAllocationConfigResponse": {
+      "type": "object"
+    },
+    "configv1DeleteLogIngestConfigResponse": {
       "type": "object"
     },
     "configv1DeleteLogScaleActionResponse": {
@@ -3945,6 +4025,44 @@
       },
       "type": "object"
     },
+    "configv1LogIngestConfig": {
+      "description": "LogIngestConfig is a singleton configuration object that specifies the configuration for log ingest.",
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the LogIngestConfig was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the LogIngestConfig was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "parsers": {
+          "description": "The ordered list of parsers to run on ingested logs. The first parser which matches the log is used.",
+          "items": {
+            "$ref": "#/definitions/configv1LogParser"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1LogParser": {
+      "properties": {
+        "name": {
+          "description": "Name is the name of the parser.",
+          "type": "string"
+        },
+        "regex": {
+          "description": "Regex is the Re2 regex parser pattern to apply. Named capturing groups become named fields in the extracted log.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configv1LogScaleAction": {
       "properties": {
         "slug": {
@@ -4554,6 +4672,14 @@
       },
       "type": "object"
     },
+    "configv1ReadLogIngestConfigResponse": {
+      "properties": {
+        "log_ingest_config": {
+          "$ref": "#/definitions/configv1LogIngestConfig"
+        }
+      },
+      "type": "object"
+    },
     "configv1ReadLogScaleActionResponse": {
       "properties": {
         "log_scale_action": {
@@ -4962,6 +5088,9 @@
       "properties": {
         "custom_indicator": {
           "$ref": "#/definitions/SLICustomIndicatorConfig"
+        },
+        "templated_indicator": {
+          "$ref": "#/definitions/SLITemplatedIndicatorConfig"
         },
         "custom_dimension_labels": {
           "description": "Custom dimensions are used to configure additional labels to export from\nthe underlying queries. This feature provides a logical budget to group\nunique combination of dimensions. For example, if you want to track a\nbudget per endpoint, add the endpoint label as a dimension. These dimensions\nare provided on the top-level SLI so that SLOs will receive them\nin `.GroupBy`.",
@@ -5538,6 +5667,30 @@
       "properties": {
         "log_allocation_config": {
           "$ref": "#/definitions/configv1LogAllocationConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateLogIngestConfigRequest": {
+      "properties": {
+        "log_ingest_config": {
+          "$ref": "#/definitions/configv1LogIngestConfig"
+        },
+        "create_if_missing": {
+          "description": "If true, the LogIngestConfig will be created if it does not already exist. If false, an error will be returned if the LogIngestConfig does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the LogIngestConfig will not be created nor updated, and no response LogIngestConfig will be returned. The response will return an error if the given LogIngestConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateLogIngestConfigResponse": {
+      "properties": {
+        "log_ingest_config": {
+          "$ref": "#/definitions/configv1LogIngestConfig"
         }
       },
       "type": "object"
@@ -8629,6 +8782,174 @@
         },
         "tags": [
           "LogAllocationConfig"
+        ]
+      }
+    },
+    "/api/v1/config/log-ingest-config": {
+      "delete": {
+        "operationId": "DeleteLogIngestConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteLogIngestConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the LogIngestConfig because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the LogIngestConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogIngestConfig"
+        ]
+      },
+      "get": {
+        "operationId": "ReadLogIngestConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadLogIngestConfigResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the LogIngestConfig because LogIngestConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogIngestConfig"
+        ]
+      },
+      "post": {
+        "operationId": "CreateLogIngestConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogIngestConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created LogIngestConfig.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogIngestConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the LogIngestConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the LogIngestConfig because there is a conflict with an existing LogIngestConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogIngestConfig"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateLogIngestConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateLogIngestConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated LogIngestConfig.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateLogIngestConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the LogIngestConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the LogIngestConfig because LogIngestConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogIngestConfig"
         ]
       }
     },

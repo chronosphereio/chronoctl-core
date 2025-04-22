@@ -23,6 +23,9 @@ type Configv1SLI struct {
 	// custom indicator
 	CustomIndicator *SLICustomIndicatorConfig `json:"custom_indicator,omitempty"`
 
+	// templated indicator
+	TemplatedIndicator *SLITemplatedIndicatorConfig `json:"templated_indicator,omitempty"`
+
 	// Custom dimensions are used to configure additional labels to export from
 	// the underlying queries. This feature provides a logical budget to group
 	// unique combination of dimensions. For example, if you want to track a
@@ -41,6 +44,10 @@ func (m *Configv1SLI) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCustomIndicator(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTemplatedIndicator(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -65,6 +72,25 @@ func (m *Configv1SLI) validateCustomIndicator(formats strfmt.Registry) error {
 				return ve.ValidateName("custom_indicator")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("custom_indicator")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1SLI) validateTemplatedIndicator(formats strfmt.Registry) error {
+	if swag.IsZero(m.TemplatedIndicator) { // not required
+		return nil
+	}
+
+	if m.TemplatedIndicator != nil {
+		if err := m.TemplatedIndicator.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("templated_indicator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("templated_indicator")
 			}
 			return err
 		}
@@ -107,6 +133,10 @@ func (m *Configv1SLI) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateTemplatedIndicator(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateAdditionalPromqlFilters(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -130,6 +160,27 @@ func (m *Configv1SLI) contextValidateCustomIndicator(ctx context.Context, format
 				return ve.ValidateName("custom_indicator")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("custom_indicator")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1SLI) contextValidateTemplatedIndicator(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TemplatedIndicator != nil {
+
+		if swag.IsZero(m.TemplatedIndicator) { // not required
+			return nil
+		}
+
+		if err := m.TemplatedIndicator.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("templated_indicator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("templated_indicator")
 			}
 			return err
 		}

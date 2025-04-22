@@ -23,6 +23,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewGcpMetricsIntegrationCmd())
 	root.AddCommand(NewGrafanaDashboardCmd())
 	root.AddCommand(NewLogAllocationConfigCmd())
+	root.AddCommand(NewLogIngestConfigCmd())
 	root.AddCommand(NewLogScaleActionCmd())
 	root.AddCommand(NewLogScaleAlertCmd())
 	root.AddCommand(NewMappingRuleCmd())
@@ -217,6 +218,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateLogAllocationConfig(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		LogIngestConfigTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*LogIngestConfig)
+			if !ok {
+				return types.WrongObjectErr((&LogIngestConfig{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateLogIngestConfig(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

@@ -15,27 +15,27 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ConfigunstableLogParserConfig LogParserConfig specifies the parsers to run on inputted logs.
+// Configv1LogIngestConfig LogIngestConfig is a singleton configuration object that specifies the configuration for log ingest.
 //
-// swagger:model configunstableLogParserConfig
-type ConfigunstableLogParserConfig struct {
+// swagger:model configv1LogIngestConfig
+type Configv1LogIngestConfig struct {
 
-	// Timestamp of when the LogParserConfig was created. Cannot be set by clients.
+	// Timestamp of when the LogIngestConfig was created. Cannot be set by clients.
 	// Read Only: true
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
-	// Timestamp of when the LogParserConfig was last updated. Cannot be set by clients.
+	// Timestamp of when the LogIngestConfig was last updated. Cannot be set by clients.
 	// Read Only: true
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// The list of parsers to run in order. The first parser which matches the log is used.
-	Parsers []*ConfigunstableLogParser `json:"parsers"`
+	// The ordered list of parsers to run on ingested logs. The first parser which matches the log is used.
+	Parsers []*Configv1LogParser `json:"parsers"`
 }
 
-// Validate validates this configunstable log parser config
-func (m *ConfigunstableLogParserConfig) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 log ingest config
+func (m *Configv1LogIngestConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
@@ -56,7 +56,7 @@ func (m *ConfigunstableLogParserConfig) Validate(formats strfmt.Registry) error 
 	return nil
 }
 
-func (m *ConfigunstableLogParserConfig) validateCreatedAt(formats strfmt.Registry) error {
+func (m *Configv1LogIngestConfig) validateCreatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -68,7 +68,7 @@ func (m *ConfigunstableLogParserConfig) validateCreatedAt(formats strfmt.Registr
 	return nil
 }
 
-func (m *ConfigunstableLogParserConfig) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *Configv1LogIngestConfig) validateUpdatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -80,7 +80,7 @@ func (m *ConfigunstableLogParserConfig) validateUpdatedAt(formats strfmt.Registr
 	return nil
 }
 
-func (m *ConfigunstableLogParserConfig) validateParsers(formats strfmt.Registry) error {
+func (m *Configv1LogIngestConfig) validateParsers(formats strfmt.Registry) error {
 	if swag.IsZero(m.Parsers) { // not required
 		return nil
 	}
@@ -106,8 +106,8 @@ func (m *ConfigunstableLogParserConfig) validateParsers(formats strfmt.Registry)
 	return nil
 }
 
-// ContextValidate validate this configunstable log parser config based on the context it is used
-func (m *ConfigunstableLogParserConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 log ingest config based on the context it is used
+func (m *Configv1LogIngestConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
@@ -128,7 +128,7 @@ func (m *ConfigunstableLogParserConfig) ContextValidate(ctx context.Context, for
 	return nil
 }
 
-func (m *ConfigunstableLogParserConfig) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1LogIngestConfig) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
 		return err
@@ -137,7 +137,7 @@ func (m *ConfigunstableLogParserConfig) contextValidateCreatedAt(ctx context.Con
 	return nil
 }
 
-func (m *ConfigunstableLogParserConfig) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1LogIngestConfig) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
 		return err
@@ -146,7 +146,7 @@ func (m *ConfigunstableLogParserConfig) contextValidateUpdatedAt(ctx context.Con
 	return nil
 }
 
-func (m *ConfigunstableLogParserConfig) contextValidateParsers(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1LogIngestConfig) contextValidateParsers(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Parsers); i++ {
 
@@ -172,7 +172,7 @@ func (m *ConfigunstableLogParserConfig) contextValidateParsers(ctx context.Conte
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableLogParserConfig) MarshalBinary() ([]byte, error) {
+func (m *Configv1LogIngestConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -180,8 +180,8 @@ func (m *ConfigunstableLogParserConfig) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableLogParserConfig) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableLogParserConfig
+func (m *Configv1LogIngestConfig) UnmarshalBinary(b []byte) error {
+	var res Configv1LogIngestConfig
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
