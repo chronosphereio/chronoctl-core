@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+## v1.13.0
 Added:
 * Move SLOs stable public API in `v1/config/Slos`
 
