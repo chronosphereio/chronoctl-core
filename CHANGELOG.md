@@ -1,6 +1,7 @@
 # Releases
 
 ## Unreleased
+* Add support for resource `v1/config/LogIngestConfig
 
 ## v1.13.0
 Added:

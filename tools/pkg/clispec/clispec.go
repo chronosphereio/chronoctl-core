@@ -18,9 +18,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/chronosphereio/chronoctl-core/src/thirdparty/yaml"
 	"github.com/go-openapi/inflect"
 	"github.com/go-openapi/spec"
+
+	"github.com/chronosphereio/chronoctl-core/src/thirdparty/yaml"
 )
 
 const (
@@ -151,15 +152,6 @@ func (e *Entity) ScaffoldYAML() (string, error) {
 		Kind: yaml.MappingNode,
 	}
 
-	entityKind := e.Type.Kind
-	// Unlike other singletons, the base name of OtelMetricsIngestion is not plural.
-	if e.IsSingleton && entityKind != "OtelMetricsIngestion" {
-		entityKind = inflect.Pluralize(entityKind)
-	}
-	if entityKind == "Slo" {
-		entityKind = "SLO"
-	}
-
 	root.Content = append(root.Content,
 		newKeyNode("api_version", "" /* description */),
 		&yaml.Node{
@@ -170,7 +162,7 @@ func (e *Entity) ScaffoldYAML() (string, error) {
 		newKeyNode("kind", "" /* description */),
 		&yaml.Node{
 			Kind:  yaml.ScalarNode,
-			Value: entityKind,
+			Value: e.scaffoldingKindName(),
 		},
 
 		newKeyNode("spec", "" /* description */),
@@ -182,6 +174,25 @@ func (e *Entity) ScaffoldYAML() (string, error) {
 		return "", err
 	}
 	return string(b), nil
+}
+
+func (e *Entity) scaffoldingKindName() string {
+	entityKind := e.Type.Kind
+	if entityKind == "Slo" {
+		return "SLO"
+	}
+
+	// Set of singleton entity kinds that should not be pluralized.
+	nonPluralSingletons := map[string]bool{
+		"OtelMetricsIngestion": true,
+		"LogIngestConfig":      true,
+	}
+
+	if e.IsSingleton && !nonPluralSingletons[entityKind] {
+		entityKind = inflect.Pluralize(entityKind)
+	}
+
+	return entityKind
 }
 
 // Parameter represents a parameter to a Chronosphere API that must be provided by the user
