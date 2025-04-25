@@ -345,7 +345,7 @@ func newLogIngestConfigDeleteCmd() *cobra.Command {
 }
 
 const LogIngestConfigScaffoldYAML = `api_version: v1/config
-kind: LogIngestConfigs
+kind: LogIngestConfig
 spec:
     # The ordered list of parsers to run on ingested logs. The first parser which matches the log is used.
     parsers:
