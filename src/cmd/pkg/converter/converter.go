@@ -1,5 +1,5 @@
 // Package converter is a library for converting prometheus/alertmanager configuration to Chronosphere.
-package converter
+package main
 
 import (
 	"fmt"
@@ -11,7 +11,6 @@ import (
 	"time"
 
 	anyascii "github.com/anyascii/go"
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 	"github.com/prometheus/alertmanager/config"
 	"github.com/prometheus/alertmanager/dispatch"
 	"github.com/prometheus/alertmanager/pkg/labels"
@@ -21,6 +20,8 @@ import (
 	"github.com/prometheus/prometheus/promql/parser"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
+
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 const (
@@ -160,7 +161,7 @@ func ConvertPrometheus(
 	rulesYAML string,
 	alertManagerYAML string,
 	opts Opts,
-) (*ConvertedAlerts, []string, error) {
+) (*convertPrometheusRulesResult, []string, error) {
 	err := validateOpts(&opts, fieldPath("chrono_config"))
 	if err != nil {
 		return nil, nil, fmt.Errorf("validate options: %w", err)
@@ -184,70 +185,70 @@ func ConvertPrometheus(
 		return nil, nil, fmt.Errorf("convert prometheus rule groups: %w", err)
 	}
 
-	var alertReceivers []*Notifier
-	var notificationPolicy *models.Configv1NotificationPolicy
-	var alertWarnings []string
+	//var alertReceivers []*Notifier
+	//var notificationPolicy *models.Configv1NotificationPolicy
+	//var alertWarnings []string
+	//
+	//// Only apply alertmanager config if there's any monitor
+	//// A monitor is created from an alert rule
+	//if len(promResult.monitors) > 0 {
+	//	var alertmgrConfig config.Config
+	//	if err := yaml.Unmarshal([]byte(alertManagerYAML), &alertmgrConfig); err != nil {
+	//		return nil, nil, fieldPath("alertmanager_yaml").invalidReason("Unable to unmarshal alertmanager rules: %v", err)
+	//	}
+	//
+	//	if numTemplates := len(alertmgrConfig.Templates); numTemplates > 0 {
+	//		// nil out the list of template files since they are not supported.
+	//		// We inline the template files into the notifier definitions (see ExpandAlertManagerTemplates)
+	//		alertWarnings = append(alertWarnings, fmt.Sprintf("Ignoring and niling out alertmanager templates slice of size %d", numTemplates))
+	//		alertmgrConfig.Templates = nil
+	//	}
+	//
+	//	// Compile alertmanager version of the route, this will make it simpler for us to walk the tree.
+	//	rootRoute := *alertmgrConfig.Route
+	//	if rootRoute.RepeatInterval == nil {
+	//		rootRoute.RepeatInterval = &defaultRepeatInterval
+	//	}
+	//	route := dispatch.NewRoute(alertmgrConfig.Route, nil)
+	//
+	//	policy, receivers, warnings, err := convertAlertManagerConfig("alertmanager_yaml", opts, newMultiReceiverRoute(route), &alertmgrConfig)
+	//	if err != nil {
+	//		return nil, nil, fmt.Errorf("convert alertmanager config: %w", err)
+	//	}
+	//	alertWarnings = append(alertWarnings, warnings...)
+	//
+	//	// Update all monitors to use the generated notification policy, and possibly signal-per-series
+	//	for _, monitor := range promResult.monitors {
+	//		monitor.NotificationPolicySlug = policy.Slug
+	//		if opts.InferMonitorSignals {
+	//			if grouping, ok := inferSignal(monitor, route); ok {
+	//				monitor.SignalGrouping = grouping
+	//			} else {
+	//				alertWarnings = append(alertWarnings, fmt.Sprintf(
+	//					"Unable to determine a signal grouping for monitor with slug `%s`; will default to grouping by monitor and severity",
+	//					monitor.Slug))
+	//			}
+	//		}
+	//	}
+	//
+	//	alertReceivers = receivers
+	//	notificationPolicy = policy
+	//}
+	//
+	//alerts := &ConvertedAlerts{
+	//	EntityGroups:       promResult.entityGroups,
+	//	Collections:        promResult.collections,
+	//	NotificationPolicy: notificationPolicy,
+	//	Receivers:          alertReceivers,
+	//	Monitors:           promResult.monitors,
+	//	RecordingRules:     promResult.recordingRules,
+	//}
+	//
+	//if opts.UseBuckets {
+	//	alerts.Collections = nil
+	//}
 
-	// Only apply alertmanager config if there's any monitor
-	// A monitor is created from an alert rule
-	if len(promResult.monitors) > 0 {
-		var alertmgrConfig config.Config
-		if err := yaml.Unmarshal([]byte(alertManagerYAML), &alertmgrConfig); err != nil {
-			return nil, nil, fieldPath("alertmanager_yaml").invalidReason("Unable to unmarshal alertmanager rules: %v", err)
-		}
-
-		if numTemplates := len(alertmgrConfig.Templates); numTemplates > 0 {
-			// nil out the list of template files since they are not supported.
-			// We inline the template files into the notifier definitions (see ExpandAlertManagerTemplates)
-			alertWarnings = append(alertWarnings, fmt.Sprintf("Ignoring and niling out alertmanager templates slice of size %d", numTemplates))
-			alertmgrConfig.Templates = nil
-		}
-
-		// Compile alertmanager version of the route, this will make it simpler for us to walk the tree.
-		rootRoute := *alertmgrConfig.Route
-		if rootRoute.RepeatInterval == nil {
-			rootRoute.RepeatInterval = &defaultRepeatInterval
-		}
-		route := dispatch.NewRoute(alertmgrConfig.Route, nil)
-
-		policy, receivers, warnings, err := convertAlertManagerConfig("alertmanager_yaml", opts, newMultiReceiverRoute(route), &alertmgrConfig)
-		if err != nil {
-			return nil, nil, fmt.Errorf("convert alertmanager config: %w", err)
-		}
-		alertWarnings = append(alertWarnings, warnings...)
-
-		// Update all monitors to use the generated notification policy, and possibly signal-per-series
-		for _, monitor := range promResult.monitors {
-			monitor.NotificationPolicySlug = policy.Slug
-			if opts.InferMonitorSignals {
-				if grouping, ok := inferSignal(monitor, route); ok {
-					monitor.SignalGrouping = grouping
-				} else {
-					alertWarnings = append(alertWarnings, fmt.Sprintf(
-						"Unable to determine a signal grouping for monitor with slug `%s`; will default to grouping by monitor and severity",
-						monitor.Slug))
-				}
-			}
-		}
-
-		alertReceivers = receivers
-		notificationPolicy = policy
-	}
-
-	alerts := &ConvertedAlerts{
-		EntityGroups:       promResult.entityGroups,
-		Collections:        promResult.collections,
-		NotificationPolicy: notificationPolicy,
-		Receivers:          alertReceivers,
-		Monitors:           promResult.monitors,
-		RecordingRules:     promResult.recordingRules,
-	}
-
-	if opts.UseBuckets {
-		alerts.Collections = nil
-	}
-
-	return alerts, alertWarnings, nil
+	return promResult, []string{}, nil
 }
 
 func validateOpts(opts *Opts, fp fieldPath) error {
