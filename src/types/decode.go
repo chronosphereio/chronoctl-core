@@ -19,7 +19,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"reflect"
 	"regexp"
@@ -67,7 +66,7 @@ func Decode(r io.Reader, permissiveParsing bool) ([]Object, error) {
 }
 
 func decodeWithRegistry(r io.Reader, reg ObjectRegistry, permissiveParsing bool) ([]Object, error) {
-	data, err := ioutil.ReadAll(r)
+	data, err := io.ReadAll(r)
 	if err != nil {
 		return nil, fmt.Errorf("reading input: %w", err)
 	}
@@ -176,7 +175,7 @@ func (j *jsonDecoder) Decode(v interface{}) error {
 	err := j.decoder.Decode(v)
 
 	if syntaxErr, ok := err.(*json.SyntaxError); ok {
-		data, readErr := ioutil.ReadAll(j.decoder.Buffered())
+		data, readErr := io.ReadAll(j.decoder.Buffered())
 		if readErr != nil {
 			log.Printf("reading stream failed: %v", readErr)
 		}
@@ -206,5 +205,5 @@ func newObjectFromMeta(reg ObjectRegistry, meta TypeMeta) (Object, error) {
 		)
 	}
 
-	return reflect.New(t).Interface().(Object), nil
+	return reflect.New(t).Interface().(Object), nil //nolint:errcheck
 }
