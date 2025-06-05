@@ -17,7 +17,6 @@ package xtest
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -39,7 +38,7 @@ var updateGoldenFiles = flag.Bool(
 func MustReadFile(t testing.TB, fileName string, msgAndArgs ...any) string {
 	t.Helper()
 
-	bytes, err := ioutil.ReadFile(path.Clean(fileName))
+	bytes, err := os.ReadFile(path.Clean(fileName))
 	require.NoError(t, err, msgAndArgs...)
 	return string(bytes)
 }
@@ -50,10 +49,10 @@ func writeGoldenFile(t *testing.T, updatedContent, filePath string) {
 	// The directory may not exist, so create it first.
 	require.NoError(t, os.MkdirAll(filepath.Dir(filePath), 0o777),
 		"create directory for golden files failed")
-	require.NoError(t, ioutil.WriteFile(path.Clean(filePath), []byte(updatedContent), 0o600),
+	require.NoError(t, os.WriteFile(path.Clean(filePath), []byte(updatedContent), 0o600),
 		"failed to write golden file")
 
-	err := ioutil.WriteFile(path.Clean(filePath), []byte(updatedContent+"\n"), 0o600)
+	err := os.WriteFile(path.Clean(filePath), []byte(updatedContent+"\n"), 0o600)
 	require.NoError(t, err)
 }
 

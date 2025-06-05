@@ -2,6 +2,7 @@
 
 ## Unreleased
 * Add support for resource `v1/config/LogIngestConfig
+* Internal: upgrade to Go 1.24
 
 ## v1.13.0
 Added:

@@ -16,7 +16,7 @@ package client
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -506,7 +506,7 @@ func TestRequestIDTransport(t *testing.T) {
 					Header: http.Header{
 						"Chrono-Request-Id": []string{"abc123"},
 					},
-					Body: ioutil.NopCloser(strings.NewReader(`{"code": 12, "message": "hi"}`)),
+					Body: io.NopCloser(strings.NewReader(`{"code": 12, "message": "hi"}`)),
 				}
 				return res, nil
 			}),

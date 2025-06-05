@@ -17,7 +17,6 @@ package swagger
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"reflect"
 	"strings"
 
@@ -38,7 +37,7 @@ func TextConsumer() runtime.Consumer {
 			return fmt.Errorf("unexpected response, missing response body")
 		}
 
-		b, err := ioutil.ReadAll(reader)
+		b, err := io.ReadAll(reader)
 		if err != nil {
 			return errors.Wrap(err, "could not read unexpected response body")
 		}

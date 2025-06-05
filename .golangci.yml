@@ -175,7 +175,6 @@ linters:
   enable:
     - depguard
     - errcheck
-    - exportloopref
     - gosimple
     - govet
     - goimports

@@ -1,6 +1,6 @@
 module github.com/chronosphereio/chronoctl-core
 
-go 1.23
+go 1.24
 
 // Required to avoid picking up https://github.com/go-openapi/strfmt/commit/b36a4901fcb51dbf4300a5a6b60b4335440aa208
 // which causes strfmt.DateTime values to be incorrectly omitted from yaml output due to a bug in the yaml library

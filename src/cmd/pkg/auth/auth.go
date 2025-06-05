@@ -19,7 +19,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/pkg/browser"
@@ -217,7 +216,7 @@ func (c *subcommand) newWhoAmICmd() *cobra.Command {
 				return errors.WithStack(err)
 			}
 			defer resp.Body.Close()
-			body, err := ioutil.ReadAll(resp.Body)
+			body, err := io.ReadAll(resp.Body)
 			if err != nil {
 				return errors.WithStack(err)
 			}

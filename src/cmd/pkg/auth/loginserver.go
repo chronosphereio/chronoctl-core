@@ -123,7 +123,7 @@ func (s *loginServer) login(ctx context.Context, stdin io.Reader, stdout, stderr
 	urlParams := authURL.Query()
 	// We can't use listener.Addr().String() here since it produces an address of the form `[::]:PORT` which we're not
 	// allowed to send to under our CSP, which explicitly requires the form `localhost:PORT`
-	urlParams.Set("token_callback", fmt.Sprintf("localhost:%d", listener.Addr().(*net.TCPAddr).Port))
+	urlParams.Set("token_callback", fmt.Sprintf("localhost:%d", listener.Addr().(*net.TCPAddr).Port)) //nolint:errcheck
 	authURL.RawQuery = urlParams.Encode()
 	if s.openFunc(authURL.String()) != nil {
 		return errors.WithStack(err)
