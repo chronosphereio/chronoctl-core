@@ -21,7 +21,7 @@ type Configv1CreateTraceMetricsRuleRequest struct {
 	// trace metrics rule
 	TraceMetricsRule *Configv1TraceMetricsRule `json:"trace_metrics_rule,omitempty"`
 
-	// If true, the TraceMetricsRule will not be created, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.
+	// If true, the TraceMetricsRule isn't created, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

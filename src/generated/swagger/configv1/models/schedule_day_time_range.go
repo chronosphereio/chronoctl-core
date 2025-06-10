@@ -17,10 +17,10 @@ import (
 // swagger:model ScheduleDayTimeRange
 type ScheduleDayTimeRange struct {
 
-	// Start time in the in format "<hour>:<minute>", e.g. "15:30".
+	// Start time in the in format `"<hour>:<minute>"`. For example, `"15:30"`.
 	StartHhMm string `json:"start_hh_mm,omitempty"`
 
-	// End time in the in format "<hour>:<minute>", e.g. "15:30".
+	// End time in the in format `"<hour>:<minute>"`. For example, `"15:30"`.
 	EndHhMm string `json:"end_hh_mm,omitempty"`
 }
 

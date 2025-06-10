@@ -501,9 +501,9 @@ func newTraceJaegerRemoteSamplingStrategyListCmd() *cobra.Command {
 const TraceJaegerRemoteSamplingStrategyScaffoldYAML = `api_version: v1/config
 kind: TraceJaegerRemoteSamplingStrategy
 spec:
-    # Unique identifier of the TraceJaegerRemoteSamplingStrategy. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceJaegerRemoteSamplingStrategy is created.
+    # Unique identifier of the TraceJaegerRemoteSamplingStrategy. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the TraceJaegerRemoteSamplingStrategy is created.
     slug: <string>
-    # Required name of the TraceJaegerRemoteSamplingStrategy. May be modified after the TraceJaegerRemoteSamplingStrategy is created.
+    # Required. Name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.
     name: <string>
     # The name of the service this sampling strategy applies to. This must match the slug and name fields.
     service_name: <string>

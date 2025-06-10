@@ -55,6 +55,26 @@ func (mr *MockClientServiceMockRecorder) Echo(params interface{}, opts ...interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Echo", reflect.TypeOf((*MockClientService)(nil).Echo), varargs...)
 }
 
+// ListMonitorStatuses mocks base method.
+func (m *MockClientService) ListMonitorStatuses(params *operations.ListMonitorStatusesParams, opts ...operations.ClientOption) (*operations.ListMonitorStatusesOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListMonitorStatuses", varargs...)
+	ret0, _ := ret[0].(*operations.ListMonitorStatusesOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListMonitorStatuses indicates an expected call of ListMonitorStatuses.
+func (mr *MockClientServiceMockRecorder) ListMonitorStatuses(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMonitorStatuses", reflect.TypeOf((*MockClientService)(nil).ListMonitorStatuses), varargs...)
+}
+
 // SetTransport mocks base method.
 func (m *MockClientService) SetTransport(transport runtime.ClientTransport) {
 	m.ctrl.T.Helper()

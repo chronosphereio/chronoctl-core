@@ -19,8 +19,8 @@ import (
 // swagger:model SeriesConditionsConditions
 type SeriesConditionsConditions struct {
 
-	// List of conditions to evaluate against a series.
-	// Only one condition -- not all -- needs to match in order to assign a severity to a signal.
+	// List of conditions to evaluate against a series. Only one condition must
+	// match to assign a severity to a signal.
 	Conditions []*MonitorCondition `json:"conditions"`
 }
 

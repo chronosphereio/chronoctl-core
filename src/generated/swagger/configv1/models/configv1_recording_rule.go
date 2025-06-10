@@ -19,10 +19,10 @@ import (
 // swagger:model configv1RecordingRule
 type Configv1RecordingRule struct {
 
-	// Unique identifier of the RecordingRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the RecordingRule is created.
+	// Unique identifier of the RecordingRule. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the RecordingRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required name of the RecordingRule. May be modified after the RecordingRule is created.
+	// Required. Name of the RecordingRule. You can modify this value after the RecordingRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the RecordingRule was created. Cannot be set by clients.

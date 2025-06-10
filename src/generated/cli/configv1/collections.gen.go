@@ -499,9 +499,9 @@ func newCollectionListCmd() *cobra.Command {
 const CollectionScaffoldYAML = `api_version: v1/config
 kind: Collection
 spec:
-    # Unique identifier of the Collection. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Collection is created.
+    # Unique identifier of the Collection. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Collection is created.
     slug: <string>
-    # Required name of the Collection. May be modified after the Collection is created.
+    # Required. Name of the Collection. You can modify this value after the Collection is created.
     name: <string>
     # Required slug of the team the collection belongs to.
     team_slug: <string>

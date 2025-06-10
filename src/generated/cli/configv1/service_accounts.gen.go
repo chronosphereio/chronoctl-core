@@ -394,9 +394,9 @@ func newServiceAccountListCmd() *cobra.Command {
 const ServiceAccountScaffoldYAML = `api_version: v1/config
 kind: ServiceAccount
 spec:
-    # Unique identifier of the ServiceAccount. If slug is not provided, one will be generated based of the name field. Cannot be modified after the ServiceAccount is created.
+    # Unique identifier of the ServiceAccount. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the ServiceAccount is created.
     slug: <string>
-    # Required name of the ServiceAccount. May be modified after the ServiceAccount is created.
+    # Required. Name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
     name: <string>
     # If set, grants the service account access to all Chronosphere APIs
     # (including resource configuration and metric data) within the access

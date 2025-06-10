@@ -19,10 +19,10 @@ import (
 // swagger:model configv1ServiceAccount
 type Configv1ServiceAccount struct {
 
-	// Unique identifier of the ServiceAccount. If slug is not provided, one will be generated based of the name field. Cannot be modified after the ServiceAccount is created.
+	// Unique identifier of the ServiceAccount. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the ServiceAccount is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required name of the ServiceAccount. May be modified after the ServiceAccount is created.
+	// Required. Name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the ServiceAccount was created. Cannot be set by clients.

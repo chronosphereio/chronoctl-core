@@ -21,7 +21,7 @@ type Configv1CreateServiceAccountRequest struct {
 	// service account
 	ServiceAccount *Configv1ServiceAccount `json:"service_account,omitempty"`
 
-	// If true, the ServiceAccount will not be created, and no response ServiceAccount will be returned. The response will return an error if the given ServiceAccount is invalid.
+	// If true, the ServiceAccount isn't created, and no response ServiceAccount will be returned. The response will return an error if the given ServiceAccount is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

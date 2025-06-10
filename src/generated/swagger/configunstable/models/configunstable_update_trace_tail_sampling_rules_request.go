@@ -24,7 +24,7 @@ type ConfigunstableUpdateTraceTailSamplingRulesRequest struct {
 	// If true, the TraceTailSamplingRules will be created if it does not already exist. If false, an error will be returned if the TraceTailSamplingRules does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the TraceTailSamplingRules will not be created nor updated, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.
+	// If true, the TraceTailSamplingRules isn't created or updated, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

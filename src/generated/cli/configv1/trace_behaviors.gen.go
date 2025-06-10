@@ -491,9 +491,9 @@ func newTraceBehaviorListCmd() *cobra.Command {
 const TraceBehaviorScaffoldYAML = `api_version: v1/config
 kind: TraceBehavior
 spec:
-    # Required name of the TraceBehavior. May be modified after the TraceBehavior is created.
+    # Required. Name of the TraceBehavior. You can modify this value after the TraceBehavior is created.
     name: <string>
-    # Unique identifier of the TraceBehavior. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceBehavior is created.
+    # Unique identifier of the TraceBehavior. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the TraceBehavior is created.
     slug: <string>
     description: <string>
     # Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.

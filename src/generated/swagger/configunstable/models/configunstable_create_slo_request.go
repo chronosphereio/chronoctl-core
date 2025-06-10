@@ -21,7 +21,7 @@ type ConfigunstableCreateSLORequest struct {
 	// slo
 	SLO *ConfigunstableSLO `json:"slo,omitempty"`
 
-	// If true, the SLO will not be created, and no response SLO will be returned. The response will return an error if the given SLO is invalid.
+	// If true, the SLO isn't created, and no response SLO will be returned. The response will return an error if the given SLO is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

@@ -21,7 +21,7 @@ type Configv1CreateTeamRequest struct {
 	// team
 	Team *Configv1Team `json:"team,omitempty"`
 
-	// If true, the Team will not be created, and no response Team will be returned. The response will return an error if the given Team is invalid.
+	// If true, the Team isn't created, and no response Team will be returned. The response will return an error if the given Team is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

@@ -19,10 +19,10 @@ import (
 // swagger:model configv1GrafanaDashboard
 type Configv1GrafanaDashboard struct {
 
-	// Unique identifier of the GrafanaDashboard. If slug is not provided, one will be generated based of the name field. Cannot be modified after the GrafanaDashboard is created.
+	// Unique identifier of the GrafanaDashboard. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the GrafanaDashboard is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required name of the GrafanaDashboard. May be modified after the GrafanaDashboard is created.
+	// Required. Name of the GrafanaDashboard. You can modify this value after the GrafanaDashboard is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the GrafanaDashboard was created. Cannot be set by clients.

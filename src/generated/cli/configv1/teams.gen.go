@@ -491,9 +491,9 @@ func newTeamListCmd() *cobra.Command {
 const TeamScaffoldYAML = `api_version: v1/config
 kind: Team
 spec:
-    # Unique identifier of the Team. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Team is created.
+    # Unique identifier of the Team. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Team is created.
     slug: <string>
-    # Required name of the Team. May be modified after the Team is created.
+    # Required. Name of the Team. You can modify this value after the Team is created.
     name: <string>
     # Unordered set of emails whose users are members of this team.
     user_emails:

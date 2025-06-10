@@ -495,11 +495,11 @@ func newMappingRuleListCmd() *cobra.Command {
 const MappingRuleScaffoldYAML = `api_version: v1/config
 kind: MappingRule
 spec:
-    # Unique identifier of the MappingRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the MappingRule is created.
+    # Unique identifier of the MappingRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the MappingRule is created.
     slug: <string>
-    # Required name of the MappingRule. May be modified after the MappingRule is created.
+    # Required. Name of the MappingRule. You can modify this value after the MappingRule is created.
     name: <string>
-    # Required slug of the bucket the MappingRule belongs to.
+    # Required. Slug of the bucket the MappingRule belongs to.
     bucket_slug: <string>
     # Required filters that determine to which metrics to apply the rule.
     filters:

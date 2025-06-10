@@ -20,10 +20,10 @@ import (
 // swagger:model configv1GcpMetricsIntegration
 type Configv1GcpMetricsIntegration struct {
 
-	// Unique identifier of the GcpMetricsIntegration. If slug is not provided, one will be generated based of the name field. Cannot be modified after the GcpMetricsIntegration is created.
+	// Unique identifier of the GcpMetricsIntegration. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the GcpMetricsIntegration is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required name of the GcpMetricsIntegration. May be modified after the GcpMetricsIntegration is created.
+	// Required. Name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the GcpMetricsIntegration was created. Cannot be set by clients.

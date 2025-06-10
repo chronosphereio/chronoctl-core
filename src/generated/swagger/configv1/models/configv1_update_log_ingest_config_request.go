@@ -24,7 +24,7 @@ type Configv1UpdateLogIngestConfigRequest struct {
 	// If true, the LogIngestConfig will be created if it does not already exist. If false, an error will be returned if the LogIngestConfig does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the LogIngestConfig will not be created nor updated, and no response LogIngestConfig will be returned. The response will return an error if the given LogIngestConfig is invalid.
+	// If true, the LogIngestConfig isn't created or updated, and no response LogIngestConfig will be returned. The response will return an error if the given LogIngestConfig is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

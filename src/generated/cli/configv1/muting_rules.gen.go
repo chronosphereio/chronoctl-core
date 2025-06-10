@@ -512,9 +512,9 @@ func newMutingRuleListCmd() *cobra.Command {
 const MutingRuleScaffoldYAML = `api_version: v1/config
 kind: MutingRule
 spec:
-    # Unique identifier of the MutingRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the MutingRule is created.
+    # Unique identifier of the MutingRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the MutingRule is created.
     slug: <string>
-    # Required name of the MutingRule. May be modified after the MutingRule is created.
+    # Required. Name of the MutingRule. You can modify this value after the MutingRule is created.
     name: <string>
     # Specify which series are silenced by the muting rule. Alerting series must
     # match all muting rule matchers to be silenced.

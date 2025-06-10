@@ -503,9 +503,9 @@ func newClassicDashboardListCmd() *cobra.Command {
 const ClassicDashboardScaffoldYAML = `api_version: v1/config
 kind: ClassicDashboard
 spec:
-    # Unique identifier of the ClassicDashboard. If slug is not provided, one will be generated based of the name field. Cannot be modified after the ClassicDashboard is created.
+    # Unique identifier of the ClassicDashboard. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the ClassicDashboard is created.
     slug: <string>
-    # Required name of the ClassicDashboard. May be modified after the ClassicDashboard is created.
+    # Required. Name of the ClassicDashboard. You can modify this value after the ClassicDashboard is created.
     name: <string>
     # Slug of the bucket the dashboard belongs to. Required if collection_slug
     # is not set.

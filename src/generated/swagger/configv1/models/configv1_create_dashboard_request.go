@@ -21,7 +21,7 @@ type Configv1CreateDashboardRequest struct {
 	// dashboard
 	Dashboard *Configv1Dashboard `json:"dashboard,omitempty"`
 
-	// If true, the Dashboard will not be created, and no response Dashboard will be returned. The response will return an error if the given Dashboard is invalid.
+	// If true, the Dashboard isn't created, and no response Dashboard will be returned. The response will return an error if the given Dashboard is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 
