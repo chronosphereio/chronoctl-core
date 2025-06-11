@@ -345,7 +345,7 @@ func newLogBudgetDeleteCmd() *cobra.Command {
 }
 
 const LogBudgetScaffoldYAML = `api_version: unstable/config
-kind: LogBudgets
+kind: LogBudget
 spec:
     monthly_budget:
         # resources are the required resources of the global budget. Must set an

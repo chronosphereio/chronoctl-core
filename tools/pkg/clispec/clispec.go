@@ -186,6 +186,7 @@ func (e *Entity) scaffoldingKindName() string {
 	nonPluralSingletons := map[string]bool{
 		"OtelMetricsIngestion": true,
 		"LogIngestConfig":      true,
+		"LogBudget":            true,
 	}
 
 	if e.IsSingleton && !nonPluralSingletons[entityKind] {
