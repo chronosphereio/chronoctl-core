@@ -19,10 +19,10 @@ import (
 // swagger:model configunstableSLO
 type ConfigunstableSLO struct {
 
-	// Unique identifier of the SLO. If slug is not provided, one will be generated based of the name field. Cannot be modified after the SLO is created.
+	// Unique identifier of the SLO. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the SLO is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required name of the SLO. May be modified after the SLO is created.
+	// Required. Name of the SLO. You can modify this value after the SLO is created.
 	Name string `json:"name,omitempty"`
 
 	// description

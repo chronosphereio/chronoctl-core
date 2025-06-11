@@ -21,7 +21,7 @@ type Configv1CreateGcpMetricsIntegrationRequest struct {
 	// gcp metrics integration
 	GcpMetricsIntegration *Configv1GcpMetricsIntegration `json:"gcp_metrics_integration,omitempty"`
 
-	// If true, the GcpMetricsIntegration will not be created, and no response GcpMetricsIntegration will be returned. The response will return an error if the given GcpMetricsIntegration is invalid.
+	// If true, the GcpMetricsIntegration isn't created, and no response GcpMetricsIntegration will be returned. The response will return an error if the given GcpMetricsIntegration is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

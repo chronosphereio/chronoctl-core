@@ -495,9 +495,9 @@ func newDashboardListCmd() *cobra.Command {
 const DashboardScaffoldYAML = `api_version: unstable/config
 kind: Dashboard
 spec:
-    # Unique identifier of the Dashboard. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Dashboard is created.
+    # Unique identifier of the Dashboard. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Dashboard is created.
     slug: <string>
-    # Required name of the Dashboard. May be modified after the Dashboard is created.
+    # Required. Name of the Dashboard. You can modify this value after the Dashboard is created.
     name: <string>
     # Required slug of the collection the dashboard belongs to.
     collection_slug: <string>

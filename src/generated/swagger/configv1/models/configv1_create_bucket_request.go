@@ -21,7 +21,7 @@ type Configv1CreateBucketRequest struct {
 	// bucket
 	Bucket *Configv1Bucket `json:"bucket,omitempty"`
 
-	// If true, the Bucket will not be created, and no response Bucket will be returned. The response will return an error if the given Bucket is invalid.
+	// If true, the Bucket isn't created, and no response Bucket will be returned. The response will return an error if the given Bucket is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

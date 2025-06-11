@@ -28,11 +28,11 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateBudgetControl(params *CreateBudgetControlParams, opts ...ClientOption) (*CreateBudgetControlOK, error)
-
 	CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error)
 
 	CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...ClientOption) (*CreateLinkTemplateOK, error)
+
+	CreateLogBudget(params *CreateLogBudgetParams, opts ...ClientOption) (*CreateLogBudgetOK, error)
 
 	CreateLogControlConfig(params *CreateLogControlConfigParams, opts ...ClientOption) (*CreateLogControlConfigOK, error)
 
@@ -52,11 +52,11 @@ type ClientService interface {
 
 	CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, opts ...ClientOption) (*CreateTraceTopTagConfigOK, error)
 
-	DeleteBudgetControl(params *DeleteBudgetControlParams, opts ...ClientOption) (*DeleteBudgetControlOK, error)
-
 	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error)
 
 	DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...ClientOption) (*DeleteLinkTemplateOK, error)
+
+	DeleteLogBudget(params *DeleteLogBudgetParams, opts ...ClientOption) (*DeleteLogBudgetOK, error)
 
 	DeleteLogControlConfig(params *DeleteLogControlConfigParams, opts ...ClientOption) (*DeleteLogControlConfigOK, error)
 
@@ -76,8 +76,6 @@ type ClientService interface {
 
 	DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, opts ...ClientOption) (*DeleteTraceTopTagConfigOK, error)
 
-	ListBudgetControls(params *ListBudgetControlsParams, opts ...ClientOption) (*ListBudgetControlsOK, error)
-
 	ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error)
 
 	ListLinkTemplates(params *ListLinkTemplatesParams, opts ...ClientOption) (*ListLinkTemplatesOK, error)
@@ -92,11 +90,11 @@ type ClientService interface {
 
 	ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error)
 
-	ReadBudgetControl(params *ReadBudgetControlParams, opts ...ClientOption) (*ReadBudgetControlOK, error)
-
 	ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error)
 
 	ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...ClientOption) (*ReadLinkTemplateOK, error)
+
+	ReadLogBudget(params *ReadLogBudgetParams, opts ...ClientOption) (*ReadLogBudgetOK, error)
 
 	ReadLogControlConfig(params *ReadLogControlConfigParams, opts ...ClientOption) (*ReadLogControlConfigOK, error)
 
@@ -118,11 +116,11 @@ type ClientService interface {
 
 	SyncPrometheus(params *SyncPrometheusParams, opts ...ClientOption) (*SyncPrometheusOK, error)
 
-	UpdateBudgetControl(params *UpdateBudgetControlParams, opts ...ClientOption) (*UpdateBudgetControlOK, error)
-
 	UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOption) (*UpdateDashboardOK, error)
 
 	UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error)
+
+	UpdateLogBudget(params *UpdateLogBudgetParams, opts ...ClientOption) (*UpdateLogBudgetOK, error)
 
 	UpdateLogControlConfig(params *UpdateLogControlConfigParams, opts ...ClientOption) (*UpdateLogControlConfigOK, error)
 
@@ -143,43 +141,6 @@ type ClientService interface {
 	UpdateTraceTopTagConfig(params *UpdateTraceTopTagConfigParams, opts ...ClientOption) (*UpdateTraceTopTagConfigOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
-}
-
-/*
-CreateBudgetControl create budget control API
-*/
-func (a *Client) CreateBudgetControl(params *CreateBudgetControlParams, opts ...ClientOption) (*CreateBudgetControlOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateBudgetControlParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateBudgetControl",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/budget-controls",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateBudgetControlReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateBudgetControlOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateBudgetControlDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -253,6 +214,43 @@ func (a *Client) CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...Cl
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateLinkTemplateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateLogBudget create log budget API
+*/
+func (a *Client) CreateLogBudget(params *CreateLogBudgetParams, opts ...ClientOption) (*CreateLogBudgetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateLogBudgetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateLogBudget",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/log-budget",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateLogBudgetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateLogBudgetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateLogBudgetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -593,43 +591,6 @@ func (a *Client) CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, 
 }
 
 /*
-DeleteBudgetControl delete budget control API
-*/
-func (a *Client) DeleteBudgetControl(params *DeleteBudgetControlParams, opts ...ClientOption) (*DeleteBudgetControlOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteBudgetControlParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteBudgetControl",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/budget-controls/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteBudgetControlReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteBudgetControlOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteBudgetControlDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 DeleteDashboard delete dashboard API
 */
 func (a *Client) DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error) {
@@ -700,6 +661,43 @@ func (a *Client) DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...Cl
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteLinkTemplateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteLogBudget delete log budget API
+*/
+func (a *Client) DeleteLogBudget(params *DeleteLogBudgetParams, opts ...ClientOption) (*DeleteLogBudgetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteLogBudgetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteLogBudget",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/log-budget",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteLogBudgetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteLogBudgetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteLogBudgetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1037,43 +1035,6 @@ func (a *Client) DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, 
 }
 
 /*
-ListBudgetControls list budget controls API
-*/
-func (a *Client) ListBudgetControls(params *ListBudgetControlsParams, opts ...ClientOption) (*ListBudgetControlsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListBudgetControlsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ListBudgetControls",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/budget-controls",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListBudgetControlsReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListBudgetControlsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListBudgetControlsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ListDashboards list dashboards API
 */
 func (a *Client) ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error) {
@@ -1333,43 +1294,6 @@ func (a *Client) ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaeger
 }
 
 /*
-ReadBudgetControl read budget control API
-*/
-func (a *Client) ReadBudgetControl(params *ReadBudgetControlParams, opts ...ClientOption) (*ReadBudgetControlOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadBudgetControlParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadBudgetControl",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/budget-controls/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadBudgetControlReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadBudgetControlOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadBudgetControlDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ReadDashboard read dashboard API
 */
 func (a *Client) ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error) {
@@ -1440,6 +1364,43 @@ func (a *Client) ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadLinkTemplateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadLogBudget read log budget API
+*/
+func (a *Client) ReadLogBudget(params *ReadLogBudgetParams, opts ...ClientOption) (*ReadLogBudgetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadLogBudgetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadLogBudget",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/log-budget",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadLogBudgetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadLogBudgetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadLogBudgetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1817,43 +1778,6 @@ func (a *Client) SyncPrometheus(params *SyncPrometheusParams, opts ...ClientOpti
 }
 
 /*
-UpdateBudgetControl update budget control API
-*/
-func (a *Client) UpdateBudgetControl(params *UpdateBudgetControlParams, opts ...ClientOption) (*UpdateBudgetControlOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateBudgetControlParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateBudgetControl",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/budget-controls/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateBudgetControlReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateBudgetControlOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateBudgetControlDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 UpdateDashboard update dashboard API
 */
 func (a *Client) UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOption) (*UpdateDashboardOK, error) {
@@ -1924,6 +1848,43 @@ func (a *Client) UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...Cl
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateLinkTemplateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateLogBudget update log budget API
+*/
+func (a *Client) UpdateLogBudget(params *UpdateLogBudgetParams, opts ...ClientOption) (*UpdateLogBudgetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateLogBudgetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateLogBudget",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/log-budget",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateLogBudgetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateLogBudgetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateLogBudgetDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

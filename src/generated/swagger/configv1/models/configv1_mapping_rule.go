@@ -20,10 +20,10 @@ import (
 // swagger:model configv1MappingRule
 type Configv1MappingRule struct {
 
-	// Unique identifier of the MappingRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the MappingRule is created.
+	// Unique identifier of the MappingRule. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the MappingRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required name of the MappingRule. May be modified after the MappingRule is created.
+	// Required. Name of the MappingRule. You can modify this value after the MappingRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the MappingRule was created. Cannot be set by clients.
@@ -36,7 +36,7 @@ type Configv1MappingRule struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Required slug of the bucket the MappingRule belongs to.
+	// Required. Slug of the bucket the MappingRule belongs to.
 	BucketSlug string `json:"bucket_slug,omitempty"`
 
 	// Required filters that determine to which metrics to apply the rule.

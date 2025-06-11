@@ -20,10 +20,10 @@ import (
 // swagger:model configv1MutingRule
 type Configv1MutingRule struct {
 
-	// Unique identifier of the MutingRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the MutingRule is created.
+	// Unique identifier of the MutingRule. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the MutingRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required name of the MutingRule. May be modified after the MutingRule is created.
+	// Required. Name of the MutingRule. You can modify this value after the MutingRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the MutingRule was created. Cannot be set by clients.

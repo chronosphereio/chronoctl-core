@@ -499,9 +499,9 @@ func newNotificationPolicyListCmd() *cobra.Command {
 const NotificationPolicyScaffoldYAML = `api_version: v1/config
 kind: NotificationPolicy
 spec:
-    # Unique identifier of the NotificationPolicy. If slug is not provided, one will be generated based of the name field. Cannot be modified after the NotificationPolicy is created.
+    # Unique identifier of the NotificationPolicy. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the NotificationPolicy is created.
     slug: <string>
-    # Required name of the NotificationPolicy. May be modified after the NotificationPolicy is created.
+    # Required. Name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.
     name: <string>
     # Slug of the bucket the notification policy belongs to. Required if
     # team_slug is not set.

@@ -19,10 +19,10 @@ import (
 // swagger:model configunstableTraceJaegerRemoteSamplingStrategy
 type ConfigunstableTraceJaegerRemoteSamplingStrategy struct {
 
-	// Unique identifier of the TraceJaegerRemoteSamplingStrategy. If slug is not provided, one will be generated based of the name field. Cannot be modified after the TraceJaegerRemoteSamplingStrategy is created.
+	// Unique identifier of the TraceJaegerRemoteSamplingStrategy. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the TraceJaegerRemoteSamplingStrategy is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required name of the TraceJaegerRemoteSamplingStrategy. May be modified after the TraceJaegerRemoteSamplingStrategy is created.
+	// Required. Name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the TraceJaegerRemoteSamplingStrategy was created. Cannot be set by clients.

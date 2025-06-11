@@ -22,8 +22,8 @@ type ScheduleScheduleDay struct {
 	// active
 	Active ScheduleDayActive `json:"active,omitempty"`
 
-	// The time ranges that the monitor is active on this day. Required if
-	// active is set to ONLY_DURING_RANGES, else must be empty.
+	// The time ranges that the monitor is active on this day. Required if `active`
+	// is set to `ONLY_DURING_RANGES`. Otherwise, this field must be empty.
 	Ranges []*ScheduleDayTimeRange `json:"ranges"`
 }
 

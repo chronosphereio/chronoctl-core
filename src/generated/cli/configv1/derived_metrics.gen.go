@@ -491,9 +491,9 @@ func newDerivedMetricListCmd() *cobra.Command {
 const DerivedMetricScaffoldYAML = `api_version: v1/config
 kind: DerivedMetric
 spec:
-    # Required name of the DerivedMetric. May be modified after the DerivedMetric is created.
+    # Required. Name of the DerivedMetric. You can modify this value after the DerivedMetric is created.
     name: <string>
-    # Unique identifier of the DerivedMetric. If slug is not provided, one will be generated based of the name field. Cannot be modified after the DerivedMetric is created.
+    # Unique identifier of the DerivedMetric. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the DerivedMetric is created.
     slug: <string>
     # Required metric name of the derived metric, which must be unique across the system.
     metric_name: <string>

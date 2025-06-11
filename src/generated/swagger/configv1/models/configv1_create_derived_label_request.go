@@ -21,7 +21,7 @@ type Configv1CreateDerivedLabelRequest struct {
 	// derived label
 	DerivedLabel *Configv1DerivedLabel `json:"derived_label,omitempty"`
 
-	// If true, the DerivedLabel will not be created, and no response DerivedLabel will be returned. The response will return an error if the given DerivedLabel is invalid.
+	// If true, the DerivedLabel isn't created, and no response DerivedLabel will be returned. The response will return an error if the given DerivedLabel is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

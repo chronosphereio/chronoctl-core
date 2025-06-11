@@ -3,6 +3,64 @@
     "application/json"
   ],
   "definitions": {
+    "ListMonitorStatusesRequestSortOrder": {
+      "enum": [
+        "SORT_BY_STATE"
+      ],
+      "type": "string"
+    },
+    "MonitorStatusSignalStatus": {
+      "properties": {
+        "state": {
+          "$ref": "#/definitions/stateunstableAlertingState"
+        },
+        "severity": {
+          "type": "string"
+        },
+        "signal_labels": {
+          "description": "Signal labels.",
+          "items": {
+            "$ref": "#/definitions/commonLabel"
+          },
+          "type": "array"
+        },
+        "series": {
+          "items": {
+            "$ref": "#/definitions/SignalStatusSeriesStatus"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "RecurringBudgetResource": {
+      "enum": [
+        "LOG_PERSISTED_BYTES"
+      ],
+      "type": "string"
+    },
+    "SignalStatusSeriesStatus": {
+      "properties": {
+        "state": {
+          "$ref": "#/definitions/stateunstableAlertingState"
+        },
+        "severity": {
+          "type": "string"
+        },
+        "labels": {
+          "description": "Series labels.",
+          "items": {
+            "$ref": "#/definitions/commonLabel"
+          },
+          "type": "array"
+        },
+        "started_at": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "apiError": {
       "properties": {
         "code": {
@@ -12,6 +70,65 @@
         },
         "message": {
           "description": "An error message describing what went wrong.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "commonLabel": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "commonPromQLMatcher": {
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/commonPromQLMatcherType"
+        },
+        "name": {
+          "description": "Prometheus label name for the matcher",
+          "type": "string"
+        },
+        "value": {
+          "description": "Prometheus label value for the matcher",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "commonPromQLMatcherType": {
+      "enum": [
+        "MatchEqual",
+        "MatchRegexp",
+        "MatchNotEqual",
+        "MatchNotRegexp"
+      ],
+      "type": "string"
+    },
+    "configv1PageParams": {
+      "properties": {
+        "max_size": {
+          "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "token": {
+          "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1PageResult": {
+      "properties": {
+        "next_token": {
+          "description": "Opaque page token which identifies the next page of items which the\nclient should request. An empty next_token indicates that there are no\nmore items to return.",
           "type": "string"
         }
       },
@@ -30,10 +147,182 @@
       },
       "type": "object"
     },
+    "stateunstableAlertingState": {
+      "description": " - ALERTING_STATE_PASS: Monitor is not triggered.\n - ALERTING_STATE_PENDING: Monitor is triggered but not yet alerting.\n - ALERTING_STATE_ALERTING: Monitor is triggered and alerting.\n - ALERTING_STATE_MUTED: Monitor is triggered but is muted.",
+      "enum": [
+        "ALERTING_STATE_PASS",
+        "ALERTING_STATE_PENDING",
+        "ALERTING_STATE_ALERTING",
+        "ALERTING_STATE_MUTED"
+      ],
+      "type": "string"
+    },
+    "stateunstableConsumptionDatapoint": {
+      "description": "Datapoint representing a cumulative consumption volume at some point in time.",
+      "properties": {
+        "timestamp": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "volume": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableConsumptionRateDatapoint": {
+      "description": "Datapoint representing a consumption rate at some point in time.",
+      "properties": {
+        "timestamp": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "volume_per_sec": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "stateunstableEchoResponse": {
       "properties": {
         "message": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableListMonitorStatusesResponse": {
+      "properties": {
+        "monitor_statuses": {
+          "items": {
+            "$ref": "#/definitions/stateunstableMonitorStatus"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableMonitorStatus": {
+      "description": "MonitorStatus contains the status of a monitor.",
+      "properties": {
+        "slug": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/stateunstableAlertingState"
+        },
+        "severity": {
+          "type": "string"
+        },
+        "signals": {
+          "items": {
+            "$ref": "#/definitions/MonitorStatusSignalStatus"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableQueryConsumptionByBudgetResponse": {
+      "properties": {
+        "series": {
+          "description": "Paginated list of series in ascending chronological order. Different paginated responses to this endpoint for the same\ncall can return different budget's time series; the caller is expected to concat datapoints for previously seen\nbudget series.",
+          "items": {
+            "$ref": "#/definitions/stateunstableQueryConsumptionByBudgetResponseTimeSeries"
+          },
+          "type": "array"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableQueryConsumptionByBudgetResponseTimeSeries": {
+      "properties": {
+        "budget_slug": {
+          "type": "string"
+        },
+        "datapoints": {
+          "items": {
+            "$ref": "#/definitions/stateunstableConsumptionDatapoint"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableQueryConsumptionRateByBudgetResponse": {
+      "properties": {
+        "series": {
+          "description": "Paginated list of series in ascending chronological order. Different paginated responses to this endpoint for the same call can return different\nbudget's time series; the caller is expected to concat datapoints for previously seen budget series.",
+          "items": {
+            "$ref": "#/definitions/stateunstableQueryConsumptionRateByBudgetResponseTimeSeries"
+          },
+          "type": "array"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableQueryConsumptionRateByBudgetResponseTimeSeries": {
+      "properties": {
+        "budget_slug": {
+          "type": "string"
+        },
+        "datapoints": {
+          "items": {
+            "$ref": "#/definitions/stateunstableConsumptionRateDatapoint"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableQueryConsumptionRateResponse": {
+      "properties": {
+        "series": {
+          "$ref": "#/definitions/stateunstableQueryConsumptionRateResponseTimeSeries"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableQueryConsumptionRateResponseTimeSeries": {
+      "properties": {
+        "datapoints": {
+          "items": {
+            "$ref": "#/definitions/stateunstableConsumptionRateDatapoint"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableQueryConsumptionResponse": {
+      "properties": {
+        "series": {
+          "$ref": "#/definitions/stateunstableQueryConsumptionResponseTimeSeries"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableQueryConsumptionResponseTimeSeries": {
+      "properties": {
+        "datapoints": {
+          "items": {
+            "$ref": "#/definitions/stateunstableConsumptionDatapoint"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -45,7 +334,7 @@
     "version": "UNSTABLE"
   },
   "paths": {
-    "/api/unstable/data/echo": {
+    "/api/unstable/state/echo": {
       "get": {
         "operationId": "Echo",
         "parameters": [
@@ -60,6 +349,80 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/stateunstableEchoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "StateUnstable"
+        ]
+      }
+    },
+    "/api/unstable/state/monitors-statuses": {
+      "get": {
+        "operationId": "ListMonitorStatuses",
+        "parameters": [
+          {
+            "collectionFormat": "multi",
+            "description": "Filter by monitor slug.\nIf all filters are empty, return status for all monitors.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "monitor_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter monitor state by owning collection.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "collection_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter monitor state by owning team.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "team_slugs",
+            "type": "array"
+          },
+          {
+            "description": "include_signal_statuses must be true for include_series_statuses to be true.",
+            "in": "query",
+            "name": "include_signal_statuses",
+            "type": "boolean"
+          },
+          {
+            "description": "include_signal_statuses must be true for include_series_statuses to be true.",
+            "in": "query",
+            "name": "include_series_statuses",
+            "type": "boolean"
+          },
+          {
+            "enum": [
+              "SORT_BY_STATE"
+            ],
+            "in": "query",
+            "name": "sort_by",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stateunstableListMonitorStatusesResponse"
             }
           },
           "default": {

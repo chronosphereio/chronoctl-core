@@ -491,9 +491,9 @@ func newGcpMetricsIntegrationListCmd() *cobra.Command {
 const GcpMetricsIntegrationScaffoldYAML = `api_version: v1/config
 kind: GcpMetricsIntegration
 spec:
-    # Unique identifier of the GcpMetricsIntegration. If slug is not provided, one will be generated based of the name field. Cannot be modified after the GcpMetricsIntegration is created.
+    # Unique identifier of the GcpMetricsIntegration. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the GcpMetricsIntegration is created.
     slug: <string>
-    # Required name of the GcpMetricsIntegration. May be modified after the GcpMetricsIntegration is created.
+    # Required. Name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.
     name: <string>
     # Metric groups to be ingested for this integration.
     metric_groups:

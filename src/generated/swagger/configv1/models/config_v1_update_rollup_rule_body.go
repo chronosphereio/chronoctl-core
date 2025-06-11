@@ -24,7 +24,7 @@ type ConfigV1UpdateRollupRuleBody struct {
 	// If true, the RollupRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the RollupRule does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the RollupRule will not be created nor updated, and no response RollupRule will be returned. The response will return an error if the given RollupRule is invalid.
+	// If true, the RollupRule isn't created or updated, and no response RollupRule will be returned. The response will return an error if the given RollupRule is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

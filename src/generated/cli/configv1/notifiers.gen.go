@@ -491,9 +491,9 @@ func newNotifierListCmd() *cobra.Command {
 const NotifierScaffoldYAML = `api_version: v1/config
 kind: Notifier
 spec:
-    # Unique identifier of the Notifier. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Notifier is created.
+    # Unique identifier of the Notifier. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Notifier is created.
     slug: <string>
-    # Required name of the Notifier. May be modified after the Notifier is created.
+    # Required. Name of the Notifier. You can modify this value after the Notifier is created.
     name: <string>
     # If true, do not notify on resolved alerts. Cannot set if discard is set.
     skip_resolved: <true|false>

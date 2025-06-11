@@ -19,10 +19,10 @@ import (
 // swagger:model configv1Dashboard
 type Configv1Dashboard struct {
 
-	// Unique identifier of the Dashboard. If slug is not provided, one will be generated based of the name field. Cannot be modified after the Dashboard is created.
+	// Unique identifier of the Dashboard. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the Dashboard is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required name of the Dashboard. May be modified after the Dashboard is created.
+	// Required. Name of the Dashboard. You can modify this value after the Dashboard is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the Dashboard was created. Cannot be set by clients.

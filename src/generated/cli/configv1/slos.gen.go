@@ -499,9 +499,9 @@ func newSLOListCmd() *cobra.Command {
 const SLOScaffoldYAML = `api_version: v1/config
 kind: SLO
 spec:
-    # Unique identifier of the SLO. If slug is not provided, one will be generated based of the name field. Cannot be modified after the SLO is created.
+    # Unique identifier of the SLO. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the SLO is created.
     slug: <string>
-    # Required name of the SLO. May be modified after the SLO is created.
+    # Required. Name of the SLO. You can modify this value after the SLO is created.
     name: <string>
     description: <string>
     # Optional notification policy to explicitly apply to the generated monitors.
@@ -544,16 +544,16 @@ spec:
             duration: <string>
     # SignalGrouping defines how the set of series from the query are split into signals.
     signal_grouping:
-        # Set of labels names used to split series into signals.
-        # Each unique combination of labels will result in its own signal.
-        # For example, if label_names is ["service", "code"] then all series including labels {service="foo",code="404"}
-        # will be grouped together in the same signal.
+        # Set of label names used to split series into signals. Each unique combination
+        # of labels result in its own signal. For example, if 'label_names' is
+        # '["service", "code"]', then all series including labels
+        # '{service="foo",code="404"}' will be grouped together in the same signal.
 
-        # Cannot be used if graphite_query is set.
+        # Cannot be used if 'graphite_query' is set.
         label_names:
             - <string>
-        # If this is true, each series will have its own signal.
-        # If this is true then label_names cannot be set.
+        # If set to 'true', each series will have its own signal. Cannot be used with
+        # 'label_names'.
         signal_per_series: <true|false>
     # SLI is a service level indicator. The contents of this proto are intended to
     # be used to generate queries necessary to measure SLOs.
@@ -584,32 +584,14 @@ spec:
             # A PromQL query that measures the total number of events for this SLI.
             # This is required for all advanced SLIs.
             total_query_template: <string>
-        # Configuration for the different supported templated indicators.
-        templated_indicator:
-            # Indicates which Chronosphere discovery job is used to build the
-            # SLI queries.
-            discovery_job_slug: <string>
-            # This overrides the equivalent ComponentDiscovery.MetricMetadata field
-            # when present. This is a common change for RPC components.
-            endpoint_label: <string>
-            # Configuration for an availability SLI.
-            availability_indicator:
-                # the API endpoints to monitor in the SLO. If this is left empty then all
-                # endpoints will be monitored.
-                endpoints_monitored:
-                    - <string>
-                # A list of result codes that indicate an unsuccessful event. Either this
-                # or success_codes must be set.
-                error_codes:
-                    - <string>
-            # Configuration for a latency SLI.
-            latency_indicator:
-                # the API endpoints to monitor in the SLO. If this is left empty then all
-                # endpoints will be monitored.
-                endpoints_monitored:
-                    - <string>
-                # The name of the histogram metric that measures latency.
-                latency_bucket: <string>
+        custom_timeslice_indicator:
+            # A PromQL query template for the timeslice SLI.
+            query_template: <string>
+            condition:
+                # The value to compare against.
+                value: <number>
+                op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS>
+            timeslice_size: <TIMESLICE_SIZE_ONE_MINUTE|TIMESLICE_SIZE_FIVE_MINUTES>
 `
 
 func newSLOScaffoldCmd() *cobra.Command {

@@ -24,7 +24,7 @@ type ConfigV1UpdateTeamBody struct {
 	// If true, the Team will be created if it does not already exist, identified by slug. If false, an error will be returned if the Team does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the Team will not be created nor updated, and no response Team will be returned. The response will return an error if the given Team is invalid.
+	// If true, the Team isn't created or updated, and no response Team will be returned. The response will return an error if the given Team is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

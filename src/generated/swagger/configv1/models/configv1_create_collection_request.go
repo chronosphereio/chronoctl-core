@@ -21,7 +21,7 @@ type Configv1CreateCollectionRequest struct {
 	// collection
 	Collection *Configv1Collection `json:"collection,omitempty"`
 
-	// If true, the Collection will not be created, and no response Collection will be returned. The response will return an error if the given Collection is invalid.
+	// If true, the Collection isn't created, and no response Collection will be returned. The response will return an error if the given Collection is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

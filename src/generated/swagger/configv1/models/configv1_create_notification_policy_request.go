@@ -21,7 +21,7 @@ type Configv1CreateNotificationPolicyRequest struct {
 	// notification policy
 	NotificationPolicy *Configv1NotificationPolicy `json:"notification_policy,omitempty"`
 
-	// If true, the NotificationPolicy will not be created, and no response NotificationPolicy will be returned. The response will return an error if the given NotificationPolicy is invalid.
+	// If true, the NotificationPolicy isn't created, and no response NotificationPolicy will be returned. The response will return an error if the given NotificationPolicy is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

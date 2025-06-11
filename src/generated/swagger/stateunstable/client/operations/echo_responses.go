@@ -86,11 +86,11 @@ func (o *EchoOK) Code() int {
 }
 
 func (o *EchoOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/data/echo][%d] echoOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/unstable/state/echo][%d] echoOK  %+v", 200, o.Payload)
 }
 
 func (o *EchoOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/data/echo][%d] echoOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/unstable/state/echo][%d] echoOK  %+v", 200, o.Payload)
 }
 
 func (o *EchoOK) GetPayload() *models.StateunstableEchoResponse {
@@ -158,11 +158,11 @@ func (o *EchoDefault) Code() int {
 }
 
 func (o *EchoDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/data/echo][%d] Echo default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/unstable/state/echo][%d] Echo default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *EchoDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/data/echo][%d] Echo default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/unstable/state/echo][%d] Echo default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *EchoDefault) GetPayload() *models.APIError {

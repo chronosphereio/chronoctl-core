@@ -491,7 +491,7 @@ func newLogScaleActionListCmd() *cobra.Command {
 const LogScaleActionScaffoldYAML = `api_version: v1/config
 kind: LogScaleAction
 spec:
-    # Unique identifier of the LogScaleAction. If slug is not provided, one will be generated based of the name field. Cannot be modified after the LogScaleAction is created.
+    # Unique identifier of the LogScaleAction. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the LogScaleAction is created.
     slug: <string>
     # Name of the LogScale repository the alerts belongs to. Required.
     repository: <string>

@@ -19,10 +19,10 @@ import (
 // swagger:model configv1DerivedLabel
 type Configv1DerivedLabel struct {
 
-	// Required name of the DerivedLabel. May be modified after the DerivedLabel is created.
+	// Required. Name of the DerivedLabel. You can modify this value after the DerivedLabel is created.
 	Name string `json:"name,omitempty"`
 
-	// Unique identifier of the DerivedLabel. If slug is not provided, one will be generated based of the name field. Cannot be modified after the DerivedLabel is created.
+	// Unique identifier of the DerivedLabel. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the DerivedLabel is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Timestamp of when the DerivedLabel was created. Cannot be set by clients.

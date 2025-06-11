@@ -491,9 +491,9 @@ func newDropRuleListCmd() *cobra.Command {
 const DropRuleScaffoldYAML = `api_version: v1/config
 kind: DropRule
 spec:
-    # Unique identifier of the DropRule. If slug is not provided, one will be generated based of the name field. Cannot be modified after the DropRule is created.
+    # Unique identifier of the DropRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the DropRule is created.
     slug: <string>
-    # Required name of the DropRule. May be modified after the DropRule is created.
+    # Required. Name of the DropRule. You can modify this value after the DropRule is created.
     name: <string>
     # Series that match this filter are dropped.
     filters:

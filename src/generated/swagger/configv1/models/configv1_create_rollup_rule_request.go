@@ -21,7 +21,7 @@ type Configv1CreateRollupRuleRequest struct {
 	// rollup rule
 	RollupRule *Configv1RollupRule `json:"rollup_rule,omitempty"`
 
-	// If true, the RollupRule will not be created, and no response RollupRule will be returned. The response will return an error if the given RollupRule is invalid.
+	// If true, the RollupRule isn't created, and no response RollupRule will be returned. The response will return an error if the given RollupRule is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

@@ -30,6 +30,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	Echo(params *EchoParams, opts ...ClientOption) (*EchoOK, error)
 
+	ListMonitorStatuses(params *ListMonitorStatusesParams, opts ...ClientOption) (*ListMonitorStatusesOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -44,7 +46,7 @@ func (a *Client) Echo(params *EchoParams, opts ...ClientOption) (*EchoOK, error)
 	op := &runtime.ClientOperation{
 		ID:                 "Echo",
 		Method:             "GET",
-		PathPattern:        "/api/unstable/data/echo",
+		PathPattern:        "/api/unstable/state/echo",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
@@ -67,6 +69,43 @@ func (a *Client) Echo(params *EchoParams, opts ...ClientOption) (*EchoOK, error)
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*EchoDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListMonitorStatuses list monitor statuses API
+*/
+func (a *Client) ListMonitorStatuses(params *ListMonitorStatusesParams, opts ...ClientOption) (*ListMonitorStatusesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListMonitorStatusesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListMonitorStatuses",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/state/monitors-statuses",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListMonitorStatusesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListMonitorStatusesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListMonitorStatusesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

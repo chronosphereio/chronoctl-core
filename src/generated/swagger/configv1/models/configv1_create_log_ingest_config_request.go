@@ -21,7 +21,7 @@ type Configv1CreateLogIngestConfigRequest struct {
 	// log ingest config
 	LogIngestConfig *Configv1LogIngestConfig `json:"log_ingest_config,omitempty"`
 
-	// If true, the LogIngestConfig will not be created, and no response LogIngestConfig will be returned. The response will return an error if the given LogIngestConfig is invalid.
+	// If true, the LogIngestConfig isn't created, and no response LogIngestConfig will be returned. The response will return an error if the given LogIngestConfig is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

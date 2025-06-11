@@ -17,7 +17,6 @@ import (
 // be used in the template to generate the query:
 // - Window (required)
 // - GroupBy (required)
-// - LensService (optional)
 //
 // swagger:model SLICustomIndicatorConfig
 type SLICustomIndicatorConfig struct {

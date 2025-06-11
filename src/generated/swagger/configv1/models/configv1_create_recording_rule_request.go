@@ -21,7 +21,7 @@ type Configv1CreateRecordingRuleRequest struct {
 	// recording rule
 	RecordingRule *Configv1RecordingRule `json:"recording_rule,omitempty"`
 
-	// If true, the RecordingRule will not be created, and no response RecordingRule will be returned. The response will return an error if the given RecordingRule is invalid.
+	// If true, the RecordingRule isn't created, and no response RecordingRule will be returned. The response will return an error if the given RecordingRule is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 
