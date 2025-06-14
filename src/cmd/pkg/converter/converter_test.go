@@ -27,7 +27,7 @@ import (
 )
 
 func TestConvertPrometheus_RecordingRules(t *testing.T) {
-	testRuleGroup := func(rules []rulefmt.RuleNode) rulefmt.RuleGroup {
+	testRuleGroup := func(rules []rulefmt.Rule) rulefmt.RuleGroup {
 		return rulefmt.RuleGroup{
 			Name:  "test-group",
 			Rules: rules,
@@ -37,15 +37,15 @@ func TestConvertPrometheus_RecordingRules(t *testing.T) {
 	tests := []struct {
 		name               string
 		opts               Opts
-		rules              []rulefmt.RuleNode
+		rules              []rulefmt.Rule
 		wantRecordingRules []*models.Configv1RecordingRule
 	}{
 		{
 			name: "collections",
-			rules: []rulefmt.RuleNode{
+			rules: []rulefmt.Rule{
 				{
-					Record: node("test-rule"),
-					Expr:   node("sum(rate(errors[5m]))"),
+					Record: "test-rule",
+					Expr:   "sum(rate(errors[5m]))",
 					Labels: map[string]string{"zone": "us-east-1a"},
 				},
 			},
@@ -65,10 +65,10 @@ func TestConvertPrometheus_RecordingRules(t *testing.T) {
 		{
 			name: "buckets",
 			opts: Opts{UseBuckets: true},
-			rules: []rulefmt.RuleNode{
+			rules: []rulefmt.Rule{
 				{
-					Record: node("test-rule"),
-					Expr:   node("sum(rate(errors[5m]))"),
+					Record: "test-rule",
+					Expr:   "sum(rate(errors[5m]))",
 					Labels: map[string]string{"zone": "us-east-1a"},
 				},
 			},
@@ -87,15 +87,15 @@ func TestConvertPrometheus_RecordingRules(t *testing.T) {
 		},
 		{
 			name: "multiple recording rules, same name",
-			rules: []rulefmt.RuleNode{
+			rules: []rulefmt.Rule{
 				{
-					Record: node("test-rule"),
-					Expr:   node("sum(rate(errors{zone='us-east-1a'}[5m]))"),
+					Record: "test-rule",
+					Expr:   "sum(rate(errors{zone='us-east-1a'}[5m]))",
 					Labels: map[string]string{"zone": "us-east-1a"},
 				},
 				{
-					Record: node("test-rule"),
-					Expr:   node("sum(rate(errors{zone='us-west-1a'}[5m]))"),
+					Record: "test-rule",
+					Expr:   "sum(rate(errors{zone='us-west-1a'}[5m]))",
 					Labels: map[string]string{"zone": "us-west-1a"},
 				},
 			},
@@ -142,10 +142,10 @@ func TestConvertPrometheus_SeverityOptions(t *testing.T) {
 	testRuleGroup := func(labels map[string]string) rulefmt.RuleGroup {
 		return rulefmt.RuleGroup{
 			Name: "test-group",
-			Rules: []rulefmt.RuleNode{
+			Rules: []rulefmt.Rule{
 				{
-					Alert:  node("test-rule"),
-					Expr:   node("sum(rate(errors[5m])) > 0"),
+					Alert:  "test-rule",
+					Expr:   "sum(rate(errors[5m])) > 0",
 					Labels: labels,
 				},
 			},
@@ -191,9 +191,9 @@ func TestConvertPrometheus_SeverityOptions(t *testing.T) {
 					},
 				},
 			},
-			Receivers: []*config.Receiver{
-				&config.Receiver{Name: "blackhole"},
-				&config.Receiver{Name: "pagerduty"},
+			Receivers: []config.Receiver{
+				config.Receiver{Name: "blackhole"},
+				config.Receiver{Name: "pagerduty"},
 			},
 		}
 	}
@@ -312,10 +312,6 @@ func TestConvertPrometheus_SeverityOptions(t *testing.T) {
 			require.Equal(t, tt.wantPolicy, out.NotificationPolicy)
 		})
 	}
-}
-
-func node(s string) yaml.Node {
-	return yaml.Node{Kind: yaml.ScalarNode, Value: s}
 }
 
 func defaultPolicy(routes *models.NotificationPolicyRoutes) *models.Configv1NotificationPolicy {
@@ -776,7 +772,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 					Receiver: "multiple",
 					GroupBy:  []model.LabelName{"alertname", "severity"},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{
 						Name: "multiple",
 						EmailConfigs: []*config.EmailConfig{
@@ -814,7 +810,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 					GroupBy:  []model.LabelName{"alertname"},
 					Match:    map[string]string{chronoSeverityLabelName: criticalLabel},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 				},
 			},
@@ -852,7 +848,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "pagerduty"},
 					{Name: "slack"},
@@ -897,7 +893,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "slack_triage"},
 					{Name: "slack"},
@@ -990,7 +986,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "triage_pagerduty"},
 					{Name: "triage_email"},
@@ -1096,7 +1092,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "a"},
 					{Name: "b"},
@@ -1161,7 +1157,7 @@ func TestConvertAlertManagerConfig(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "a"},
 					{Name: "b"},
@@ -1278,7 +1274,7 @@ func TestConvertAlertManagerConfig_GroupBy(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "pagerduty"},
 				},
@@ -1315,7 +1311,7 @@ func TestConvertAlertManagerConfig_GroupBy(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "blackhole"},
 					{Name: "pagerduty"},
 				},
@@ -1360,7 +1356,7 @@ func TestConvertAlertManagerConfig_GroupBy(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "a"},
 					{Name: "b"},
 					{Name: "c"},
@@ -1455,7 +1451,7 @@ func TestConvertAlertManagerConfig_GroupBy(t *testing.T) {
 						},
 					},
 				},
-				Receivers: []*config.Receiver{
+				Receivers: []config.Receiver{
 					{Name: "a"},
 					{Name: "b"},
 					{Name: "c"},
@@ -1571,12 +1567,12 @@ func TestExpandReceiver(t *testing.T) {
 				},
 			},
 		}),
-		expandReceiver(&config.Receiver{
+		expandReceiver(config.Receiver{
 			Name: "rname",
 			WebhookConfigs: []*config.WebhookConfig{
 				{
 					NotifierConfig: config.NotifierConfig{VSendResolved: true},
-					URL:            &config.URL{URL: mustParseURL(t, "wh-one")},
+					URL:            &config.SecretURL{URL: mustParseURL(t, "wh-one")},
 				},
 			},
 		}))
@@ -1601,11 +1597,11 @@ func TestExpandReceiver(t *testing.T) {
 				},
 			},
 		}),
-		expandReceiver(&config.Receiver{
+		expandReceiver(config.Receiver{
 			Name: "rname",
 			WebhookConfigs: []*config.WebhookConfig{
-				{URL: &config.URL{URL: mustParseURL(t, "wh-one")}},
-				{URL: &config.URL{URL: mustParseURL(t, "wh-two")}},
+				{URL: &config.SecretURL{URL: mustParseURL(t, "wh-one")}},
+				{URL: &config.SecretURL{URL: mustParseURL(t, "wh-two")}},
 			},
 		}))
 
@@ -1639,11 +1635,11 @@ func TestExpandReceiver(t *testing.T) {
 				},
 			},
 		}),
-		expandReceiver(&config.Receiver{
+		expandReceiver(config.Receiver{
 			Name: "rname",
 			WebhookConfigs: []*config.WebhookConfig{
-				{URL: &config.URL{URL: mustParseURL(t, "wh-one")}},
-				{URL: &config.URL{URL: mustParseURL(t, "wh-two")}},
+				{URL: &config.SecretURL{URL: mustParseURL(t, "wh-one")}},
+				{URL: &config.SecretURL{URL: mustParseURL(t, "wh-two")}},
 			},
 			SlackConfigs: []*config.SlackConfig{
 				{Channel: "s-one"},
@@ -2082,7 +2078,7 @@ func TestConvertAlertManagerConfig_ContinueEqualsTrue_FuzzyTesting(t *testing.T)
 						Receiver: "blackhole",
 						Routes:   updatedRoutes,
 					},
-					Receivers: []*config.Receiver{
+					Receivers: []config.Receiver{
 						{Name: "blackhole"},
 						{Name: "0"},
 						{Name: "1"},

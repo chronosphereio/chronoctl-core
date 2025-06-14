@@ -1493,18 +1493,18 @@ func convertRules(
 	for i, rule := range ruleGroup.Rules {
 		rulePath := ruleGroupPath.field("rules").index(i)
 
-		if rule.Alert.Value == "" && rule.Record.Value == "" {
+		if rule.Alert == "" && rule.Record == "" {
 			return nil, nil, rulePath.invalidReason("Either alert or record field must be set")
 		}
 
-		if rule.Record.Value != "" {
+		if rule.Record != "" {
 			rr := convertRecordingRule(rule, ruleGroup)
 			rr.Slug = slugs.recordingRule.generateV2(rr.Name)
 			recRules = append(recRules, rr)
 		} else {
 			var monitorSlug string
 			if !opts.DisableMonitorSlugAssignment {
-				monitorSlug = slugs.monitor.generateV1(rule.Alert.Value)
+				monitorSlug = slugs.monitor.generateV1(rule.Alert)
 			}
 
 			monitor, err := convertAlertingRule(rule, monitorSlug, parentSlug, ruleGroup, rulePath, opts)
@@ -1518,7 +1518,7 @@ func convertRules(
 }
 
 func convertAlertingRule(
-	rule rulefmt.RuleNode,
+	rule rulefmt.Rule,
 	slug string,
 	parentSlug string,
 	ruleGroup rulefmt.RuleGroup,
@@ -1541,7 +1541,7 @@ func convertAlertingRule(
 		return nil, rulePath.field("labels").invalidReason("invalid %s value `%s`", chronoSeverityLabelName, severityLabel)
 	}
 
-	expr, op, threshold, err := parseExpr(rulePath.field("expr"), rule.Expr.Value, !opts.ExistsOpNotSupported)
+	expr, op, threshold, err := parseExpr(rulePath.field("expr"), rule.Expr, !opts.ExistsOpNotSupported)
 	if err != nil {
 		return nil, fmt.Errorf("parse expression: %w", err)
 	}
@@ -1575,7 +1575,7 @@ func convertAlertingRule(
 
 	monitor := &models.Configv1Monitor{
 		Slug:             slug,
-		Name:             rule.Alert.Value,
+		Name:             rule.Alert,
 		Labels:           nonSeverityLabels,
 		Annotations:      rule.Annotations,
 		PrometheusQuery:  strings.TrimSpace(expr),
@@ -1594,13 +1594,13 @@ func convertAlertingRule(
 }
 
 func convertRecordingRule(
-	rule rulefmt.RuleNode,
+	rule rulefmt.Rule,
 	ruleGroup rulefmt.RuleGroup,
 ) *models.Configv1RecordingRule {
 	return &models.Configv1RecordingRule{
-		Name:           rule.Record.Value,
-		MetricName:     rule.Record.Value,
-		PrometheusExpr: rule.Expr.Value,
+		Name:           rule.Record,
+		MetricName:     rule.Record,
+		PrometheusExpr: rule.Expr,
 		IntervalSecs:   durationSeconds(ruleGroup.Interval),
 		LabelPolicy: &models.Configv1RecordingRuleLabelPolicy{
 			Add: rule.Labels,
@@ -1677,7 +1677,7 @@ func setReceiverSlugs(
 // each receiver has at most one target. Returned receivers also have slugs set.
 // The returned map indexes the original receivers names the new receivers for that name.
 func expandReceivers(
-	receivers []*config.Receiver,
+	receivers []config.Receiver,
 	opts Opts,
 ) (
 	[]*Notifier,
@@ -1700,7 +1700,7 @@ func expandReceivers(
 	return allReceivers, recvByInputName, nil
 }
 
-func expandReceiver(r *config.Receiver) []*Notifier {
+func expandReceiver(r config.Receiver) []*Notifier {
 	receivers := make([]*Notifier, 0)
 	for _, w := range r.WebhookConfigs {
 		receivers = append(receivers, &Notifier{
