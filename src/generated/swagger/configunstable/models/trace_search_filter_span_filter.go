@@ -40,7 +40,7 @@ type TraceSearchFilterSpanFilter struct {
 	// error
 	Error *TraceSearchFilterBoolFilter `json:"error,omitempty"`
 
-	// Matches the tags of the candidate.
+	// Matches the tags of the candidate span.
 	Tags []*TraceSearchFilterTagFilter `json:"tags"`
 
 	// span count

@@ -353,47 +353,55 @@ spec:
           dataset_slug: <string>
           # Configuration for allocating resources to a dataset.
           allocation:
+            # Sets the percentage of the license limit to allocate to the default dataset.
             percent_of_license: <number>
-          # HighLowPriorities defines explicit high and low priority match criteria to define which logs
-          # should be dropped first (low) and dropped last (high). Anything not matched by either set of rules
-          # is considered default priority and thus dropped after low but before high.
+          # Defines explicit high and low priority match criteria to specify which logs to
+          # drop first (low) and last (high). Anything not matched by either set of rules is
+          # considered default priority and is dropped after low priority but before high
+          # priority data.
           priorities:
-            # A list of search filters defining which logs are considered high priority in this dataset.
-            # The filters are ORed together so only one given filter needs to match.
+            # A list of search filters defining which logs are considered high priority in
+            # this dataset. Filters are combined as OR statements so only one filter needs
+            # to match.
             high_priority_filters:
-                - # Matches logs which match this query.
-                  # Query may only include top level operations (no nested clauses).
-                  # Only one type of operator AND/OR is allowed.
+                - # Returns logs that match this query. The query can include only top-level
+                  # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
+                  # operator is allowed.
                   query: <string>
-            # A list of search filters defining which logs are considered low priority in this dataset.
-            # The filters are ORed together so only one given filter needs to match.
+            # A list of search filters defining which logs are considered low priority in
+            # this dataset. Filters are combined as OR statements so only one filter needs
+            # to match.
             low_priority_filters:
-                - # Matches logs which match this query.
-                  # Query may only include top level operations (no nested clauses).
-                  # Only one type of operator AND/OR is allowed.
+                - # Returns logs that match this query. The query can include only top-level
+                  # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
+                  # operator is allowed.
                   query: <string>
     # Configuration for default dataset.
     default_dataset:
         # Configuration for allocating resources to a dataset.
         allocation:
+            # Sets the percentage of the license limit to allocate to the default dataset.
             percent_of_license: <number>
-        # HighLowPriorities defines explicit high and low priority match criteria to define which logs
-        # should be dropped first (low) and dropped last (high). Anything not matched by either set of rules
-        # is considered default priority and thus dropped after low but before high.
+        # Defines explicit high and low priority match criteria to specify which logs to
+        # drop first (low) and last (high). Anything not matched by either set of rules is
+        # considered default priority and is dropped after low priority but before high
+        # priority data.
         priorities:
-            # A list of search filters defining which logs are considered high priority in this dataset.
-            # The filters are ORed together so only one given filter needs to match.
+            # A list of search filters defining which logs are considered high priority in
+            # this dataset. Filters are combined as OR statements so only one filter needs
+            # to match.
             high_priority_filters:
-                - # Matches logs which match this query.
-                  # Query may only include top level operations (no nested clauses).
-                  # Only one type of operator AND/OR is allowed.
+                - # Returns logs that match this query. The query can include only top-level
+                  # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
+                  # operator is allowed.
                   query: <string>
-            # A list of search filters defining which logs are considered low priority in this dataset.
-            # The filters are ORed together so only one given filter needs to match.
+            # A list of search filters defining which logs are considered low priority in
+            # this dataset. Filters are combined as OR statements so only one filter needs
+            # to match.
             low_priority_filters:
-                - # Matches logs which match this query.
-                  # Query may only include top level operations (no nested clauses).
-                  # Only one type of operator AND/OR is allowed.
+                - # Returns logs that match this query. The query can include only top-level
+                  # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
+                  # operator is allowed.
                   query: <string>
 `
 

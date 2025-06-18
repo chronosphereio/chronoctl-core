@@ -19,7 +19,7 @@ import (
 // swagger:model SLODefinition
 type SLODefinition struct {
 
-	// The SLO objective
+	// objective
 	Objective float64 `json:"objective,omitempty"`
 
 	// time window

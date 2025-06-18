@@ -22,11 +22,11 @@ type Configv1TraceSearchFilter struct {
 	// trace
 	Trace *TraceSearchFilterTraceFilter `json:"trace,omitempty"`
 
-	// Each SpanFilter object represents all conditions that need to be true on
-	// the same span for the span to be considered matching the SpanFilter. If
-	// `span_count` is used, the number of spans within the trace that match the
-	// SpanFilter needs to be within [min, max]. Multiple SpanFilters can be used,
-	// and each can be satisfied by any number of spans within the trace.
+	// Specifies the span conditions to match on. All conditions must be true in a
+	// single span for the span to be considered a match. If `span_count` is specified,
+	// the number of spans within the trace that match span conditions must be within
+	// `[min, max]`. You can specify multiple span conditions, and each can be
+	// satisfied by any number of spans within the trace.
 	Span []*TraceSearchFilterSpanFilter `json:"span"`
 }
 

@@ -14,8 +14,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Configv1SLI SLI is a service level indicator. The contents of this proto are intended to
-// be used to generate queries necessary to measure SLOs.
+// Configv1SLI configv1 s l i
 //
 // swagger:model configv1SLI
 type Configv1SLI struct {
@@ -26,7 +25,7 @@ type Configv1SLI struct {
 	// custom timeslice indicator
 	CustomTimesliceIndicator *SLICustomTimeSliceIndicatorConfig `json:"custom_timeslice_indicator,omitempty"`
 
-	// Custom dimensions are used to configure additional labels to export from
+	// Used to configure additional labels to export from
 	// the underlying queries. This feature provides a logical budget to group
 	// unique combination of dimensions. For example, if you want to track a
 	// budget per endpoint, add the endpoint label as a dimension. These dimensions
@@ -34,7 +33,7 @@ type Configv1SLI struct {
 	// in `.GroupBy`.
 	CustomDimensionLabels []string `json:"custom_dimension_labels"`
 
-	// These are added to _every_ query and are intended to be used for things
+	// These are made available to the SLO queries and are intended to be used for things
 	// like `cluster!~"dev"`
 	AdditionalPromqlFilters []*CommonPromQLMatcher `json:"additional_promql_filters"`
 }
