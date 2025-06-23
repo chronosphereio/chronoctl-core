@@ -516,21 +516,21 @@ spec:
     slug: <string>
     # Required. Name of the MutingRule. You can modify this value after the MutingRule is created.
     name: <string>
-    # Specify which series are silenced by the muting rule. Alerting series must
-    # match all muting rule matchers to be silenced.
-    # This value cannot be updated. Updates must specify the original value.
+    # Required. Specifies which series are silenced by the muting rule. Alerting
+    # series must match all muting rule matchers to be silenced. You can't update this
+    # value. Updates must specify the original value.
     label_matchers:
-        - # name always matches against an exact label name.
+        - # Required. Always matches against an exact label name.
           name: <string>
-          # value matches against a label value based on the configured type.
+          # Required. Matches against a label value based on the configured type.
           value: <string>
           type: <EXACT|REGEX|NOT_EXACT|NOT_REGEXP>
-    # Timestamp of when the muting rule becomes active.
-    # This value cannot be updated. Updates must specify the original value.
+    # Required. Timestamp of when the muting rule becomes active. You can't update
+    # this value. Updates must specify the original value.
     starts_at: <date-time>
-    # Timestamp of when the muting rule stops being active.
+    # Required. Timestamp of when the muting rule stops being active.
     ends_at: <date-time>
-    # Optional comment that explains why the muting rule was created.
+    # Descriptive comment that explains why the muting rule was created.
     comment: <string>
 `
 

@@ -13,7 +13,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SLICustomTimeSliceIndicatorConfig s l i custom time slice indicator config
+// SLICustomTimeSliceIndicatorConfig Defines the configuration for TimeSlice SLIs.
+// TimeSlice SLIs are evaluated by running a PromQL query over a certain time window and comparing the result again a condition.
+// You can include these variables in PromQL queries for SLIs:
+// - {{.Window}}. Specifies the window of time that the PromQL query operates on.
+// - {{.GroupBy}}. Specifies a comma-separated list of signal and dimension labels to group the results by.
+// - {{.TimeSlice}} :The time slice being evaluated, e.g. `1m` or `5m`.
+// - {{.AdditionalFilters}}. Requires setting `additional_promql_filters`.
 //
 // swagger:model SLICustomTimeSliceIndicatorConfig
 type SLICustomTimeSliceIndicatorConfig struct {

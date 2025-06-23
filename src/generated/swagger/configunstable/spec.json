@@ -770,7 +770,7 @@
     "TraceSearchFilterBoolFilter": {
       "properties": {
         "value": {
-          "description": "The value the filter compares to the target trace or span field.",
+          "description": "The value of the filter compared to the target trace or span field.",
           "type": "boolean"
         }
       },
@@ -779,12 +779,12 @@
     "TraceSearchFilterCountFilter": {
       "properties": {
         "min": {
-          "description": "Minimum number of spans that must match a SpanFilter (inclusive).",
+          "description": "Minimum number of spans that must match a span query, inclusive.",
           "format": "int32",
           "type": "integer"
         },
         "max": {
-          "description": "Maximum number of spans that must match a SpanFilter (inclusive).",
+          "description": "Maximum number of spans that must match a span query, inclusive.",
           "format": "int32",
           "type": "integer"
         }
@@ -843,7 +843,7 @@
           "$ref": "#/definitions/TraceSearchFilterBoolFilter"
         },
         "tags": {
-          "description": "Matches the tags of the candidate.",
+          "description": "Matches the tags of the candidate span.",
           "items": {
             "$ref": "#/definitions/TraceSearchFilterTagFilter"
           },
@@ -864,11 +864,11 @@
           "$ref": "#/definitions/StringFilterStringFilterMatchType"
         },
         "value": {
-          "description": "The value the filter compares to the target trace or span field.",
+          "description": "The value of the filter compared to the target trace or span field.",
           "type": "string"
         },
         "in_values": {
-          "description": "Values the filter tests against when using IN or NOT_IN match type.",
+          "description": "Values the filter tests against when using `IN` or `NOT_IN` match type.",
           "items": {
             "type": "string"
           },
@@ -880,7 +880,7 @@
     "TraceSearchFilterTagFilter": {
       "properties": {
         "key": {
-          "description": "The key (or name) of the span tag that is inspected by this filter.",
+          "description": "The key or name of the span tag that this filter inspects.",
           "type": "string"
         },
         "value": {
@@ -2199,7 +2199,7 @@
           "$ref": "#/definitions/TraceSearchFilterTraceFilter"
         },
         "span": {
-          "description": "Each SpanFilter object represents all conditions that need to be true on\nthe same span for the span to be considered matching the SpanFilter. If\n`span_count` is used, the number of spans within the trace that match the\nSpanFilter needs to be within [min, max]. Multiple SpanFilters can be used,\nand each can be satisfied by any number of spans within the trace.",
+          "description": "Specifies the span conditions to match on. All conditions must be true in a\nsingle span for the span to be considered a match. If `span_count` is specified,\nthe number of spans within the trace that match span conditions must be within\n`[min, max]`. You can specify multiple span conditions, and each can be\nsatisfied by any number of spans within the trace.",
           "items": {
             "$ref": "#/definitions/TraceSearchFilterSpanFilter"
           },

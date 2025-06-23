@@ -21,10 +21,10 @@ type Configv1MutingRuleLabelMatcher struct {
 	// type
 	Type Configv1MutingRuleLabelMatcherMatcherType `json:"type,omitempty"`
 
-	// name always matches against an exact label name.
+	// Required. Always matches against an exact label name.
 	Name string `json:"name,omitempty"`
 
-	// value matches against a label value based on the configured type.
+	// Required. Matches against a label value based on the configured type.
 	Value string `json:"value,omitempty"`
 }
 

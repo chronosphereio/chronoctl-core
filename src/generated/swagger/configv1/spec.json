@@ -486,19 +486,19 @@
           "type": "string"
         },
         "budget": {
-          "description": "budget defines the amount of errors that are allowed during a given\ntime window. It is a value between 0.0 and 100.0 exclusive.",
+          "description": "The amount of allowed errors during a given time window,\nexpressed as a percentage of the error budget. Must be a\nvalue between `0.0` and `100.0`, exclusive.",
           "format": "double",
           "type": "number"
         },
         "severity": {
-          "description": "Severity may only be one of: critical, warn.\nThis is also a string in the monitor schema",
+          "description": "Severity may only be one of: critical, warn.",
           "type": "string"
         },
         "labels": {
           "additionalProperties": {
             "type": "string"
           },
-          "description": "labels to attach to the burn rate alerts.",
+          "description": "Labels to attach when this burn rate triggers. If you add these labels to\n`signal_groupings`, you can route them in the notification policy, and\ncan route different burn rates to other notifiers.",
           "type": "object"
         }
       },
@@ -722,17 +722,17 @@
       "type": "object"
     },
     "LogAllocationConfigHighLowPriorities": {
-      "description": "HighLowPriorities defines explicit high and low priority match criteria to define which logs\nshould be dropped first (low) and dropped last (high). Anything not matched by either set of rules\nis considered default priority and thus dropped after low but before high.",
+      "description": "Defines explicit high and low priority match criteria to specify which logs to\ndrop first (low) and last (high). Anything not matched by either set of rules is\nconsidered default priority and is dropped after low priority but before high\npriority data.",
       "properties": {
         "high_priority_filters": {
-          "description": "A list of search filters defining which logs are considered high priority in this dataset.\nThe filters are ORed together so only one given filter needs to match.",
+          "description": "A list of search filters defining which logs are considered high priority in\nthis dataset. Filters are combined as OR statements so only one filter needs\nto match.",
           "items": {
             "$ref": "#/definitions/configv1LogSearchFilter"
           },
           "type": "array"
         },
         "low_priority_filters": {
-          "description": "A list of search filters defining which logs are considered low priority in this dataset.\nThe filters are ORed together so only one given filter needs to match.",
+          "description": "A list of search filters defining which logs are considered low priority in\nthis dataset. Filters are combined as OR statements so only one filter needs\nto match.",
           "items": {
             "$ref": "#/definitions/configv1LogSearchFilter"
           },
@@ -1036,12 +1036,12 @@
           "$ref": "#/definitions/ConditionOp"
         },
         "value": {
-          "description": "The value to compare to the metric value using the `op` operation.",
+          "description": "Required. The value to compare to the metric value using the `op` operation.",
           "format": "double",
           "type": "number"
         },
         "sustain_secs": {
-          "description": "Optional. Amount of time the query needs to fail the condition check before an\nalert is triggered. Must be an integer. Accepts one of `s` (seconds), `m`\n(minutes), or `h` (hours) as units.",
+          "description": "Amount of time the query needs to fail the condition check before an alert is\ntriggered. Must be an integer. Accepts one of `s` (seconds), `m` (minutes), or\n`h` (hours) as units.",
           "format": "int32",
           "type": "integer"
         },
@@ -1753,6 +1753,7 @@
       "type": "object"
     },
     "SLICustomIndicatorConfig": {
+      "description": "Configuration for error ratio SLIs.\nYou can include these variables in PromQL queries for SLIs:\n- {{.Window}}. Specifies the window of time that the PromQL query operates on.\n- {{.GroupBy}}. Specifies a comma-separated list of signal and dimension labels to group the results by.\n- {{.AdditionalFilters}}. Requires setting `additional_promql_filters`.",
       "properties": {
         "good_query_template": {
           "description": "A PromQL query that measures the number of \"good\" events for this SLI.\nEither this or the bad_query_template must be set.",
@@ -1763,11 +1764,10 @@
           "type": "string"
         },
         "total_query_template": {
-          "description": "A PromQL query that measures the total number of events for this SLI.\nThis is required for all advanced SLIs.",
+          "description": "A PromQL query that measures the total number of events for this SLI.\nThis is required for all error ratio SLOs.",
           "type": "string"
         }
       },
-      "title": "CustomIndicatorConfig is for SLIs that are not associated with Chronosphere\nLens supported SLO types. They are provided with several variables that can\nbe used in the template to generate the query:\n- Window (required)\n- GroupBy (required)",
       "type": "object"
     },
     "SLICustomTimeSliceIndicatorConfig": {
@@ -1783,6 +1783,7 @@
           "$ref": "#/definitions/SLITimeSliceCondition"
         }
       },
+      "title": "Defines the configuration for TimeSlice SLIs.\nTimeSlice SLIs are evaluated by running a PromQL query over a certain time window and comparing the result again a condition.\nYou can include these variables in PromQL queries for SLIs:\n- {{.Window}}. Specifies the window of time that the PromQL query operates on.\n- {{.GroupBy}}. Specifies a comma-separated list of signal and dimension labels to group the results by.\n- {{.TimeSlice}} :The time slice being evaluated, e.g. `1m` or `5m`.\n- {{.AdditionalFilters}}. Requires setting `additional_promql_filters`.",
       "type": "object"
     },
     "SLITimeSliceCondition": {
@@ -1804,13 +1805,12 @@
         "TIMESLICE_SIZE_ONE_MINUTE",
         "TIMESLICE_SIZE_FIVE_MINUTES"
       ],
-      "title": "TimeSliceSize defines the supported time slice sizes for TimeSlice SLIs.",
+      "title": "Defines the supported time slice sizes for TimeSlice SLIs.",
       "type": "string"
     },
     "SLODefinition": {
       "properties": {
         "objective": {
-          "description": "The SLO objective",
           "format": "double",
           "type": "number"
         },
@@ -2225,7 +2225,7 @@
     "TraceSearchFilterBoolFilter": {
       "properties": {
         "value": {
-          "description": "The value the filter compares to the target trace or span field.",
+          "description": "The value of the filter compared to the target trace or span field.",
           "type": "boolean"
         }
       },
@@ -2234,12 +2234,12 @@
     "TraceSearchFilterCountFilter": {
       "properties": {
         "min": {
-          "description": "Minimum number of spans that must match a SpanFilter (inclusive).",
+          "description": "Minimum number of spans that must match a span query, inclusive.",
           "format": "int32",
           "type": "integer"
         },
         "max": {
-          "description": "Maximum number of spans that must match a SpanFilter (inclusive).",
+          "description": "Maximum number of spans that must match a span query, inclusive.",
           "format": "int32",
           "type": "integer"
         }
@@ -2298,7 +2298,7 @@
           "$ref": "#/definitions/TraceSearchFilterBoolFilter"
         },
         "tags": {
-          "description": "Matches the tags of the candidate.",
+          "description": "Matches the tags of the candidate span.",
           "items": {
             "$ref": "#/definitions/TraceSearchFilterTagFilter"
           },
@@ -2319,11 +2319,11 @@
           "$ref": "#/definitions/StringFilterStringFilterMatchType"
         },
         "value": {
-          "description": "The value the filter compares to the target trace or span field.",
+          "description": "The value of the filter compared to the target trace or span field.",
           "type": "string"
         },
         "in_values": {
-          "description": "Values the filter tests against when using IN or NOT_IN match type.",
+          "description": "Values the filter tests against when using `IN` or `NOT_IN` match type.",
           "items": {
             "type": "string"
           },
@@ -2335,7 +2335,7 @@
     "TraceSearchFilterTagFilter": {
       "properties": {
         "key": {
-          "description": "The key (or name) of the span tag that is inspected by this filter.",
+          "description": "The key or name of the span tag that this filter inspects.",
           "type": "string"
         },
         "value": {
@@ -3225,7 +3225,7 @@
           "type": "string"
         },
         "description": {
-          "description": "Optional longer-form description of the dataset.",
+          "description": "Required. Description of the dataset.",
           "type": "string"
         },
         "configuration": {
@@ -4016,6 +4016,7 @@
       "description": "Configuration for allocating resources to a dataset.",
       "properties": {
         "percent_of_license": {
+          "description": "Sets the percentage of the license limit to allocate to the default dataset.",
           "format": "double",
           "type": "number"
         }
@@ -4208,7 +4209,7 @@
     "configv1LogSearchFilter": {
       "properties": {
         "query": {
-          "description": "Matches logs which match this query.\nQuery may only include top level operations (no nested clauses).\nOnly one type of operator AND/OR is allowed.",
+          "description": "Returns logs that match this query. The query can include only top-level\noperations. Nested clauses aren't supported. Only one type of `AND` or `OR`\noperator is allowed.",
           "type": "string"
         }
       },
@@ -4318,7 +4319,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Labels to include in notifications generated by this monitor, and can be used to\nroute alerts with notification overrides.",
+          "description": "Required. Labels to include in notifications generated by this monitor, and can\nbe used to route alerts with notification overrides.",
           "type": "object"
         },
         "annotations": {
@@ -4335,11 +4336,11 @@
           "$ref": "#/definitions/MonitorSeriesConditions"
         },
         "notification_policy_slug": {
-          "description": "Optional. Specifies the notification policy used to route alerts generated by\nthe monitor. If omitted, the notification policy is inherited from the monitor.",
+          "description": "Specifies the notification policy used to route alerts generated by the monitor.\nIf omitted, the notification policy is inherited from the monitor.",
           "type": "string"
         },
         "interval_secs": {
-          "description": "Optional. Determines how often alerts are evaluated. Default: `60s`.",
+          "description": "Specifies how often alerts are evaluated. Default: `60s`.",
           "format": "int32",
           "type": "integer"
         },
@@ -4386,24 +4387,24 @@
           "type": "string"
         },
         "label_matchers": {
-          "description": "Specify which series are silenced by the muting rule. Alerting series must\nmatch all muting rule matchers to be silenced.\nThis value cannot be updated. Updates must specify the original value.",
+          "description": "Required. Specifies which series are silenced by the muting rule. Alerting\nseries must match all muting rule matchers to be silenced. You can't update this\nvalue. Updates must specify the original value.",
           "items": {
             "$ref": "#/definitions/configv1MutingRuleLabelMatcher"
           },
           "type": "array"
         },
         "starts_at": {
-          "description": "Timestamp of when the muting rule becomes active.\nThis value cannot be updated. Updates must specify the original value.",
+          "description": "Required. Timestamp of when the muting rule becomes active. You can't update\nthis value. Updates must specify the original value.",
           "format": "date-time",
           "type": "string"
         },
         "ends_at": {
-          "description": "Timestamp of when the muting rule stops being active.",
+          "description": "Required. Timestamp of when the muting rule stops being active.",
           "format": "date-time",
           "type": "string"
         },
         "comment": {
-          "description": "Optional comment that explains why the muting rule was created.",
+          "description": "Descriptive comment that explains why the muting rule was created.",
           "type": "string"
         }
       },
@@ -4415,11 +4416,11 @@
           "$ref": "#/definitions/configv1MutingRuleLabelMatcherMatcherType"
         },
         "name": {
-          "description": "name always matches against an exact label name.",
+          "description": "Required. Always matches against an exact label name.",
           "type": "string"
         },
         "value": {
-          "description": "value matches against a label value based on the configured type.",
+          "description": "Required. Matches against a label value based on the configured type.",
           "type": "string"
         }
       },
@@ -5064,7 +5065,6 @@
       "type": "object"
     },
     "configv1SLI": {
-      "description": "SLI is a service level indicator. The contents of this proto are intended to\nbe used to generate queries necessary to measure SLOs.",
       "properties": {
         "custom_indicator": {
           "$ref": "#/definitions/SLICustomIndicatorConfig"
@@ -5073,14 +5073,14 @@
           "$ref": "#/definitions/SLICustomTimeSliceIndicatorConfig"
         },
         "custom_dimension_labels": {
-          "description": "Custom dimensions are used to configure additional labels to export from\nthe underlying queries. This feature provides a logical budget to group\nunique combination of dimensions. For example, if you want to track a\nbudget per endpoint, add the endpoint label as a dimension. These dimensions\nare provided on the top-level SLI so that SLOs will receive them\nin `.GroupBy`.",
+          "description": "Used to configure additional labels to export from\nthe underlying queries. This feature provides a logical budget to group\nunique combination of dimensions. For example, if you want to track a\nbudget per endpoint, add the endpoint label as a dimension. These dimensions\nare provided on the top-level SLI so that SLOs will receive them\nin `.GroupBy`.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "additional_promql_filters": {
-          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`",
+          "description": "These are made available to the SLO queries and are intended to be used for things\nlike `cluster!~\"dev\"`",
           "items": {
             "$ref": "#/definitions/commonPromQLMatcher"
           },
@@ -5118,7 +5118,7 @@
           "$ref": "#/definitions/configv1CollectionReference"
         },
         "notification_policy_slug": {
-          "description": "Optional notification policy to explicitly apply to the generated monitors.\nIf this is not set then the team this SLO will belong to must have a\ndefault notification policy",
+          "description": "Optional notification policy to explicitly apply to the generated monitors.\nSlug of the notification policy to use for the SLO. If you don't specify a value,\nthen the collection or service this SLO belongs to must have a notification\npolicy.",
           "type": "string"
         },
         "signal_grouping": {
@@ -5478,7 +5478,7 @@
           "$ref": "#/definitions/TraceSearchFilterTraceFilter"
         },
         "span": {
-          "description": "Each SpanFilter object represents all conditions that need to be true on\nthe same span for the span to be considered matching the SpanFilter. If\n`span_count` is used, the number of spans within the trace that match the\nSpanFilter needs to be within [min, max]. Multiple SpanFilters can be used,\nand each can be satisfied by any number of spans within the trace.",
+          "description": "Specifies the span conditions to match on. All conditions must be true in a\nsingle span for the span to be considered a match. If `span_count` is specified,\nthe number of spans within the trace that match span conditions must be within\n`[min, max]`. You can specify multiple span conditions, and each can be\nsatisfied by any number of spans within the trace.",
           "items": {
             "$ref": "#/definitions/TraceSearchFilterSpanFilter"
           },
@@ -10048,7 +10048,7 @@
           },
           {
             "collectionFormat": "multi",
-            "description": "Lists muting rules filtered by the states.\nIf empty, all muting rules are included.",
+            "description": "Lists muting rules filtered by the states. If empty, all muting rules are\nincluded.",
             "in": "query",
             "items": {
               "enum": [

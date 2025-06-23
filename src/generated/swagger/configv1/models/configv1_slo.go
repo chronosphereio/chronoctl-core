@@ -42,8 +42,9 @@ type Configv1SLO struct {
 	CollectionRef *Configv1CollectionReference `json:"collection_ref,omitempty"`
 
 	// Optional notification policy to explicitly apply to the generated monitors.
-	// If this is not set then the team this SLO will belong to must have a
-	// default notification policy
+	// Slug of the notification policy to use for the SLO. If you don't specify a value,
+	// then the collection or service this SLO belongs to must have a notification
+	// policy.
 	NotificationPolicySlug string `json:"notification_policy_slug,omitempty"`
 
 	// signal grouping

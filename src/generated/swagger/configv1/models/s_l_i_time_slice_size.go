@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// SLITimeSliceSize TimeSliceSize defines the supported time slice sizes for TimeSlice SLIs.
+// SLITimeSliceSize Defines the supported time slice sizes for TimeSlice SLIs.
 //
 // swagger:model SLITimeSliceSize
 type SLITimeSliceSize string

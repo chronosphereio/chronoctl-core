@@ -21,12 +21,12 @@ type MonitorCondition struct {
 	// op
 	Op ConditionOp `json:"op,omitempty"`
 
-	// The value to compare to the metric value using the `op` operation.
+	// Required. The value to compare to the metric value using the `op` operation.
 	Value float64 `json:"value,omitempty"`
 
-	// Optional. Amount of time the query needs to fail the condition check before an
-	// alert is triggered. Must be an integer. Accepts one of `s` (seconds), `m`
-	// (minutes), or `h` (hours) as units.
+	// Amount of time the query needs to fail the condition check before an alert is
+	// triggered. Must be an integer. Accepts one of `s` (seconds), `m` (minutes), or
+	// `h` (hours) as units.
 	SustainSecs int32 `json:"sustain_secs,omitempty"`
 
 	// Amount of time the query needs to no longer fire before resolving. Must be an

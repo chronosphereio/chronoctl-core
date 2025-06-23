@@ -21,10 +21,10 @@ type TraceSearchFilterStringFilter struct {
 	// match
 	Match StringFilterStringFilterMatchType `json:"match,omitempty"`
 
-	// The value the filter compares to the target trace or span field.
+	// The value of the filter compared to the target trace or span field.
 	Value string `json:"value,omitempty"`
 
-	// Values the filter tests against when using IN or NOT_IN match type.
+	// Values the filter tests against when using `IN` or `NOT_IN` match type.
 	InValues []string `json:"in_values"`
 }
 

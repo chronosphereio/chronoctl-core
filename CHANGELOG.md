@@ -4,6 +4,7 @@
 * Add support for resource `v1/config/LogIngestConfig
 * Internal: upgrade to Go 1.24
 * Internal: pull in latest API changes
+* Add support for TimeSlice SLOs
 
 ## v1.13.0
 Added:
@@ -105,3 +106,4 @@ No changes
 ## v1.0.0
 
 Initial release for chronoctl-core.
+

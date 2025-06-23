@@ -36,21 +36,21 @@ type Configv1MutingRule struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Specify which series are silenced by the muting rule. Alerting series must
-	// match all muting rule matchers to be silenced.
-	// This value cannot be updated. Updates must specify the original value.
+	// Required. Specifies which series are silenced by the muting rule. Alerting
+	// series must match all muting rule matchers to be silenced. You can't update this
+	// value. Updates must specify the original value.
 	LabelMatchers []*Configv1MutingRuleLabelMatcher `json:"label_matchers"`
 
-	// Timestamp of when the muting rule becomes active.
-	// This value cannot be updated. Updates must specify the original value.
+	// Required. Timestamp of when the muting rule becomes active. You can't update
+	// this value. Updates must specify the original value.
 	// Format: date-time
 	StartsAt strfmt.DateTime `json:"starts_at,omitempty"`
 
-	// Timestamp of when the muting rule stops being active.
+	// Required. Timestamp of when the muting rule stops being active.
 	// Format: date-time
 	EndsAt strfmt.DateTime `json:"ends_at,omitempty"`
 
-	// Optional comment that explains why the muting rule was created.
+	// Descriptive comment that explains why the muting rule was created.
 	Comment string `json:"comment,omitempty"`
 }
 

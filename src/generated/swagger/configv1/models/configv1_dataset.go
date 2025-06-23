@@ -35,7 +35,7 @@ type Configv1Dataset struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Optional longer-form description of the dataset.
+	// Required. Description of the dataset.
 	Description string `json:"description,omitempty"`
 
 	// configuration

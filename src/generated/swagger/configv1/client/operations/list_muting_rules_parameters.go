@@ -93,8 +93,8 @@ type ListMutingRulesParams struct {
 
 	/* States.
 
-	     Lists muting rules filtered by the states.
-	If empty, all muting rules are included.
+	     Lists muting rules filtered by the states. If empty, all muting rules are
+	included.
 	*/
 	States []string
 
