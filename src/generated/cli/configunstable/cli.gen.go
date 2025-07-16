@@ -12,9 +12,10 @@ import (
 
 // AddCommandsTo adds all entity subcommands to the given root command.
 func AddCommandsTo(root *cobra.Command) {
+	root.AddCommand(NewConsumptionBudgetCmd())
+	root.AddCommand(NewConsumptionConfigCmd())
 	root.AddCommand(NewDashboardCmd())
 	root.AddCommand(NewLinkTemplateCmd())
-	root.AddCommand(NewLogBudgetCmd())
 	root.AddCommand(NewSavedTraceSearchCmd())
 	root.AddCommand(NewServiceCmd())
 	root.AddCommand(NewTraceTailSamplingRulesCmd())
@@ -22,6 +23,38 @@ func AddCommandsTo(root *cobra.Command) {
 
 func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, types.Object, bool) error {
 	return map[types.TypeMeta]func(context.Context, client.Clients, types.Object, bool) error{
+		ConsumptionBudgetTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*ConsumptionBudget)
+			if !ok {
+				return types.WrongObjectErr((&ConsumptionBudget{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateConsumptionBudget(ctx, clients.ConfigUnstable, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		ConsumptionConfigTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*ConsumptionConfig)
+			if !ok {
+				return types.WrongObjectErr((&ConsumptionConfig{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateConsumptionConfig(ctx, clients.ConfigUnstable, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
 		DashboardTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
 			entity, ok := obj.(*Dashboard)
 			if !ok {
@@ -49,22 +82,6 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateLinkTemplate(ctx, clients.ConfigUnstable, entity, updateOpts)
-			if err != nil {
-				return err
-			}
-			return nil
-		},
-		LogBudgetTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
-			entity, ok := obj.(*LogBudget)
-			if !ok {
-				return types.WrongObjectErr((&LogBudget{}), obj)
-			}
-
-			updateOpts := UpdateOptions{
-				DryRun:          dryRun,
-				CreateIfMissing: true,
-			}
-			_, err := UpdateLogBudget(ctx, clients.ConfigUnstable, entity, updateOpts)
 			if err != nil {
 				return err
 			}

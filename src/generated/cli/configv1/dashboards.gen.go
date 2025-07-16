@@ -373,7 +373,7 @@ func (r *DashboardListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyCollectionSlugs []string
 	flags.StringSliceVar(&r.CollectionSlugs, "collection-slugs", emptyCollectionSlugs, "Filters results by collection_slug, where any Dashboard with a matching collection_slug in the given list (and matches all other filters) is returned.")
 	var emptyIncludeDashboardJSON bool
-	flags.BoolVar(&r.IncludeDashboardJSON, "include-dashboard-json", emptyIncludeDashboardJSON, "Optional flag to populate the dashboard_json of the returned dashboards. By default, dashboard_json will be left empty.")
+	flags.BoolVar(&r.IncludeDashboardJSON, "include-dashboard-json", emptyIncludeDashboardJSON, "Optional. Flag to populate the `dashboard_json` field of the returned dashboards. By default, `dashboard_json` is empty.")
 	var emptyNames []string
 	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any Dashboard with a matching name in the given list (and matches all other filters) is returned.")
 	var emptySlugs []string
@@ -503,10 +503,11 @@ spec:
     slug: <string>
     # Required. Name of the Dashboard. You can modify this value after the Dashboard is created.
     name: <string>
-    # Optional slug of the collection the dashboard belongs to.
+    # Optional. Slug of the collection the dashboard belongs to.
     collection_slug: <string>
-    # Required raw JSON of the dashboard.
+    # Raw JSON representation that defines the structure of the dashboard.
     dashboard_json: <string>
+    # Optional. Defines tags that add metadata about the dashboard.
     labels:
         key_1: <string>
     collection:

@@ -602,11 +602,11 @@
     "DropRuleValueBasedDrop": {
       "properties": {
         "enabled": {
-          "description": "Enables value-based metric dropping.",
+          "description": "Enables dropping metrics based on a set value.",
           "type": "boolean"
         },
         "target_drop_value": {
-          "description": "The target datapoint value at which to drop metrics.",
+          "description": "The target data point value at which to drop metrics.",
           "format": "double",
           "type": "number"
         }
@@ -3183,20 +3183,21 @@
           "type": "string"
         },
         "collection_slug": {
-          "description": "Optional slug of the collection the dashboard belongs to.",
+          "description": "Optional. Slug of the collection the dashboard belongs to.",
           "type": "string"
         },
         "collection": {
           "$ref": "#/definitions/configv1CollectionReference"
         },
         "dashboard_json": {
-          "description": "Required raw JSON of the dashboard.",
+          "description": "Raw JSON representation that defines the structure of the dashboard.",
           "type": "string"
         },
         "labels": {
           "additionalProperties": {
             "type": "string"
           },
+          "description": "Optional. Defines tags that add metadata about the dashboard.",
           "type": "object"
         }
       },
@@ -3485,7 +3486,7 @@
           "$ref": "#/definitions/configv1DropRuleMode"
         },
         "filters": {
-          "description": "Series that match this filter are dropped.",
+          "description": "Defines the conditions that determine whether to drop a metric. Drop rules can\nhave multiple filter conditions on different labels, making it possible to drop\na subset of the series matching a particular metric name.",
           "items": {
             "$ref": "#/definitions/configv1LabelFilter"
           },
@@ -3498,7 +3499,7 @@
           "$ref": "#/definitions/DropRuleValueBasedDrop"
         },
         "drop_nan_value": {
-          "description": "Drops datapoints if datapoint values are NaN.",
+          "description": "Drops data points if values are Not a Number (NaN). If set to true, Chronosphere\ndrops NaN data points, along with any published staleness markers. See the\n[drop rules\ndocumentation](https://docs.chronosphere.io/control/shaping/rules/drop-rules#define-a-value-based-drop-rule)\nfor more information.",
           "type": "boolean"
         }
       },
@@ -4997,7 +4998,7 @@
           "type": "string"
         },
         "expansive_match": {
-          "description": "A series matches and aggregates only if each label defined by filters and\n`label_policy.keep` or `graphite_label_policy.replace` (respectively) exist in\nthe series. Setting `expansive_match=true` removes this restriction. Default:\n`expansive_match=false`.\n\nIf `false`, a series matches and aggregates only if each label defined by the\nprovided `filters` and the `label_policy.keep` or\n`graphite_label_policy.replace` settings exist in the series.",
+          "description": "DEPRECATED.\nA series matches and aggregates only if each label defined by filters and\n`label_policy.keep` or `graphite_label_policy.replace` (respectively) exist in\nthe series. Setting `expansive_match=true` removes this restriction. Default:\n`expansive_match=false`.\n\nIf `false`, a series matches and aggregates only if each label defined by the\nprovided `filters` and the `label_policy.keep` or\n`graphite_label_policy.replace` settings exist in the series.",
           "type": "boolean"
         },
         "add_metric_type_label": {
@@ -6780,7 +6781,7 @@
             "type": "array"
           },
           {
-            "description": "Optional flag to populate the dashboard_json of the returned dashboards.\nBy default, dashboard_json will be left empty.",
+            "description": "Optional. Flag to populate the `dashboard_json` field of the returned\ndashboards. By default, `dashboard_json` is empty.",
             "in": "query",
             "name": "include_dashboard_json",
             "type": "boolean"

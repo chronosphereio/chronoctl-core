@@ -3,6 +3,12 @@
     "application/json"
   ],
   "definitions": {
+    "ConsumptionBudgetResource": {
+      "enum": [
+        "LOG_PERSISTED_BYTES"
+      ],
+      "type": "string"
+    },
     "ListMonitorStatusesRequestSortOrder": {
       "enum": [
         "SORT_BY_STATE"
@@ -32,12 +38,6 @@
         }
       },
       "type": "object"
-    },
-    "RecurringBudgetResource": {
-      "enum": [
-        "LOG_PERSISTED_BYTES"
-      ],
-      "type": "string"
     },
     "SignalStatusSeriesStatus": {
       "properties": {
