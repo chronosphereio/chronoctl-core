@@ -35,16 +35,16 @@ type Configv1Dashboard struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Optional slug of the collection the dashboard belongs to.
+	// Optional. Slug of the collection the dashboard belongs to.
 	CollectionSlug string `json:"collection_slug,omitempty"`
 
 	// collection
 	Collection *Configv1CollectionReference `json:"collection,omitempty"`
 
-	// Required raw JSON of the dashboard.
+	// Raw JSON representation that defines the structure of the dashboard.
 	DashboardJSON string `json:"dashboard_json,omitempty"`
 
-	// labels
+	// Optional. Defines tags that add metadata about the dashboard.
 	Labels map[string]string `json:"labels,omitempty"`
 }
 

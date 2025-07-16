@@ -89,6 +89,7 @@ type Configv1RollupRule struct {
 	// 0.286.0-2023-01-06-release.1 and earlier.
 	Interval string `json:"interval,omitempty"`
 
+	// DEPRECATED.
 	// A series matches and aggregates only if each label defined by filters and
 	// `label_policy.keep` or `graphite_label_policy.replace` (respectively) exist in
 	// the series. Setting `expansive_match=true` removes this restriction. Default:

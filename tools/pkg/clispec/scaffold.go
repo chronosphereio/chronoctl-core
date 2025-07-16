@@ -16,6 +16,7 @@ package clispec
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/chronosphereio/chronoctl-core/src/thirdparty/yaml"
@@ -74,7 +75,19 @@ func newArrayNode(schema spec.Schema) *yaml.Node {
 		return node
 	}
 	if schema.Items.Schema != nil {
-		node.Content = append(node.Content, newNode(*schema.Items.Schema))
+		if len(schema.Items.Schema.Type) == 0  {
+			// TODO(codyg): Swagger doesn't render recursive types correctly,
+			// see https://github.com/swagger-api/swagger-ui/issues/3325. This
+			// means scaffold won't work for recursive types.
+			//
+			// I'm sniping "ConsumptionConfigPartition" here, which is a
+			// recursive array element which has an empty schema.
+			fmt.Fprintf(
+				os.Stderr, "[WARN] scaffold: skipping recursive schema: %s\n",
+				schema.Items.Schema.Ref.String())
+		} else {
+			node.Content = append(node.Content, newNode(*schema.Items.Schema))
+		}
 	}
 	for _, schema := range schema.Items.Schemas {
 		node.Content = append(node.Content, newNode(schema))

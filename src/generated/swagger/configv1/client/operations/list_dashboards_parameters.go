@@ -70,8 +70,8 @@ type ListDashboardsParams struct {
 
 	/* IncludeDashboardJSON.
 
-	     Optional flag to populate the dashboard_json of the returned dashboards.
-	By default, dashboard_json will be left empty.
+	     Optional. Flag to populate the `dashboard_json` field of the returned
+	dashboards. By default, `dashboard_json` is empty.
 	*/
 	IncludeDashboardJSON *bool
 

@@ -23,7 +23,7 @@
     },
     "BehaviorThresholdType": {
       "enum": [
-        "TARGET",
+        "TARGET_MONTHLY_VOLUME",
         "INSTANT_RATE"
       ],
       "type": "string"
@@ -63,6 +63,22 @@
         },
         "team_slug": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ConfigUnstableUpdateConsumptionBudgetBody": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configunstableConsumptionBudget"
+        },
+        "create_if_missing": {
+          "description": "If true, the ConsumptionBudget will be created if it does not already exist, identified by slug. If false, an error will be returned if the ConsumptionBudget does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the ConsumptionBudget isn't created or updated, and no response ConsumptionBudget will be returned. The response will return an error if the given ConsumptionBudget is invalid.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -119,22 +135,6 @@
       },
       "type": "object"
     },
-    "ConfigUnstableUpdateSLOBody": {
-      "properties": {
-        "slo": {
-          "$ref": "#/definitions/configunstableSLO"
-        },
-        "create_if_missing": {
-          "description": "If true, the SLO will be created if it does not already exist, identified by slug. If false, an error will be returned if the SLO does not already exist.",
-          "type": "boolean"
-        },
-        "dry_run": {
-          "description": "If true, the SLO isn't created or updated, and no response SLO will be returned. The response will return an error if the given SLO is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
     "ConfigUnstableUpdateSavedTraceSearchBody": {
       "properties": {
         "saved_trace_search": {
@@ -179,38 +179,81 @@
       },
       "type": "object"
     },
-    "DefinitionBurnRateDefinition": {
+    "ConsumptionBudgetBehavior": {
       "properties": {
-        "window": {
-          "type": "string"
+        "action": {
+          "$ref": "#/definitions/BehaviorAction"
         },
-        "budget": {
-          "description": "budget defines the amount of errors that are allowed during a given\ntime window. It is a value between 0.0 and 100.0 exclusive.",
-          "format": "double",
-          "type": "number"
+        "threshold_type": {
+          "$ref": "#/definitions/BehaviorThresholdType"
         },
-        "severity": {
-          "description": "Severity may only be one of: critical, warn.\nThis is also a string in the monitor schema",
-          "type": "string"
-        },
-        "labels": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "labels to attach to the burn rate alerts.",
-          "type": "object"
+        "instant_rate_threshold": {
+          "$ref": "#/definitions/BehaviorInstantRateThreshold"
         }
       },
       "type": "object"
     },
-    "DefinitionTimeWindow": {
+    "ConsumptionBudgetPriority": {
       "properties": {
-        "duration": {
-          "description": "duration as a string in the format \"28d\" or \"24h\", etc.",
+        "dataset_filters": {
+          "description": "dataset_filters define what datasets match the priority.  The filters are\nAND'd together; a request must match every filter in order to match the\npriority.",
+          "items": {
+            "$ref": "#/definitions/configunstableDatasetFilter"
+          },
+          "type": "array"
+        },
+        "priority": {
+          "description": "priority is the required priority of the dataset, where priority=1 is\nthe highest priority, and priority=50 is the lowest priority.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ConsumptionBudgetResource": {
+      "enum": [
+        "LOG_PERSISTED_BYTES"
+      ],
+      "type": "string"
+    },
+    "ConsumptionConfigPartition": {
+      "properties": {
+        "name": {
+          "description": "name is the name of the partition. Must be unique within the parent\npartition.",
+          "type": "string"
+        },
+        "dataset_filters": {
+          "description": "dataset_filters define what datasets match the partition. The filters are\nAND'd together; a request must match every filter in order to match the\npartition. Must not be empty.",
+          "items": {
+            "$ref": "#/definitions/configunstableDatasetFilter"
+          },
+          "type": "array"
+        },
+        "partitions": {
+          "description": "partitions are the optional child partitions of this partition. If set,\nrequests which match the current partition will be allocated to the\nfirst child partition that matches. Requests that don't match any child\npartition fall back to an omnipresent default child partition.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionConfigPartition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "DatasetFilterDataset": {
+      "properties": {
+        "dataset_slug": {
+          "description": "dataset_slug is the slug of the dataset to match.",
           "type": "string"
         }
       },
       "type": "object"
+    },
+    "DatasetFilterOperator": {
+      "enum": [
+        "IN",
+        "NOT_IN"
+      ],
+      "type": "string"
     },
     "LogControlRuleDrop": {
       "description": "Drop is the configuration for a drop logs action.",
@@ -247,23 +290,6 @@
           "description": "Percentage of matching logs to keep. Must be in the range [0, 1].",
           "format": "double",
           "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "MonitorSignalGrouping": {
-      "description": "SignalGrouping defines how the set of series from the query are split into signals.",
-      "properties": {
-        "label_names": {
-          "description": "Set of label names used to split series into signals. Each unique combination\nof labels result in its own signal. For example, if `label_names` is\n`[\"service\", \"code\"]`, then all series including labels\n`{service=\"foo\",code=\"404\"}` will be grouped together in the same signal.\n\nCannot be used if `graphite_query` is set.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "signal_per_series": {
-          "description": "If set to `true`, each series will have its own signal. Cannot be used with\n`label_names`.",
-          "type": "boolean"
         }
       },
       "type": "object"
@@ -310,219 +336,6 @@
         },
         "probabilistic_sampling_strategy": {
           "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyProbabilisticStrategy"
-        }
-      },
-      "type": "object"
-    },
-    "RecurringBudgetBehavior": {
-      "properties": {
-        "action": {
-          "$ref": "#/definitions/BehaviorAction"
-        },
-        "threshold_type": {
-          "$ref": "#/definitions/BehaviorThresholdType"
-        },
-        "instant_rate_threshold": {
-          "$ref": "#/definitions/BehaviorInstantRateThreshold"
-        }
-      },
-      "type": "object"
-    },
-    "RecurringBudgetBudget": {
-      "properties": {
-        "slug": {
-          "description": "slug is the required human-readable identifier of the budget.",
-          "type": "string"
-        },
-        "dataset_slug": {
-          "description": "dataset_slug is the required slug of the budget's dataset. Must match\nthe global budget's telemetry type (e.g. logs, metrics etc).",
-          "type": "string"
-        },
-        "resources": {
-          "description": "resources are the required resources of the budget. Must set an entry\nfor each resource of the global budget's telemetry type (e.g. logs,\nmetrics, etc).",
-          "items": {
-            "$ref": "#/definitions/RecurringBudgetResourceBudget"
-          },
-          "type": "array"
-        },
-        "priorities": {
-          "description": "priorities are optional budget priorities. Priorites define in what\norder should requests be dropped when necessary (i.e. lowest priority\ndropped first, highest priority dropped last). If a request does not\nmatch any priority dataset, then it defaults to the lowest priority.",
-          "items": {
-            "$ref": "#/definitions/RecurringBudgetPriority"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "RecurringBudgetDefaultBudget": {
-      "properties": {
-        "resources": {
-          "description": "resources are the optional resources of the default budget.\n\nUnlike regular budgets, any unset resource target defaults to whatever\nportion of the global resource budget remains after all sub-budget\ntargets are subtracted.",
-          "items": {
-            "$ref": "#/definitions/RecurringBudgetResourceBudget"
-          },
-          "type": "array"
-        },
-        "priorities": {
-          "description": "priorities are optional default budget priorities. Priorities\ndefine in what order should requests be dropped when necessary (i.e.\nlowest priority dropped first, highest priority dropped last). If a\nrequest does not match any priority dataset, then it defaults to the\nlowest priority.",
-          "items": {
-            "$ref": "#/definitions/RecurringBudgetPriority"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "RecurringBudgetPriority": {
-      "properties": {
-        "dataset_slug": {
-          "description": "dataset_slug is the required slug of the priority's dataset. Priority\ndatasets are implicitly AND'd with the budget dataset. Must match the\nglobal budget's telemetry type (e.g. logs, metrics etc).",
-          "type": "string"
-        },
-        "priority": {
-          "description": "priority is the required priority of the dataset, where priority=1 is\nthe highest priority, and priority=64 is the lowest priority.",
-          "format": "int32",
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "RecurringBudgetResource": {
-      "enum": [
-        "LOG_PERSISTED_BYTES"
-      ],
-      "type": "string"
-    },
-    "RecurringBudgetResourceBudget": {
-      "properties": {
-        "resource": {
-          "$ref": "#/definitions/RecurringBudgetResource"
-        },
-        "target": {
-          "$ref": "#/definitions/RecurringBudgetTarget"
-        },
-        "behaviors": {
-          "description": "behaviors are optional budget behaviors.",
-          "items": {
-            "$ref": "#/definitions/RecurringBudgetBehavior"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "RecurringBudgetTarget": {
-      "properties": {
-        "fixed_value": {
-          "description": "fixed_value describes the target as a fixed value. Mutually exclusive\nwith percent_of_parent_target; exactly one must be set.",
-          "format": "int64",
-          "type": "string"
-        },
-        "percent_of_parent_target": {
-          "description": "percent_of_parent_target describes the target as a percentage of the\nparent budget's target. Can be set only if the parent budget has a\ntarget set. Cannot set on the global budget, since it has no parent.\nMutually exclusive with fixed_value; exactly one must be set.",
-          "format": "double",
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "SLICustomIndicatorConfig": {
-      "properties": {
-        "good_query_template": {
-          "description": "A PromQL query that measures the number of \"good\" events for this SLI.\nEither this or the bad_query_template must be set.",
-          "type": "string"
-        },
-        "bad_query_template": {
-          "description": "A PromQL query that measures the number of \"bad\" events for this SLI.\nEither this or the good_query_template must be set.",
-          "type": "string"
-        },
-        "total_query_template": {
-          "description": "A PromQL query that measures the total number of events for this SLI.\nThis is required for all advanced SLIs.",
-          "type": "string"
-        }
-      },
-      "title": "CustomIndicatorConfig is for SLIs that are not associated with Chronosphere\nLens supported SLO types. They are provided with several variables that can\nbe used in the template to generate the query:\n- Window (required)\n- GroupBy (required)\n- LensService (optional)",
-      "type": "object"
-    },
-    "SLIEndpointAvailabilityConfig": {
-      "description": "Configuration for an endpoint availability SLI.",
-      "properties": {
-        "endpoints_monitored": {
-          "description": "the API endpoints to monitor in the SLO. If this is left empty then all\nendpoints will be monitored.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "error_codes": {
-          "description": "A list of result codes that indicate an unsuccessful event. Either this\nor success_codes must be set.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "additional_promql_filters": {
-          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`\ndeprecated: Use the top level SLI field",
-          "items": {
-            "$ref": "#/definitions/commonPromQLMatcher"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "SLIEndpointLatencyConfig": {
-      "description": "Configuration for an endpoint latency SLI.",
-      "properties": {
-        "endpoints_monitored": {
-          "description": "the API endpoints to monitor in the SLO. If this is left empty then all\nendpoints will be monitored.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "latency_bucket": {
-          "description": "The name of the histogram metric that measures latency.",
-          "type": "string"
-        },
-        "additional_promql_filters": {
-          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`\ndeprecated: Use the top level SLI field",
-          "items": {
-            "$ref": "#/definitions/commonPromQLMatcher"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "SLODefinition": {
-      "properties": {
-        "objective": {
-          "description": "The SLO objective",
-          "format": "double",
-          "type": "number"
-        },
-        "reporting_windows": {
-          "description": "This is deprecated.",
-          "items": {
-            "$ref": "#/definitions/DefinitionTimeWindow"
-          },
-          "type": "array"
-        },
-        "time_window": {
-          "$ref": "#/definitions/DefinitionTimeWindow"
-        },
-        "burn_rate_alerting_config": {
-          "description": "Provides the burn rate alert configuration for the SLO. If not provided the\ndefault burn rates will be used. The configuration is only valid if the\nenable_burn_rate_alerting flag is set to true.",
-          "items": {
-            "$ref": "#/definitions/DefinitionBurnRateDefinition"
-          },
-          "type": "array"
-        },
-        "enable_burn_rate_alerting": {
-          "description": "If true enables burn rate alerting.",
-          "type": "boolean"
         }
       },
       "type": "object"
@@ -930,30 +743,123 @@
       },
       "type": "object"
     },
-    "commonPromQLMatcher": {
+    "configunstableConsumptionBudget": {
       "properties": {
-        "type": {
-          "$ref": "#/definitions/commonPromQLMatcherType"
+        "slug": {
+          "description": "Unique identifier of the ConsumptionBudget. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the ConsumptionBudget is created.",
+          "type": "string"
         },
         "name": {
-          "description": "Prometheus label name for the matcher",
+          "description": "Required. Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.",
           "type": "string"
         },
-        "value": {
-          "description": "Prometheus label value for the matcher",
+        "created_at": {
+          "description": "Timestamp of when the ConsumptionBudget was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
           "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the ConsumptionBudget was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "resource": {
+          "$ref": "#/definitions/ConsumptionBudgetResource"
+        },
+        "partition_name_path": {
+          "description": "partition_name_path is the required path of the budget's partition, in the\nformat `[\"global\", \"\u003cname1\u003e\", \"\u003cname2\u003e\", ...]`, where name1 is a top-level\npartition, and name2 is a child partition of name1, etc.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "target_monthly_volume": {
+          "description": "target_monthly_volume is the optional desired resource consumption volume\nper month.",
+          "format": "int64",
+          "type": "string"
+        },
+        "priorities": {
+          "description": "priorities are optional budget priorities. Priorites define in what\norder should requests be dropped when necessary (i.e. lowest priority\ndropped first, highest priority dropped last). If a request does not\nmatch any priority dataset, then it defaults to the lowest priority.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionBudgetPriority"
+          },
+          "type": "array"
+        },
+        "behaviors": {
+          "description": "behaviors are optional budget behaviors for automated limiting and\nalerting.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionBudgetBehavior"
+          },
+          "type": "array"
         }
       },
       "type": "object"
     },
-    "commonPromQLMatcherType": {
-      "enum": [
-        "MatchEqual",
-        "MatchRegexp",
-        "MatchNotEqual",
-        "MatchNotRegexp"
-      ],
-      "type": "string"
+    "configunstableConsumptionConfig": {
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the ConsumptionConfig was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the ConsumptionConfig was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "partitions": {
+          "description": "partitions define non-overlapping groupings of telemetry. Partitions are\ndefined in order of precedence, where incoming requests are allocated to\nthe first partition that matches. Requests that don't match any\npartition fall back to an omnipresent default partition.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionConfigPartition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateConsumptionBudgetRequest": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configunstableConsumptionBudget"
+        },
+        "dry_run": {
+          "description": "If true, the ConsumptionBudget isn't created, and no response ConsumptionBudget will be returned. The response will return an error if the given ConsumptionBudget is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateConsumptionBudgetResponse": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configunstableConsumptionBudget"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateConsumptionConfigRequest": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configunstableConsumptionConfig"
+        },
+        "dry_run": {
+          "description": "If true, the ConsumptionConfig isn't created, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateConsumptionConfigResponse": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configunstableConsumptionConfig"
+        }
+      },
+      "type": "object"
     },
     "configunstableCreateDashboardRequest": {
       "properties": {
@@ -987,26 +893,6 @@
       "properties": {
         "link_template": {
           "$ref": "#/definitions/configunstableLinkTemplate"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateLogBudgetRequest": {
-      "properties": {
-        "log_budget": {
-          "$ref": "#/definitions/configunstableLogBudget"
-        },
-        "dry_run": {
-          "description": "If true, the LogBudget isn't created, and no response LogBudget will be returned. The response will return an error if the given LogBudget is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateLogBudgetResponse": {
-      "properties": {
-        "log_budget": {
-          "$ref": "#/definitions/configunstableLogBudget"
         }
       },
       "type": "object"
@@ -1059,26 +945,6 @@
       "properties": {
         "object_discovery_rule": {
           "$ref": "#/definitions/configunstableObjectDiscoveryRule"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateSLORequest": {
-      "properties": {
-        "slo": {
-          "$ref": "#/definitions/configunstableSLO"
-        },
-        "dry_run": {
-          "description": "If true, the SLO isn't created, and no response SLO will be returned. The response will return an error if the given SLO is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateSLOResponse": {
-      "properties": {
-        "slo": {
-          "$ref": "#/definitions/configunstableSLO"
         }
       },
       "type": "object"
@@ -1212,6 +1078,21 @@
       },
       "type": "object"
     },
+    "configunstableDatasetFilter": {
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/DatasetFilterOperator"
+        },
+        "datasets": {
+          "description": "datasets are the datasets to match.",
+          "items": {
+            "$ref": "#/definitions/DatasetFilterDataset"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configunstableDefaultSampleRate": {
       "properties": {
         "enabled": {
@@ -1226,13 +1107,16 @@
       },
       "type": "object"
     },
+    "configunstableDeleteConsumptionBudgetResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteConsumptionConfigResponse": {
+      "type": "object"
+    },
     "configunstableDeleteDashboardResponse": {
       "type": "object"
     },
     "configunstableDeleteLinkTemplateResponse": {
-      "type": "object"
-    },
-    "configunstableDeleteLogBudgetResponse": {
       "type": "object"
     },
     "configunstableDeleteLogControlConfigResponse": {
@@ -1247,9 +1131,6 @@
       "type": "object"
     },
     "configunstableDeleteObjectDiscoveryRuleResponse": {
-      "type": "object"
-    },
-    "configunstableDeleteSLOResponse": {
       "type": "object"
     },
     "configunstableDeleteSavedTraceSearchResponse": {
@@ -1296,6 +1177,20 @@
         "ui_component": {
           "description": "Link template is scoped to the specified string representing a UI component here.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListConsumptionBudgetsResponse": {
+      "properties": {
+        "consumption_budgets": {
+          "items": {
+            "$ref": "#/definitions/configunstableConsumptionBudget"
+          },
+          "type": "array"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
         }
       },
       "type": "object"
@@ -1356,20 +1251,6 @@
       },
       "type": "object"
     },
-    "configunstableListSLOsResponse": {
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/configv1PageResult"
-        },
-        "slos": {
-          "items": {
-            "$ref": "#/definitions/configunstableSLO"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "configunstableListSavedTraceSearchesResponse": {
       "properties": {
         "page": {
@@ -1409,26 +1290,6 @@
             "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
           },
           "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableLogBudget": {
-      "properties": {
-        "created_at": {
-          "description": "Timestamp of when the LogBudget was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the LogBudget was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "monthly_budget": {
-          "$ref": "#/definitions/configunstableRecurringBudget"
         }
       },
       "type": "object"
@@ -1537,6 +1398,22 @@
       },
       "type": "object"
     },
+    "configunstableReadConsumptionBudgetResponse": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configunstableConsumptionBudget"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadConsumptionConfigResponse": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configunstableConsumptionConfig"
+        }
+      },
+      "type": "object"
+    },
     "configunstableReadDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -1549,14 +1426,6 @@
       "properties": {
         "link_template": {
           "$ref": "#/definitions/configunstableLinkTemplate"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableReadLogBudgetResponse": {
-      "properties": {
-        "log_budget": {
-          "$ref": "#/definitions/configunstableLogBudget"
         }
       },
       "type": "object"
@@ -1581,14 +1450,6 @@
       "properties": {
         "object_discovery_rule": {
           "$ref": "#/definitions/configunstableObjectDiscoveryRule"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableReadSLOResponse": {
-      "properties": {
-        "slo": {
-          "$ref": "#/definitions/configunstableSLO"
         }
       },
       "type": "object"
@@ -1629,133 +1490,6 @@
       "properties": {
         "trace_top_tag_config": {
           "$ref": "#/definitions/configunstableTraceTopTagConfig"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableRecurringBudget": {
-      "properties": {
-        "resources": {
-          "description": "resources are the required resources of the global budget. Must set an\nentry for each resource of the global budget's telemetry type (e.g. logs,\nmetrics, etc). Any global resource behaviors are applied after sub-budget\nbehaviors.",
-          "items": {
-            "$ref": "#/definitions/RecurringBudgetResourceBudget"
-          },
-          "type": "array"
-        },
-        "priorities": {
-          "description": "priorities are optional global budget priorities. Priorities define the\norder in which requests should be dropped when necessary (i.e. lowest\npriority dropped first, highest priority dropped last). If a request does\nnot match any priority dataset, then it defaults to the lowest priority.\n\nGlobal budget priorities are also used by internal Chronosphere system\nlimiters when dropping requests.",
-          "items": {
-            "$ref": "#/definitions/RecurringBudgetPriority"
-          },
-          "type": "array"
-        },
-        "budgets": {
-          "description": "budgets are optional sub-budgets of the global budget. Incoming\nrequests match to a budget by dataset, where the first match wins (i.e.\nordering matters). If a request does not match any budget, it falls back\nto the default_budget.",
-          "items": {
-            "$ref": "#/definitions/RecurringBudgetBudget"
-          },
-          "type": "array"
-        },
-        "default_budget": {
-          "$ref": "#/definitions/RecurringBudgetDefaultBudget"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableSLI": {
-      "description": "SLI is a service level indicator. The contents of this proto are intended to\nbe used to generate queries necessary to measure SLOs.",
-      "properties": {
-        "lens_template_indicator": {
-          "description": "Indicates which Chronosphere service discovery template is used to build\nthe SLI queries",
-          "type": "string"
-        },
-        "endpoint_label": {
-          "description": "This overrides the equivalent ComponentDiscovery.MetricMetadata field as it\nis common to change",
-          "type": "string"
-        },
-        "custom_indicator": {
-          "$ref": "#/definitions/SLICustomIndicatorConfig"
-        },
-        "endpoint_availability": {
-          "$ref": "#/definitions/SLIEndpointAvailabilityConfig"
-        },
-        "endpoint_latency": {
-          "$ref": "#/definitions/SLIEndpointLatencyConfig"
-        },
-        "custom_dimension_labels": {
-          "description": "Custom dimensions are used to configure additional labels to export from\nthe underlying queries. This feature provides a logical budget to group\nunique combination of dimensions. For example, if you want to track a\nbudget per endpoint, add the endpoint label as a dimension. These dimensions\nare provided on the top-level SLI so that queryful SLOs will receive them\nin `.GroupBy`.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "source_service": {
-          "$ref": "#/definitions/configv1CollectionReference"
-        },
-        "additional_promql_filters": {
-          "description": "These are added to _every_ query and are intended to be used for things\nlike `cluster!~\"dev\"`",
-          "items": {
-            "$ref": "#/definitions/commonPromQLMatcher"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableSLO": {
-      "properties": {
-        "slug": {
-          "description": "Unique identifier of the SLO. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the SLO is created.",
-          "type": "string"
-        },
-        "name": {
-          "description": "Required. Name of the SLO. You can modify this value after the SLO is created.",
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "created_at": {
-          "description": "Timestamp of when the SLO was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the SLO was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "collection_ref": {
-          "$ref": "#/definitions/configv1CollectionReference"
-        },
-        "notification_policy_slug": {
-          "description": "Optional notification policy to explicitly apply to the generated monitors.\nIf this is not set then the team this SLO will belong to must have a\ndefault notification policy",
-          "type": "string"
-        },
-        "sli": {
-          "$ref": "#/definitions/configunstableSLI"
-        },
-        "definition": {
-          "$ref": "#/definitions/SLODefinition"
-        },
-        "signal_grouping": {
-          "$ref": "#/definitions/MonitorSignalGrouping"
-        },
-        "annotations": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "Annotations are visible in notifications generated by this SLO\nThey can be be templated with labels from notifications.",
-          "type": "object"
-        },
-        "labels": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "Labels are visible in notifications generated by this SLO,\nand can be used to route alerts with notification overrides.",
-          "type": "object"
         }
       },
       "type": "object"
@@ -1991,6 +1725,38 @@
       },
       "type": "object"
     },
+    "configunstableUpdateConsumptionBudgetResponse": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configunstableConsumptionBudget"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateConsumptionConfigRequest": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configunstableConsumptionConfig"
+        },
+        "create_if_missing": {
+          "description": "If true, the ConsumptionConfig will be created if it does not already exist. If false, an error will be returned if the ConsumptionConfig does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If true, the ConsumptionConfig isn't created or updated, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateConsumptionConfigResponse": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configunstableConsumptionConfig"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -2003,30 +1769,6 @@
       "properties": {
         "link_template": {
           "$ref": "#/definitions/configunstableLinkTemplate"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableUpdateLogBudgetRequest": {
-      "properties": {
-        "log_budget": {
-          "$ref": "#/definitions/configunstableLogBudget"
-        },
-        "create_if_missing": {
-          "description": "If true, the LogBudget will be created if it does not already exist. If false, an error will be returned if the LogBudget does not already exist.",
-          "type": "boolean"
-        },
-        "dry_run": {
-          "description": "If true, the LogBudget isn't created or updated, and no response LogBudget will be returned. The response will return an error if the given LogBudget is invalid.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableUpdateLogBudgetResponse": {
-      "properties": {
-        "log_budget": {
-          "$ref": "#/definitions/configunstableLogBudget"
         }
       },
       "type": "object"
@@ -2067,14 +1809,6 @@
       "properties": {
         "object_discovery_rule": {
           "$ref": "#/definitions/configunstableObjectDiscoveryRule"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableUpdateSLOResponse": {
-      "properties": {
-        "slo": {
-          "$ref": "#/definitions/configunstableSLO"
         }
       },
       "type": "object"
@@ -2151,25 +1885,6 @@
       },
       "type": "object"
     },
-    "configv1CollectionReference": {
-      "properties": {
-        "type": {
-          "$ref": "#/definitions/configv1CollectionReferenceType"
-        },
-        "slug": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "configv1CollectionReferenceType": {
-      "description": "Type values must match entitiespb.Collection.CollectionType.",
-      "enum": [
-        "SIMPLE",
-        "SERVICE"
-      ],
-      "type": "string"
-    },
     "configv1PageParams": {
       "properties": {
         "max_size": {
@@ -2228,6 +1943,433 @@
     "version": "UNSTABLE"
   },
   "paths": {
+    "/api/unstable/config/consumption-budgets": {
+      "get": {
+        "operationId": "ListConsumptionBudgets",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any ConsumptionBudget with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any ConsumptionBudget with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListConsumptionBudgetsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      },
+      "post": {
+        "operationId": "CreateConsumptionBudget",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateConsumptionBudgetRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created ConsumptionBudget.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateConsumptionBudgetResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the ConsumptionBudget because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the ConsumptionBudget because there is a conflict with an existing ConsumptionBudget.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      }
+    },
+    "/api/unstable/config/consumption-budgets/{slug}": {
+      "delete": {
+        "operationId": "DeleteConsumptionBudget",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteConsumptionBudgetResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the ConsumptionBudget because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the ConsumptionBudget because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      },
+      "get": {
+        "operationId": "ReadConsumptionBudget",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadConsumptionBudgetResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the ConsumptionBudget because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateConsumptionBudget",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateConsumptionBudgetBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated ConsumptionBudget.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateConsumptionBudgetResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the ConsumptionBudget because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the ConsumptionBudget because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the ConsumptionBudget because there is a conflict with an existing ConsumptionBudget.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      }
+    },
+    "/api/unstable/config/consumption-config": {
+      "delete": {
+        "operationId": "DeleteConsumptionConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteConsumptionConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the ConsumptionConfig because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the ConsumptionConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionConfig"
+        ]
+      },
+      "get": {
+        "operationId": "ReadConsumptionConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadConsumptionConfigResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the ConsumptionConfig because ConsumptionConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionConfig"
+        ]
+      },
+      "post": {
+        "operationId": "CreateConsumptionConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateConsumptionConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created ConsumptionConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateConsumptionConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the ConsumptionConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the ConsumptionConfig because there is a conflict with an existing ConsumptionConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionConfig"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateConsumptionConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateConsumptionConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated ConsumptionConfig.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateConsumptionConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the ConsumptionConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the ConsumptionConfig because ConsumptionConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionConfig"
+        ]
+      }
+    },
     "/api/unstable/config/dashboards": {
       "get": {
         "operationId": "ListDashboards",
@@ -2769,174 +2911,6 @@
         },
         "tags": [
           "LinkTemplate"
-        ]
-      }
-    },
-    "/api/unstable/config/log-budget": {
-      "delete": {
-        "operationId": "DeleteLogBudget",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteLogBudgetResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot delete the LogBudget because it is in use.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the LogBudget because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogBudget"
-        ]
-      },
-      "get": {
-        "operationId": "ReadLogBudget",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadLogBudgetResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the LogBudget because LogBudget has not been created.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogBudget"
-        ]
-      },
-      "post": {
-        "operationId": "CreateLogBudget",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateLogBudgetRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created LogBudget.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateLogBudgetResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the LogBudget because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the LogBudget because there is a conflict with an existing LogBudget.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogBudget"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateLogBudget",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateLogBudgetRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated LogBudget.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateLogBudgetResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the LogBudget because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the LogBudget because LogBudget has not been created.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogBudget"
         ]
       }
     },
@@ -4087,283 +4061,6 @@
         },
         "tags": [
           "Service"
-        ]
-      }
-    },
-    "/api/unstable/config/slos": {
-      "get": {
-        "operationId": "ListSLOs",
-        "parameters": [
-          {
-            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
-            "format": "int64",
-            "in": "query",
-            "name": "page.max_size",
-            "type": "integer"
-          },
-          {
-            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
-            "in": "query",
-            "name": "page.token",
-            "type": "string"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by slug, where any SLO with a matching slug in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "slugs",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by name, where any SLO with a matching name in the given list (and matches all other filters) is returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "names",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "collection_slugs",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "service_slugs",
-            "type": "array"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableListSLOsResponse"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SLO"
-        ]
-      },
-      "post": {
-        "operationId": "CreateSLO",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateSLORequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created SLO.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateSLOResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the SLO because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the SLO because there is a conflict with an existing SLO.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SLO"
-        ]
-      }
-    },
-    "/api/unstable/config/slos/{slug}": {
-      "delete": {
-        "operationId": "DeleteSLO",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteSLOResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot delete the SLO because it is in use.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the SLO because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SLO"
-        ]
-      },
-      "get": {
-        "operationId": "ReadSLO",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadSLOResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the SLO because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SLO"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateSLO",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ConfigUnstableUpdateSLOBody"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated SLO.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateSLOResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the SLO because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the SLO because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot update the SLO because there is a conflict with an existing SLO.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SLO"
         ]
       }
     },
