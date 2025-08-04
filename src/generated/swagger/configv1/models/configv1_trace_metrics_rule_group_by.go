@@ -18,7 +18,7 @@ import (
 // swagger:model configv1TraceMetricsRuleGroupBy
 type Configv1TraceMetricsRuleGroupBy struct {
 
-	// The label to use in the resultant metrics.
+	// The label to use in the resulting metrics.
 	Label string `json:"label,omitempty"`
 
 	// key

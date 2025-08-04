@@ -20,18 +20,19 @@ import (
 // swagger:model configv1TraceTailSamplingRules
 type Configv1TraceTailSamplingRules struct {
 
-	// Set in API responses.
+	// Timestamp of when the rule was created.
 	// Read Only: true
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
-	// Set in API responses.
+	// Timestamp of when the rule was updated.
 	// Read Only: true
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Optional. A list of rules, evaluated in order until a match is found,
-	// and the sample rate applied, or else the default sample rate is applied.
+	// Optional. Specifies a list of rules and a sampling rate to apply. Rules are
+	// evaluated in order until a match is found. If no sample rate is specified, the
+	// default sample rate is applied.
 	Rules []*Configv1TraceTailSamplingRule `json:"rules"`
 
 	// default sample rate

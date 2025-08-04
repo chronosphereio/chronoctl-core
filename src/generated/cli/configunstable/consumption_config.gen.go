@@ -351,7 +351,24 @@ spec:
     # defined in order of precedence, where incoming requests are allocated to
     # the first partition that matches. Requests that don't match any
     # partition fall back to an omnipresent default partition.
-    partitions: []
+    partitions:
+        - # name is the name of the partition. Must be unique within the parent
+          # partition.
+          name: <string>
+          # dataset_filters define what datasets match the partition. The filters are
+          # AND'd together; a request must match every filter in order to match the
+          # partition. Must not be empty.
+          dataset_filters:
+            - # datasets are the datasets to match.
+              datasets:
+                - # dataset_slug is the slug of the dataset to match.
+                  dataset_slug: <string>
+              operator: <IN|NOT_IN>
+          # partitions are the optional child partitions of this partition. If set,
+          # requests which match the current partition will be allocated to the
+          # first child partition that matches. Requests that don't match any child
+          # partition fall back to an omnipresent default child partition.
+          partitions: []
 `
 
 func newConsumptionConfigScaffoldCmd() *cobra.Command {

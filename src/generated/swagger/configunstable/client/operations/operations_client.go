@@ -28,6 +28,8 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	CreateAzureMetricsIntegration(params *CreateAzureMetricsIntegrationParams, opts ...ClientOption) (*CreateAzureMetricsIntegrationOK, error)
+
 	CreateConsumptionBudget(params *CreateConsumptionBudgetParams, opts ...ClientOption) (*CreateConsumptionBudgetOK, error)
 
 	CreateConsumptionConfig(params *CreateConsumptionConfigParams, opts ...ClientOption) (*CreateConsumptionConfigOK, error)
@@ -51,6 +53,8 @@ type ClientService interface {
 	CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRulesParams, opts ...ClientOption) (*CreateTraceTailSamplingRulesOK, error)
 
 	CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, opts ...ClientOption) (*CreateTraceTopTagConfigOK, error)
+
+	DeleteAzureMetricsIntegration(params *DeleteAzureMetricsIntegrationParams, opts ...ClientOption) (*DeleteAzureMetricsIntegrationOK, error)
 
 	DeleteConsumptionBudget(params *DeleteConsumptionBudgetParams, opts ...ClientOption) (*DeleteConsumptionBudgetOK, error)
 
@@ -76,6 +80,8 @@ type ClientService interface {
 
 	DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, opts ...ClientOption) (*DeleteTraceTopTagConfigOK, error)
 
+	ListAzureMetricsIntegrations(params *ListAzureMetricsIntegrationsParams, opts ...ClientOption) (*ListAzureMetricsIntegrationsOK, error)
+
 	ListConsumptionBudgets(params *ListConsumptionBudgetsParams, opts ...ClientOption) (*ListConsumptionBudgetsOK, error)
 
 	ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error)
@@ -89,6 +95,8 @@ type ClientService interface {
 	ListServices(params *ListServicesParams, opts ...ClientOption) (*ListServicesOK, error)
 
 	ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error)
+
+	ReadAzureMetricsIntegration(params *ReadAzureMetricsIntegrationParams, opts ...ClientOption) (*ReadAzureMetricsIntegrationOK, error)
 
 	ReadConsumptionBudget(params *ReadConsumptionBudgetParams, opts ...ClientOption) (*ReadConsumptionBudgetOK, error)
 
@@ -116,6 +124,8 @@ type ClientService interface {
 
 	SyncPrometheus(params *SyncPrometheusParams, opts ...ClientOption) (*SyncPrometheusOK, error)
 
+	UpdateAzureMetricsIntegration(params *UpdateAzureMetricsIntegrationParams, opts ...ClientOption) (*UpdateAzureMetricsIntegrationOK, error)
+
 	UpdateConsumptionBudget(params *UpdateConsumptionBudgetParams, opts ...ClientOption) (*UpdateConsumptionBudgetOK, error)
 
 	UpdateConsumptionConfig(params *UpdateConsumptionConfigParams, opts ...ClientOption) (*UpdateConsumptionConfigOK, error)
@@ -141,6 +151,43 @@ type ClientService interface {
 	UpdateTraceTopTagConfig(params *UpdateTraceTopTagConfigParams, opts ...ClientOption) (*UpdateTraceTopTagConfigOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+CreateAzureMetricsIntegration create azure metrics integration API
+*/
+func (a *Client) CreateAzureMetricsIntegration(params *CreateAzureMetricsIntegrationParams, opts ...ClientOption) (*CreateAzureMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateAzureMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateAzureMetricsIntegration",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/azure-metrics-integrations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateAzureMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateAzureMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateAzureMetricsIntegrationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -591,6 +638,43 @@ func (a *Client) CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, 
 }
 
 /*
+DeleteAzureMetricsIntegration delete azure metrics integration API
+*/
+func (a *Client) DeleteAzureMetricsIntegration(params *DeleteAzureMetricsIntegrationParams, opts ...ClientOption) (*DeleteAzureMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteAzureMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteAzureMetricsIntegration",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/azure-metrics-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteAzureMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteAzureMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteAzureMetricsIntegrationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteConsumptionBudget delete consumption budget API
 */
 func (a *Client) DeleteConsumptionBudget(params *DeleteConsumptionBudgetParams, opts ...ClientOption) (*DeleteConsumptionBudgetOK, error) {
@@ -1035,6 +1119,43 @@ func (a *Client) DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, 
 }
 
 /*
+ListAzureMetricsIntegrations list azure metrics integrations API
+*/
+func (a *Client) ListAzureMetricsIntegrations(params *ListAzureMetricsIntegrationsParams, opts ...ClientOption) (*ListAzureMetricsIntegrationsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListAzureMetricsIntegrationsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListAzureMetricsIntegrations",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/azure-metrics-integrations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListAzureMetricsIntegrationsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListAzureMetricsIntegrationsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListAzureMetricsIntegrationsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListConsumptionBudgets list consumption budgets API
 */
 func (a *Client) ListConsumptionBudgets(params *ListConsumptionBudgetsParams, opts ...ClientOption) (*ListConsumptionBudgetsOK, error) {
@@ -1290,6 +1411,43 @@ func (a *Client) ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaeger
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListTraceJaegerRemoteSamplingStrategiesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadAzureMetricsIntegration read azure metrics integration API
+*/
+func (a *Client) ReadAzureMetricsIntegration(params *ReadAzureMetricsIntegrationParams, opts ...ClientOption) (*ReadAzureMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadAzureMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadAzureMetricsIntegration",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/azure-metrics-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadAzureMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadAzureMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadAzureMetricsIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1774,6 +1932,43 @@ func (a *Client) SyncPrometheus(params *SyncPrometheusParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*SyncPrometheusDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateAzureMetricsIntegration update azure metrics integration API
+*/
+func (a *Client) UpdateAzureMetricsIntegration(params *UpdateAzureMetricsIntegrationParams, opts ...ClientOption) (*UpdateAzureMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateAzureMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateAzureMetricsIntegration",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/azure-metrics-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateAzureMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateAzureMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateAzureMetricsIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

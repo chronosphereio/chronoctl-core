@@ -21,7 +21,7 @@ type Configv1CreateSLORequest struct {
 	// slo
 	SLO *Configv1SLO `json:"slo,omitempty"`
 
-	// If true, the SLO isn't created, and no response SLO will be returned. The response will return an error if the given SLO is invalid.
+	// If `true`, the SLO isn't created, and no response SLO will be returned. The response will return an error if the given SLO is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

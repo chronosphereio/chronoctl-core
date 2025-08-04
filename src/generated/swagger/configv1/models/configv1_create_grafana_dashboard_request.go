@@ -21,7 +21,7 @@ type Configv1CreateGrafanaDashboardRequest struct {
 	// grafana dashboard
 	GrafanaDashboard *Configv1GrafanaDashboard `json:"grafana_dashboard,omitempty"`
 
-	// If true, the GrafanaDashboard isn't created, and no response GrafanaDashboard will be returned. The response will return an error if the given GrafanaDashboard is invalid.
+	// If `true`, the GrafanaDashboard isn't created, and no response GrafanaDashboard will be returned. The response will return an error if the given GrafanaDashboard is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

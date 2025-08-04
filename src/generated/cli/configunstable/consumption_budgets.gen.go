@@ -493,16 +493,13 @@ kind: ConsumptionBudget
 spec:
     # Unique identifier of the ConsumptionBudget. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the ConsumptionBudget is created.
     slug: <string>
-    # Required. Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
+    # Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
     name: <string>
     # partition_name_path is the required path of the budget's partition, in the
     # format '["global", "<name1>", "<name2>", ...]', where name1 is a top-level
     # partition, and name2 is a child partition of name1, etc.
     partition_name_path:
         - <string>
-    # target_monthly_volume is the optional desired resource consumption volume
-    # per month.
-    target_monthly_volume: <int64>
     # priorities are optional budget priorities. Priorites define in what
     # order should requests be dropped when necessary (i.e. lowest priority
     # dropped first, highest priority dropped last). If a request does not
@@ -518,7 +515,7 @@ spec:
                   dataset_slug: <string>
               operator: <IN|NOT_IN>
           # priority is the required priority of the dataset, where priority=1 is
-          # the highest priority, and priority=50 is the lowest priority.
+          # the highest priority, and priority=10 is the lowest priority.
           priority: <integer>
     # behaviors are optional budget behaviors for automated limiting and
     # alerting.
@@ -527,7 +524,15 @@ spec:
           instant_rate_threshold:
             # fixed_value_per_sec is the required rate threshold.
             fixed_value_per_sec: <int64>
-          threshold_type: <TARGET_MONTHLY_VOLUME|INSTANT_RATE>
+          threshold_type: <VOLUME|INSTANT_RATE>
+          volume_threshold:
+            # fixed_value is the required volume threshold.
+            fixed_value: <int64>
+            time_period: <DAILY|WEEKLY|MONTHLY>
+    # default_priority is an optional default priority for requests which do not
+    # match any priority in the priorities list. If not set, then the lowest
+    # priority (10) is used as the default.
+    default_priority: <integer>
     resource: <LOG_PERSISTED_BYTES>
 `
 

@@ -497,9 +497,9 @@ kind: RollupRule
 spec:
     # Unique identifier of the RollupRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the RollupRule is created.
     slug: <string>
-    # Required. Name of the RollupRule. You can modify this value after the RollupRule is created.
+    # Name of the RollupRule. You can modify this value after the RollupRule is created.
     name: <string>
-    # Required. Slug of the bucket the RollupRule belongs to.
+    # Slug of the bucket the RollupRule belongs to.
     bucket_slug: <string>
     # Filters incoming metrics by label. If multiple label filters are specified, an
     # incoming metric must match every label filter to match the rule. Label values

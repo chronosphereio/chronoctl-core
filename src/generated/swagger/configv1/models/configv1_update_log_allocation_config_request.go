@@ -21,10 +21,10 @@ type Configv1UpdateLogAllocationConfigRequest struct {
 	// log allocation config
 	LogAllocationConfig *Configv1LogAllocationConfig `json:"log_allocation_config,omitempty"`
 
-	// If true, the LogAllocationConfig will be created if it does not already exist. If false, an error will be returned if the LogAllocationConfig does not already exist.
+	// If `true`, the LogAllocationConfig will be created if it does not already exist. If `false`, an error will be returned if the LogAllocationConfig does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the LogAllocationConfig isn't created or updated, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.
+	// If `true`, the LogAllocationConfig isn't created or updated, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

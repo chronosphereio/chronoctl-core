@@ -23,7 +23,7 @@ type ConfigunstableConsumptionBudget struct {
 	// Unique identifier of the ConsumptionBudget. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the ConsumptionBudget is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required. Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
+	// Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the ConsumptionBudget was created. Cannot be set by clients.
@@ -44,10 +44,6 @@ type ConfigunstableConsumptionBudget struct {
 	// partition, and name2 is a child partition of name1, etc.
 	PartitionNamePath []string `json:"partition_name_path"`
 
-	// target_monthly_volume is the optional desired resource consumption volume
-	// per month.
-	TargetMonthlyVolume string `json:"target_monthly_volume,omitempty"`
-
 	// priorities are optional budget priorities. Priorites define in what
 	// order should requests be dropped when necessary (i.e. lowest priority
 	// dropped first, highest priority dropped last). If a request does not
@@ -57,6 +53,11 @@ type ConfigunstableConsumptionBudget struct {
 	// behaviors are optional budget behaviors for automated limiting and
 	// alerting.
 	Behaviors []*ConsumptionBudgetBehavior `json:"behaviors"`
+
+	// default_priority is an optional default priority for requests which do not
+	// match any priority in the priorities list. If not set, then the lowest
+	// priority (10) is used as the default.
+	DefaultPriority int32 `json:"default_priority,omitempty"`
 }
 
 // Validate validates this configunstable consumption budget

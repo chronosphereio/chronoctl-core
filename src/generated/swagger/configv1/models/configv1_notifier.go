@@ -22,7 +22,7 @@ type Configv1Notifier struct {
 	// Unique identifier of the Notifier. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the Notifier is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required. Name of the Notifier. You can modify this value after the Notifier is created.
+	// Name of the Notifier. You can modify this value after the Notifier is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the Notifier was created. Cannot be set by clients.

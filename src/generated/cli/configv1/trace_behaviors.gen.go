@@ -491,64 +491,69 @@ func newTraceBehaviorListCmd() *cobra.Command {
 const TraceBehaviorScaffoldYAML = `api_version: v1/config
 kind: TraceBehavior
 spec:
-    # Required. Name of the TraceBehavior. You can modify this value after the TraceBehavior is created.
+    # Name of the TraceBehavior. You can modify this value after the TraceBehavior is created.
     name: <string>
     # Unique identifier of the TraceBehavior. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the TraceBehavior is created.
     slug: <string>
     description: <string>
-    # Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.
+    # Specifies the base sample rate for fully assembled traces that don't apply to
+    # the 'error_sample_options', 'fast_sample_options', 'slow_sample_options',
+    # 'large_trace_sample_options', or 'small_trace_sample_options' sampling options.
     base_tail_sample_rate: <number>
-    # Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,
-    # but do not have a specific rule defined for their service.
+    # Specifies the sample rate for head sampling. This rate applies to all root spans
+    # that are enrolled in head sampling, but don't have a specific rule defined for
+    # their service.
     base_head_sample_rate: <number>
     error_sample_options:
-        # Sample rate for traces with errors.
+        # Specifies the sample rate for traces with errors.
         sample_rate: <number>
-        # Whether or not to use these options.
+        # Determines whether or not to define options for error traces.
         enabled: <true|false>
         #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
         #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.
         sampling_type: <LOW_VALUE|HIGH_VALUE>
     fast_sample_options:
-        # Duration in seconds under which traces are sampled
-        # according to the given sample rate.
+        # Duration in seconds under which traces are sampled according to the given
+        # sample rate.
         max_duration_seconds: <number>
-        # Sample rate for traces under the given duration.
+        # Defines the sample rate for traces during a specified duration.
         sample_rate: <number>
-        # Whether or not to use these options.
+        # Determines whether or not to define options for fast traces.
         enabled: <true|false>
         #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
         #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.
         sampling_type: <LOW_VALUE|HIGH_VALUE>
     large_trace_sample_options:
-        # For N = number of spans in the trace, if N >= span_count_threshold, the trace is sampled according to the
-        # given sample rate.
+        # Defines the sampling rate for large traces. If the number of spans in the
+        # trace is grater than or equal to ('>=') the 'span_count_threshold', the trace
+        # is sampled according to the given sample rate.
         span_count_threshold: <integer>
-        # Sample rate.
+        # Defines the sample rate for traces during a specified duration.
         sample_rate: <number>
-        # Whether or not to use these options.
+        # Determines whether or not to define options for large traces.
         enabled: <true|false>
         #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
         #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.
         sampling_type: <LOW_VALUE|HIGH_VALUE>
     slow_sample_options:
-        # Duration in seconds over which traces are sampled
-        # according to the given sample rate.
+        # Duration in seconds under which traces are sampled according to the given
+        # sample rate.
         min_duration_seconds: <number>
-        # Sample rate.
+        # Defines the sample rate for traces during a specified duration.
         sample_rate: <number>
-        # Whether or not to use these options.
+        # Determines whether or not to define options for slow traces.
         enabled: <true|false>
         #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
         #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.
         sampling_type: <LOW_VALUE|HIGH_VALUE>
     small_trace_sample_options:
-        # For N = number of spans in the trace, if N <= span_count_threshold, the trace is sampled according to the
-        # given sample rate.
+        # Defines the sampling rate for small traces. If the number of spans in the
+        # trace is less than or equal to ('<=') the 'span_count_threshold', the trace is
+        # sampled according to the given sample rate.
         span_count_threshold: <integer>
-        # Sample rate.
+        # Defines the sample rate for traces during a specified duration.
         sample_rate: <number>
-        # Whether or not to use these options.
+        # Determines whether or not to define options for small traces.
         enabled: <true|false>
         #  - LOW_VALUE: Match indicates a low value trace. With multiple low value matches sample at the lowest rate.
         #  - HIGH_VALUE: Match indicates a high value trace. With multiple high value matches sample at the highest rate.

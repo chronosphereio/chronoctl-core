@@ -501,7 +501,7 @@ kind: SLO
 spec:
     # Unique identifier of the SLO. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the SLO is created.
     slug: <string>
-    # Required. Name of the SLO. You can modify this value after the SLO is created.
+    # Name of the SLO. You can modify this value after the SLO is created.
     name: <string>
     description: <string>
     # Optional notification policy to explicitly apply to the generated monitors.

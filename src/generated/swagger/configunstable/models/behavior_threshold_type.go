@@ -30,8 +30,8 @@ func (m BehaviorThresholdType) Pointer() *BehaviorThresholdType {
 
 const (
 
-	// BehaviorThresholdTypeTARGETMONTHLYVOLUME captures enum value "TARGET_MONTHLY_VOLUME"
-	BehaviorThresholdTypeTARGETMONTHLYVOLUME BehaviorThresholdType = "TARGET_MONTHLY_VOLUME"
+	// BehaviorThresholdTypeVOLUME captures enum value "VOLUME"
+	BehaviorThresholdTypeVOLUME BehaviorThresholdType = "VOLUME"
 
 	// BehaviorThresholdTypeINSTANTRATE captures enum value "INSTANT_RATE"
 	BehaviorThresholdTypeINSTANTRATE BehaviorThresholdType = "INSTANT_RATE"
@@ -42,7 +42,7 @@ var behaviorThresholdTypeEnum []interface{}
 
 func init() {
 	var res []BehaviorThresholdType
-	if err := json.Unmarshal([]byte(`["TARGET_MONTHLY_VOLUME","INSTANT_RATE"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["VOLUME","INSTANT_RATE"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

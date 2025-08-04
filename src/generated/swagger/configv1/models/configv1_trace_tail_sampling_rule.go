@@ -22,20 +22,21 @@ type Configv1TraceTailSamplingRule struct {
 	// filter
 	Filter *Configv1TraceSearchFilter `json:"filter,omitempty"`
 
-	// A fraction of traces to keep, which should be a number between 0 and 1, inclusive
+	// Specifies the percentage of traces to keep, which must be a number between `0`
+	// and `1`, inclusive, where `1` equates to 100 percent.
 	SampleRate float64 `json:"sample_rate,omitempty"`
 
-	// A human-readable name of the rule, which summarizes what it's for
+	// A human-readable name of the rule.
 	Name string `json:"name,omitempty"`
 
-	// Value used as the metric label value for metrics emitted relating to this rule.
+	// Name used as the metric label value for metrics that are emitted from this rule.
 	SystemName string `json:"system_name,omitempty"`
 
-	// When the rule was created (novel system_name)
+	// Timestamp of when the rule was created.
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
-	// When the rule was updated (existing system_name)
+	// Timestamp of when the rule was updated.
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 }

@@ -499,7 +499,7 @@ kind: Bucket
 spec:
     # Unique identifier of the Bucket. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Bucket is created.
     slug: <string>
-    # Required. Name of the Bucket. You can modify this value after the Bucket is created.
+    # Name of the Bucket. You can modify this value after the Bucket is created.
     name: <string>
     # Optional description of the bucket.
     description: <string>

@@ -1695,6 +1695,26 @@ func (mr *MockClientServiceMockRecorder) ListServiceAccounts(params interface{},
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListServiceAccounts", reflect.TypeOf((*MockClientService)(nil).ListServiceAccounts), varargs...)
 }
 
+// ListServices mocks base method.
+func (m *MockClientService) ListServices(params *operations.ListServicesParams, opts ...operations.ClientOption) (*operations.ListServicesOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListServices", varargs...)
+	ret0, _ := ret[0].(*operations.ListServicesOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListServices indicates an expected call of ListServices.
+func (mr *MockClientServiceMockRecorder) ListServices(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListServices", reflect.TypeOf((*MockClientService)(nil).ListServices), varargs...)
+}
+
 // ListTeams mocks base method.
 func (m *MockClientService) ListTeams(params *operations.ListTeamsParams, opts ...operations.ClientOption) (*operations.ListTeamsOK, error) {
 	m.ctrl.T.Helper()

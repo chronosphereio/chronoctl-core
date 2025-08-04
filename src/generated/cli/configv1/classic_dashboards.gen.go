@@ -505,7 +505,7 @@ kind: ClassicDashboard
 spec:
     # Unique identifier of the ClassicDashboard. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the ClassicDashboard is created.
     slug: <string>
-    # Required. Name of the ClassicDashboard. You can modify this value after the ClassicDashboard is created.
+    # Name of the ClassicDashboard. You can modify this value after the ClassicDashboard is created.
     name: <string>
     # Slug of the bucket the dashboard belongs to. Required if collection_slug
     # is not set.

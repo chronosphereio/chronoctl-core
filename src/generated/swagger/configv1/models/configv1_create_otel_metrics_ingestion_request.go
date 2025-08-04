@@ -21,7 +21,7 @@ type Configv1CreateOtelMetricsIngestionRequest struct {
 	// otel metrics ingestion
 	OtelMetricsIngestion *Configv1OtelMetricsIngestion `json:"otel_metrics_ingestion,omitempty"`
 
-	// If true, the OtelMetricsIngestion isn't created, and no response OtelMetricsIngestion will be returned. The response will return an error if the given OtelMetricsIngestion is invalid.
+	// If `true`, the OtelMetricsIngestion isn't created, and no response OtelMetricsIngestion will be returned. The response will return an error if the given OtelMetricsIngestion is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

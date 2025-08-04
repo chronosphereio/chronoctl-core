@@ -21,7 +21,7 @@ type Configv1CreateLogScaleAlertRequest struct {
 	// log scale alert
 	LogScaleAlert *Configv1LogScaleAlert `json:"log_scale_alert,omitempty"`
 
-	// If true, the LogScaleAlert isn't created, and no response LogScaleAlert will be returned. The response will return an error if the given LogScaleAlert is invalid.
+	// If `true`, the LogScaleAlert isn't created, and no response LogScaleAlert will be returned. The response will return an error if the given LogScaleAlert is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

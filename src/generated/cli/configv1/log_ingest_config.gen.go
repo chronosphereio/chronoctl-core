@@ -347,12 +347,57 @@ func newLogIngestConfigDeleteCmd() *cobra.Command {
 const LogIngestConfigScaffoldYAML = `api_version: v1/config
 kind: LogIngestConfig
 spec:
-    # The ordered list of parsers to run on ingested logs. The first parser which matches the log is used.
-    parsers:
-        - # Name is the name of the parser.
+    # The parsers to run on plaintext logs. The first parser that matches the log is used.
+    plaintext_parsers:
+        - # The name of the parser. Must be unique within the configuration.
           name: <string>
-          # Regex is the Re2 regex parser pattern to apply. Named capturing groups become named fields in the extracted log.
-          regex: <string>
+          # If true, the original log will be dropped after parsing.
+          # Otherwise the original log is stored under the key "plaintext_log".
+          drop_original: <true|false>
+          mode: <ENABLED|DISABLED>
+          parser:
+            # A parser to extract key-value pairs from a string.
+            # If duplicate keys are found, the first instance is used.
+            key_value_parser:
+                # String used to split each pair into its key and value. Required.
+                pair_separator: <string>
+                # String used to split the input into key-value pairs. Required.
+                delimiter: <string>
+                # All leading and trailing Unicode code points contained in the trim
+                # set will be removed from keys and values. Optional.
+                trim_set: <string>
+            parser_type: <JSON|REGEX|KEY_VALUE>
+            regex_parser:
+                # Regex is the Re2 regex parser pattern to apply.
+                # Named capturing groups become named fields in the extracted log.
+                regex: <string>
+    # The parsers to run on specific fields within structured logs or plaintext logs after parsing.
+    field_parsers:
+        - destination:
+            # LogQL Selector to indicate field path. Use 'parent[child]' syntax to
+            # indicate nesting.
+            selector: <string>
+          mode: <ENABLED|DISABLED>
+          parser:
+            # A parser to extract key-value pairs from a string.
+            # If duplicate keys are found, the first instance is used.
+            key_value_parser:
+                # String used to split each pair into its key and value. Required.
+                pair_separator: <string>
+                # String used to split the input into key-value pairs. Required.
+                delimiter: <string>
+                # All leading and trailing Unicode code points contained in the trim
+                # set will be removed from keys and values. Optional.
+                trim_set: <string>
+            parser_type: <JSON|REGEX|KEY_VALUE>
+            regex_parser:
+                # Regex is the Re2 regex parser pattern to apply.
+                # Named capturing groups become named fields in the extracted log.
+                regex: <string>
+          source:
+            # LogQL Selector to indicate field path. Use 'parent[child]' syntax to
+            # indicate nesting.
+            selector: <string>
 `
 
 func newLogIngestConfigScaffoldCmd() *cobra.Command {

@@ -21,7 +21,7 @@ type ConfigunstableCreateConsumptionConfigRequest struct {
 	// consumption config
 	ConsumptionConfig *ConfigunstableConsumptionConfig `json:"consumption_config,omitempty"`
 
-	// If true, the ConsumptionConfig isn't created, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.
+	// If `true`, the ConsumptionConfig isn't created, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

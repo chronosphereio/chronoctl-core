@@ -21,10 +21,10 @@ type Configv1UpdateTraceTailSamplingRulesRequest struct {
 	// trace tail sampling rules
 	TraceTailSamplingRules *Configv1TraceTailSamplingRules `json:"trace_tail_sampling_rules,omitempty"`
 
-	// If true, the TraceTailSamplingRules will be created if it does not already exist. If false, an error will be returned if the TraceTailSamplingRules does not already exist.
+	// If `true`, the TraceTailSamplingRules will be created if it does not already exist. If `false`, an error will be returned if the TraceTailSamplingRules does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the TraceTailSamplingRules isn't created or updated, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.
+	// If `true`, the TraceTailSamplingRules isn't created or updated, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

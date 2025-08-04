@@ -21,10 +21,10 @@ type ConfigV1UpdateTraceMetricsRuleBody struct {
 	// trace metrics rule
 	TraceMetricsRule *Configv1TraceMetricsRule `json:"trace_metrics_rule,omitempty"`
 
-	// If true, the TraceMetricsRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceMetricsRule does not already exist.
+	// If `true`, the TraceMetricsRule will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the TraceMetricsRule does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the TraceMetricsRule isn't created or updated, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.
+	// If `true`, the TraceMetricsRule isn't created or updated, and no response TraceMetricsRule will be returned. The response will return an error if the given TraceMetricsRule is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

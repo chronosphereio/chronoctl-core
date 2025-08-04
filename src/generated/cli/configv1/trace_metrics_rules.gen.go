@@ -495,7 +495,7 @@ func newTraceMetricsRuleListCmd() *cobra.Command {
 const TraceMetricsRuleScaffoldYAML = `api_version: v1/config
 kind: TraceMetricsRule
 spec:
-    # Required. Name of the TraceMetricsRule. You can modify this value after the TraceMetricsRule is created.
+    # Name of the TraceMetricsRule. You can modify this value after the TraceMetricsRule is created.
     name: <string>
     # Unique identifier of the TraceMetricsRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the TraceMetricsRule is created.
     slug: <string>
@@ -507,17 +507,18 @@ spec:
     # Histogram bucket values, in seconds, for generated duration metrics.
     histogram_buckets_secs:
         - <number>
-    # Add labels to the resultant metrics based on these specified GroupBy messages.
+    # Add labels to the resultant metrics based on the specified key:value pairs.
     group_by:
-        - # The label to use in the resultant metrics.
+        - # The label to use in the resulting metrics.
           label: <string>
           # GroupByKey describes a key to group by.
           key:
-            # For named KeyTypes (e.g. span tags), the name of the key to group by.
+            # For named key types, such as span tags, indicates the name of the key to
+            # group by.
             named_key: <string>
-            #  - SERVICE: Group by service.
-            #  - OPERATION: Group by operation.
-            #  - TAG: Group by span tag.
+            #  - SERVICE: The service to group by.
+            #  - OPERATION: The operation to group by.
+            #  - TAG: The span tag to group by.
             type: <SERVICE|OPERATION|TAG>
     trace_filter:
         # Specifies the span conditions to match on. All conditions must be true in a

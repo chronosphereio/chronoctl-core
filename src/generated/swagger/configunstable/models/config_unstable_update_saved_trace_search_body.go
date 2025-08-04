@@ -21,7 +21,7 @@ type ConfigUnstableUpdateSavedTraceSearchBody struct {
 	// saved trace search
 	SavedTraceSearch *ConfigunstableSavedTraceSearch `json:"saved_trace_search,omitempty"`
 
-	// If true, the SavedTraceSearch will be created if it does not already exist, identified by slug. If false, an error will be returned if the SavedTraceSearch does not already exist.
+	// If `true`, the SavedTraceSearch will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the SavedTraceSearch does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 }
 

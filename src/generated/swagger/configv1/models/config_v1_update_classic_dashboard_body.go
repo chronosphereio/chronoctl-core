@@ -21,10 +21,10 @@ type ConfigV1UpdateClassicDashboardBody struct {
 	// classic dashboard
 	ClassicDashboard *Configv1GrafanaDashboard `json:"classic_dashboard,omitempty"`
 
-	// If true, the GrafanaDashboard will be created if it does not already exist, identified by slug. If false, an error will be returned if the GrafanaDashboard does not already exist.
+	// If `true`, the GrafanaDashboard will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the GrafanaDashboard does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the GrafanaDashboard isn't created or updated, and no response GrafanaDashboard will be returned. The response will return an error if the given GrafanaDashboard is invalid.
+	// If `true`, the GrafanaDashboard isn't created or updated, and no response GrafanaDashboard will be returned. The response will return an error if the given GrafanaDashboard is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

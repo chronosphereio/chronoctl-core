@@ -501,7 +501,7 @@ kind: RecordingRule
 spec:
     # Unique identifier of the RecordingRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the RecordingRule is created.
     slug: <string>
-    # Required. Name of the RecordingRule. You can modify this value after the RecordingRule is created.
+    # Name of the RecordingRule. You can modify this value after the RecordingRule is created.
     name: <string>
     # Optional slug of the bucket the RecordingRule belongs to.
     bucket_slug: <string>

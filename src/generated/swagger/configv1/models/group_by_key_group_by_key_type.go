@@ -14,9 +14,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// GroupByKeyGroupByKeyType  - SERVICE: Group by service.
-//   - OPERATION: Group by operation.
-//   - TAG: Group by span tag.
+// GroupByKeyGroupByKeyType  - SERVICE: The service to group by.
+//   - OPERATION: The operation to group by.
+//   - TAG: The span tag to group by.
 //
 // swagger:model GroupByKeyGroupByKeyType
 type GroupByKeyGroupByKeyType string

@@ -21,7 +21,8 @@ type GroupByGroupByKey struct {
 	// type
 	Type GroupByKeyGroupByKeyType `json:"type,omitempty"`
 
-	// For named KeyTypes (e.g. span tags), the name of the key to group by.
+	// For named key types, such as span tags, indicates the name of the key to
+	// group by.
 	NamedKey string `json:"named_key,omitempty"`
 }
 

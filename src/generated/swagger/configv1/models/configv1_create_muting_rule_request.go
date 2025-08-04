@@ -21,7 +21,7 @@ type Configv1CreateMutingRuleRequest struct {
 	// muting rule
 	MutingRule *Configv1MutingRule `json:"muting_rule,omitempty"`
 
-	// If true, the MutingRule isn't created, and no response MutingRule will be returned. The response will return an error if the given MutingRule is invalid.
+	// If `true`, the MutingRule isn't created, and no response MutingRule will be returned. The response will return an error if the given MutingRule is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

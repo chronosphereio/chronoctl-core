@@ -21,10 +21,10 @@ type ConfigV1UpdateCollectionBody struct {
 	// collection
 	Collection *Configv1Collection `json:"collection,omitempty"`
 
-	// If true, the Collection will be created if it does not already exist, identified by slug. If false, an error will be returned if the Collection does not already exist.
+	// If `true`, the Collection will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the Collection does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the Collection isn't created or updated, and no response Collection will be returned. The response will return an error if the given Collection is invalid.
+	// If `true`, the Collection isn't created or updated, and no response Collection will be returned. The response will return an error if the given Collection is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

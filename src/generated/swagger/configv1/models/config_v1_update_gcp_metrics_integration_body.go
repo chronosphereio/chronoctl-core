@@ -21,10 +21,10 @@ type ConfigV1UpdateGcpMetricsIntegrationBody struct {
 	// gcp metrics integration
 	GcpMetricsIntegration *Configv1GcpMetricsIntegration `json:"gcp_metrics_integration,omitempty"`
 
-	// If true, the GcpMetricsIntegration will be created if it does not already exist, identified by slug. If false, an error will be returned if the GcpMetricsIntegration does not already exist.
+	// If `true`, the GcpMetricsIntegration will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the GcpMetricsIntegration does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the GcpMetricsIntegration isn't created or updated, and no response GcpMetricsIntegration will be returned. The response will return an error if the given GcpMetricsIntegration is invalid.
+	// If `true`, the GcpMetricsIntegration isn't created or updated, and no response GcpMetricsIntegration will be returned. The response will return an error if the given GcpMetricsIntegration is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

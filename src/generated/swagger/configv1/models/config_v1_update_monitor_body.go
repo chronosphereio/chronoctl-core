@@ -21,10 +21,10 @@ type ConfigV1UpdateMonitorBody struct {
 	// monitor
 	Monitor *Configv1Monitor `json:"monitor,omitempty"`
 
-	// If true, the Monitor will be created if it does not already exist, identified by slug. If false, an error will be returned if the Monitor does not already exist.
+	// If `true`, the Monitor will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the Monitor does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the Monitor isn't created or updated, and no response Monitor will be returned. The response will return an error if the given Monitor is invalid.
+	// If `true`, the Monitor isn't created or updated, and no response Monitor will be returned. The response will return an error if the given Monitor is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

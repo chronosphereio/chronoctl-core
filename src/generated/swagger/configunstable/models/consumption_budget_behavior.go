@@ -26,6 +26,9 @@ type ConsumptionBudgetBehavior struct {
 
 	// instant rate threshold
 	InstantRateThreshold *BehaviorInstantRateThreshold `json:"instant_rate_threshold,omitempty"`
+
+	// volume threshold
+	VolumeThreshold *BehaviorVolumeThreshold `json:"volume_threshold,omitempty"`
 }
 
 // Validate validates this consumption budget behavior
@@ -41,6 +44,10 @@ func (m *ConsumptionBudgetBehavior) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateInstantRateThreshold(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateVolumeThreshold(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -103,6 +110,25 @@ func (m *ConsumptionBudgetBehavior) validateInstantRateThreshold(formats strfmt.
 	return nil
 }
 
+func (m *ConsumptionBudgetBehavior) validateVolumeThreshold(formats strfmt.Registry) error {
+	if swag.IsZero(m.VolumeThreshold) { // not required
+		return nil
+	}
+
+	if m.VolumeThreshold != nil {
+		if err := m.VolumeThreshold.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("volume_threshold")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("volume_threshold")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this consumption budget behavior based on the context it is used
 func (m *ConsumptionBudgetBehavior) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -116,6 +142,10 @@ func (m *ConsumptionBudgetBehavior) ContextValidate(ctx context.Context, formats
 	}
 
 	if err := m.contextValidateInstantRateThreshold(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVolumeThreshold(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -174,6 +204,27 @@ func (m *ConsumptionBudgetBehavior) contextValidateInstantRateThreshold(ctx cont
 				return ve.ValidateName("instant_rate_threshold")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("instant_rate_threshold")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConsumptionBudgetBehavior) contextValidateVolumeThreshold(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.VolumeThreshold != nil {
+
+		if swag.IsZero(m.VolumeThreshold) { // not required
+			return nil
+		}
+
+		if err := m.VolumeThreshold.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("volume_threshold")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("volume_threshold")
 			}
 			return err
 		}

@@ -18,13 +18,13 @@ import (
 // swagger:model TraceBehaviorErrorSampleOptions
 type TraceBehaviorErrorSampleOptions struct {
 
-	// Sample rate for traces with errors.
+	// Specifies the sample rate for traces with errors.
 	SampleRate float64 `json:"sample_rate,omitempty"`
 
 	// sampling type
 	SamplingType TraceBehaviorSamplingType `json:"sampling_type,omitempty"`
 
-	// Whether or not to use these options.
+	// Determines whether or not to define options for error traces.
 	Enabled bool `json:"enabled,omitempty"`
 }
 

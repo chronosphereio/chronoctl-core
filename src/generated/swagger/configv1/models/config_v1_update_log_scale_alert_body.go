@@ -21,10 +21,10 @@ type ConfigV1UpdateLogScaleAlertBody struct {
 	// log scale alert
 	LogScaleAlert *Configv1LogScaleAlert `json:"log_scale_alert,omitempty"`
 
-	// If true, the LogScaleAlert will be created if it does not already exist, identified by slug. If false, an error will be returned if the LogScaleAlert does not already exist.
+	// If `true`, the LogScaleAlert will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the LogScaleAlert does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the LogScaleAlert isn't created or updated, and no response LogScaleAlert will be returned. The response will return an error if the given LogScaleAlert is invalid.
+	// If `true`, the LogScaleAlert isn't created or updated, and no response LogScaleAlert will be returned. The response will return an error if the given LogScaleAlert is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

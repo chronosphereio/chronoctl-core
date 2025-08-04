@@ -21,10 +21,10 @@ type ConfigV1UpdateLogScaleActionBody struct {
 	// log scale action
 	LogScaleAction *Configv1LogScaleAction `json:"log_scale_action,omitempty"`
 
-	// If true, the LogScaleAction will be created if it does not already exist, identified by slug. If false, an error will be returned if the LogScaleAction does not already exist.
+	// If `true`, the LogScaleAction will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the LogScaleAction does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the LogScaleAction isn't created or updated, and no response LogScaleAction will be returned. The response will return an error if the given LogScaleAction is invalid.
+	// If `true`, the LogScaleAction isn't created or updated, and no response LogScaleAction will be returned. The response will return an error if the given LogScaleAction is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

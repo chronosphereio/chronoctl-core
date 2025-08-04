@@ -493,7 +493,7 @@ kind: DropRule
 spec:
     # Unique identifier of the DropRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the DropRule is created.
     slug: <string>
-    # Required. Name of the DropRule. You can modify this value after the DropRule is created.
+    # Name of the DropRule. You can modify this value after the DropRule is created.
     name: <string>
     # Defines the conditions that determine whether to drop a metric. Drop rules can
     # have multiple filter conditions on different labels, making it possible to drop
