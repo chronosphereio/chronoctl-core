@@ -18,17 +18,17 @@ import (
 // swagger:model TraceBehaviorFastSampleOptions
 type TraceBehaviorFastSampleOptions struct {
 
-	// Duration in seconds under which traces are sampled
-	// according to the given sample rate.
+	// Duration in seconds under which traces are sampled according to the given
+	// sample rate.
 	MaxDurationSeconds float64 `json:"max_duration_seconds,omitempty"`
 
-	// Sample rate for traces under the given duration.
+	// Defines the sample rate for traces during a specified duration.
 	SampleRate float64 `json:"sample_rate,omitempty"`
 
 	// sampling type
 	SamplingType TraceBehaviorSamplingType `json:"sampling_type,omitempty"`
 
-	// Whether or not to use these options.
+	// Determines whether or not to define options for fast traces.
 	Enabled bool `json:"enabled,omitempty"`
 }
 

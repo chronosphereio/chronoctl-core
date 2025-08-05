@@ -21,7 +21,7 @@ type ConfigUnstableUpdateObjectDiscoveryRuleBody struct {
 	// object discovery rule
 	ObjectDiscoveryRule *ConfigunstableObjectDiscoveryRule `json:"object_discovery_rule,omitempty"`
 
-	// If true, the ObjectDiscoveryRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the ObjectDiscoveryRule does not already exist.
+	// If `true`, the ObjectDiscoveryRule will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the ObjectDiscoveryRule does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 }
 

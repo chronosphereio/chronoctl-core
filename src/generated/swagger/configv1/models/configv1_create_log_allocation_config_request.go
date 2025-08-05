@@ -21,7 +21,7 @@ type Configv1CreateLogAllocationConfigRequest struct {
 	// log allocation config
 	LogAllocationConfig *Configv1LogAllocationConfig `json:"log_allocation_config,omitempty"`
 
-	// If true, the LogAllocationConfig isn't created, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.
+	// If `true`, the LogAllocationConfig isn't created, and no response LogAllocationConfig will be returned. The response will return an error if the given LogAllocationConfig is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

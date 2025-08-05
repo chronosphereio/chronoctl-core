@@ -19,7 +19,7 @@ import (
 // swagger:model configunstableSavedTraceSearch
 type ConfigunstableSavedTraceSearch struct {
 
-	// Required. Name of the SavedTraceSearch. You can modify this value after the SavedTraceSearch is created.
+	// Name of the SavedTraceSearch. You can modify this value after the SavedTraceSearch is created.
 	Name string `json:"name,omitempty"`
 
 	// Unique identifier of the SavedTraceSearch. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the SavedTraceSearch is created.

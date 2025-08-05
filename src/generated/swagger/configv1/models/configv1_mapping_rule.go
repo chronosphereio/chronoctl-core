@@ -23,7 +23,7 @@ type Configv1MappingRule struct {
 	// Unique identifier of the MappingRule. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the MappingRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required. Name of the MappingRule. You can modify this value after the MappingRule is created.
+	// Name of the MappingRule. You can modify this value after the MappingRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the MappingRule was created. Cannot be set by clients.
@@ -36,7 +36,7 @@ type Configv1MappingRule struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Required. Slug of the bucket the MappingRule belongs to.
+	// Slug of the bucket the MappingRule belongs to.
 	BucketSlug string `json:"bucket_slug,omitempty"`
 
 	// Required filters that determine to which metrics to apply the rule.

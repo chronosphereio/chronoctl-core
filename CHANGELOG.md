@@ -1,6 +1,7 @@
 # Releases
 
 ## Unreleased
+* Update parser resource in `v1/config/LogIngestConfig`
 
 ## v1.14.0
 

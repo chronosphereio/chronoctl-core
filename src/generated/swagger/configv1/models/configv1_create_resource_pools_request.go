@@ -21,7 +21,7 @@ type Configv1CreateResourcePoolsRequest struct {
 	// resource pools
 	ResourcePools *Configv1ResourcePools `json:"resource_pools,omitempty"`
 
-	// If true, the ResourcePools isn't created, and no response ResourcePools will be returned. The response will return an error if the given ResourcePools is invalid.
+	// If `true`, the ResourcePools isn't created, and no response ResourcePools will be returned. The response will return an error if the given ResourcePools is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

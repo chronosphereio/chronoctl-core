@@ -347,18 +347,20 @@ func newTraceTailSamplingRulesDeleteCmd() *cobra.Command {
 const TraceTailSamplingRulesScaffoldYAML = `api_version: v1/config
 kind: TraceTailSamplingRules
 spec:
-    # Optional. A list of rules, evaluated in order until a match is found,
-    # and the sample rate applied, or else the default sample rate is applied.
+    # Optional. Specifies a list of rules and a sampling rate to apply. Rules are
+    # evaluated in order until a match is found. If no sample rate is specified, the
+    # default sample rate is applied.
     rules:
-        - # A fraction of traces to keep, which should be a number between 0 and 1, inclusive
+        - # Specifies the percentage of traces to keep, which must be a number between '0'
+          # and '1', inclusive, where '1' equates to 100 percent.
           sample_rate: <number>
-          # A human-readable name of the rule, which summarizes what it's for
+          # A human-readable name of the rule.
           name: <string>
-          # Value used as the metric label value for metrics emitted relating to this rule.
+          # Name used as the metric label value for metrics that are emitted from this rule.
           system_name: <string>
-          # When the rule was created (novel system_name)
+          # Timestamp of when the rule was created.
           created_at: <date-time>
-          # When the rule was updated (existing system_name)
+          # Timestamp of when the rule was updated.
           updated_at: <date-time>
           filter:
             # Specifies the span conditions to match on. All conditions must be true in a
@@ -437,9 +439,10 @@ spec:
                     # The value of the filter compared to the target trace or span field.
                     value: <true|false>
     default_sample_rate:
-        # Whether to override the default sample rate
+        # Determines whether to override the default sample rate.
         enabled: <true|false>
-        # A fraction of traces to keep, which should be a number between 0 and 1, inclusive
+        # Specifies the percentage of traces to keep, which must be a number between '0'
+        # and '1', inclusive, where '1' equates to 100 percent.
         sample_rate: <number>
 `
 

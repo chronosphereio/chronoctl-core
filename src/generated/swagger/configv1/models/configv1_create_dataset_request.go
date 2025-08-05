@@ -21,7 +21,7 @@ type Configv1CreateDatasetRequest struct {
 	// dataset
 	Dataset *Configv1Dataset `json:"dataset,omitempty"`
 
-	// If true, the Dataset isn't created, and no response Dataset will be returned. The response will return an error if the given Dataset is invalid.
+	// If `true`, the Dataset isn't created, and no response Dataset will be returned. The response will return an error if the given Dataset is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

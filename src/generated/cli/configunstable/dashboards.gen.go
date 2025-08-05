@@ -497,7 +497,7 @@ kind: Dashboard
 spec:
     # Unique identifier of the Dashboard. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Dashboard is created.
     slug: <string>
-    # Required. Name of the Dashboard. You can modify this value after the Dashboard is created.
+    # Name of the Dashboard. You can modify this value after the Dashboard is created.
     name: <string>
     # Required slug of the collection the dashboard belongs to.
     collection_slug: <string>

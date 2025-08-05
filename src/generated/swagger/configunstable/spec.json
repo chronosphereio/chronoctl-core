@@ -3,6 +3,61 @@
     "application/json"
   ],
   "definitions": {
+    "AzureMetricsIntegrationAzurePrincipal": {
+      "properties": {
+        "tenant_id": {
+          "description": "Specifies the ID of the Azure tenant that hosts the managed identity principal.",
+          "type": "string"
+        },
+        "client_id": {
+          "description": "Specifies the OAuth2 client ID of the managed identity principal.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AzureMetricsIntegrationAzureResourceType": {
+      "properties": {
+        "name": {
+          "description": "Name of the resource type.",
+          "type": "string"
+        },
+        "metric_names": {
+          "description": "List of metric names to be targeted (these apply to this resource type; use empty for all metrics).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "AzureMetricsIntegrationAzureScrapeConfig": {
+      "properties": {
+        "subscription_ids": {
+          "description": "Subscriptions to be targeted for this integration (use empty for all subscriptions).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "locations": {
+          "description": "Locations to be ingested for this integration (these apply to all subscriptions; use empty for all locations).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "resource_types": {
+          "description": "Metric groups to be ingested for this integration.",
+          "items": {
+            "$ref": "#/definitions/AzureMetricsIntegrationAzureResourceType"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "BehaviorAction": {
       "enum": [
         "ALERT_WARN",
@@ -23,10 +78,23 @@
     },
     "BehaviorThresholdType": {
       "enum": [
-        "TARGET_MONTHLY_VOLUME",
+        "VOLUME",
         "INSTANT_RATE"
       ],
       "type": "string"
+    },
+    "BehaviorVolumeThreshold": {
+      "properties": {
+        "time_period": {
+          "$ref": "#/definitions/VolumeThresholdTimePeriod"
+        },
+        "fixed_value": {
+          "description": "fixed_value is the required volume threshold.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "ChronoConfigCollectionsConfig": {
       "properties": {
@@ -67,17 +135,33 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateAzureMetricsIntegrationBody": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configunstableAzureMetricsIntegration"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the AzureMetricsIntegration will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the AzureMetricsIntegration does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, the AzureMetricsIntegration isn't created or updated, and no response AzureMetricsIntegration will be returned. The response will return an error if the given AzureMetricsIntegration is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateConsumptionBudgetBody": {
       "properties": {
         "consumption_budget": {
           "$ref": "#/definitions/configunstableConsumptionBudget"
         },
         "create_if_missing": {
-          "description": "If true, the ConsumptionBudget will be created if it does not already exist, identified by slug. If false, an error will be returned if the ConsumptionBudget does not already exist.",
+          "description": "If `true`, the ConsumptionBudget will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the ConsumptionBudget does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
-          "description": "If true, the ConsumptionBudget isn't created or updated, and no response ConsumptionBudget will be returned. The response will return an error if the given ConsumptionBudget is invalid.",
+          "description": "If `true`, the ConsumptionBudget isn't created or updated, and no response ConsumptionBudget will be returned. The response will return an error if the given ConsumptionBudget is invalid.",
           "type": "boolean"
         }
       },
@@ -89,7 +173,7 @@
           "$ref": "#/definitions/configunstableDashboard"
         },
         "create_if_missing": {
-          "description": "If true, the Dashboard will be created if it does not already exist, identified by slug. If false, an error will be returned if the Dashboard does not already exist.",
+          "description": "If `true`, the Dashboard will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the Dashboard does not already exist.",
           "type": "boolean"
         }
       },
@@ -101,11 +185,11 @@
           "$ref": "#/definitions/configunstableLinkTemplate"
         },
         "create_if_missing": {
-          "description": "If true, the LinkTemplate will be created if it does not already exist, identified by slug. If false, an error will be returned if the LinkTemplate does not already exist.",
+          "description": "If `true`, the LinkTemplate will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the LinkTemplate does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
-          "description": "If true, the LinkTemplate isn't created or updated, and no response LinkTemplate will be returned. The response will return an error if the given LinkTemplate is invalid.",
+          "description": "If `true`, the LinkTemplate isn't created or updated, and no response LinkTemplate will be returned. The response will return an error if the given LinkTemplate is invalid.",
           "type": "boolean"
         }
       },
@@ -117,7 +201,7 @@
           "$ref": "#/definitions/configunstableNoopEntity"
         },
         "create_if_missing": {
-          "description": "If true, the NoopEntity will be created if it does not already exist, identified by slug. If false, an error will be returned if the NoopEntity does not already exist.",
+          "description": "If `true`, the NoopEntity will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the NoopEntity does not already exist.",
           "type": "boolean"
         }
       },
@@ -129,7 +213,7 @@
           "$ref": "#/definitions/configunstableObjectDiscoveryRule"
         },
         "create_if_missing": {
-          "description": "If true, the ObjectDiscoveryRule will be created if it does not already exist, identified by slug. If false, an error will be returned if the ObjectDiscoveryRule does not already exist.",
+          "description": "If `true`, the ObjectDiscoveryRule will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the ObjectDiscoveryRule does not already exist.",
           "type": "boolean"
         }
       },
@@ -141,7 +225,7 @@
           "$ref": "#/definitions/configunstableSavedTraceSearch"
         },
         "create_if_missing": {
-          "description": "If true, the SavedTraceSearch will be created if it does not already exist, identified by slug. If false, an error will be returned if the SavedTraceSearch does not already exist.",
+          "description": "If `true`, the SavedTraceSearch will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the SavedTraceSearch does not already exist.",
           "type": "boolean"
         }
       },
@@ -153,11 +237,11 @@
           "$ref": "#/definitions/configunstableService"
         },
         "create_if_missing": {
-          "description": "If true, the Service will be created if it does not already exist, identified by slug. If false, an error will be returned if the Service does not already exist.",
+          "description": "If `true`, the Service will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the Service does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
-          "description": "If true, the Service isn't created or updated, and no response Service will be returned. The response will return an error if the given Service is invalid.",
+          "description": "If `true`, the Service isn't created or updated, and no response Service will be returned. The response will return an error if the given Service is invalid.",
           "type": "boolean"
         }
       },
@@ -169,11 +253,11 @@
           "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
         },
         "create_if_missing": {
-          "description": "If true, the TraceJaegerRemoteSamplingStrategy will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceJaegerRemoteSamplingStrategy does not already exist.",
+          "description": "If `true`, the TraceJaegerRemoteSamplingStrategy will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the TraceJaegerRemoteSamplingStrategy does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
-          "description": "If true, the TraceJaegerRemoteSamplingStrategy isn't created or updated, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.",
+          "description": "If `true`, the TraceJaegerRemoteSamplingStrategy isn't created or updated, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.",
           "type": "boolean"
         }
       },
@@ -189,6 +273,9 @@
         },
         "instant_rate_threshold": {
           "$ref": "#/definitions/BehaviorInstantRateThreshold"
+        },
+        "volume_threshold": {
+          "$ref": "#/definitions/BehaviorVolumeThreshold"
         }
       },
       "type": "object"
@@ -203,7 +290,7 @@
           "type": "array"
         },
         "priority": {
-          "description": "priority is the required priority of the dataset, where priority=1 is\nthe highest priority, and priority=50 is the lowest priority.",
+          "description": "priority is the required priority of the dataset, where priority=1 is\nthe highest priority, and priority=10 is the lowest priority.",
           "format": "int32",
           "type": "integer"
         }
@@ -729,6 +816,14 @@
       },
       "type": "object"
     },
+    "VolumeThresholdTimePeriod": {
+      "enum": [
+        "DAILY",
+        "WEEKLY",
+        "MONTHLY"
+      ],
+      "type": "string"
+    },
     "apiError": {
       "properties": {
         "code": {
@@ -743,6 +838,53 @@
       },
       "type": "object"
     },
+    "configunstableAzureMetricsIntegration": {
+      "properties": {
+        "slug": {
+          "description": "Unique identifier of the AzureMetricsIntegration. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the AzureMetricsIntegration is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the AzureMetricsIntegration. You can modify this value after the AzureMetricsIntegration is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the AzureMetricsIntegration was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the AzureMetricsIntegration was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "principal": {
+          "$ref": "#/definitions/AzureMetricsIntegrationAzurePrincipal"
+        },
+        "scrape_configs": {
+          "description": "Specifies the scrape configs for this integration.",
+          "items": {
+            "$ref": "#/definitions/AzureMetricsIntegrationAzureScrapeConfig"
+          },
+          "type": "array"
+        },
+        "count_metrics_enabled": {
+          "description": "Enables Azure count metrics for the configured resources.",
+          "type": "boolean"
+        },
+        "usage_metrics_enabled": {
+          "description": "Enables collection of azure usage metrics under this principal (Microsoft.Compute, Microsoft.Network, Microsoft.Storage).",
+          "type": "boolean"
+        },
+        "propagate_tags": {
+          "description": "Specifies whether Azure resource, group, and subscription tags should be propagated as metric labels.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "configunstableConsumptionBudget": {
       "properties": {
         "slug": {
@@ -750,7 +892,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Required. Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.",
+          "description": "Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.",
           "type": "string"
         },
         "created_at": {
@@ -775,11 +917,6 @@
           },
           "type": "array"
         },
-        "target_monthly_volume": {
-          "description": "target_monthly_volume is the optional desired resource consumption volume\nper month.",
-          "format": "int64",
-          "type": "string"
-        },
         "priorities": {
           "description": "priorities are optional budget priorities. Priorites define in what\norder should requests be dropped when necessary (i.e. lowest priority\ndropped first, highest priority dropped last). If a request does not\nmatch any priority dataset, then it defaults to the lowest priority.",
           "items": {
@@ -793,6 +930,11 @@
             "$ref": "#/definitions/ConsumptionBudgetBehavior"
           },
           "type": "array"
+        },
+        "default_priority": {
+          "description": "default_priority is an optional default priority for requests which do not\nmatch any priority in the priorities list. If not set, then the lowest\npriority (10) is used as the default.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -821,13 +963,33 @@
       },
       "type": "object"
     },
+    "configunstableCreateAzureMetricsIntegrationRequest": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configunstableAzureMetricsIntegration"
+        },
+        "dry_run": {
+          "description": "If `true`, the AzureMetricsIntegration isn't created, and no response AzureMetricsIntegration will be returned. The response will return an error if the given AzureMetricsIntegration is invalid.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateAzureMetricsIntegrationResponse": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configunstableAzureMetricsIntegration"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateConsumptionBudgetRequest": {
       "properties": {
         "consumption_budget": {
           "$ref": "#/definitions/configunstableConsumptionBudget"
         },
         "dry_run": {
-          "description": "If true, the ConsumptionBudget isn't created, and no response ConsumptionBudget will be returned. The response will return an error if the given ConsumptionBudget is invalid.",
+          "description": "If `true`, the ConsumptionBudget isn't created, and no response ConsumptionBudget will be returned. The response will return an error if the given ConsumptionBudget is invalid.",
           "type": "boolean"
         }
       },
@@ -847,7 +1009,7 @@
           "$ref": "#/definitions/configunstableConsumptionConfig"
         },
         "dry_run": {
-          "description": "If true, the ConsumptionConfig isn't created, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.",
+          "description": "If `true`, the ConsumptionConfig isn't created, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.",
           "type": "boolean"
         }
       },
@@ -883,7 +1045,7 @@
           "$ref": "#/definitions/configunstableLinkTemplate"
         },
         "dry_run": {
-          "description": "If true, the LinkTemplate isn't created, and no response LinkTemplate will be returned. The response will return an error if the given LinkTemplate is invalid.",
+          "description": "If `true`, the LinkTemplate isn't created, and no response LinkTemplate will be returned. The response will return an error if the given LinkTemplate is invalid.",
           "type": "boolean"
         }
       },
@@ -903,7 +1065,7 @@
           "$ref": "#/definitions/configunstableLogControlConfig"
         },
         "dry_run": {
-          "description": "If true, the LogControlConfig isn't created, and no response LogControlConfig will be returned. The response will return an error if the given LogControlConfig is invalid.",
+          "description": "If `true`, the LogControlConfig isn't created, and no response LogControlConfig will be returned. The response will return an error if the given LogControlConfig is invalid.",
           "type": "boolean"
         }
       },
@@ -971,7 +1133,7 @@
           "$ref": "#/definitions/configunstableService"
         },
         "dry_run": {
-          "description": "If true, the Service isn't created, and no response Service will be returned. The response will return an error if the given Service is invalid.",
+          "description": "If `true`, the Service isn't created, and no response Service will be returned. The response will return an error if the given Service is invalid.",
           "type": "boolean"
         }
       },
@@ -991,7 +1153,7 @@
           "$ref": "#/definitions/configunstableTraceJaegerRemoteSamplingStrategy"
         },
         "dry_run": {
-          "description": "If true, the TraceJaegerRemoteSamplingStrategy isn't created, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.",
+          "description": "If `true`, the TraceJaegerRemoteSamplingStrategy isn't created, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.",
           "type": "boolean"
         }
       },
@@ -1011,7 +1173,7 @@
           "$ref": "#/definitions/configunstableTraceTailSamplingRules"
         },
         "dry_run": {
-          "description": "If true, the TraceTailSamplingRules isn't created, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.",
+          "description": "If `true`, the TraceTailSamplingRules isn't created, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.",
           "type": "boolean"
         }
       },
@@ -1031,7 +1193,7 @@
           "$ref": "#/definitions/configunstableTraceTopTagConfig"
         },
         "dry_run": {
-          "description": "If true, the TraceTopTagConfig isn't created, and no response TraceTopTagConfig will be returned. The response will return an error if the given TraceTopTagConfig is invalid.",
+          "description": "If `true`, the TraceTopTagConfig isn't created, and no response TraceTopTagConfig will be returned. The response will return an error if the given TraceTopTagConfig is invalid.",
           "type": "boolean"
         }
       },
@@ -1052,7 +1214,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Required. Name of the Dashboard. You can modify this value after the Dashboard is created.",
+          "description": "Name of the Dashboard. You can modify this value after the Dashboard is created.",
           "type": "string"
         },
         "created_at": {
@@ -1105,6 +1267,9 @@
           "type": "number"
         }
       },
+      "type": "object"
+    },
+    "configunstableDeleteAzureMetricsIntegrationResponse": {
       "type": "object"
     },
     "configunstableDeleteConsumptionBudgetResponse": {
@@ -1177,6 +1342,20 @@
         "ui_component": {
           "description": "Link template is scoped to the specified string representing a UI component here.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListAzureMetricsIntegrationsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "azure_metrics_integrations": {
+          "items": {
+            "$ref": "#/definitions/configunstableAzureMetricsIntegration"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1352,7 +1531,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Required. Name of the NoopEntity. You can modify this value after the NoopEntity is created.",
+          "description": "Name of the NoopEntity. You can modify this value after the NoopEntity is created.",
           "type": "string"
         },
         "created_at": {
@@ -1389,11 +1568,19 @@
           "type": "string"
         },
         "name": {
-          "description": "Required. Name of the ObjectDiscoveryRule. You can modify this value after the ObjectDiscoveryRule is created.",
+          "description": "Name of the ObjectDiscoveryRule. You can modify this value after the ObjectDiscoveryRule is created.",
           "type": "string"
         },
         "metric": {
           "$ref": "#/definitions/ObjectDiscoveryRuleMetricRule"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadAzureMetricsIntegrationResponse": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configunstableAzureMetricsIntegration"
         }
       },
       "type": "object"
@@ -1497,7 +1684,7 @@
     "configunstableSavedTraceSearch": {
       "properties": {
         "name": {
-          "description": "Required. Name of the SavedTraceSearch. You can modify this value after the SavedTraceSearch is created.",
+          "description": "Name of the SavedTraceSearch. You can modify this value after the SavedTraceSearch is created.",
           "type": "string"
         },
         "slug": {
@@ -1532,7 +1719,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Required. Name of the Service. You can modify this value after the Service is created.",
+          "description": "Name of the Service. You can modify this value after the Service is created.",
           "type": "string"
         },
         "created_at": {
@@ -1609,7 +1796,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Required. Name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.",
+          "description": "Name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.",
           "type": "string"
         },
         "created_at": {
@@ -1725,6 +1912,14 @@
       },
       "type": "object"
     },
+    "configunstableUpdateAzureMetricsIntegrationResponse": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configunstableAzureMetricsIntegration"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateConsumptionBudgetResponse": {
       "properties": {
         "consumption_budget": {
@@ -1739,11 +1934,11 @@
           "$ref": "#/definitions/configunstableConsumptionConfig"
         },
         "create_if_missing": {
-          "description": "If true, the ConsumptionConfig will be created if it does not already exist. If false, an error will be returned if the ConsumptionConfig does not already exist.",
+          "description": "If `true`, the ConsumptionConfig will be created if it does not already exist. If `false`, an error will be returned if the ConsumptionConfig does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
-          "description": "If true, the ConsumptionConfig isn't created or updated, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.",
+          "description": "If `true`, the ConsumptionConfig isn't created or updated, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.",
           "type": "boolean"
         }
       },
@@ -1779,11 +1974,11 @@
           "$ref": "#/definitions/configunstableLogControlConfig"
         },
         "create_if_missing": {
-          "description": "If true, the LogControlConfig will be created if it does not already exist. If false, an error will be returned if the LogControlConfig does not already exist.",
+          "description": "If `true`, the LogControlConfig will be created if it does not already exist. If `false`, an error will be returned if the LogControlConfig does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
-          "description": "If true, the LogControlConfig isn't created or updated, and no response LogControlConfig will be returned. The response will return an error if the given LogControlConfig is invalid.",
+          "description": "If `true`, the LogControlConfig isn't created or updated, and no response LogControlConfig will be returned. The response will return an error if the given LogControlConfig is invalid.",
           "type": "boolean"
         }
       },
@@ -1843,11 +2038,11 @@
           "$ref": "#/definitions/configunstableTraceTailSamplingRules"
         },
         "create_if_missing": {
-          "description": "If true, the TraceTailSamplingRules will be created if it does not already exist. If false, an error will be returned if the TraceTailSamplingRules does not already exist.",
+          "description": "If `true`, the TraceTailSamplingRules will be created if it does not already exist. If `false`, an error will be returned if the TraceTailSamplingRules does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
-          "description": "If true, the TraceTailSamplingRules isn't created or updated, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.",
+          "description": "If `true`, the TraceTailSamplingRules isn't created or updated, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.",
           "type": "boolean"
         }
       },
@@ -1867,11 +2062,11 @@
           "$ref": "#/definitions/configunstableTraceTopTagConfig"
         },
         "create_if_missing": {
-          "description": "If true, the TraceTopTagConfig will be created if it does not already exist. If false, an error will be returned if the TraceTopTagConfig does not already exist.",
+          "description": "If `true`, the TraceTopTagConfig will be created if it does not already exist. If `false`, an error will be returned if the TraceTopTagConfig does not already exist.",
           "type": "boolean"
         },
         "dry_run": {
-          "description": "If true, the TraceTopTagConfig isn't created or updated, and no response TraceTopTagConfig will be returned. The response will return an error if the given TraceTopTagConfig is invalid.",
+          "description": "If `true`, the TraceTopTagConfig isn't created or updated, and no response TraceTopTagConfig will be returned. The response will return an error if the given TraceTopTagConfig is invalid.",
           "type": "boolean"
         }
       },
@@ -1943,6 +2138,265 @@
     "version": "UNSTABLE"
   },
   "paths": {
+    "/api/unstable/config/azure-metrics-integrations": {
+      "get": {
+        "operationId": "ListAzureMetricsIntegrations",
+        "parameters": [
+          {
+            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any AzureMetricsIntegration with a matching slug in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any AzureMetricsIntegration with a matching name in the given list (and matches all other filters) is returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListAzureMetricsIntegrationsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      },
+      "post": {
+        "operationId": "CreateAzureMetricsIntegration",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateAzureMetricsIntegrationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created AzureMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateAzureMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the AzureMetricsIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the AzureMetricsIntegration because there is a conflict with an existing AzureMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      }
+    },
+    "/api/unstable/config/azure-metrics-integrations/{slug}": {
+      "delete": {
+        "operationId": "DeleteAzureMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteAzureMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the AzureMetricsIntegration because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the AzureMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      },
+      "get": {
+        "operationId": "ReadAzureMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadAzureMetricsIntegrationResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the AzureMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateAzureMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateAzureMetricsIntegrationBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated AzureMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateAzureMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the AzureMetricsIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the AzureMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the AzureMetricsIntegration because there is a conflict with an existing AzureMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      }
+    },
     "/api/unstable/config/consumption-budgets": {
       "get": {
         "operationId": "ListConsumptionBudgets",

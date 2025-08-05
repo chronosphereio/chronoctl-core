@@ -21,10 +21,10 @@ type ConfigUnstableUpdateConsumptionBudgetBody struct {
 	// consumption budget
 	ConsumptionBudget *ConfigunstableConsumptionBudget `json:"consumption_budget,omitempty"`
 
-	// If true, the ConsumptionBudget will be created if it does not already exist, identified by slug. If false, an error will be returned if the ConsumptionBudget does not already exist.
+	// If `true`, the ConsumptionBudget will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the ConsumptionBudget does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the ConsumptionBudget isn't created or updated, and no response ConsumptionBudget will be returned. The response will return an error if the given ConsumptionBudget is invalid.
+	// If `true`, the ConsumptionBudget isn't created or updated, and no response ConsumptionBudget will be returned. The response will return an error if the given ConsumptionBudget is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

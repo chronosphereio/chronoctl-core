@@ -495,7 +495,7 @@ func newDatasetListCmd() *cobra.Command {
 const DatasetScaffoldYAML = `api_version: v1/config
 kind: Dataset
 spec:
-    # Required. Name of the Dataset. You can modify this value after the Dataset is created.
+    # Name of the Dataset. You can modify this value after the Dataset is created.
     name: <string>
     # Unique identifier of the Dataset. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Dataset is created.
     slug: <string>

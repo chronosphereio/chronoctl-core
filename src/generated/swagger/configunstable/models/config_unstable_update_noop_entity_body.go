@@ -21,7 +21,7 @@ type ConfigUnstableUpdateNoopEntityBody struct {
 	// noop entity
 	NoopEntity *ConfigunstableNoopEntity `json:"noop_entity,omitempty"`
 
-	// If true, the NoopEntity will be created if it does not already exist, identified by slug. If false, an error will be returned if the NoopEntity does not already exist.
+	// If `true`, the NoopEntity will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the NoopEntity does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 }
 

@@ -21,10 +21,10 @@ type ConfigV1UpdateTraceBehaviorBody struct {
 	// trace behavior
 	TraceBehavior *Configv1TraceBehavior `json:"trace_behavior,omitempty"`
 
-	// If true, the TraceBehavior will be created if it does not already exist, identified by slug. If false, an error will be returned if the TraceBehavior does not already exist.
+	// If `true`, the TraceBehavior will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the TraceBehavior does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the TraceBehavior isn't created or updated, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.
+	// If `true`, the TraceBehavior isn't created or updated, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

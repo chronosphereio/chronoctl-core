@@ -19,7 +19,7 @@ import (
 // swagger:model configv1TraceBehavior
 type Configv1TraceBehavior struct {
 
-	// Required. Name of the TraceBehavior. You can modify this value after the TraceBehavior is created.
+	// Name of the TraceBehavior. You can modify this value after the TraceBehavior is created.
 	Name string `json:"name,omitempty"`
 
 	// Unique identifier of the TraceBehavior. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the TraceBehavior is created.
@@ -38,11 +38,14 @@ type Configv1TraceBehavior struct {
 	// description
 	Description string `json:"description,omitempty"`
 
-	// Sample rate for fully assembled traces that do not apply to the error, fast, slow, large, or small sampling options.
+	// Specifies the base sample rate for fully assembled traces that don't apply to
+	// the `error_sample_options`, `fast_sample_options`, `slow_sample_options`,
+	// `large_trace_sample_options`, or `small_trace_sample_options` sampling options.
 	BaseTailSampleRate float64 `json:"base_tail_sample_rate,omitempty"`
 
-	// Sample rate for head sampling. This applies to all root spans that are enrolled in head sampling,
-	// but do not have a specific rule defined for their service.
+	// Specifies the sample rate for head sampling. This rate applies to all root spans
+	// that are enrolled in head sampling, but don't have a specific rule defined for
+	// their service.
 	BaseHeadSampleRate float64 `json:"base_head_sample_rate,omitempty"`
 
 	// error sample options

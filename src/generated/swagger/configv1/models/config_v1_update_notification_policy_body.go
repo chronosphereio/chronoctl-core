@@ -21,10 +21,10 @@ type ConfigV1UpdateNotificationPolicyBody struct {
 	// notification policy
 	NotificationPolicy *Configv1NotificationPolicy `json:"notification_policy,omitempty"`
 
-	// If true, the NotificationPolicy will be created if it does not already exist, identified by slug. If false, an error will be returned if the NotificationPolicy does not already exist.
+	// If `true`, the NotificationPolicy will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the NotificationPolicy does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the NotificationPolicy isn't created or updated, and no response NotificationPolicy will be returned. The response will return an error if the given NotificationPolicy is invalid.
+	// If `true`, the NotificationPolicy isn't created or updated, and no response NotificationPolicy will be returned. The response will return an error if the given NotificationPolicy is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

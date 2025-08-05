@@ -503,27 +503,34 @@ kind: TraceJaegerRemoteSamplingStrategy
 spec:
     # Unique identifier of the TraceJaegerRemoteSamplingStrategy. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the TraceJaegerRemoteSamplingStrategy is created.
     slug: <string>
-    # Required. Name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.
+    # Name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.
     name: <string>
-    # The name of the service this sampling strategy applies to. This must match the slug and name fields.
+    # The name of the service this sampling strategy applies to. This value must match
+    # the 'slug' and 'name' fields.
     service_name: <string>
     applied_strategy:
         per_operation_strategies:
-            # Defines the service-wide sampling probability (in the range [0, 1]) when specific operations are not matched.
+            # Defines the service-wide sampling probability (in the range '[0, 1]') when
+            # specific operations are not matched.
             default_sampling_rate: <number>
-            # Defines a minimum number of traces to send for ANY operation in the service, regardless of matching per operation strategy.
+            # Defines a minimum number of traces to send for any operation in the service,
+            # regardless of matching per operation strategy.
             default_lower_bound_traces_per_second: <number>
-            # Defines a maximum number of traces to send for ANY operation in the service, regardless of matching per operation strategy.
+            # Defines a maximum number of traces to send for any operation in the service,
+            # regardless of matching per operation strategy.
             default_upper_bound_traces_per_second: <number>
-            # Defines explicit operations-specific strategies that take precedence over the default sampling rate.
+            # Defines explicit operations-specific strategies that take precedence over the
+            # default sampling rate.
             per_operation_strategies:
-                - # The operation to which this specific strategy should apply.
+                - # The operation to which this specific strategy applies.
                   operation: <string>
                   probabilistic_sampling_strategy:
-                    # Value in the range [0, 1] that defines the probability of sampling any trace.
+                    # Value in the range '[0, 1]' that defines the percentage probability of
+                    # sampling any trace, where '0' is zero percent and '1' equals 100 percent.
                     sampling_rate: <number>
         probabilistic_strategy:
-            # Value in the range [0, 1] that defines the probability of sampling any trace.
+            # Value in the range '[0, 1]' that defines the percentage probability of
+            # sampling any trace, where '0' is zero percent and '1' equals 100 percent.
             sampling_rate: <number>
         rate_limiting_strategy:
             # Maximum number of traces to sample per second.

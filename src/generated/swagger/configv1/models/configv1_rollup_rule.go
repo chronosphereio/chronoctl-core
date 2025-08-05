@@ -23,7 +23,7 @@ type Configv1RollupRule struct {
 	// Unique identifier of the RollupRule. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the RollupRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required. Name of the RollupRule. You can modify this value after the RollupRule is created.
+	// Name of the RollupRule. You can modify this value after the RollupRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the RollupRule was created. Cannot be set by clients.
@@ -36,7 +36,7 @@ type Configv1RollupRule struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Required. Slug of the bucket the RollupRule belongs to.
+	// Slug of the bucket the RollupRule belongs to.
 	BucketSlug string `json:"bucket_slug,omitempty"`
 
 	// Filters incoming metrics by label. If multiple label filters are specified, an

@@ -22,7 +22,7 @@ type Configv1NotificationPolicy struct {
 	// Unique identifier of the NotificationPolicy. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the NotificationPolicy is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required. Name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.
+	// Name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the NotificationPolicy was created. Cannot be set by clients.

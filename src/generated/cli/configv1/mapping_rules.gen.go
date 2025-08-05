@@ -497,9 +497,9 @@ kind: MappingRule
 spec:
     # Unique identifier of the MappingRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the MappingRule is created.
     slug: <string>
-    # Required. Name of the MappingRule. You can modify this value after the MappingRule is created.
+    # Name of the MappingRule. You can modify this value after the MappingRule is created.
     name: <string>
-    # Required. Slug of the bucket the MappingRule belongs to.
+    # Slug of the bucket the MappingRule belongs to.
     bucket_slug: <string>
     # Required filters that determine to which metrics to apply the rule.
     filters:

@@ -21,10 +21,10 @@ type ConfigV1UpdateDerivedLabelBody struct {
 	// derived label
 	DerivedLabel *Configv1DerivedLabel `json:"derived_label,omitempty"`
 
-	// If true, the DerivedLabel will be created if it does not already exist, identified by slug. If false, an error will be returned if the DerivedLabel does not already exist.
+	// If `true`, the DerivedLabel will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the DerivedLabel does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the DerivedLabel isn't created or updated, and no response DerivedLabel will be returned. The response will return an error if the given DerivedLabel is invalid.
+	// If `true`, the DerivedLabel isn't created or updated, and no response DerivedLabel will be returned. The response will return an error if the given DerivedLabel is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

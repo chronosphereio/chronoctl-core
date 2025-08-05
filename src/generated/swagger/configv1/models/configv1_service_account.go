@@ -22,7 +22,7 @@ type Configv1ServiceAccount struct {
 	// Unique identifier of the ServiceAccount. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the ServiceAccount is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required. Name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
+	// Name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the ServiceAccount was created. Cannot be set by clients.

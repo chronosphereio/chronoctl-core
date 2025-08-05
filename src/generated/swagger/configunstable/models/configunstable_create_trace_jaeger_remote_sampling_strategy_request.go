@@ -21,7 +21,7 @@ type ConfigunstableCreateTraceJaegerRemoteSamplingStrategyRequest struct {
 	// trace jaeger remote sampling strategy
 	TraceJaegerRemoteSamplingStrategy *ConfigunstableTraceJaegerRemoteSamplingStrategy `json:"trace_jaeger_remote_sampling_strategy,omitempty"`
 
-	// If true, the TraceJaegerRemoteSamplingStrategy isn't created, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.
+	// If `true`, the TraceJaegerRemoteSamplingStrategy isn't created, and no response TraceJaegerRemoteSamplingStrategy will be returned. The response will return an error if the given TraceJaegerRemoteSamplingStrategy is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

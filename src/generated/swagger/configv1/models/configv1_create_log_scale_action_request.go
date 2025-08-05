@@ -21,7 +21,7 @@ type Configv1CreateLogScaleActionRequest struct {
 	// log scale action
 	LogScaleAction *Configv1LogScaleAction `json:"log_scale_action,omitempty"`
 
-	// If true, the LogScaleAction isn't created, and no response LogScaleAction will be returned. The response will return an error if the given LogScaleAction is invalid.
+	// If `true`, the LogScaleAction isn't created, and no response LogScaleAction will be returned. The response will return an error if the given LogScaleAction is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

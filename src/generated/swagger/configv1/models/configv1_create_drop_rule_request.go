@@ -21,7 +21,7 @@ type Configv1CreateDropRuleRequest struct {
 	// drop rule
 	DropRule *Configv1DropRule `json:"drop_rule,omitempty"`
 
-	// If true, the DropRule isn't created, and no response DropRule will be returned. The response will return an error if the given DropRule is invalid.
+	// If `true`, the DropRule isn't created, and no response DropRule will be returned. The response will return an error if the given DropRule is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

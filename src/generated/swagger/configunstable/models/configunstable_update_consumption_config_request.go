@@ -21,10 +21,10 @@ type ConfigunstableUpdateConsumptionConfigRequest struct {
 	// consumption config
 	ConsumptionConfig *ConfigunstableConsumptionConfig `json:"consumption_config,omitempty"`
 
-	// If true, the ConsumptionConfig will be created if it does not already exist. If false, an error will be returned if the ConsumptionConfig does not already exist.
+	// If `true`, the ConsumptionConfig will be created if it does not already exist. If `false`, an error will be returned if the ConsumptionConfig does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If true, the ConsumptionConfig isn't created or updated, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.
+	// If `true`, the ConsumptionConfig isn't created or updated, and no response ConsumptionConfig will be returned. The response will return an error if the given ConsumptionConfig is invalid.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

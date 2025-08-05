@@ -505,7 +505,7 @@ kind: GrafanaDashboard
 spec:
     # Unique identifier of the GrafanaDashboard. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the GrafanaDashboard is created.
     slug: <string>
-    # Required. Name of the GrafanaDashboard. You can modify this value after the GrafanaDashboard is created.
+    # Name of the GrafanaDashboard. You can modify this value after the GrafanaDashboard is created.
     name: <string>
     # Slug of the bucket the dashboard belongs to. Required if collection_slug
     # is not set.

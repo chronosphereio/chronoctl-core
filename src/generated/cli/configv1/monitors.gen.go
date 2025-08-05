@@ -505,7 +505,7 @@ kind: Monitor
 spec:
     # Unique identifier of the Monitor. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Monitor is created.
     slug: <string>
-    # Required. Name of the Monitor. You can modify this value after the Monitor is created.
+    # Name of the Monitor. You can modify this value after the Monitor is created.
     name: <string>
     # Slug of the bucket the monitor belongs to. Required if 'collection_slug' isn't
     # set.

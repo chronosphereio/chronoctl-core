@@ -22,7 +22,7 @@ type ConfigunstableService struct {
 	// Unique identifier of the Service. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the Service is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required. Name of the Service. You can modify this value after the Service is created.
+	// Name of the Service. You can modify this value after the Service is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the Service was created. Cannot be set by clients.

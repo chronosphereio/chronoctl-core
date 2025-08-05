@@ -25,7 +25,7 @@ type ConsumptionBudgetPriority struct {
 	DatasetFilters []*ConfigunstableDatasetFilter `json:"dataset_filters"`
 
 	// priority is the required priority of the dataset, where priority=1 is
-	// the highest priority, and priority=50 is the lowest priority.
+	// the highest priority, and priority=10 is the lowest priority.
 	Priority int32 `json:"priority,omitempty"`
 }
 

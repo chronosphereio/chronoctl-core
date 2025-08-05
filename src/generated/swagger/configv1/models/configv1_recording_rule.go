@@ -22,7 +22,7 @@ type Configv1RecordingRule struct {
 	// Unique identifier of the RecordingRule. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the RecordingRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Required. Name of the RecordingRule. You can modify this value after the RecordingRule is created.
+	// Name of the RecordingRule. You can modify this value after the RecordingRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the RecordingRule was created. Cannot be set by clients.

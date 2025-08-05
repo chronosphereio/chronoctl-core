@@ -491,7 +491,7 @@ func newDerivedLabelListCmd() *cobra.Command {
 const DerivedLabelScaffoldYAML = `api_version: v1/config
 kind: DerivedLabel
 spec:
-    # Required. Name of the DerivedLabel. You can modify this value after the DerivedLabel is created.
+    # Name of the DerivedLabel. You can modify this value after the DerivedLabel is created.
     name: <string>
     # Unique identifier of the DerivedLabel. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the DerivedLabel is created.
     slug: <string>

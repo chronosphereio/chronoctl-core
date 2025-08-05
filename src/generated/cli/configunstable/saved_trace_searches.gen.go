@@ -491,7 +491,7 @@ func newSavedTraceSearchListCmd() *cobra.Command {
 const SavedTraceSearchScaffoldYAML = `api_version: unstable/config
 kind: SavedTraceSearch
 spec:
-    # Required. Name of the SavedTraceSearch. You can modify this value after the SavedTraceSearch is created.
+    # Name of the SavedTraceSearch. You can modify this value after the SavedTraceSearch is created.
     name: <string>
     # Unique identifier of the SavedTraceSearch. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the SavedTraceSearch is created.
     slug: <string>

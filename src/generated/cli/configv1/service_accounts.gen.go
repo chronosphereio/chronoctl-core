@@ -396,7 +396,7 @@ kind: ServiceAccount
 spec:
     # Unique identifier of the ServiceAccount. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the ServiceAccount is created.
     slug: <string>
-    # Required. Name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
+    # Name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
     name: <string>
     # If set, grants the service account access to all Chronosphere APIs
     # (including resource configuration and metric data) within the access
