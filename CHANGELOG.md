@@ -2,6 +2,7 @@
 
 ## Unreleased
 * Update parser resource in `v1/config/LogIngestConfig`
+* Adds unstable resource `unstable/config/AzureMetricsIntegration`
 
 ## v1.14.0
 
