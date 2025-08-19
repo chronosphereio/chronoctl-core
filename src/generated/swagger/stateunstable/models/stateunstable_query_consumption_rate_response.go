@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -19,10 +20,10 @@ import (
 type StateunstableQueryConsumptionRateResponse struct {
 
 	// series
-	Series *StateunstableQueryConsumptionRateResponseTimeSeries `json:"series,omitempty"`
+	Series []*StateunstableGroupedRateTimeSeries `json:"series"`
 
 	// page
-	Page *Configv1PageResult `json:"page,omitempty"`
+	Page *Configv1PageParams `json:"page,omitempty"`
 }
 
 // Validate validates this stateunstable query consumption rate response
@@ -48,15 +49,22 @@ func (m *StateunstableQueryConsumptionRateResponse) validateSeries(formats strfm
 		return nil
 	}
 
-	if m.Series != nil {
-		if err := m.Series.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("series")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("series")
-			}
-			return err
+	for i := 0; i < len(m.Series); i++ {
+		if swag.IsZero(m.Series[i]) { // not required
+			continue
 		}
+
+		if m.Series[i] != nil {
+			if err := m.Series[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("series" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("series" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil
@@ -101,20 +109,24 @@ func (m *StateunstableQueryConsumptionRateResponse) ContextValidate(ctx context.
 
 func (m *StateunstableQueryConsumptionRateResponse) contextValidateSeries(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.Series != nil {
+	for i := 0; i < len(m.Series); i++ {
 
-		if swag.IsZero(m.Series) { // not required
-			return nil
-		}
+		if m.Series[i] != nil {
 
-		if err := m.Series.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("series")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("series")
+			if swag.IsZero(m.Series[i]) { // not required
+				return nil
 			}
-			return err
+
+			if err := m.Series[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("series" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("series" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
 		}
+
 	}
 
 	return nil

@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // ReadLogControlConfigReader is a Reader for the ReadLogControlConfig structure.
@@ -64,7 +64,7 @@ ReadLogControlConfigOK describes a response with status code 200, with default h
 A successful response.
 */
 type ReadLogControlConfigOK struct {
-	Payload *models.ConfigunstableReadLogControlConfigResponse
+	Payload *models.Configv1ReadLogControlConfigResponse
 }
 
 // IsSuccess returns true when this read log control config o k response has a 2xx status code
@@ -98,20 +98,20 @@ func (o *ReadLogControlConfigOK) Code() int {
 }
 
 func (o *ReadLogControlConfigOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/log-control-config][%d] readLogControlConfigOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/log-control-config][%d] readLogControlConfigOK  %+v", 200, o.Payload)
 }
 
 func (o *ReadLogControlConfigOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/log-control-config][%d] readLogControlConfigOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/log-control-config][%d] readLogControlConfigOK  %+v", 200, o.Payload)
 }
 
-func (o *ReadLogControlConfigOK) GetPayload() *models.ConfigunstableReadLogControlConfigResponse {
+func (o *ReadLogControlConfigOK) GetPayload() *models.Configv1ReadLogControlConfigResponse {
 	return o.Payload
 }
 
 func (o *ReadLogControlConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableReadLogControlConfigResponse)
+	o.Payload = new(models.Configv1ReadLogControlConfigResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -166,11 +166,11 @@ func (o *ReadLogControlConfigNotFound) Code() int {
 }
 
 func (o *ReadLogControlConfigNotFound) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/log-control-config][%d] readLogControlConfigNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/log-control-config][%d] readLogControlConfigNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadLogControlConfigNotFound) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/log-control-config][%d] readLogControlConfigNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/log-control-config][%d] readLogControlConfigNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadLogControlConfigNotFound) GetPayload() *models.APIError {
@@ -234,11 +234,11 @@ func (o *ReadLogControlConfigInternalServerError) Code() int {
 }
 
 func (o *ReadLogControlConfigInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/log-control-config][%d] readLogControlConfigInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/log-control-config][%d] readLogControlConfigInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadLogControlConfigInternalServerError) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/log-control-config][%d] readLogControlConfigInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/log-control-config][%d] readLogControlConfigInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadLogControlConfigInternalServerError) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *ReadLogControlConfigDefault) Code() int {
 }
 
 func (o *ReadLogControlConfigDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/log-control-config][%d] ReadLogControlConfig default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/log-control-config][%d] ReadLogControlConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadLogControlConfigDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/log-control-config][%d] ReadLogControlConfig default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/log-control-config][%d] ReadLogControlConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadLogControlConfigDefault) GetPayload() models.GenericError {

@@ -19,13 +19,13 @@ import (
 // swagger:model ConsumptionBudgetPriority
 type ConsumptionBudgetPriority struct {
 
-	// dataset_filters define what datasets match the priority.  The filters are
-	// AND'd together; a request must match every filter in order to match the
-	// priority.
-	DatasetFilters []*ConfigunstableDatasetFilter `json:"dataset_filters"`
+	// filters define what data matches the priority. The filters are AND'd
+	// together; a request must match every filter in order to match the
+	// priority. Must not be empty.
+	Filters []*ConsumptionBudgetPriorityFilter `json:"filters"`
 
-	// priority is the required priority of the dataset, where priority=1 is
-	// the highest priority, and priority=10 is the lowest priority.
+	// priority is the required priority of the dataset, where priority=10 is dropped
+	// first, and priority=1 is dropped last.
 	Priority int32 `json:"priority,omitempty"`
 }
 
@@ -33,7 +33,7 @@ type ConsumptionBudgetPriority struct {
 func (m *ConsumptionBudgetPriority) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateDatasetFilters(formats); err != nil {
+	if err := m.validateFilters(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -43,22 +43,22 @@ func (m *ConsumptionBudgetPriority) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ConsumptionBudgetPriority) validateDatasetFilters(formats strfmt.Registry) error {
-	if swag.IsZero(m.DatasetFilters) { // not required
+func (m *ConsumptionBudgetPriority) validateFilters(formats strfmt.Registry) error {
+	if swag.IsZero(m.Filters) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.DatasetFilters); i++ {
-		if swag.IsZero(m.DatasetFilters[i]) { // not required
+	for i := 0; i < len(m.Filters); i++ {
+		if swag.IsZero(m.Filters[i]) { // not required
 			continue
 		}
 
-		if m.DatasetFilters[i] != nil {
-			if err := m.DatasetFilters[i].Validate(formats); err != nil {
+		if m.Filters[i] != nil {
+			if err := m.Filters[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("dataset_filters" + "." + strconv.Itoa(i))
+					return ve.ValidateName("filters" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("dataset_filters" + "." + strconv.Itoa(i))
+					return ce.ValidateName("filters" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -73,7 +73,7 @@ func (m *ConsumptionBudgetPriority) validateDatasetFilters(formats strfmt.Regist
 func (m *ConsumptionBudgetPriority) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateDatasetFilters(ctx, formats); err != nil {
+	if err := m.contextValidateFilters(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -83,21 +83,21 @@ func (m *ConsumptionBudgetPriority) ContextValidate(ctx context.Context, formats
 	return nil
 }
 
-func (m *ConsumptionBudgetPriority) contextValidateDatasetFilters(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConsumptionBudgetPriority) contextValidateFilters(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.DatasetFilters); i++ {
+	for i := 0; i < len(m.Filters); i++ {
 
-		if m.DatasetFilters[i] != nil {
+		if m.Filters[i] != nil {
 
-			if swag.IsZero(m.DatasetFilters[i]) { // not required
+			if swag.IsZero(m.Filters[i]) { // not required
 				return nil
 			}
 
-			if err := m.DatasetFilters[i].ContextValidate(ctx, formats); err != nil {
+			if err := m.Filters[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("dataset_filters" + "." + strconv.Itoa(i))
+					return ve.ValidateName("filters" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("dataset_filters" + "." + strconv.Itoa(i))
+					return ce.ValidateName("filters" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

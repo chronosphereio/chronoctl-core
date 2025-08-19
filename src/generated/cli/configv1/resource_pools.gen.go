@@ -347,29 +347,31 @@ func newResourcePoolsDeleteCmd() *cobra.Command {
 const ResourcePoolsScaffoldYAML = `api_version: v1/config
 kind: ResourcePools
 spec:
-    # Optional pools. Cannot set more than 20 pools.
+    # Optional. Defines additional pools, which can't exceed 20 pools.
     pools:
-        - # Required name of the pool. Must be unique.
+        - # Name of the pool, which must be unique.
           name: <string>
-          # Required filters which define which metrics map to this pool, where any
-          # metric which matches at least one filter will map to the pool.
+          # Filters that define which metrics map to this pool, where any metric that
+          # matches at least one filter will map to the pool.
           filters:
             - # Name of the label to match.
               name: <string>
               # Glob value of the label to match.
               value_glob: <string>
           allocation:
-            # Percent of the license to allocate to this pool. Must be between 0
-            # and 100 inclusive. The percent_of_license values across all pools
-            # (excluding the default pool) must be <= 100. default_pool need not specify
-            # an allocation, and implicitly receives any remaining allocation. If default_pool does
-            # explicitly specify an allocation, the sum of percent_of_license across all pools
-            # (including the default pool) must exactly equal 100.
+            # Percent of the license to allocate to this pool. This value must be between
+            # '0' and '100', inclusive. The 'percent_of_license' values across all pools,
+            # excluding the default pool, must be less than or equal to 100. The
+            # 'default_pool' receives any remaining allocation, so you don't need to specify
+            # a value for it explicitly. If you specify an allocation for the
+            # 'default_pool', the sum of 'percent_of_license' across all pools (including
+            # the default pool) must exactly equal '100'.
             percent_of_license: <number>
-            # Fixed values optionally override 'percent_of_license' allocations for specified licenses.
-            # When defining fixed values for a license, all pools must have an explicit fixed value
-            # specification for that given license. The default pool receives all remaining quota left
-            # within the license, after subtracting the sum of fixed values across pools for that license.
+            # Optional. Specifies overrides for the 'percent_of_license' allocations for
+            # specified licenses. When defining fixed values for a license, all pools must
+            # have an explicit fixed value specification for that given license. The default
+            # pool receives all remaining quota left within the license, after subtracting
+            # the sum of fixed values across pools for that license.
             fixed_values:
                 - value: <int64>
                   license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
@@ -379,48 +381,48 @@ spec:
             # supported.
             priority_thresholds:
                 - all_priorities:
-                    # Threshold expressed as a percent of the license allocated to a pool.
-                    # A value of '100' represents a threshold that is the pool's full allocation.
-                    # Values over '100' indicate thresholds that exceed the pool's allocation.
-                    # For example, a value of '50' represents a threshold that is half the pool's
-                    # allocation and a value of '200' represents a threshold that is double the
+                    # Threshold expressed as a percent of the license allocated to a pool. A value
+                    # of '100' represents a threshold that is the pool's full allocation. Values
+                    # over '100' indicate thresholds that exceed the pool's allocation. For
+                    # example, a value of '50' represents a threshold that is half the pool's
+                    # allocation, and a value of '200' represents a threshold that is double the
                     # pool's allocation.
                     percent_of_pool_allocation: <number>
                     # Threshold expressed as a fixed value of the license.
                     fixed_value: <int64>
                   default_and_low_priority:
-                    # Threshold expressed as a percent of the license allocated to a pool.
-                    # A value of '100' represents a threshold that is the pool's full allocation.
-                    # Values over '100' indicate thresholds that exceed the pool's allocation.
-                    # For example, a value of '50' represents a threshold that is half the pool's
-                    # allocation and a value of '200' represents a threshold that is double the
+                    # Threshold expressed as a percent of the license allocated to a pool. A value
+                    # of '100' represents a threshold that is the pool's full allocation. Values
+                    # over '100' indicate thresholds that exceed the pool's allocation. For
+                    # example, a value of '50' represents a threshold that is half the pool's
+                    # allocation, and a value of '200' represents a threshold that is double the
                     # pool's allocation.
                     percent_of_pool_allocation: <number>
                     # Threshold expressed as a fixed value of the license.
                     fixed_value: <int64>
                   license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
                   low_priority:
-                    # Threshold expressed as a percent of the license allocated to a pool.
-                    # A value of '100' represents a threshold that is the pool's full allocation.
-                    # Values over '100' indicate thresholds that exceed the pool's allocation.
-                    # For example, a value of '50' represents a threshold that is half the pool's
-                    # allocation and a value of '200' represents a threshold that is double the
+                    # Threshold expressed as a percent of the license allocated to a pool. A value
+                    # of '100' represents a threshold that is the pool's full allocation. Values
+                    # over '100' indicate thresholds that exceed the pool's allocation. For
+                    # example, a value of '50' represents a threshold that is half the pool's
+                    # allocation, and a value of '200' represents a threshold that is double the
                     # pool's allocation.
                     percent_of_pool_allocation: <number>
                     # Threshold expressed as a fixed value of the license.
                     fixed_value: <int64>
           priorities:
-            # Required filters which define which metrics are high priority, where any
-            # metric which matches at least one filter is considered high priority.
-            # High priority metrics are dropped last when the license limit is exceeded.
+            # Optional. Filters that define which metrics are high priority. Any metric that
+            # matches at least one filter is considered high priority. High priority metrics
+            # are dropped last when the license limit is exceeded.
             high_priority_filters:
                 - # Name of the label to match.
                   name: <string>
                   # Glob value of the label to match.
                   value_glob: <string>
-            # Required filters which define which metrics are low priority, where any
-            # metric which matches at least one filter is considered low priority. Low
-            # priority metrics are dropped first when the license limit is exceeded.
+            # Optional. Filters that define which metrics are low priority. Any metric that
+            # matches at least one filter is considered low priority. Low priority metrics
+            # are dropped first when the license limit is exceeded.
             low_priority_filters:
                 - # Name of the label to match.
                   name: <string>
@@ -430,51 +432,54 @@ spec:
         # Optional. For supported licenses, defines thresholds with strict limits for
         # when to drop new consumption of the license for a pool. Currently, only
         # 'PERSISTED_CARDINALITY_STANDARD' and 'PERSISTED_CARDINALITY_HISTOGRAM' are
-        # supported.
+        # supported. See the [product documentation](https://docs.chronosphere.io/control/shaping/quotas/define-pools#pool-thresholds)
+        # for more information.
         priority_thresholds:
             - all_priorities:
-                # Threshold expressed as a percent of the license allocated to a pool.
-                # A value of '100' represents a threshold that is the pool's full allocation.
-                # Values over '100' indicate thresholds that exceed the pool's allocation.
-                # For example, a value of '50' represents a threshold that is half the pool's
-                # allocation and a value of '200' represents a threshold that is double the
+                # Threshold expressed as a percent of the license allocated to a pool. A value
+                # of '100' represents a threshold that is the pool's full allocation. Values
+                # over '100' indicate thresholds that exceed the pool's allocation. For
+                # example, a value of '50' represents a threshold that is half the pool's
+                # allocation, and a value of '200' represents a threshold that is double the
                 # pool's allocation.
                 percent_of_pool_allocation: <number>
                 # Threshold expressed as a fixed value of the license.
                 fixed_value: <int64>
               default_and_low_priority:
-                # Threshold expressed as a percent of the license allocated to a pool.
-                # A value of '100' represents a threshold that is the pool's full allocation.
-                # Values over '100' indicate thresholds that exceed the pool's allocation.
-                # For example, a value of '50' represents a threshold that is half the pool's
-                # allocation and a value of '200' represents a threshold that is double the
+                # Threshold expressed as a percent of the license allocated to a pool. A value
+                # of '100' represents a threshold that is the pool's full allocation. Values
+                # over '100' indicate thresholds that exceed the pool's allocation. For
+                # example, a value of '50' represents a threshold that is half the pool's
+                # allocation, and a value of '200' represents a threshold that is double the
                 # pool's allocation.
                 percent_of_pool_allocation: <number>
                 # Threshold expressed as a fixed value of the license.
                 fixed_value: <int64>
               license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
               low_priority:
-                # Threshold expressed as a percent of the license allocated to a pool.
-                # A value of '100' represents a threshold that is the pool's full allocation.
-                # Values over '100' indicate thresholds that exceed the pool's allocation.
-                # For example, a value of '50' represents a threshold that is half the pool's
-                # allocation and a value of '200' represents a threshold that is double the
+                # Threshold expressed as a percent of the license allocated to a pool. A value
+                # of '100' represents a threshold that is the pool's full allocation. Values
+                # over '100' indicate thresholds that exceed the pool's allocation. For
+                # example, a value of '50' represents a threshold that is half the pool's
+                # allocation, and a value of '200' represents a threshold that is double the
                 # pool's allocation.
                 percent_of_pool_allocation: <number>
                 # Threshold expressed as a fixed value of the license.
                 fixed_value: <int64>
         allocation:
-            # Percent of the license to allocate to this pool. Must be between 0
-            # and 100 inclusive. The percent_of_license values across all pools
-            # (excluding the default pool) must be <= 100. default_pool need not specify
-            # an allocation, and implicitly receives any remaining allocation. If default_pool does
-            # explicitly specify an allocation, the sum of percent_of_license across all pools
-            # (including the default pool) must exactly equal 100.
+            # Percent of the license to allocate to this pool. This value must be between
+            # '0' and '100', inclusive. The 'percent_of_license' values across all pools,
+            # excluding the default pool, must be less than or equal to 100. The
+            # 'default_pool' receives any remaining allocation, so you don't need to specify
+            # a value for it explicitly. If you specify an allocation for the
+            # 'default_pool', the sum of 'percent_of_license' across all pools (including
+            # the default pool) must exactly equal '100'.
             percent_of_license: <number>
-            # Fixed values optionally override 'percent_of_license' allocations for specified licenses.
-            # When defining fixed values for a license, all pools must have an explicit fixed value
-            # specification for that given license. The default pool receives all remaining quota left
-            # within the license, after subtracting the sum of fixed values across pools for that license.
+            # Optional. Specifies overrides for the 'percent_of_license' allocations for
+            # specified licenses. When defining fixed values for a license, all pools must
+            # have an explicit fixed value specification for that given license. The default
+            # pool receives all remaining quota left within the license, after subtracting
+            # the sum of fixed values across pools for that license.
             fixed_values:
                 - value: <int64>
                   license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
@@ -484,48 +489,48 @@ spec:
             # supported.
             priority_thresholds:
                 - all_priorities:
-                    # Threshold expressed as a percent of the license allocated to a pool.
-                    # A value of '100' represents a threshold that is the pool's full allocation.
-                    # Values over '100' indicate thresholds that exceed the pool's allocation.
-                    # For example, a value of '50' represents a threshold that is half the pool's
-                    # allocation and a value of '200' represents a threshold that is double the
+                    # Threshold expressed as a percent of the license allocated to a pool. A value
+                    # of '100' represents a threshold that is the pool's full allocation. Values
+                    # over '100' indicate thresholds that exceed the pool's allocation. For
+                    # example, a value of '50' represents a threshold that is half the pool's
+                    # allocation, and a value of '200' represents a threshold that is double the
                     # pool's allocation.
                     percent_of_pool_allocation: <number>
                     # Threshold expressed as a fixed value of the license.
                     fixed_value: <int64>
                   default_and_low_priority:
-                    # Threshold expressed as a percent of the license allocated to a pool.
-                    # A value of '100' represents a threshold that is the pool's full allocation.
-                    # Values over '100' indicate thresholds that exceed the pool's allocation.
-                    # For example, a value of '50' represents a threshold that is half the pool's
-                    # allocation and a value of '200' represents a threshold that is double the
+                    # Threshold expressed as a percent of the license allocated to a pool. A value
+                    # of '100' represents a threshold that is the pool's full allocation. Values
+                    # over '100' indicate thresholds that exceed the pool's allocation. For
+                    # example, a value of '50' represents a threshold that is half the pool's
+                    # allocation, and a value of '200' represents a threshold that is double the
                     # pool's allocation.
                     percent_of_pool_allocation: <number>
                     # Threshold expressed as a fixed value of the license.
                     fixed_value: <int64>
                   license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
                   low_priority:
-                    # Threshold expressed as a percent of the license allocated to a pool.
-                    # A value of '100' represents a threshold that is the pool's full allocation.
-                    # Values over '100' indicate thresholds that exceed the pool's allocation.
-                    # For example, a value of '50' represents a threshold that is half the pool's
-                    # allocation and a value of '200' represents a threshold that is double the
+                    # Threshold expressed as a percent of the license allocated to a pool. A value
+                    # of '100' represents a threshold that is the pool's full allocation. Values
+                    # over '100' indicate thresholds that exceed the pool's allocation. For
+                    # example, a value of '50' represents a threshold that is half the pool's
+                    # allocation, and a value of '200' represents a threshold that is double the
                     # pool's allocation.
                     percent_of_pool_allocation: <number>
                     # Threshold expressed as a fixed value of the license.
                     fixed_value: <int64>
         priorities:
-            # Required filters which define which metrics are high priority, where any
-            # metric which matches at least one filter is considered high priority.
-            # High priority metrics are dropped last when the license limit is exceeded.
+            # Optional. Filters that define which metrics are high priority. Any metric that
+            # matches at least one filter is considered high priority. High priority metrics
+            # are dropped last when the license limit is exceeded.
             high_priority_filters:
                 - # Name of the label to match.
                   name: <string>
                   # Glob value of the label to match.
                   value_glob: <string>
-            # Required filters which define which metrics are low priority, where any
-            # metric which matches at least one filter is considered low priority. Low
-            # priority metrics are dropped first when the license limit is exceeded.
+            # Optional. Filters that define which metrics are low priority. Any metric that
+            # matches at least one filter is considered low priority. Low priority metrics
+            # are dropped first when the license limit is exceeded.
             low_priority_filters:
                 - # Name of the label to match.
                   name: <string>

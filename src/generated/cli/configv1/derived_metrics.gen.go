@@ -369,9 +369,9 @@ type DerivedMetricListOpts struct {
 
 func (r *DerivedMetricListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any DerivedMetric with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any DerivedMetric with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any DerivedMetric with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any DerivedMetric with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -493,30 +493,29 @@ kind: DerivedMetric
 spec:
     # Name of the DerivedMetric. You can modify this value after the DerivedMetric is created.
     name: <string>
-    # Unique identifier of the DerivedMetric. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the DerivedMetric is created.
+    # The unique identifier of the DerivedMetric. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the DerivedMetric is created.
     slug: <string>
-    # Required metric name of the derived metric, which must be unique across the system.
+    # Name of the derived metric, which must be unique across the system.
     metric_name: <string>
-    # Optional description of the derived metric.
+    # Optional. Description of the derived metric.
     description: <string>
-    # Required queries that the derived metric can map to.
+    # Defines the queries that the derived metric can map to.
     queries:
         - query:
-            # Required PromQL expression which the derived metric executes. Should
+            # PromQL expression the derived metric executes. The expression should
             # include all configured variables.
             prometheus_expr: <string>
-            # Optional variables which may be used in the derived metric as label
-            # selectors.
+            # Optional. Specifies the variables that can be used in the derived metric as
+            # label selectors.
             variables:
-                - # Required name of the variable.
+                - # Name of the variable.
                   name: <string>
-                  # Required PromQL label selector which must match the given variable name.
-                  # If the variable is not specified in the derived metric usage, then this
-                  # default selector is used.
+                  # PromQL label selector, which must match the given variable name. If the
+                  # variable is not specified in the derived metric usage, then the default
+                  # selector is used.
                   default_prometheus_selector: <string>
           selector:
-            # Labels which must match in the derived metric usage for the selector to
-            # match.
+            # Labels that must match in the derived metric usage for the selector to match.
             labels:
                 - # name always matches against an exact label name.
                   name: <string>

@@ -24,7 +24,7 @@ type ConfigUnstableUpdateConsumptionBudgetBody struct {
 	// If `true`, the ConsumptionBudget will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the ConsumptionBudget does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If `true`, the ConsumptionBudget isn't created or updated, and no response ConsumptionBudget will be returned. The response will return an error if the given ConsumptionBudget is invalid.
+	// If `true`, validates the specified configuration without creating or updating the ConsumptionBudget. If the specified configuration is valid, the endpoint returns a partial response without the ConsumptionBudget. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

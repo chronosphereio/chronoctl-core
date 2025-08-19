@@ -14,7 +14,6 @@ import (
 )
 
 // AllocationThresholds Thresholds define strict quota limits for each metrics license.
-// **This feature is part of pre-release functionality and is subject to change.**
 //
 // swagger:model AllocationThresholds
 type AllocationThresholds struct {

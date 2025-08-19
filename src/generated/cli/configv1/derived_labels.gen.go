@@ -369,9 +369,9 @@ type DerivedLabelListOpts struct {
 
 func (r *DerivedLabelListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any DerivedLabel with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any DerivedLabel with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any DerivedLabel with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any DerivedLabel with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -493,7 +493,7 @@ kind: DerivedLabel
 spec:
     # Name of the DerivedLabel. You can modify this value after the DerivedLabel is created.
     name: <string>
-    # Unique identifier of the DerivedLabel. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the DerivedLabel is created.
+    # The unique identifier of the DerivedLabel. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the DerivedLabel is created.
     slug: <string>
     # Name of the derived label. It needs to be unique across the system.
     label_name: <string>

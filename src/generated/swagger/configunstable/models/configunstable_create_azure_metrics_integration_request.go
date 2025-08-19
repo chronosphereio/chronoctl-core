@@ -21,7 +21,7 @@ type ConfigunstableCreateAzureMetricsIntegrationRequest struct {
 	// azure metrics integration
 	AzureMetricsIntegration *ConfigunstableAzureMetricsIntegration `json:"azure_metrics_integration,omitempty"`
 
-	// If `true`, the AzureMetricsIntegration isn't created, and no response AzureMetricsIntegration will be returned. The response will return an error if the given AzureMetricsIntegration is invalid.
+	// If `true`, validates the specified configuration without creating the AzureMetricsIntegration. If the specified configuration is valid, the endpoint returns a partial response without the AzureMetricsIntegration. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

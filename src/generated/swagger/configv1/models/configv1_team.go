@@ -19,7 +19,7 @@ import (
 // swagger:model configv1Team
 type Configv1Team struct {
 
-	// Unique identifier of the Team. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the Team is created.
+	// The unique identifier of the Team. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Team is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of the Team. You can modify this value after the Team is created.

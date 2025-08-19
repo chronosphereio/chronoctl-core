@@ -372,15 +372,15 @@ type ClassicDashboardListOpts struct {
 
 func (r *ClassicDashboardListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyBucketSlugs []string
-	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any ClassicDashboard with a matching bucket_slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any ClassicDashboard with a matching bucket_slug in the given list (and matches all other filters) will be returned.")
 	var emptyCollectionSlugs []string
-	flags.StringSliceVar(&r.CollectionSlugs, "collection-slugs", emptyCollectionSlugs, "Filters results by collection_slug, where any ClassicDashboard with a matching collection_slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.CollectionSlugs, "collection-slugs", emptyCollectionSlugs, "Filters results by collection_slug, where any ClassicDashboard with a matching collection_slug in the given list (and matches all other filters) will be returned.")
 	var emptyIncludeDashboardJSON bool
 	flags.BoolVar(&r.IncludeDashboardJSON, "include-dashboard-json", emptyIncludeDashboardJSON, "Optional flag to populate the dashboard_json of the returned dashboards. By default, dashboard_json will be left empty.")
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ClassicDashboard with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ClassicDashboard with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any ClassicDashboard with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any ClassicDashboard with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -503,7 +503,7 @@ func newClassicDashboardListCmd() *cobra.Command {
 const ClassicDashboardScaffoldYAML = `api_version: v1/config
 kind: ClassicDashboard
 spec:
-    # Unique identifier of the ClassicDashboard. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the ClassicDashboard is created.
+    # The unique identifier of the ClassicDashboard. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the ClassicDashboard is created.
     slug: <string>
     # Name of the ClassicDashboard. You can modify this value after the ClassicDashboard is created.
     name: <string>

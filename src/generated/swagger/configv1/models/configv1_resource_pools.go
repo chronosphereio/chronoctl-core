@@ -33,7 +33,7 @@ type Configv1ResourcePools struct {
 	// default pool
 	DefaultPool *ResourcePoolsDefaultPool `json:"default_pool,omitempty"`
 
-	// Optional pools. Cannot set more than 20 pools.
+	// Optional. Defines additional pools, which can't exceed 20 pools.
 	Pools []*ResourcePoolsPool `json:"pools"`
 }
 

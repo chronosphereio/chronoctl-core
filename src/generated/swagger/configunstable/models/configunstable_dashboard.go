@@ -19,7 +19,7 @@ import (
 // swagger:model configunstableDashboard
 type ConfigunstableDashboard struct {
 
-	// Unique identifier of the Dashboard. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the Dashboard is created.
+	// The unique identifier of the Dashboard. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Dashboard is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of the Dashboard. You can modify this value after the Dashboard is created.

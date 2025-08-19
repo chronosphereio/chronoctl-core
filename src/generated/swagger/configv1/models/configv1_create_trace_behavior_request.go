@@ -21,7 +21,7 @@ type Configv1CreateTraceBehaviorRequest struct {
 	// trace behavior
 	TraceBehavior *Configv1TraceBehavior `json:"trace_behavior,omitempty"`
 
-	// If `true`, the TraceBehavior isn't created, and no response TraceBehavior will be returned. The response will return an error if the given TraceBehavior is invalid.
+	// If `true`, validates the specified configuration without creating the TraceBehavior. If the specified configuration is valid, the endpoint returns a partial response without the TraceBehavior. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

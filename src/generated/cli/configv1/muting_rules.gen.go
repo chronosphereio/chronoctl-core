@@ -387,9 +387,9 @@ type MutingRuleListOpts struct {
 
 func (r *MutingRuleListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any MutingRule with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any MutingRule with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any MutingRule with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any MutingRule with a matching slug in the given list (and matches all other filters) will be returned.")
 	var emptyStates []string
 	flags.StringSliceVar(&r.States, "states", emptyStates, "Lists muting rules filtered by the states. If empty, all muting rules are included.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
@@ -512,7 +512,7 @@ func newMutingRuleListCmd() *cobra.Command {
 const MutingRuleScaffoldYAML = `api_version: v1/config
 kind: MutingRule
 spec:
-    # Unique identifier of the MutingRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the MutingRule is created.
+    # The unique identifier of the MutingRule. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the MutingRule is created.
     slug: <string>
     # Name of the MutingRule. You can modify this value after the MutingRule is created.
     name: <string>

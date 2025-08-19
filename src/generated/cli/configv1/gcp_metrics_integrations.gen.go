@@ -369,9 +369,9 @@ type GcpMetricsIntegrationListOpts struct {
 
 func (r *GcpMetricsIntegrationListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any GcpMetricsIntegration with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any GcpMetricsIntegration with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any GcpMetricsIntegration with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any GcpMetricsIntegration with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -491,7 +491,7 @@ func newGcpMetricsIntegrationListCmd() *cobra.Command {
 const GcpMetricsIntegrationScaffoldYAML = `api_version: v1/config
 kind: GcpMetricsIntegration
 spec:
-    # Unique identifier of the GcpMetricsIntegration. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the GcpMetricsIntegration is created.
+    # The unique identifier of the GcpMetricsIntegration. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the GcpMetricsIntegration is created.
     slug: <string>
     # Name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.
     name: <string>

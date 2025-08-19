@@ -24,7 +24,7 @@ type ConfigUnstableUpdateLinkTemplateBody struct {
 	// If `true`, the LinkTemplate will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the LinkTemplate does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If `true`, the LinkTemplate isn't created or updated, and no response LinkTemplate will be returned. The response will return an error if the given LinkTemplate is invalid.
+	// If `true`, validates the specified configuration without creating or updating the LinkTemplate. If the specified configuration is valid, the endpoint returns a partial response without the LinkTemplate. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

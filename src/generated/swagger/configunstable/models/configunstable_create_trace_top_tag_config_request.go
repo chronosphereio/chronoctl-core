@@ -21,7 +21,7 @@ type ConfigunstableCreateTraceTopTagConfigRequest struct {
 	// trace top tag config
 	TraceTopTagConfig *ConfigunstableTraceTopTagConfig `json:"trace_top_tag_config,omitempty"`
 
-	// If `true`, the TraceTopTagConfig isn't created, and no response TraceTopTagConfig will be returned. The response will return an error if the given TraceTopTagConfig is invalid.
+	// If `true`, validates the specified configuration without creating the TraceTopTagConfig. If the specified configuration is valid, the endpoint returns a partial response without the TraceTopTagConfig. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

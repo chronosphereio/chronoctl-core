@@ -24,7 +24,7 @@ type ConfigunstableUpdateTraceTopTagConfigRequest struct {
 	// If `true`, the TraceTopTagConfig will be created if it does not already exist. If `false`, an error will be returned if the TraceTopTagConfig does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If `true`, the TraceTopTagConfig isn't created or updated, and no response TraceTopTagConfig will be returned. The response will return an error if the given TraceTopTagConfig is invalid.
+	// If `true`, validates the specified configuration without creating or updating the TraceTopTagConfig. If the specified configuration is valid, the endpoint returns a partial response without the TraceTopTagConfig. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

@@ -371,13 +371,13 @@ type NotificationPolicyListOpts struct {
 
 func (r *NotificationPolicyListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyBucketSlugs []string
-	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any NotificationPolicy with a matching bucket_slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any NotificationPolicy with a matching bucket_slug in the given list (and matches all other filters) will be returned.")
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any NotificationPolicy with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any NotificationPolicy with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any NotificationPolicy with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any NotificationPolicy with a matching slug in the given list (and matches all other filters) will be returned.")
 	var emptyTeamSlugs []string
-	flags.StringSliceVar(&r.TeamSlugs, "team-slugs", emptyTeamSlugs, "Filters results by team_slug, where any NotificationPolicy with a matching team_slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.TeamSlugs, "team-slugs", emptyTeamSlugs, "Filters results by team_slug, where any NotificationPolicy with a matching team_slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -499,7 +499,7 @@ func newNotificationPolicyListCmd() *cobra.Command {
 const NotificationPolicyScaffoldYAML = `api_version: v1/config
 kind: NotificationPolicy
 spec:
-    # Unique identifier of the NotificationPolicy. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the NotificationPolicy is created.
+    # The unique identifier of the NotificationPolicy. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the NotificationPolicy is created.
     slug: <string>
     # Name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.
     name: <string>

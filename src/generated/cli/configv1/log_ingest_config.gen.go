@@ -351,9 +351,9 @@ spec:
     plaintext_parsers:
         - # The name of the parser. Must be unique within the configuration.
           name: <string>
-          # If true, the original log will be dropped after parsing.
-          # Otherwise the original log is stored under the key "plaintext_log".
-          drop_original: <true|false>
+          # If true, the original log is kept after parsing and stored under the key "plaintext_log".
+          # Otherwise the original log will be dropped after parsing. Default is false.
+          keep_original: <true|false>
           mode: <ENABLED|DISABLED>
           parser:
             # A parser to extract key-value pairs from a string.

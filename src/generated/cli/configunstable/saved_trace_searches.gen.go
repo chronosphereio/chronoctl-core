@@ -368,9 +368,9 @@ func (r *SavedTraceSearchListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyCreatedBy string
 	flags.StringVar(&r.CreatedBy, "created-by", emptyCreatedBy, "Optional filter: creator email address.")
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any SavedTraceSearch with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any SavedTraceSearch with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any SavedTraceSearch with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any SavedTraceSearch with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -493,7 +493,7 @@ kind: SavedTraceSearch
 spec:
     # Name of the SavedTraceSearch. You can modify this value after the SavedTraceSearch is created.
     name: <string>
-    # Unique identifier of the SavedTraceSearch. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the SavedTraceSearch is created.
+    # The unique identifier of the SavedTraceSearch. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the SavedTraceSearch is created.
     slug: <string>
     comparison:
         criteria:

@@ -372,9 +372,9 @@ func (r *TraceMetricsRuleListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyMetricNames []string
 	flags.StringSliceVar(&r.MetricNames, "metric-names", emptyMetricNames, "Get trace metric rules by name.")
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any TraceMetricsRule with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any TraceMetricsRule with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any TraceMetricsRule with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any TraceMetricsRule with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -497,7 +497,7 @@ kind: TraceMetricsRule
 spec:
     # Name of the TraceMetricsRule. You can modify this value after the TraceMetricsRule is created.
     name: <string>
-    # Unique identifier of the TraceMetricsRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the TraceMetricsRule is created.
+    # The unique identifier of the TraceMetricsRule. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the TraceMetricsRule is created.
     slug: <string>
     # The name of the generated trace metrics.
     metric_name: <string>

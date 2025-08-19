@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// StateunstableConsumptionRateDatapoint Datapoint representing a consumption rate at some point in time.
+// StateunstableConsumptionRateDatapoint ConsumptionRateDatapoint represents a consumption rate at some point in time.
 //
 // swagger:model stateunstableConsumptionRateDatapoint
 type StateunstableConsumptionRateDatapoint struct {

@@ -81,12 +81,12 @@
     "configv1PageParams": {
       "properties": {
         "max_size": {
-          "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+          "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
           "format": "int64",
           "type": "integer"
         },
         "token": {
-          "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+          "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
           "type": "string"
         }
       },
@@ -95,7 +95,7 @@
     "configv1PageResult": {
       "properties": {
         "next_token": {
-          "description": "Opaque page token which identifies the next page of items which the\nclient should request. An empty next_token indicates that there are no\nmore items to return.",
+          "description": "An opaque page token that identifies the next page of items that the\nclient should request. An empty value indicates that there are no\nmore items to return.",
           "type": "string"
         }
       },
@@ -271,14 +271,14 @@
         "operationId": "ListMetricUsagesByLabelName",
         "parameters": [
           {
-            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
             "format": "int64",
             "in": "query",
             "name": "page.max_size",
             "type": "integer"
           },
           {
-            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
             "in": "query",
             "name": "page.token",
             "type": "string"
@@ -346,14 +346,14 @@
         "operationId": "ListMetricUsagesByMetricName",
         "parameters": [
           {
-            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
             "format": "int64",
             "in": "query",
             "name": "page.max_size",
             "type": "integer"
           },
           {
-            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
             "in": "query",
             "name": "page.token",
             "type": "string"
@@ -421,14 +421,14 @@
         "operationId": "ListRuleEvaluations",
         "parameters": [
           {
-            "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
             "format": "int64",
             "in": "query",
             "name": "page.max_size",
             "type": "integer"
           },
           {
-            "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
             "in": "query",
             "name": "page.token",
             "type": "string"

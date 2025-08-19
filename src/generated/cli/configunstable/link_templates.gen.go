@@ -370,11 +370,11 @@ type LinkTemplateListOpts struct {
 
 func (r *LinkTemplateListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any LinkTemplate with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any LinkTemplate with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any LinkTemplate with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any LinkTemplate with a matching slug in the given list (and matches all other filters) will be returned.")
 	var emptyUIComponents []string
-	flags.StringSliceVar(&r.UIComponents, "ui-components", emptyUIComponents, "Filters results by ui_component, where any LinkTemplate with a matching ui_component in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.UIComponents, "ui-components", emptyUIComponents, "Filters results by ui_component, where any LinkTemplate with a matching ui_component in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")

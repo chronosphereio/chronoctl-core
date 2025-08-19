@@ -7,7 +7,6 @@ package models
 
 import (
 	"context"
-	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -20,7 +19,7 @@ import (
 // swagger:model configunstableAzureMetricsIntegration
 type ConfigunstableAzureMetricsIntegration struct {
 
-	// Unique identifier of the AzureMetricsIntegration. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the AzureMetricsIntegration is created.
+	// The unique identifier of the AzureMetricsIntegration. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the AzureMetricsIntegration is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of the AzureMetricsIntegration. You can modify this value after the AzureMetricsIntegration is created.
@@ -39,8 +38,8 @@ type ConfigunstableAzureMetricsIntegration struct {
 	// principal
 	Principal *AzureMetricsIntegrationAzurePrincipal `json:"principal,omitempty"`
 
-	// Specifies the scrape configs for this integration.
-	ScrapeConfigs []*AzureMetricsIntegrationAzureScrapeConfig `json:"scrape_configs"`
+	// scrape config
+	ScrapeConfig *AzureMetricsIntegrationAzureScrapeConfig `json:"scrape_config,omitempty"`
 
 	// Enables Azure count metrics for the configured resources.
 	CountMetricsEnabled bool `json:"count_metrics_enabled,omitempty"`
@@ -68,7 +67,7 @@ func (m *ConfigunstableAzureMetricsIntegration) Validate(formats strfmt.Registry
 		res = append(res, err)
 	}
 
-	if err := m.validateScrapeConfigs(formats); err != nil {
+	if err := m.validateScrapeConfig(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -121,27 +120,20 @@ func (m *ConfigunstableAzureMetricsIntegration) validatePrincipal(formats strfmt
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) validateScrapeConfigs(formats strfmt.Registry) error {
-	if swag.IsZero(m.ScrapeConfigs) { // not required
+func (m *ConfigunstableAzureMetricsIntegration) validateScrapeConfig(formats strfmt.Registry) error {
+	if swag.IsZero(m.ScrapeConfig) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.ScrapeConfigs); i++ {
-		if swag.IsZero(m.ScrapeConfigs[i]) { // not required
-			continue
-		}
-
-		if m.ScrapeConfigs[i] != nil {
-			if err := m.ScrapeConfigs[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("scrape_configs" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("scrape_configs" + "." + strconv.Itoa(i))
-				}
-				return err
+	if m.ScrapeConfig != nil {
+		if err := m.ScrapeConfig.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("scrape_config")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("scrape_config")
 			}
+			return err
 		}
-
 	}
 
 	return nil
@@ -163,7 +155,7 @@ func (m *ConfigunstableAzureMetricsIntegration) ContextValidate(ctx context.Cont
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateScrapeConfigs(ctx, formats); err != nil {
+	if err := m.contextValidateScrapeConfig(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -212,26 +204,22 @@ func (m *ConfigunstableAzureMetricsIntegration) contextValidatePrincipal(ctx con
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) contextValidateScrapeConfigs(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConfigunstableAzureMetricsIntegration) contextValidateScrapeConfig(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.ScrapeConfigs); i++ {
+	if m.ScrapeConfig != nil {
 
-		if m.ScrapeConfigs[i] != nil {
-
-			if swag.IsZero(m.ScrapeConfigs[i]) { // not required
-				return nil
-			}
-
-			if err := m.ScrapeConfigs[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("scrape_configs" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("scrape_configs" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
+		if swag.IsZero(m.ScrapeConfig) { // not required
+			return nil
 		}
 
+		if err := m.ScrapeConfig.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("scrape_config")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("scrape_config")
+			}
+			return err
+		}
 	}
 
 	return nil

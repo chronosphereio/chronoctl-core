@@ -30,11 +30,17 @@ func (m BehaviorThresholdType) Pointer() *BehaviorThresholdType {
 
 const (
 
-	// BehaviorThresholdTypeVOLUME captures enum value "VOLUME"
-	BehaviorThresholdTypeVOLUME BehaviorThresholdType = "VOLUME"
+	// BehaviorThresholdTypeDAILYVOLUME captures enum value "DAILY_VOLUME"
+	BehaviorThresholdTypeDAILYVOLUME BehaviorThresholdType = "DAILY_VOLUME"
 
 	// BehaviorThresholdTypeINSTANTRATE captures enum value "INSTANT_RATE"
 	BehaviorThresholdTypeINSTANTRATE BehaviorThresholdType = "INSTANT_RATE"
+
+	// BehaviorThresholdTypeWEEKLYVOLUME captures enum value "WEEKLY_VOLUME"
+	BehaviorThresholdTypeWEEKLYVOLUME BehaviorThresholdType = "WEEKLY_VOLUME"
+
+	// BehaviorThresholdTypeMONTHLYVOLUME captures enum value "MONTHLY_VOLUME"
+	BehaviorThresholdTypeMONTHLYVOLUME BehaviorThresholdType = "MONTHLY_VOLUME"
 )
 
 // for schema
@@ -42,7 +48,7 @@ var behaviorThresholdTypeEnum []interface{}
 
 func init() {
 	var res []BehaviorThresholdType
-	if err := json.Unmarshal([]byte(`["VOLUME","INSTANT_RATE"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["DAILY_VOLUME","INSTANT_RATE","WEEKLY_VOLUME","MONTHLY_VOLUME"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

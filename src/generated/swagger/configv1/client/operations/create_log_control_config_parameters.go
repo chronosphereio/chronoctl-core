@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewCreateLogControlConfigParams creates a new CreateLogControlConfigParams object,
@@ -64,7 +64,7 @@ CreateLogControlConfigParams contains all the parameters to send to the API endp
 type CreateLogControlConfigParams struct {
 
 	// Body.
-	Body *models.ConfigunstableCreateLogControlConfigRequest
+	Body *models.Configv1CreateLogControlConfigRequest
 
 	timeout    time.Duration
 	Context    context.Context
@@ -120,13 +120,13 @@ func (o *CreateLogControlConfigParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create log control config params
-func (o *CreateLogControlConfigParams) WithBody(body *models.ConfigunstableCreateLogControlConfigRequest) *CreateLogControlConfigParams {
+func (o *CreateLogControlConfigParams) WithBody(body *models.Configv1CreateLogControlConfigRequest) *CreateLogControlConfigParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create log control config params
-func (o *CreateLogControlConfigParams) SetBody(body *models.ConfigunstableCreateLogControlConfigRequest) {
+func (o *CreateLogControlConfigParams) SetBody(body *models.Configv1CreateLogControlConfigRequest) {
 	o.Body = body
 }
 

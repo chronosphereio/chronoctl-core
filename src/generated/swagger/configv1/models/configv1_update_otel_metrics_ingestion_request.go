@@ -24,7 +24,7 @@ type Configv1UpdateOtelMetricsIngestionRequest struct {
 	// If `true`, the OtelMetricsIngestion will be created if it does not already exist. If `false`, an error will be returned if the OtelMetricsIngestion does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
 
-	// If `true`, the OtelMetricsIngestion isn't created or updated, and no response OtelMetricsIngestion will be returned. The response will return an error if the given OtelMetricsIngestion is invalid.
+	// If `true`, validates the specified configuration without creating or updating the OtelMetricsIngestion. If the specified configuration is valid, the endpoint returns a partial response without the OtelMetricsIngestion. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

@@ -19,27 +19,32 @@ import (
 // swagger:model ConsumptionConfigPartition
 type ConsumptionConfigPartition struct {
 
-	// name is the name of the partition. Must be unique within the parent
-	// partition.
+	// name is a human-readable name of the partition. Must be unique within the
+	// parent partition. You can modify this value after the partition is created.
 	Name string `json:"name,omitempty"`
 
-	// dataset_filters define what datasets match the partition. The filters are
-	// AND'd together; a request must match every filter in order to match the
+	// filters define what data matches the partition. The filters are AND'd
+	// together; a request must match every filter in order to match the
 	// partition. Must not be empty.
-	DatasetFilters []*ConfigunstableDatasetFilter `json:"dataset_filters"`
+	Filters []*ConsumptionConfigPartitionFilter `json:"filters"`
 
 	// partitions are the optional child partitions of this partition. If set,
 	// requests which match the current partition will be allocated to the
 	// first child partition that matches. Requests that don't match any child
 	// partition fall back to an omnipresent default child partition.
 	Partitions []*ConsumptionConfigPartition `json:"partitions"`
+
+	// slug is the immutable identifier of the partition. Must be unique within
+	// the parent partition. You can not modify this value after the partition
+	// is created.
+	Slug string `json:"slug,omitempty"`
 }
 
 // Validate validates this consumption config partition
 func (m *ConsumptionConfigPartition) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateDatasetFilters(formats); err != nil {
+	if err := m.validateFilters(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -53,22 +58,22 @@ func (m *ConsumptionConfigPartition) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ConsumptionConfigPartition) validateDatasetFilters(formats strfmt.Registry) error {
-	if swag.IsZero(m.DatasetFilters) { // not required
+func (m *ConsumptionConfigPartition) validateFilters(formats strfmt.Registry) error {
+	if swag.IsZero(m.Filters) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.DatasetFilters); i++ {
-		if swag.IsZero(m.DatasetFilters[i]) { // not required
+	for i := 0; i < len(m.Filters); i++ {
+		if swag.IsZero(m.Filters[i]) { // not required
 			continue
 		}
 
-		if m.DatasetFilters[i] != nil {
-			if err := m.DatasetFilters[i].Validate(formats); err != nil {
+		if m.Filters[i] != nil {
+			if err := m.Filters[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("dataset_filters" + "." + strconv.Itoa(i))
+					return ve.ValidateName("filters" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("dataset_filters" + "." + strconv.Itoa(i))
+					return ce.ValidateName("filters" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -109,7 +114,7 @@ func (m *ConsumptionConfigPartition) validatePartitions(formats strfmt.Registry)
 func (m *ConsumptionConfigPartition) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateDatasetFilters(ctx, formats); err != nil {
+	if err := m.contextValidateFilters(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -123,21 +128,21 @@ func (m *ConsumptionConfigPartition) ContextValidate(ctx context.Context, format
 	return nil
 }
 
-func (m *ConsumptionConfigPartition) contextValidateDatasetFilters(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConsumptionConfigPartition) contextValidateFilters(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.DatasetFilters); i++ {
+	for i := 0; i < len(m.Filters); i++ {
 
-		if m.DatasetFilters[i] != nil {
+		if m.Filters[i] != nil {
 
-			if swag.IsZero(m.DatasetFilters[i]) { // not required
+			if swag.IsZero(m.Filters[i]) { // not required
 				return nil
 			}
 
-			if err := m.DatasetFilters[i].ContextValidate(ctx, formats); err != nil {
+			if err := m.Filters[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("dataset_filters" + "." + strconv.Itoa(i))
+					return ve.ValidateName("filters" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("dataset_filters" + "." + strconv.Itoa(i))
+					return ce.ValidateName("filters" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
