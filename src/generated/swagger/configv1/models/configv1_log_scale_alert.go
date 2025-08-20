@@ -19,7 +19,7 @@ import (
 // swagger:model configv1LogScaleAlert
 type Configv1LogScaleAlert struct {
 
-	// Unique identifier of the LogScaleAlert. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the LogScaleAlert is created.
+	// The unique identifier of the LogScaleAlert. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the LogScaleAlert is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of LogScale repository the alerts belongs to. Required.

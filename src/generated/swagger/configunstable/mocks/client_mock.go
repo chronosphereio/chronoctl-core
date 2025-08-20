@@ -135,26 +135,6 @@ func (mr *MockClientServiceMockRecorder) CreateLinkTemplate(params interface{}, 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLinkTemplate", reflect.TypeOf((*MockClientService)(nil).CreateLinkTemplate), varargs...)
 }
 
-// CreateLogControlConfig mocks base method.
-func (m *MockClientService) CreateLogControlConfig(params *operations.CreateLogControlConfigParams, opts ...operations.ClientOption) (*operations.CreateLogControlConfigOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateLogControlConfig", varargs...)
-	ret0, _ := ret[0].(*operations.CreateLogControlConfigOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateLogControlConfig indicates an expected call of CreateLogControlConfig.
-func (mr *MockClientServiceMockRecorder) CreateLogControlConfig(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLogControlConfig", reflect.TypeOf((*MockClientService)(nil).CreateLogControlConfig), varargs...)
-}
-
 // CreateNoopEntity mocks base method.
 func (m *MockClientService) CreateNoopEntity(params *operations.CreateNoopEntityParams, opts ...operations.ClientOption) (*operations.CreateNoopEntityOK, error) {
 	m.ctrl.T.Helper()
@@ -393,26 +373,6 @@ func (mr *MockClientServiceMockRecorder) DeleteLinkTemplate(params interface{}, 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLinkTemplate", reflect.TypeOf((*MockClientService)(nil).DeleteLinkTemplate), varargs...)
-}
-
-// DeleteLogControlConfig mocks base method.
-func (m *MockClientService) DeleteLogControlConfig(params *operations.DeleteLogControlConfigParams, opts ...operations.ClientOption) (*operations.DeleteLogControlConfigOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteLogControlConfig", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteLogControlConfigOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteLogControlConfig indicates an expected call of DeleteLogControlConfig.
-func (mr *MockClientServiceMockRecorder) DeleteLogControlConfig(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLogControlConfig", reflect.TypeOf((*MockClientService)(nil).DeleteLogControlConfig), varargs...)
 }
 
 // DeleteNoopEntity mocks base method.
@@ -815,26 +775,6 @@ func (mr *MockClientServiceMockRecorder) ReadLinkTemplate(params interface{}, op
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLinkTemplate", reflect.TypeOf((*MockClientService)(nil).ReadLinkTemplate), varargs...)
 }
 
-// ReadLogControlConfig mocks base method.
-func (m *MockClientService) ReadLogControlConfig(params *operations.ReadLogControlConfigParams, opts ...operations.ClientOption) (*operations.ReadLogControlConfigOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadLogControlConfig", varargs...)
-	ret0, _ := ret[0].(*operations.ReadLogControlConfigOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadLogControlConfig indicates an expected call of ReadLogControlConfig.
-func (mr *MockClientServiceMockRecorder) ReadLogControlConfig(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLogControlConfig", reflect.TypeOf((*MockClientService)(nil).ReadLogControlConfig), varargs...)
-}
-
 // ReadNoopEntity mocks base method.
 func (m *MockClientService) ReadNoopEntity(params *operations.ReadNoopEntityParams, opts ...operations.ClientOption) (*operations.ReadNoopEntityOK, error) {
 	m.ctrl.T.Helper()
@@ -1105,26 +1045,6 @@ func (mr *MockClientServiceMockRecorder) UpdateLinkTemplate(params interface{}, 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLinkTemplate", reflect.TypeOf((*MockClientService)(nil).UpdateLinkTemplate), varargs...)
-}
-
-// UpdateLogControlConfig mocks base method.
-func (m *MockClientService) UpdateLogControlConfig(params *operations.UpdateLogControlConfigParams, opts ...operations.ClientOption) (*operations.UpdateLogControlConfigOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateLogControlConfig", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateLogControlConfigOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateLogControlConfig indicates an expected call of UpdateLogControlConfig.
-func (mr *MockClientServiceMockRecorder) UpdateLogControlConfig(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLogControlConfig", reflect.TypeOf((*MockClientService)(nil).UpdateLogControlConfig), varargs...)
 }
 
 // UpdateNoopEntity mocks base method.

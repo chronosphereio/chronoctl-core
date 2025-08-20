@@ -17,7 +17,7 @@ import (
 // swagger:model DatasetFilterDataset
 type DatasetFilterDataset struct {
 
-	// dataset_slug is the slug of the dataset to match.
+	// dataset slug
 	DatasetSlug string `json:"dataset_slug,omitempty"`
 }
 

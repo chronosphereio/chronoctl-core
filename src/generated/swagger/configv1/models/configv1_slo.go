@@ -19,7 +19,7 @@ import (
 // swagger:model configv1SLO
 type Configv1SLO struct {
 
-	// Unique identifier of the SLO. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the SLO is created.
+	// The unique identifier of the SLO. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the SLO is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of the SLO. You can modify this value after the SLO is created.

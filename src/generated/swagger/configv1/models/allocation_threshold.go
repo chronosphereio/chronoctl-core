@@ -17,11 +17,11 @@ import (
 // swagger:model AllocationThreshold
 type AllocationThreshold struct {
 
-	// Threshold expressed as a percent of the license allocated to a pool.
-	// A value of `100` represents a threshold that is the pool's full allocation.
-	// Values over `100` indicate thresholds that exceed the pool's allocation.
-	// For example, a value of `50` represents a threshold that is half the pool's
-	// allocation and a value of `200` represents a threshold that is double the
+	// Threshold expressed as a percent of the license allocated to a pool. A value
+	// of `100` represents a threshold that is the pool's full allocation. Values
+	// over `100` indicate thresholds that exceed the pool's allocation. For
+	// example, a value of `50` represents a threshold that is half the pool's
+	// allocation, and a value of `200` represents a threshold that is double the
 	// pool's allocation.
 	PercentOfPoolAllocation float64 `json:"percent_of_pool_allocation,omitempty"`
 

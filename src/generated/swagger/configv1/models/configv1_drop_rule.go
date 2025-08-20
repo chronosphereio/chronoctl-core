@@ -20,7 +20,7 @@ import (
 // swagger:model configv1DropRule
 type Configv1DropRule struct {
 
-	// Unique identifier of the DropRule. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the DropRule is created.
+	// The unique identifier of the DropRule. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the DropRule is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of the DropRule. You can modify this value after the DropRule is created.

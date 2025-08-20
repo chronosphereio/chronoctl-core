@@ -21,7 +21,7 @@ type Configv1CreateMappingRuleRequest struct {
 	// mapping rule
 	MappingRule *Configv1MappingRule `json:"mapping_rule,omitempty"`
 
-	// If `true`, the MappingRule isn't created, and no response MappingRule will be returned. The response will return an error if the given MappingRule is invalid.
+	// If `true`, validates the specified configuration without creating the MappingRule. If the specified configuration is valid, the endpoint returns a partial response without the MappingRule. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

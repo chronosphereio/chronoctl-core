@@ -21,7 +21,7 @@ type Configv1CreateNotifierRequest struct {
 	// notifier
 	Notifier *Configv1Notifier `json:"notifier,omitempty"`
 
-	// If `true`, the Notifier isn't created, and no response Notifier will be returned. The response will return an error if the given Notifier is invalid.
+	// If `true`, validates the specified configuration without creating the Notifier. If the specified configuration is valid, the endpoint returns a partial response without the Notifier. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

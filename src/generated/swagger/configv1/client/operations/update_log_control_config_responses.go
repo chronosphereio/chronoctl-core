@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // UpdateLogControlConfigReader is a Reader for the UpdateLogControlConfig structure.
@@ -70,7 +70,7 @@ UpdateLogControlConfigOK describes a response with status code 200, with default
 A successful response containing the updated LogControlConfig.
 */
 type UpdateLogControlConfigOK struct {
-	Payload *models.ConfigunstableUpdateLogControlConfigResponse
+	Payload *models.Configv1UpdateLogControlConfigResponse
 }
 
 // IsSuccess returns true when this update log control config o k response has a 2xx status code
@@ -104,20 +104,20 @@ func (o *UpdateLogControlConfigOK) Code() int {
 }
 
 func (o *UpdateLogControlConfigOK) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] updateLogControlConfigOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] updateLogControlConfigOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateLogControlConfigOK) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] updateLogControlConfigOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] updateLogControlConfigOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateLogControlConfigOK) GetPayload() *models.ConfigunstableUpdateLogControlConfigResponse {
+func (o *UpdateLogControlConfigOK) GetPayload() *models.Configv1UpdateLogControlConfigResponse {
 	return o.Payload
 }
 
 func (o *UpdateLogControlConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableUpdateLogControlConfigResponse)
+	o.Payload = new(models.Configv1UpdateLogControlConfigResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -172,11 +172,11 @@ func (o *UpdateLogControlConfigBadRequest) Code() int {
 }
 
 func (o *UpdateLogControlConfigBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] updateLogControlConfigBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] updateLogControlConfigBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateLogControlConfigBadRequest) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] updateLogControlConfigBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] updateLogControlConfigBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateLogControlConfigBadRequest) GetPayload() *models.APIError {
@@ -240,11 +240,11 @@ func (o *UpdateLogControlConfigNotFound) Code() int {
 }
 
 func (o *UpdateLogControlConfigNotFound) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] updateLogControlConfigNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] updateLogControlConfigNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateLogControlConfigNotFound) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] updateLogControlConfigNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] updateLogControlConfigNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateLogControlConfigNotFound) GetPayload() *models.APIError {
@@ -308,11 +308,11 @@ func (o *UpdateLogControlConfigInternalServerError) Code() int {
 }
 
 func (o *UpdateLogControlConfigInternalServerError) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] updateLogControlConfigInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] updateLogControlConfigInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateLogControlConfigInternalServerError) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] updateLogControlConfigInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] updateLogControlConfigInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateLogControlConfigInternalServerError) GetPayload() *models.APIError {
@@ -380,11 +380,11 @@ func (o *UpdateLogControlConfigDefault) Code() int {
 }
 
 func (o *UpdateLogControlConfigDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] UpdateLogControlConfig default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] UpdateLogControlConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateLogControlConfigDefault) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/log-control-config][%d] UpdateLogControlConfig default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/log-control-config][%d] UpdateLogControlConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateLogControlConfigDefault) GetPayload() models.GenericError {

@@ -14,15 +14,15 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableDatasetFilter configunstable dataset filter
+// ConfigunstableDatasetFilter TODO(codyg): remove; still in-use by stateunstable.
 //
 // swagger:model configunstableDatasetFilter
 type ConfigunstableDatasetFilter struct {
 
 	// operator
-	Operator DatasetFilterOperator `json:"operator,omitempty"`
+	Operator ConfigunstableDatasetFilterOperator `json:"operator,omitempty"`
 
-	// datasets are the datasets to match.
+	// datasets
 	Datasets []*DatasetFilterDataset `json:"datasets"`
 }
 

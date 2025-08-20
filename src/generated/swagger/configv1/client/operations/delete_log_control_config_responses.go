@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // DeleteLogControlConfigReader is a Reader for the DeleteLogControlConfig structure.
@@ -70,7 +70,7 @@ DeleteLogControlConfigOK describes a response with status code 200, with default
 A successful response.
 */
 type DeleteLogControlConfigOK struct {
-	Payload models.ConfigunstableDeleteLogControlConfigResponse
+	Payload models.Configv1DeleteLogControlConfigResponse
 }
 
 // IsSuccess returns true when this delete log control config o k response has a 2xx status code
@@ -104,14 +104,14 @@ func (o *DeleteLogControlConfigOK) Code() int {
 }
 
 func (o *DeleteLogControlConfigOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] deleteLogControlConfigOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] deleteLogControlConfigOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteLogControlConfigOK) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] deleteLogControlConfigOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] deleteLogControlConfigOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteLogControlConfigOK) GetPayload() models.ConfigunstableDeleteLogControlConfigResponse {
+func (o *DeleteLogControlConfigOK) GetPayload() models.Configv1DeleteLogControlConfigResponse {
 	return o.Payload
 }
 
@@ -170,11 +170,11 @@ func (o *DeleteLogControlConfigBadRequest) Code() int {
 }
 
 func (o *DeleteLogControlConfigBadRequest) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] deleteLogControlConfigBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] deleteLogControlConfigBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteLogControlConfigBadRequest) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] deleteLogControlConfigBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] deleteLogControlConfigBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteLogControlConfigBadRequest) GetPayload() *models.APIError {
@@ -238,11 +238,11 @@ func (o *DeleteLogControlConfigNotFound) Code() int {
 }
 
 func (o *DeleteLogControlConfigNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] deleteLogControlConfigNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] deleteLogControlConfigNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteLogControlConfigNotFound) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] deleteLogControlConfigNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] deleteLogControlConfigNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteLogControlConfigNotFound) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *DeleteLogControlConfigInternalServerError) Code() int {
 }
 
 func (o *DeleteLogControlConfigInternalServerError) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] deleteLogControlConfigInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] deleteLogControlConfigInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteLogControlConfigInternalServerError) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] deleteLogControlConfigInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] deleteLogControlConfigInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteLogControlConfigInternalServerError) GetPayload() *models.APIError {
@@ -378,11 +378,11 @@ func (o *DeleteLogControlConfigDefault) Code() int {
 }
 
 func (o *DeleteLogControlConfigDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] DeleteLogControlConfig default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] DeleteLogControlConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteLogControlConfigDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/log-control-config][%d] DeleteLogControlConfig default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/log-control-config][%d] DeleteLogControlConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteLogControlConfigDefault) GetPayload() models.GenericError {

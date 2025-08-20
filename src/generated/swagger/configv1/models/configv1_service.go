@@ -19,7 +19,7 @@ import (
 // swagger:model configv1Service
 type Configv1Service struct {
 
-	// Unique identifier of the Service. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the Service is created.
+	// The unique identifier of the Service. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Service is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of the Service. You can modify this value after the Service is created.

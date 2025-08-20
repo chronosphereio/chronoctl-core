@@ -19,14 +19,14 @@ import (
 // swagger:model ResourcePoolsPool
 type ResourcePoolsPool struct {
 
-	// Required name of the pool. Must be unique.
+	// Name of the pool, which must be unique.
 	Name string `json:"name,omitempty"`
 
 	// allocation
 	Allocation *Configv1ResourcePoolsAllocation `json:"allocation,omitempty"`
 
-	// Required filters which define which metrics map to this pool, where any
-	// metric which matches at least one filter will map to the pool.
+	// Filters that define which metrics map to this pool, where any metric that
+	// matches at least one filter will map to the pool.
 	Filters []*Configv1LabelFilter `json:"filters"`
 
 	// priorities

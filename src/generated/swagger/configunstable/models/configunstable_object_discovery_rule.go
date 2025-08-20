@@ -18,7 +18,7 @@ import (
 // swagger:model configunstableObjectDiscoveryRule
 type ConfigunstableObjectDiscoveryRule struct {
 
-	// Unique identifier of the ObjectDiscoveryRule. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the ObjectDiscoveryRule is created.
+	// The unique identifier of the ObjectDiscoveryRule. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the ObjectDiscoveryRule is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of the ObjectDiscoveryRule. You can modify this value after the ObjectDiscoveryRule is created.

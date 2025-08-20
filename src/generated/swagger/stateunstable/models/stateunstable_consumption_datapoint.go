@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// StateunstableConsumptionDatapoint Datapoint representing a cumulative consumption volume at some point in time.
+// StateunstableConsumptionDatapoint ConsumptionDatapoint represents a cumulative consumption volume at some point in time.
 //
 // swagger:model stateunstableConsumptionDatapoint
 type StateunstableConsumptionDatapoint struct {

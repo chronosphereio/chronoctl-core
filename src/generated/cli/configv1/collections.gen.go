@@ -371,13 +371,13 @@ type CollectionListOpts struct {
 
 func (r *CollectionListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any Collection with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any Collection with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptyNotificationPolicySlugs []string
-	flags.StringSliceVar(&r.NotificationPolicySlugs, "notification-policy-slugs", emptyNotificationPolicySlugs, "Get collections that directly reference notifications policies by the referenced policy slugs.")
+	flags.StringSliceVar(&r.NotificationPolicySlugs, "notification-policy-slugs", emptyNotificationPolicySlugs, "Get collections that directly reference notification policies specified in this array. To specify a notification policy, include its slug.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any Collection with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any Collection with a matching slug in the given list (and matches all other filters) will be returned.")
 	var emptyTeamSlugs []string
-	flags.StringSliceVar(&r.TeamSlugs, "team-slugs", emptyTeamSlugs, "Filters results by team_slug, where any Collection with a matching team_slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.TeamSlugs, "team-slugs", emptyTeamSlugs, "Filters results by team_slug, where any Collection with a matching team_slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -499,17 +499,19 @@ func newCollectionListCmd() *cobra.Command {
 const CollectionScaffoldYAML = `api_version: v1/config
 kind: Collection
 spec:
-    # Unique identifier of the Collection. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Collection is created.
+    # The unique identifier of the Collection. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the Collection is created.
     slug: <string>
     # Name of the Collection. You can modify this value after the Collection is created.
     name: <string>
-    # Required slug of the team the collection belongs to.
+    # The slug of the team that the collection belongs to.
     team_slug: <string>
-    # Optional description of the collection.
+    # A description of the collection.
     description: <string>
-    # Slug of the notification policy used by default for monitors in this collection.
-    # This is optional if the collection does not contain monitors or all of its monitors explicitly reference a policy.
-    # This does not override the policy used when a monitor explicitly references a policy.
+    # The slug of the default notification policy for monitors in this collection.
+    # This value is only required when the collection contains monitors and one
+    # or more of those monitors don't explicitly reference a policy. This value does
+    # not override the policy used when a monitor explicitly references a different
+    # policy.
     notification_policy_slug: <string>
 `
 

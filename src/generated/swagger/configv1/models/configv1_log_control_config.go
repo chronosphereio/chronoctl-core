@@ -15,11 +15,11 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ConfigunstableLogControlConfig LogControlConfig is a singleton configuration object that specifies the
+// Configv1LogControlConfig LogControlConfig is a singleton configuration object that specifies the
 // configuration for log control.
 //
-// swagger:model configunstableLogControlConfig
-type ConfigunstableLogControlConfig struct {
+// swagger:model configv1LogControlConfig
+type Configv1LogControlConfig struct {
 
 	// Timestamp of when the LogControlConfig was created. Cannot be set by clients.
 	// Read Only: true
@@ -32,11 +32,11 @@ type ConfigunstableLogControlConfig struct {
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
 	// Control Rules are the ordered list of control rules.
-	Rules []*ConfigunstableLogControlRule `json:"rules"`
+	Rules []*Configv1LogControlRule `json:"rules"`
 }
 
-// Validate validates this configunstable log control config
-func (m *ConfigunstableLogControlConfig) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 log control config
+func (m *Configv1LogControlConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
@@ -57,7 +57,7 @@ func (m *ConfigunstableLogControlConfig) Validate(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *ConfigunstableLogControlConfig) validateCreatedAt(formats strfmt.Registry) error {
+func (m *Configv1LogControlConfig) validateCreatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -69,7 +69,7 @@ func (m *ConfigunstableLogControlConfig) validateCreatedAt(formats strfmt.Regist
 	return nil
 }
 
-func (m *ConfigunstableLogControlConfig) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *Configv1LogControlConfig) validateUpdatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -81,7 +81,7 @@ func (m *ConfigunstableLogControlConfig) validateUpdatedAt(formats strfmt.Regist
 	return nil
 }
 
-func (m *ConfigunstableLogControlConfig) validateRules(formats strfmt.Registry) error {
+func (m *Configv1LogControlConfig) validateRules(formats strfmt.Registry) error {
 	if swag.IsZero(m.Rules) { // not required
 		return nil
 	}
@@ -107,8 +107,8 @@ func (m *ConfigunstableLogControlConfig) validateRules(formats strfmt.Registry) 
 	return nil
 }
 
-// ContextValidate validate this configunstable log control config based on the context it is used
-func (m *ConfigunstableLogControlConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 log control config based on the context it is used
+func (m *Configv1LogControlConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
@@ -129,7 +129,7 @@ func (m *ConfigunstableLogControlConfig) ContextValidate(ctx context.Context, fo
 	return nil
 }
 
-func (m *ConfigunstableLogControlConfig) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1LogControlConfig) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
 		return err
@@ -138,7 +138,7 @@ func (m *ConfigunstableLogControlConfig) contextValidateCreatedAt(ctx context.Co
 	return nil
 }
 
-func (m *ConfigunstableLogControlConfig) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1LogControlConfig) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
 		return err
@@ -147,7 +147,7 @@ func (m *ConfigunstableLogControlConfig) contextValidateUpdatedAt(ctx context.Co
 	return nil
 }
 
-func (m *ConfigunstableLogControlConfig) contextValidateRules(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1LogControlConfig) contextValidateRules(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Rules); i++ {
 
@@ -173,7 +173,7 @@ func (m *ConfigunstableLogControlConfig) contextValidateRules(ctx context.Contex
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableLogControlConfig) MarshalBinary() ([]byte, error) {
+func (m *Configv1LogControlConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -181,8 +181,8 @@ func (m *ConfigunstableLogControlConfig) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableLogControlConfig) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableLogControlConfig
+func (m *Configv1LogControlConfig) UnmarshalBinary(b []byte) error {
+	var res Configv1LogControlConfig
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

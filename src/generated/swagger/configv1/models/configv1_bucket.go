@@ -19,7 +19,7 @@ import (
 // swagger:model configv1Bucket
 type Configv1Bucket struct {
 
-	// Unique identifier of the Bucket. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the Bucket is created.
+	// The unique identifier of the Bucket. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Bucket is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of the Bucket. You can modify this value after the Bucket is created.

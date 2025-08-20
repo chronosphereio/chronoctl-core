@@ -21,7 +21,7 @@ type ConfigunstableCreateTraceTailSamplingRulesRequest struct {
 	// trace tail sampling rules
 	TraceTailSamplingRules *ConfigunstableTraceTailSamplingRules `json:"trace_tail_sampling_rules,omitempty"`
 
-	// If `true`, the TraceTailSamplingRules isn't created, and no response TraceTailSamplingRules will be returned. The response will return an error if the given TraceTailSamplingRules is invalid.
+	// If `true`, validates the specified configuration without creating the TraceTailSamplingRules. If the specified configuration is valid, the endpoint returns a partial response without the TraceTailSamplingRules. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

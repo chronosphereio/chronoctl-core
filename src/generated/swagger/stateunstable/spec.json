@@ -9,6 +9,14 @@
       ],
       "type": "string"
     },
+    "DatasetFilterDataset": {
+      "properties": {
+        "dataset_slug": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ListMonitorStatusesRequestSortOrder": {
       "enum": [
         "SORT_BY_STATE"
@@ -111,24 +119,37 @@
       ],
       "type": "string"
     },
-    "configv1PageParams": {
+    "configunstableDatasetFilter": {
+      "description": "TODO(codyg): remove; still in-use by stateunstable.",
       "properties": {
-        "max_size": {
-          "description": "Page size preference (i.e. how many items are returned in the next\npage). If zero, the server will use a default. Regardless of what size\nis given, clients must never assume how many items will be returned.",
-          "format": "int64",
-          "type": "integer"
+        "operator": {
+          "$ref": "#/definitions/configunstableDatasetFilterOperator"
         },
-        "token": {
-          "description": "Opaque page token identifying which page to request. An empty token\nidentifies the first page.",
-          "type": "string"
+        "datasets": {
+          "items": {
+            "$ref": "#/definitions/DatasetFilterDataset"
+          },
+          "type": "array"
         }
       },
       "type": "object"
     },
-    "configv1PageResult": {
+    "configunstableDatasetFilterOperator": {
+      "enum": [
+        "IN",
+        "NOT_IN"
+      ],
+      "type": "string"
+    },
+    "configv1PageParams": {
       "properties": {
-        "next_token": {
-          "description": "Opaque page token which identifies the next page of items which the\nclient should request. An empty next_token indicates that there are no\nmore items to return.",
+        "max_size": {
+          "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "token": {
+          "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
           "type": "string"
         }
       },
@@ -158,7 +179,7 @@
       "type": "string"
     },
     "stateunstableConsumptionDatapoint": {
-      "description": "Datapoint representing a cumulative consumption volume at some point in time.",
+      "description": "ConsumptionDatapoint represents a cumulative consumption volume at some point in time.",
       "properties": {
         "timestamp": {
           "format": "date-time",
@@ -171,8 +192,26 @@
       },
       "type": "object"
     },
+    "stateunstableConsumptionGroupKey": {
+      "description": "ConsumptionGroupKey uniquely identifies a specific time series returned from\nthe consumption query APIs.",
+      "properties": {
+        "partition_slug_path": {
+          "type": "string"
+        },
+        "dataset_slug": {
+          "type": "string"
+        },
+        "matches": {
+          "type": "boolean"
+        },
+        "dynamic_label_value": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "stateunstableConsumptionRateDatapoint": {
-      "description": "Datapoint representing a consumption rate at some point in time.",
+      "description": "ConsumptionRateDatapoint represents a consumption rate at some point in time.",
       "properties": {
         "timestamp": {
           "format": "date-time",
@@ -189,6 +228,36 @@
       "properties": {
         "message": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableGroupedRateTimeSeries": {
+      "description": "GroupedRateTimeSeries represents a time series of consumption rate for a dataset.",
+      "properties": {
+        "group_key": {
+          "$ref": "#/definitions/stateunstableConsumptionGroupKey"
+        },
+        "datapoints": {
+          "items": {
+            "$ref": "#/definitions/stateunstableConsumptionRateDatapoint"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableGroupedTimeSeries": {
+      "description": "GroupedTimeSeries represents a time series of cumulative consumption for a dataset.",
+      "properties": {
+        "group_key": {
+          "$ref": "#/definitions/stateunstableConsumptionGroupKey"
+        },
+        "datapoints": {
+          "items": {
+            "$ref": "#/definitions/stateunstableConsumptionDatapoint"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -225,60 +294,41 @@
       },
       "type": "object"
     },
-    "stateunstableQueryConsumptionByBudgetResponse": {
+    "stateunstableQueryConsumptionRateRequest": {
+      "description": "QueryConsumptionRateRequest for querying consumption rates.",
       "properties": {
-        "series": {
-          "description": "Paginated list of series in ascending chronological order. Different paginated responses to this endpoint for the same\ncall can return different budget's time series; the caller is expected to concat datapoints for previously seen\nbudget series.",
+        "resource": {
+          "$ref": "#/definitions/ConsumptionBudgetResource"
+        },
+        "start_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "end_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "step_secs": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "partition_name_path": {
           "items": {
-            "$ref": "#/definitions/stateunstableQueryConsumptionByBudgetResponseTimeSeries"
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "group_by_dataset_slug": {
+          "type": "string"
+        },
+        "dataset_filters": {
+          "items": {
+            "$ref": "#/definitions/configunstableDatasetFilter"
           },
           "type": "array"
         },
         "page": {
-          "$ref": "#/definitions/configv1PageResult"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableQueryConsumptionByBudgetResponseTimeSeries": {
-      "properties": {
-        "budget_slug": {
-          "type": "string"
-        },
-        "datapoints": {
-          "items": {
-            "$ref": "#/definitions/stateunstableConsumptionDatapoint"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableQueryConsumptionRateByBudgetResponse": {
-      "properties": {
-        "series": {
-          "description": "Paginated list of series in ascending chronological order. Different paginated responses to this endpoint for the same call can return different\nbudget's time series; the caller is expected to concat datapoints for previously seen budget series.",
-          "items": {
-            "$ref": "#/definitions/stateunstableQueryConsumptionRateByBudgetResponseTimeSeries"
-          },
-          "type": "array"
-        },
-        "page": {
-          "$ref": "#/definitions/configv1PageResult"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableQueryConsumptionRateByBudgetResponseTimeSeries": {
-      "properties": {
-        "budget_slug": {
-          "type": "string"
-        },
-        "datapoints": {
-          "items": {
-            "$ref": "#/definitions/stateunstableConsumptionRateDatapoint"
-          },
-          "type": "array"
+          "$ref": "#/definitions/configv1PageParams"
         }
       },
       "type": "object"
@@ -286,21 +336,56 @@
     "stateunstableQueryConsumptionRateResponse": {
       "properties": {
         "series": {
-          "$ref": "#/definitions/stateunstableQueryConsumptionRateResponseTimeSeries"
+          "items": {
+            "$ref": "#/definitions/stateunstableGroupedRateTimeSeries"
+          },
+          "type": "array"
         },
         "page": {
-          "$ref": "#/definitions/configv1PageResult"
+          "$ref": "#/definitions/configv1PageParams"
         }
       },
       "type": "object"
     },
-    "stateunstableQueryConsumptionRateResponseTimeSeries": {
+    "stateunstableQueryConsumptionRequest": {
+      "description": "QueryConsumptionRequest for querying cumulative consumption volumes.",
       "properties": {
-        "datapoints": {
+        "resource": {
+          "$ref": "#/definitions/ConsumptionBudgetResource"
+        },
+        "start_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "end_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "step_secs": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "cumulative_period_start_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "partition_name_path": {
           "items": {
-            "$ref": "#/definitions/stateunstableConsumptionRateDatapoint"
+            "type": "string"
           },
           "type": "array"
+        },
+        "group_by_dataset_slug": {
+          "type": "string"
+        },
+        "dataset_filters": {
+          "items": {
+            "$ref": "#/definitions/configunstableDatasetFilter"
+          },
+          "type": "array"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageParams"
         }
       },
       "type": "object"
@@ -308,21 +393,13 @@
     "stateunstableQueryConsumptionResponse": {
       "properties": {
         "series": {
-          "$ref": "#/definitions/stateunstableQueryConsumptionResponseTimeSeries"
-        },
-        "page": {
-          "$ref": "#/definitions/configv1PageResult"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableQueryConsumptionResponseTimeSeries": {
-      "properties": {
-        "datapoints": {
           "items": {
-            "$ref": "#/definitions/stateunstableConsumptionDatapoint"
+            "$ref": "#/definitions/stateunstableGroupedTimeSeries"
           },
           "type": "array"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageParams"
         }
       },
       "type": "object"

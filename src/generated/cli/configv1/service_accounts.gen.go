@@ -272,9 +272,9 @@ type ServiceAccountListOpts struct {
 
 func (r *ServiceAccountListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ServiceAccount with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ServiceAccount with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any ServiceAccount with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any ServiceAccount with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -394,7 +394,7 @@ func newServiceAccountListCmd() *cobra.Command {
 const ServiceAccountScaffoldYAML = `api_version: v1/config
 kind: ServiceAccount
 spec:
-    # Unique identifier of the ServiceAccount. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the ServiceAccount is created.
+    # The unique identifier of the ServiceAccount. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the ServiceAccount is created.
     slug: <string>
     # Name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
     name: <string>

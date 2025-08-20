@@ -27,9 +27,9 @@ type LogIngestConfigPlaintextParser struct {
 	// parser
 	Parser *LogIngestConfigLogParser `json:"parser,omitempty"`
 
-	// If true, the original log will be dropped after parsing.
-	// Otherwise the original log is stored under the key "plaintext_log".
-	DropOriginal bool `json:"drop_original,omitempty"`
+	// If true, the original log is kept after parsing and stored under the key "plaintext_log".
+	// Otherwise the original log will be dropped after parsing. Default is false.
+	KeepOriginal bool `json:"keep_original,omitempty"`
 }
 
 // Validate validates this log ingest config plaintext parser

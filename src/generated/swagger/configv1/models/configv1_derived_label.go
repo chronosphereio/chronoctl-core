@@ -22,7 +22,7 @@ type Configv1DerivedLabel struct {
 	// Name of the DerivedLabel. You can modify this value after the DerivedLabel is created.
 	Name string `json:"name,omitempty"`
 
-	// Unique identifier of the DerivedLabel. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the DerivedLabel is created.
+	// The unique identifier of the DerivedLabel. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the DerivedLabel is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Timestamp of when the DerivedLabel was created. Cannot be set by clients.

@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // CreateLogControlConfigReader is a Reader for the CreateLogControlConfig structure.
@@ -70,7 +70,7 @@ CreateLogControlConfigOK describes a response with status code 200, with default
 A successful response containing the created LogControlConfig.
 */
 type CreateLogControlConfigOK struct {
-	Payload *models.ConfigunstableCreateLogControlConfigResponse
+	Payload *models.Configv1CreateLogControlConfigResponse
 }
 
 // IsSuccess returns true when this create log control config o k response has a 2xx status code
@@ -104,20 +104,20 @@ func (o *CreateLogControlConfigOK) Code() int {
 }
 
 func (o *CreateLogControlConfigOK) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] createLogControlConfigOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] createLogControlConfigOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateLogControlConfigOK) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] createLogControlConfigOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] createLogControlConfigOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateLogControlConfigOK) GetPayload() *models.ConfigunstableCreateLogControlConfigResponse {
+func (o *CreateLogControlConfigOK) GetPayload() *models.Configv1CreateLogControlConfigResponse {
 	return o.Payload
 }
 
 func (o *CreateLogControlConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableCreateLogControlConfigResponse)
+	o.Payload = new(models.Configv1CreateLogControlConfigResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -172,11 +172,11 @@ func (o *CreateLogControlConfigBadRequest) Code() int {
 }
 
 func (o *CreateLogControlConfigBadRequest) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] createLogControlConfigBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] createLogControlConfigBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *CreateLogControlConfigBadRequest) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] createLogControlConfigBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] createLogControlConfigBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *CreateLogControlConfigBadRequest) GetPayload() *models.APIError {
@@ -240,11 +240,11 @@ func (o *CreateLogControlConfigConflict) Code() int {
 }
 
 func (o *CreateLogControlConfigConflict) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] createLogControlConfigConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] createLogControlConfigConflict  %+v", 409, o.Payload)
 }
 
 func (o *CreateLogControlConfigConflict) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] createLogControlConfigConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] createLogControlConfigConflict  %+v", 409, o.Payload)
 }
 
 func (o *CreateLogControlConfigConflict) GetPayload() *models.APIError {
@@ -308,11 +308,11 @@ func (o *CreateLogControlConfigInternalServerError) Code() int {
 }
 
 func (o *CreateLogControlConfigInternalServerError) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] createLogControlConfigInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] createLogControlConfigInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *CreateLogControlConfigInternalServerError) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] createLogControlConfigInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] createLogControlConfigInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *CreateLogControlConfigInternalServerError) GetPayload() *models.APIError {
@@ -380,11 +380,11 @@ func (o *CreateLogControlConfigDefault) Code() int {
 }
 
 func (o *CreateLogControlConfigDefault) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] CreateLogControlConfig default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] CreateLogControlConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateLogControlConfigDefault) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/log-control-config][%d] CreateLogControlConfig default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/log-control-config][%d] CreateLogControlConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateLogControlConfigDefault) GetPayload() models.GenericError {

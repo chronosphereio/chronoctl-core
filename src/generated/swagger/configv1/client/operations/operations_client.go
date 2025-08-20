@@ -50,6 +50,8 @@ type ClientService interface {
 
 	CreateLogAllocationConfig(params *CreateLogAllocationConfigParams, opts ...ClientOption) (*CreateLogAllocationConfigOK, error)
 
+	CreateLogControlConfig(params *CreateLogControlConfigParams, opts ...ClientOption) (*CreateLogControlConfigOK, error)
+
 	CreateLogIngestConfig(params *CreateLogIngestConfigParams, opts ...ClientOption) (*CreateLogIngestConfigOK, error)
 
 	CreateLogScaleAction(params *CreateLogScaleActionParams, opts ...ClientOption) (*CreateLogScaleActionOK, error)
@@ -111,6 +113,8 @@ type ClientService interface {
 	DeleteGrafanaDashboard(params *DeleteGrafanaDashboardParams, opts ...ClientOption) (*DeleteGrafanaDashboardOK, error)
 
 	DeleteLogAllocationConfig(params *DeleteLogAllocationConfigParams, opts ...ClientOption) (*DeleteLogAllocationConfigOK, error)
+
+	DeleteLogControlConfig(params *DeleteLogControlConfigParams, opts ...ClientOption) (*DeleteLogControlConfigOK, error)
 
 	DeleteLogIngestConfig(params *DeleteLogIngestConfigParams, opts ...ClientOption) (*DeleteLogIngestConfigOK, error)
 
@@ -226,6 +230,8 @@ type ClientService interface {
 
 	ReadLogAllocationConfig(params *ReadLogAllocationConfigParams, opts ...ClientOption) (*ReadLogAllocationConfigOK, error)
 
+	ReadLogControlConfig(params *ReadLogControlConfigParams, opts ...ClientOption) (*ReadLogControlConfigOK, error)
+
 	ReadLogIngestConfig(params *ReadLogIngestConfigParams, opts ...ClientOption) (*ReadLogIngestConfigOK, error)
 
 	ReadLogScaleAction(params *ReadLogScaleActionParams, opts ...ClientOption) (*ReadLogScaleActionOK, error)
@@ -289,6 +295,8 @@ type ClientService interface {
 	UpdateGrafanaDashboard(params *UpdateGrafanaDashboardParams, opts ...ClientOption) (*UpdateGrafanaDashboardOK, error)
 
 	UpdateLogAllocationConfig(params *UpdateLogAllocationConfigParams, opts ...ClientOption) (*UpdateLogAllocationConfigOK, error)
+
+	UpdateLogControlConfig(params *UpdateLogControlConfigParams, opts ...ClientOption) (*UpdateLogControlConfigOK, error)
 
 	UpdateLogIngestConfig(params *UpdateLogIngestConfigParams, opts ...ClientOption) (*UpdateLogIngestConfigOK, error)
 
@@ -735,6 +743,43 @@ func (a *Client) CreateLogAllocationConfig(params *CreateLogAllocationConfigPara
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateLogAllocationConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateLogControlConfig create log control config API
+*/
+func (a *Client) CreateLogControlConfig(params *CreateLogControlConfigParams, opts ...ClientOption) (*CreateLogControlConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateLogControlConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateLogControlConfig",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/log-control-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateLogControlConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateLogControlConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateLogControlConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1885,6 +1930,43 @@ func (a *Client) DeleteLogAllocationConfig(params *DeleteLogAllocationConfigPara
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteLogAllocationConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteLogControlConfig delete log control config API
+*/
+func (a *Client) DeleteLogControlConfig(params *DeleteLogControlConfigParams, opts ...ClientOption) (*DeleteLogControlConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteLogControlConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteLogControlConfig",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/log-control-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteLogControlConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteLogControlConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteLogControlConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3998,6 +4080,43 @@ func (a *Client) ReadLogAllocationConfig(params *ReadLogAllocationConfigParams, 
 }
 
 /*
+ReadLogControlConfig read log control config API
+*/
+func (a *Client) ReadLogControlConfig(params *ReadLogControlConfigParams, opts ...ClientOption) (*ReadLogControlConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadLogControlConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadLogControlConfig",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/log-control-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadLogControlConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadLogControlConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadLogControlConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadLogIngestConfig read log ingest config API
 */
 func (a *Client) ReadLogIngestConfig(params *ReadLogIngestConfigParams, opts ...ClientOption) (*ReadLogIngestConfigOK, error) {
@@ -5178,6 +5297,43 @@ func (a *Client) UpdateLogAllocationConfig(params *UpdateLogAllocationConfigPara
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateLogAllocationConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateLogControlConfig update log control config API
+*/
+func (a *Client) UpdateLogControlConfig(params *UpdateLogControlConfigParams, opts ...ClientOption) (*UpdateLogControlConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateLogControlConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateLogControlConfig",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/log-control-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateLogControlConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateLogControlConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateLogControlConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

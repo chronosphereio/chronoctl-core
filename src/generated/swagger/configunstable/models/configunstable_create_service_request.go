@@ -21,7 +21,7 @@ type ConfigunstableCreateServiceRequest struct {
 	// service
 	Service *ConfigunstableService `json:"service,omitempty"`
 
-	// If `true`, the Service isn't created, and no response Service will be returned. The response will return an error if the given Service is invalid.
+	// If `true`, validates the specified configuration without creating the Service. If the specified configuration is valid, the endpoint returns a partial response without the Service. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 

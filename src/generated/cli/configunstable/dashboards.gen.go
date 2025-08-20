@@ -367,13 +367,13 @@ type DashboardListOpts struct {
 
 func (r *DashboardListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyCollectionSlugs []string
-	flags.StringSliceVar(&r.CollectionSlugs, "collection-slugs", emptyCollectionSlugs, "Filters results by collection_slug, where any Dashboard with a matching collection_slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.CollectionSlugs, "collection-slugs", emptyCollectionSlugs, "Filters results by collection_slug, where any Dashboard with a matching collection_slug in the given list (and matches all other filters) will be returned.")
 	var emptyIncludeDashboardJSON bool
 	flags.BoolVar(&r.IncludeDashboardJSON, "include-dashboard-json", emptyIncludeDashboardJSON, "Optional flag to populate the dashboard_json of the returned dashboards. By default, dashboard_json will be left empty.")
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any Dashboard with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any Dashboard with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any Dashboard with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any Dashboard with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -495,7 +495,7 @@ func newDashboardListCmd() *cobra.Command {
 const DashboardScaffoldYAML = `api_version: unstable/config
 kind: Dashboard
 spec:
-    # Unique identifier of the Dashboard. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the Dashboard is created.
+    # The unique identifier of the Dashboard. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the Dashboard is created.
     slug: <string>
     # Name of the Dashboard. You can modify this value after the Dashboard is created.
     name: <string>

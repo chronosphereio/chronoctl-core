@@ -19,7 +19,7 @@ import (
 // swagger:model configunstableNoopEntity
 type ConfigunstableNoopEntity struct {
 
-	// Unique identifier of the NoopEntity. If a `slug` isn't provided, one will be generated based of the `name` field. You can't modify this field after the NoopEntity is created.
+	// The unique identifier of the NoopEntity. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the NoopEntity is created.
 	Slug string `json:"slug,omitempty"`
 
 	// Name of the NoopEntity. You can modify this value after the NoopEntity is created.

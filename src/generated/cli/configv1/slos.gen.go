@@ -373,11 +373,11 @@ func (r *SLOListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyCollectionSlugs []string
 	flags.StringSliceVar(&r.CollectionSlugs, "collection-slugs", emptyCollectionSlugs, "")
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any SLO with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any SLO with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptyServiceSlugs []string
 	flags.StringSliceVar(&r.ServiceSlugs, "service-slugs", emptyServiceSlugs, "")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any SLO with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any SLO with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -499,7 +499,7 @@ func newSLOListCmd() *cobra.Command {
 const SLOScaffoldYAML = `api_version: v1/config
 kind: SLO
 spec:
-    # Unique identifier of the SLO. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the SLO is created.
+    # The unique identifier of the SLO. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the SLO is created.
     slug: <string>
     # Name of the SLO. You can modify this value after the SLO is created.
     name: <string>

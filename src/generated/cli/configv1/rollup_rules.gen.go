@@ -370,11 +370,11 @@ type RollupRuleListOpts struct {
 
 func (r *RollupRuleListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyBucketSlugs []string
-	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any RollupRule with a matching bucket_slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any RollupRule with a matching bucket_slug in the given list (and matches all other filters) will be returned.")
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any RollupRule with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any RollupRule with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any RollupRule with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any RollupRule with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -495,11 +495,11 @@ func newRollupRuleListCmd() *cobra.Command {
 const RollupRuleScaffoldYAML = `api_version: v1/config
 kind: RollupRule
 spec:
-    # Unique identifier of the RollupRule. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the RollupRule is created.
+    # The unique identifier of the RollupRule. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the RollupRule is created.
     slug: <string>
     # Name of the RollupRule. You can modify this value after the RollupRule is created.
     name: <string>
-    # Slug of the bucket the RollupRule belongs to.
+    # The slug of the bucket the RollupRule belongs to.
     bucket_slug: <string>
     # Filters incoming metrics by label. If multiple label filters are specified, an
     # incoming metric must match every label filter to match the rule. Label values
@@ -516,17 +516,18 @@ spec:
     #    format](https://docs.chronosphere.io/control/shaping/types#supported-formats).
     #    Valid values: 'carbon', 'chrono_gcp', 'dogstatsd', 'open_metrics',
     #    'open_telemetry', 'prometheus', 'signalfx', 'statsd', 'wavefront'.
-    #  * '__m3_prom_type__': When ingesting with Prometheus, matches the incoming
-    #    metric's [Prometheus metric
+    #  * '__m3_prom_type__': When ingesting metric data with Prometheus, matches the
+    #    incoming metric's [Prometheus metric
     #    type](https://docs.chronosphere.io/control/shaping/types#prometheus). Valid
     #    values: 'counter', 'gauge', 'histogram', 'gauge_histogram', 'summary',
     #    'info', 'state_set', 'quantile'.
     #  * '__otel_type__': When ingesting with OpenTelemetry, matches on the incoming
-    #    metric's [OpenTelemetry metric type](https://docs.chronosphere.io/control/shaping/types#opentelemetry).
+    #    metric's [OpenTelemetry metric
+    #    type](https://docs.chronosphere.io/control/shaping/types#opentelemetry).
     #    Valid values: 'sum', 'monotonic_sum', 'gauge', 'histogram', 'exp_histogram',
-    #    'summary'.
-    # For example, the following filter matches any cumulative counter metric with a
-    # 'service=gateway' label whose metric name starts with 'http_requests_':
+    #   'summary'. For example, the following filter matches any cumulative counter
+    #   metric with a 'service=gateway' label whose metric name starts with
+    #   'http_requests_':
     # '''
     # __metric_type__:cumulative_counter service:gateway __name__:http_requests_*
     # '''
@@ -535,15 +536,21 @@ spec:
           name: <string>
           # Glob value of the label to match.
           value_glob: <string>
+    # The name of the new metric to create and persist to the database. You can use
+    # the template string '{{.MetricName }}' to create a new metric name that
+    # references the original metric name. For example, 'new_metric: '{{ .MetricName
+    # }}:by_instance'' outputs a metric with the name 'my_metric:by_instance' if the
+    # matched metric is 'my_metric'.
     # This field is optional for Graphite rollup rules.
     metric_name: <string>
-    # The distance in time between aggregated data points. Intervals are based on your
+    # Optional. Sets a custom interval that defines the amount of
+    # time between aggregated data points. Intervals are based on your
     # [retention policy](https://docs.chronosphere.io/administer/licensing#retention-policies).
-    # Use this optional field to set a custom interval.
     # This field was known as 'storage_policies' in version
-    # 0.286.0-2023-01-06-release.1 and earlier.
+    # 0.286.0-2023-01-06-release.1
+    # and earlier.
     interval: <string>
-    # DEPRECATED.
+    # **DEPRECATED**.
     # A series matches and aggregates only if each label defined by filters and
     # 'label_policy.keep' or 'graphite_label_policy.replace' (respectively) exist in
     # the series. Setting 'expansive_match=true' removes this restriction. Default:
@@ -555,29 +562,28 @@ spec:
     expansive_match: <true|false>
     # Defines whether to add a '__rollup_type__' label in the new metric.
     add_metric_type_label: <true|false>
-    # Defines whether to automatically generate drop rules for this rollup rule.
-    # Set to 'true' to remove raw metrics that match this rollup rule. Default: 'false'.
+    # Defines whether to automatically generate drop rules for this rollup rule. Set
+    # to 'true' to remove raw metrics that match this rollup rule. Default: 'false'.
     drop_raw: <true|false>
     aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES|HISTOGRAM>
     graphite_label_policy:
-        # Required list of labels to replace. Useful for discarding
-        # high-cardinality values while still preserving the original positions of
-        # the Graphite metric.
+        # List of labels to replace. Use to discard high-cardinality values while still
+        # preserving the original positions of the Graphite metric.
         replace:
-            - # Required name of the label whose value should be replaced. Only
-              # '__gX__' labels are allowed (aka positional Graphite labels).
+            - # Name of the label to replace the value for. Only positional Graphite labels
+              # such as '__gX__' are allowed.
               name: <string>
-              # Required new value of the replaced label.
+              # New value of the replaced label.
               new_value: <string>
     # TODO: consolidate w/ RecordingRule.LabelPolicy once both of these
     #  entities implement the same label semantics.
     label_policy:
-        # Labels that should be retained in the output metric. If set, then the
-        # discard field must be empty.
+        # Labels to retain in the output metric. If set, the 'discard' field must
+        # be empty.
         keep:
             - <string>
-        # Labels that should be discarded in the output metric. If set, then the
-        # keep field must be empty.
+        # Labels to discard in the output metric. If set, the 'keep' field must be
+        # empty.
         discard:
             - <string>
     # Must keep this around for backwards compatibility because terraform will
@@ -588,9 +594,9 @@ spec:
     metric_type: <COUNTER|GAUGE|DELTA|DISTRIBUTION|CUMULATIVE_EXPONENTIAL_HISTOGRAM|MEASUREMENT|CUMULATIVE_COUNTER|DELTA_COUNTER|DELTA_EXPONENTIAL_HISTOGRAM>
     mode: <ENABLED|PREVIEW>
     storage_policy:
-        # Required resolution of the aggregated metrics.
+        # Resolution of the aggregated metrics.
         resolution: <string>
-        # Required retention of the aggregated metrics.
+        # Retention of the aggregated metrics.
         retention: <string>
 `
 

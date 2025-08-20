@@ -369,9 +369,9 @@ type ConsumptionBudgetListOpts struct {
 
 func (r *ConsumptionBudgetListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ConsumptionBudget with a matching name in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ConsumptionBudget with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any ConsumptionBudget with a matching slug in the given list (and matches all other filters) is returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any ConsumptionBudget with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
@@ -491,31 +491,37 @@ func newConsumptionBudgetListCmd() *cobra.Command {
 const ConsumptionBudgetScaffoldYAML = `api_version: unstable/config
 kind: ConsumptionBudget
 spec:
-    # Unique identifier of the ConsumptionBudget. If a 'slug' isn't provided, one will be generated based of the 'name' field. You can't modify this field after the ConsumptionBudget is created.
+    # The unique identifier of the ConsumptionBudget. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the ConsumptionBudget is created.
     slug: <string>
     # Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
     name: <string>
-    # partition_name_path is the required path of the budget's partition, in the
-    # format '["global", "<name1>", "<name2>", ...]', where name1 is a top-level
-    # partition, and name2 is a child partition of name1, etc.
-    partition_name_path:
+    # partition_slug_path is the required path of the budget's partition, in the
+    # format '["global", "<slug1>", "<slug2>", ...]', where slug1 is a top-level
+    # partition, and slug2 is a child partition of slug1, etc.
+    partition_slug_path:
         - <string>
-    # priorities are optional budget priorities. Priorites define in what
-    # order should requests be dropped when necessary (i.e. lowest priority
-    # dropped first, highest priority dropped last). If a request does not
-    # match any priority dataset, then it defaults to the lowest priority.
+    # priorities are optional budget priorities. Priorities are defined in order
+    # of precedence, where incoming requests are assigned the first priority that
+    # matches. Each priority value defines the order in which requests are
+    # dropped when necessary (i.e. priority=10 dropped first, priority=1 dropped
+    # last). If a request does not match any priority, then it is assigned the
+    # default_priority.
     priorities:
-        - # dataset_filters define what datasets match the priority.  The filters are
-          # AND'd together; a request must match every filter in order to match the
-          # priority.
-          dataset_filters:
-            - # datasets are the datasets to match.
-              datasets:
-                - # dataset_slug is the slug of the dataset to match.
-                  dataset_slug: <string>
-              operator: <IN|NOT_IN>
-          # priority is the required priority of the dataset, where priority=1 is
-          # the highest priority, and priority=10 is the lowest priority.
+        - # filters define what data matches the priority. The filters are AND'd
+          # together; a request must match every filter in order to match the
+          # priority. Must not be empty.
+          filters:
+            - # If set, matches data which belongs to the given dataset. Cannot set if
+              # log_filter is set. The dataset type must match the budget resource
+              # (e.g. type=LOGS for resource=LOG_PERSISTED_BYTES).
+              dataset_slug: <string>
+              log_filter:
+                # Returns logs that match this query. The query can include only top-level
+                # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
+                # operator is allowed.
+                query: <string>
+          # priority is the required priority of the dataset, where priority=10 is dropped
+          # first, and priority=1 is dropped last.
           priority: <integer>
     # behaviors are optional budget behaviors for automated limiting and
     # alerting.
@@ -524,15 +530,17 @@ spec:
           instant_rate_threshold:
             # fixed_value_per_sec is the required rate threshold.
             fixed_value_per_sec: <int64>
-          threshold_type: <VOLUME|INSTANT_RATE>
+          threshold_type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME>
           volume_threshold:
             # fixed_value is the required volume threshold.
             fixed_value: <int64>
-            time_period: <DAILY|WEEKLY|MONTHLY>
     # default_priority is an optional default priority for requests which do not
-    # match any priority in the priorities list. If not set, then the lowest
-    # priority (10) is used as the default.
+    # match any priority in the priorities list. If not set, then priority=10
+    # is used as the default.
     default_priority: <integer>
+    # Notification policy slug for routing consumption alerts. Required only if
+    # ALERT_WARN or ALERT_CRITICAL actions are configured.
+    notification_policy_slug: <string>
     resource: <LOG_PERSISTED_BYTES>
 `
 

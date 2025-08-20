@@ -8,7 +8,6 @@ package models
 import (
 	"context"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -18,73 +17,17 @@ import (
 // swagger:model BehaviorVolumeThreshold
 type BehaviorVolumeThreshold struct {
 
-	// time period
-	TimePeriod VolumeThresholdTimePeriod `json:"time_period,omitempty"`
-
 	// fixed_value is the required volume threshold.
 	FixedValue string `json:"fixed_value,omitempty"`
 }
 
 // Validate validates this behavior volume threshold
 func (m *BehaviorVolumeThreshold) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateTimePeriod(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }
 
-func (m *BehaviorVolumeThreshold) validateTimePeriod(formats strfmt.Registry) error {
-	if swag.IsZero(m.TimePeriod) { // not required
-		return nil
-	}
-
-	if err := m.TimePeriod.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("time_period")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("time_period")
-		}
-		return err
-	}
-
-	return nil
-}
-
-// ContextValidate validate this behavior volume threshold based on the context it is used
+// ContextValidate validates this behavior volume threshold based on context it is used
 func (m *BehaviorVolumeThreshold) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.contextValidateTimePeriod(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *BehaviorVolumeThreshold) contextValidateTimePeriod(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.TimePeriod) { // not required
-		return nil
-	}
-
-	if err := m.TimePeriod.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("time_period")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("time_period")
-		}
-		return err
-	}
-
 	return nil
 }
 
