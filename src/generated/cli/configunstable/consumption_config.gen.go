@@ -345,7 +345,7 @@ func newConsumptionConfigDeleteCmd() *cobra.Command {
 }
 
 const ConsumptionConfigScaffoldYAML = `api_version: unstable/config
-kind: ConsumptionConfigs
+kind: ConsumptionConfig
 spec:
     # partitions define non-overlapping groupings of telemetry. Partitions are
     # defined in order of precedence, where incoming requests are allocated to

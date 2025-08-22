@@ -181,18 +181,16 @@ func (e *Entity) scaffoldingKindName() string {
 	if entityKind == "Slo" {
 		return "SLO"
 	}
-
-	// Set of singleton entity kinds that should not be pluralized.
-	nonPluralSingletons := map[string]bool{
-		"OtelMetricsIngestion": true,
-		"LogIngestConfig":      true,
-		"LogBudget":            true,
+	// Set of singleton entity kinds that are pluralized.
+	// By default, singletons are assumed to be singular, but a few
+	// singletons are naturally plural.
+	pluralSingletons := map[string]bool{
+		"ResourcePool":          true,
+		"TraceTailSamplingRule": true,
 	}
-
-	if e.IsSingleton && !nonPluralSingletons[entityKind] {
-		entityKind = inflect.Pluralize(entityKind)
+	if pluralSingletons[entityKind] {
+		return inflect.Pluralize(entityKind)
 	}
-
 	return entityKind
 }
 
