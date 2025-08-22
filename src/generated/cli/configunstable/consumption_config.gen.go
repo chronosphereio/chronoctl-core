@@ -351,7 +351,34 @@ spec:
     # defined in order of precedence, where incoming requests are allocated to
     # the first partition that matches. Requests that don't match any
     # partition fall back to an omnipresent default partition.
-    partitions: []
+    partitions:
+        - # name is a human-readable name of the partition. Must be unique within the
+          # parent partition. You can modify this value after the partition is created.
+          name: <string>
+          # filters define what data matches the partition. The filters are AND'd
+          # together; a request must match every filter in order to match the
+          # partition. Must not be empty.
+          filters:
+            - # conditions are the conditions to match.
+              conditions:
+                - # If set, matches data which belongs to the given dataset. Cannot set if
+                  # log_filter is set.
+                  dataset_slug: <string>
+                  log_filter:
+                    # Returns logs that match this query. The query can include only top-level
+                    # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
+                    # operator is allowed.
+                    query: <string>
+              operator: <IN|NOT_IN>
+          # partitions are the optional child partitions of this partition. If set,
+          # requests which match the current partition will be allocated to the
+          # first child partition that matches. Requests that don't match any child
+          # partition fall back to an omnipresent default child partition.
+          partitions: []
+          # slug is the immutable identifier of the partition. Must be unique within
+          # the parent partition. You can not modify this value after the partition
+          # is created.
+          slug: <string>
 `
 
 func newConsumptionConfigScaffoldCmd() *cobra.Command {
