@@ -345,7 +345,7 @@ func newLogAllocationConfigDeleteCmd() *cobra.Command {
 }
 
 const LogAllocationConfigScaffoldYAML = `api_version: v1/config
-kind: LogAllocationConfigs
+kind: LogAllocationConfig
 spec:
     # Defines datasets and budget allocations. Datasets are evaluated in order.
     dataset_allocations:

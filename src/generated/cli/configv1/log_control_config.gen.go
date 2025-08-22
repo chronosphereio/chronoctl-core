@@ -345,7 +345,7 @@ func newLogControlConfigDeleteCmd() *cobra.Command {
 }
 
 const LogControlConfigScaffoldYAML = `api_version: v1/config
-kind: LogControlConfigs
+kind: LogControlConfig
 spec:
     # Control Rules are the ordered list of control rules.
     rules:

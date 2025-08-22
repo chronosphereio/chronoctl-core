@@ -345,7 +345,7 @@ func newTraceBehaviorConfigDeleteCmd() *cobra.Command {
 }
 
 const TraceBehaviorConfigScaffoldYAML = `api_version: v1/config
-kind: TraceBehaviorConfigs
+kind: TraceBehaviorConfig
 spec:
     # List of assignments for the main behavior. The referenced datasets will be
     # enrolled in behaviors. The referenced behaviors are the active behaviors for the
