@@ -20,7 +20,7 @@ import (
 type ConfigunstableDatasetFilter struct {
 
 	// operator
-	Operator ConfigunstableDatasetFilterOperator `json:"operator,omitempty"`
+	Operator DatasetFilterOperator `json:"operator,omitempty"`
 
 	// datasets
 	Datasets []*DatasetFilterDataset `json:"datasets"`

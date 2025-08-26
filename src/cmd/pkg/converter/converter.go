@@ -1557,7 +1557,7 @@ func convertAlertingRule(
 		Defaults: &models.SeriesConditionsSeverityConditions{},
 	}
 	condition := &models.SeriesConditionsConditions{
-		Conditions: []*models.MonitorCondition{
+		Conditions: []*models.Configv1MonitorCondition{
 			{
 				Op:                 op,
 				Value:              threshold,

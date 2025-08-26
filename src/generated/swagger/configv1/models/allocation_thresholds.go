@@ -22,13 +22,13 @@ type AllocationThresholds struct {
 	License ResourcePoolsLicense `json:"license,omitempty"`
 
 	// all priorities
-	AllPriorities *AllocationThreshold `json:"all_priorities,omitempty"`
+	AllPriorities *ResourcePoolsAllocationThreshold `json:"all_priorities,omitempty"`
 
 	// default and low priority
-	DefaultAndLowPriority *AllocationThreshold `json:"default_and_low_priority,omitempty"`
+	DefaultAndLowPriority *ResourcePoolsAllocationThreshold `json:"default_and_low_priority,omitempty"`
 
 	// low priority
-	LowPriority *AllocationThreshold `json:"low_priority,omitempty"`
+	LowPriority *ResourcePoolsAllocationThreshold `json:"low_priority,omitempty"`
 }
 
 // Validate validates this allocation thresholds

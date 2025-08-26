@@ -34,6 +34,10 @@ type ClientService interface {
 
 	CreateCollection(params *CreateCollectionParams, opts ...ClientOption) (*CreateCollectionOK, error)
 
+	CreateConsumptionBudget(params *CreateConsumptionBudgetParams, opts ...ClientOption) (*CreateConsumptionBudgetOK, error)
+
+	CreateConsumptionConfig(params *CreateConsumptionConfigParams, opts ...ClientOption) (*CreateConsumptionConfigOK, error)
+
 	CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error)
 
 	CreateDataset(params *CreateDatasetParams, opts ...ClientOption) (*CreateDatasetOK, error)
@@ -97,6 +101,10 @@ type ClientService interface {
 	DeleteClassicDashboard(params *DeleteClassicDashboardParams, opts ...ClientOption) (*DeleteClassicDashboardOK, error)
 
 	DeleteCollection(params *DeleteCollectionParams, opts ...ClientOption) (*DeleteCollectionOK, error)
+
+	DeleteConsumptionBudget(params *DeleteConsumptionBudgetParams, opts ...ClientOption) (*DeleteConsumptionBudgetOK, error)
+
+	DeleteConsumptionConfig(params *DeleteConsumptionConfigParams, opts ...ClientOption) (*DeleteConsumptionConfigOK, error)
 
 	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error)
 
@@ -162,6 +170,8 @@ type ClientService interface {
 
 	ListCollections(params *ListCollectionsParams, opts ...ClientOption) (*ListCollectionsOK, error)
 
+	ListConsumptionBudgets(params *ListConsumptionBudgetsParams, opts ...ClientOption) (*ListConsumptionBudgetsOK, error)
+
 	ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error)
 
 	ListDatasets(params *ListDatasetsParams, opts ...ClientOption) (*ListDatasetsOK, error)
@@ -213,6 +223,10 @@ type ClientService interface {
 	ReadClassicDashboard(params *ReadClassicDashboardParams, opts ...ClientOption) (*ReadClassicDashboardOK, error)
 
 	ReadCollection(params *ReadCollectionParams, opts ...ClientOption) (*ReadCollectionOK, error)
+
+	ReadConsumptionBudget(params *ReadConsumptionBudgetParams, opts ...ClientOption) (*ReadConsumptionBudgetOK, error)
+
+	ReadConsumptionConfig(params *ReadConsumptionConfigParams, opts ...ClientOption) (*ReadConsumptionConfigOK, error)
 
 	ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error)
 
@@ -279,6 +293,10 @@ type ClientService interface {
 	UpdateClassicDashboard(params *UpdateClassicDashboardParams, opts ...ClientOption) (*UpdateClassicDashboardOK, error)
 
 	UpdateCollection(params *UpdateCollectionParams, opts ...ClientOption) (*UpdateCollectionOK, error)
+
+	UpdateConsumptionBudget(params *UpdateConsumptionBudgetParams, opts ...ClientOption) (*UpdateConsumptionBudgetOK, error)
+
+	UpdateConsumptionConfig(params *UpdateConsumptionConfigParams, opts ...ClientOption) (*UpdateConsumptionConfigOK, error)
 
 	UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOption) (*UpdateDashboardOK, error)
 
@@ -447,6 +465,80 @@ func (a *Client) CreateCollection(params *CreateCollectionParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateCollectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateConsumptionBudget create consumption budget API
+*/
+func (a *Client) CreateConsumptionBudget(params *CreateConsumptionBudgetParams, opts ...ClientOption) (*CreateConsumptionBudgetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateConsumptionBudgetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateConsumptionBudget",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/consumption-budgets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateConsumptionBudgetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateConsumptionBudgetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateConsumptionBudgetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateConsumptionConfig create consumption config API
+*/
+func (a *Client) CreateConsumptionConfig(params *CreateConsumptionConfigParams, opts ...ClientOption) (*CreateConsumptionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateConsumptionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateConsumptionConfig",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/consumption-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateConsumptionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateConsumptionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateConsumptionConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1638,6 +1730,80 @@ func (a *Client) DeleteCollection(params *DeleteCollectionParams, opts ...Client
 }
 
 /*
+DeleteConsumptionBudget delete consumption budget API
+*/
+func (a *Client) DeleteConsumptionBudget(params *DeleteConsumptionBudgetParams, opts ...ClientOption) (*DeleteConsumptionBudgetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteConsumptionBudgetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteConsumptionBudget",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/consumption-budgets/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteConsumptionBudgetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteConsumptionBudgetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteConsumptionBudgetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteConsumptionConfig delete consumption config API
+*/
+func (a *Client) DeleteConsumptionConfig(params *DeleteConsumptionConfigParams, opts ...ClientOption) (*DeleteConsumptionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteConsumptionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteConsumptionConfig",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/consumption-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteConsumptionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteConsumptionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteConsumptionConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteDashboard delete dashboard API
 */
 func (a *Client) DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error) {
@@ -2822,6 +2988,43 @@ func (a *Client) ListCollections(params *ListCollectionsParams, opts ...ClientOp
 }
 
 /*
+ListConsumptionBudgets list consumption budgets API
+*/
+func (a *Client) ListConsumptionBudgets(params *ListConsumptionBudgetsParams, opts ...ClientOption) (*ListConsumptionBudgetsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListConsumptionBudgetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListConsumptionBudgets",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/consumption-budgets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListConsumptionBudgetsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListConsumptionBudgetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListConsumptionBudgetsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListDashboards list dashboards API
 */
 func (a *Client) ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error) {
@@ -3780,6 +3983,80 @@ func (a *Client) ReadCollection(params *ReadCollectionParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadCollectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadConsumptionBudget read consumption budget API
+*/
+func (a *Client) ReadConsumptionBudget(params *ReadConsumptionBudgetParams, opts ...ClientOption) (*ReadConsumptionBudgetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadConsumptionBudgetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadConsumptionBudget",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/consumption-budgets/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadConsumptionBudgetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadConsumptionBudgetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadConsumptionBudgetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadConsumptionConfig read consumption config API
+*/
+func (a *Client) ReadConsumptionConfig(params *ReadConsumptionConfigParams, opts ...ClientOption) (*ReadConsumptionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadConsumptionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadConsumptionConfig",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/consumption-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadConsumptionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadConsumptionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadConsumptionConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5001,6 +5278,80 @@ func (a *Client) UpdateCollection(params *UpdateCollectionParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateCollectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateConsumptionBudget update consumption budget API
+*/
+func (a *Client) UpdateConsumptionBudget(params *UpdateConsumptionBudgetParams, opts ...ClientOption) (*UpdateConsumptionBudgetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateConsumptionBudgetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateConsumptionBudget",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/consumption-budgets/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateConsumptionBudgetReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateConsumptionBudgetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateConsumptionBudgetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateConsumptionConfig update consumption config API
+*/
+func (a *Client) UpdateConsumptionConfig(params *UpdateConsumptionConfigParams, opts ...ClientOption) (*UpdateConsumptionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateConsumptionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateConsumptionConfig",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/consumption-config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateConsumptionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateConsumptionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateConsumptionConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

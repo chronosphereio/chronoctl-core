@@ -14,24 +14,26 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// MetricLabelMappingLabel metric label mapping label
+// MetricLabelMappingLabelNameMapping metric label mapping label name mapping
 //
-// swagger:model MetricLabelMappingLabel
-type MetricLabelMappingLabel struct {
+// swagger:model MetricLabelMappingLabelNameMapping
+type MetricLabelMappingLabelNameMapping struct {
 
-	// name mappings
-	NameMappings []*MetricLabelMappingLabelNameMapping `json:"name_mappings"`
+	// filters
+	Filters []*Configv1LabelFilter `json:"filters"`
 
-	// These value mappings apply to the whole mapping label.
-	// If there's no name_mappings, these value mappings apply to the label that exists on the metric.
+	// The actual label ingested on the time series
+	SourceLabel string `json:"source_label,omitempty"`
+
+	// These value mappings apply to just the name mapping they belong to.
 	ValueMappings []*MappingLabelValueMapping `json:"value_mappings"`
 }
 
-// Validate validates this metric label mapping label
-func (m *MetricLabelMappingLabel) Validate(formats strfmt.Registry) error {
+// Validate validates this metric label mapping label name mapping
+func (m *MetricLabelMappingLabelNameMapping) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateNameMappings(formats); err != nil {
+	if err := m.validateFilters(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -45,22 +47,22 @@ func (m *MetricLabelMappingLabel) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *MetricLabelMappingLabel) validateNameMappings(formats strfmt.Registry) error {
-	if swag.IsZero(m.NameMappings) { // not required
+func (m *MetricLabelMappingLabelNameMapping) validateFilters(formats strfmt.Registry) error {
+	if swag.IsZero(m.Filters) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.NameMappings); i++ {
-		if swag.IsZero(m.NameMappings[i]) { // not required
+	for i := 0; i < len(m.Filters); i++ {
+		if swag.IsZero(m.Filters[i]) { // not required
 			continue
 		}
 
-		if m.NameMappings[i] != nil {
-			if err := m.NameMappings[i].Validate(formats); err != nil {
+		if m.Filters[i] != nil {
+			if err := m.Filters[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("name_mappings" + "." + strconv.Itoa(i))
+					return ve.ValidateName("filters" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("name_mappings" + "." + strconv.Itoa(i))
+					return ce.ValidateName("filters" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -71,7 +73,7 @@ func (m *MetricLabelMappingLabel) validateNameMappings(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *MetricLabelMappingLabel) validateValueMappings(formats strfmt.Registry) error {
+func (m *MetricLabelMappingLabelNameMapping) validateValueMappings(formats strfmt.Registry) error {
 	if swag.IsZero(m.ValueMappings) { // not required
 		return nil
 	}
@@ -97,11 +99,11 @@ func (m *MetricLabelMappingLabel) validateValueMappings(formats strfmt.Registry)
 	return nil
 }
 
-// ContextValidate validate this metric label mapping label based on the context it is used
-func (m *MetricLabelMappingLabel) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this metric label mapping label name mapping based on the context it is used
+func (m *MetricLabelMappingLabelNameMapping) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateNameMappings(ctx, formats); err != nil {
+	if err := m.contextValidateFilters(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -115,21 +117,21 @@ func (m *MetricLabelMappingLabel) ContextValidate(ctx context.Context, formats s
 	return nil
 }
 
-func (m *MetricLabelMappingLabel) contextValidateNameMappings(ctx context.Context, formats strfmt.Registry) error {
+func (m *MetricLabelMappingLabelNameMapping) contextValidateFilters(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.NameMappings); i++ {
+	for i := 0; i < len(m.Filters); i++ {
 
-		if m.NameMappings[i] != nil {
+		if m.Filters[i] != nil {
 
-			if swag.IsZero(m.NameMappings[i]) { // not required
+			if swag.IsZero(m.Filters[i]) { // not required
 				return nil
 			}
 
-			if err := m.NameMappings[i].ContextValidate(ctx, formats); err != nil {
+			if err := m.Filters[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("name_mappings" + "." + strconv.Itoa(i))
+					return ve.ValidateName("filters" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("name_mappings" + "." + strconv.Itoa(i))
+					return ce.ValidateName("filters" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -140,7 +142,7 @@ func (m *MetricLabelMappingLabel) contextValidateNameMappings(ctx context.Contex
 	return nil
 }
 
-func (m *MetricLabelMappingLabel) contextValidateValueMappings(ctx context.Context, formats strfmt.Registry) error {
+func (m *MetricLabelMappingLabelNameMapping) contextValidateValueMappings(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.ValueMappings); i++ {
 
@@ -166,7 +168,7 @@ func (m *MetricLabelMappingLabel) contextValidateValueMappings(ctx context.Conte
 }
 
 // MarshalBinary interface implementation
-func (m *MetricLabelMappingLabel) MarshalBinary() ([]byte, error) {
+func (m *MetricLabelMappingLabelNameMapping) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -174,8 +176,8 @@ func (m *MetricLabelMappingLabel) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *MetricLabelMappingLabel) UnmarshalBinary(b []byte) error {
-	var res MetricLabelMappingLabel
+func (m *MetricLabelMappingLabelNameMapping) UnmarshalBinary(b []byte) error {
+	var res MetricLabelMappingLabelNameMapping
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

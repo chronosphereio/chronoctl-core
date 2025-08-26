@@ -46,6 +46,9 @@ type Configv1DerivedLabel struct {
 
 	// existing label policy
 	ExistingLabelPolicy Configv1DerivedLabelLabelPolicy `json:"existing_label_policy,omitempty"`
+
+	// span tag
+	SpanTag *DerivedLabelSpanTag `json:"span_tag,omitempty"`
 }
 
 // Validate validates this configv1 derived label
@@ -65,6 +68,10 @@ func (m *Configv1DerivedLabel) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExistingLabelPolicy(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSpanTag(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -134,6 +141,25 @@ func (m *Configv1DerivedLabel) validateExistingLabelPolicy(formats strfmt.Regist
 	return nil
 }
 
+func (m *Configv1DerivedLabel) validateSpanTag(formats strfmt.Registry) error {
+	if swag.IsZero(m.SpanTag) { // not required
+		return nil
+	}
+
+	if m.SpanTag != nil {
+		if err := m.SpanTag.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("span_tag")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("span_tag")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 derived label based on the context it is used
 func (m *Configv1DerivedLabel) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -151,6 +177,10 @@ func (m *Configv1DerivedLabel) ContextValidate(ctx context.Context, formats strf
 	}
 
 	if err := m.contextValidateExistingLabelPolicy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSpanTag(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -212,6 +242,27 @@ func (m *Configv1DerivedLabel) contextValidateExistingLabelPolicy(ctx context.Co
 			return ce.ValidateName("existing_label_policy")
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m *Configv1DerivedLabel) contextValidateSpanTag(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SpanTag != nil {
+
+		if swag.IsZero(m.SpanTag) { // not required
+			return nil
+		}
+
+		if err := m.SpanTag.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("span_tag")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("span_tag")
+			}
+			return err
+		}
 	}
 
 	return nil

@@ -15,6 +15,8 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewBucketCmd())
 	root.AddCommand(NewClassicDashboardCmd())
 	root.AddCommand(NewCollectionCmd())
+	root.AddCommand(NewConsumptionBudgetCmd())
+	root.AddCommand(NewConsumptionConfigCmd())
 	root.AddCommand(NewDashboardCmd())
 	root.AddCommand(NewDatasetCmd())
 	root.AddCommand(NewDerivedLabelCmd())
@@ -91,6 +93,38 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateCollection(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		ConsumptionBudgetTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*ConsumptionBudget)
+			if !ok {
+				return types.WrongObjectErr((&ConsumptionBudget{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateConsumptionBudget(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		ConsumptionConfigTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*ConsumptionConfig)
+			if !ok {
+				return types.WrongObjectErr((&ConsumptionConfig{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateConsumptionConfig(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}
