@@ -15,21 +15,6 @@
       },
       "type": "object"
     },
-    "AllocationThreshold": {
-      "properties": {
-        "percent_of_pool_allocation": {
-          "description": "Threshold expressed as a percent of the license allocated to a pool. A value\nof `100` represents a threshold that is the pool's full allocation. Values\nover `100` indicate thresholds that exceed the pool's allocation. For\nexample, a value of `50` represents a threshold that is half the pool's\nallocation, and a value of `200` represents a threshold that is double the\npool's allocation.",
-          "format": "double",
-          "type": "number"
-        },
-        "fixed_value": {
-          "description": "Threshold expressed as a fixed value of the license.",
-          "format": "int64",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "AllocationThresholds": {
       "description": "Thresholds define strict quota limits for each metrics license.",
       "properties": {
@@ -37,13 +22,13 @@
           "$ref": "#/definitions/ResourcePoolsLicense"
         },
         "all_priorities": {
-          "$ref": "#/definitions/AllocationThreshold"
+          "$ref": "#/definitions/ResourcePoolsAllocationThreshold"
         },
         "default_and_low_priority": {
-          "$ref": "#/definitions/AllocationThreshold"
+          "$ref": "#/definitions/ResourcePoolsAllocationThreshold"
         },
         "low_priority": {
-          "$ref": "#/definitions/AllocationThreshold"
+          "$ref": "#/definitions/ResourcePoolsAllocationThreshold"
         }
       },
       "type": "object"
@@ -104,6 +89,22 @@
         },
         "dry_run": {
           "description": "If `true`, validates the specified configuration without creating or updating the Collection. If the specified configuration is valid, the endpoint returns a partial response without the Collection. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "ConfigV1UpdateConsumptionBudgetBody": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configv1ConsumptionBudget"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the ConsumptionBudget will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the ConsumptionBudget does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the ConsumptionBudget. If the specified configuration is valid, the endpoint returns a partial response without the ConsumptionBudget. If the specified configuration is invalid, the endpoint returns an error.",
           "type": "boolean"
         }
       },
@@ -459,6 +460,94 @@
       },
       "type": "object"
     },
+    "ConsumptionBudgetPriority": {
+      "properties": {
+        "filters": {
+          "description": "filters define what data matches the priority. The filters are AND'd\ntogether; a request must match every filter in order to match the\npriority. Must not be empty.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionBudgetPriorityFilter"
+          },
+          "type": "array"
+        },
+        "priority": {
+          "description": "priority is the required priority of the dataset, where priority=10 is dropped\nfirst, and priority=1 is dropped last.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ConsumptionBudgetPriorityFilter": {
+      "properties": {
+        "dataset_slug": {
+          "description": "If set, matches data which belongs to the given dataset. Cannot set if\nlog_filter is set. The dataset type must match the budget resource\n(e.g. type=LOGS for resource=LOG_PERSISTED_BYTES).",
+          "type": "string"
+        },
+        "log_filter": {
+          "$ref": "#/definitions/configv1LogSearchFilter"
+        }
+      },
+      "type": "object"
+    },
+    "ConsumptionBudgetThresholdAction": {
+      "enum": [
+        "ALERT_WARN",
+        "ALERT_CRITICAL",
+        "DROP"
+      ],
+      "type": "string"
+    },
+    "ConsumptionBudgetThresholdType": {
+      "enum": [
+        "DAILY_VOLUME",
+        "INSTANT_RATE",
+        "WEEKLY_VOLUME",
+        "MONTHLY_VOLUME"
+      ],
+      "type": "string"
+    },
+    "ConsumptionConfigPartition": {
+      "properties": {
+        "name": {
+          "description": "name is a human-readable name of the partition. Must be unique within the\nparent partition. You can modify this value after the partition is created.",
+          "type": "string"
+        },
+        "filters": {
+          "description": "filters define what data matches the partition. The filters are AND'd\ntogether; a request must match every filter in order to match the\npartition. Must not be empty.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionConfigPartitionFilter"
+          },
+          "type": "array"
+        },
+        "partitions": {
+          "description": "partitions are the optional child partitions of this partition. If set,\nrequests which match the current partition will be allocated to the\nfirst child partition that matches. Requests that don't match any child\npartition fall back to an omnipresent default child partition.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionConfigPartition"
+          },
+          "type": "array"
+        },
+        "slug": {
+          "description": "slug is the immutable identifier of the partition. Must be unique within\nthe parent partition. You can not modify this value after the partition\nis created.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ConsumptionConfigPartitionFilter": {
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/FilterOperator"
+        },
+        "conditions": {
+          "description": "conditions are the conditions to match.",
+          "items": {
+            "$ref": "#/definitions/PartitionFilterCondition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "DatasetDatasetConfiguration": {
       "properties": {
         "type": {
@@ -520,6 +609,28 @@
         },
         "mapping_label": {
           "$ref": "#/definitions/MetricLabelMappingLabel"
+        }
+      },
+      "type": "object"
+    },
+    "DerivedLabelSpanTag": {
+      "description": "SpanTag is used to map span tags to derived labels.",
+      "properties": {
+        "name_mappings": {
+          "description": "All name mappings are ORed together and the first matching name mapping is used to map the source tag to the derived tag.",
+          "items": {
+            "$ref": "#/definitions/DerivedLabelSpanTagNameMapping"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "DerivedLabelSpanTagNameMapping": {
+      "description": "Denotes the source tag to be mapped to the derived tag.",
+      "properties": {
+        "source_tag": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -612,6 +723,13 @@
         }
       },
       "type": "object"
+    },
+    "FilterOperator": {
+      "enum": [
+        "IN",
+        "NOT_IN"
+      ],
+      "type": "string"
     },
     "GcpMetricsIntegrationMetricGroup": {
       "properties": {
@@ -1059,28 +1177,6 @@
       ],
       "type": "string"
     },
-    "MappingLabelNameMapping": {
-      "properties": {
-        "filters": {
-          "items": {
-            "$ref": "#/definitions/configv1LabelFilter"
-          },
-          "type": "array"
-        },
-        "source_label": {
-          "description": "The actual label ingested on the time series",
-          "type": "string"
-        },
-        "value_mappings": {
-          "description": "These value mappings apply to just the name mapping they belong to.",
-          "items": {
-            "$ref": "#/definitions/MappingLabelValueMapping"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "MappingLabelValueMapping": {
       "properties": {
         "source_value_globs": {
@@ -1131,12 +1227,34 @@
       "properties": {
         "name_mappings": {
           "items": {
-            "$ref": "#/definitions/MappingLabelNameMapping"
+            "$ref": "#/definitions/MetricLabelMappingLabelNameMapping"
           },
           "type": "array"
         },
         "value_mappings": {
           "description": "These value mappings apply to the whole mapping label.\nIf there's no name_mappings, these value mappings apply to the label that exists on the metric.",
+          "items": {
+            "$ref": "#/definitions/MappingLabelValueMapping"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "MetricLabelMappingLabelNameMapping": {
+      "properties": {
+        "filters": {
+          "items": {
+            "$ref": "#/definitions/configv1LabelFilter"
+          },
+          "type": "array"
+        },
+        "source_label": {
+          "description": "The actual label ingested on the time series",
+          "type": "string"
+        },
+        "value_mappings": {
+          "description": "These value mappings apply to just the name mapping they belong to.",
           "items": {
             "$ref": "#/definitions/MappingLabelValueMapping"
           },
@@ -1152,29 +1270,6 @@
         "READ_WRITE"
       ],
       "type": "string"
-    },
-    "MonitorCondition": {
-      "properties": {
-        "op": {
-          "$ref": "#/definitions/ConditionOp"
-        },
-        "value": {
-          "description": "Required. The value to compare to the metric value using the `op` operation.",
-          "format": "double",
-          "type": "number"
-        },
-        "sustain_secs": {
-          "description": "Amount of time the query needs to fail the condition check before an alert is\ntriggered. Must be an integer. Accepts one of `s` (seconds), `m` (minutes), or\n`h` (hours) as units.",
-          "format": "int32",
-          "type": "integer"
-        },
-        "resolve_sustain_secs": {
-          "description": "Amount of time the query needs to no longer fire before resolving. Must be an\ninteger. Accepts one of `s` (seconds), `m` (minutes), or `h` (hours) as units.",
-          "format": "int32",
-          "type": "integer"
-        }
-      },
-      "type": "object"
     },
     "MonitorSchedule": {
       "properties": {
@@ -1684,6 +1779,18 @@
       },
       "type": "object"
     },
+    "PartitionFilterCondition": {
+      "properties": {
+        "dataset_slug": {
+          "description": "If set, matches data which belongs to the given dataset. Cannot set if\nlog_filter is set.",
+          "type": "string"
+        },
+        "log_filter": {
+          "$ref": "#/definitions/configv1LogSearchFilter"
+        }
+      },
+      "type": "object"
+    },
     "PerOperationSamplingStrategiesPerOperationSamplingStrategy": {
       "properties": {
         "operation": {
@@ -1733,6 +1840,21 @@
         "NOOP"
       ],
       "type": "string"
+    },
+    "ResourcePoolsAllocationThreshold": {
+      "properties": {
+        "percent_of_pool_allocation": {
+          "description": "Threshold expressed as a percent of the license allocated to a pool. A value\nof `100` represents a threshold that is the pool's full allocation. Values\nover `100` indicate thresholds that exceed the pool's allocation. For\nexample, a value of `50` represents a threshold that is half the pool's\nallocation, and a value of `200` represents a threshold that is double the\npool's allocation.",
+          "format": "double",
+          "type": "number"
+        },
+        "fixed_value": {
+          "description": "Threshold expressed as a fixed value of the license.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "ResourcePoolsDefaultPool": {
       "properties": {
@@ -2021,7 +2143,7 @@
         "conditions": {
           "description": "List of conditions to evaluate against a series. Only one condition must\nmatch to assign a severity to a signal.",
           "items": {
-            "$ref": "#/definitions/MonitorCondition"
+            "$ref": "#/definitions/configv1MonitorCondition"
           },
           "type": "array"
         }
@@ -2102,6 +2224,26 @@
         "NOT_IN"
       ],
       "type": "string"
+    },
+    "ThresholdInstantRate": {
+      "properties": {
+        "fixed_value_per_sec": {
+          "description": "fixed_value_per_sec is the required rate threshold.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ThresholdVolume": {
+      "properties": {
+        "fixed_value": {
+          "description": "fixed_value is the required volume threshold.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "TraceBehaviorConfigMainBehaviorAssignment": {
       "properties": {
@@ -2667,6 +2809,108 @@
       ],
       "type": "string"
     },
+    "configv1ConsumptionBudget": {
+      "properties": {
+        "slug": {
+          "description": "The unique identifier of the ConsumptionBudget. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the ConsumptionBudget is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the ConsumptionBudget was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the ConsumptionBudget was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "resource": {
+          "$ref": "#/definitions/configv1ConsumptionBudgetResource"
+        },
+        "partition_slug_path": {
+          "description": "partition_slug_path is the required path of the budget's partition,\ndelimited by \"/\", in the format \"global/\u003cslug1\u003e/\u003cslug2\u003e\", where slug1 is a\ntop-level partition, and slug2 is a child partition of slug1, etc.\n\nA well-formed partition path always starts with the \"global\" partition\nslug, and has no leading or trailing \"/\".",
+          "type": "string"
+        },
+        "priorities": {
+          "description": "priorities are optional budget priorities. Priorities are defined in order\nof precedence, where incoming requests are assigned the first priority that\nmatches. Each priority value defines the order in which requests are\ndropped when necessary (i.e. priority=10 dropped first, priority=1 dropped\nlast). If a request does not match any priority, then it is assigned the\ndefault_priority.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionBudgetPriority"
+          },
+          "type": "array"
+        },
+        "thresholds": {
+          "description": "thresholds are optional budget thresholds for automated limiting and\nalerting.",
+          "items": {
+            "$ref": "#/definitions/configv1ConsumptionBudgetThreshold"
+          },
+          "type": "array"
+        },
+        "default_priority": {
+          "description": "default_priority is an optional default priority for requests which do not\nmatch any priority in the priorities list. If not set, then priority=10\nis used as the default.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "notification_policy_slug": {
+          "description": "Notification policy slug for routing consumption alerts. Required only if\nALERT_WARN or ALERT_CRITICAL actions are configured.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ConsumptionBudgetResource": {
+      "enum": [
+        "LOG_PERSISTED_BYTES"
+      ],
+      "type": "string"
+    },
+    "configv1ConsumptionBudgetThreshold": {
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/ConsumptionBudgetThresholdAction"
+        },
+        "type": {
+          "$ref": "#/definitions/ConsumptionBudgetThresholdType"
+        },
+        "instant_rate": {
+          "$ref": "#/definitions/ThresholdInstantRate"
+        },
+        "volume": {
+          "$ref": "#/definitions/ThresholdVolume"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ConsumptionConfig": {
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the ConsumptionConfig was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the ConsumptionConfig was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "partitions": {
+          "description": "partitions define non-overlapping groupings of telemetry. Partitions are\ndefined in order of precedence, where incoming requests are allocated to\nthe first partition that matches. Requests that don't match any\npartition fall back to an omnipresent default partition.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionConfigPartition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateBucketRequest": {
       "properties": {
         "bucket": {
@@ -2723,6 +2967,46 @@
       "properties": {
         "collection": {
           "$ref": "#/definitions/configv1Collection"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateConsumptionBudgetRequest": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configv1ConsumptionBudget"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the ConsumptionBudget. If the specified configuration is valid, the endpoint returns a partial response without the ConsumptionBudget. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateConsumptionBudgetResponse": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configv1ConsumptionBudget"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateConsumptionConfigRequest": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configv1ConsumptionConfig"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the ConsumptionConfig. If the specified configuration is valid, the endpoint returns a partial response without the ConsumptionConfig. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateConsumptionConfigResponse": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configv1ConsumptionConfig"
         }
       },
       "type": "object"
@@ -3414,6 +3698,12 @@
     "configv1DeleteCollectionResponse": {
       "type": "object"
     },
+    "configv1DeleteConsumptionBudgetResponse": {
+      "type": "object"
+    },
+    "configv1DeleteConsumptionConfigResponse": {
+      "type": "object"
+    },
     "configv1DeleteDashboardResponse": {
       "type": "object"
     },
@@ -3536,6 +3826,9 @@
         },
         "existing_label_policy": {
           "$ref": "#/definitions/configv1DerivedLabelLabelPolicy"
+        },
+        "span_tag": {
+          "$ref": "#/definitions/DerivedLabelSpanTag"
         }
       },
       "type": "object"
@@ -3822,6 +4115,20 @@
             "$ref": "#/definitions/configv1Collection"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListConsumptionBudgetsResponse": {
+      "properties": {
+        "consumption_budgets": {
+          "items": {
+            "$ref": "#/definitions/configv1ConsumptionBudget"
+          },
+          "type": "array"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
         }
       },
       "type": "object"
@@ -4598,6 +4905,29 @@
       },
       "type": "object"
     },
+    "configv1MonitorCondition": {
+      "properties": {
+        "op": {
+          "$ref": "#/definitions/ConditionOp"
+        },
+        "value": {
+          "description": "Required. The value to compare to the metric value using the `op` operation.",
+          "format": "double",
+          "type": "number"
+        },
+        "sustain_secs": {
+          "description": "Amount of time the query needs to fail the condition check before an alert is\ntriggered. Must be an integer. Accepts one of `s` (seconds), `m` (minutes), or\n`h` (hours) as units.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "resolve_sustain_secs": {
+          "description": "Amount of time the query needs to no longer fire before resolving. Must be an\ninteger. Accepts one of `s` (seconds), `m` (minutes), or `h` (hours) as units.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "configv1MutingRule": {
       "properties": {
         "slug": {
@@ -4819,6 +5149,22 @@
       "properties": {
         "collection": {
           "$ref": "#/definitions/configv1Collection"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadConsumptionBudgetResponse": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configv1ConsumptionBudget"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadConsumptionConfigResponse": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configv1ConsumptionConfig"
         }
       },
       "type": "object"
@@ -5809,6 +6155,38 @@
       "properties": {
         "collection": {
           "$ref": "#/definitions/configv1Collection"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateConsumptionBudgetResponse": {
+      "properties": {
+        "consumption_budget": {
+          "$ref": "#/definitions/configv1ConsumptionBudget"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateConsumptionConfigRequest": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configv1ConsumptionConfig"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the ConsumptionConfig will be created if it does not already exist. If `false`, an error will be returned if the ConsumptionConfig does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the ConsumptionConfig. If the specified configuration is valid, the endpoint returns a partial response without the ConsumptionConfig. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateConsumptionConfigResponse": {
+      "properties": {
+        "consumption_config": {
+          "$ref": "#/definitions/configv1ConsumptionConfig"
         }
       },
       "type": "object"
@@ -6995,6 +7373,433 @@
         },
         "tags": [
           "Collection"
+        ]
+      }
+    },
+    "/api/v1/config/consumption-budgets": {
+      "get": {
+        "operationId": "ListConsumptionBudgets",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any ConsumptionBudget with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any ConsumptionBudget with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListConsumptionBudgetsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      },
+      "post": {
+        "operationId": "CreateConsumptionBudget",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateConsumptionBudgetRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created ConsumptionBudget.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateConsumptionBudgetResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the ConsumptionBudget because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the ConsumptionBudget because there is a conflict with an existing ConsumptionBudget.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      }
+    },
+    "/api/v1/config/consumption-budgets/{slug}": {
+      "delete": {
+        "operationId": "DeleteConsumptionBudget",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteConsumptionBudgetResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the ConsumptionBudget because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the ConsumptionBudget because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      },
+      "get": {
+        "operationId": "ReadConsumptionBudget",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadConsumptionBudgetResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the ConsumptionBudget because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateConsumptionBudget",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateConsumptionBudgetBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated ConsumptionBudget.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateConsumptionBudgetResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the ConsumptionBudget because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the ConsumptionBudget because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the ConsumptionBudget because there is a conflict with an existing ConsumptionBudget.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionBudget"
+        ]
+      }
+    },
+    "/api/v1/config/consumption-config": {
+      "delete": {
+        "operationId": "DeleteConsumptionConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteConsumptionConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the ConsumptionConfig because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the ConsumptionConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionConfig"
+        ]
+      },
+      "get": {
+        "operationId": "ReadConsumptionConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadConsumptionConfigResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the ConsumptionConfig because ConsumptionConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionConfig"
+        ]
+      },
+      "post": {
+        "operationId": "CreateConsumptionConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateConsumptionConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created ConsumptionConfig.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateConsumptionConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the ConsumptionConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the ConsumptionConfig because there is a conflict with an existing ConsumptionConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionConfig"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateConsumptionConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateConsumptionConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated ConsumptionConfig.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateConsumptionConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the ConsumptionConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the ConsumptionConfig because ConsumptionConfig has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ConsumptionConfig"
         ]
       }
     },

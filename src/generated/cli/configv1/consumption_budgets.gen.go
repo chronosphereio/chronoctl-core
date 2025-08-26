@@ -21,55 +21,55 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-func init() { types.MustRegisterObject(DerivedLabelTypeMeta, &DerivedLabel{}) }
+func init() { types.MustRegisterObject(ConsumptionBudgetTypeMeta, &ConsumptionBudget{}) }
 
-var _ types.Object = &DerivedLabel{}
+var _ types.Object = &ConsumptionBudget{}
 
-var DerivedLabelTypeMeta = types.TypeMeta{
+var ConsumptionBudgetTypeMeta = types.TypeMeta{
 	APIVersion: "v1/config",
-	Kind:       "DerivedLabel",
+	Kind:       "ConsumptionBudget",
 }
 
-type DerivedLabel struct {
+type ConsumptionBudget struct {
 	types.TypeMeta `json:",inline"`
-	Spec           *models.Configv1DerivedLabel `json:"spec"`
+	Spec           *models.Configv1ConsumptionBudget `json:"spec"`
 }
 
-func NewDerivedLabel(spec *models.Configv1DerivedLabel) *DerivedLabel {
-	return &DerivedLabel{
-		TypeMeta: DerivedLabelTypeMeta,
+func NewConsumptionBudget(spec *models.Configv1ConsumptionBudget) *ConsumptionBudget {
+	return &ConsumptionBudget{
+		TypeMeta: ConsumptionBudgetTypeMeta,
 		Spec:     spec,
 	}
 }
 
-func (e *DerivedLabel) Description() string {
+func (e *ConsumptionBudget) Description() string {
 	return types.TypeDescription(e, "name", e.Spec.Name, "slug", e.Spec.Slug)
 }
 
-func (e *DerivedLabel) Identifier() string {
+func (e *ConsumptionBudget) Identifier() string {
 	return e.Spec.Slug
 }
 
-func CreateDerivedLabel(
+func CreateConsumptionBudget(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *DerivedLabel,
+	entity *ConsumptionBudget,
 	dryRun bool,
-) (*DerivedLabel, error) {
-	res, err := client.CreateDerivedLabel(&config_v1.CreateDerivedLabelParams{
+) (*ConsumptionBudget, error) {
+	res, err := client.CreateConsumptionBudget(&config_v1.CreateConsumptionBudgetParams{
 		Context: ctx,
-		Body: &models.Configv1CreateDerivedLabelRequest{
-			DryRun:       dryRun,
-			DerivedLabel: entity.Spec,
+		Body: &models.Configv1CreateConsumptionBudgetRequest{
+			DryRun:            dryRun,
+			ConsumptionBudget: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewDerivedLabel(res.Payload.DerivedLabel), nil
+	return NewConsumptionBudget(res.Payload.ConsumptionBudget), nil
 }
 
-func newDerivedLabelCreateCmd() *cobra.Command {
+func newConsumptionBudgetCreateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		dryRunFlags       = dry.NewFlags()
@@ -83,7 +83,7 @@ func newDerivedLabelCreateCmd() *cobra.Command {
 		short string
 	)
 	use = "create -f <file>"
-	short = "Creates a single DerivedLabel."
+	short = "Creates a single ConsumptionBudget."
 
 	cmd := &cobra.Command{
 		Use:     use,
@@ -103,13 +103,13 @@ func newDerivedLabelCreateCmd() *cobra.Command {
 				return err
 			}
 
-			var derivedLabel *DerivedLabel
+			var consumptionBudget *ConsumptionBudget
 			file, err := fileFlags.File()
 			if err != nil {
 				return err
 			}
 			defer file.Close() //nolint:errcheck
-			derivedLabel, err = types.MustDecodeSingleObject[*DerivedLabel](file, permissiveParsing)
+			consumptionBudget, err = types.MustDecodeSingleObject[*ConsumptionBudget](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -117,18 +117,18 @@ func newDerivedLabelCreateCmd() *cobra.Command {
 			if dryRunFlags.DryRun {
 				stderr.Println("--dry-run is set")
 			}
-			fullDerivedLabel, err := CreateDerivedLabel(ctx, client, derivedLabel, dryRunFlags.DryRun)
+			fullConsumptionBudget, err := CreateConsumptionBudget(ctx, client, consumptionBudget, dryRunFlags.DryRun)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("DerivedLabel is valid and can be created")
+				stderr.Println("ConsumptionBudget is valid and can be created")
 				return nil
 			}
-			stderr.Printf("DerivedLabel with slug %q created successfully\n", fullDerivedLabel.Spec.Slug)
+			stderr.Printf("ConsumptionBudget with slug %q created successfully\n", fullConsumptionBudget.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullDerivedLabel, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullConsumptionBudget, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -143,22 +143,22 @@ func newDerivedLabelCreateCmd() *cobra.Command {
 	return cmd
 }
 
-func GetDerivedLabel(
+func GetConsumptionBudget(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
-) (*DerivedLabel, error) {
-	res, err := client.ReadDerivedLabel(&config_v1.ReadDerivedLabelParams{
+) (*ConsumptionBudget, error) {
+	res, err := client.ReadConsumptionBudget(&config_v1.ReadConsumptionBudgetParams{
 		Context: ctx,
 		Slug:    slug,
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewDerivedLabel(res.GetPayload().DerivedLabel), nil
+	return NewConsumptionBudget(res.GetPayload().ConsumptionBudget), nil
 }
 
-func newDerivedLabelReadCmd() *cobra.Command {
+func newConsumptionBudgetReadCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 	var (
@@ -166,7 +166,7 @@ func newDerivedLabelReadCmd() *cobra.Command {
 		use   string
 		args  cobra.PositionalArgs
 	)
-	short = "Reads a single DerivedLabel by slug"
+	short = "Reads a single ConsumptionBudget by slug"
 	use = "read <slug>"
 	args = cobra.ExactArgs(1)
 
@@ -187,7 +187,7 @@ func newDerivedLabelReadCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			entity, err := GetDerivedLabel(ctx, client, args[0])
+			entity, err := GetConsumptionBudget(ctx, client, args[0])
 			if err != nil {
 				return err
 			}
@@ -204,29 +204,29 @@ func newDerivedLabelReadCmd() *cobra.Command {
 	return cmd
 }
 
-func UpdateDerivedLabel(
+func UpdateConsumptionBudget(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *DerivedLabel,
+	entity *ConsumptionBudget,
 	opts UpdateOptions,
-) (*DerivedLabel, error) {
-	res, err := client.UpdateDerivedLabel(&config_v1.UpdateDerivedLabelParams{
+) (*ConsumptionBudget, error) {
+	res, err := client.UpdateConsumptionBudget(&config_v1.UpdateConsumptionBudgetParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: &models.ConfigV1UpdateDerivedLabelBody{
-			CreateIfMissing: opts.CreateIfMissing,
-			DryRun:          opts.DryRun,
-			DerivedLabel:    entity.Spec,
+		Body: &models.ConfigV1UpdateConsumptionBudgetBody{
+			CreateIfMissing:   opts.CreateIfMissing,
+			DryRun:            opts.DryRun,
+			ConsumptionBudget: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
 
-	return NewDerivedLabel(res.Payload.DerivedLabel), nil
+	return NewConsumptionBudget(res.Payload.ConsumptionBudget), nil
 }
 
-func newDerivedLabelUpdateCmd() *cobra.Command {
+func newConsumptionBudgetUpdateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		createIfMissing   bool
@@ -239,7 +239,7 @@ func newDerivedLabelUpdateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "update -f <filename>",
 		GroupID: groups.Commands.ID,
-		Short:   "Updates an existing DerivedLabel.",
+		Short:   "Updates an existing ConsumptionBudget.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
 			defer cancel()
@@ -260,7 +260,7 @@ func newDerivedLabelUpdateCmd() *cobra.Command {
 			}
 			defer file.Close() //nolint:errcheck
 
-			derivedLabel, err := types.MustDecodeSingleObject[*DerivedLabel](file, permissiveParsing)
+			consumptionBudget, err := types.MustDecodeSingleObject[*ConsumptionBudget](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -274,18 +274,18 @@ func newDerivedLabelUpdateCmd() *cobra.Command {
 				stderr.Println("--dry-run is set, update not persisted")
 			}
 
-			fullDerivedLabel, err := UpdateDerivedLabel(ctx, client, derivedLabel, updateOpts)
+			fullConsumptionBudget, err := UpdateConsumptionBudget(ctx, client, consumptionBudget, updateOpts)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("DerivedLabel is valid and can be updated")
+				stderr.Println("ConsumptionBudget is valid and can be updated")
 				return nil
 			}
-			stderr.Printf("DerivedLabel with slug %q applied successfully\n", fullDerivedLabel.Spec.Slug)
+			stderr.Printf("ConsumptionBudget with slug %q applied successfully\n", fullConsumptionBudget.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullDerivedLabel, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullConsumptionBudget, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -296,17 +296,17 @@ func newDerivedLabelUpdateCmd() *cobra.Command {
 	outputFlags.AddFlags(cmd)
 	fileFlags.AddFlags(cmd)
 	cmd.Flags().BoolVar(&permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are allowed. Defaults to false.")
-	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the DerivedLabel if it does not already exist. Defaults to false.")
+	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the ConsumptionBudget if it does not already exist. Defaults to false.")
 
 	return cmd
 }
 
-func DeleteDerivedLabel(
+func DeleteConsumptionBudget(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
 ) error {
-	_, err := client.DeleteDerivedLabel(&config_v1.DeleteDerivedLabelParams{
+	_, err := client.DeleteConsumptionBudget(&config_v1.DeleteConsumptionBudgetParams{
 		Context: ctx,
 		Slug:    slug,
 	})
@@ -316,14 +316,14 @@ func DeleteDerivedLabel(
 	return nil
 }
 
-func newDerivedLabelDeleteCmd() *cobra.Command {
+func newConsumptionBudgetDeleteCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
 		Use:     "delete <slug>",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes a single DerivedLabel by slug",
+		Short:   "Deletes a single ConsumptionBudget by slug",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -338,7 +338,7 @@ func newDerivedLabelDeleteCmd() *cobra.Command {
 				return err
 			}
 
-			res, err := client.DeleteDerivedLabel(&config_v1.DeleteDerivedLabelParams{
+			res, err := client.DeleteConsumptionBudget(&config_v1.DeleteConsumptionBudgetParams{
 				Context: ctx,
 				Slug:    args[0],
 			})
@@ -346,7 +346,7 @@ func newDerivedLabelDeleteCmd() *cobra.Command {
 				return clienterror.Wrap(err)
 			}
 			_ = res
-			fmt.Fprintf(cmd.OutOrStdout(), "deleted DerivedLabel with slug %q\n", args[0])
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted ConsumptionBudget with slug %q\n", args[0])
 
 			return nil
 		},
@@ -356,7 +356,7 @@ func newDerivedLabelDeleteCmd() *cobra.Command {
 	return cmd
 }
 
-type DerivedLabelListOpts struct {
+type ConsumptionBudgetListOpts struct {
 	// Limit represents that maximum number of items we wish to return.
 	Limit int
 	// PageToken is the pagination token we want to start our request at.
@@ -367,21 +367,21 @@ type DerivedLabelListOpts struct {
 	Slugs       []string
 }
 
-func (r *DerivedLabelListOpts) registerFlags(flags *flag.FlagSet) {
+func (r *ConsumptionBudgetListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any DerivedLabel with a matching name in the given list (and matches all other filters) will be returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ConsumptionBudget with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any DerivedLabel with a matching slug in the given list (and matches all other filters) will be returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any ConsumptionBudget with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
 }
 
-func ListDerivedLabels(
+func ListConsumptionBudgets(
 	ctx context.Context,
 	client config_v1.ClientService,
-	streamer output.Streamer[*DerivedLabel],
-	opts DerivedLabelListOpts,
+	streamer output.Streamer[*ConsumptionBudget],
+	opts ConsumptionBudgetListOpts,
 ) (pagination.Token, error) {
 	var (
 		gotItems    = 0
@@ -395,7 +395,7 @@ func ListDerivedLabels(
 	}
 
 	for {
-		res, err := client.ListDerivedLabels(&config_v1.ListDerivedLabelsParams{
+		res, err := client.ListConsumptionBudgets(&config_v1.ListConsumptionBudgetsParams{
 			Context:     ctx,
 			PageToken:   &nextToken,
 			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
@@ -406,8 +406,8 @@ func ListDerivedLabels(
 			return pagination.Token(""), clienterror.Wrap(err)
 		}
 
-		for _, v := range res.Payload.DerivedLabels {
-			if err := streamer(NewDerivedLabel(v)); err != nil {
+		for _, v := range res.Payload.ConsumptionBudgets {
+			if err := streamer(NewConsumptionBudget(v)); err != nil {
 				return pagination.Token(""), err
 			}
 			gotItems++
@@ -425,19 +425,19 @@ func ListDerivedLabels(
 		pageMaxSize = pagination.CalculatePageSize(pagination.Calculation{
 			GotItems:    gotItems,
 			MaxItems:    opts.Limit,
-			MaxPageSize: len(res.Payload.DerivedLabels),
+			MaxPageSize: len(res.Payload.ConsumptionBudgets),
 		})
 	}
 }
 
-func newDerivedLabelListCmd() *cobra.Command {
-	var listOptions DerivedLabelListOpts
+func newConsumptionBudgetListCmd() *cobra.Command {
+	var listOptions ConsumptionBudgetListOpts
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags()
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   "Lists all DerivedLabels and applies optional filters",
+		Short:   "Lists all ConsumptionBudgets and applies optional filters",
 		GroupID: groups.Commands.ID,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -457,8 +457,8 @@ func newDerivedLabelListCmd() *cobra.Command {
 				return err
 			}
 
-			streamer := output.NewWriteObjectStreamer[*DerivedLabel](writer)
-			nextToken, err := ListDerivedLabels(ctx, client, streamer, listOptions)
+			streamer := output.NewWriteObjectStreamer[*ConsumptionBudget](writer)
+			nextToken, err := ListConsumptionBudgets(ctx, client, streamer, listOptions)
 			if err != nil {
 				return err
 			}
@@ -466,7 +466,7 @@ func newDerivedLabelListCmd() *cobra.Command {
 			if nextToken != "" {
 				nextPage := pagination.Result{
 					Kind:          pagination.ResultKind,
-					Message:       "There are additional derivedLabels. To view more, use the next page token or run the full command.",
+					Message:       "There are additional consumptionBudgets. To view more, use the next page token or run the full command.",
 					NextPageToken: nextToken,
 					FullCommand: fmt.Sprintf("%s --page-token %q",
 						cli.BuildCommandString(cmd, []string{"page-token"}),
@@ -488,103 +488,91 @@ func newDerivedLabelListCmd() *cobra.Command {
 	return cmd
 }
 
-const DerivedLabelScaffoldYAML = `api_version: v1/config
-kind: DerivedLabel
+const ConsumptionBudgetScaffoldYAML = `api_version: v1/config
+kind: ConsumptionBudget
 spec:
-    # Name of the DerivedLabel. You can modify this value after the DerivedLabel is created.
-    name: <string>
-    # The unique identifier of the DerivedLabel. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the DerivedLabel is created.
+    # The unique identifier of the ConsumptionBudget. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the ConsumptionBudget is created.
     slug: <string>
-    # Name of the derived label. It needs to be unique across the system.
-    label_name: <string>
-    # Optional description of the derived label.
-    description: <string>
-    existing_label_policy: <KEEP|OVERRIDE>
-    metric_label:
-        constructed_label:
-            value_definitions:
-                - value: <string>
-                  filters:
-                    - # Name of the label to match.
-                      name: <string>
-                      # Glob value of the label to match.
-                      value_glob: <string>
-        mapping_label:
-            name_mappings:
-                - filters:
-                    - # Name of the label to match.
-                      name: <string>
-                      # Glob value of the label to match.
-                      value_glob: <string>
-                  # The actual label ingested on the time series
-                  source_label: <string>
-                  # These value mappings apply to just the name mapping they belong to.
-                  value_mappings:
-                    - # Defines the source label values that should be mapped into the given target_value.
-                      source_value_globs:
-                        - <string>
-                      # The value that source_value_globs are mapped into.
-                      # For example, given this mapping:
-                      # '''yaml
-                      # value_mappings:
-                      #  - source_value_globs:
-                      #      - Cat
-                      #      - CAT
-                      #    target_value: cat
-                      # '''
-                      # This indicates that the target value 'cat' maps to the source label's values 'Cat' and 'CAT'.
-                      target_value: <string>
-            # These value mappings apply to the whole mapping label.
-            # If there's no name_mappings, these value mappings apply to the label that exists on the metric.
-            value_mappings:
-                - # Defines the source label values that should be mapped into the given target_value.
-                  source_value_globs:
-                    - <string>
-                  # The value that source_value_globs are mapped into.
-                  # For example, given this mapping:
-                  # '''yaml
-                  # value_mappings:
-                  #  - source_value_globs:
-                  #      - Cat
-                  #      - CAT
-                  #    target_value: cat
-                  # '''
-                  # This indicates that the target value 'cat' maps to the source label's values 'Cat' and 'CAT'.
-                  target_value: <string>
-    # SpanTag is used to map span tags to derived labels.
-    span_tag:
-        # All name mappings are ORed together and the first matching name mapping is used to map the source tag to the derived tag.
-        name_mappings:
-            - source_tag: <string>
+    # Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
+    name: <string>
+    # partition_slug_path is the required path of the budget's partition,
+    # delimited by "/", in the format "global/<slug1>/<slug2>", where slug1 is a
+    # top-level partition, and slug2 is a child partition of slug1, etc.
+
+    # A well-formed partition path always starts with the "global" partition
+    # slug, and has no leading or trailing "/".
+    partition_slug_path: <string>
+    # priorities are optional budget priorities. Priorities are defined in order
+    # of precedence, where incoming requests are assigned the first priority that
+    # matches. Each priority value defines the order in which requests are
+    # dropped when necessary (i.e. priority=10 dropped first, priority=1 dropped
+    # last). If a request does not match any priority, then it is assigned the
+    # default_priority.
+    priorities:
+        - # filters define what data matches the priority. The filters are AND'd
+          # together; a request must match every filter in order to match the
+          # priority. Must not be empty.
+          filters:
+            - # If set, matches data which belongs to the given dataset. Cannot set if
+              # log_filter is set. The dataset type must match the budget resource
+              # (e.g. type=LOGS for resource=LOG_PERSISTED_BYTES).
+              dataset_slug: <string>
+              log_filter:
+                # Returns logs that match this query. The query can include only top-level
+                # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
+                # operator is allowed.
+                query: <string>
+          # priority is the required priority of the dataset, where priority=10 is dropped
+          # first, and priority=1 is dropped last.
+          priority: <integer>
+    # thresholds are optional budget thresholds for automated limiting and
+    # alerting.
+    thresholds:
+        - action: <ALERT_WARN|ALERT_CRITICAL|DROP>
+          instant_rate:
+            # fixed_value_per_sec is the required rate threshold.
+            fixed_value_per_sec: <int64>
+          type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME>
+          volume:
+            # fixed_value is the required volume threshold.
+            fixed_value: <int64>
+    # default_priority is an optional default priority for requests which do not
+    # match any priority in the priorities list. If not set, then priority=10
+    # is used as the default.
+    default_priority: <integer>
+    # Notification policy slug for routing consumption alerts. Required only if
+    # ALERT_WARN or ALERT_CRITICAL actions are configured.
+    notification_policy_slug: <string>
+    resource: <LOG_PERSISTED_BYTES>
 `
 
-func newDerivedLabelScaffoldCmd() *cobra.Command {
+func newConsumptionBudgetScaffoldCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "scaffold",
 		GroupID: groups.Commands.ID,
 		Short:   "Scaffolds a complete object with placeholder values",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Fprint(cmd.OutOrStdout(), DerivedLabelScaffoldYAML)
+			fmt.Fprint(cmd.OutOrStdout(), ConsumptionBudgetScaffoldYAML)
 		},
 	}
 	return cmd
 }
 
-func NewDerivedLabelCmd() *cobra.Command {
+func NewConsumptionBudgetCmd() *cobra.Command {
 	root := &cobra.Command{
-		Use:     "derived-labels",
+		Use:     "consumption-budgets",
 		GroupID: groups.Config.ID,
-		Short:   "All commands for DerivedLabels",
+		Short:   "All commands for ConsumptionBudgets",
 	}
 
 	root.AddGroup(groups.Commands)
 	root.AddCommand(
-		newDerivedLabelCreateCmd(),
-		newDerivedLabelReadCmd(),
-		newDerivedLabelUpdateCmd(),
-		newDerivedLabelDeleteCmd(),
-		newDerivedLabelListCmd(),
-		newDerivedLabelScaffoldCmd(),
+		newConsumptionBudgetCreateCmd(),
+		newConsumptionBudgetReadCmd(),
+		newConsumptionBudgetUpdateCmd(),
+		newConsumptionBudgetDeleteCmd(),
+		newConsumptionBudgetListCmd(),
+		newConsumptionBudgetScaffoldCmd(),
 	)
 	return root
 }

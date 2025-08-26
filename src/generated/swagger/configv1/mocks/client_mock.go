@@ -95,6 +95,46 @@ func (mr *MockClientServiceMockRecorder) CreateCollection(params interface{}, op
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCollection", reflect.TypeOf((*MockClientService)(nil).CreateCollection), varargs...)
 }
 
+// CreateConsumptionBudget mocks base method.
+func (m *MockClientService) CreateConsumptionBudget(params *operations.CreateConsumptionBudgetParams, opts ...operations.ClientOption) (*operations.CreateConsumptionBudgetOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateConsumptionBudget", varargs...)
+	ret0, _ := ret[0].(*operations.CreateConsumptionBudgetOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateConsumptionBudget indicates an expected call of CreateConsumptionBudget.
+func (mr *MockClientServiceMockRecorder) CreateConsumptionBudget(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateConsumptionBudget", reflect.TypeOf((*MockClientService)(nil).CreateConsumptionBudget), varargs...)
+}
+
+// CreateConsumptionConfig mocks base method.
+func (m *MockClientService) CreateConsumptionConfig(params *operations.CreateConsumptionConfigParams, opts ...operations.ClientOption) (*operations.CreateConsumptionConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateConsumptionConfig", varargs...)
+	ret0, _ := ret[0].(*operations.CreateConsumptionConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateConsumptionConfig indicates an expected call of CreateConsumptionConfig.
+func (mr *MockClientServiceMockRecorder) CreateConsumptionConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateConsumptionConfig", reflect.TypeOf((*MockClientService)(nil).CreateConsumptionConfig), varargs...)
+}
+
 // CreateDashboard mocks base method.
 func (m *MockClientService) CreateDashboard(params *operations.CreateDashboardParams, opts ...operations.ClientOption) (*operations.CreateDashboardOK, error) {
 	m.ctrl.T.Helper()
@@ -733,6 +773,46 @@ func (mr *MockClientServiceMockRecorder) DeleteCollection(params interface{}, op
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCollection", reflect.TypeOf((*MockClientService)(nil).DeleteCollection), varargs...)
+}
+
+// DeleteConsumptionBudget mocks base method.
+func (m *MockClientService) DeleteConsumptionBudget(params *operations.DeleteConsumptionBudgetParams, opts ...operations.ClientOption) (*operations.DeleteConsumptionBudgetOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteConsumptionBudget", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteConsumptionBudgetOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteConsumptionBudget indicates an expected call of DeleteConsumptionBudget.
+func (mr *MockClientServiceMockRecorder) DeleteConsumptionBudget(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteConsumptionBudget", reflect.TypeOf((*MockClientService)(nil).DeleteConsumptionBudget), varargs...)
+}
+
+// DeleteConsumptionConfig mocks base method.
+func (m *MockClientService) DeleteConsumptionConfig(params *operations.DeleteConsumptionConfigParams, opts ...operations.ClientOption) (*operations.DeleteConsumptionConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteConsumptionConfig", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteConsumptionConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteConsumptionConfig indicates an expected call of DeleteConsumptionConfig.
+func (mr *MockClientServiceMockRecorder) DeleteConsumptionConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteConsumptionConfig", reflect.TypeOf((*MockClientService)(nil).DeleteConsumptionConfig), varargs...)
 }
 
 // DeleteDashboard mocks base method.
@@ -1375,6 +1455,26 @@ func (mr *MockClientServiceMockRecorder) ListCollections(params interface{}, opt
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCollections", reflect.TypeOf((*MockClientService)(nil).ListCollections), varargs...)
 }
 
+// ListConsumptionBudgets mocks base method.
+func (m *MockClientService) ListConsumptionBudgets(params *operations.ListConsumptionBudgetsParams, opts ...operations.ClientOption) (*operations.ListConsumptionBudgetsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListConsumptionBudgets", varargs...)
+	ret0, _ := ret[0].(*operations.ListConsumptionBudgetsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListConsumptionBudgets indicates an expected call of ListConsumptionBudgets.
+func (mr *MockClientServiceMockRecorder) ListConsumptionBudgets(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListConsumptionBudgets", reflect.TypeOf((*MockClientService)(nil).ListConsumptionBudgets), varargs...)
+}
+
 // ListDashboards mocks base method.
 func (m *MockClientService) ListDashboards(params *operations.ListDashboardsParams, opts ...operations.ClientOption) (*operations.ListDashboardsOK, error) {
 	m.ctrl.T.Helper()
@@ -1893,6 +1993,46 @@ func (mr *MockClientServiceMockRecorder) ReadCollection(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadCollection", reflect.TypeOf((*MockClientService)(nil).ReadCollection), varargs...)
+}
+
+// ReadConsumptionBudget mocks base method.
+func (m *MockClientService) ReadConsumptionBudget(params *operations.ReadConsumptionBudgetParams, opts ...operations.ClientOption) (*operations.ReadConsumptionBudgetOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadConsumptionBudget", varargs...)
+	ret0, _ := ret[0].(*operations.ReadConsumptionBudgetOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadConsumptionBudget indicates an expected call of ReadConsumptionBudget.
+func (mr *MockClientServiceMockRecorder) ReadConsumptionBudget(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadConsumptionBudget", reflect.TypeOf((*MockClientService)(nil).ReadConsumptionBudget), varargs...)
+}
+
+// ReadConsumptionConfig mocks base method.
+func (m *MockClientService) ReadConsumptionConfig(params *operations.ReadConsumptionConfigParams, opts ...operations.ClientOption) (*operations.ReadConsumptionConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadConsumptionConfig", varargs...)
+	ret0, _ := ret[0].(*operations.ReadConsumptionConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadConsumptionConfig indicates an expected call of ReadConsumptionConfig.
+func (mr *MockClientServiceMockRecorder) ReadConsumptionConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadConsumptionConfig", reflect.TypeOf((*MockClientService)(nil).ReadConsumptionConfig), varargs...)
 }
 
 // ReadDashboard mocks base method.
@@ -2565,6 +2705,46 @@ func (mr *MockClientServiceMockRecorder) UpdateCollection(params interface{}, op
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateCollection", reflect.TypeOf((*MockClientService)(nil).UpdateCollection), varargs...)
+}
+
+// UpdateConsumptionBudget mocks base method.
+func (m *MockClientService) UpdateConsumptionBudget(params *operations.UpdateConsumptionBudgetParams, opts ...operations.ClientOption) (*operations.UpdateConsumptionBudgetOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateConsumptionBudget", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateConsumptionBudgetOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateConsumptionBudget indicates an expected call of UpdateConsumptionBudget.
+func (mr *MockClientServiceMockRecorder) UpdateConsumptionBudget(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateConsumptionBudget", reflect.TypeOf((*MockClientService)(nil).UpdateConsumptionBudget), varargs...)
+}
+
+// UpdateConsumptionConfig mocks base method.
+func (m *MockClientService) UpdateConsumptionConfig(params *operations.UpdateConsumptionConfigParams, opts ...operations.ClientOption) (*operations.UpdateConsumptionConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateConsumptionConfig", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateConsumptionConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateConsumptionConfig indicates an expected call of UpdateConsumptionConfig.
+func (mr *MockClientServiceMockRecorder) UpdateConsumptionConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateConsumptionConfig", reflect.TypeOf((*MockClientService)(nil).UpdateConsumptionConfig), varargs...)
 }
 
 // UpdateDashboard mocks base method.

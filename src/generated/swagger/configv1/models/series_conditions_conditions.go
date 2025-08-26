@@ -21,7 +21,7 @@ type SeriesConditionsConditions struct {
 
 	// List of conditions to evaluate against a series. Only one condition must
 	// match to assign a severity to a signal.
-	Conditions []*MonitorCondition `json:"conditions"`
+	Conditions []*Configv1MonitorCondition `json:"conditions"`
 }
 
 // Validate validates this series conditions conditions

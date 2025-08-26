@@ -166,7 +166,7 @@ func TestConvertPrometheus_SeverityOptions(t *testing.T) {
 		}
 	}
 
-	testCondition := &models.MonitorCondition{Op: models.ConditionOpGT, Value: 0}
+	testCondition := &models.Configv1MonitorCondition{Op: models.ConditionOpGT, Value: 0}
 
 	warnMonitor := testMonitor(&models.SeriesConditionsSeverityConditions{
 		Warn: conditions(testCondition),
@@ -329,7 +329,7 @@ func defaultNotifiers(slugs ...string) *models.RoutesNotifierList {
 	}
 }
 
-func conditions(c ...*models.MonitorCondition) *models.SeriesConditionsConditions {
+func conditions(c ...*models.Configv1MonitorCondition) *models.SeriesConditionsConditions {
 	return &models.SeriesConditionsConditions{Conditions: c}
 }
 

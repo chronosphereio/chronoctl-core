@@ -17,6 +17,13 @@
       },
       "type": "object"
     },
+    "DatasetFilterOperator": {
+      "enum": [
+        "IN",
+        "NOT_IN"
+      ],
+      "type": "string"
+    },
     "ListMonitorStatusesRequestSortOrder": {
       "enum": [
         "SORT_BY_STATE"
@@ -123,7 +130,7 @@
       "description": "TODO(codyg): remove; still in-use by stateunstable.",
       "properties": {
         "operator": {
-          "$ref": "#/definitions/configunstableDatasetFilterOperator"
+          "$ref": "#/definitions/DatasetFilterOperator"
         },
         "datasets": {
           "items": {
@@ -133,13 +140,6 @@
         }
       },
       "type": "object"
-    },
-    "configunstableDatasetFilterOperator": {
-      "enum": [
-        "IN",
-        "NOT_IN"
-      ],
-      "type": "string"
     },
     "configv1PageParams": {
       "properties": {

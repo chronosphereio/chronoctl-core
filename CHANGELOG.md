@@ -4,6 +4,8 @@
 * Update parser resource in `v1/config/LogIngestConfig`
 * Adds unstable resource `unstable/config/AzureMetricsIntegration`
 * Fix ConsumptionConfig, LogAllocationConfig, LogControlConfig, and TraceBehaviorConfig kinds in scaffold command
+* Adds new resource `v1/config/ConsumptionConfig` 
+* Adds new resource `v1/config/ConsumptionBudget` 
 
 ## v1.14.0
 
