@@ -17,6 +17,8 @@
 package specscanner
 
 import (
+	"encoding/json"
+
 	"github.com/go-openapi/analysis"
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/spec"
@@ -75,6 +77,11 @@ type scanner struct {
 // Scan will scan the given spec data and call the implemented methods on the given handler
 // specData should be the raw bytes of the swagger spec JSON
 func Scan(specData []byte, handler Handler, logger *zap.Logger) error {
+	var err error
+	specData, err = removeRecursiveFields(specData)
+	if err != nil {
+		return err
+	}
 	if logger == nil {
 		logger = zap.NewNop()
 	}
@@ -190,4 +197,37 @@ func (s *scanner) scanResponses(op *spec.Operation, handler Handler) error {
 		}
 	}
 	return nil
+}
+
+func removeRecursiveFields(orig []byte) ([]byte, error) {
+	var modified map[string]any
+	if err := json.Unmarshal(orig, &modified); err != nil {
+		return nil, err
+	}
+	partitions, ok := tryLoadPath(modified, []string{
+		"definitions",
+		"ConsumptionConfigPartition",
+		"properties",
+		"partitions",
+	})
+	if !ok {
+		return orig, nil
+	}
+	delete(partitions, "items")
+	return json.Marshal(modified)
+}
+
+func tryLoadPath(m map[string]any, path []string) (map[string]any, bool) {
+	for _, field := range path {
+		v, ok := m[field]
+		if !ok {
+			return nil, false
+		}
+		next, ok := v.(map[string]any)
+		if !ok {
+			return nil, false
+		}
+		m = next
+	}
+	return m, true
 }
