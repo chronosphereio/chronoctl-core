@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // ReadAzureMetricsIntegrationReader is a Reader for the ReadAzureMetricsIntegration structure.
@@ -64,7 +64,7 @@ ReadAzureMetricsIntegrationOK describes a response with status code 200, with de
 A successful response.
 */
 type ReadAzureMetricsIntegrationOK struct {
-	Payload *models.ConfigunstableReadAzureMetricsIntegrationResponse
+	Payload *models.Configv1ReadAzureMetricsIntegrationResponse
 }
 
 // IsSuccess returns true when this read azure metrics integration o k response has a 2xx status code
@@ -98,20 +98,20 @@ func (o *ReadAzureMetricsIntegrationOK) Code() int {
 }
 
 func (o *ReadAzureMetricsIntegrationOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
 func (o *ReadAzureMetricsIntegrationOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
-func (o *ReadAzureMetricsIntegrationOK) GetPayload() *models.ConfigunstableReadAzureMetricsIntegrationResponse {
+func (o *ReadAzureMetricsIntegrationOK) GetPayload() *models.Configv1ReadAzureMetricsIntegrationResponse {
 	return o.Payload
 }
 
 func (o *ReadAzureMetricsIntegrationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableReadAzureMetricsIntegrationResponse)
+	o.Payload = new(models.Configv1ReadAzureMetricsIntegrationResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -166,11 +166,11 @@ func (o *ReadAzureMetricsIntegrationNotFound) Code() int {
 }
 
 func (o *ReadAzureMetricsIntegrationNotFound) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadAzureMetricsIntegrationNotFound) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadAzureMetricsIntegrationNotFound) GetPayload() *models.APIError {
@@ -234,11 +234,11 @@ func (o *ReadAzureMetricsIntegrationInternalServerError) Code() int {
 }
 
 func (o *ReadAzureMetricsIntegrationInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadAzureMetricsIntegrationInternalServerError) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/azure-metrics-integrations/{slug}][%d] readAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadAzureMetricsIntegrationInternalServerError) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *ReadAzureMetricsIntegrationDefault) Code() int {
 }
 
 func (o *ReadAzureMetricsIntegrationDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/azure-metrics-integrations/{slug}][%d] ReadAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/azure-metrics-integrations/{slug}][%d] ReadAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadAzureMetricsIntegrationDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/azure-metrics-integrations/{slug}][%d] ReadAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/azure-metrics-integrations/{slug}][%d] ReadAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadAzureMetricsIntegrationDefault) GetPayload() models.GenericError {

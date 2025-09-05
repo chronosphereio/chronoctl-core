@@ -520,7 +520,7 @@ spec:
         # Once activated, activated_drop_duration_secs defines how long the drop
         # rule stays activated before rechecking against the rate_limit_threshold.
         activated_drop_duration_secs: <integer>
-    mode: <ENABLED|DISABLED>
+    mode: <ENABLED|DISABLED|PREVIEW>
     value_based_drop:
         # Enables dropping metrics based on a set value.
         enabled: <true|false>

@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // UpdateAzureMetricsIntegrationReader is a Reader for the UpdateAzureMetricsIntegration structure.
@@ -76,7 +76,7 @@ UpdateAzureMetricsIntegrationOK describes a response with status code 200, with 
 A successful response containing the updated AzureMetricsIntegration.
 */
 type UpdateAzureMetricsIntegrationOK struct {
-	Payload *models.ConfigunstableUpdateAzureMetricsIntegrationResponse
+	Payload *models.Configv1UpdateAzureMetricsIntegrationResponse
 }
 
 // IsSuccess returns true when this update azure metrics integration o k response has a 2xx status code
@@ -110,20 +110,20 @@ func (o *UpdateAzureMetricsIntegrationOK) Code() int {
 }
 
 func (o *UpdateAzureMetricsIntegrationOK) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationOK) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateAzureMetricsIntegrationOK) GetPayload() *models.ConfigunstableUpdateAzureMetricsIntegrationResponse {
+func (o *UpdateAzureMetricsIntegrationOK) GetPayload() *models.Configv1UpdateAzureMetricsIntegrationResponse {
 	return o.Payload
 }
 
 func (o *UpdateAzureMetricsIntegrationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableUpdateAzureMetricsIntegrationResponse)
+	o.Payload = new(models.Configv1UpdateAzureMetricsIntegrationResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -178,11 +178,11 @@ func (o *UpdateAzureMetricsIntegrationBadRequest) Code() int {
 }
 
 func (o *UpdateAzureMetricsIntegrationBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationBadRequest) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationBadRequest) GetPayload() *models.APIError {
@@ -246,11 +246,11 @@ func (o *UpdateAzureMetricsIntegrationNotFound) Code() int {
 }
 
 func (o *UpdateAzureMetricsIntegrationNotFound) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationNotFound) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationNotFound) GetPayload() *models.APIError {
@@ -314,11 +314,11 @@ func (o *UpdateAzureMetricsIntegrationConflict) Code() int {
 }
 
 func (o *UpdateAzureMetricsIntegrationConflict) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationConflict  %+v", 409, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationConflict) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationConflict  %+v", 409, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationConflict) GetPayload() *models.APIError {
@@ -382,11 +382,11 @@ func (o *UpdateAzureMetricsIntegrationInternalServerError) Code() int {
 }
 
 func (o *UpdateAzureMetricsIntegrationInternalServerError) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationInternalServerError) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] updateAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationInternalServerError) GetPayload() *models.APIError {
@@ -454,11 +454,11 @@ func (o *UpdateAzureMetricsIntegrationDefault) Code() int {
 }
 
 func (o *UpdateAzureMetricsIntegrationDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] UpdateAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] UpdateAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationDefault) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/azure-metrics-integrations/{slug}][%d] UpdateAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/azure-metrics-integrations/{slug}][%d] UpdateAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateAzureMetricsIntegrationDefault) GetPayload() models.GenericError {

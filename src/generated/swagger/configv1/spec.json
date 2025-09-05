@@ -33,6 +33,61 @@
       },
       "type": "object"
     },
+    "AzureMetricsIntegrationAzurePrincipal": {
+      "properties": {
+        "tenant_id": {
+          "description": "Specifies the ID of the Azure tenant that hosts the managed identity principal.",
+          "type": "string"
+        },
+        "client_id": {
+          "description": "Specifies the OAuth2 client ID of the managed identity principal.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AzureMetricsIntegrationAzureResourceType": {
+      "properties": {
+        "name": {
+          "description": "Name of the resource type.",
+          "type": "string"
+        },
+        "metric_names": {
+          "description": "List of metric names to be targeted (these apply to this resource type; use empty for all metrics).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "AzureMetricsIntegrationAzureScrapeConfig": {
+      "properties": {
+        "subscription_ids": {
+          "description": "Subscriptions to be targeted for this integration (use empty for all subscriptions).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "locations": {
+          "description": "Locations to be ingested for this integration (these apply to all subscriptions; use empty for all locations).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "resource_types": {
+          "description": "Metric groups to be ingested for this integration.",
+          "items": {
+            "$ref": "#/definitions/AzureMetricsIntegrationAzureResourceType"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "ConditionOp": {
       "enum": [
         "GEQ",
@@ -45,6 +100,22 @@
         "NOT_EXISTS"
       ],
       "type": "string"
+    },
+    "ConfigV1UpdateAzureMetricsIntegrationBody": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configv1AzureMetricsIntegration"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the AzureMetricsIntegration will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the AzureMetricsIntegration does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the AzureMetricsIntegration. If the specified configuration is valid, the endpoint returns a partial response without the AzureMetricsIntegration. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
     },
     "ConfigV1UpdateBucketBody": {
       "properties": {
@@ -452,6 +523,7 @@
           "type": "string"
         },
         "filters": {
+          "description": "Determine when to apply `name_mappings`, filtering out all other values.",
           "items": {
             "$ref": "#/definitions/configv1LabelFilter"
           },
@@ -614,10 +686,10 @@
       "type": "object"
     },
     "DerivedLabelSpanTag": {
-      "description": "SpanTag is used to map span tags to derived labels.",
+      "description": "A span tag is used to map span tags to derived labels.",
       "properties": {
         "name_mappings": {
-          "description": "All name mappings are ORed together and the first matching name mapping is used to map the source tag to the derived tag.",
+          "description": "All name mappings are combined as `OR` matches. The first matching name\nmapping is used to map the source tag to the derived tag.",
           "items": {
             "$ref": "#/definitions/DerivedLabelSpanTagNameMapping"
           },
@@ -734,11 +806,11 @@
     "GcpMetricsIntegrationMetricGroup": {
       "properties": {
         "project_id": {
-          "description": "Project ID that has access to the metric data.",
+          "description": "The Google Cloud project ID that can access the metric data.",
           "type": "string"
         },
         "prefixes": {
-          "description": "List of Gcp metric prefixes to ingest.",
+          "description": "A list of Google Cloud metric prefixes to ingest.",
           "items": {
             "type": "string"
           },
@@ -1180,14 +1252,14 @@
     "MappingLabelValueMapping": {
       "properties": {
         "source_value_globs": {
-          "description": "Defines the source label values that should be mapped into the given target_value.",
+          "description": "Defines the source label values that map into the given `target_value`.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "target_value": {
-          "description": "The value that source_value_globs are mapped into.\nFor example, given this mapping:\n```yaml\nvalue_mappings:\n - source_value_globs:\n     - Cat\n     - CAT\n   target_value: cat\n```\nThis indicates that the target value `cat` maps to the source label's values `Cat` and `CAT`.",
+          "description": "The value that `source_value_globs` are mapped into. For example, this\nmapping indicates that the target value `cat` maps to the source label's\nvalues of `Cat` and `CAT`.:\n```yaml\nvalue_mappings:\n - source_value_globs:\n     - Cat\n     - CAT\n   target_value: cat\n```",
           "type": "string"
         }
       },
@@ -1226,6 +1298,7 @@
     "MetricLabelMappingLabel": {
       "properties": {
         "name_mappings": {
+          "description": "Determines where the input data for a derived label comes from. For each\nname mapping, you must define a `source_label`.",
           "items": {
             "$ref": "#/definitions/MetricLabelMappingLabelNameMapping"
           },
@@ -1250,11 +1323,11 @@
           "type": "array"
         },
         "source_label": {
-          "description": "The actual label ingested on the time series",
+          "description": "The source label name on the time series from when it was ingested.",
           "type": "string"
         },
         "value_mappings": {
-          "description": "These value mappings apply to just the name mapping they belong to.",
+          "description": "These value mappings apply only to the name mapping they belong to.",
           "items": {
             "$ref": "#/definitions/MappingLabelValueMapping"
           },
@@ -2709,6 +2782,49 @@
       ],
       "type": "string"
     },
+    "configv1AzureMetricsIntegration": {
+      "properties": {
+        "slug": {
+          "description": "The unique identifier of the AzureMetricsIntegration. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the AzureMetricsIntegration is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the AzureMetricsIntegration. You can modify this value after the AzureMetricsIntegration is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the AzureMetricsIntegration was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the AzureMetricsIntegration was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "principal": {
+          "$ref": "#/definitions/AzureMetricsIntegrationAzurePrincipal"
+        },
+        "scrape_config": {
+          "$ref": "#/definitions/AzureMetricsIntegrationAzureScrapeConfig"
+        },
+        "count_metrics_enabled": {
+          "description": "Enables Azure count metrics for the configured resources.",
+          "type": "boolean"
+        },
+        "usage_metrics_enabled": {
+          "description": "Enables collection of azure usage metrics under this principal (Microsoft.Compute, Microsoft.Network, Microsoft.Storage).",
+          "type": "boolean"
+        },
+        "propagate_tags": {
+          "description": "Specifies whether Azure resource, group, and subscription tags should be propagated as metric labels.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "configv1Bucket": {
       "properties": {
         "slug": {
@@ -2907,6 +3023,26 @@
             "$ref": "#/definitions/ConsumptionConfigPartition"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateAzureMetricsIntegrationRequest": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configv1AzureMetricsIntegration"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the AzureMetricsIntegration. If the specified configuration is valid, the endpoint returns a partial response without the AzureMetricsIntegration. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateAzureMetricsIntegrationResponse": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configv1AzureMetricsIntegration"
         }
       },
       "type": "object"
@@ -3680,6 +3816,9 @@
       },
       "type": "object"
     },
+    "configv1DeleteAzureMetricsIntegrationResponse": {
+      "type": "object"
+    },
     "configv1DeleteBucketResponse": {
       "properties": {
         "changes": {
@@ -3814,11 +3953,11 @@
           "type": "string"
         },
         "label_name": {
-          "description": "Name of the derived label. It needs to be unique across the system.",
+          "description": "Name of the derived label. Must be unique across the system.",
           "type": "string"
         },
         "description": {
-          "description": "Optional description of the derived label.",
+          "description": "Optional. Description of the derived label.",
           "type": "string"
         },
         "metric_label": {
@@ -3951,7 +4090,8 @@
     "configv1DropRuleMode": {
       "enum": [
         "ENABLED",
-        "DISABLED"
+        "DISABLED",
+        "PREVIEW"
       ],
       "type": "string"
     },
@@ -3981,7 +4121,7 @@
           "$ref": "#/definitions/configv1GcpMetricsIntegrationServiceAccount"
         },
         "metric_groups": {
-          "description": "Metric groups to be ingested for this integration.",
+          "description": "An array of metric groups to be ingested for this integration.",
           "items": {
             "$ref": "#/definitions/GcpMetricsIntegrationMetricGroup"
           },
@@ -3993,7 +4133,7 @@
     "configv1GcpMetricsIntegrationServiceAccount": {
       "properties": {
         "client_email": {
-          "description": "Email address of the service account to impersonate.",
+          "description": "The email address of the Google Cloud service account to impersonate for authentication.",
           "type": "string"
         }
       },
@@ -4076,6 +4216,20 @@
         "REGEX"
       ],
       "type": "string"
+    },
+    "configv1ListAzureMetricsIntegrationsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "azure_metrics_integrations": {
+          "items": {
+            "$ref": "#/definitions/configv1AzureMetricsIntegration"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
     },
     "configv1ListBucketsResponse": {
       "properties": {
@@ -5129,6 +5283,14 @@
       },
       "type": "object"
     },
+    "configv1ReadAzureMetricsIntegrationResponse": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configv1AzureMetricsIntegration"
+        }
+      },
+      "type": "object"
+    },
     "configv1ReadBucketResponse": {
       "properties": {
         "bucket": {
@@ -6135,6 +6297,14 @@
       },
       "type": "object"
     },
+    "configv1UpdateAzureMetricsIntegrationResponse": {
+      "properties": {
+        "azure_metrics_integration": {
+          "$ref": "#/definitions/configv1AzureMetricsIntegration"
+        }
+      },
+      "type": "object"
+    },
     "configv1UpdateBucketResponse": {
       "properties": {
         "bucket": {
@@ -6547,6 +6717,265 @@
     "version": "v1"
   },
   "paths": {
+    "/api/v1/config/azure-metrics-integrations": {
+      "get": {
+        "operationId": "ListAzureMetricsIntegrations",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any AzureMetricsIntegration with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any AzureMetricsIntegration with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListAzureMetricsIntegrationsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      },
+      "post": {
+        "operationId": "CreateAzureMetricsIntegration",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateAzureMetricsIntegrationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created AzureMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateAzureMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the AzureMetricsIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the AzureMetricsIntegration because there is a conflict with an existing AzureMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      }
+    },
+    "/api/v1/config/azure-metrics-integrations/{slug}": {
+      "delete": {
+        "operationId": "DeleteAzureMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteAzureMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the AzureMetricsIntegration because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the AzureMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      },
+      "get": {
+        "operationId": "ReadAzureMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadAzureMetricsIntegrationResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the AzureMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateAzureMetricsIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateAzureMetricsIntegrationBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated AzureMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateAzureMetricsIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the AzureMetricsIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the AzureMetricsIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the AzureMetricsIntegration because there is a conflict with an existing AzureMetricsIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "AzureMetricsIntegration"
+        ]
+      }
+    },
     "/api/v1/config/buckets": {
       "get": {
         "operationId": "ListBuckets",
@@ -9240,6 +9669,7 @@
         "operationId": "DeleteGcpMetricsIntegration",
         "parameters": [
           {
+            "description": "The unique slug that identifies the GcpMetricsIntegration to delete.",
             "in": "path",
             "name": "slug",
             "required": true,
@@ -9286,6 +9716,7 @@
         "operationId": "ReadGcpMetricsIntegration",
         "parameters": [
           {
+            "description": "The unique slug that identifies the GcpMetricsIntegration to read.",
             "in": "path",
             "name": "slug",
             "required": true,
@@ -9326,6 +9757,7 @@
         "operationId": "UpdateGcpMetricsIntegration",
         "parameters": [
           {
+            "description": "The unique slug that identifies the GcpMetricsIntegration to update.",
             "in": "path",
             "name": "slug",
             "required": true,

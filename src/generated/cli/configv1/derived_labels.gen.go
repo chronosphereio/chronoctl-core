@@ -495,36 +495,40 @@ spec:
     name: <string>
     # The unique identifier of the DerivedLabel. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the DerivedLabel is created.
     slug: <string>
-    # Name of the derived label. It needs to be unique across the system.
+    # Name of the derived label. Must be unique across the system.
     label_name: <string>
-    # Optional description of the derived label.
+    # Optional. Description of the derived label.
     description: <string>
     existing_label_policy: <KEEP|OVERRIDE>
     metric_label:
         constructed_label:
             value_definitions:
                 - value: <string>
+                  # Determine when to apply 'name_mappings', filtering out all other values.
                   filters:
                     - # Name of the label to match.
                       name: <string>
                       # Glob value of the label to match.
                       value_glob: <string>
         mapping_label:
+            # Determines where the input data for a derived label comes from. For each
+            # name mapping, you must define a 'source_label'.
             name_mappings:
                 - filters:
                     - # Name of the label to match.
                       name: <string>
                       # Glob value of the label to match.
                       value_glob: <string>
-                  # The actual label ingested on the time series
+                  # The source label name on the time series from when it was ingested.
                   source_label: <string>
-                  # These value mappings apply to just the name mapping they belong to.
+                  # These value mappings apply only to the name mapping they belong to.
                   value_mappings:
-                    - # Defines the source label values that should be mapped into the given target_value.
+                    - # Defines the source label values that map into the given 'target_value'.
                       source_value_globs:
                         - <string>
-                      # The value that source_value_globs are mapped into.
-                      # For example, given this mapping:
+                      # The value that 'source_value_globs' are mapped into. For example, this
+                      # mapping indicates that the target value 'cat' maps to the source label's
+                      # values of 'Cat' and 'CAT'.:
                       # '''yaml
                       # value_mappings:
                       #  - source_value_globs:
@@ -532,16 +536,16 @@ spec:
                       #      - CAT
                       #    target_value: cat
                       # '''
-                      # This indicates that the target value 'cat' maps to the source label's values 'Cat' and 'CAT'.
                       target_value: <string>
             # These value mappings apply to the whole mapping label.
             # If there's no name_mappings, these value mappings apply to the label that exists on the metric.
             value_mappings:
-                - # Defines the source label values that should be mapped into the given target_value.
+                - # Defines the source label values that map into the given 'target_value'.
                   source_value_globs:
                     - <string>
-                  # The value that source_value_globs are mapped into.
-                  # For example, given this mapping:
+                  # The value that 'source_value_globs' are mapped into. For example, this
+                  # mapping indicates that the target value 'cat' maps to the source label's
+                  # values of 'Cat' and 'CAT'.:
                   # '''yaml
                   # value_mappings:
                   #  - source_value_globs:
@@ -549,11 +553,11 @@ spec:
                   #      - CAT
                   #    target_value: cat
                   # '''
-                  # This indicates that the target value 'cat' maps to the source label's values 'Cat' and 'CAT'.
                   target_value: <string>
-    # SpanTag is used to map span tags to derived labels.
+    # A span tag is used to map span tags to derived labels.
     span_tag:
-        # All name mappings are ORed together and the first matching name mapping is used to map the source tag to the derived tag.
+        # All name mappings are combined as 'OR' matches. The first matching name
+        # mapping is used to map the source tag to the derived tag.
         name_mappings:
             - source_tag: <string>
 `

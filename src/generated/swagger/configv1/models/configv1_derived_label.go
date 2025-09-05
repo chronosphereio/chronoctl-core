@@ -35,10 +35,10 @@ type Configv1DerivedLabel struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Name of the derived label. It needs to be unique across the system.
+	// Name of the derived label. Must be unique across the system.
 	LabelName string `json:"label_name,omitempty"`
 
-	// Optional description of the derived label.
+	// Optional. Description of the derived label.
 	Description string `json:"description,omitempty"`
 
 	// metric label

@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // DeleteAzureMetricsIntegrationReader is a Reader for the DeleteAzureMetricsIntegration structure.
@@ -70,7 +70,7 @@ DeleteAzureMetricsIntegrationOK describes a response with status code 200, with 
 A successful response.
 */
 type DeleteAzureMetricsIntegrationOK struct {
-	Payload models.ConfigunstableDeleteAzureMetricsIntegrationResponse
+	Payload models.Configv1DeleteAzureMetricsIntegrationResponse
 }
 
 // IsSuccess returns true when this delete azure metrics integration o k response has a 2xx status code
@@ -104,14 +104,14 @@ func (o *DeleteAzureMetricsIntegrationOK) Code() int {
 }
 
 func (o *DeleteAzureMetricsIntegrationOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteAzureMetricsIntegrationOK) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteAzureMetricsIntegrationOK) GetPayload() models.ConfigunstableDeleteAzureMetricsIntegrationResponse {
+func (o *DeleteAzureMetricsIntegrationOK) GetPayload() models.Configv1DeleteAzureMetricsIntegrationResponse {
 	return o.Payload
 }
 
@@ -170,11 +170,11 @@ func (o *DeleteAzureMetricsIntegrationBadRequest) Code() int {
 }
 
 func (o *DeleteAzureMetricsIntegrationBadRequest) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteAzureMetricsIntegrationBadRequest) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteAzureMetricsIntegrationBadRequest) GetPayload() *models.APIError {
@@ -238,11 +238,11 @@ func (o *DeleteAzureMetricsIntegrationNotFound) Code() int {
 }
 
 func (o *DeleteAzureMetricsIntegrationNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteAzureMetricsIntegrationNotFound) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteAzureMetricsIntegrationNotFound) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *DeleteAzureMetricsIntegrationInternalServerError) Code() int {
 }
 
 func (o *DeleteAzureMetricsIntegrationInternalServerError) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteAzureMetricsIntegrationInternalServerError) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] deleteAzureMetricsIntegrationInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteAzureMetricsIntegrationInternalServerError) GetPayload() *models.APIError {
@@ -378,11 +378,11 @@ func (o *DeleteAzureMetricsIntegrationDefault) Code() int {
 }
 
 func (o *DeleteAzureMetricsIntegrationDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] DeleteAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] DeleteAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteAzureMetricsIntegrationDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/azure-metrics-integrations/{slug}][%d] DeleteAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/azure-metrics-integrations/{slug}][%d] DeleteAzureMetricsIntegration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteAzureMetricsIntegrationDefault) GetPayload() models.GenericError {

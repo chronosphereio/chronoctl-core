@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateAzureMetricsIntegrationParams creates a new UpdateAzureMetricsIntegrationParams object,
@@ -64,7 +64,7 @@ UpdateAzureMetricsIntegrationParams contains all the parameters to send to the A
 type UpdateAzureMetricsIntegrationParams struct {
 
 	// Body.
-	Body *models.ConfigUnstableUpdateAzureMetricsIntegrationBody
+	Body *models.ConfigV1UpdateAzureMetricsIntegrationBody
 
 	// Slug.
 	Slug string
@@ -123,13 +123,13 @@ func (o *UpdateAzureMetricsIntegrationParams) SetHTTPClient(client *http.Client)
 }
 
 // WithBody adds the body to the update azure metrics integration params
-func (o *UpdateAzureMetricsIntegrationParams) WithBody(body *models.ConfigUnstableUpdateAzureMetricsIntegrationBody) *UpdateAzureMetricsIntegrationParams {
+func (o *UpdateAzureMetricsIntegrationParams) WithBody(body *models.ConfigV1UpdateAzureMetricsIntegrationBody) *UpdateAzureMetricsIntegrationParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update azure metrics integration params
-func (o *UpdateAzureMetricsIntegrationParams) SetBody(body *models.ConfigUnstableUpdateAzureMetricsIntegrationBody) {
+func (o *UpdateAzureMetricsIntegrationParams) SetBody(body *models.ConfigV1UpdateAzureMetricsIntegrationBody) {
 	o.Body = body
 }
 

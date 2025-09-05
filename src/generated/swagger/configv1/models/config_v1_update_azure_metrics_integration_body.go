@@ -13,13 +13,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigUnstableUpdateAzureMetricsIntegrationBody config unstable update azure metrics integration body
+// ConfigV1UpdateAzureMetricsIntegrationBody config v1 update azure metrics integration body
 //
-// swagger:model ConfigUnstableUpdateAzureMetricsIntegrationBody
-type ConfigUnstableUpdateAzureMetricsIntegrationBody struct {
+// swagger:model ConfigV1UpdateAzureMetricsIntegrationBody
+type ConfigV1UpdateAzureMetricsIntegrationBody struct {
 
 	// azure metrics integration
-	AzureMetricsIntegration *ConfigunstableAzureMetricsIntegration `json:"azure_metrics_integration,omitempty"`
+	AzureMetricsIntegration *Configv1AzureMetricsIntegration `json:"azure_metrics_integration,omitempty"`
 
 	// If `true`, the AzureMetricsIntegration will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the AzureMetricsIntegration does not already exist.
 	CreateIfMissing bool `json:"create_if_missing,omitempty"`
@@ -28,8 +28,8 @@ type ConfigUnstableUpdateAzureMetricsIntegrationBody struct {
 	DryRun bool `json:"dry_run,omitempty"`
 }
 
-// Validate validates this config unstable update azure metrics integration body
-func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) Validate(formats strfmt.Registry) error {
+// Validate validates this config v1 update azure metrics integration body
+func (m *ConfigV1UpdateAzureMetricsIntegrationBody) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAzureMetricsIntegration(formats); err != nil {
@@ -42,7 +42,7 @@ func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) Validate(formats strfm
 	return nil
 }
 
-func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) validateAzureMetricsIntegration(formats strfmt.Registry) error {
+func (m *ConfigV1UpdateAzureMetricsIntegrationBody) validateAzureMetricsIntegration(formats strfmt.Registry) error {
 	if swag.IsZero(m.AzureMetricsIntegration) { // not required
 		return nil
 	}
@@ -61,8 +61,8 @@ func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) validateAzureMetricsIn
 	return nil
 }
 
-// ContextValidate validate this config unstable update azure metrics integration body based on the context it is used
-func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this config v1 update azure metrics integration body based on the context it is used
+func (m *ConfigV1UpdateAzureMetricsIntegrationBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateAzureMetricsIntegration(ctx, formats); err != nil {
@@ -75,7 +75,7 @@ func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) ContextValidate(ctx co
 	return nil
 }
 
-func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) contextValidateAzureMetricsIntegration(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConfigV1UpdateAzureMetricsIntegrationBody) contextValidateAzureMetricsIntegration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AzureMetricsIntegration != nil {
 
@@ -97,7 +97,7 @@ func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) contextValidateAzureMe
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) MarshalBinary() ([]byte, error) {
+func (m *ConfigV1UpdateAzureMetricsIntegrationBody) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -105,8 +105,8 @@ func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) MarshalBinary() ([]byt
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigUnstableUpdateAzureMetricsIntegrationBody) UnmarshalBinary(b []byte) error {
-	var res ConfigUnstableUpdateAzureMetricsIntegrationBody
+func (m *ConfigV1UpdateAzureMetricsIntegrationBody) UnmarshalBinary(b []byte) error {
+	var res ConfigV1UpdateAzureMetricsIntegrationBody
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

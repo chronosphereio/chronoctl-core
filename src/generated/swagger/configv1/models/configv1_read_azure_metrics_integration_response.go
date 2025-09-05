@@ -13,17 +13,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableCreateAzureMetricsIntegrationResponse configunstable create azure metrics integration response
+// Configv1ReadAzureMetricsIntegrationResponse configv1 read azure metrics integration response
 //
-// swagger:model configunstableCreateAzureMetricsIntegrationResponse
-type ConfigunstableCreateAzureMetricsIntegrationResponse struct {
+// swagger:model configv1ReadAzureMetricsIntegrationResponse
+type Configv1ReadAzureMetricsIntegrationResponse struct {
 
 	// azure metrics integration
-	AzureMetricsIntegration *ConfigunstableAzureMetricsIntegration `json:"azure_metrics_integration,omitempty"`
+	AzureMetricsIntegration *Configv1AzureMetricsIntegration `json:"azure_metrics_integration,omitempty"`
 }
 
-// Validate validates this configunstable create azure metrics integration response
-func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 read azure metrics integration response
+func (m *Configv1ReadAzureMetricsIntegrationResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAzureMetricsIntegration(formats); err != nil {
@@ -36,7 +36,7 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) Validate(formats s
 	return nil
 }
 
-func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) validateAzureMetricsIntegration(formats strfmt.Registry) error {
+func (m *Configv1ReadAzureMetricsIntegrationResponse) validateAzureMetricsIntegration(formats strfmt.Registry) error {
 	if swag.IsZero(m.AzureMetricsIntegration) { // not required
 		return nil
 	}
@@ -55,8 +55,8 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) validateAzureMetri
 	return nil
 }
 
-// ContextValidate validate this configunstable create azure metrics integration response based on the context it is used
-func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 read azure metrics integration response based on the context it is used
+func (m *Configv1ReadAzureMetricsIntegrationResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateAzureMetricsIntegration(ctx, formats); err != nil {
@@ -69,7 +69,7 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) ContextValidate(ct
 	return nil
 }
 
-func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) contextValidateAzureMetricsIntegration(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ReadAzureMetricsIntegrationResponse) contextValidateAzureMetricsIntegration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AzureMetricsIntegration != nil {
 
@@ -91,7 +91,7 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) contextValidateAzu
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) MarshalBinary() ([]byte, error) {
+func (m *Configv1ReadAzureMetricsIntegrationResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -99,8 +99,8 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) MarshalBinary() ([
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableCreateAzureMetricsIntegrationResponse) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableCreateAzureMetricsIntegrationResponse
+func (m *Configv1ReadAzureMetricsIntegrationResponse) UnmarshalBinary(b []byte) error {
+	var res Configv1ReadAzureMetricsIntegrationResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

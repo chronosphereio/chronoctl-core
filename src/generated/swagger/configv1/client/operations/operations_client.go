@@ -28,6 +28,8 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	CreateAzureMetricsIntegration(params *CreateAzureMetricsIntegrationParams, opts ...ClientOption) (*CreateAzureMetricsIntegrationOK, error)
+
 	CreateBucket(params *CreateBucketParams, opts ...ClientOption) (*CreateBucketOK, error)
 
 	CreateClassicDashboard(params *CreateClassicDashboardParams, opts ...ClientOption) (*CreateClassicDashboardOK, error)
@@ -95,6 +97,8 @@ type ClientService interface {
 	CreateTraceMetricsRule(params *CreateTraceMetricsRuleParams, opts ...ClientOption) (*CreateTraceMetricsRuleOK, error)
 
 	CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRulesParams, opts ...ClientOption) (*CreateTraceTailSamplingRulesOK, error)
+
+	DeleteAzureMetricsIntegration(params *DeleteAzureMetricsIntegrationParams, opts ...ClientOption) (*DeleteAzureMetricsIntegrationOK, error)
 
 	DeleteBucket(params *DeleteBucketParams, opts ...ClientOption) (*DeleteBucketOK, error)
 
@@ -164,6 +168,8 @@ type ClientService interface {
 
 	DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRulesParams, opts ...ClientOption) (*DeleteTraceTailSamplingRulesOK, error)
 
+	ListAzureMetricsIntegrations(params *ListAzureMetricsIntegrationsParams, opts ...ClientOption) (*ListAzureMetricsIntegrationsOK, error)
+
 	ListBuckets(params *ListBucketsParams, opts ...ClientOption) (*ListBucketsOK, error)
 
 	ListClassicDashboards(params *ListClassicDashboardsParams, opts ...ClientOption) (*ListClassicDashboardsOK, error)
@@ -217,6 +223,8 @@ type ClientService interface {
 	ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error)
 
 	ListTraceMetricsRules(params *ListTraceMetricsRulesParams, opts ...ClientOption) (*ListTraceMetricsRulesOK, error)
+
+	ReadAzureMetricsIntegration(params *ReadAzureMetricsIntegrationParams, opts ...ClientOption) (*ReadAzureMetricsIntegrationOK, error)
 
 	ReadBucket(params *ReadBucketParams, opts ...ClientOption) (*ReadBucketOK, error)
 
@@ -288,6 +296,8 @@ type ClientService interface {
 
 	ReadTraceTailSamplingRules(params *ReadTraceTailSamplingRulesParams, opts ...ClientOption) (*ReadTraceTailSamplingRulesOK, error)
 
+	UpdateAzureMetricsIntegration(params *UpdateAzureMetricsIntegrationParams, opts ...ClientOption) (*UpdateAzureMetricsIntegrationOK, error)
+
 	UpdateBucket(params *UpdateBucketParams, opts ...ClientOption) (*UpdateBucketOK, error)
 
 	UpdateClassicDashboard(params *UpdateClassicDashboardParams, opts ...ClientOption) (*UpdateClassicDashboardOK, error)
@@ -355,6 +365,43 @@ type ClientService interface {
 	UpdateTraceTailSamplingRules(params *UpdateTraceTailSamplingRulesParams, opts ...ClientOption) (*UpdateTraceTailSamplingRulesOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+CreateAzureMetricsIntegration create azure metrics integration API
+*/
+func (a *Client) CreateAzureMetricsIntegration(params *CreateAzureMetricsIntegrationParams, opts ...ClientOption) (*CreateAzureMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateAzureMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateAzureMetricsIntegration",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/azure-metrics-integrations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateAzureMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateAzureMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateAzureMetricsIntegrationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -1619,6 +1666,43 @@ func (a *Client) CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRul
 }
 
 /*
+DeleteAzureMetricsIntegration delete azure metrics integration API
+*/
+func (a *Client) DeleteAzureMetricsIntegration(params *DeleteAzureMetricsIntegrationParams, opts ...ClientOption) (*DeleteAzureMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteAzureMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteAzureMetricsIntegration",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/azure-metrics-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteAzureMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteAzureMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteAzureMetricsIntegrationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteBucket delete bucket API
 */
 func (a *Client) DeleteBucket(params *DeleteBucketParams, opts ...ClientOption) (*DeleteBucketOK, error) {
@@ -2877,6 +2961,43 @@ func (a *Client) DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRul
 }
 
 /*
+ListAzureMetricsIntegrations list azure metrics integrations API
+*/
+func (a *Client) ListAzureMetricsIntegrations(params *ListAzureMetricsIntegrationsParams, opts ...ClientOption) (*ListAzureMetricsIntegrationsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListAzureMetricsIntegrationsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListAzureMetricsIntegrations",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/azure-metrics-integrations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListAzureMetricsIntegrationsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListAzureMetricsIntegrationsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListAzureMetricsIntegrationsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListBuckets list buckets API
 */
 func (a *Client) ListBuckets(params *ListBucketsParams, opts ...ClientOption) (*ListBucketsOK, error) {
@@ -3872,6 +3993,43 @@ func (a *Client) ListTraceMetricsRules(params *ListTraceMetricsRulesParams, opts
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListTraceMetricsRulesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadAzureMetricsIntegration read azure metrics integration API
+*/
+func (a *Client) ReadAzureMetricsIntegration(params *ReadAzureMetricsIntegrationParams, opts ...ClientOption) (*ReadAzureMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadAzureMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadAzureMetricsIntegration",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/azure-metrics-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadAzureMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadAzureMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadAzureMetricsIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5167,6 +5325,43 @@ func (a *Client) ReadTraceTailSamplingRules(params *ReadTraceTailSamplingRulesPa
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadTraceTailSamplingRulesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateAzureMetricsIntegration update azure metrics integration API
+*/
+func (a *Client) UpdateAzureMetricsIntegration(params *UpdateAzureMetricsIntegrationParams, opts ...ClientOption) (*UpdateAzureMetricsIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateAzureMetricsIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateAzureMetricsIntegration",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/azure-metrics-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateAzureMetricsIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateAzureMetricsIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateAzureMetricsIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
