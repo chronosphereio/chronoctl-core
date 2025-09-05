@@ -39,7 +39,7 @@ type Configv1GcpMetricsIntegration struct {
 	// service account
 	ServiceAccount *Configv1GcpMetricsIntegrationServiceAccount `json:"service_account,omitempty"`
 
-	// Metric groups to be ingested for this integration.
+	// An array of metric groups to be ingested for this integration.
 	MetricGroups []*GcpMetricsIntegrationMetricGroup `json:"metric_groups"`
 }
 

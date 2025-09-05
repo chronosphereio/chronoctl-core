@@ -12,6 +12,7 @@ import (
 
 // AddCommandsTo adds all entity subcommands to the given root command.
 func AddCommandsTo(root *cobra.Command) {
+	root.AddCommand(NewAzureMetricsIntegrationCmd())
 	root.AddCommand(NewBucketCmd())
 	root.AddCommand(NewClassicDashboardCmd())
 	root.AddCommand(NewCollectionCmd())
@@ -50,6 +51,22 @@ func AddCommandsTo(root *cobra.Command) {
 
 func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, types.Object, bool) error {
 	return map[types.TypeMeta]func(context.Context, client.Clients, types.Object, bool) error{
+		AzureMetricsIntegrationTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*AzureMetricsIntegration)
+			if !ok {
+				return types.WrongObjectErr((&AzureMetricsIntegration{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateAzureMetricsIntegration(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
 		BucketTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
 			entity, ok := obj.(*Bucket)
 			if !ok {

@@ -19,7 +19,8 @@ import (
 // swagger:model MetricLabelMappingLabel
 type MetricLabelMappingLabel struct {
 
-	// name mappings
+	// Determines where the input data for a derived label comes from. For each
+	// name mapping, you must define a `source_label`.
 	NameMappings []*MetricLabelMappingLabelNameMapping `json:"name_mappings"`
 
 	// These value mappings apply to the whole mapping label.

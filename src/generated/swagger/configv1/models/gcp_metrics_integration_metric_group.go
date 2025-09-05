@@ -17,10 +17,10 @@ import (
 // swagger:model GcpMetricsIntegrationMetricGroup
 type GcpMetricsIntegrationMetricGroup struct {
 
-	// Project ID that has access to the metric data.
+	// The Google Cloud project ID that can access the metric data.
 	ProjectID string `json:"project_id,omitempty"`
 
-	// List of Gcp metric prefixes to ingest.
+	// A list of Google Cloud metric prefixes to ingest.
 	Prefixes []string `json:"prefixes"`
 }
 

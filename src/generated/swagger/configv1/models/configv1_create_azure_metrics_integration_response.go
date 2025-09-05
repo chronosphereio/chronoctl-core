@@ -13,20 +13,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableCreateAzureMetricsIntegrationRequest configunstable create azure metrics integration request
+// Configv1CreateAzureMetricsIntegrationResponse configv1 create azure metrics integration response
 //
-// swagger:model configunstableCreateAzureMetricsIntegrationRequest
-type ConfigunstableCreateAzureMetricsIntegrationRequest struct {
+// swagger:model configv1CreateAzureMetricsIntegrationResponse
+type Configv1CreateAzureMetricsIntegrationResponse struct {
 
 	// azure metrics integration
-	AzureMetricsIntegration *ConfigunstableAzureMetricsIntegration `json:"azure_metrics_integration,omitempty"`
-
-	// If `true`, validates the specified configuration without creating the AzureMetricsIntegration. If the specified configuration is valid, the endpoint returns a partial response without the AzureMetricsIntegration. If the specified configuration is invalid, the endpoint returns an error.
-	DryRun bool `json:"dry_run,omitempty"`
+	AzureMetricsIntegration *Configv1AzureMetricsIntegration `json:"azure_metrics_integration,omitempty"`
 }
 
-// Validate validates this configunstable create azure metrics integration request
-func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 create azure metrics integration response
+func (m *Configv1CreateAzureMetricsIntegrationResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAzureMetricsIntegration(formats); err != nil {
@@ -39,7 +36,7 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) Validate(formats st
 	return nil
 }
 
-func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) validateAzureMetricsIntegration(formats strfmt.Registry) error {
+func (m *Configv1CreateAzureMetricsIntegrationResponse) validateAzureMetricsIntegration(formats strfmt.Registry) error {
 	if swag.IsZero(m.AzureMetricsIntegration) { // not required
 		return nil
 	}
@@ -58,8 +55,8 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) validateAzureMetric
 	return nil
 }
 
-// ContextValidate validate this configunstable create azure metrics integration request based on the context it is used
-func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 create azure metrics integration response based on the context it is used
+func (m *Configv1CreateAzureMetricsIntegrationResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateAzureMetricsIntegration(ctx, formats); err != nil {
@@ -72,7 +69,7 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) ContextValidate(ctx
 	return nil
 }
 
-func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) contextValidateAzureMetricsIntegration(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1CreateAzureMetricsIntegrationResponse) contextValidateAzureMetricsIntegration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AzureMetricsIntegration != nil {
 
@@ -94,7 +91,7 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) contextValidateAzur
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) MarshalBinary() ([]byte, error) {
+func (m *Configv1CreateAzureMetricsIntegrationResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -102,8 +99,8 @@ func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) MarshalBinary() ([]
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableCreateAzureMetricsIntegrationRequest) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableCreateAzureMetricsIntegrationRequest
+func (m *Configv1CreateAzureMetricsIntegrationResponse) UnmarshalBinary(b []byte) error {
+	var res Configv1CreateAzureMetricsIntegrationResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

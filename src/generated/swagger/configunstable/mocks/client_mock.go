@@ -35,26 +35,6 @@ func (m *MockClientService) EXPECT() *MockClientServiceMockRecorder {
 	return m.recorder
 }
 
-// CreateAzureMetricsIntegration mocks base method.
-func (m *MockClientService) CreateAzureMetricsIntegration(params *operations.CreateAzureMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.CreateAzureMetricsIntegrationOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateAzureMetricsIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.CreateAzureMetricsIntegrationOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateAzureMetricsIntegration indicates an expected call of CreateAzureMetricsIntegration.
-func (mr *MockClientServiceMockRecorder) CreateAzureMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAzureMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).CreateAzureMetricsIntegration), varargs...)
-}
-
 // CreateDashboard mocks base method.
 func (m *MockClientService) CreateDashboard(params *operations.CreateDashboardParams, opts ...operations.ClientOption) (*operations.CreateDashboardOK, error) {
 	m.ctrl.T.Helper()
@@ -233,26 +213,6 @@ func (mr *MockClientServiceMockRecorder) CreateTraceTopTagConfig(params interfac
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).CreateTraceTopTagConfig), varargs...)
-}
-
-// DeleteAzureMetricsIntegration mocks base method.
-func (m *MockClientService) DeleteAzureMetricsIntegration(params *operations.DeleteAzureMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.DeleteAzureMetricsIntegrationOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteAzureMetricsIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteAzureMetricsIntegrationOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteAzureMetricsIntegration indicates an expected call of DeleteAzureMetricsIntegration.
-func (mr *MockClientServiceMockRecorder) DeleteAzureMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAzureMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).DeleteAzureMetricsIntegration), varargs...)
 }
 
 // DeleteDashboard mocks base method.
@@ -435,26 +395,6 @@ func (mr *MockClientServiceMockRecorder) DeleteTraceTopTagConfig(params interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).DeleteTraceTopTagConfig), varargs...)
 }
 
-// ListAzureMetricsIntegrations mocks base method.
-func (m *MockClientService) ListAzureMetricsIntegrations(params *operations.ListAzureMetricsIntegrationsParams, opts ...operations.ClientOption) (*operations.ListAzureMetricsIntegrationsOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ListAzureMetricsIntegrations", varargs...)
-	ret0, _ := ret[0].(*operations.ListAzureMetricsIntegrationsOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListAzureMetricsIntegrations indicates an expected call of ListAzureMetricsIntegrations.
-func (mr *MockClientServiceMockRecorder) ListAzureMetricsIntegrations(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureMetricsIntegrations", reflect.TypeOf((*MockClientService)(nil).ListAzureMetricsIntegrations), varargs...)
-}
-
 // ListDashboards mocks base method.
 func (m *MockClientService) ListDashboards(params *operations.ListDashboardsParams, opts ...operations.ClientOption) (*operations.ListDashboardsOK, error) {
 	m.ctrl.T.Helper()
@@ -573,26 +513,6 @@ func (mr *MockClientServiceMockRecorder) ListTraceJaegerRemoteSamplingStrategies
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTraceJaegerRemoteSamplingStrategies", reflect.TypeOf((*MockClientService)(nil).ListTraceJaegerRemoteSamplingStrategies), varargs...)
-}
-
-// ReadAzureMetricsIntegration mocks base method.
-func (m *MockClientService) ReadAzureMetricsIntegration(params *operations.ReadAzureMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.ReadAzureMetricsIntegrationOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadAzureMetricsIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.ReadAzureMetricsIntegrationOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadAzureMetricsIntegration indicates an expected call of ReadAzureMetricsIntegration.
-func (mr *MockClientServiceMockRecorder) ReadAzureMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadAzureMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).ReadAzureMetricsIntegration), varargs...)
 }
 
 // ReadDashboard mocks base method.
@@ -805,26 +725,6 @@ func (mr *MockClientServiceMockRecorder) SyncPrometheus(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SyncPrometheus", reflect.TypeOf((*MockClientService)(nil).SyncPrometheus), varargs...)
-}
-
-// UpdateAzureMetricsIntegration mocks base method.
-func (m *MockClientService) UpdateAzureMetricsIntegration(params *operations.UpdateAzureMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.UpdateAzureMetricsIntegrationOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateAzureMetricsIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateAzureMetricsIntegrationOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateAzureMetricsIntegration indicates an expected call of UpdateAzureMetricsIntegration.
-func (mr *MockClientServiceMockRecorder) UpdateAzureMetricsIntegration(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateAzureMetricsIntegration", reflect.TypeOf((*MockClientService)(nil).UpdateAzureMetricsIntegration), varargs...)
 }
 
 // UpdateDashboard mocks base method.

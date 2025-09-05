@@ -21,55 +21,55 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-func init() { types.MustRegisterObject(GcpMetricsIntegrationTypeMeta, &GcpMetricsIntegration{}) }
+func init() { types.MustRegisterObject(AzureMetricsIntegrationTypeMeta, &AzureMetricsIntegration{}) }
 
-var _ types.Object = &GcpMetricsIntegration{}
+var _ types.Object = &AzureMetricsIntegration{}
 
-var GcpMetricsIntegrationTypeMeta = types.TypeMeta{
+var AzureMetricsIntegrationTypeMeta = types.TypeMeta{
 	APIVersion: "v1/config",
-	Kind:       "GcpMetricsIntegration",
+	Kind:       "AzureMetricsIntegration",
 }
 
-type GcpMetricsIntegration struct {
+type AzureMetricsIntegration struct {
 	types.TypeMeta `json:",inline"`
-	Spec           *models.Configv1GcpMetricsIntegration `json:"spec"`
+	Spec           *models.Configv1AzureMetricsIntegration `json:"spec"`
 }
 
-func NewGcpMetricsIntegration(spec *models.Configv1GcpMetricsIntegration) *GcpMetricsIntegration {
-	return &GcpMetricsIntegration{
-		TypeMeta: GcpMetricsIntegrationTypeMeta,
+func NewAzureMetricsIntegration(spec *models.Configv1AzureMetricsIntegration) *AzureMetricsIntegration {
+	return &AzureMetricsIntegration{
+		TypeMeta: AzureMetricsIntegrationTypeMeta,
 		Spec:     spec,
 	}
 }
 
-func (e *GcpMetricsIntegration) Description() string {
+func (e *AzureMetricsIntegration) Description() string {
 	return types.TypeDescription(e, "name", e.Spec.Name, "slug", e.Spec.Slug)
 }
 
-func (e *GcpMetricsIntegration) Identifier() string {
+func (e *AzureMetricsIntegration) Identifier() string {
 	return e.Spec.Slug
 }
 
-func CreateGcpMetricsIntegration(
+func CreateAzureMetricsIntegration(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *GcpMetricsIntegration,
+	entity *AzureMetricsIntegration,
 	dryRun bool,
-) (*GcpMetricsIntegration, error) {
-	res, err := client.CreateGcpMetricsIntegration(&config_v1.CreateGcpMetricsIntegrationParams{
+) (*AzureMetricsIntegration, error) {
+	res, err := client.CreateAzureMetricsIntegration(&config_v1.CreateAzureMetricsIntegrationParams{
 		Context: ctx,
-		Body: &models.Configv1CreateGcpMetricsIntegrationRequest{
-			DryRun:                dryRun,
-			GcpMetricsIntegration: entity.Spec,
+		Body: &models.Configv1CreateAzureMetricsIntegrationRequest{
+			DryRun:                  dryRun,
+			AzureMetricsIntegration: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewGcpMetricsIntegration(res.Payload.GcpMetricsIntegration), nil
+	return NewAzureMetricsIntegration(res.Payload.AzureMetricsIntegration), nil
 }
 
-func newGcpMetricsIntegrationCreateCmd() *cobra.Command {
+func newAzureMetricsIntegrationCreateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		dryRunFlags       = dry.NewFlags()
@@ -83,7 +83,7 @@ func newGcpMetricsIntegrationCreateCmd() *cobra.Command {
 		short string
 	)
 	use = "create -f <file>"
-	short = "Creates a single GcpMetricsIntegration."
+	short = "Creates a single AzureMetricsIntegration."
 
 	cmd := &cobra.Command{
 		Use:     use,
@@ -103,13 +103,13 @@ func newGcpMetricsIntegrationCreateCmd() *cobra.Command {
 				return err
 			}
 
-			var gcpMetricsIntegration *GcpMetricsIntegration
+			var azureMetricsIntegration *AzureMetricsIntegration
 			file, err := fileFlags.File()
 			if err != nil {
 				return err
 			}
 			defer file.Close() //nolint:errcheck
-			gcpMetricsIntegration, err = types.MustDecodeSingleObject[*GcpMetricsIntegration](file, permissiveParsing)
+			azureMetricsIntegration, err = types.MustDecodeSingleObject[*AzureMetricsIntegration](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -117,18 +117,18 @@ func newGcpMetricsIntegrationCreateCmd() *cobra.Command {
 			if dryRunFlags.DryRun {
 				stderr.Println("--dry-run is set")
 			}
-			fullGcpMetricsIntegration, err := CreateGcpMetricsIntegration(ctx, client, gcpMetricsIntegration, dryRunFlags.DryRun)
+			fullAzureMetricsIntegration, err := CreateAzureMetricsIntegration(ctx, client, azureMetricsIntegration, dryRunFlags.DryRun)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("GcpMetricsIntegration is valid and can be created")
+				stderr.Println("AzureMetricsIntegration is valid and can be created")
 				return nil
 			}
-			stderr.Printf("GcpMetricsIntegration with slug %q created successfully\n", fullGcpMetricsIntegration.Spec.Slug)
+			stderr.Printf("AzureMetricsIntegration with slug %q created successfully\n", fullAzureMetricsIntegration.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullGcpMetricsIntegration, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullAzureMetricsIntegration, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -143,22 +143,22 @@ func newGcpMetricsIntegrationCreateCmd() *cobra.Command {
 	return cmd
 }
 
-func GetGcpMetricsIntegration(
+func GetAzureMetricsIntegration(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
-) (*GcpMetricsIntegration, error) {
-	res, err := client.ReadGcpMetricsIntegration(&config_v1.ReadGcpMetricsIntegrationParams{
+) (*AzureMetricsIntegration, error) {
+	res, err := client.ReadAzureMetricsIntegration(&config_v1.ReadAzureMetricsIntegrationParams{
 		Context: ctx,
 		Slug:    slug,
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewGcpMetricsIntegration(res.GetPayload().GcpMetricsIntegration), nil
+	return NewAzureMetricsIntegration(res.GetPayload().AzureMetricsIntegration), nil
 }
 
-func newGcpMetricsIntegrationReadCmd() *cobra.Command {
+func newAzureMetricsIntegrationReadCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 	var (
@@ -166,7 +166,7 @@ func newGcpMetricsIntegrationReadCmd() *cobra.Command {
 		use   string
 		args  cobra.PositionalArgs
 	)
-	short = "Reads a single GcpMetricsIntegration by slug"
+	short = "Reads a single AzureMetricsIntegration by slug"
 	use = "read <slug>"
 	args = cobra.ExactArgs(1)
 
@@ -187,7 +187,7 @@ func newGcpMetricsIntegrationReadCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			entity, err := GetGcpMetricsIntegration(ctx, client, args[0])
+			entity, err := GetAzureMetricsIntegration(ctx, client, args[0])
 			if err != nil {
 				return err
 			}
@@ -204,29 +204,29 @@ func newGcpMetricsIntegrationReadCmd() *cobra.Command {
 	return cmd
 }
 
-func UpdateGcpMetricsIntegration(
+func UpdateAzureMetricsIntegration(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *GcpMetricsIntegration,
+	entity *AzureMetricsIntegration,
 	opts UpdateOptions,
-) (*GcpMetricsIntegration, error) {
-	res, err := client.UpdateGcpMetricsIntegration(&config_v1.UpdateGcpMetricsIntegrationParams{
+) (*AzureMetricsIntegration, error) {
+	res, err := client.UpdateAzureMetricsIntegration(&config_v1.UpdateAzureMetricsIntegrationParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: &models.ConfigV1UpdateGcpMetricsIntegrationBody{
-			CreateIfMissing:       opts.CreateIfMissing,
-			DryRun:                opts.DryRun,
-			GcpMetricsIntegration: entity.Spec,
+		Body: &models.ConfigV1UpdateAzureMetricsIntegrationBody{
+			CreateIfMissing:         opts.CreateIfMissing,
+			DryRun:                  opts.DryRun,
+			AzureMetricsIntegration: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
 
-	return NewGcpMetricsIntegration(res.Payload.GcpMetricsIntegration), nil
+	return NewAzureMetricsIntegration(res.Payload.AzureMetricsIntegration), nil
 }
 
-func newGcpMetricsIntegrationUpdateCmd() *cobra.Command {
+func newAzureMetricsIntegrationUpdateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		createIfMissing   bool
@@ -239,7 +239,7 @@ func newGcpMetricsIntegrationUpdateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "update -f <filename>",
 		GroupID: groups.Commands.ID,
-		Short:   "Updates an existing GcpMetricsIntegration.",
+		Short:   "Updates an existing AzureMetricsIntegration.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
 			defer cancel()
@@ -260,7 +260,7 @@ func newGcpMetricsIntegrationUpdateCmd() *cobra.Command {
 			}
 			defer file.Close() //nolint:errcheck
 
-			gcpMetricsIntegration, err := types.MustDecodeSingleObject[*GcpMetricsIntegration](file, permissiveParsing)
+			azureMetricsIntegration, err := types.MustDecodeSingleObject[*AzureMetricsIntegration](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -274,18 +274,18 @@ func newGcpMetricsIntegrationUpdateCmd() *cobra.Command {
 				stderr.Println("--dry-run is set, update not persisted")
 			}
 
-			fullGcpMetricsIntegration, err := UpdateGcpMetricsIntegration(ctx, client, gcpMetricsIntegration, updateOpts)
+			fullAzureMetricsIntegration, err := UpdateAzureMetricsIntegration(ctx, client, azureMetricsIntegration, updateOpts)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("GcpMetricsIntegration is valid and can be updated")
+				stderr.Println("AzureMetricsIntegration is valid and can be updated")
 				return nil
 			}
-			stderr.Printf("GcpMetricsIntegration with slug %q applied successfully\n", fullGcpMetricsIntegration.Spec.Slug)
+			stderr.Printf("AzureMetricsIntegration with slug %q applied successfully\n", fullAzureMetricsIntegration.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullGcpMetricsIntegration, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullAzureMetricsIntegration, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -296,17 +296,17 @@ func newGcpMetricsIntegrationUpdateCmd() *cobra.Command {
 	outputFlags.AddFlags(cmd)
 	fileFlags.AddFlags(cmd)
 	cmd.Flags().BoolVar(&permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are allowed. Defaults to false.")
-	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the GcpMetricsIntegration if it does not already exist. Defaults to false.")
+	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the AzureMetricsIntegration if it does not already exist. Defaults to false.")
 
 	return cmd
 }
 
-func DeleteGcpMetricsIntegration(
+func DeleteAzureMetricsIntegration(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
 ) error {
-	_, err := client.DeleteGcpMetricsIntegration(&config_v1.DeleteGcpMetricsIntegrationParams{
+	_, err := client.DeleteAzureMetricsIntegration(&config_v1.DeleteAzureMetricsIntegrationParams{
 		Context: ctx,
 		Slug:    slug,
 	})
@@ -316,14 +316,14 @@ func DeleteGcpMetricsIntegration(
 	return nil
 }
 
-func newGcpMetricsIntegrationDeleteCmd() *cobra.Command {
+func newAzureMetricsIntegrationDeleteCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
 		Use:     "delete <slug>",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes a single GcpMetricsIntegration by slug",
+		Short:   "Deletes a single AzureMetricsIntegration by slug",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -338,7 +338,7 @@ func newGcpMetricsIntegrationDeleteCmd() *cobra.Command {
 				return err
 			}
 
-			res, err := client.DeleteGcpMetricsIntegration(&config_v1.DeleteGcpMetricsIntegrationParams{
+			res, err := client.DeleteAzureMetricsIntegration(&config_v1.DeleteAzureMetricsIntegrationParams{
 				Context: ctx,
 				Slug:    args[0],
 			})
@@ -346,7 +346,7 @@ func newGcpMetricsIntegrationDeleteCmd() *cobra.Command {
 				return clienterror.Wrap(err)
 			}
 			_ = res
-			fmt.Fprintf(cmd.OutOrStdout(), "deleted GcpMetricsIntegration with slug %q\n", args[0])
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted AzureMetricsIntegration with slug %q\n", args[0])
 
 			return nil
 		},
@@ -356,7 +356,7 @@ func newGcpMetricsIntegrationDeleteCmd() *cobra.Command {
 	return cmd
 }
 
-type GcpMetricsIntegrationListOpts struct {
+type AzureMetricsIntegrationListOpts struct {
 	// Limit represents that maximum number of items we wish to return.
 	Limit int
 	// PageToken is the pagination token we want to start our request at.
@@ -367,21 +367,21 @@ type GcpMetricsIntegrationListOpts struct {
 	Slugs       []string
 }
 
-func (r *GcpMetricsIntegrationListOpts) registerFlags(flags *flag.FlagSet) {
+func (r *AzureMetricsIntegrationListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any GcpMetricsIntegration with a matching name in the given list (and matches all other filters) will be returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any AzureMetricsIntegration with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any GcpMetricsIntegration with a matching slug in the given list (and matches all other filters) will be returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any AzureMetricsIntegration with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
 }
 
-func ListGcpMetricsIntegrations(
+func ListAzureMetricsIntegrations(
 	ctx context.Context,
 	client config_v1.ClientService,
-	streamer output.Streamer[*GcpMetricsIntegration],
-	opts GcpMetricsIntegrationListOpts,
+	streamer output.Streamer[*AzureMetricsIntegration],
+	opts AzureMetricsIntegrationListOpts,
 ) (pagination.Token, error) {
 	var (
 		gotItems    = 0
@@ -395,7 +395,7 @@ func ListGcpMetricsIntegrations(
 	}
 
 	for {
-		res, err := client.ListGcpMetricsIntegrations(&config_v1.ListGcpMetricsIntegrationsParams{
+		res, err := client.ListAzureMetricsIntegrations(&config_v1.ListAzureMetricsIntegrationsParams{
 			Context:     ctx,
 			PageToken:   &nextToken,
 			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
@@ -406,8 +406,8 @@ func ListGcpMetricsIntegrations(
 			return pagination.Token(""), clienterror.Wrap(err)
 		}
 
-		for _, v := range res.Payload.GcpMetricsIntegrations {
-			if err := streamer(NewGcpMetricsIntegration(v)); err != nil {
+		for _, v := range res.Payload.AzureMetricsIntegrations {
+			if err := streamer(NewAzureMetricsIntegration(v)); err != nil {
 				return pagination.Token(""), err
 			}
 			gotItems++
@@ -425,19 +425,19 @@ func ListGcpMetricsIntegrations(
 		pageMaxSize = pagination.CalculatePageSize(pagination.Calculation{
 			GotItems:    gotItems,
 			MaxItems:    opts.Limit,
-			MaxPageSize: len(res.Payload.GcpMetricsIntegrations),
+			MaxPageSize: len(res.Payload.AzureMetricsIntegrations),
 		})
 	}
 }
 
-func newGcpMetricsIntegrationListCmd() *cobra.Command {
-	var listOptions GcpMetricsIntegrationListOpts
+func newAzureMetricsIntegrationListCmd() *cobra.Command {
+	var listOptions AzureMetricsIntegrationListOpts
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags()
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   "Lists all GcpMetricsIntegrations and applies optional filters",
+		Short:   "Lists all AzureMetricsIntegrations and applies optional filters",
 		GroupID: groups.Commands.ID,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -457,8 +457,8 @@ func newGcpMetricsIntegrationListCmd() *cobra.Command {
 				return err
 			}
 
-			streamer := output.NewWriteObjectStreamer[*GcpMetricsIntegration](writer)
-			nextToken, err := ListGcpMetricsIntegrations(ctx, client, streamer, listOptions)
+			streamer := output.NewWriteObjectStreamer[*AzureMetricsIntegration](writer)
+			nextToken, err := ListAzureMetricsIntegrations(ctx, client, streamer, listOptions)
 			if err != nil {
 				return err
 			}
@@ -466,7 +466,7 @@ func newGcpMetricsIntegrationListCmd() *cobra.Command {
 			if nextToken != "" {
 				nextPage := pagination.Result{
 					Kind:          pagination.ResultKind,
-					Message:       "There are additional gcpMetricsIntegrations. To view more, use the next page token or run the full command.",
+					Message:       "There are additional azureMetricsIntegrations. To view more, use the next page token or run the full command.",
 					NextPageToken: nextToken,
 					FullCommand: fmt.Sprintf("%s --page-token %q",
 						cli.BuildCommandString(cmd, []string{"page-token"}),
@@ -488,52 +488,67 @@ func newGcpMetricsIntegrationListCmd() *cobra.Command {
 	return cmd
 }
 
-const GcpMetricsIntegrationScaffoldYAML = `api_version: v1/config
-kind: GcpMetricsIntegration
+const AzureMetricsIntegrationScaffoldYAML = `api_version: v1/config
+kind: AzureMetricsIntegration
 spec:
-    # The unique identifier of the GcpMetricsIntegration. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the GcpMetricsIntegration is created.
+    # The unique identifier of the AzureMetricsIntegration. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the AzureMetricsIntegration is created.
     slug: <string>
-    # Name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.
+    # Name of the AzureMetricsIntegration. You can modify this value after the AzureMetricsIntegration is created.
     name: <string>
-    # An array of metric groups to be ingested for this integration.
-    metric_groups:
-        - # The Google Cloud project ID that can access the metric data.
-          project_id: <string>
-          # A list of Google Cloud metric prefixes to ingest.
-          prefixes:
+    # Enables Azure count metrics for the configured resources.
+    count_metrics_enabled: <true|false>
+    # Enables collection of azure usage metrics under this principal (Microsoft.Compute, Microsoft.Network, Microsoft.Storage).
+    usage_metrics_enabled: <true|false>
+    # Specifies whether Azure resource, group, and subscription tags should be propagated as metric labels.
+    propagate_tags: <true|false>
+    principal:
+        # Specifies the ID of the Azure tenant that hosts the managed identity principal.
+        tenant_id: <string>
+        # Specifies the OAuth2 client ID of the managed identity principal.
+        client_id: <string>
+    scrape_config:
+        # Subscriptions to be targeted for this integration (use empty for all subscriptions).
+        subscription_ids:
             - <string>
-    service_account:
-        # The email address of the Google Cloud service account to impersonate for authentication.
-        client_email: <string>
+        # Locations to be ingested for this integration (these apply to all subscriptions; use empty for all locations).
+        locations:
+            - <string>
+        # Metric groups to be ingested for this integration.
+        resource_types:
+            - # Name of the resource type.
+              name: <string>
+              # List of metric names to be targeted (these apply to this resource type; use empty for all metrics).
+              metric_names:
+                - <string>
 `
 
-func newGcpMetricsIntegrationScaffoldCmd() *cobra.Command {
+func newAzureMetricsIntegrationScaffoldCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "scaffold",
 		GroupID: groups.Commands.ID,
 		Short:   "Scaffolds a complete object with placeholder values",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Fprint(cmd.OutOrStdout(), GcpMetricsIntegrationScaffoldYAML)
+			fmt.Fprint(cmd.OutOrStdout(), AzureMetricsIntegrationScaffoldYAML)
 		},
 	}
 	return cmd
 }
 
-func NewGcpMetricsIntegrationCmd() *cobra.Command {
+func NewAzureMetricsIntegrationCmd() *cobra.Command {
 	root := &cobra.Command{
-		Use:     "gcp-metrics-integrations",
+		Use:     "azure-metrics-integrations",
 		GroupID: groups.Config.ID,
-		Short:   "All commands for GcpMetricsIntegrations",
+		Short:   "All commands for AzureMetricsIntegrations",
 	}
 
 	root.AddGroup(groups.Commands)
 	root.AddCommand(
-		newGcpMetricsIntegrationCreateCmd(),
-		newGcpMetricsIntegrationReadCmd(),
-		newGcpMetricsIntegrationUpdateCmd(),
-		newGcpMetricsIntegrationDeleteCmd(),
-		newGcpMetricsIntegrationListCmd(),
-		newGcpMetricsIntegrationScaffoldCmd(),
+		newAzureMetricsIntegrationCreateCmd(),
+		newAzureMetricsIntegrationReadCmd(),
+		newAzureMetricsIntegrationUpdateCmd(),
+		newAzureMetricsIntegrationDeleteCmd(),
+		newAzureMetricsIntegrationListCmd(),
+		newAzureMetricsIntegrationScaffoldCmd(),
 	)
 	return root
 }
