@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewCreateAzureMetricsIntegrationParams creates a new CreateAzureMetricsIntegrationParams object,
@@ -64,7 +64,7 @@ CreateAzureMetricsIntegrationParams contains all the parameters to send to the A
 type CreateAzureMetricsIntegrationParams struct {
 
 	// Body.
-	Body *models.ConfigunstableCreateAzureMetricsIntegrationRequest
+	Body *models.Configv1CreateAzureMetricsIntegrationRequest
 
 	timeout    time.Duration
 	Context    context.Context
@@ -120,13 +120,13 @@ func (o *CreateAzureMetricsIntegrationParams) SetHTTPClient(client *http.Client)
 }
 
 // WithBody adds the body to the create azure metrics integration params
-func (o *CreateAzureMetricsIntegrationParams) WithBody(body *models.ConfigunstableCreateAzureMetricsIntegrationRequest) *CreateAzureMetricsIntegrationParams {
+func (o *CreateAzureMetricsIntegrationParams) WithBody(body *models.Configv1CreateAzureMetricsIntegrationRequest) *CreateAzureMetricsIntegrationParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create azure metrics integration params
-func (o *CreateAzureMetricsIntegrationParams) SetBody(body *models.ConfigunstableCreateAzureMetricsIntegrationRequest) {
+func (o *CreateAzureMetricsIntegrationParams) SetBody(body *models.Configv1CreateAzureMetricsIntegrationRequest) {
 	o.Body = body
 }
 

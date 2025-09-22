@@ -14,10 +14,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ConfigunstableAzureMetricsIntegration configunstable azure metrics integration
+// Configv1AzureMetricsIntegration configv1 azure metrics integration
 //
-// swagger:model configunstableAzureMetricsIntegration
-type ConfigunstableAzureMetricsIntegration struct {
+// swagger:model configv1AzureMetricsIntegration
+type Configv1AzureMetricsIntegration struct {
 
 	// The unique identifier of the AzureMetricsIntegration. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the AzureMetricsIntegration is created.
 	Slug string `json:"slug,omitempty"`
@@ -51,8 +51,8 @@ type ConfigunstableAzureMetricsIntegration struct {
 	PropagateTags bool `json:"propagate_tags,omitempty"`
 }
 
-// Validate validates this configunstable azure metrics integration
-func (m *ConfigunstableAzureMetricsIntegration) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 azure metrics integration
+func (m *Configv1AzureMetricsIntegration) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
@@ -77,7 +77,7 @@ func (m *ConfigunstableAzureMetricsIntegration) Validate(formats strfmt.Registry
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) validateCreatedAt(formats strfmt.Registry) error {
+func (m *Configv1AzureMetricsIntegration) validateCreatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -89,7 +89,7 @@ func (m *ConfigunstableAzureMetricsIntegration) validateCreatedAt(formats strfmt
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *Configv1AzureMetricsIntegration) validateUpdatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -101,7 +101,7 @@ func (m *ConfigunstableAzureMetricsIntegration) validateUpdatedAt(formats strfmt
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) validatePrincipal(formats strfmt.Registry) error {
+func (m *Configv1AzureMetricsIntegration) validatePrincipal(formats strfmt.Registry) error {
 	if swag.IsZero(m.Principal) { // not required
 		return nil
 	}
@@ -120,7 +120,7 @@ func (m *ConfigunstableAzureMetricsIntegration) validatePrincipal(formats strfmt
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) validateScrapeConfig(formats strfmt.Registry) error {
+func (m *Configv1AzureMetricsIntegration) validateScrapeConfig(formats strfmt.Registry) error {
 	if swag.IsZero(m.ScrapeConfig) { // not required
 		return nil
 	}
@@ -139,8 +139,8 @@ func (m *ConfigunstableAzureMetricsIntegration) validateScrapeConfig(formats str
 	return nil
 }
 
-// ContextValidate validate this configunstable azure metrics integration based on the context it is used
-func (m *ConfigunstableAzureMetricsIntegration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 azure metrics integration based on the context it is used
+func (m *Configv1AzureMetricsIntegration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
@@ -165,7 +165,7 @@ func (m *ConfigunstableAzureMetricsIntegration) ContextValidate(ctx context.Cont
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1AzureMetricsIntegration) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
 		return err
@@ -174,7 +174,7 @@ func (m *ConfigunstableAzureMetricsIntegration) contextValidateCreatedAt(ctx con
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1AzureMetricsIntegration) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
 		return err
@@ -183,7 +183,7 @@ func (m *ConfigunstableAzureMetricsIntegration) contextValidateUpdatedAt(ctx con
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) contextValidatePrincipal(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1AzureMetricsIntegration) contextValidatePrincipal(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Principal != nil {
 
@@ -204,7 +204,7 @@ func (m *ConfigunstableAzureMetricsIntegration) contextValidatePrincipal(ctx con
 	return nil
 }
 
-func (m *ConfigunstableAzureMetricsIntegration) contextValidateScrapeConfig(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1AzureMetricsIntegration) contextValidateScrapeConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ScrapeConfig != nil {
 
@@ -226,7 +226,7 @@ func (m *ConfigunstableAzureMetricsIntegration) contextValidateScrapeConfig(ctx 
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableAzureMetricsIntegration) MarshalBinary() ([]byte, error) {
+func (m *Configv1AzureMetricsIntegration) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -234,8 +234,8 @@ func (m *ConfigunstableAzureMetricsIntegration) MarshalBinary() ([]byte, error) 
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableAzureMetricsIntegration) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableAzureMetricsIntegration
+func (m *Configv1AzureMetricsIntegration) UnmarshalBinary(b []byte) error {
+	var res Configv1AzureMetricsIntegration
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

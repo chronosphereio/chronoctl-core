@@ -22,7 +22,7 @@ type ConstructedLabelValueDefinition struct {
 	// value
 	Value string `json:"value,omitempty"`
 
-	// filters
+	// Determine when to apply `name_mappings`, filtering out all other values.
 	Filters []*Configv1LabelFilter `json:"filters"`
 }
 

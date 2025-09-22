@@ -14,12 +14,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// DerivedLabelSpanTag SpanTag is used to map span tags to derived labels.
+// DerivedLabelSpanTag A span tag is used to map span tags to derived labels.
 //
 // swagger:model DerivedLabelSpanTag
 type DerivedLabelSpanTag struct {
 
-	// All name mappings are ORed together and the first matching name mapping is used to map the source tag to the derived tag.
+	// All name mappings are combined as `OR` matches. The first matching name
+	// mapping is used to map the source tag to the derived tag.
 	NameMappings []*DerivedLabelSpanTagNameMapping `json:"name_mappings"`
 }
 

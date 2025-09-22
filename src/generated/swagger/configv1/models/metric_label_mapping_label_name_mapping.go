@@ -22,10 +22,10 @@ type MetricLabelMappingLabelNameMapping struct {
 	// filters
 	Filters []*Configv1LabelFilter `json:"filters"`
 
-	// The actual label ingested on the time series
+	// The source label name on the time series from when it was ingested.
 	SourceLabel string `json:"source_label,omitempty"`
 
-	// These value mappings apply to just the name mapping they belong to.
+	// These value mappings apply only to the name mapping they belong to.
 	ValueMappings []*MappingLabelValueMapping `json:"value_mappings"`
 }
 
