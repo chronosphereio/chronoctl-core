@@ -19,6 +19,7 @@ letting you manage resources with YAML or JSON. The app supports the `create`,
 Chronoctl provides commands to configure Chronosphere, each of which corresponds
 to a resource type.
 
+* `azure-metrics-integrations`
 * `buckets`
 * `classic-dashboards` (`grafana-dashboards`)
 * `collections`
