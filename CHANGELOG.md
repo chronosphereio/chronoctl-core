@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.16.0
+
 * Adds new resource `v1/config/AzureMetricsIntegration`
 
 ## v1.15.0
