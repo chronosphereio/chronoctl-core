@@ -19,13 +19,13 @@ import (
 // swagger:model ConsumptionBudgetPriority
 type ConsumptionBudgetPriority struct {
 
-	// filters define what data matches the priority. The filters are AND'd
-	// together; a request must match every filter in order to match the
-	// priority. Must not be empty.
+	// Criteria that defines which data matches the `priority`. Filters are
+	// concatenated together as implied `AND` operators. A request must match every
+	// filter to match the `priority`.
 	Filters []*ConsumptionBudgetPriorityFilter `json:"filters"`
 
-	// priority is the required priority of the dataset, where priority=10 is dropped
-	// first, and priority=1 is dropped last.
+	// Priority order that determines when to drop data. A priority of `10` is
+	// dropped first, and a priority of `1` is dropped last.
 	Priority int32 `json:"priority,omitempty"`
 }
 

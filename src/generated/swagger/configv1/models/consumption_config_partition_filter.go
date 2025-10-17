@@ -22,7 +22,7 @@ type ConsumptionConfigPartitionFilter struct {
 	// operator
 	Operator FilterOperator `json:"operator,omitempty"`
 
-	// conditions are the conditions to match.
+	// Conditions for the query to match.
 	Conditions []*PartitionFilterCondition `json:"conditions"`
 }
 

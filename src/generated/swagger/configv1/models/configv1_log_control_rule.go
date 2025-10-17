@@ -35,6 +35,12 @@ type Configv1LogControlRule struct {
 
 	// drop field
 	DropField *LogControlRuleDropField `json:"drop_field,omitempty"`
+
+	// replace field
+	ReplaceField *LogControlRuleReplaceField `json:"replace_field,omitempty"`
+
+	// emit metrics
+	EmitMetrics *LogControlRuleEmitMetrics `json:"emit_metrics,omitempty"`
 }
 
 // Validate validates this configv1 log control rule
@@ -54,6 +60,14 @@ func (m *Configv1LogControlRule) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDropField(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateReplaceField(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEmitMetrics(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -135,6 +149,44 @@ func (m *Configv1LogControlRule) validateDropField(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *Configv1LogControlRule) validateReplaceField(formats strfmt.Registry) error {
+	if swag.IsZero(m.ReplaceField) { // not required
+		return nil
+	}
+
+	if m.ReplaceField != nil {
+		if err := m.ReplaceField.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("replace_field")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("replace_field")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1LogControlRule) validateEmitMetrics(formats strfmt.Registry) error {
+	if swag.IsZero(m.EmitMetrics) { // not required
+		return nil
+	}
+
+	if m.EmitMetrics != nil {
+		if err := m.EmitMetrics.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emit_metrics")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emit_metrics")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 log control rule based on the context it is used
 func (m *Configv1LogControlRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -152,6 +204,14 @@ func (m *Configv1LogControlRule) ContextValidate(ctx context.Context, formats st
 	}
 
 	if err := m.contextValidateDropField(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReplaceField(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEmitMetrics(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -231,6 +291,48 @@ func (m *Configv1LogControlRule) contextValidateDropField(ctx context.Context, f
 				return ve.ValidateName("drop_field")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("drop_field")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1LogControlRule) contextValidateReplaceField(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ReplaceField != nil {
+
+		if swag.IsZero(m.ReplaceField) { // not required
+			return nil
+		}
+
+		if err := m.ReplaceField.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("replace_field")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("replace_field")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1LogControlRule) contextValidateEmitMetrics(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EmitMetrics != nil {
+
+		if swag.IsZero(m.EmitMetrics) { // not required
+			return nil
+		}
+
+		if err := m.EmitMetrics.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emit_metrics")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emit_metrics")
 			}
 			return err
 		}

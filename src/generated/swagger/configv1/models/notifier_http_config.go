@@ -21,11 +21,11 @@ type NotifierHTTPConfig struct {
 	// basic auth
 	BasicAuth *HTTPConfigBasicAuth `json:"basic_auth,omitempty"`
 
-	// Bearer token authentication. Cannot be set if basic_auth is set.
+	// Sets a token for bearer authentication. Cannot be set if `basic_auth` is set.
 	BearerToken string `json:"bearer_token,omitempty"`
 
-	// Optional proxy URL.
-	// DEPRECATED: Custom proxies are unsupported.
+	// Your proxy URL. (This parameter is deprecated, and custom proxies are
+	// unsupported.)
 	ProxyURL string `json:"proxy_url,omitempty"`
 
 	// tls config

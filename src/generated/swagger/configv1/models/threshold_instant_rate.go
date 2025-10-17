@@ -17,7 +17,7 @@ import (
 // swagger:model ThresholdInstantRate
 type ThresholdInstantRate struct {
 
-	// fixed_value_per_sec is the required rate threshold.
+	// Value of the fixed rate threshold.
 	FixedValuePerSec string `json:"fixed_value_per_sec,omitempty"`
 }
 

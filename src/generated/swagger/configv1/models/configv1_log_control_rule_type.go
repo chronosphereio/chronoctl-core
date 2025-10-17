@@ -38,6 +38,12 @@ const (
 
 	// Configv1LogControlRuleTypeDROPFIELD captures enum value "DROP_FIELD"
 	Configv1LogControlRuleTypeDROPFIELD Configv1LogControlRuleType = "DROP_FIELD"
+
+	// Configv1LogControlRuleTypeREPLACEFIELD captures enum value "REPLACE_FIELD"
+	Configv1LogControlRuleTypeREPLACEFIELD Configv1LogControlRuleType = "REPLACE_FIELD"
+
+	// Configv1LogControlRuleTypeEMITMETRICS captures enum value "EMIT_METRICS"
+	Configv1LogControlRuleTypeEMITMETRICS Configv1LogControlRuleType = "EMIT_METRICS"
 )
 
 // for schema
@@ -45,7 +51,7 @@ var configv1LogControlRuleTypeEnum []interface{}
 
 func init() {
 	var res []Configv1LogControlRuleType
-	if err := json.Unmarshal([]byte(`["DROP","SAMPLE","DROP_FIELD"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["DROP","SAMPLE","DROP_FIELD","REPLACE_FIELD","EMIT_METRICS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

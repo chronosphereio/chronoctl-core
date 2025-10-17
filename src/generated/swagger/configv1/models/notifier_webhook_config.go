@@ -21,7 +21,8 @@ type NotifierWebhookConfig struct {
 	// http config
 	HTTPConfig *NotifierHTTPConfig `json:"http_config,omitempty"`
 
-	// Required webhook URL (will be called as a POST request).
+	// Your webhook URL. This URL will be called as a `POST` request. Required
+	// if including a `webhook` object in your request body.
 	URL string `json:"url,omitempty"`
 }
 

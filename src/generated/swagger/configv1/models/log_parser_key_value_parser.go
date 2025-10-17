@@ -12,20 +12,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// LogParserKeyValueParser A parser to extract key-value pairs from a string.
+// LogParserKeyValueParser A parser to extract key/value pairs from a string.
 // If duplicate keys are found, the first instance is used.
 //
 // swagger:model LogParserKeyValueParser
 type LogParserKeyValueParser struct {
 
-	// String used to split each pair into its key and value. Required.
+	// The string for splitting each pair into its key and value.
 	PairSeparator string `json:"pair_separator,omitempty"`
 
-	// String used to split the input into key-value pairs. Required.
+	// The string for splitting the input into key/value pairs.
 	Delimiter string `json:"delimiter,omitempty"`
 
-	// All leading and trailing Unicode code points contained in the trim
-	// set will be removed from keys and values. Optional.
+	// Specifies the code points of any Unicode characters to trim from the
+	// beginning and end of keys and values.
 	TrimSet string `json:"trim_set,omitempty"`
 }
 

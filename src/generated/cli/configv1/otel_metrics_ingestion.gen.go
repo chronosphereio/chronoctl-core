@@ -348,13 +348,15 @@ const OtelMetricsIngestionScaffoldYAML = `api_version: v1/config
 kind: OtelMetricsIngestion
 spec:
     resource_attributes:
-        # Do not copy any resource attribute whose key exactly matches one of the
-        # strings in this list.
+        # Specifies resource attributes to exclude. If a resource attribute's key
+        # matches any of the strings in this array, that resource attribute is
+        # excluded.
         exclude_keys:
             - <string>
-        # Generate a target_info time series with labels derived from resource
-        # attributes. The filter_mode and exclude_keys settings apply in the same way as
-        # for the "flatten" operation. The default is false.
+        # If 'true', generates a 'target_info' time series with labels derived from
+        # resource attributes. The 'filter_mode' and 'exclude_keys' settings apply
+        # in the same manner that they apply to the 'flatten' operation. Default:
+        # 'false'.
         generate_target_info: <true|false>
         filter_mode: <APPEND_DEFAULT_EXCLUDE_KEYS|CUSTOM_EXCLUDE_KEYS>
         flatten_mode: <MERGE|OVERWRITE|IGNORE>

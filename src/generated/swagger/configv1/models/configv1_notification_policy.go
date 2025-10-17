@@ -22,7 +22,7 @@ type Configv1NotificationPolicy struct {
 	// The unique identifier of the NotificationPolicy. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the NotificationPolicy is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.
+	// The name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the NotificationPolicy was created. Cannot be set by clients.
@@ -35,12 +35,12 @@ type Configv1NotificationPolicy struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Slug of the bucket the notification policy belongs to. Required if
-	// team_slug is not set.
+	// The slug of the bucket that the notification policy belongs to. Required if
+	// `team_slug` is not set.
 	BucketSlug string `json:"bucket_slug,omitempty"`
 
-	// Slug of the team the notification policy belongs to. Required if
-	// bucket_slug is not set.
+	// The slug of the team that the notification policy belongs to. Required if
+	// `bucket_slug` is not set.
 	TeamSlug string `json:"team_slug,omitempty"`
 
 	// routes

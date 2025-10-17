@@ -491,7 +491,7 @@ func newTraceBehaviorListCmd() *cobra.Command {
 const TraceBehaviorScaffoldYAML = `api_version: v1/config
 kind: TraceBehavior
 spec:
-    # Name of the TraceBehavior. You can modify this value after the TraceBehavior is created.
+    # The name of the TraceBehavior. You can modify this value after the TraceBehavior is created.
     name: <string>
     # The unique identifier of the TraceBehavior. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the TraceBehavior is created.
     slug: <string>

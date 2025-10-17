@@ -25,30 +25,30 @@ type NotifierPagerdutyConfig struct {
 	// The Pagerduty URL to send API requests to.
 	URL string `json:"url,omitempty"`
 
-	// Client identification of the notification sender.
+	// The client identification of the notification sender.
 	Client string `json:"client,omitempty"`
 
 	// A backlink to the sender of the notification.
 	ClientURL string `json:"client_url,omitempty"`
 
-	// Description of the incident.
+	// A description of the incident.
 	Description string `json:"description,omitempty"`
 
-	// Severity of the incident.
-	// Valid values are 'critical', 'error', 'warning', 'info', or blank
+	// The severity of the incident. Possible values: `critical`, `error`,
+	// `warning`, or `info`.
 	Severity string `json:"severity,omitempty"`
 
-	// The class/type of the event.
+	// The class of the event.
 	Class string `json:"class,omitempty"`
 
-	// The part or component of the affected system which is broken.
+	// The part or component of the affected system that is broken.
 	Component string `json:"component,omitempty"`
 
 	// A cluster or grouping of services.
 	Group string `json:"group,omitempty"`
 
-	// Set of arbitrary key/value pairs which provide further detail about the
-	// incident.
+	// A set of key/value pairs with additional information about the incident. These
+	// key/value pairs can include any arbitrary data.
 	Details map[string]string `json:"details,omitempty"`
 
 	// Images to attach to the incident.
@@ -57,12 +57,12 @@ type NotifierPagerdutyConfig struct {
 	// Links to attach to the incident.
 	Links []*PagerdutyConfigLink `json:"links"`
 
-	// The PagerDuty integration key (when using PagerDuty integration type
-	// "Prometheus"). Cannot be set if routing_key is set.
+	// Your PagerDuty integration key, if using the PagerDuty integration type
+	// `Prometheus`. Cannot be set if `routing_key` is set.
 	ServiceKey string `json:"service_key,omitempty"`
 
-	// The PagerDuty integration key (when using PagerDuty integration type
-	// "Events API v2"). Cannot be set if service_key is set.
+	// Your PagerDuty integration key, if using the PagerDuty integration type
+	// `Events API v2`. Cannot be set if `service_key` is set.
 	RoutingKey string `json:"routing_key,omitempty"`
 }
 

@@ -21,10 +21,13 @@ type Configv1LabelMatcher struct {
 	// type
 	Type Configv1LabelMatcherMatcherType `json:"type,omitempty"`
 
-	// name always matches against an exact label name.
+	// The name of the label to match against. This always matches against an
+	// exact label name, regardless of the value of `type`.
 	Name string `json:"name,omitempty"`
 
-	// value matches against a label value based on the configured type.
+	// The value of the label to match against. If `type` is set to `EXACT`, this
+	// matches against an exact label value. If `type` is set to `REGEX`, this
+	// parameter is treated as a regular expression for parsing label values.
 	Value string `json:"value,omitempty"`
 }
 

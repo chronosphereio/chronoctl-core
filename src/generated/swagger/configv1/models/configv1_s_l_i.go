@@ -25,16 +25,16 @@ type Configv1SLI struct {
 	// custom timeslice indicator
 	CustomTimesliceIndicator *SLICustomTimeSliceIndicatorConfig `json:"custom_timeslice_indicator,omitempty"`
 
-	// Used to configure additional labels to export from
-	// the underlying queries. This feature provides a logical budget to group
-	// unique combination of dimensions. For example, if you want to track a
-	// budget per endpoint, add the endpoint label as a dimension. These dimensions
-	// are provided on the top-level SLI so that SLOs will receive them
-	// in `.GroupBy`.
+	// Configures additional labels to export from the underlying queries. This feature
+	// provides a logical budget to group unique combinations of dimensions. For
+	// example, if you want to track a budget per endpoint, add the endpoint label as a
+	// dimension. These dimensions are provided on the top-level SLI so that SLOs will
+	// receive them in the `.GroupBy` variable.
 	CustomDimensionLabels []string `json:"custom_dimension_labels"`
 
-	// These are made available to the SLO queries and are intended to be used for things
-	// like `cluster!~"dev"`
+	// Specifies additional PromQL filters, which are made available to the SLO queries.
+	// Use these filters to reduce the number of metrics used by the SLO.
+	// Example: cluster!~\"dev\
 	AdditionalPromqlFilters []*CommonPromQLMatcher `json:"additional_promql_filters"`
 }
 

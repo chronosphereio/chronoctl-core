@@ -22,7 +22,7 @@ type ConfigunstableNoopEntity struct {
 	// The unique identifier of the NoopEntity. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the NoopEntity is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the NoopEntity. You can modify this value after the NoopEntity is created.
+	// The name of the NoopEntity. You can modify this value after the NoopEntity is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the NoopEntity was created. Cannot be set by clients.

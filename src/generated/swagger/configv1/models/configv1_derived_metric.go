@@ -20,7 +20,7 @@ import (
 // swagger:model configv1DerivedMetric
 type Configv1DerivedMetric struct {
 
-	// Name of the DerivedMetric. You can modify this value after the DerivedMetric is created.
+	// The name of the DerivedMetric. You can modify this value after the DerivedMetric is created.
 	Name string `json:"name,omitempty"`
 
 	// The unique identifier of the DerivedMetric. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the DerivedMetric is created.

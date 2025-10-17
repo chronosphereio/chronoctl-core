@@ -30,11 +30,14 @@ type Configv1LogIngestConfig struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// The parsers to run on plaintext logs. The first parser that matches the log is used.
+	// The parsers to apply to plaintext logs. The first parser that matches the log is used.
 	PlaintextParsers []*LogIngestConfigPlaintextParser `json:"plaintext_parsers"`
 
-	// The parsers to run on specific fields within structured logs or plaintext logs after parsing.
+	// The parsers to apply to specific fields within structured logs or plaintext logs after those logs are parsed.
 	FieldParsers []*LogIngestConfigLogFieldParser `json:"field_parsers"`
+
+	// field normalization
+	FieldNormalization *LogIngestConfigFieldNormalization `json:"field_normalization,omitempty"`
 }
 
 // Validate validates this configv1 log ingest config
@@ -54,6 +57,10 @@ func (m *Configv1LogIngestConfig) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateFieldParsers(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFieldNormalization(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -139,6 +146,25 @@ func (m *Configv1LogIngestConfig) validateFieldParsers(formats strfmt.Registry) 
 	return nil
 }
 
+func (m *Configv1LogIngestConfig) validateFieldNormalization(formats strfmt.Registry) error {
+	if swag.IsZero(m.FieldNormalization) { // not required
+		return nil
+	}
+
+	if m.FieldNormalization != nil {
+		if err := m.FieldNormalization.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("field_normalization")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("field_normalization")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 log ingest config based on the context it is used
 func (m *Configv1LogIngestConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -156,6 +182,10 @@ func (m *Configv1LogIngestConfig) ContextValidate(ctx context.Context, formats s
 	}
 
 	if err := m.contextValidateFieldParsers(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFieldNormalization(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -228,6 +258,27 @@ func (m *Configv1LogIngestConfig) contextValidateFieldParsers(ctx context.Contex
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *Configv1LogIngestConfig) contextValidateFieldNormalization(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.FieldNormalization != nil {
+
+		if swag.IsZero(m.FieldNormalization) { // not required
+			return nil
+		}
+
+		if err := m.FieldNormalization.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("field_normalization")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("field_normalization")
+			}
+			return err
+		}
 	}
 
 	return nil

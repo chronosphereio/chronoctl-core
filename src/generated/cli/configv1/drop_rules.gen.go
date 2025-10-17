@@ -493,15 +493,15 @@ kind: DropRule
 spec:
     # The unique identifier of the DropRule. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the DropRule is created.
     slug: <string>
-    # Name of the DropRule. You can modify this value after the DropRule is created.
+    # The name of the DropRule. You can modify this value after the DropRule is created.
     name: <string>
     # Defines the conditions that determine whether to drop a metric. Drop rules can
     # have multiple filter conditions on different labels, making it possible to drop
     # a subset of the series matching a particular metric name.
     filters:
-        - # Name of the label to match.
+        - # The name of the label to match.
           name: <string>
-          # Glob value of the label to match.
+          # The glob value of the label to match.
           value_glob: <string>
     # Drops data points if values are Not a Number (NaN). If set to true, Chronosphere
     # drops NaN data points, along with any published staleness markers. See the

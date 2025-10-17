@@ -497,7 +497,7 @@ kind: RollupRule
 spec:
     # The unique identifier of the RollupRule. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the RollupRule is created.
     slug: <string>
-    # Name of the RollupRule. You can modify this value after the RollupRule is created.
+    # The name of the RollupRule. You can modify this value after the RollupRule is created.
     name: <string>
     # The slug of the bucket the RollupRule belongs to.
     bucket_slug: <string>
@@ -532,9 +532,9 @@ spec:
     # __metric_type__:cumulative_counter service:gateway __name__:http_requests_*
     # '''
     filters:
-        - # Name of the label to match.
+        - # The name of the label to match.
           name: <string>
-          # Glob value of the label to match.
+          # The glob value of the label to match.
           value_glob: <string>
     # The name of the new metric to create and persist to the database. You can use
     # the template string '{{.MetricName }}' to create a new metric name that

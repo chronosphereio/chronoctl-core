@@ -23,7 +23,7 @@ type Configv1DropRule struct {
 	// The unique identifier of the DropRule. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the DropRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the DropRule. You can modify this value after the DropRule is created.
+	// The name of the DropRule. You can modify this value after the DropRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the DropRule was created. Cannot be set by clients.

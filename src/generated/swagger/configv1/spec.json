@@ -532,17 +532,41 @@
       },
       "type": "object"
     },
+    "ConsumptionBudgetAlertActionConfig": {
+      "properties": {
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Additional annotations to set on the generated monitor. By default, the\nmonitors already contain \"description\", \"dashboard\", \"resource\",\n\"consumption_budget_slug\", \"threshold_type\", and \"partition\" annotations.\nSetting any of these annotations will override its default value.",
+          "type": "object"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Additional labels to set on the generated monitor, which can be used for\nnotification routing. The following labels are reserved and cannot be\noverride: \"resource\", \"partition\", and \"threshold_type\".",
+          "type": "object"
+        },
+        "instant_rate_sustain_secs": {
+          "description": "How long instant rate consumption must sustain above the threshold in\norder to fire an alert. By default, the sustain is 0: any consumption\nover the threshold will fire an alert.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "ConsumptionBudgetPriority": {
       "properties": {
         "filters": {
-          "description": "filters define what data matches the priority. The filters are AND'd\ntogether; a request must match every filter in order to match the\npriority. Must not be empty.",
+          "description": "Criteria that defines which data matches the `priority`. Filters are\nconcatenated together as implied `AND` operators. A request must match every\nfilter to match the `priority`.",
           "items": {
             "$ref": "#/definitions/ConsumptionBudgetPriorityFilter"
           },
           "type": "array"
         },
         "priority": {
-          "description": "priority is the required priority of the dataset, where priority=10 is dropped\nfirst, and priority=1 is dropped last.",
+          "description": "Priority order that determines when to drop data. A priority of `10` is\ndropped first, and a priority of `1` is dropped last.",
           "format": "int32",
           "type": "integer"
         }
@@ -552,7 +576,7 @@
     "ConsumptionBudgetPriorityFilter": {
       "properties": {
         "dataset_slug": {
-          "description": "If set, matches data which belongs to the given dataset. Cannot set if\nlog_filter is set. The dataset type must match the budget resource\n(e.g. type=LOGS for resource=LOG_PERSISTED_BYTES).",
+          "description": "Optional. If set, matches data that belongs to the specified dataset. The\ndataset type must match the budget resource. For example, if `resource=LOG_PERSISTED_BYTES`\nthen only dataset `type=LOGS` is allowed. You can't set a value for this\nfield if a value is set for `log_filter`.",
           "type": "string"
         },
         "log_filter": {
@@ -574,32 +598,33 @@
         "DAILY_VOLUME",
         "INSTANT_RATE",
         "WEEKLY_VOLUME",
-        "MONTHLY_VOLUME"
+        "MONTHLY_VOLUME",
+        "HOURLY_VOLUME"
       ],
       "type": "string"
     },
     "ConsumptionConfigPartition": {
       "properties": {
         "name": {
-          "description": "name is a human-readable name of the partition. Must be unique within the\nparent partition. You can modify this value after the partition is created.",
+          "description": "Name of the partition. Must be unique within the parent partition. You can\nmodify this value after the partition is created.",
           "type": "string"
         },
         "filters": {
-          "description": "filters define what data matches the partition. The filters are AND'd\ntogether; a request must match every filter in order to match the\npartition. Must not be empty.",
+          "description": "Criteria that defines which data matches the `partition`. Filters are\nconcatenated together as implied `AND` operators. A request must match every\nfilter to match the `partition`.",
           "items": {
             "$ref": "#/definitions/ConsumptionConfigPartitionFilter"
           },
           "type": "array"
         },
         "partitions": {
-          "description": "partitions are the optional child partitions of this partition. If set,\nrequests which match the current partition will be allocated to the\nfirst child partition that matches. Requests that don't match any child\npartition fall back to an omnipresent default child partition.",
+          "description": "Optional. Child partitions of this partition. If set, requests that match the\ncurrent partition are allocated to the first child partition that matches.\nRequests that don't match any child partition are assigned to an implicit `default`\nchild partition.",
           "items": {
             "$ref": "#/definitions/ConsumptionConfigPartition"
           },
           "type": "array"
         },
         "slug": {
-          "description": "slug is the immutable identifier of the partition. Must be unique within\nthe parent partition. You can not modify this value after the partition\nis created.",
+          "description": "Immutable identifier of the partition. Must be unique within the parent\npartition. You can't modify this value after the partition is created.",
           "type": "string"
         }
       },
@@ -611,7 +636,7 @@
           "$ref": "#/definitions/FilterOperator"
         },
         "conditions": {
-          "description": "conditions are the conditions to match.",
+          "description": "Conditions for the query to match.",
           "items": {
             "$ref": "#/definitions/PartitionFilterCondition"
           },
@@ -644,22 +669,24 @@
     "DefinitionBurnRateDefinition": {
       "properties": {
         "window": {
+          "description": "Time window for the burn rate calculation.",
           "type": "string"
         },
         "budget": {
-          "description": "The amount of allowed errors during a given time window,\nexpressed as a percentage of the error budget. Must be a\nvalue between `0.0` and `100.0`, exclusive.",
+          "description": "The amount of allowed errors during a given time window, expressed as a\npercentage of the error budget. Must be a value between `0.0` and `100.0`,\nexclusive.",
+          "example": "50.0",
           "format": "double",
           "type": "number"
         },
         "severity": {
-          "description": "Severity may only be one of: critical, warn.",
+          "description": "Defines the alert severity level, which can only be one of `critical` or\n`warn`.",
           "type": "string"
         },
         "labels": {
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Labels to attach when this burn rate triggers. If you add these labels to\n`signal_groupings`, you can route them in the notification policy, and\ncan route different burn rates to other notifiers.",
+          "description": "Labels to attach when this burn rate triggers. If you add these labels to\n`signal_groupings`, you can route them in the notification policy, and can\nroute different burn rates to other notifiers.",
           "type": "object"
         }
       },
@@ -668,7 +695,8 @@
     "DefinitionTimeWindow": {
       "properties": {
         "duration": {
-          "description": "duration as a string in the format \"28d\" or \"24h\", etc.",
+          "description": "Time window that defines the evaluation period as a string, in the format\nlike `\"28d\"` (28 days) or `\"24h\"` (24 hours).",
+          "example": "\"30d\"",
           "type": "string"
         }
       },
@@ -686,10 +714,9 @@
       "type": "object"
     },
     "DerivedLabelSpanTag": {
-      "description": "A span tag is used to map span tags to derived labels.",
       "properties": {
         "name_mappings": {
-          "description": "All name mappings are combined as `OR` matches. The first matching name\nmapping is used to map the source tag to the derived tag.",
+          "description": "Determines where the input data for a derived label comes from. For each\nname mapping, you must define a `source_label`. If multiple name mappings\nare defined, the first name mapping that matches is used to map the source\ntag to the derived tag.",
           "items": {
             "$ref": "#/definitions/DerivedLabelSpanTagNameMapping"
           },
@@ -699,9 +726,9 @@
       "type": "object"
     },
     "DerivedLabelSpanTagNameMapping": {
-      "description": "Denotes the source tag to be mapped to the derived tag.",
       "properties": {
         "source_tag": {
+          "description": "The source span tag name.",
           "type": "string"
         }
       },
@@ -796,10 +823,53 @@
       },
       "type": "object"
     },
+    "EmitMetricsCounter": {
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/configv1LogFieldPath"
+        }
+      },
+      "type": "object"
+    },
+    "EmitMetricsGauge": {
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/configv1LogFieldPath"
+        },
+        "aggregation_type": {
+          "$ref": "#/definitions/GaugeAggregationType"
+        }
+      },
+      "type": "object"
+    },
+    "EmitMetricsHistogram": {
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/configv1LogFieldPath"
+        }
+      },
+      "type": "object"
+    },
+    "EmitMetricsMetricMode": {
+      "enum": [
+        "COUNTER",
+        "GAUGE",
+        "HISTOGRAM"
+      ],
+      "type": "string"
+    },
     "FilterOperator": {
       "enum": [
         "IN",
         "NOT_IN"
+      ],
+      "type": "string"
+    },
+    "GaugeAggregationType": {
+      "enum": [
+        "LAST",
+        "MIN",
+        "MAX"
       ],
       "type": "string"
     },
@@ -870,7 +940,7 @@
     "HTTPConfigTLSConfig": {
       "properties": {
         "insecure_skip_verify": {
-          "description": "Disables validation of the server certificate.",
+          "description": "If `true`, disables validation of the server certificate.",
           "type": "boolean"
         }
       },
@@ -944,6 +1014,76 @@
       },
       "type": "object"
     },
+    "LogControlRuleEmitMetrics": {
+      "description": "EmitMetrics is the configuration for emit metrics action.",
+      "properties": {
+        "mode": {
+          "$ref": "#/definitions/EmitMetricsMetricMode"
+        },
+        "name": {
+          "description": "The name of the metric to emit. This name has to be unique, and conform to Prometheus naming conventions.",
+          "type": "string"
+        },
+        "labels": {
+          "description": "The labels to emit the metric with. This is a prom-valid label name mapped to a log key.",
+          "items": {
+            "$ref": "#/definitions/LogControlRuleEmitMetricsLabel"
+          },
+          "type": "array"
+        },
+        "drop_log": {
+          "description": "Drop log after emitting the metric.",
+          "type": "boolean"
+        },
+        "counter": {
+          "$ref": "#/definitions/EmitMetricsCounter"
+        },
+        "gauge": {
+          "$ref": "#/definitions/EmitMetricsGauge"
+        },
+        "histogram": {
+          "$ref": "#/definitions/EmitMetricsHistogram"
+        }
+      },
+      "type": "object"
+    },
+    "LogControlRuleEmitMetricsLabel": {
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/configv1LogFieldPath"
+        }
+      },
+      "type": "object"
+    },
+    "LogControlRuleReplaceField": {
+      "description": "ReplaceField is the configuration for a replace field action.",
+      "properties": {
+        "field": {
+          "$ref": "#/definitions/configv1LogFieldPath"
+        },
+        "replace_regex": {
+          "description": "Regular expression to specify what part of the field to replace.",
+          "type": "string"
+        },
+        "replace_all": {
+          "description": "Whether to replace all matches or just the first one.",
+          "type": "boolean"
+        },
+        "replace_mode": {
+          "$ref": "#/definitions/ReplaceFieldReplaceMode"
+        },
+        "static_value": {
+          "$ref": "#/definitions/ReplaceFieldStaticValue"
+        },
+        "mapped_value": {
+          "$ref": "#/definitions/ReplaceFieldMappedValue"
+        }
+      },
+      "type": "object"
+    },
     "LogControlRuleSample": {
       "description": "Sample is the configuration for the sample logs action.",
       "properties": {
@@ -951,6 +1091,31 @@
           "description": "Percentage of matching logs to keep. Must be in the range (0, 1].",
           "format": "double",
           "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "LogIngestConfigFieldNormalization": {
+      "description": "FieldNormalization allows you to map and normalize well-known fields from your logs.\nThese mappings run after parsing to standardize common fields like timestamp,\nseverity level, primary key name, and message across different log formats.",
+      "properties": {
+        "primary_key": {
+          "$ref": "#/definitions/LogIngestConfigNamedStringNormalization"
+        },
+        "timestamp": {
+          "$ref": "#/definitions/LogIngestConfigTimestampNormalization"
+        },
+        "severity": {
+          "$ref": "#/definitions/LogIngestConfigStringNormalization"
+        },
+        "message": {
+          "$ref": "#/definitions/LogIngestConfigStringNormalization"
+        },
+        "custom_field_normalization": {
+          "description": "Maps additional custom fields from your logs. These will not be indexed.\nUse these for any other fields you want to normalize, such as environment, region, or user ID.",
+          "items": {
+            "$ref": "#/definitions/LogIngestConfigNamedStringNormalization"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -993,6 +1158,19 @@
       },
       "type": "object"
     },
+    "LogIngestConfigNamedStringNormalization": {
+      "description": "NamedStringNormalization maps a field to a named target with optional transformations.",
+      "properties": {
+        "target": {
+          "description": "The name of the target field where the normalized value will be stored.",
+          "type": "string"
+        },
+        "normalization": {
+          "$ref": "#/definitions/LogIngestConfigStringNormalization"
+        }
+      },
+      "type": "object"
+    },
     "LogIngestConfigPlaintextParser": {
       "properties": {
         "name": {
@@ -1006,7 +1184,7 @@
           "$ref": "#/definitions/LogIngestConfigLogParser"
         },
         "keep_original": {
-          "description": "If true, the original log is kept after parsing and stored under the key \"plaintext_log\".\nOtherwise the original log will be dropped after parsing. Default is false.",
+          "description": "If `true`, the original log is retained after parsing and stored in the\nkey `plaintext_log`. If `false`, the original log is dropped after parsing.\nDefault value: `false`.",
           "type": "boolean"
         }
       },
@@ -1019,19 +1197,63 @@
       ],
       "type": "string"
     },
+    "LogIngestConfigStringNormalization": {
+      "description": "StringNormalization defines how to extract and transform string values from log fields.",
+      "properties": {
+        "source": {
+          "description": "List of field paths to check for values, in priority order.\nThe first non-empty value found will be used.",
+          "items": {
+            "$ref": "#/definitions/configv1LogFieldPath"
+          },
+          "type": "array"
+        },
+        "default_value": {
+          "description": "Default value to use when no source fields contain values.",
+          "type": "string"
+        },
+        "value_map": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional mapping to normalize values.\nFor example: {\"warn\": \"WARNING\", \"err\": \"ERROR\"} to standardize severity levels.",
+          "type": "object"
+        },
+        "sanitize_patterns": {
+          "description": "Optional regex patterns to extract and sanitize values.\nEach pattern must have exactly one capturing group that will be used as the result.\nFor example: \"^.*level=([A-Z]+).*$\" to extract log level from a string.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "LogIngestConfigTimestampNormalization": {
+      "description": "TimestampNormalization specifies which fields to check for timestamp values.",
+      "properties": {
+        "source": {
+          "description": "List of field paths to check for timestamp values, in priority order.\nCommon fields include \"timestamp\", \"@timestamp\", \"time\", \"datetime\".",
+          "items": {
+            "$ref": "#/definitions/configv1LogFieldPath"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "LogParserKeyValueParser": {
-      "description": "A parser to extract key-value pairs from a string.\nIf duplicate keys are found, the first instance is used.",
+      "description": "A parser to extract key/value pairs from a string.\nIf duplicate keys are found, the first instance is used.",
       "properties": {
         "pair_separator": {
-          "description": "String used to split each pair into its key and value. Required.",
+          "description": "The string for splitting each pair into its key and value.",
           "type": "string"
         },
         "delimiter": {
-          "description": "String used to split the input into key-value pairs. Required.",
+          "description": "The string for splitting the input into key/value pairs.",
           "type": "string"
         },
         "trim_set": {
-          "description": "All leading and trailing Unicode code points contained in the trim\nset will be removed from keys and values. Optional.",
+          "description": "Specifies the code points of any Unicode characters to trim from the\nbeginning and end of keys and values.",
           "type": "string"
         }
       },
@@ -1048,7 +1270,7 @@
     "LogParserRegexParser": {
       "properties": {
         "regex": {
-          "description": "Regex is the Re2 regex parser pattern to apply.\nNamed capturing groups become named fields in the extracted log.",
+          "description": "The regular expression parser pattern to apply. Must use RE2 syntax.\nNamed capturing groups become named fields in the extracted log.",
           "type": "string"
         }
       },
@@ -1249,6 +1471,17 @@
       ],
       "type": "string"
     },
+    "MappedValueReplacePair": {
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "MappingLabelValueMapping": {
       "properties": {
         "source_value_globs": {
@@ -1274,11 +1507,11 @@
           "$ref": "#/definitions/configv1MappingRuleStoragePolicy"
         },
         "interval": {
-          "description": "Interval between aggregated data points, equivalent to the resolution\nfield in storage policy. If set, then the storage_policy field can't be\nset.",
+          "description": "The interval between aggregated data points.",
           "type": "string"
         },
         "drop_timestamp": {
-          "description": "Deprecated: This field is no longer supported.",
+          "description": "Deprecated: This parameter is no longer supported.",
           "type": "boolean"
         }
       },
@@ -1298,7 +1531,7 @@
     "MetricLabelMappingLabel": {
       "properties": {
         "name_mappings": {
-          "description": "Determines where the input data for a derived label comes from. For each\nname mapping, you must define a `source_label`.",
+          "description": "Determines where the input data for a derived label comes from. For each\nname mapping, you must define a `source_label`. If multiple name mappings\nare defined, the first name mapping that matches is used to map the source\nlabel to the derived label.",
           "items": {
             "$ref": "#/definitions/MetricLabelMappingLabelNameMapping"
           },
@@ -1410,7 +1643,7 @@
           "$ref": "#/definitions/RoutesSeverityNotifiers"
         },
         "overrides": {
-          "description": "Optional list of overrides to use for alerts having matching labels.\nEach override defines labels that potentially match an alert's labels.\nIf one or more overrides match an alert, the notifiers of the first matching\noverride are used instead of the defaults.",
+          "description": "A list of overrides to use for alert notification policies. Each\noverride defines the labels that potentially match an alert. If an alert has\nmatching labels, the override notification policy is used for that alert\ninstead of the default notification policy. If multiple overrides match\nthe same alert, the first matching override notification policy is used.",
           "items": {
             "$ref": "#/definitions/NotificationPolicyRoutesOverride"
           },
@@ -1434,7 +1667,7 @@
     "NotificationPolicyRoutesOverride": {
       "properties": {
         "alert_label_matchers": {
-          "description": "Set of matchers on an alert's labels.\nIf all labels match then the override notifiers apply.",
+          "description": "The alert labels to match against. If an alert matches all of these labels,\nthe override notifier is applied to that alert.",
           "items": {
             "$ref": "#/definitions/configv1LabelMatcher"
           },
@@ -1449,15 +1682,15 @@
     "NotifierEmailConfig": {
       "properties": {
         "to": {
-          "description": "Required email address to send notifications to.",
+          "description": "The email address to send notifications to. Required if including an\n`email` object in your request body.",
           "type": "string"
         },
         "html": {
-          "description": "Optional HTML body of the email.",
+          "description": "The body of the email to send, in HTML format.",
           "type": "string"
         },
         "text": {
-          "description": "Optional text body of the email.",
+          "description": "The body of the email to send, in plain text format.",
           "type": "string"
         }
       },
@@ -1469,11 +1702,11 @@
           "$ref": "#/definitions/HTTPConfigBasicAuth"
         },
         "bearer_token": {
-          "description": "Bearer token authentication. Cannot be set if basic_auth is set.",
+          "description": "Sets a token for bearer authentication. Cannot be set if `basic_auth` is set.",
           "type": "string"
         },
         "proxy_url": {
-          "description": "Optional proxy URL.\nDEPRECATED: Custom proxies are unsupported.",
+          "description": "Your proxy URL. (This parameter is deprecated, and custom proxies are\nunsupported.)",
           "type": "string"
         },
         "tls_config": {
@@ -1488,19 +1721,20 @@
           "$ref": "#/definitions/NotifierHTTPConfig"
         },
         "api_key": {
-          "description": "Required OpsGenie API key.",
+          "description": "Your Opsgenie API key. Required if including an `ops_genie` object in your\nrequest body.",
           "type": "string"
         },
         "api_url": {
-          "description": "Required OpsGenie API URL to send requests to, e.g.\n\"https://api.opsgenie.com/\".",
+          "description": "The Opsgenie API URL to send requests to. Required if including an\n`ops_genie` object in your request body.",
+          "example": "https://api.opsgenie.com/",
           "type": "string"
         },
         "message": {
-          "description": "Alert text.",
+          "description": "The alert text.",
           "type": "string"
         },
         "description": {
-          "description": "Description of the alert.",
+          "description": "A description of the alert.",
           "type": "string"
         },
         "source": {
@@ -1511,7 +1745,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "A set of arbitrary key/value pairs that provide further detail about the\nalert.",
+          "description": "A set of key/value pairs with additional information about the alert. These\nkey/value pairs can include any arbitrary data.",
           "type": "object"
         },
         "responders": {
@@ -1522,15 +1756,15 @@
           "type": "array"
         },
         "tags": {
-          "description": "Comma separated list of tags attached to the notifications.",
+          "description": "A comma-separated list of tags attached to the notifications.",
           "type": "string"
         },
         "note": {
-          "description": "Additional alert note.",
+          "description": "A note about the alert.",
           "type": "string"
         },
         "priority": {
-          "description": "Priority level of alert. Possible values are P1, P2, P3, P4, and P5.",
+          "description": "The priority level of alert. Possible values are `P1`, `P2`, `P3`, `P4`, and `P5`.",
           "type": "string"
         }
       },
@@ -1546,7 +1780,7 @@
           "type": "string"
         },
         "client": {
-          "description": "Client identification of the notification sender.",
+          "description": "The client identification of the notification sender.",
           "type": "string"
         },
         "client_url": {
@@ -1554,19 +1788,19 @@
           "type": "string"
         },
         "description": {
-          "description": "Description of the incident.",
+          "description": "A description of the incident.",
           "type": "string"
         },
         "severity": {
-          "description": "Severity of the incident.\nValid values are 'critical', 'error', 'warning', 'info', or blank",
+          "description": "The severity of the incident. Possible values: `critical`, `error`,\n`warning`, or `info`.",
           "type": "string"
         },
         "class": {
-          "description": "The class/type of the event.",
+          "description": "The class of the event.",
           "type": "string"
         },
         "component": {
-          "description": "The part or component of the affected system which is broken.",
+          "description": "The part or component of the affected system that is broken.",
           "type": "string"
         },
         "group": {
@@ -1577,7 +1811,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Set of arbitrary key/value pairs which provide further detail about the\nincident.",
+          "description": "A set of key/value pairs with additional information about the incident. These\nkey/value pairs can include any arbitrary data.",
           "type": "object"
         },
         "images": {
@@ -1595,11 +1829,11 @@
           "type": "array"
         },
         "service_key": {
-          "description": "The PagerDuty integration key (when using PagerDuty integration type\n\"Prometheus\"). Cannot be set if routing_key is set.",
+          "description": "Your PagerDuty integration key, if using the PagerDuty integration type\n`Prometheus`. Cannot be set if `routing_key` is set.",
           "type": "string"
         },
         "routing_key": {
-          "description": "The PagerDuty integration key (when using PagerDuty integration type\n\"Events API v2\"). Cannot be set if service_key is set.",
+          "description": "Your PagerDuty integration key, if using the PagerDuty integration type\n`Events API v2`. Cannot be set if `service_key` is set.",
           "type": "string"
         }
       },
@@ -1611,7 +1845,7 @@
           "$ref": "#/definitions/NotifierHTTPConfig"
         },
         "api_url": {
-          "description": "Required Slack webhook API URL.",
+          "description": "Your Slack webhook API URL. Required if including a `slack` object in\nyour request body.",
           "type": "string"
         },
         "channel": {
@@ -1717,31 +1951,31 @@
           "$ref": "#/definitions/NotifierHTTPConfig"
         },
         "api_key": {
-          "description": "Required VictorOps API key.",
+          "description": "Your VictorOps API key. Required if including a `victor_ops` object in\nyour request body.",
           "type": "string"
         },
         "api_url": {
-          "description": "Required VictorOps API URL.",
+          "description": "The VictorOps API URL. Required if including a `victor_ops` object in your\nrequest body.",
           "type": "string"
         },
         "routing_key": {
-          "description": "Required VictorOps routing key.",
+          "description": "Your VictorOps routing key. Required if including a `victor_ops` object in\nyour request body.",
           "type": "string"
         },
         "message_type": {
-          "description": "Describes the behavior of the alert (CRITICAL, WARNING, INFO).",
+          "description": "The behavior of the alert. Possible values are `CRITICAL`, `WARNING`, and\n`INFO`.",
           "type": "string"
         },
         "entity_display_name": {
-          "description": "Summary of the alerted problem.",
+          "description": "A summary of the alerted problem.",
           "type": "string"
         },
         "state_message": {
-          "description": "Long explanation of the alerted problem.",
+          "description": "A detailed explanation of the alerted problem.",
           "type": "string"
         },
         "monitoring_tool": {
-          "description": "The monitoring tool the state message is from.",
+          "description": "The monitoring tool from which the state message originated.",
           "type": "string"
         },
         "custom_fields": {
@@ -1759,7 +1993,7 @@
           "$ref": "#/definitions/NotifierHTTPConfig"
         },
         "url": {
-          "description": "Required webhook URL (will be called as a POST request).",
+          "description": "Your webhook URL. This URL will be called as a `POST` request. Required\nif including a `webhook` object in your request body.",
           "type": "string"
         }
       },
@@ -1779,15 +2013,15 @@
     "OpsGenieConfigResponder": {
       "properties": {
         "id": {
-          "description": "ID of the responder. Cannot be set if name or username are set.",
+          "description": "The ID of the responder. Cannot be set if `name` or `username` are set.",
           "type": "string"
         },
         "name": {
-          "description": "Name of the responder. Cannot be set if id or username are set.",
+          "description": "The name of the responder. Cannot be set if `id` or `username` are set.",
           "type": "string"
         },
         "username": {
-          "description": "Username of the responder. Cannot be set if id or name are set.",
+          "description": "The username of the responder. Cannot be set if `id` or `name` are set.",
           "type": "string"
         },
         "responder_type": {
@@ -1805,14 +2039,14 @@
           "$ref": "#/definitions/ResourceAttributesFilterMode"
         },
         "exclude_keys": {
-          "description": "Do not copy any resource attribute whose key exactly matches one of the\nstrings in this list.",
+          "description": "Specifies resource attributes to exclude. If a resource attribute's key\nmatches any of the strings in this array, that resource attribute is\nexcluded.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "generate_target_info": {
-          "description": "Generate a target_info time series with labels derived from resource\nattributes. The filter_mode and exclude_keys settings apply in the same way as\nfor the \"flatten\" operation. The default is false.",
+          "description": "If `true`, generates a `target_info` time series with labels derived from\nresource attributes. The `filter_mode` and `exclude_keys` settings apply\nin the same manner that they apply to the `flatten` operation. Default:\n`false`.",
           "type": "boolean"
         }
       },
@@ -1855,7 +2089,7 @@
     "PartitionFilterCondition": {
       "properties": {
         "dataset_slug": {
-          "description": "If set, matches data which belongs to the given dataset. Cannot set if\nlog_filter is set.",
+          "description": "Optional. If set, matches data that belongs to the specified dataset. The\ndataset type must match the budget resource. For example, if `type=LOGS`\nthen set `resource=LOG_PERSISTED_BYTES`. You can't set a value for this\nfield if a value is set for `log_filter`.",
           "type": "string"
         },
         "log_filter": {
@@ -1872,6 +2106,46 @@
         },
         "probabilistic_sampling_strategy": {
           "$ref": "#/definitions/TraceJaegerRemoteSamplingStrategyProbabilisticStrategy"
+        }
+      },
+      "type": "object"
+    },
+    "ReplaceFieldMappedValue": {
+      "description": "MappedValue is the configuration for mapped value replace mode.",
+      "properties": {
+        "pairs": {
+          "description": "List of key value pairs.",
+          "items": {
+            "$ref": "#/definitions/MappedValueReplacePair"
+          },
+          "type": "array"
+        },
+        "use_default": {
+          "description": "If no matching key is found, fall back to default value. If use_default is false,\nthe value will be left unchanged if no matching key is found.",
+          "type": "boolean"
+        },
+        "default_value": {
+          "description": "Value to use if no value is found.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ReplaceFieldReplaceMode": {
+      "description": " - HASH: Hash the selected content.\n - STATIC_VALUE: Replace the selected content with a static string.\n - MAPPED_VALUE: Replace the selected content with a mapped value.",
+      "enum": [
+        "HASH",
+        "STATIC_VALUE",
+        "MAPPED_VALUE"
+      ],
+      "type": "string"
+    },
+    "ReplaceFieldStaticValue": {
+      "description": "StaticValue is the configuration for the replace field control rule in static value\nmode. Used to replace the selected content with a static value.",
+      "properties": {
+        "value": {
+          "description": "The value to replace selected content with.\nIf empty, action will remove the content.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1938,7 +2212,7 @@
           "$ref": "#/definitions/ResourcePoolsPriorities"
         },
         "priority_thresholds": {
-          "description": "Optional. For supported licenses, defines thresholds with strict limits for\nwhen to drop new consumption of the license for a pool. Currently, only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported. See the [product documentation](https://docs.chronosphere.io/control/shaping/quotas/define-pools#pool-thresholds)\nfor more information.",
+          "description": "Optional. For supported licenses, defines thresholds with strict limits for\nwhen to drop new consumption of the license for a pool. Only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported. See the [product documentation](https://docs.chronosphere.io/control/shaping/quotas/define-pools#pool-thresholds)\nfor more information.",
           "items": {
             "$ref": "#/definitions/AllocationThresholds"
           },
@@ -2042,14 +2316,14 @@
     "RoutesNotifierList": {
       "properties": {
         "notifier_slugs": {
-          "description": "Slugs of notifiers that will receive the alerts.",
+          "description": "The slugs of the notifiers that will receive the alerts.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "repeat_interval_secs": {
-          "description": "Frequency at which to resend alerts.",
+          "description": "The frequency at which to resend alerts.",
           "format": "int32",
           "type": "integer"
         },
@@ -2071,14 +2345,14 @@
       "type": "object"
     },
     "SLICustomIndicatorConfig": {
-      "description": "Configuration for error ratio SLIs.\nYou can include these variables in PromQL queries for SLIs:\n- {{.Window}}. Specifies the window of time that the PromQL query operates on.\n- {{.GroupBy}}. Specifies a comma-separated list of signal and dimension labels to group the results by.\n- {{.AdditionalFilters}}. Requires setting `additional_promql_filters`.",
+      "description": "Configuration for error ratio SLIs. You can include these variables in PromQL\nqueries for SLIs:\n- `{{.Window}}`: Specifies the window of time that the PromQL query operates on.\n- `{{.GroupBy}}`: Specifies a comma-separated list of signal and dimension\n  labels to group the results by.\n- `{{.AdditionalFilters}}`: Requires setting `additional_promql_filters`.",
       "properties": {
         "good_query_template": {
-          "description": "A PromQL query that measures the number of \"good\" events for this SLI.\nEither this or the bad_query_template must be set.",
+          "description": "A PromQL query that measures the number of \"good\" events for this SLI.\nEither this or `bad_query_template` must be set.",
           "type": "string"
         },
         "bad_query_template": {
-          "description": "A PromQL query that measures the number of \"bad\" events for this SLI.\nEither this or the good_query_template must be set.",
+          "description": "A PromQL query that measures the number of \"bad\" events for this SLI.\nEither this or `good_query_template` must be set.",
           "type": "string"
         },
         "total_query_template": {
@@ -2089,9 +2363,10 @@
       "type": "object"
     },
     "SLICustomTimeSliceIndicatorConfig": {
+      "description": "Defines the configuration for time slice SLIs. Time slice SLIs are evaluated by\nrunning a PromQL query over a certain time window and comparing the result against\na condition. You can include these variables in PromQL queries for SLIs:\n- `{{.Window}}`: Specifies the window of time that the PromQL query operates on.\n- `{{.GroupBy}}`: Specifies a comma-separated list of signal and dimension labels\n  to group the results by.\n- `{{.TimeSlice}}`: The time slice being evaluated, such as `1m` or `5m`.\n- `{{.AdditionalFilters}}`: Requires setting `additional_promql_filters`.",
       "properties": {
         "query_template": {
-          "description": "A PromQL query template for the timeslice SLI.",
+          "description": "A PromQL query template for the time slice SLI.",
           "type": "string"
         },
         "timeslice_size": {
@@ -2101,10 +2376,10 @@
           "$ref": "#/definitions/SLITimeSliceCondition"
         }
       },
-      "title": "Defines the configuration for TimeSlice SLIs.\nTimeSlice SLIs are evaluated by running a PromQL query over a certain time window and comparing the result again a condition.\nYou can include these variables in PromQL queries for SLIs:\n- {{.Window}}. Specifies the window of time that the PromQL query operates on.\n- {{.GroupBy}}. Specifies a comma-separated list of signal and dimension labels to group the results by.\n- {{.TimeSlice}} :The time slice being evaluated, e.g. `1m` or `5m`.\n- {{.AdditionalFilters}}. Requires setting `additional_promql_filters`.",
       "type": "object"
     },
     "SLITimeSliceCondition": {
+      "description": "Defines the condition for evaluating time slice SLIs.",
       "properties": {
         "op": {
           "$ref": "#/definitions/ConditionOp"
@@ -2115,20 +2390,21 @@
           "type": "number"
         }
       },
-      "title": "Defines the condition for evaluating TimeSlice SLIs.",
       "type": "object"
     },
     "SLITimeSliceSize": {
+      "description": "Defines the supported time slice sizes for time slice SLIs.",
       "enum": [
         "TIMESLICE_SIZE_ONE_MINUTE",
         "TIMESLICE_SIZE_FIVE_MINUTES"
       ],
-      "title": "Defines the supported time slice sizes for TimeSlice SLIs.",
       "type": "string"
     },
     "SLODefinition": {
       "properties": {
         "objective": {
+          "description": "The SLO target percentage, which represents the availability of the SLO.",
+          "example": "99.9995",
           "format": "double",
           "type": "number"
         },
@@ -2136,14 +2412,14 @@
           "$ref": "#/definitions/DefinitionTimeWindow"
         },
         "burn_rate_alerting_config": {
-          "description": "Provides the burn rate alert configuration for the SLO. If not provided the\ndefault burn rates will be used. The configuration is only valid if the\nenable_burn_rate_alerting flag is set to true.",
+          "description": "Provides the burn rate alert configuration for the SLO. If not provided, the\ndefault burn rates are used. The configuration is only valid if the\n`enable_burn_rate_alerting` flag is set to `true`.",
           "items": {
             "$ref": "#/definitions/DefinitionBurnRateDefinition"
           },
           "type": "array"
         },
         "enable_burn_rate_alerting": {
-          "description": "If true enables burn rate alerting.",
+          "description": "If `true`, enables burn rate alerting.",
           "type": "boolean"
         }
       },
@@ -2243,7 +2519,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Optional labels which further restricts the service account to only read\nor write metrics with the given label names and values.",
+          "description": "Optional. Specifies labels that further restrict the service account to only\nread or write metrics with the given label names and values.",
           "type": "object"
         }
       },
@@ -2301,7 +2577,7 @@
     "ThresholdInstantRate": {
       "properties": {
         "fixed_value_per_sec": {
-          "description": "fixed_value_per_sec is the required rate threshold.",
+          "description": "Value of the fixed rate threshold.",
           "format": "int64",
           "type": "string"
         }
@@ -2311,7 +2587,7 @@
     "ThresholdVolume": {
       "properties": {
         "fixed_value": {
-          "description": "fixed_value is the required volume threshold.",
+          "description": "Value of the volume threshold.",
           "format": "int64",
           "type": "string"
         }
@@ -2616,6 +2892,18 @@
       },
       "type": "object"
     },
+    "TraceSearchFilterScopeFilter": {
+      "properties": {
+        "span_scopes": {
+          "description": "Specifies the span filters that define which spans contribute to the metrics calculation.\nOnly spans matching these filters will be included in the metrics aggregation.",
+          "items": {
+            "$ref": "#/definitions/TraceSearchFilterSpanFilter"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "TraceSearchFilterSpanFilter": {
       "properties": {
         "match_type": {
@@ -2789,7 +3077,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the AzureMetricsIntegration. You can modify this value after the AzureMetricsIntegration is created.",
+          "description": "The name of the AzureMetricsIntegration. You can modify this value after the AzureMetricsIntegration is created.",
           "type": "string"
         },
         "created_at": {
@@ -2832,7 +3120,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the Bucket. You can modify this value after the Bucket is created.",
+          "description": "The name of the Bucket. You can modify this value after the Bucket is created.",
           "type": "string"
         },
         "created_at": {
@@ -2876,7 +3164,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the Collection. You can modify this value after the Collection is created.",
+          "description": "The name of the Collection. You can modify this value after the Collection is created.",
           "type": "string"
         },
         "created_at": {
@@ -2932,7 +3220,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.",
+          "description": "The name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.",
           "type": "string"
         },
         "created_at": {
@@ -2951,38 +3239,42 @@
           "$ref": "#/definitions/configv1ConsumptionBudgetResource"
         },
         "partition_slug_path": {
-          "description": "partition_slug_path is the required path of the budget's partition,\ndelimited by \"/\", in the format \"global/\u003cslug1\u003e/\u003cslug2\u003e\", where slug1 is a\ntop-level partition, and slug2 is a child partition of slug1, etc.\n\nA well-formed partition path always starts with the \"global\" partition\nslug, and has no leading or trailing \"/\".",
+          "description": "Path of the budget's partition, delimited by forward slashes (`/`), in the\nformat `global/SLUG1/SLUG2`, where `SLUG1` is a top-level partition, and `SLUG2`\nis a child partition of `SLUG1`.\n\nA well-formed partition path always starts with the `global` partition slug, and\nhas no leading or trailing forward slashes.",
           "type": "string"
         },
         "priorities": {
-          "description": "priorities are optional budget priorities. Priorities are defined in order\nof precedence, where incoming requests are assigned the first priority that\nmatches. Each priority value defines the order in which requests are\ndropped when necessary (i.e. priority=10 dropped first, priority=1 dropped\nlast). If a request does not match any priority, then it is assigned the\ndefault_priority.",
+          "description": "Optional. Controls the order in which data is dropped when a drop action is\napplied. For example, a priority of 10 is dropped first, and a priority of 1 is\ndropped last. Priorities are evaluated in match order, and the first priority to\nmatch is applied. All other priorities are ignored. If a request does not match\nany priority, then it is assigned the `default_priority`.",
           "items": {
             "$ref": "#/definitions/ConsumptionBudgetPriority"
           },
           "type": "array"
         },
         "thresholds": {
-          "description": "thresholds are optional budget thresholds for automated limiting and\nalerting.",
+          "description": "Optional. Defines which actions to take when a threshold is exceeded.",
           "items": {
             "$ref": "#/definitions/configv1ConsumptionBudgetThreshold"
           },
           "type": "array"
         },
         "default_priority": {
-          "description": "default_priority is an optional default priority for requests which do not\nmatch any priority in the priorities list. If not set, then priority=10\nis used as the default.",
+          "description": "Optional. The default priority for requests that don't match any priority in the\n`priorities` list. If not set, then `priority=10` (dropped first) is used as the\ndefault.",
           "format": "int32",
           "type": "integer"
         },
         "notification_policy_slug": {
-          "description": "Notification policy slug for routing consumption alerts. Required only if\nALERT_WARN or ALERT_CRITICAL actions are configured.",
+          "description": "Notification policy slug for routing alerts. Required only if `ALERT_WARN` or\n`ALERT_CRITICAL` actions are configured.",
           "type": "string"
+        },
+        "alert_action_config": {
+          "$ref": "#/definitions/ConsumptionBudgetAlertActionConfig"
         }
       },
       "type": "object"
     },
     "configv1ConsumptionBudgetResource": {
       "enum": [
-        "LOG_PERSISTED_BYTES"
+        "LOG_PERSISTED_BYTES",
+        "LOG_PROCESSED_BYTES"
       ],
       "type": "string"
     },
@@ -3018,7 +3310,7 @@
           "type": "string"
         },
         "partitions": {
-          "description": "partitions define non-overlapping groupings of telemetry. Partitions are\ndefined in order of precedence, where incoming requests are allocated to\nthe first partition that matches. Requests that don't match any\npartition fall back to an omnipresent default partition.",
+          "description": "Partitions define non-overlapping groupings of telemetry data. Partitions are\ndefined in order of precedence, where incoming requests are allocated to the\nfirst partition that matches. Requests that don't match any partition use an\nimplicit `default` partition.",
           "items": {
             "$ref": "#/definitions/ConsumptionConfigPartition"
           },
@@ -3734,7 +4026,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the Dashboard. You can modify this value after the Dashboard is created.",
+          "description": "The name of the Dashboard. You can modify this value after the Dashboard is created.",
           "type": "string"
         },
         "created_at": {
@@ -3773,7 +4065,7 @@
     "configv1Dataset": {
       "properties": {
         "name": {
-          "description": "Name of the Dataset. You can modify this value after the Dataset is created.",
+          "description": "The name of the Dataset. You can modify this value after the Dataset is created.",
           "type": "string"
         },
         "slug": {
@@ -3933,7 +4225,7 @@
     "configv1DerivedLabel": {
       "properties": {
         "name": {
-          "description": "Name of the DerivedLabel. You can modify this value after the DerivedLabel is created.",
+          "description": "The name of the DerivedLabel. You can modify this value after the DerivedLabel is created.",
           "type": "string"
         },
         "slug": {
@@ -3982,7 +4274,7 @@
     "configv1DerivedMetric": {
       "properties": {
         "name": {
-          "description": "Name of the DerivedMetric. You can modify this value after the DerivedMetric is created.",
+          "description": "The name of the DerivedMetric. You can modify this value after the DerivedMetric is created.",
           "type": "string"
         },
         "slug": {
@@ -4049,7 +4341,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the DropRule. You can modify this value after the DropRule is created.",
+          "description": "The name of the DropRule. You can modify this value after the DropRule is created.",
           "type": "string"
         },
         "created_at": {
@@ -4102,7 +4394,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.",
+          "description": "The name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.",
           "type": "string"
         },
         "created_at": {
@@ -4146,7 +4438,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the GrafanaDashboard. You can modify this value after the GrafanaDashboard is created.",
+          "description": "The name of the GrafanaDashboard. You can modify this value after the GrafanaDashboard is created.",
           "type": "string"
         },
         "created_at": {
@@ -4182,12 +4474,12 @@
     "configv1LabelFilter": {
       "properties": {
         "name": {
-          "description": "Name of the label to match.",
+          "description": "The name of the label to match.",
           "example": "job",
           "type": "string"
         },
         "value_glob": {
-          "description": "Glob value of the label to match.",
+          "description": "The glob value of the label to match.",
           "example": "myservice*",
           "type": "string"
         }
@@ -4200,11 +4492,11 @@
           "$ref": "#/definitions/configv1LabelMatcherMatcherType"
         },
         "name": {
-          "description": "name always matches against an exact label name.",
+          "description": "The name of the label to match against. This always matches against an\nexact label name, regardless of the value of `type`.",
           "type": "string"
         },
         "value": {
-          "description": "value matches against a label value based on the configured type.",
+          "description": "The value of the label to match against. If `type` is set to `EXACT`, this\nmatches against an exact label value. If `type` is set to `REGEX`, this\nparameter is treated as a regular expression for parsing label values.",
           "type": "string"
         }
       },
@@ -4696,6 +4988,12 @@
         },
         "drop_field": {
           "$ref": "#/definitions/LogControlRuleDropField"
+        },
+        "replace_field": {
+          "$ref": "#/definitions/LogControlRuleReplaceField"
+        },
+        "emit_metrics": {
+          "$ref": "#/definitions/LogControlRuleEmitMetrics"
         }
       },
       "type": "object"
@@ -4711,7 +5009,9 @@
       "enum": [
         "DROP",
         "SAMPLE",
-        "DROP_FIELD"
+        "DROP_FIELD",
+        "REPLACE_FIELD",
+        "EMIT_METRICS"
       ],
       "type": "string"
     },
@@ -4726,7 +5026,7 @@
     "configv1LogFieldPath": {
       "properties": {
         "selector": {
-          "description": "LogQL Selector to indicate field path. Use `parent[child]` syntax to\nindicate nesting.",
+          "description": "The LogQL selector to indicate the field path. Use `parent[child]` syntax to\nindicate nesting.",
           "type": "string"
         }
       },
@@ -4748,18 +5048,21 @@
           "type": "string"
         },
         "plaintext_parsers": {
-          "description": "The parsers to run on plaintext logs. The first parser that matches the log is used.",
+          "description": "The parsers to apply to plaintext logs. The first parser that matches the log is used.",
           "items": {
             "$ref": "#/definitions/LogIngestConfigPlaintextParser"
           },
           "type": "array"
         },
         "field_parsers": {
-          "description": "The parsers to run on specific fields within structured logs or plaintext logs after parsing.",
+          "description": "The parsers to apply to specific fields within structured logs or plaintext logs after those logs are parsed.",
           "items": {
             "$ref": "#/definitions/LogIngestConfigLogFieldParser"
           },
           "type": "array"
+        },
+        "field_normalization": {
+          "$ref": "#/definitions/LogIngestConfigFieldNormalization"
         }
       },
       "type": "object"
@@ -4917,7 +5220,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the MappingRule. You can modify this value after the MappingRule is created.",
+          "description": "The name of the MappingRule. You can modify this value after the MappingRule is created.",
           "type": "string"
         },
         "created_at": {
@@ -4937,7 +5240,7 @@
           "type": "string"
         },
         "filters": {
-          "description": "Required filters that determine to which metrics to apply the rule.",
+          "description": "The filters that determine which metrics should have rules applied to them.\nTo be considered a match, a metric must meet the criteria for all of the\nfilters specified in this array.",
           "items": {
             "$ref": "#/definitions/configv1LabelFilter"
           },
@@ -4947,7 +5250,7 @@
           "$ref": "#/definitions/MappingRuleAggregationPolicy"
         },
         "drop": {
-          "description": "Whether to drop the given set of metrics. If set, then the aggregation\npolicy can't be set.",
+          "description": "Specifies whether to drop the given set of metrics. Cannot be set if the\n`aggregation_policy` object is set.",
           "type": "boolean"
         },
         "mode": {
@@ -4967,11 +5270,11 @@
     "configv1MappingRuleStoragePolicy": {
       "properties": {
         "resolution": {
-          "description": "Required resolution of the aggregated metrics.",
+          "description": "Deprecated: This parameter is no longer supported.",
           "type": "string"
         },
         "retention": {
-          "description": "Required retention of the aggregated metrics.",
+          "description": "Deprecated: This parameter is no longer supported.",
           "type": "string"
         }
       },
@@ -4984,7 +5287,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the Monitor. You can modify this value after the Monitor is created.",
+          "description": "The name of the Monitor. You can modify this value after the Monitor is created.",
           "type": "string"
         },
         "created_at": {
@@ -5089,7 +5392,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the MutingRule. You can modify this value after the MutingRule is created.",
+          "description": "The name of the MutingRule. You can modify this value after the MutingRule is created.",
           "type": "string"
         },
         "created_at": {
@@ -5160,7 +5463,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.",
+          "description": "The name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.",
           "type": "string"
         },
         "created_at": {
@@ -5176,11 +5479,11 @@
           "type": "string"
         },
         "bucket_slug": {
-          "description": "Slug of the bucket the notification policy belongs to. Required if\nteam_slug is not set.",
+          "description": "The slug of the bucket that the notification policy belongs to. Required if\n`team_slug` is not set.",
           "type": "string"
         },
         "team_slug": {
-          "description": "Slug of the team the notification policy belongs to. Required if\nbucket_slug is not set.",
+          "description": "The slug of the team that the notification policy belongs to. Required if\n`bucket_slug` is not set.",
           "type": "string"
         },
         "routes": {
@@ -5196,7 +5499,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the Notifier. You can modify this value after the Notifier is created.",
+          "description": "The name of the Notifier. You can modify this value after the Notifier is created.",
           "type": "string"
         },
         "created_at": {
@@ -5212,7 +5515,7 @@
           "type": "string"
         },
         "skip_resolved": {
-          "description": "If true, do not notify on resolved alerts. Cannot set if discard is set.",
+          "description": "If `true`, disables notifications for resolved alerts. Cannot be set if\n`discard` equals `true`.",
           "type": "boolean"
         },
         "webhook": {
@@ -5234,7 +5537,7 @@
           "$ref": "#/definitions/NotifierVictorOpsConfig"
         },
         "discard": {
-          "description": "If set, enables the \"discard\" integration which simply discards all\nnotifications. Cannot set if another integration is set.",
+          "description": "If `true`, enables the `discard` integration, which discards all\nnotifications. Cannot be set if another integration is set.",
           "type": "boolean"
         }
       },
@@ -5578,7 +5881,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the RecordingRule. You can modify this value after the RecordingRule is created.",
+          "description": "The name of the RecordingRule. You can modify this value after the RecordingRule is created.",
           "type": "string"
         },
         "created_at": {
@@ -5594,27 +5897,27 @@
           "type": "string"
         },
         "bucket_slug": {
-          "description": "Optional slug of the bucket the RecordingRule belongs to.",
+          "description": "The slug of the bucket the recording rule belongs to. Required if\n`execution_group` is not set. If both `bucket_slug` and `execution_group`\nare set, their values must match.",
           "type": "string"
         },
         "label_policy": {
           "$ref": "#/definitions/configv1RecordingRuleLabelPolicy"
         },
         "interval_secs": {
-          "description": "Optional interval for evaluating the recording rule.",
+          "description": "Specifies how often to evaluate the recording rule.",
           "format": "int32",
           "type": "integer"
         },
         "metric_name": {
-          "description": "The name of the time series to use for output, which must be a valid\nmetric name.",
+          "description": "The name of the time series to use for the output of `prometheus_expr`.\nThis value must be a valid metric name. If you don't set this value,\nthe output of `prometheus_expr` is output to a time series with a name\ndefined by the value of `name`.",
           "type": "string"
         },
         "prometheus_expr": {
-          "description": "The PromQL expression to evaluate at the time of each evaluation cycle.\nThe result is recorded as a new time series with its metric name\ndefined by the metric_name (or name) field.",
+          "description": "The PromQL expression to evaluate at the time of each evaluation cycle. The\nresult is output to a new time series with a name defined by the value of\n`metric_name`. If `metric_name` is unset, the result is output to a\ntime series defined by the value of `name`.",
           "type": "string"
         },
         "execution_group": {
-          "description": "Optional execution_group in which this rule is to be evaluated.\nAt least one of bucket_slug and execution_group must be set. If both are set, then they are expected to match.",
+          "description": "The slug of the execution group in which the recording rule will be\nevaluated. Required if `bucket_slug` is not set.  If both `bucket_slug` and\n`execution_group` are set, their values must match.",
           "type": "string"
         }
       },
@@ -5626,7 +5929,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Labels to add or overwrite before storing the result.",
+          "description": "A list of labels to add or overwrite before storing the result.",
           "type": "object"
         }
       },
@@ -5674,7 +5977,7 @@
           "type": "array"
         },
         "priority_thresholds": {
-          "description": "Optional. For supported licenses, defines thresholds with strict limits for\nwhen to drop new consumption of the license for a pool. Currently, only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported.",
+          "description": "Optional. For supported licenses, defines thresholds with strict limits for\nwhen to drop new consumption of the license for a pool. Only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported.",
           "items": {
             "$ref": "#/definitions/AllocationThresholds"
           },
@@ -5703,7 +6006,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the RollupRule. You can modify this value after the RollupRule is created.",
+          "description": "The name of the RollupRule. You can modify this value after the RollupRule is created.",
           "type": "string"
         },
         "created_at": {
@@ -5823,14 +6126,15 @@
           "$ref": "#/definitions/SLICustomTimeSliceIndicatorConfig"
         },
         "custom_dimension_labels": {
-          "description": "Used to configure additional labels to export from\nthe underlying queries. This feature provides a logical budget to group\nunique combination of dimensions. For example, if you want to track a\nbudget per endpoint, add the endpoint label as a dimension. These dimensions\nare provided on the top-level SLI so that SLOs will receive them\nin `.GroupBy`.",
+          "description": "Configures additional labels to export from the underlying queries. This feature\nprovides a logical budget to group unique combinations of dimensions. For\nexample, if you want to track a budget per endpoint, add the endpoint label as a\ndimension. These dimensions are provided on the top-level SLI so that SLOs will\nreceive them in the `.GroupBy` variable.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "additional_promql_filters": {
-          "description": "These are made available to the SLO queries and are intended to be used for things\nlike `cluster!~\"dev\"`",
+          "description": "Specifies additional PromQL filters, which are made available to the SLO queries.\nUse these filters to reduce the number of metrics used by the SLO.",
+          "example": "cluster!~\"dev\"",
           "items": {
             "$ref": "#/definitions/commonPromQLMatcher"
           },
@@ -5846,7 +6150,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the SLO. You can modify this value after the SLO is created.",
+          "description": "The name of the SLO. You can modify this value after the SLO is created.",
           "type": "string"
         },
         "description": {
@@ -5868,7 +6172,8 @@
           "$ref": "#/definitions/configv1CollectionReference"
         },
         "notification_policy_slug": {
-          "description": "Optional notification policy to explicitly apply to the generated monitors.\nSlug of the notification policy to use for the SLO. If you don't specify a value,\nthen the collection or service this SLO belongs to must have a notification\npolicy.",
+          "description": "Optional. Slug of the notification policy to use for the SLO. If you don't\nspecify a value, then the collection or service this SLO belongs to must have a\nnotification policy. Required if alerting is enabled for this SLO.",
+          "example": "alerting_notification_policy",
           "type": "string"
         },
         "signal_grouping": {
@@ -5885,7 +6190,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Annotations are visible in notifications generated by this SLO\nThey can be be templated with labels from notifications.",
+          "description": "Annotations are visible in notifications generated by this SLO.\nYou can template annotations with labels from notifications.",
           "type": "object"
         },
         "sli": {
@@ -5904,7 +6209,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the Service. You can modify this value after the Service is created.",
+          "description": "The name of the Service. You can modify this value after the Service is created.",
           "type": "string"
         },
         "created_at": {
@@ -5920,15 +6225,15 @@
           "type": "string"
         },
         "team_slug": {
-          "description": "Required slug of the team the service collection belongs to.",
+          "description": "Slug of the team the service collection belongs to.",
           "type": "string"
         },
         "description": {
-          "description": "Optional description of the service collection.",
+          "description": "Optional. Description of the service collection.",
           "type": "string"
         },
         "notification_policy_slug": {
-          "description": "Slug of the notification policy used by default for monitors in this service collection.\nThis is optional if the collection does not contain monitors or all of its monitors explicitly reference a policy.\nThis does not override the policy used when a monitor explicitly references a policy.",
+          "description": "Slug of the notification policy used by default for monitors in this service\ncollection. This parameter is optional if the collection doesn't contain\nmonitors, or if all of its monitors explicitly reference a policy. This\nparameter doesn't override the policy used if a monitor explicitly references\na policy.",
           "type": "string"
         }
       },
@@ -5941,7 +6246,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the ServiceAccount. You can modify this value after the ServiceAccount is created.",
+          "description": "The name of the ServiceAccount. You can modify this value after the ServiceAccount is created.",
           "type": "string"
         },
         "created_at": {
@@ -5957,17 +6262,17 @@
           "type": "string"
         },
         "token": {
-          "description": "token is the generated API token of the service account. Cannot be set by\nclients.\n\ntoken is only set once by the server in the CreateServiceAccount response.\nReadServiceAccount will always return an empty token. Therefore, when\ncreating a service account, clients are responsible for securely storing\nthe response token on their end, as they will not be able to read it\nagain.",
+          "description": "Generated API token of the service account. Cannot be set by clients.\n\nThe token is set only once by the server in the `CreateServiceAccount` response.\nThe `ReadServiceAccount` response always returns an empty token. Therefore, when\ncreating a service account, ensure you securely store the response token.\nIf you lose the token, you must delete and recreate the service account to\ngenerate a new token.",
           "readOnly": true,
           "type": "string"
         },
         "email": {
-          "description": "email is the generated email address of the service account. Cannot be set\nby clients.",
+          "description": "The unique email user for this service account. Cannot be set by clients.",
           "readOnly": true,
           "type": "string"
         },
         "unrestricted": {
-          "description": "If set, grants the service account access to all Chronosphere APIs\n(including resource configuration and metric data) within the access\ncontrols defined by the service account's team membership.\n\nExactly one of unrestricted or metrics_restriction must be set.",
+          "description": "If set, grants the service account access to all Chronosphere APIs, including\nresource configuration and metric data within the access controls defined by the\nservice account's team membership.\n\nOnly one of `unrestricted` or `metrics_restriction` must be set.",
           "type": "boolean"
         },
         "metrics_restriction": {
@@ -5983,7 +6288,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the Team. You can modify this value after the Team is created.",
+          "description": "The name of the Team. You can modify this value after the Team is created.",
           "type": "string"
         },
         "created_at": {
@@ -6006,7 +6311,7 @@
           "type": "array"
         },
         "description": {
-          "description": "Optional short description of the team.",
+          "description": "Optional. Short description of the team.",
           "type": "string"
         }
       },
@@ -6015,7 +6320,7 @@
     "configv1TraceBehavior": {
       "properties": {
         "name": {
-          "description": "Name of the TraceBehavior. You can modify this value after the TraceBehavior is created.",
+          "description": "The name of the TraceBehavior. You can modify this value after the TraceBehavior is created.",
           "type": "string"
         },
         "slug": {
@@ -6130,7 +6435,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.",
+          "description": "The name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.",
           "type": "string"
         },
         "created_at": {
@@ -6158,7 +6463,7 @@
     "configv1TraceMetricsRule": {
       "properties": {
         "name": {
-          "description": "Name of the TraceMetricsRule. You can modify this value after the TraceMetricsRule is created.",
+          "description": "The name of the TraceMetricsRule. You can modify this value after the TraceMetricsRule is created.",
           "type": "string"
         },
         "slug": {
@@ -6205,6 +6510,9 @@
             "$ref": "#/definitions/configv1TraceMetricsRuleGroupBy"
           },
           "type": "array"
+        },
+        "scope_filter": {
+          "$ref": "#/definitions/TraceSearchFilterScopeFilter"
         }
       },
       "type": "object"
@@ -6233,6 +6541,9 @@
             "$ref": "#/definitions/TraceSearchFilterSpanFilter"
           },
           "type": "array"
+        },
+        "scope_filter": {
+          "$ref": "#/definitions/TraceSearchFilterScopeFilter"
         }
       },
       "type": "object"
@@ -7840,6 +8151,30 @@
               "type": "string"
             },
             "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by partition_slug_path, where any ConsumptionBudget with a matching partition_slug_path in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "partition_slug_paths",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by resource, where any ConsumptionBudget with a matching resource in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "enum": [
+                "LOG_PERSISTED_BYTES",
+                "LOG_PROCESSED_BYTES"
+              ],
+              "type": "string"
+            },
+            "name": "resources",
             "type": "array"
           }
         ],
@@ -13602,7 +13937,7 @@
           },
           {
             "collectionFormat": "multi",
-            "description": "Filters results by slug, where any Service with a matching slug in the given list (and matches all other filters) will be returned.",
+            "description": "Filters results by slug, where any Service with a matching slug in the given\nlist that matches all other filters is returned.",
             "in": "query",
             "items": {
               "type": "string"
@@ -13612,7 +13947,7 @@
           },
           {
             "collectionFormat": "multi",
-            "description": "Filters results by team_slug, where any Service with a matching team_slug in the given list (and matches all other filters) will be returned.",
+            "description": "Filters results by `team_slug`, where any Service with a matching `team_slug` in\nthe given list that matches all other filters is returned.",
             "in": "query",
             "items": {
               "type": "string"
@@ -13622,7 +13957,7 @@
           },
           {
             "collectionFormat": "multi",
-            "description": "Filters results by name, where any Service with a matching name in the given list (and matches all other filters) will be returned.",
+            "description": "Filters results by `name`, where any Service with a matching `name` in the given\nlist that matches all other filters is returned.",
             "in": "query",
             "items": {
               "type": "string"
@@ -13632,7 +13967,7 @@
           },
           {
             "collectionFormat": "multi",
-            "description": "Filters results by notification_policy_slug, where any Service with a matching notification_policy_slug in the given list (and matches all other filters) will be returned.",
+            "description": "Filters results by `notification_policy_slug`, where any Service with a matching\n`notification_policy_slug` in the given list that matches all other filters is\nreturned.",
             "in": "query",
             "items": {
               "type": "string"

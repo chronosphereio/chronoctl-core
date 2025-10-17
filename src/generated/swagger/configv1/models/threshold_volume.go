@@ -17,7 +17,7 @@ import (
 // swagger:model ThresholdVolume
 type ThresholdVolume struct {
 
-	// fixed_value is the required volume threshold.
+	// Value of the volume threshold.
 	FixedValue string `json:"fixed_value,omitempty"`
 }
 

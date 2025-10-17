@@ -362,14 +362,20 @@ type ConsumptionBudgetListOpts struct {
 	// PageToken is the pagination token we want to start our request at.
 	PageToken string
 	// PageMaxSize is the maximum page size to use when making List calls.
-	PageMaxSize int
-	Names       []string
-	Slugs       []string
+	PageMaxSize        int
+	Names              []string
+	PartitionSlugPaths []string
+	Resources          []string
+	Slugs              []string
 }
 
 func (r *ConsumptionBudgetListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
 	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ConsumptionBudget with a matching name in the given list (and matches all other filters) will be returned.")
+	var emptyPartitionSlugPaths []string
+	flags.StringSliceVar(&r.PartitionSlugPaths, "partition-slug-paths", emptyPartitionSlugPaths, "Filters results by partition_slug_path, where any ConsumptionBudget with a matching partition_slug_path in the given list (and matches all other filters) will be returned.")
+	var emptyResources []string
+	flags.StringSliceVar(&r.Resources, "resources", emptyResources, "Filters results by resource, where any ConsumptionBudget with a matching resource in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
 	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any ConsumptionBudget with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
@@ -396,11 +402,13 @@ func ListConsumptionBudgets(
 
 	for {
 		res, err := client.ListConsumptionBudgets(&config_v1.ListConsumptionBudgetsParams{
-			Context:     ctx,
-			PageToken:   &nextToken,
-			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
-			Names:       opts.Names,
-			Slugs:       opts.Slugs,
+			Context:            ctx,
+			PageToken:          &nextToken,
+			PageMaxSize:        ptr.Int64(int64(pageMaxSize)),
+			Names:              opts.Names,
+			PartitionSlugPaths: opts.PartitionSlugPaths,
+			Resources:          opts.Resources,
+			Slugs:              opts.Slugs,
 		})
 		if err != nil {
 			return pagination.Token(""), clienterror.Wrap(err)
@@ -493,57 +501,72 @@ kind: ConsumptionBudget
 spec:
     # The unique identifier of the ConsumptionBudget. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the ConsumptionBudget is created.
     slug: <string>
-    # Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
+    # The name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
     name: <string>
-    # partition_slug_path is the required path of the budget's partition,
-    # delimited by "/", in the format "global/<slug1>/<slug2>", where slug1 is a
-    # top-level partition, and slug2 is a child partition of slug1, etc.
+    # Path of the budget's partition, delimited by forward slashes ('/'), in the
+    # format 'global/SLUG1/SLUG2', where 'SLUG1' is a top-level partition, and 'SLUG2'
+    # is a child partition of 'SLUG1'.
 
-    # A well-formed partition path always starts with the "global" partition
-    # slug, and has no leading or trailing "/".
+    # A well-formed partition path always starts with the 'global' partition slug, and
+    # has no leading or trailing forward slashes.
     partition_slug_path: <string>
-    # priorities are optional budget priorities. Priorities are defined in order
-    # of precedence, where incoming requests are assigned the first priority that
-    # matches. Each priority value defines the order in which requests are
-    # dropped when necessary (i.e. priority=10 dropped first, priority=1 dropped
-    # last). If a request does not match any priority, then it is assigned the
-    # default_priority.
+    # Optional. Controls the order in which data is dropped when a drop action is
+    # applied. For example, a priority of 10 is dropped first, and a priority of 1 is
+    # dropped last. Priorities are evaluated in match order, and the first priority to
+    # match is applied. All other priorities are ignored. If a request does not match
+    # any priority, then it is assigned the 'default_priority'.
     priorities:
-        - # filters define what data matches the priority. The filters are AND'd
-          # together; a request must match every filter in order to match the
-          # priority. Must not be empty.
+        - # Criteria that defines which data matches the 'priority'. Filters are
+          # concatenated together as implied 'AND' operators. A request must match every
+          # filter to match the 'priority'.
           filters:
-            - # If set, matches data which belongs to the given dataset. Cannot set if
-              # log_filter is set. The dataset type must match the budget resource
-              # (e.g. type=LOGS for resource=LOG_PERSISTED_BYTES).
+            - # Optional. If set, matches data that belongs to the specified dataset. The
+              # dataset type must match the budget resource. For example, if 'resource=LOG_PERSISTED_BYTES'
+              # then only dataset 'type=LOGS' is allowed. You can't set a value for this
+              # field if a value is set for 'log_filter'.
               dataset_slug: <string>
               log_filter:
                 # Returns logs that match this query. The query can include only top-level
                 # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
                 # operator is allowed.
                 query: <string>
-          # priority is the required priority of the dataset, where priority=10 is dropped
-          # first, and priority=1 is dropped last.
+          # Priority order that determines when to drop data. A priority of '10' is
+          # dropped first, and a priority of '1' is dropped last.
           priority: <integer>
-    # thresholds are optional budget thresholds for automated limiting and
-    # alerting.
+    # Optional. Defines which actions to take when a threshold is exceeded.
     thresholds:
         - action: <ALERT_WARN|ALERT_CRITICAL|DROP>
           instant_rate:
-            # fixed_value_per_sec is the required rate threshold.
+            # Value of the fixed rate threshold.
             fixed_value_per_sec: <int64>
-          type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME>
+          type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME|HOURLY_VOLUME>
           volume:
-            # fixed_value is the required volume threshold.
+            # Value of the volume threshold.
             fixed_value: <int64>
-    # default_priority is an optional default priority for requests which do not
-    # match any priority in the priorities list. If not set, then priority=10
-    # is used as the default.
+    # Optional. The default priority for requests that don't match any priority in the
+    # 'priorities' list. If not set, then 'priority=10' (dropped first) is used as the
+    # default.
     default_priority: <integer>
-    # Notification policy slug for routing consumption alerts. Required only if
-    # ALERT_WARN or ALERT_CRITICAL actions are configured.
+    # Notification policy slug for routing alerts. Required only if 'ALERT_WARN' or
+    # 'ALERT_CRITICAL' actions are configured.
     notification_policy_slug: <string>
-    resource: <LOG_PERSISTED_BYTES>
+    alert_action_config:
+        # Additional annotations to set on the generated monitor. By default, the
+        # monitors already contain "description", "dashboard", "resource",
+        # "consumption_budget_slug", "threshold_type", and "partition" annotations.
+        # Setting any of these annotations will override its default value.
+        annotations:
+            key_1: <string>
+        # Additional labels to set on the generated monitor, which can be used for
+        # notification routing. The following labels are reserved and cannot be
+        # override: "resource", "partition", and "threshold_type".
+        labels:
+            key_1: <string>
+        # How long instant rate consumption must sustain above the threshold in
+        # order to fire an alert. By default, the sustain is 0: any consumption
+        # over the threshold will fire an alert.
+        instant_rate_sustain_secs: <integer>
+    resource: <LOG_PERSISTED_BYTES|LOG_PROCESSED_BYTES>
 `
 
 func newConsumptionBudgetScaffoldCmd() *cobra.Command {

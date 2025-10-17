@@ -22,7 +22,7 @@ type Configv1Collection struct {
 	// The unique identifier of the Collection. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Collection is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the Collection. You can modify this value after the Collection is created.
+	// The name of the Collection. You can modify this value after the Collection is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the Collection was created. Cannot be set by clients.

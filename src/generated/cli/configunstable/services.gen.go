@@ -501,7 +501,7 @@ kind: Service
 spec:
     # The unique identifier of the Service. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the Service is created.
     slug: <string>
-    # Name of the Service. You can modify this value after the Service is created.
+    # The name of the Service. You can modify this value after the Service is created.
     name: <string>
     # Required telemetry name of the service.
     derived_name: <string>

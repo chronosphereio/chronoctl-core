@@ -70,6 +70,20 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateLogInternalMaterializedFieldBody": {
+      "properties": {
+        "log_internal_materialized_field": {
+          "$ref": "#/definitions/configunstableLogInternalMaterializedField"
+        },
+        "create_if_missing": {
+          "type": "boolean"
+        },
+        "dry_run": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateNoopEntityBody": {
       "properties": {
         "noop_entity": {
@@ -137,6 +151,24 @@
         }
       },
       "type": "object"
+    },
+    "LogInternalMaterializedFieldMaterializedFieldStatus": {
+      "enum": [
+        "PENDING_MIGRATION",
+        "MIGRATED",
+        "PENDING_DELETION",
+        "DELETED",
+        "IGNORED"
+      ],
+      "type": "string"
+    },
+    "LogInternalMaterializedFieldMaterializedFieldType": {
+      "enum": [
+        "STRING",
+        "LOW_CARDINALITY_STRING",
+        "NUMBER"
+      ],
+      "type": "string"
     },
     "NoopEntityNestedEnum": {
       "enum": [
@@ -476,6 +508,18 @@
       },
       "type": "object"
     },
+    "TraceSearchFilterScopeFilter": {
+      "properties": {
+        "span_scopes": {
+          "description": "Specifies the span filters that define which spans contribute to the metrics calculation.\nOnly spans matching these filters will be included in the metrics aggregation.",
+          "items": {
+            "$ref": "#/definitions/TraceSearchFilterSpanFilter"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "TraceSearchFilterSpanFilter": {
       "properties": {
         "match_type": {
@@ -623,6 +667,25 @@
       },
       "type": "object"
     },
+    "configunstableCreateLogInternalMaterializedFieldRequest": {
+      "properties": {
+        "log_internal_materialized_field": {
+          "$ref": "#/definitions/configunstableLogInternalMaterializedField"
+        },
+        "dry_run": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateLogInternalMaterializedFieldResponse": {
+      "properties": {
+        "log_internal_materialized_field": {
+          "$ref": "#/definitions/configunstableLogInternalMaterializedField"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateNoopEntityRequest": {
       "properties": {
         "noop_entity": {
@@ -758,7 +821,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the Dashboard. You can modify this value after the Dashboard is created.",
+          "description": "The name of the Dashboard. You can modify this value after the Dashboard is created.",
           "type": "string"
         },
         "created_at": {
@@ -802,6 +865,9 @@
       "type": "object"
     },
     "configunstableDeleteLinkTemplateResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteLogInternalMaterializedFieldResponse": {
       "type": "object"
     },
     "configunstableDeleteNoopEntityResponse": {
@@ -891,6 +957,20 @@
       },
       "type": "object"
     },
+    "configunstableListLogInternalMaterializedFieldsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "log_internal_materialized_fields": {
+          "items": {
+            "$ref": "#/definitions/configunstableLogInternalMaterializedField"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configunstableListNoopEntitiesResponse": {
       "properties": {
         "noop_entities": {
@@ -962,6 +1042,45 @@
       },
       "type": "object"
     },
+    "configunstableLogInternalMaterializedField": {
+      "properties": {
+        "slug": {
+          "description": "Unique slug identifying the LogInternalMaterializedField.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the entity.",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/LogInternalMaterializedFieldMaterializedFieldType"
+        },
+        "targeted_field": {
+          "description": "Targeted field defines a field in a payload that should be materialized.",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/LogInternalMaterializedFieldMaterializedFieldStatus"
+        },
+        "created_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "column_name": {
+          "description": "Name of the clickhouse column that this field maps to. Its an actual value that is used for the queries.",
+          "type": "string"
+        },
+        "materialize_expression": {
+          "description": "Materialize expression allows providing more complex instructions\nhow to get field value, for example using conditions, instead\nof simply targeting field defined by targeted_field.\nIf materialize_expression is provided targeted_field should be empty.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configunstableNoopEntity": {
       "properties": {
         "slug": {
@@ -969,7 +1088,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the NoopEntity. You can modify this value after the NoopEntity is created.",
+          "description": "The name of the NoopEntity. You can modify this value after the NoopEntity is created.",
           "type": "string"
         },
         "created_at": {
@@ -1006,7 +1125,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the ObjectDiscoveryRule. You can modify this value after the ObjectDiscoveryRule is created.",
+          "description": "The name of the ObjectDiscoveryRule. You can modify this value after the ObjectDiscoveryRule is created.",
           "type": "string"
         },
         "metric": {
@@ -1027,6 +1146,14 @@
       "properties": {
         "link_template": {
           "$ref": "#/definitions/configunstableLinkTemplate"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadLogInternalMaterializedFieldResponse": {
+      "properties": {
+        "log_internal_materialized_field": {
+          "$ref": "#/definitions/configunstableLogInternalMaterializedField"
         }
       },
       "type": "object"
@@ -1090,7 +1217,7 @@
     "configunstableSavedTraceSearch": {
       "properties": {
         "name": {
-          "description": "Name of the SavedTraceSearch. You can modify this value after the SavedTraceSearch is created.",
+          "description": "The name of the SavedTraceSearch. You can modify this value after the SavedTraceSearch is created.",
           "type": "string"
         },
         "slug": {
@@ -1125,7 +1252,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the Service. You can modify this value after the Service is created.",
+          "description": "The name of the Service. You can modify this value after the Service is created.",
           "type": "string"
         },
         "created_at": {
@@ -1202,7 +1329,7 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.",
+          "description": "The name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.",
           "type": "string"
         },
         "created_at": {
@@ -1334,6 +1461,14 @@
       },
       "type": "object"
     },
+    "configunstableUpdateLogInternalMaterializedFieldResponse": {
+      "properties": {
+        "log_internal_materialized_field": {
+          "$ref": "#/definitions/configunstableLogInternalMaterializedField"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateNoopEntityResponse": {
       "properties": {
         "noop_entity": {
@@ -1456,6 +1591,9 @@
             "$ref": "#/definitions/TraceSearchFilterSpanFilter"
           },
           "type": "array"
+        },
+        "scope_filter": {
+          "$ref": "#/definitions/TraceSearchFilterScopeFilter"
         }
       },
       "type": "object"

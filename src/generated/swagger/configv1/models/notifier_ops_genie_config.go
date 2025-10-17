@@ -22,36 +22,38 @@ type NotifierOpsGenieConfig struct {
 	// http config
 	HTTPConfig *NotifierHTTPConfig `json:"http_config,omitempty"`
 
-	// Required OpsGenie API key.
+	// Your Opsgenie API key. Required if including an `ops_genie` object in your
+	// request body.
 	APIKey string `json:"api_key,omitempty"`
 
-	// Required OpsGenie API URL to send requests to, e.g.
-	// "https://api.opsgenie.com/".
+	// The Opsgenie API URL to send requests to. Required if including an
+	// `ops_genie` object in your request body.
+	// Example: https://api.opsgenie.com/
 	APIURL string `json:"api_url,omitempty"`
 
-	// Alert text.
+	// The alert text.
 	Message string `json:"message,omitempty"`
 
-	// Description of the alert.
+	// A description of the alert.
 	Description string `json:"description,omitempty"`
 
 	// A backlink to the sender of the notification.
 	Source string `json:"source,omitempty"`
 
-	// A set of arbitrary key/value pairs that provide further detail about the
-	// alert.
+	// A set of key/value pairs with additional information about the alert. These
+	// key/value pairs can include any arbitrary data.
 	Details map[string]string `json:"details,omitempty"`
 
 	// List of responders responsible for notifications.
 	Responders []*OpsGenieConfigResponder `json:"responders"`
 
-	// Comma separated list of tags attached to the notifications.
+	// A comma-separated list of tags attached to the notifications.
 	Tags string `json:"tags,omitempty"`
 
-	// Additional alert note.
+	// A note about the alert.
 	Note string `json:"note,omitempty"`
 
-	// Priority level of alert. Possible values are P1, P2, P3, P4, and P5.
+	// The priority level of alert. Possible values are `P1`, `P2`, `P3`, `P4`, and `P5`.
 	Priority string `json:"priority,omitempty"`
 }
 

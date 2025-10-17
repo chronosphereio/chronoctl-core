@@ -26,7 +26,7 @@ type ResourcePoolsDefaultPool struct {
 	Priorities *ResourcePoolsPriorities `json:"priorities,omitempty"`
 
 	// Optional. For supported licenses, defines thresholds with strict limits for
-	// when to drop new consumption of the license for a pool. Currently, only
+	// when to drop new consumption of the license for a pool. Only
 	// `PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are
 	// supported. See the [product documentation](https://docs.chronosphere.io/control/shaping/quotas/define-pools#pool-thresholds)
 	// for more information.

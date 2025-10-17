@@ -347,22 +347,24 @@ func newConsumptionConfigDeleteCmd() *cobra.Command {
 const ConsumptionConfigScaffoldYAML = `api_version: v1/config
 kind: ConsumptionConfig
 spec:
-    # partitions define non-overlapping groupings of telemetry. Partitions are
-    # defined in order of precedence, where incoming requests are allocated to
-    # the first partition that matches. Requests that don't match any
-    # partition fall back to an omnipresent default partition.
+    # Partitions define non-overlapping groupings of telemetry data. Partitions are
+    # defined in order of precedence, where incoming requests are allocated to the
+    # first partition that matches. Requests that don't match any partition use an
+    # implicit 'default' partition.
     partitions:
-        - # name is a human-readable name of the partition. Must be unique within the
-          # parent partition. You can modify this value after the partition is created.
+        - # Name of the partition. Must be unique within the parent partition. You can
+          # modify this value after the partition is created.
           name: <string>
-          # filters define what data matches the partition. The filters are AND'd
-          # together; a request must match every filter in order to match the
-          # partition. Must not be empty.
+          # Criteria that defines which data matches the 'partition'. Filters are
+          # concatenated together as implied 'AND' operators. A request must match every
+          # filter to match the 'partition'.
           filters:
-            - # conditions are the conditions to match.
+            - # Conditions for the query to match.
               conditions:
-                - # If set, matches data which belongs to the given dataset. Cannot set if
-                  # log_filter is set.
+                - # Optional. If set, matches data that belongs to the specified dataset. The
+                  # dataset type must match the budget resource. For example, if 'type=LOGS'
+                  # then set 'resource=LOG_PERSISTED_BYTES'. You can't set a value for this
+                  # field if a value is set for 'log_filter'.
                   dataset_slug: <string>
                   log_filter:
                     # Returns logs that match this query. The query can include only top-level
@@ -370,14 +372,13 @@ spec:
                     # operator is allowed.
                     query: <string>
               operator: <IN|NOT_IN>
-          # partitions are the optional child partitions of this partition. If set,
-          # requests which match the current partition will be allocated to the
-          # first child partition that matches. Requests that don't match any child
-          # partition fall back to an omnipresent default child partition.
+          # Optional. Child partitions of this partition. If set, requests that match the
+          # current partition are allocated to the first child partition that matches.
+          # Requests that don't match any child partition are assigned to an implicit 'default'
+          # child partition.
           partitions: []
-          # slug is the immutable identifier of the partition. Must be unique within
-          # the parent partition. You can not modify this value after the partition
-          # is created.
+          # Immutable identifier of the partition. Must be unique within the parent
+          # partition. You can't modify this value after the partition is created.
           slug: <string>
 `
 

@@ -493,83 +493,86 @@ kind: Notifier
 spec:
     # The unique identifier of the Notifier. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the Notifier is created.
     slug: <string>
-    # Name of the Notifier. You can modify this value after the Notifier is created.
+    # The name of the Notifier. You can modify this value after the Notifier is created.
     name: <string>
-    # If true, do not notify on resolved alerts. Cannot set if discard is set.
+    # If 'true', disables notifications for resolved alerts. Cannot be set if
+    # 'discard' equals 'true'.
     skip_resolved: <true|false>
-    # If set, enables the "discard" integration which simply discards all
-    # notifications. Cannot set if another integration is set.
+    # If 'true', enables the 'discard' integration, which discards all
+    # notifications. Cannot be set if another integration is set.
     discard: <true|false>
     email:
-        # Required email address to send notifications to.
+        # The email address to send notifications to. Required if including an
+        # 'email' object in your request body.
         to: <string>
-        # Optional HTML body of the email.
+        # The body of the email to send, in HTML format.
         html: <string>
-        # Optional text body of the email.
+        # The body of the email to send, in plain text format.
         text: <string>
     ops_genie:
-        # Required OpsGenie API key.
+        # Your Opsgenie API key. Required if including an 'ops_genie' object in your
+        # request body.
         api_key: <string>
-        # Required OpsGenie API URL to send requests to, e.g.
-        # "https://api.opsgenie.com/".
+        # The Opsgenie API URL to send requests to. Required if including an
+        # 'ops_genie' object in your request body.
         api_url: <string>
-        # Alert text.
+        # The alert text.
         message: <string>
-        # Description of the alert.
+        # A description of the alert.
         description: <string>
         # A backlink to the sender of the notification.
         source: <string>
-        # A set of arbitrary key/value pairs that provide further detail about the
-        # alert.
+        # A set of key/value pairs with additional information about the alert. These
+        # key/value pairs can include any arbitrary data.
         details:
             key_1: <string>
         # List of responders responsible for notifications.
         responders:
-            - # ID of the responder. Cannot be set if name or username are set.
+            - # The ID of the responder. Cannot be set if 'name' or 'username' are set.
               id: <string>
-              # Name of the responder. Cannot be set if id or username are set.
+              # The name of the responder. Cannot be set if 'id' or 'username' are set.
               name: <string>
-              # Username of the responder. Cannot be set if id or name are set.
+              # The username of the responder. Cannot be set if 'id' or 'name' are set.
               username: <string>
               responder_type: <TEAM|USER|ESCALATION|SCHEDULE>
-        # Comma separated list of tags attached to the notifications.
+        # A comma-separated list of tags attached to the notifications.
         tags: <string>
-        # Additional alert note.
+        # A note about the alert.
         note: <string>
-        # Priority level of alert. Possible values are P1, P2, P3, P4, and P5.
+        # The priority level of alert. Possible values are 'P1', 'P2', 'P3', 'P4', and 'P5'.
         priority: <string>
         http_config:
-            # Bearer token authentication. Cannot be set if basic_auth is set.
+            # Sets a token for bearer authentication. Cannot be set if 'basic_auth' is set.
             bearer_token: <string>
-            # Optional proxy URL.
-            # DEPRECATED: Custom proxies are unsupported.
+            # Your proxy URL. (This parameter is deprecated, and custom proxies are
+            # unsupported.)
             proxy_url: <string>
             basic_auth:
                 username: <string>
                 password: <string>
             tls_config:
-                # Disables validation of the server certificate.
+                # If 'true', disables validation of the server certificate.
                 insecure_skip_verify: <true|false>
     pagerduty:
         # The Pagerduty URL to send API requests to.
         url: <string>
-        # Client identification of the notification sender.
+        # The client identification of the notification sender.
         client: <string>
         # A backlink to the sender of the notification.
         client_url: <string>
-        # Description of the incident.
+        # A description of the incident.
         description: <string>
-        # Severity of the incident.
-        # Valid values are 'critical', 'error', 'warning', 'info', or blank
+        # The severity of the incident. Possible values: 'critical', 'error',
+        # 'warning', or 'info'.
         severity: <string>
-        # The class/type of the event.
+        # The class of the event.
         class: <string>
-        # The part or component of the affected system which is broken.
+        # The part or component of the affected system that is broken.
         component: <string>
         # A cluster or grouping of services.
         group: <string>
-        # Set of arbitrary key/value pairs which provide further detail about the
-        # incident.
+        # A set of key/value pairs with additional information about the incident. These
+        # key/value pairs can include any arbitrary data.
         details:
             key_1: <string>
         # Images to attach to the incident.
@@ -581,26 +584,27 @@ spec:
         links:
             - href: <string>
               text: <string>
-        # The PagerDuty integration key (when using PagerDuty integration type
-        # "Prometheus"). Cannot be set if routing_key is set.
+        # Your PagerDuty integration key, if using the PagerDuty integration type
+        # 'Prometheus'. Cannot be set if 'routing_key' is set.
         service_key: <string>
-        # The PagerDuty integration key (when using PagerDuty integration type
-        # "Events API v2"). Cannot be set if service_key is set.
+        # Your PagerDuty integration key, if using the PagerDuty integration type
+        # 'Events API v2'. Cannot be set if 'service_key' is set.
         routing_key: <string>
         http_config:
-            # Bearer token authentication. Cannot be set if basic_auth is set.
+            # Sets a token for bearer authentication. Cannot be set if 'basic_auth' is set.
             bearer_token: <string>
-            # Optional proxy URL.
-            # DEPRECATED: Custom proxies are unsupported.
+            # Your proxy URL. (This parameter is deprecated, and custom proxies are
+            # unsupported.)
             proxy_url: <string>
             basic_auth:
                 username: <string>
                 password: <string>
             tls_config:
-                # Disables validation of the server certificate.
+                # If 'true', disables validation of the server certificate.
                 insecure_skip_verify: <true|false>
     slack:
-        # Required Slack webhook API URL.
+        # Your Slack webhook API URL. Required if including a 'slack' object in
+        # your request body.
         api_url: <string>
         # The channel to send notifications to.
         channel: <string>
@@ -639,60 +643,65 @@ spec:
                 ok_text: <string>
                 dismiss_text: <string>
         http_config:
-            # Bearer token authentication. Cannot be set if basic_auth is set.
+            # Sets a token for bearer authentication. Cannot be set if 'basic_auth' is set.
             bearer_token: <string>
-            # Optional proxy URL.
-            # DEPRECATED: Custom proxies are unsupported.
+            # Your proxy URL. (This parameter is deprecated, and custom proxies are
+            # unsupported.)
             proxy_url: <string>
             basic_auth:
                 username: <string>
                 password: <string>
             tls_config:
-                # Disables validation of the server certificate.
+                # If 'true', disables validation of the server certificate.
                 insecure_skip_verify: <true|false>
     victor_ops:
-        # Required VictorOps API key.
+        # Your VictorOps API key. Required if including a 'victor_ops' object in
+        # your request body.
         api_key: <string>
-        # Required VictorOps API URL.
+        # The VictorOps API URL. Required if including a 'victor_ops' object in your
+        # request body.
         api_url: <string>
-        # Required VictorOps routing key.
+        # Your VictorOps routing key. Required if including a 'victor_ops' object in
+        # your request body.
         routing_key: <string>
-        # Describes the behavior of the alert (CRITICAL, WARNING, INFO).
+        # The behavior of the alert. Possible values are 'CRITICAL', 'WARNING', and
+        # 'INFO'.
         message_type: <string>
-        # Summary of the alerted problem.
+        # A summary of the alerted problem.
         entity_display_name: <string>
-        # Long explanation of the alerted problem.
+        # A detailed explanation of the alerted problem.
         state_message: <string>
-        # The monitoring tool the state message is from.
+        # The monitoring tool from which the state message originated.
         monitoring_tool: <string>
         custom_fields:
             key_1: <string>
         http_config:
-            # Bearer token authentication. Cannot be set if basic_auth is set.
+            # Sets a token for bearer authentication. Cannot be set if 'basic_auth' is set.
             bearer_token: <string>
-            # Optional proxy URL.
-            # DEPRECATED: Custom proxies are unsupported.
+            # Your proxy URL. (This parameter is deprecated, and custom proxies are
+            # unsupported.)
             proxy_url: <string>
             basic_auth:
                 username: <string>
                 password: <string>
             tls_config:
-                # Disables validation of the server certificate.
+                # If 'true', disables validation of the server certificate.
                 insecure_skip_verify: <true|false>
     webhook:
-        # Required webhook URL (will be called as a POST request).
+        # Your webhook URL. This URL will be called as a 'POST' request. Required
+        # if including a 'webhook' object in your request body.
         url: <string>
         http_config:
-            # Bearer token authentication. Cannot be set if basic_auth is set.
+            # Sets a token for bearer authentication. Cannot be set if 'basic_auth' is set.
             bearer_token: <string>
-            # Optional proxy URL.
-            # DEPRECATED: Custom proxies are unsupported.
+            # Your proxy URL. (This parameter is deprecated, and custom proxies are
+            # unsupported.)
             proxy_url: <string>
             basic_auth:
                 username: <string>
                 password: <string>
             tls_config:
-                # Disables validation of the server certificate.
+                # If 'true', disables validation of the server certificate.
                 insecure_skip_verify: <true|false>
 `
 

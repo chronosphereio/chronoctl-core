@@ -12,12 +12,12 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// DerivedLabelSpanTagNameMapping Denotes the source tag to be mapped to the derived tag.
+// DerivedLabelSpanTagNameMapping derived label span tag name mapping
 //
 // swagger:model DerivedLabelSpanTagNameMapping
 type DerivedLabelSpanTagNameMapping struct {
 
-	// source tag
+	// The source span tag name.
 	SourceTag string `json:"source_tag,omitempty"`
 }
 

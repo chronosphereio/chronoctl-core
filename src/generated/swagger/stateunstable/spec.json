@@ -5,7 +5,8 @@
   "definitions": {
     "ConsumptionBudgetResource": {
       "enum": [
-        "LOG_PERSISTED_BYTES"
+        "LOG_PERSISTED_BYTES",
+        "LOG_PROCESSED_BYTES"
       ],
       "type": "string"
     },

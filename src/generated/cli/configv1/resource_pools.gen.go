@@ -354,9 +354,9 @@ spec:
           # Filters that define which metrics map to this pool, where any metric that
           # matches at least one filter will map to the pool.
           filters:
-            - # Name of the label to match.
+            - # The name of the label to match.
               name: <string>
-              # Glob value of the label to match.
+              # The glob value of the label to match.
               value_glob: <string>
           allocation:
             # Percent of the license to allocate to this pool. This value must be between
@@ -376,7 +376,7 @@ spec:
                 - value: <int64>
                   license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
             # Optional. For supported licenses, defines thresholds with strict limits for
-            # when to drop new consumption of the license for a pool. Currently, only
+            # when to drop new consumption of the license for a pool. Only
             # 'PERSISTED_CARDINALITY_STANDARD' and 'PERSISTED_CARDINALITY_HISTOGRAM' are
             # supported.
             priority_thresholds:
@@ -416,21 +416,21 @@ spec:
             # matches at least one filter is considered high priority. High priority metrics
             # are dropped last when the license limit is exceeded.
             high_priority_filters:
-                - # Name of the label to match.
+                - # The name of the label to match.
                   name: <string>
-                  # Glob value of the label to match.
+                  # The glob value of the label to match.
                   value_glob: <string>
             # Optional. Filters that define which metrics are low priority. Any metric that
             # matches at least one filter is considered low priority. Low priority metrics
             # are dropped first when the license limit is exceeded.
             low_priority_filters:
-                - # Name of the label to match.
+                - # The name of the label to match.
                   name: <string>
-                  # Glob value of the label to match.
+                  # The glob value of the label to match.
                   value_glob: <string>
     default_pool:
         # Optional. For supported licenses, defines thresholds with strict limits for
-        # when to drop new consumption of the license for a pool. Currently, only
+        # when to drop new consumption of the license for a pool. Only
         # 'PERSISTED_CARDINALITY_STANDARD' and 'PERSISTED_CARDINALITY_HISTOGRAM' are
         # supported. See the [product documentation](https://docs.chronosphere.io/control/shaping/quotas/define-pools#pool-thresholds)
         # for more information.
@@ -484,7 +484,7 @@ spec:
                 - value: <int64>
                   license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
             # Optional. For supported licenses, defines thresholds with strict limits for
-            # when to drop new consumption of the license for a pool. Currently, only
+            # when to drop new consumption of the license for a pool. Only
             # 'PERSISTED_CARDINALITY_STANDARD' and 'PERSISTED_CARDINALITY_HISTOGRAM' are
             # supported.
             priority_thresholds:
@@ -524,17 +524,17 @@ spec:
             # matches at least one filter is considered high priority. High priority metrics
             # are dropped last when the license limit is exceeded.
             high_priority_filters:
-                - # Name of the label to match.
+                - # The name of the label to match.
                   name: <string>
-                  # Glob value of the label to match.
+                  # The glob value of the label to match.
                   value_glob: <string>
             # Optional. Filters that define which metrics are low priority. Any metric that
             # matches at least one filter is considered low priority. Low priority metrics
             # are dropped first when the license limit is exceeded.
             low_priority_filters:
-                - # Name of the label to match.
+                - # The name of the label to match.
                   name: <string>
-                  # Glob value of the label to match.
+                  # The glob value of the label to match.
                   value_glob: <string>
 `
 

@@ -22,7 +22,7 @@ type Configv1Service struct {
 	// The unique identifier of the Service. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Service is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the Service. You can modify this value after the Service is created.
+	// The name of the Service. You can modify this value after the Service is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the Service was created. Cannot be set by clients.
@@ -35,15 +35,17 @@ type Configv1Service struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Required slug of the team the service collection belongs to.
+	// Slug of the team the service collection belongs to.
 	TeamSlug string `json:"team_slug,omitempty"`
 
-	// Optional description of the service collection.
+	// Optional. Description of the service collection.
 	Description string `json:"description,omitempty"`
 
-	// Slug of the notification policy used by default for monitors in this service collection.
-	// This is optional if the collection does not contain monitors or all of its monitors explicitly reference a policy.
-	// This does not override the policy used when a monitor explicitly references a policy.
+	// Slug of the notification policy used by default for monitors in this service
+	// collection. This parameter is optional if the collection doesn't contain
+	// monitors, or if all of its monitors explicitly reference a policy. This
+	// parameter doesn't override the policy used if a monitor explicitly references
+	// a policy.
 	NotificationPolicySlug string `json:"notification_policy_slug,omitempty"`
 }
 

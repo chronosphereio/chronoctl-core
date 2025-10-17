@@ -22,7 +22,8 @@ type NotifierSlackConfig struct {
 	// http config
 	HTTPConfig *NotifierHTTPConfig `json:"http_config,omitempty"`
 
-	// Required Slack webhook API URL.
+	// Your Slack webhook API URL. Required if including a `slack` object in
+	// your request body.
 	APIURL string `json:"api_url,omitempty"`
 
 	// The channel to send notifications to.

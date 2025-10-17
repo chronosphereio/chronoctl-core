@@ -17,7 +17,7 @@ import (
 // swagger:model LogParserRegexParser
 type LogParserRegexParser struct {
 
-	// Regex is the Re2 regex parser pattern to apply.
+	// The regular expression parser pattern to apply. Must use RE2 syntax.
 	// Named capturing groups become named fields in the extracted log.
 	Regex string `json:"regex,omitempty"`
 }

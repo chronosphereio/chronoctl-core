@@ -493,7 +493,7 @@ kind: AzureMetricsIntegration
 spec:
     # The unique identifier of the AzureMetricsIntegration. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the AzureMetricsIntegration is created.
     slug: <string>
-    # Name of the AzureMetricsIntegration. You can modify this value after the AzureMetricsIntegration is created.
+    # The name of the AzureMetricsIntegration. You can modify this value after the AzureMetricsIntegration is created.
     name: <string>
     # Enables Azure count metrics for the configured resources.
     count_metrics_enabled: <true|false>

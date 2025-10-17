@@ -514,7 +514,7 @@ kind: MutingRule
 spec:
     # The unique identifier of the MutingRule. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the MutingRule is created.
     slug: <string>
-    # Name of the MutingRule. You can modify this value after the MutingRule is created.
+    # The name of the MutingRule. You can modify this value after the MutingRule is created.
     name: <string>
     # Required. Specifies which series are silenced by the muting rule. Alerting
     # series must match all muting rule matchers to be silenced. You can't update this

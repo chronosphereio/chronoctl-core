@@ -505,7 +505,7 @@ kind: Monitor
 spec:
     # The unique identifier of the Monitor. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the Monitor is created.
     slug: <string>
-    # Name of the Monitor. You can modify this value after the Monitor is created.
+    # The name of the Monitor. You can modify this value after the Monitor is created.
     name: <string>
     # Slug of the bucket the monitor belongs to. Required if 'collection_slug' isn't
     # set.
@@ -615,9 +615,12 @@ spec:
             - # Set of matchers on a series' labels. If all labels match, then the conditions
               # defined in this override are used.
               label_matchers:
-                - # name always matches against an exact label name.
+                - # The name of the label to match against. This always matches against an
+                  # exact label name, regardless of the value of 'type'.
                   name: <string>
-                  # value matches against a label value based on the configured type.
+                  # The value of the label to match against. If 'type' is set to 'EXACT', this
+                  # matches against an exact label value. If 'type' is set to 'REGEX', this
+                  # parameter is treated as a regular expression for parsing label values.
                   value: <string>
                   type: <EXACT|REGEX>
               severity_conditions:
