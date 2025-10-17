@@ -18,13 +18,13 @@ import (
 // swagger:model OpsGenieConfigResponder
 type OpsGenieConfigResponder struct {
 
-	// ID of the responder. Cannot be set if name or username are set.
+	// The ID of the responder. Cannot be set if `name` or `username` are set.
 	ID string `json:"id,omitempty"`
 
-	// Name of the responder. Cannot be set if id or username are set.
+	// The name of the responder. Cannot be set if `id` or `username` are set.
 	Name string `json:"name,omitempty"`
 
-	// Username of the responder. Cannot be set if id or name are set.
+	// The username of the responder. Cannot be set if `id` or `name` are set.
 	Username string `json:"username,omitempty"`
 
 	// responder type

@@ -497,31 +497,31 @@ kind: MappingRule
 spec:
     # The unique identifier of the MappingRule. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the MappingRule is created.
     slug: <string>
-    # Name of the MappingRule. You can modify this value after the MappingRule is created.
+    # The name of the MappingRule. You can modify this value after the MappingRule is created.
     name: <string>
     # The slug of the bucket the MappingRule belongs to.
     bucket_slug: <string>
-    # Required filters that determine to which metrics to apply the rule.
+    # The filters that determine which metrics should have rules applied to them.
+    # To be considered a match, a metric must meet the criteria for all of the
+    # filters specified in this array.
     filters:
-        - # Name of the label to match.
+        - # The name of the label to match.
           name: <string>
-          # Glob value of the label to match.
+          # The glob value of the label to match.
           value_glob: <string>
-    # Whether to drop the given set of metrics. If set, then the aggregation
-    # policy can't be set.
+    # Specifies whether to drop the given set of metrics. Cannot be set if the
+    # 'aggregation_policy' object is set.
     drop: <true|false>
     aggregation_policy:
-        # Interval between aggregated data points, equivalent to the resolution
-        # field in storage policy. If set, then the storage_policy field can't be
-        # set.
+        # The interval between aggregated data points.
         interval: <string>
-        # Deprecated: This field is no longer supported.
+        # Deprecated: This parameter is no longer supported.
         drop_timestamp: <true|false>
         aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES|HISTOGRAM>
         storage_policy:
-            # Required resolution of the aggregated metrics.
+            # Deprecated: This parameter is no longer supported.
             resolution: <string>
-            # Required retention of the aggregated metrics.
+            # Deprecated: This parameter is no longer supported.
             retention: <string>
     #  - ENABLED: ENABLED rules are applied. Rules default to ENABLED.
     #  - PREVIEW: PREVIEW rules are not applied, but shaping impact stats

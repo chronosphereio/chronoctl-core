@@ -30,10 +30,10 @@ type Configv1ConsumptionConfig struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// partitions define non-overlapping groupings of telemetry. Partitions are
-	// defined in order of precedence, where incoming requests are allocated to
-	// the first partition that matches. Requests that don't match any
-	// partition fall back to an omnipresent default partition.
+	// Partitions define non-overlapping groupings of telemetry data. Partitions are
+	// defined in order of precedence, where incoming requests are allocated to the
+	// first partition that matches. Requests that don't match any partition use an
+	// implicit `default` partition.
 	Partitions []*ConsumptionConfigPartition `json:"partitions"`
 }
 

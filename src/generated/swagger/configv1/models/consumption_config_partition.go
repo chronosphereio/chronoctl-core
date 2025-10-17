@@ -19,24 +19,23 @@ import (
 // swagger:model ConsumptionConfigPartition
 type ConsumptionConfigPartition struct {
 
-	// name is a human-readable name of the partition. Must be unique within the
-	// parent partition. You can modify this value after the partition is created.
+	// Name of the partition. Must be unique within the parent partition. You can
+	// modify this value after the partition is created.
 	Name string `json:"name,omitempty"`
 
-	// filters define what data matches the partition. The filters are AND'd
-	// together; a request must match every filter in order to match the
-	// partition. Must not be empty.
+	// Criteria that defines which data matches the `partition`. Filters are
+	// concatenated together as implied `AND` operators. A request must match every
+	// filter to match the `partition`.
 	Filters []*ConsumptionConfigPartitionFilter `json:"filters"`
 
-	// partitions are the optional child partitions of this partition. If set,
-	// requests which match the current partition will be allocated to the
-	// first child partition that matches. Requests that don't match any child
-	// partition fall back to an omnipresent default child partition.
+	// Optional. Child partitions of this partition. If set, requests that match the
+	// current partition are allocated to the first child partition that matches.
+	// Requests that don't match any child partition are assigned to an implicit `default`
+	// child partition.
 	Partitions []*ConsumptionConfigPartition `json:"partitions"`
 
-	// slug is the immutable identifier of the partition. Must be unique within
-	// the parent partition. You can not modify this value after the partition
-	// is created.
+	// Immutable identifier of the partition. Must be unique within the parent
+	// partition. You can't modify this value after the partition is created.
 	Slug string `json:"slug,omitempty"`
 }
 

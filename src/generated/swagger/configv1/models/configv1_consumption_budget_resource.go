@@ -32,6 +32,9 @@ const (
 
 	// Configv1ConsumptionBudgetResourceLOGPERSISTEDBYTES captures enum value "LOG_PERSISTED_BYTES"
 	Configv1ConsumptionBudgetResourceLOGPERSISTEDBYTES Configv1ConsumptionBudgetResource = "LOG_PERSISTED_BYTES"
+
+	// Configv1ConsumptionBudgetResourceLOGPROCESSEDBYTES captures enum value "LOG_PROCESSED_BYTES"
+	Configv1ConsumptionBudgetResourceLOGPROCESSEDBYTES Configv1ConsumptionBudgetResource = "LOG_PROCESSED_BYTES"
 )
 
 // for schema
@@ -39,7 +42,7 @@ var configv1ConsumptionBudgetResourceEnum []interface{}
 
 func init() {
 	var res []Configv1ConsumptionBudgetResource
-	if err := json.Unmarshal([]byte(`["LOG_PERSISTED_BYTES"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["LOG_PERSISTED_BYTES","LOG_PROCESSED_BYTES"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

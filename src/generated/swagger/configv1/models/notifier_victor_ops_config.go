@@ -21,25 +21,29 @@ type NotifierVictorOpsConfig struct {
 	// http config
 	HTTPConfig *NotifierHTTPConfig `json:"http_config,omitempty"`
 
-	// Required VictorOps API key.
+	// Your VictorOps API key. Required if including a `victor_ops` object in
+	// your request body.
 	APIKey string `json:"api_key,omitempty"`
 
-	// Required VictorOps API URL.
+	// The VictorOps API URL. Required if including a `victor_ops` object in your
+	// request body.
 	APIURL string `json:"api_url,omitempty"`
 
-	// Required VictorOps routing key.
+	// Your VictorOps routing key. Required if including a `victor_ops` object in
+	// your request body.
 	RoutingKey string `json:"routing_key,omitempty"`
 
-	// Describes the behavior of the alert (CRITICAL, WARNING, INFO).
+	// The behavior of the alert. Possible values are `CRITICAL`, `WARNING`, and
+	// `INFO`.
 	MessageType string `json:"message_type,omitempty"`
 
-	// Summary of the alerted problem.
+	// A summary of the alerted problem.
 	EntityDisplayName string `json:"entity_display_name,omitempty"`
 
-	// Long explanation of the alerted problem.
+	// A detailed explanation of the alerted problem.
 	StateMessage string `json:"state_message,omitempty"`
 
-	// The monitoring tool the state message is from.
+	// The monitoring tool from which the state message originated.
 	MonitoringTool string `json:"monitoring_tool,omitempty"`
 
 	// custom fields

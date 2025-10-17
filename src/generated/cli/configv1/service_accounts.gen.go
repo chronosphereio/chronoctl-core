@@ -396,17 +396,17 @@ kind: ServiceAccount
 spec:
     # The unique identifier of the ServiceAccount. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the ServiceAccount is created.
     slug: <string>
-    # Name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
+    # The name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
     name: <string>
-    # If set, grants the service account access to all Chronosphere APIs
-    # (including resource configuration and metric data) within the access
-    # controls defined by the service account's team membership.
+    # If set, grants the service account access to all Chronosphere APIs, including
+    # resource configuration and metric data within the access controls defined by the
+    # service account's team membership.
 
-    # Exactly one of unrestricted or metrics_restriction must be set.
+    # Only one of 'unrestricted' or 'metrics_restriction' must be set.
     unrestricted: <true|false>
     metrics_restriction:
-        # Optional labels which further restricts the service account to only read
-        # or write metrics with the given label names and values.
+        # Optional. Specifies labels that further restrict the service account to only
+        # read or write metrics with the given label names and values.
         labels:
             key_1: <string>
         permission: <READ|WRITE|READ_WRITE>

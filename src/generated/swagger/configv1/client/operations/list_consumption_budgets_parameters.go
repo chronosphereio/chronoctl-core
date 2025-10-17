@@ -85,6 +85,18 @@ type ListConsumptionBudgetsParams struct {
 	*/
 	PageToken *string
 
+	/* PartitionSlugPaths.
+
+	   Filters results by partition_slug_path, where any ConsumptionBudget with a matching partition_slug_path in the given list (and matches all other filters) will be returned.
+	*/
+	PartitionSlugPaths []string
+
+	/* Resources.
+
+	   Filters results by resource, where any ConsumptionBudget with a matching resource in the given list (and matches all other filters) will be returned.
+	*/
+	Resources []string
+
 	/* Slugs.
 
 	   Filters results by slug, where any ConsumptionBudget with a matching slug in the given list (and matches all other filters) will be returned.
@@ -177,6 +189,28 @@ func (o *ListConsumptionBudgetsParams) SetPageToken(pageToken *string) {
 	o.PageToken = pageToken
 }
 
+// WithPartitionSlugPaths adds the partitionSlugPaths to the list consumption budgets params
+func (o *ListConsumptionBudgetsParams) WithPartitionSlugPaths(partitionSlugPaths []string) *ListConsumptionBudgetsParams {
+	o.SetPartitionSlugPaths(partitionSlugPaths)
+	return o
+}
+
+// SetPartitionSlugPaths adds the partitionSlugPaths to the list consumption budgets params
+func (o *ListConsumptionBudgetsParams) SetPartitionSlugPaths(partitionSlugPaths []string) {
+	o.PartitionSlugPaths = partitionSlugPaths
+}
+
+// WithResources adds the resources to the list consumption budgets params
+func (o *ListConsumptionBudgetsParams) WithResources(resources []string) *ListConsumptionBudgetsParams {
+	o.SetResources(resources)
+	return o
+}
+
+// SetResources adds the resources to the list consumption budgets params
+func (o *ListConsumptionBudgetsParams) SetResources(resources []string) {
+	o.Resources = resources
+}
+
 // WithSlugs adds the slugs to the list consumption budgets params
 func (o *ListConsumptionBudgetsParams) WithSlugs(slugs []string) *ListConsumptionBudgetsParams {
 	o.SetSlugs(slugs)
@@ -241,6 +275,28 @@ func (o *ListConsumptionBudgetsParams) WriteToRequest(r runtime.ClientRequest, r
 		}
 	}
 
+	if o.PartitionSlugPaths != nil {
+
+		// binding items for partition_slug_paths
+		joinedPartitionSlugPaths := o.bindParamPartitionSlugPaths(reg)
+
+		// query array param partition_slug_paths
+		if err := r.SetQueryParam("partition_slug_paths", joinedPartitionSlugPaths...); err != nil {
+			return err
+		}
+	}
+
+	if o.Resources != nil {
+
+		// binding items for resources
+		joinedResources := o.bindParamResources(reg)
+
+		// query array param resources
+		if err := r.SetQueryParam("resources", joinedResources...); err != nil {
+			return err
+		}
+	}
+
 	if o.Slugs != nil {
 
 		// binding items for slugs
@@ -273,6 +329,40 @@ func (o *ListConsumptionBudgetsParams) bindParamNames(formats strfmt.Registry) [
 	namesIS := swag.JoinByFormat(namesIC, "multi")
 
 	return namesIS
+}
+
+// bindParamListConsumptionBudgets binds the parameter partition_slug_paths
+func (o *ListConsumptionBudgetsParams) bindParamPartitionSlugPaths(formats strfmt.Registry) []string {
+	partitionSlugPathsIR := o.PartitionSlugPaths
+
+	var partitionSlugPathsIC []string
+	for _, partitionSlugPathsIIR := range partitionSlugPathsIR { // explode []string
+
+		partitionSlugPathsIIV := partitionSlugPathsIIR // string as string
+		partitionSlugPathsIC = append(partitionSlugPathsIC, partitionSlugPathsIIV)
+	}
+
+	// items.CollectionFormat: "multi"
+	partitionSlugPathsIS := swag.JoinByFormat(partitionSlugPathsIC, "multi")
+
+	return partitionSlugPathsIS
+}
+
+// bindParamListConsumptionBudgets binds the parameter resources
+func (o *ListConsumptionBudgetsParams) bindParamResources(formats strfmt.Registry) []string {
+	resourcesIR := o.Resources
+
+	var resourcesIC []string
+	for _, resourcesIIR := range resourcesIR { // explode []string
+
+		resourcesIIV := resourcesIIR // string as string
+		resourcesIC = append(resourcesIC, resourcesIIV)
+	}
+
+	// items.CollectionFormat: "multi"
+	resourcesIS := swag.JoinByFormat(resourcesIC, "multi")
+
+	return resourcesIS
 }
 
 // bindParamListConsumptionBudgets binds the parameter slugs

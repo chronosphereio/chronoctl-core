@@ -23,7 +23,7 @@ type Configv1RollupRule struct {
 	// The unique identifier of the RollupRule. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the RollupRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the RollupRule. You can modify this value after the RollupRule is created.
+	// The name of the RollupRule. You can modify this value after the RollupRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the RollupRule was created. Cannot be set by clients.

@@ -21,7 +21,7 @@ type ConfigunstableObjectDiscoveryRule struct {
 	// The unique identifier of the ObjectDiscoveryRule. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the ObjectDiscoveryRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the ObjectDiscoveryRule. You can modify this value after the ObjectDiscoveryRule is created.
+	// The name of the ObjectDiscoveryRule. You can modify this value after the ObjectDiscoveryRule is created.
 	Name string `json:"name,omitempty"`
 
 	// metric

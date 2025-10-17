@@ -347,57 +347,155 @@ func newLogIngestConfigDeleteCmd() *cobra.Command {
 const LogIngestConfigScaffoldYAML = `api_version: v1/config
 kind: LogIngestConfig
 spec:
-    # The parsers to run on plaintext logs. The first parser that matches the log is used.
+    # The parsers to apply to plaintext logs. The first parser that matches the log is used.
     plaintext_parsers:
         - # The name of the parser. Must be unique within the configuration.
           name: <string>
-          # If true, the original log is kept after parsing and stored under the key "plaintext_log".
-          # Otherwise the original log will be dropped after parsing. Default is false.
+          # If 'true', the original log is retained after parsing and stored in the
+          # key 'plaintext_log'. If 'false', the original log is dropped after parsing.
+          # Default value: 'false'.
           keep_original: <true|false>
           mode: <ENABLED|DISABLED>
           parser:
-            # A parser to extract key-value pairs from a string.
+            # A parser to extract key/value pairs from a string.
             # If duplicate keys are found, the first instance is used.
             key_value_parser:
-                # String used to split each pair into its key and value. Required.
+                # The string for splitting each pair into its key and value.
                 pair_separator: <string>
-                # String used to split the input into key-value pairs. Required.
+                # The string for splitting the input into key/value pairs.
                 delimiter: <string>
-                # All leading and trailing Unicode code points contained in the trim
-                # set will be removed from keys and values. Optional.
+                # Specifies the code points of any Unicode characters to trim from the
+                # beginning and end of keys and values.
                 trim_set: <string>
             parser_type: <JSON|REGEX|KEY_VALUE>
             regex_parser:
-                # Regex is the Re2 regex parser pattern to apply.
+                # The regular expression parser pattern to apply. Must use RE2 syntax.
                 # Named capturing groups become named fields in the extracted log.
                 regex: <string>
-    # The parsers to run on specific fields within structured logs or plaintext logs after parsing.
+    # The parsers to apply to specific fields within structured logs or plaintext logs after those logs are parsed.
     field_parsers:
         - destination:
-            # LogQL Selector to indicate field path. Use 'parent[child]' syntax to
+            # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
             # indicate nesting.
             selector: <string>
           mode: <ENABLED|DISABLED>
           parser:
-            # A parser to extract key-value pairs from a string.
+            # A parser to extract key/value pairs from a string.
             # If duplicate keys are found, the first instance is used.
             key_value_parser:
-                # String used to split each pair into its key and value. Required.
+                # The string for splitting each pair into its key and value.
                 pair_separator: <string>
-                # String used to split the input into key-value pairs. Required.
+                # The string for splitting the input into key/value pairs.
                 delimiter: <string>
-                # All leading and trailing Unicode code points contained in the trim
-                # set will be removed from keys and values. Optional.
+                # Specifies the code points of any Unicode characters to trim from the
+                # beginning and end of keys and values.
                 trim_set: <string>
             parser_type: <JSON|REGEX|KEY_VALUE>
             regex_parser:
-                # Regex is the Re2 regex parser pattern to apply.
+                # The regular expression parser pattern to apply. Must use RE2 syntax.
                 # Named capturing groups become named fields in the extracted log.
                 regex: <string>
           source:
-            # LogQL Selector to indicate field path. Use 'parent[child]' syntax to
+            # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
             # indicate nesting.
             selector: <string>
+    # FieldNormalization allows you to map and normalize well-known fields from your logs.
+    # These mappings run after parsing to standardize common fields like timestamp,
+    # severity level, primary key name, and message across different log formats.
+    field_normalization:
+        # Maps additional custom fields from your logs. These will not be indexed.
+        # Use these for any other fields you want to normalize, such as environment, region, or user ID.
+        custom_field_normalization:
+            - # The name of the target field where the normalized value will be stored.
+              target: <string>
+              # StringNormalization defines how to extract and transform string values from log fields.
+              normalization:
+                # List of field paths to check for values, in priority order.
+                # The first non-empty value found will be used.
+                source:
+                    - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                      # indicate nesting.
+                      selector: <string>
+                # Default value to use when no source fields contain values.
+                default_value: <string>
+                # Optional mapping to normalize values.
+                # For example: {"warn": "WARNING", "err": "ERROR"} to standardize severity levels.
+                value_map:
+                    key_1: <string>
+                # Optional regex patterns to extract and sanitize values.
+                # Each pattern must have exactly one capturing group that will be used as the result.
+                # For example: "^.*level=([A-Z]+).*$" to extract log level from a string.
+                sanitize_patterns:
+                    - <string>
+        # StringNormalization defines how to extract and transform string values from log fields.
+        message:
+            # List of field paths to check for values, in priority order.
+            # The first non-empty value found will be used.
+            source:
+                - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                  # indicate nesting.
+                  selector: <string>
+            # Default value to use when no source fields contain values.
+            default_value: <string>
+            # Optional mapping to normalize values.
+            # For example: {"warn": "WARNING", "err": "ERROR"} to standardize severity levels.
+            value_map:
+                key_1: <string>
+            # Optional regex patterns to extract and sanitize values.
+            # Each pattern must have exactly one capturing group that will be used as the result.
+            # For example: "^.*level=([A-Z]+).*$" to extract log level from a string.
+            sanitize_patterns:
+                - <string>
+        # NamedStringNormalization maps a field to a named target with optional transformations.
+        primary_key:
+            # The name of the target field where the normalized value will be stored.
+            target: <string>
+            # StringNormalization defines how to extract and transform string values from log fields.
+            normalization:
+                # List of field paths to check for values, in priority order.
+                # The first non-empty value found will be used.
+                source:
+                    - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                      # indicate nesting.
+                      selector: <string>
+                # Default value to use when no source fields contain values.
+                default_value: <string>
+                # Optional mapping to normalize values.
+                # For example: {"warn": "WARNING", "err": "ERROR"} to standardize severity levels.
+                value_map:
+                    key_1: <string>
+                # Optional regex patterns to extract and sanitize values.
+                # Each pattern must have exactly one capturing group that will be used as the result.
+                # For example: "^.*level=([A-Z]+).*$" to extract log level from a string.
+                sanitize_patterns:
+                    - <string>
+        # StringNormalization defines how to extract and transform string values from log fields.
+        severity:
+            # List of field paths to check for values, in priority order.
+            # The first non-empty value found will be used.
+            source:
+                - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                  # indicate nesting.
+                  selector: <string>
+            # Default value to use when no source fields contain values.
+            default_value: <string>
+            # Optional mapping to normalize values.
+            # For example: {"warn": "WARNING", "err": "ERROR"} to standardize severity levels.
+            value_map:
+                key_1: <string>
+            # Optional regex patterns to extract and sanitize values.
+            # Each pattern must have exactly one capturing group that will be used as the result.
+            # For example: "^.*level=([A-Z]+).*$" to extract log level from a string.
+            sanitize_patterns:
+                - <string>
+        # TimestampNormalization specifies which fields to check for timestamp values.
+        timestamp:
+            # List of field paths to check for timestamp values, in priority order.
+            # Common fields include "timestamp", "@timestamp", "time", "datetime".
+            source:
+                - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                  # indicate nesting.
+                  selector: <string>
 `
 
 func newLogIngestConfigScaffoldCmd() *cobra.Command {

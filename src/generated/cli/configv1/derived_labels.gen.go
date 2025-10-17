@@ -491,7 +491,7 @@ func newDerivedLabelListCmd() *cobra.Command {
 const DerivedLabelScaffoldYAML = `api_version: v1/config
 kind: DerivedLabel
 spec:
-    # Name of the DerivedLabel. You can modify this value after the DerivedLabel is created.
+    # The name of the DerivedLabel. You can modify this value after the DerivedLabel is created.
     name: <string>
     # The unique identifier of the DerivedLabel. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the DerivedLabel is created.
     slug: <string>
@@ -506,18 +506,20 @@ spec:
                 - value: <string>
                   # Determine when to apply 'name_mappings', filtering out all other values.
                   filters:
-                    - # Name of the label to match.
+                    - # The name of the label to match.
                       name: <string>
-                      # Glob value of the label to match.
+                      # The glob value of the label to match.
                       value_glob: <string>
         mapping_label:
             # Determines where the input data for a derived label comes from. For each
-            # name mapping, you must define a 'source_label'.
+            # name mapping, you must define a 'source_label'. If multiple name mappings
+            # are defined, the first name mapping that matches is used to map the source
+            # label to the derived label.
             name_mappings:
                 - filters:
-                    - # Name of the label to match.
+                    - # The name of the label to match.
                       name: <string>
-                      # Glob value of the label to match.
+                      # The glob value of the label to match.
                       value_glob: <string>
                   # The source label name on the time series from when it was ingested.
                   source_label: <string>
@@ -554,12 +556,14 @@ spec:
                   #    target_value: cat
                   # '''
                   target_value: <string>
-    # A span tag is used to map span tags to derived labels.
     span_tag:
-        # All name mappings are combined as 'OR' matches. The first matching name
-        # mapping is used to map the source tag to the derived tag.
+        # Determines where the input data for a derived label comes from. For each
+        # name mapping, you must define a 'source_label'. If multiple name mappings
+        # are defined, the first name mapping that matches is used to map the source
+        # tag to the derived tag.
         name_mappings:
-            - source_tag: <string>
+            - # The source span tag name.
+              source_tag: <string>
 `
 
 func newDerivedLabelScaffoldCmd() *cobra.Command {

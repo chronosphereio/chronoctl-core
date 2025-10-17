@@ -501,34 +501,38 @@ kind: NotificationPolicy
 spec:
     # The unique identifier of the NotificationPolicy. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the NotificationPolicy is created.
     slug: <string>
-    # Name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.
+    # The name of the NotificationPolicy. You can modify this value after the NotificationPolicy is created.
     name: <string>
-    # Slug of the bucket the notification policy belongs to. Required if
-    # team_slug is not set.
+    # The slug of the bucket that the notification policy belongs to. Required if
+    # 'team_slug' is not set.
     bucket_slug: <string>
-    # Slug of the team the notification policy belongs to. Required if
-    # bucket_slug is not set.
+    # The slug of the team that the notification policy belongs to. Required if
+    # 'bucket_slug' is not set.
     team_slug: <string>
     routes:
-        # Optional list of overrides to use for alerts having matching labels.
-        # Each override defines labels that potentially match an alert's labels.
-        # If one or more overrides match an alert, the notifiers of the first matching
-        # override are used instead of the defaults.
+        # A list of overrides to use for alert notification policies. Each
+        # override defines the labels that potentially match an alert. If an alert has
+        # matching labels, the override notification policy is used for that alert
+        # instead of the default notification policy. If multiple overrides match
+        # the same alert, the first matching override notification policy is used.
         overrides:
-            - # Set of matchers on an alert's labels.
-              # If all labels match then the override notifiers apply.
+            - # The alert labels to match against. If an alert matches all of these labels,
+              # the override notifier is applied to that alert.
               alert_label_matchers:
-                - # name always matches against an exact label name.
+                - # The name of the label to match against. This always matches against an
+                  # exact label name, regardless of the value of 'type'.
                   name: <string>
-                  # value matches against a label value based on the configured type.
+                  # The value of the label to match against. If 'type' is set to 'EXACT', this
+                  # matches against an exact label value. If 'type' is set to 'REGEX', this
+                  # parameter is treated as a regular expression for parsing label values.
                   value: <string>
                   type: <EXACT|REGEX>
               notifiers:
                 critical:
-                    # Slugs of notifiers that will receive the alerts.
+                    # The slugs of the notifiers that will receive the alerts.
                     notifier_slugs:
                         - <string>
-                    # Frequency at which to resend alerts.
+                    # The frequency at which to resend alerts.
                     repeat_interval_secs: <integer>
                     group_by:
                         # Set of label names used to group alerts.
@@ -537,10 +541,10 @@ spec:
                         label_names:
                             - <string>
                 warn:
-                    # Slugs of notifiers that will receive the alerts.
+                    # The slugs of the notifiers that will receive the alerts.
                     notifier_slugs:
                         - <string>
-                    # Frequency at which to resend alerts.
+                    # The frequency at which to resend alerts.
                     repeat_interval_secs: <integer>
                     group_by:
                         # Set of label names used to group alerts.
@@ -550,10 +554,10 @@ spec:
                             - <string>
         defaults:
             critical:
-                # Slugs of notifiers that will receive the alerts.
+                # The slugs of the notifiers that will receive the alerts.
                 notifier_slugs:
                     - <string>
-                # Frequency at which to resend alerts.
+                # The frequency at which to resend alerts.
                 repeat_interval_secs: <integer>
                 group_by:
                     # Set of label names used to group alerts.
@@ -562,10 +566,10 @@ spec:
                     label_names:
                         - <string>
             warn:
-                # Slugs of notifiers that will receive the alerts.
+                # The slugs of the notifiers that will receive the alerts.
                 notifier_slugs:
                     - <string>
-                # Frequency at which to resend alerts.
+                # The frequency at which to resend alerts.
                 repeat_interval_secs: <integer>
                 group_by:
                     # Set of label names used to group alerts.

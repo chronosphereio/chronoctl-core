@@ -503,7 +503,7 @@ kind: TraceJaegerRemoteSamplingStrategy
 spec:
     # The unique identifier of the TraceJaegerRemoteSamplingStrategy. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the TraceJaegerRemoteSamplingStrategy is created.
     slug: <string>
-    # Name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.
+    # The name of the TraceJaegerRemoteSamplingStrategy. You can modify this value after the TraceJaegerRemoteSamplingStrategy is created.
     name: <string>
     # The name of the service this sampling strategy applies to. This value must match
     # the 'slug' and 'name' fields.

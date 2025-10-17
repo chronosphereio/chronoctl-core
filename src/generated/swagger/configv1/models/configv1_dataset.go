@@ -19,7 +19,7 @@ import (
 // swagger:model configv1Dataset
 type Configv1Dataset struct {
 
-	// Name of the Dataset. You can modify this value after the Dataset is created.
+	// The name of the Dataset. You can modify this value after the Dataset is created.
 	Name string `json:"name,omitempty"`
 
 	// The unique identifier of the Dataset. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Dataset is created.

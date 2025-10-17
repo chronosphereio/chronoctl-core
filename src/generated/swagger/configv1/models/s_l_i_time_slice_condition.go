@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SLITimeSliceCondition Defines the condition for evaluating TimeSlice SLIs.
+// SLITimeSliceCondition Defines the condition for evaluating time slice SLIs.
 //
 // swagger:model SLITimeSliceCondition
 type SLITimeSliceCondition struct {

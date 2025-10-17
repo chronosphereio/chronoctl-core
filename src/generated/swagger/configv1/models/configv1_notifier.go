@@ -22,7 +22,7 @@ type Configv1Notifier struct {
 	// The unique identifier of the Notifier. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Notifier is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the Notifier. You can modify this value after the Notifier is created.
+	// The name of the Notifier. You can modify this value after the Notifier is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the Notifier was created. Cannot be set by clients.
@@ -35,7 +35,8 @@ type Configv1Notifier struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// If true, do not notify on resolved alerts. Cannot set if discard is set.
+	// If `true`, disables notifications for resolved alerts. Cannot be set if
+	// `discard` equals `true`.
 	SkipResolved bool `json:"skip_resolved,omitempty"`
 
 	// webhook
@@ -56,8 +57,8 @@ type Configv1Notifier struct {
 	// victor ops
 	VictorOps *NotifierVictorOpsConfig `json:"victor_ops,omitempty"`
 
-	// If set, enables the "discard" integration which simply discards all
-	// notifications. Cannot set if another integration is set.
+	// If `true`, enables the `discard` integration, which discards all
+	// notifications. Cannot be set if another integration is set.
 	Discard bool `json:"discard,omitempty"`
 }
 

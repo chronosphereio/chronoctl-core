@@ -23,7 +23,7 @@ type Configv1GcpMetricsIntegration struct {
 	// The unique identifier of the GcpMetricsIntegration. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the GcpMetricsIntegration is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.
+	// The name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the GcpMetricsIntegration was created. Cannot be set by clients.

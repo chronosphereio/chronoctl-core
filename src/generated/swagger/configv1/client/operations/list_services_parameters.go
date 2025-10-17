@@ -64,13 +64,16 @@ type ListServicesParams struct {
 
 	/* Names.
 
-	   Filters results by name, where any Service with a matching name in the given list (and matches all other filters) will be returned.
+	     Filters results by `name`, where any Service with a matching `name` in the given
+	list that matches all other filters is returned.
 	*/
 	Names []string
 
 	/* NotificationPolicySlugs.
 
-	   Filters results by notification_policy_slug, where any Service with a matching notification_policy_slug in the given list (and matches all other filters) will be returned.
+	     Filters results by `notification_policy_slug`, where any Service with a matching
+	`notification_policy_slug` in the given list that matches all other filters is
+	returned.
 	*/
 	NotificationPolicySlugs []string
 
@@ -93,13 +96,15 @@ type ListServicesParams struct {
 
 	/* Slugs.
 
-	   Filters results by slug, where any Service with a matching slug in the given list (and matches all other filters) will be returned.
+	     Filters results by slug, where any Service with a matching slug in the given
+	list that matches all other filters is returned.
 	*/
 	Slugs []string
 
 	/* TeamSlugs.
 
-	   Filters results by team_slug, where any Service with a matching team_slug in the given list (and matches all other filters) will be returned.
+	     Filters results by `team_slug`, where any Service with a matching `team_slug` in
+	the given list that matches all other filters is returned.
 	*/
 	TeamSlugs []string
 

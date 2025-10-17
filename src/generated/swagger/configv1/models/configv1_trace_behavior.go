@@ -19,7 +19,7 @@ import (
 // swagger:model configv1TraceBehavior
 type Configv1TraceBehavior struct {
 
-	// Name of the TraceBehavior. You can modify this value after the TraceBehavior is created.
+	// The name of the TraceBehavior. You can modify this value after the TraceBehavior is created.
 	Name string `json:"name,omitempty"`
 
 	// The unique identifier of the TraceBehavior. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the TraceBehavior is created.

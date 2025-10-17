@@ -501,7 +501,7 @@ kind: Collection
 spec:
     # The unique identifier of the Collection. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the Collection is created.
     slug: <string>
-    # Name of the Collection. You can modify this value after the Collection is created.
+    # The name of the Collection. You can modify this value after the Collection is created.
     name: <string>
     # The slug of the team that the collection belongs to.
     team_slug: <string>

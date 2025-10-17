@@ -23,7 +23,7 @@ type Configv1MutingRule struct {
 	// The unique identifier of the MutingRule. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the MutingRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the MutingRule. You can modify this value after the MutingRule is created.
+	// The name of the MutingRule. You can modify this value after the MutingRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the MutingRule was created. Cannot be set by clients.

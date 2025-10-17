@@ -36,7 +36,7 @@ type Configv1ResourcePoolsAllocation struct {
 	FixedValues []*AllocationFixedValue `json:"fixed_values"`
 
 	// Optional. For supported licenses, defines thresholds with strict limits for
-	// when to drop new consumption of the license for a pool. Currently, only
+	// when to drop new consumption of the license for a pool. Only
 	// `PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are
 	// supported.
 	PriorityThresholds []*AllocationThresholds `json:"priority_thresholds"`

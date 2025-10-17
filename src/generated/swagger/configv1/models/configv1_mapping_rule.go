@@ -23,7 +23,7 @@ type Configv1MappingRule struct {
 	// The unique identifier of the MappingRule. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the MappingRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the MappingRule. You can modify this value after the MappingRule is created.
+	// The name of the MappingRule. You can modify this value after the MappingRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the MappingRule was created. Cannot be set by clients.
@@ -39,14 +39,16 @@ type Configv1MappingRule struct {
 	// The slug of the bucket the MappingRule belongs to.
 	BucketSlug string `json:"bucket_slug,omitempty"`
 
-	// Required filters that determine to which metrics to apply the rule.
+	// The filters that determine which metrics should have rules applied to them.
+	// To be considered a match, a metric must meet the criteria for all of the
+	// filters specified in this array.
 	Filters []*Configv1LabelFilter `json:"filters"`
 
 	// aggregation policy
 	AggregationPolicy *MappingRuleAggregationPolicy `json:"aggregation_policy,omitempty"`
 
-	// Whether to drop the given set of metrics. If set, then the aggregation
-	// policy can't be set.
+	// Specifies whether to drop the given set of metrics. Cannot be set if the
+	// `aggregation_policy` object is set.
 	Drop bool `json:"drop,omitempty"`
 
 	// mode

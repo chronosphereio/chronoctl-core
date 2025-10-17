@@ -22,7 +22,7 @@ type Configv1RecordingRule struct {
 	// The unique identifier of the RecordingRule. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the RecordingRule is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the RecordingRule. You can modify this value after the RecordingRule is created.
+	// The name of the RecordingRule. You can modify this value after the RecordingRule is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the RecordingRule was created. Cannot be set by clients.
@@ -35,26 +35,32 @@ type Configv1RecordingRule struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Optional slug of the bucket the RecordingRule belongs to.
+	// The slug of the bucket the recording rule belongs to. Required if
+	// `execution_group` is not set. If both `bucket_slug` and `execution_group`
+	// are set, their values must match.
 	BucketSlug string `json:"bucket_slug,omitempty"`
 
 	// label policy
 	LabelPolicy *Configv1RecordingRuleLabelPolicy `json:"label_policy,omitempty"`
 
-	// Optional interval for evaluating the recording rule.
+	// Specifies how often to evaluate the recording rule.
 	IntervalSecs int32 `json:"interval_secs,omitempty"`
 
-	// The name of the time series to use for output, which must be a valid
-	// metric name.
+	// The name of the time series to use for the output of `prometheus_expr`.
+	// This value must be a valid metric name. If you don't set this value,
+	// the output of `prometheus_expr` is output to a time series with a name
+	// defined by the value of `name`.
 	MetricName string `json:"metric_name,omitempty"`
 
-	// The PromQL expression to evaluate at the time of each evaluation cycle.
-	// The result is recorded as a new time series with its metric name
-	// defined by the metric_name (or name) field.
+	// The PromQL expression to evaluate at the time of each evaluation cycle. The
+	// result is output to a new time series with a name defined by the value of
+	// `metric_name`. If `metric_name` is unset, the result is output to a
+	// time series defined by the value of `name`.
 	PrometheusExpr string `json:"prometheus_expr,omitempty"`
 
-	// Optional execution_group in which this rule is to be evaluated.
-	// At least one of bucket_slug and execution_group must be set. If both are set, then they are expected to match.
+	// The slug of the execution group in which the recording rule will be
+	// evaluated. Required if `bucket_slug` is not set.  If both `bucket_slug` and
+	// `execution_group` are set, their values must match.
 	ExecutionGroup string `json:"execution_group,omitempty"`
 }
 

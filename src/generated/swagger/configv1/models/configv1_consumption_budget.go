@@ -23,7 +23,7 @@ type Configv1ConsumptionBudget struct {
 	// The unique identifier of the ConsumptionBudget. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the ConsumptionBudget is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
+	// The name of the ConsumptionBudget. You can modify this value after the ConsumptionBudget is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the ConsumptionBudget was created. Cannot be set by clients.
@@ -39,34 +39,35 @@ type Configv1ConsumptionBudget struct {
 	// resource
 	Resource Configv1ConsumptionBudgetResource `json:"resource,omitempty"`
 
-	// partition_slug_path is the required path of the budget's partition,
-	// delimited by "/", in the format "global/<slug1>/<slug2>", where slug1 is a
-	// top-level partition, and slug2 is a child partition of slug1, etc.
+	// Path of the budget's partition, delimited by forward slashes (`/`), in the
+	// format `global/SLUG1/SLUG2`, where `SLUG1` is a top-level partition, and `SLUG2`
+	// is a child partition of `SLUG1`.
 	//
-	// A well-formed partition path always starts with the "global" partition
-	// slug, and has no leading or trailing "/".
+	// A well-formed partition path always starts with the `global` partition slug, and
+	// has no leading or trailing forward slashes.
 	PartitionSlugPath string `json:"partition_slug_path,omitempty"`
 
-	// priorities are optional budget priorities. Priorities are defined in order
-	// of precedence, where incoming requests are assigned the first priority that
-	// matches. Each priority value defines the order in which requests are
-	// dropped when necessary (i.e. priority=10 dropped first, priority=1 dropped
-	// last). If a request does not match any priority, then it is assigned the
-	// default_priority.
+	// Optional. Controls the order in which data is dropped when a drop action is
+	// applied. For example, a priority of 10 is dropped first, and a priority of 1 is
+	// dropped last. Priorities are evaluated in match order, and the first priority to
+	// match is applied. All other priorities are ignored. If a request does not match
+	// any priority, then it is assigned the `default_priority`.
 	Priorities []*ConsumptionBudgetPriority `json:"priorities"`
 
-	// thresholds are optional budget thresholds for automated limiting and
-	// alerting.
+	// Optional. Defines which actions to take when a threshold is exceeded.
 	Thresholds []*Configv1ConsumptionBudgetThreshold `json:"thresholds"`
 
-	// default_priority is an optional default priority for requests which do not
-	// match any priority in the priorities list. If not set, then priority=10
-	// is used as the default.
+	// Optional. The default priority for requests that don't match any priority in the
+	// `priorities` list. If not set, then `priority=10` (dropped first) is used as the
+	// default.
 	DefaultPriority int32 `json:"default_priority,omitempty"`
 
-	// Notification policy slug for routing consumption alerts. Required only if
-	// ALERT_WARN or ALERT_CRITICAL actions are configured.
+	// Notification policy slug for routing alerts. Required only if `ALERT_WARN` or
+	// `ALERT_CRITICAL` actions are configured.
 	NotificationPolicySlug string `json:"notification_policy_slug,omitempty"`
+
+	// alert action config
+	AlertActionConfig *ConsumptionBudgetAlertActionConfig `json:"alert_action_config,omitempty"`
 }
 
 // Validate validates this configv1 consumption budget
@@ -90,6 +91,10 @@ func (m *Configv1ConsumptionBudget) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateThresholds(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateAlertActionConfig(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -192,6 +197,25 @@ func (m *Configv1ConsumptionBudget) validateThresholds(formats strfmt.Registry) 
 	return nil
 }
 
+func (m *Configv1ConsumptionBudget) validateAlertActionConfig(formats strfmt.Registry) error {
+	if swag.IsZero(m.AlertActionConfig) { // not required
+		return nil
+	}
+
+	if m.AlertActionConfig != nil {
+		if err := m.AlertActionConfig.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("alert_action_config")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("alert_action_config")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 consumption budget based on the context it is used
 func (m *Configv1ConsumptionBudget) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -213,6 +237,10 @@ func (m *Configv1ConsumptionBudget) ContextValidate(ctx context.Context, formats
 	}
 
 	if err := m.contextValidateThresholds(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAlertActionConfig(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -303,6 +331,27 @@ func (m *Configv1ConsumptionBudget) contextValidateThresholds(ctx context.Contex
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *Configv1ConsumptionBudget) contextValidateAlertActionConfig(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AlertActionConfig != nil {
+
+		if swag.IsZero(m.AlertActionConfig) { // not required
+			return nil
+		}
+
+		if err := m.AlertActionConfig.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("alert_action_config")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("alert_action_config")
+			}
+			return err
+		}
 	}
 
 	return nil

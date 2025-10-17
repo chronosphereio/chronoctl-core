@@ -18,8 +18,10 @@ import (
 // swagger:model PartitionFilterCondition
 type PartitionFilterCondition struct {
 
-	// If set, matches data which belongs to the given dataset. Cannot set if
-	// log_filter is set.
+	// Optional. If set, matches data that belongs to the specified dataset. The
+	// dataset type must match the budget resource. For example, if `type=LOGS`
+	// then set `resource=LOG_PERSISTED_BYTES`. You can't set a value for this
+	// field if a value is set for `log_filter`.
 	DatasetSlug string `json:"dataset_slug,omitempty"`
 
 	// log filter

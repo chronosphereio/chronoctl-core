@@ -21,8 +21,8 @@ type ServiceAccountMetricsRestriction struct {
 	// permission
 	Permission MetricsRestrictionPermission `json:"permission,omitempty"`
 
-	// Optional labels which further restricts the service account to only read
-	// or write metrics with the given label names and values.
+	// Optional. Specifies labels that further restrict the service account to only
+	// read or write metrics with the given label names and values.
 	Labels map[string]string `json:"labels,omitempty"`
 }
 

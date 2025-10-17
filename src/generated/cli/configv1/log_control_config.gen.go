@@ -358,15 +358,76 @@ spec:
             # Regular expression to match the field name(s) to drop.
             field_regex: <string>
             parent_path:
-                # LogQL Selector to indicate field path. Use 'parent[child]' syntax to
+                # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
                 # indicate nesting.
                 selector: <string>
+          # EmitMetrics is the configuration for emit metrics action.
+          emit_metrics:
+            # The name of the metric to emit. This name has to be unique, and conform to Prometheus naming conventions.
+            name: <string>
+            # The labels to emit the metric with. This is a prom-valid label name mapped to a log key.
+            labels:
+                - key: <string>
+                  value:
+                    # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    # indicate nesting.
+                    selector: <string>
+            # Drop log after emitting the metric.
+            drop_log: <true|false>
+            counter:
+                value:
+                    # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    # indicate nesting.
+                    selector: <string>
+            gauge:
+                aggregation_type: <LAST|MIN|MAX>
+                value:
+                    # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    # indicate nesting.
+                    selector: <string>
+            histogram:
+                value:
+                    # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    # indicate nesting.
+                    selector: <string>
+            mode: <COUNTER|GAUGE|HISTOGRAM>
           mode: <ENABLED|DISABLED>
+          # ReplaceField is the configuration for a replace field action.
+          replace_field:
+            # Regular expression to specify what part of the field to replace.
+            replace_regex: <string>
+            # Whether to replace all matches or just the first one.
+            replace_all: <true|false>
+            field:
+                # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                # indicate nesting.
+                selector: <string>
+            # MappedValue is the configuration for mapped value replace mode.
+            mapped_value:
+                # List of key value pairs.
+                pairs:
+                    - key: <string>
+                      value: <string>
+                # If no matching key is found, fall back to default value. If use_default is false,
+                # the value will be left unchanged if no matching key is found.
+                use_default: <true|false>
+                # Value to use if no value is found.
+                default_value: <string>
+            #  - HASH: Hash the selected content.
+            #  - STATIC_VALUE: Replace the selected content with a static string.
+            #  - MAPPED_VALUE: Replace the selected content with a mapped value.
+            replace_mode: <HASH|STATIC_VALUE|MAPPED_VALUE>
+            # StaticValue is the configuration for the replace field control rule in static value
+            # mode. Used to replace the selected content with a static value.
+            static_value:
+                # The value to replace selected content with.
+                # If empty, action will remove the content.
+                value: <string>
           # Sample is the configuration for the sample logs action.
           sample:
             # Percentage of matching logs to keep. Must be in the range (0, 1].
             rate: <number>
-          type: <DROP|SAMPLE|DROP_FIELD>
+          type: <DROP|SAMPLE|DROP_FIELD|REPLACE_FIELD|EMIT_METRICS>
 `
 
 func newLogControlConfigScaffoldCmd() *cobra.Command {

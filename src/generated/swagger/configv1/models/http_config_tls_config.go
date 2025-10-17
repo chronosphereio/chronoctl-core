@@ -17,7 +17,7 @@ import (
 // swagger:model HTTPConfigTLSConfig
 type HTTPConfigTLSConfig struct {
 
-	// Disables validation of the server certificate.
+	// If `true`, disables validation of the server certificate.
 	InsecureSkipVerify bool `json:"insecure_skip_verify,omitempty"`
 }
 

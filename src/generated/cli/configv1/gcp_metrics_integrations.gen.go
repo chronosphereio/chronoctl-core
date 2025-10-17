@@ -493,7 +493,7 @@ kind: GcpMetricsIntegration
 spec:
     # The unique identifier of the GcpMetricsIntegration. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the GcpMetricsIntegration is created.
     slug: <string>
-    # Name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.
+    # The name of the GcpMetricsIntegration. You can modify this value after the GcpMetricsIntegration is created.
     name: <string>
     # An array of metric groups to be ingested for this integration.
     metric_groups:

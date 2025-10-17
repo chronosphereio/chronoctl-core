@@ -22,7 +22,7 @@ type Configv1Bucket struct {
 	// The unique identifier of the Bucket. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Bucket is created.
 	Slug string `json:"slug,omitempty"`
 
-	// Name of the Bucket. You can modify this value after the Bucket is created.
+	// The name of the Bucket. You can modify this value after the Bucket is created.
 	Name string `json:"name,omitempty"`
 
 	// Timestamp of when the Bucket was created. Cannot be set by clients.
