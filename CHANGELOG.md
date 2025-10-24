@@ -5,6 +5,8 @@
 ## v1.16.0
 
 * Adds new resource `v1/config/AzureMetricsIntegration`
+* Adds `emit_metrics` and `replace_fields` control rule types to `chronosphere_log_control_config` resource.
+* Adds `field_normalization` to `chronosphere_log_ingest_config` resource.
 
 ## v1.15.0
 
