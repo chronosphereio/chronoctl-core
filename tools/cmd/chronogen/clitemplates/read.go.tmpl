@@ -2,18 +2,14 @@
 func Get{{ .Name }}(
 	ctx context.Context,
 	client {{ .Pkg.Client }}.ClientService,
-	{{- if .Entity.IsNotSingleton}}
-	slug string,
-	{{- else if eq .Name "ServiceAttribute" }}
-	serviceSlug string,
+	{{- if or .Entity.IsNotSingleton .Entity.EntityLinkedSingletonSlug }}
+	{{ .Entity.SlugVariableName }} string,
 	{{- end }}
 ) (*{{ .Name }}, error) {
 	res, err := client.Read{{ .Name }}(&{{ .Pkg.Client }}.Read{{ .Name }}Params{
 		Context: ctx,
-		{{- if .Entity.IsNotSingleton }}
-		Slug: slug,
-		{{- else if eq .Name "ServiceAttribute" }}
-		ServiceSlug: serviceSlug,
+		{{- if or .Entity.IsNotSingleton .Entity.EntityLinkedSingletonSlug }}
+		{{ .Entity.SlugParameterName }}: {{ .Entity.SlugVariableName }},
 		{{- end }}
 	})
 	if err != nil {
@@ -34,9 +30,9 @@ func new{{ .Name }}ReadCmd() *cobra.Command {
 	short = "Reads a single {{ .Name }} by slug"
 	use = "read <slug>"
 	args = cobra.ExactArgs(1)
-	{{- else if eq .Name "ServiceAttribute" }}
-	short = "Reads a single {{ .Name }} by service slug"
-	use = "read <service_slug>"
+	{{- else if .Entity.EntityLinkedSingletonSlug }}
+	short = "Reads a single {{ .Name }} by {{ .Entity.SlugVariableName }}"
+	use = "read <{{ .Entity.SlugVariableName }}>"
 	args = cobra.ExactArgs(1)
 	{{ else }}
 	short = "Reads a {{ .Name }} singleton"
@@ -60,7 +56,7 @@ func new{{ .Name }}ReadCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			entity, err := Get{{ .Name }}(ctx, client {{- if .Entity.IsNotSingleton }}, args[0]{{- else if eq .Name "ServiceAttribute" }}, args[0]{{- end }})
+			entity, err := Get{{ .Name }}(ctx, client {{- if or .Entity.IsNotSingleton .Entity.EntityLinkedSingletonSlug }}, args[0]{{- end }})
 			if err != nil {
 				return err
 			}

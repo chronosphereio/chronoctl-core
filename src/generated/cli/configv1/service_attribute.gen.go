@@ -163,8 +163,8 @@ func newServiceAttributeReadCmd() *cobra.Command {
 		use   string
 		args  cobra.PositionalArgs
 	)
-	short = "Reads a single ServiceAttribute by service slug"
-	use = "read <service_slug>"
+	short = "Reads a single ServiceAttribute by serviceSlug"
+	use = "read <serviceSlug>"
 	args = cobra.ExactArgs(1)
 
 	cmd := &cobra.Command{
@@ -318,9 +318,9 @@ func newServiceAttributeDeleteCmd() *cobra.Command {
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
-		Use:     "delete <service_slug>",
+		Use:     "delete <serviceSlug>",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes a single ServiceAttribute by service slug",
+		Short:   "Deletes a single ServiceAttribute by serviceSlug",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -343,7 +343,8 @@ func newServiceAttributeDeleteCmd() *cobra.Command {
 				return clienterror.Wrap(err)
 			}
 			_ = res
-			fmt.Fprintf(cmd.OutOrStdout(), "deleted ServiceAttribute with service slug %q\n", args[0])
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted ServiceAttribute with serviceSlug %q\n", args[0])
+
 			return nil
 		},
 	}

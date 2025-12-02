@@ -109,12 +109,19 @@ func (c *cliSpecGen) getEntity(path string) (*Entity, error) {
 	}
 
 	if _, ok := c.spec.Entities[entityName]; !ok {
-		c.spec.Entities[entityName] = &Entity{
+		entity := &Entity{
 			Name: entityName,
 			Type: &Type{
 				Kind: c.inflectionRuleset.Typeify(entityName),
 			},
 		}
+		
+		// Set the appropriate slug field based on entity type
+		if entityName == "service-attribute" {
+			entity.EntityLinkedSingletonSlug = "ServiceSlug"
+		}
+		
+		c.spec.Entities[entityName] = entity
 	}
 
 	return c.spec.Entities[entityName], nil

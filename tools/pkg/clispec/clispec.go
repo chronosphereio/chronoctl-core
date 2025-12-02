@@ -68,6 +68,10 @@ type Entity struct {
 	Type   *Type    `json:"type,omitempty"`
 
 	IsSingleton bool
+	// EntityLinkedSingletonSlug holds the slug field name for singleton entities that need
+	// a linked identifier (e.g. "ServiceSlug" for service attributes). For normal entities
+	// this will be "Slug". This enables generic template handling without entity-specific logic.
+	EntityLinkedSingletonSlug string
 }
 
 // Command represents a Chronosphere CLI command
@@ -121,6 +125,33 @@ func (e *Entity) processSingleton() {
 // IsNotSingleton determines if the entity is not a singleton. Helper for templates.
 func (e *Entity) IsNotSingleton() bool {
 	return !e.IsSingleton
+}
+
+// SlugParameterName returns the parameter name for slug fields.
+// For normal entities: "Slug", for linked singletons: "ServiceSlug" etc.
+func (e *Entity) SlugParameterName() string {
+	if e.EntityLinkedSingletonSlug != "" {
+		return e.EntityLinkedSingletonSlug
+	}
+	return "Slug"
+}
+
+// SlugFieldName returns the field name in the spec for slug access.
+// For normal entities: "Slug", for linked singletons: "ServiceSlug" etc.
+func (e *Entity) SlugFieldName() string {
+	if e.EntityLinkedSingletonSlug != "" {
+		return e.EntityLinkedSingletonSlug
+	}
+	return "Slug"
+}
+
+// SlugVariableName returns the variable name for slug values.
+// For normal entities: "slug", for linked singletons: "serviceSlug" etc.
+func (e *Entity) SlugVariableName() string {
+	if e.EntityLinkedSingletonSlug != "" {
+		return strings.ToLower(e.EntityLinkedSingletonSlug[:1]) + e.EntityLinkedSingletonSlug[1:]
+	}
+	return "slug"
 }
 
 func (e *Entity) getEntitySchema() spec.Schema {
