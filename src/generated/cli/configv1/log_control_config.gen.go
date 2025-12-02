@@ -349,83 +349,97 @@ kind: LogControlConfig
 spec:
     # Control Rules are the ordered list of control rules.
     rules:
-        - # Name is the name of the control rule.
+        - # User-defined name of the control rule.
           name: <string>
-          # Log query syntax to select logs. Only matching logs will have control action applied.
+          # Log query filter to return log data for the control rule. The control action
+          # applies to only matching logs.
           filter: <string>
           # DropField is the configuration for a drop field action.
           drop_field:
-            # Regular expression to match the field name(s) to drop.
+            # Defines the the regular expression that determines which fields to drop.
             field_regex: <string>
             parent_path:
-                # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                 # indicate nesting.
                 selector: <string>
           # EmitMetrics is the configuration for emit metrics action.
           emit_metrics:
-            # The name of the metric to emit. This name has to be unique, and conform to Prometheus naming conventions.
+            # A unique name for the generated metric. This name must conform to Prometheus
+            # naming conventions.
             name: <string>
-            # The labels to emit the metric with. This is a prom-valid label name mapped to a log key.
+            # The labels to emit with the metric, specified as key/value pairs. The
+            # generated label is a valid Prometheus label name, mapped to a log key.
             labels:
                 - key: <string>
                   value:
-                    # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                     # indicate nesting.
                     selector: <string>
-            # Drop log after emitting the metric.
+            # Optional. If 'true', drops the entire log after emitting the defined metric.
             drop_log: <true|false>
             counter:
                 value:
-                    # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                     # indicate nesting.
                     selector: <string>
             gauge:
                 aggregation_type: <LAST|MIN|MAX>
                 value:
-                    # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                     # indicate nesting.
                     selector: <string>
             histogram:
                 value:
-                    # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                     # indicate nesting.
                     selector: <string>
             mode: <COUNTER|GAUGE|HISTOGRAM>
           mode: <ENABLED|DISABLED>
           # ReplaceField is the configuration for a replace field action.
           replace_field:
-            # Regular expression to specify what part of the field to replace.
+            # Defines the the regular expression that determines which part of the field to
+            # replace.
             replace_regex: <string>
-            # Whether to replace all matches or just the first one.
+            # Determines whether to replace all matches or just the first match.
             replace_all: <true|false>
             field:
-                # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                 # indicate nesting.
                 selector: <string>
             # MappedValue is the configuration for mapped value replace mode.
             mapped_value:
-                # List of key value pairs.
+                # A list of key/value pairs to replace matched content with.
                 pairs:
                     - key: <string>
                       value: <string>
-                # If no matching key is found, fall back to default value. If use_default is false,
-                # the value will be left unchanged if no matching key is found.
+                # If 'true', specifies a default value if no matching key is found. If
+                # 'false', the value will be unchanged if no matching key is found.
                 use_default: <true|false>
-                # Value to use if no value is found.
+                # The value to use if no matching value is found.
                 default_value: <string>
-            #  - HASH: Hash the selected content.
-            #  - STATIC_VALUE: Replace the selected content with a static string.
-            #  - MAPPED_VALUE: Replace the selected content with a mapped value.
+            #  - HASH: Replace the matched content with a hashed string, which can help reduce the
+            # size of large strings. After replacing the original content with a string,
+            # there’s no way to recover that information.
+            #  - STATIC_VALUE: Replace the matched content with a static string. For example, replace
+            # punctuation in a field with an empty string, or truncate the ends of long
+            # stack traces.
+            #  - MAPPED_VALUE: Replace the matched content with specified key/value pairs. For example,
+            # reduce log volume by replacing a string error with a specific error code. If
+            # none of the key/value pairs match, the provided default value is used.
+
+            # @REQUIRED
             replace_mode: <HASH|STATIC_VALUE|MAPPED_VALUE>
             # StaticValue is the configuration for the replace field control rule in static value
             # mode. Used to replace the selected content with a static value.
             static_value:
-                # The value to replace selected content with.
-                # If empty, action will remove the content.
+                # The value to replace selected content with. If empty, the action removes the
+                # selected content.
                 value: <string>
           # Sample is the configuration for the sample logs action.
           sample:
-            # Percentage of matching logs to keep. Must be in the range (0, 1].
+            # Percentage of matching logs to keep. Must be in the range '[0, 1]', where '1'
+            # is equal to 100% of logs. For example, to keep 25% of logs, enter '0.25' as
+            # the 'rate'.
             rate: <number>
           type: <DROP|SAMPLE|DROP_FIELD|REPLACE_FIELD|EMIT_METRICS>
 `

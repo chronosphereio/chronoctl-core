@@ -97,15 +97,31 @@ func (c *cliSpecGen) getEntity(path string) (*Entity, error) {
 	if len(pathParts) < 4 {
 		return nil, errors.Errorf("unexpected path format: %s", path)
 	}
-	entityName := pathParts[3]
+
+	var entityName string
+
+	// Handle service attributes paths - both nested and flat
+	if (len(pathParts) >= 6 && pathParts[3] == "services" && pathParts[5] == "attributes") ||
+		pathParts[3] == "service-attributes" {
+		entityName = "service-attribute"
+	} else {
+		entityName = pathParts[3]
+	}
 
 	if _, ok := c.spec.Entities[entityName]; !ok {
-		c.spec.Entities[entityName] = &Entity{
+		entity := &Entity{
 			Name: entityName,
 			Type: &Type{
 				Kind: c.inflectionRuleset.Typeify(entityName),
 			},
 		}
+		
+		// Set the appropriate slug field based on entity type
+		if entityName == "service-attribute" {
+			entity.EntityLinkedSingletonSlug = "ServiceSlug"
+		}
+		
+		c.spec.Entities[entityName] = entity
 	}
 
 	return c.spec.Entities[entityName], nil

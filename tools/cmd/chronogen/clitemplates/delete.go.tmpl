@@ -2,14 +2,14 @@
 func Delete{{ .Name }}(
 	ctx context.Context,
 	client {{ .Pkg.Client }}.ClientService,
-	{{- if .Entity.IsNotSingleton }}
-	slug string,
+	{{- if or .Entity.IsNotSingleton .Entity.EntityLinkedSingletonSlug }}
+	{{ .Entity.SlugVariableName }} string,
 	{{- end }}
 ) error {
 	_, err := client.Delete{{ .Name }}(&{{ .Pkg.Client }}.Delete{{ .Name }}Params{
 	  Context: ctx,
-	{{- if .Entity.IsNotSingleton }}
-		Slug: slug,
+	{{- if or .Entity.IsNotSingleton .Entity.EntityLinkedSingletonSlug }}
+		{{ .Entity.SlugParameterName }}: {{ .Entity.SlugVariableName }},
 	{{- end }}
 	})
 	if err != nil {
@@ -32,6 +32,11 @@ func new{{ .Name }}DeleteCmd() *cobra.Command {
 		GroupID: groups.Commands.ID,
 		Short: "Deletes a single {{ .Name }} by slug",
 		Args: cobra.ExactArgs(1),
+		{{- else if .Entity.EntityLinkedSingletonSlug }}
+		Use: "delete <{{ .Entity.SlugVariableName }}>",
+		GroupID: groups.Commands.ID,
+		Short: "Deletes a single {{ .Name }} by {{ .Entity.SlugVariableName }}",
+		Args: cobra.ExactArgs(1),
 		{{- else }}
 		Use: "delete",
 		GroupID: groups.Commands.ID,
@@ -53,8 +58,8 @@ func new{{ .Name }}DeleteCmd() *cobra.Command {
 
 			res, err := client.Delete{{ .Name }}(&{{ .Pkg.Client }}.Delete{{ .Name }}Params{
 				Context: ctx,
-				{{- if .Entity.IsNotSingleton }}
-				Slug:  args[0],
+				{{- if or .Entity.IsNotSingleton .Entity.EntityLinkedSingletonSlug }}
+				{{ .Entity.SlugParameterName }}: args[0],
 				{{- end }}
 				{{- if .Entity.SupportsForceDelete }}
 				ForceDelete: &forceDelete,
@@ -64,8 +69,8 @@ func new{{ .Name }}DeleteCmd() *cobra.Command {
 				return clienterror.Wrap(err)
 			}
 			var _ = res
-			{{- if .Entity.IsNotSingleton }}
-			fmt.Fprintf(cmd.OutOrStdout(), "deleted {{ .Name }} with slug %q\n", args[0])
+			{{- if or .Entity.IsNotSingleton .Entity.EntityLinkedSingletonSlug }}
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted {{ .Name }} with {{ .Entity.SlugVariableName }} %q\n", args[0])
 			{{ else }}
 			fmt.Fprintf(cmd.OutOrStdout(), "deleted {{ .Name }}")
 			{{- end }}

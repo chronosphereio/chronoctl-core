@@ -7,7 +7,12 @@ func Create{{ .Name }}(
 ) (*{{ .Name }}, error) {
 	res, err := client.Create{{ .Name }}(&{{ .Pkg.Client }}.Create{{ .Name }}Params{
 		Context: ctx,
+		{{- if .Entity.EntityLinkedSingletonSlug }}
+		{{ .Entity.SlugParameterName }}: entity.Spec.{{ .Entity.SlugFieldName }},
+		Body: &models.{{ .Pkg.Swagger }}Create{{ .Name }}Body{
+		{{- else }}
 		Body: &models.{{ .Pkg.Model }}Create{{ .Name }}Request{
+		{{- end }}
 			{{- if .Entity.Create.SupportsDryRun }}
 			DryRun: dryRun,
 			{{- end }}

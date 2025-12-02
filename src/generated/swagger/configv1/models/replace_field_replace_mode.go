@@ -14,9 +14,19 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ReplaceFieldReplaceMode  - HASH: Hash the selected content.
-//   - STATIC_VALUE: Replace the selected content with a static string.
-//   - MAPPED_VALUE: Replace the selected content with a mapped value.
+// ReplaceFieldReplaceMode  - HASH: Replace the matched content with a hashed string, which can help reduce the
+// size of large strings. After replacing the original content with a string,
+// there’s no way to recover that information.
+//   - STATIC_VALUE: Replace the matched content with a static string. For example, replace
+//
+// punctuation in a field with an empty string, or truncate the ends of long
+// stack traces.
+//   - MAPPED_VALUE: Replace the matched content with specified key/value pairs. For example,
+//
+// reduce log volume by replacing a string error with a specific error code. If
+// none of the key/value pairs match, the provided default value is used.
+//
+// @REQUIRED
 //
 // swagger:model ReplaceFieldReplaceMode
 type ReplaceFieldReplaceMode string

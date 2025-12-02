@@ -19,14 +19,14 @@ import (
 // swagger:model ReplaceFieldMappedValue
 type ReplaceFieldMappedValue struct {
 
-	// List of key value pairs.
+	// A list of key/value pairs to replace matched content with.
 	Pairs []*MappedValueReplacePair `json:"pairs"`
 
-	// If no matching key is found, fall back to default value. If use_default is false,
-	// the value will be left unchanged if no matching key is found.
+	// If `true`, specifies a default value if no matching key is found. If
+	// `false`, the value will be unchanged if no matching key is found.
 	UseDefault bool `json:"use_default,omitempty"`
 
-	// Value to use if no value is found.
+	// The value to use if no matching value is found.
 	DefaultValue string `json:"default_value,omitempty"`
 }
 

@@ -17,7 +17,7 @@ import (
 // swagger:model configv1LogFieldPath
 type Configv1LogFieldPath struct {
 
-	// The LogQL selector to indicate the field path. Use `parent[child]` syntax to
+	// The log filter used to indicate the field path. Use `parent[child]` syntax to
 	// indicate nesting.
 	Selector string `json:"selector,omitempty"`
 }

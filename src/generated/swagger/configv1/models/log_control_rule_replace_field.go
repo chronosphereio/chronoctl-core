@@ -21,10 +21,11 @@ type LogControlRuleReplaceField struct {
 	// field
 	Field *Configv1LogFieldPath `json:"field,omitempty"`
 
-	// Regular expression to specify what part of the field to replace.
+	// Defines the the regular expression that determines which part of the field to
+	// replace.
 	ReplaceRegex string `json:"replace_regex,omitempty"`
 
-	// Whether to replace all matches or just the first one.
+	// Determines whether to replace all matches or just the first match.
 	ReplaceAll bool `json:"replace_all,omitempty"`
 
 	// replace mode

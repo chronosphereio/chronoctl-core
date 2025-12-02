@@ -375,7 +375,7 @@ spec:
     # The parsers to apply to specific fields within structured logs or plaintext logs after those logs are parsed.
     field_parsers:
         - destination:
-            # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+            # The log filter used to indicate the field path. Use 'parent[child]' syntax to
             # indicate nesting.
             selector: <string>
           mode: <ENABLED|DISABLED>
@@ -396,7 +396,7 @@ spec:
                 # Named capturing groups become named fields in the extracted log.
                 regex: <string>
           source:
-            # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+            # The log filter used to indicate the field path. Use 'parent[child]' syntax to
             # indicate nesting.
             selector: <string>
     # FieldNormalization allows you to map and normalize well-known fields from your logs.
@@ -413,7 +413,7 @@ spec:
                 # List of field paths to check for values, in priority order.
                 # The first non-empty value found will be used.
                 source:
-                    - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    - # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                       # indicate nesting.
                       selector: <string>
                 # Default value to use when no source fields contain values.
@@ -432,7 +432,7 @@ spec:
             # List of field paths to check for values, in priority order.
             # The first non-empty value found will be used.
             source:
-                - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                - # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                   # indicate nesting.
                   selector: <string>
             # Default value to use when no source fields contain values.
@@ -455,7 +455,7 @@ spec:
                 # List of field paths to check for values, in priority order.
                 # The first non-empty value found will be used.
                 source:
-                    - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                    - # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                       # indicate nesting.
                       selector: <string>
                 # Default value to use when no source fields contain values.
@@ -474,7 +474,7 @@ spec:
             # List of field paths to check for values, in priority order.
             # The first non-empty value found will be used.
             source:
-                - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                - # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                   # indicate nesting.
                   selector: <string>
             # Default value to use when no source fields contain values.
@@ -493,7 +493,7 @@ spec:
             # List of field paths to check for timestamp values, in priority order.
             # Common fields include "timestamp", "@timestamp", "time", "datetime".
             source:
-                - # The LogQL selector to indicate the field path. Use 'parent[child]' syntax to
+                - # The log filter used to indicate the field path. Use 'parent[child]' syntax to
                   # indicate nesting.
                   selector: <string>
 `

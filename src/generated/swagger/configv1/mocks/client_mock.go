@@ -615,6 +615,26 @@ func (mr *MockClientServiceMockRecorder) CreateServiceAccount(params interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateServiceAccount", reflect.TypeOf((*MockClientService)(nil).CreateServiceAccount), varargs...)
 }
 
+// CreateServiceAttribute mocks base method.
+func (m *MockClientService) CreateServiceAttribute(params *operations.CreateServiceAttributeParams, opts ...operations.ClientOption) (*operations.CreateServiceAttributeOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateServiceAttribute", varargs...)
+	ret0, _ := ret[0].(*operations.CreateServiceAttributeOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateServiceAttribute indicates an expected call of CreateServiceAttribute.
+func (mr *MockClientServiceMockRecorder) CreateServiceAttribute(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateServiceAttribute", reflect.TypeOf((*MockClientService)(nil).CreateServiceAttribute), varargs...)
+}
+
 // CreateTeam mocks base method.
 func (m *MockClientService) CreateTeam(params *operations.CreateTeamParams, opts ...operations.ClientOption) (*operations.CreateTeamOK, error) {
 	m.ctrl.T.Helper()
@@ -1315,6 +1335,26 @@ func (mr *MockClientServiceMockRecorder) DeleteServiceAccount(params interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteServiceAccount", reflect.TypeOf((*MockClientService)(nil).DeleteServiceAccount), varargs...)
 }
 
+// DeleteServiceAttribute mocks base method.
+func (m *MockClientService) DeleteServiceAttribute(params *operations.DeleteServiceAttributeParams, opts ...operations.ClientOption) (*operations.DeleteServiceAttributeOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteServiceAttribute", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteServiceAttributeOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteServiceAttribute indicates an expected call of DeleteServiceAttribute.
+func (mr *MockClientServiceMockRecorder) DeleteServiceAttribute(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteServiceAttribute", reflect.TypeOf((*MockClientService)(nil).DeleteServiceAttribute), varargs...)
+}
+
 // DeleteTeam mocks base method.
 func (m *MockClientService) DeleteTeam(params *operations.DeleteTeamParams, opts ...operations.ClientOption) (*operations.DeleteTeamOK, error) {
 	m.ctrl.T.Helper()
@@ -1893,6 +1933,26 @@ func (mr *MockClientServiceMockRecorder) ListServiceAccounts(params interface{},
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListServiceAccounts", reflect.TypeOf((*MockClientService)(nil).ListServiceAccounts), varargs...)
+}
+
+// ListServiceAttributes mocks base method.
+func (m *MockClientService) ListServiceAttributes(params *operations.ListServiceAttributesParams, opts ...operations.ClientOption) (*operations.ListServiceAttributesOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListServiceAttributes", varargs...)
+	ret0, _ := ret[0].(*operations.ListServiceAttributesOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListServiceAttributes indicates an expected call of ListServiceAttributes.
+func (mr *MockClientServiceMockRecorder) ListServiceAttributes(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListServiceAttributes", reflect.TypeOf((*MockClientService)(nil).ListServiceAttributes), varargs...)
 }
 
 // ListServices mocks base method.
@@ -2595,6 +2655,26 @@ func (mr *MockClientServiceMockRecorder) ReadServiceAccount(params interface{}, 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadServiceAccount", reflect.TypeOf((*MockClientService)(nil).ReadServiceAccount), varargs...)
 }
 
+// ReadServiceAttribute mocks base method.
+func (m *MockClientService) ReadServiceAttribute(params *operations.ReadServiceAttributeParams, opts ...operations.ClientOption) (*operations.ReadServiceAttributeOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadServiceAttribute", varargs...)
+	ret0, _ := ret[0].(*operations.ReadServiceAttributeOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadServiceAttribute indicates an expected call of ReadServiceAttribute.
+func (mr *MockClientServiceMockRecorder) ReadServiceAttribute(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadServiceAttribute", reflect.TypeOf((*MockClientService)(nil).ReadServiceAttribute), varargs...)
+}
+
 // ReadTeam mocks base method.
 func (m *MockClientService) ReadTeam(params *operations.ReadTeamParams, opts ...operations.ClientOption) (*operations.ReadTeamOK, error) {
 	m.ctrl.T.Helper()
@@ -3285,6 +3365,26 @@ func (mr *MockClientServiceMockRecorder) UpdateSLO(params interface{}, opts ...i
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSLO", reflect.TypeOf((*MockClientService)(nil).UpdateSLO), varargs...)
+}
+
+// UpdateServiceAttribute mocks base method.
+func (m *MockClientService) UpdateServiceAttribute(params *operations.UpdateServiceAttributeParams, opts ...operations.ClientOption) (*operations.UpdateServiceAttributeOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateServiceAttribute", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateServiceAttributeOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateServiceAttribute indicates an expected call of UpdateServiceAttribute.
+func (mr *MockClientServiceMockRecorder) UpdateServiceAttribute(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateServiceAttribute", reflect.TypeOf((*MockClientService)(nil).UpdateServiceAttribute), varargs...)
 }
 
 // UpdateTeam mocks base method.

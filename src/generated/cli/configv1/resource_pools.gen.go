@@ -375,8 +375,9 @@ spec:
             fixed_values:
                 - value: <int64>
                   license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
-            # Optional. For supported licenses, defines thresholds with strict limits for
-            # when to drop new consumption of the license for a pool. Only
+            # Defines thresholds with strict limits for when to drop new consumption of the
+            # persisted cardinality license for a pool. Setting 'priority_thresholds' is
+            # required to set limits for cardinality licenses. Only
             # 'PERSISTED_CARDINALITY_STANDARD' and 'PERSISTED_CARDINALITY_HISTOGRAM' are
             # supported.
             priority_thresholds:
@@ -483,8 +484,9 @@ spec:
             fixed_values:
                 - value: <int64>
                   license: <PERSISTED_WRITES_STANDARD|PERSISTED_WRITES_HISTOGRAM|PERSISTED_CARDINALITY_STANDARD|PERSISTED_CARDINALITY_HISTOGRAM|MATCHED_WRITES_STANDARD|MATCHED_WRITES_HISTOGRAM>
-            # Optional. For supported licenses, defines thresholds with strict limits for
-            # when to drop new consumption of the license for a pool. Only
+            # Defines thresholds with strict limits for when to drop new consumption of the
+            # persisted cardinality license for a pool. Setting 'priority_thresholds' is
+            # required to set limits for cardinality licenses. Only
             # 'PERSISTED_CARDINALITY_STANDARD' and 'PERSISTED_CARDINALITY_HISTOGRAM' are
             # supported.
             priority_thresholds:
