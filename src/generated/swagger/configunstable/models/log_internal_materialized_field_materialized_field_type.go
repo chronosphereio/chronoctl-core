@@ -36,8 +36,17 @@ const (
 	// LogInternalMaterializedFieldMaterializedFieldTypeLOWCARDINALITYSTRING captures enum value "LOW_CARDINALITY_STRING"
 	LogInternalMaterializedFieldMaterializedFieldTypeLOWCARDINALITYSTRING LogInternalMaterializedFieldMaterializedFieldType = "LOW_CARDINALITY_STRING"
 
-	// LogInternalMaterializedFieldMaterializedFieldTypeNUMBER captures enum value "NUMBER"
-	LogInternalMaterializedFieldMaterializedFieldTypeNUMBER LogInternalMaterializedFieldMaterializedFieldType = "NUMBER"
+	// LogInternalMaterializedFieldMaterializedFieldTypeINT32 captures enum value "INT_32"
+	LogInternalMaterializedFieldMaterializedFieldTypeINT32 LogInternalMaterializedFieldMaterializedFieldType = "INT_32"
+
+	// LogInternalMaterializedFieldMaterializedFieldTypeINT64 captures enum value "INT_64"
+	LogInternalMaterializedFieldMaterializedFieldTypeINT64 LogInternalMaterializedFieldMaterializedFieldType = "INT_64"
+
+	// LogInternalMaterializedFieldMaterializedFieldTypeFLOAT32 captures enum value "FLOAT_32"
+	LogInternalMaterializedFieldMaterializedFieldTypeFLOAT32 LogInternalMaterializedFieldMaterializedFieldType = "FLOAT_32"
+
+	// LogInternalMaterializedFieldMaterializedFieldTypeFLOAT64 captures enum value "FLOAT_64"
+	LogInternalMaterializedFieldMaterializedFieldTypeFLOAT64 LogInternalMaterializedFieldMaterializedFieldType = "FLOAT_64"
 )
 
 // for schema
@@ -45,7 +54,7 @@ var logInternalMaterializedFieldMaterializedFieldTypeEnum []interface{}
 
 func init() {
 	var res []LogInternalMaterializedFieldMaterializedFieldType
-	if err := json.Unmarshal([]byte(`["STRING","LOW_CARDINALITY_STRING","NUMBER"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["STRING","LOW_CARDINALITY_STRING","INT_32","INT_64","FLOAT_32","FLOAT_64"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

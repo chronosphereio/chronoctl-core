@@ -97,7 +97,15 @@ func (c *cliSpecGen) getEntity(path string) (*Entity, error) {
 	if len(pathParts) < 4 {
 		return nil, errors.Errorf("unexpected path format: %s", path)
 	}
-	entityName := pathParts[3]
+
+	var entityName string
+
+	// Special case service attributes nested path: /api/v1/config/services/{service_slug}/attributes
+	if len(pathParts) >= 6 && pathParts[3] == "services" && pathParts[5] == "attributes" {
+		entityName = "service-attributes"
+	} else {
+		entityName = pathParts[3]
+	}
 
 	if _, ok := c.spec.Entities[entityName]; !ok {
 		c.spec.Entities[entityName] = &Entity{

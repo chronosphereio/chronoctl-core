@@ -18,8 +18,8 @@ import (
 // swagger:model ReplaceFieldStaticValue
 type ReplaceFieldStaticValue struct {
 
-	// The value to replace selected content with.
-	// If empty, action will remove the content.
+	// The value to replace selected content with. If empty, the action removes the
+	// selected content.
 	Value string `json:"value,omitempty"`
 }
 

@@ -17,55 +17,55 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func init() { types.MustRegisterObject(ConsumptionConfigTypeMeta, &ConsumptionConfig{}) }
+func init() { types.MustRegisterObject(ServiceAttributesTypeMeta, &ServiceAttributes{}) }
 
-var _ types.Object = &ConsumptionConfig{}
+var _ types.Object = &ServiceAttributes{}
 
-var ConsumptionConfigTypeMeta = types.TypeMeta{
+var ServiceAttributesTypeMeta = types.TypeMeta{
 	APIVersion: "v1/config",
-	Kind:       "ConsumptionConfig",
+	Kind:       "ServiceAttributes",
 }
 
-type ConsumptionConfig struct {
+type ServiceAttributes struct {
 	types.TypeMeta `json:",inline"`
-	Spec           *models.Configv1ConsumptionConfig `json:"spec"`
+	Spec           *models.Configv1ServiceAttributes `json:"spec"`
 }
 
-func NewConsumptionConfig(spec *models.Configv1ConsumptionConfig) *ConsumptionConfig {
-	return &ConsumptionConfig{
-		TypeMeta: ConsumptionConfigTypeMeta,
+func NewServiceAttributes(spec *models.Configv1ServiceAttributes) *ServiceAttributes {
+	return &ServiceAttributes{
+		TypeMeta: ServiceAttributesTypeMeta,
 		Spec:     spec,
 	}
 }
 
-func (e *ConsumptionConfig) Description() string {
+func (e *ServiceAttributes) Description() string {
 	return types.TypeDescription(e)
 }
 
-func (e *ConsumptionConfig) Identifier() string {
-	return "ConsumptionConfig"
+func (e *ServiceAttributes) Identifier() string {
+	return "ServiceAttributes"
 }
 
-func CreateConsumptionConfig(
+func CreateServiceAttributes(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *ConsumptionConfig,
+	entity *ServiceAttributes,
 	dryRun bool,
-) (*ConsumptionConfig, error) {
-	res, err := client.CreateConsumptionConfig(&config_v1.CreateConsumptionConfigParams{
+) (*ServiceAttributes, error) {
+	res, err := client.CreateServiceAttributes(&config_v1.CreateServiceAttributesParams{
 		Context: ctx,
-		Body: &models.Configv1CreateConsumptionConfigRequest{
+		Body: &models.Configv1CreateServiceAttributesRequest{
 			DryRun:            dryRun,
-			ConsumptionConfig: entity.Spec,
+			ServiceAttributes: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewConsumptionConfig(res.Payload.ConsumptionConfig), nil
+	return NewServiceAttributes(res.Payload.ServiceAttributes), nil
 }
 
-func newConsumptionConfigCreateCmd() *cobra.Command {
+func newServiceAttributesCreateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		dryRunFlags       = dry.NewFlags()
@@ -79,7 +79,7 @@ func newConsumptionConfigCreateCmd() *cobra.Command {
 		short string
 	)
 	use = "create -f <file>"
-	short = "Creates a single ConsumptionConfig."
+	short = "Creates a single ServiceAttributes."
 
 	cmd := &cobra.Command{
 		Use:     use,
@@ -99,13 +99,13 @@ func newConsumptionConfigCreateCmd() *cobra.Command {
 				return err
 			}
 
-			var consumptionConfig *ConsumptionConfig
+			var serviceAttributes *ServiceAttributes
 			file, err := fileFlags.File()
 			if err != nil {
 				return err
 			}
 			defer file.Close() //nolint:errcheck
-			consumptionConfig, err = types.MustDecodeSingleObject[*ConsumptionConfig](file, permissiveParsing)
+			serviceAttributes, err = types.MustDecodeSingleObject[*ServiceAttributes](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -113,18 +113,18 @@ func newConsumptionConfigCreateCmd() *cobra.Command {
 			if dryRunFlags.DryRun {
 				stderr.Println("--dry-run is set")
 			}
-			fullConsumptionConfig, err := CreateConsumptionConfig(ctx, client, consumptionConfig, dryRunFlags.DryRun)
+			fullServiceAttributes, err := CreateServiceAttributes(ctx, client, serviceAttributes, dryRunFlags.DryRun)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("ConsumptionConfig is valid and can be created")
+				stderr.Println("ServiceAttributes is valid and can be created")
 				return nil
 			}
-			stderr.Printf("ConsumptionConfig created successfully\n")
+			stderr.Printf("ServiceAttributes created successfully\n")
 
-			if err := outputFlags.WriteObject(fullConsumptionConfig, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullServiceAttributes, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -139,20 +139,20 @@ func newConsumptionConfigCreateCmd() *cobra.Command {
 	return cmd
 }
 
-func GetConsumptionConfig(
+func GetServiceAttributes(
 	ctx context.Context,
 	client config_v1.ClientService,
-) (*ConsumptionConfig, error) {
-	res, err := client.ReadConsumptionConfig(&config_v1.ReadConsumptionConfigParams{
+) (*ServiceAttributes, error) {
+	res, err := client.ReadServiceAttributes(&config_v1.ReadServiceAttributesParams{
 		Context: ctx,
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewConsumptionConfig(res.GetPayload().ConsumptionConfig), nil
+	return NewServiceAttributes(res.GetPayload().ServiceAttributes), nil
 }
 
-func newConsumptionConfigReadCmd() *cobra.Command {
+func newServiceAttributesReadCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 	var (
@@ -160,7 +160,7 @@ func newConsumptionConfigReadCmd() *cobra.Command {
 		use   string
 		args  cobra.PositionalArgs
 	)
-	short = "Reads a ConsumptionConfig singleton"
+	short = "Reads a ServiceAttributes singleton"
 	use = "read"
 
 	cmd := &cobra.Command{
@@ -180,7 +180,7 @@ func newConsumptionConfigReadCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			entity, err := GetConsumptionConfig(ctx, client)
+			entity, err := GetServiceAttributes(ctx, client)
 			if err != nil {
 				return err
 			}
@@ -197,28 +197,28 @@ func newConsumptionConfigReadCmd() *cobra.Command {
 	return cmd
 }
 
-func UpdateConsumptionConfig(
+func UpdateServiceAttributes(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *ConsumptionConfig,
+	entity *ServiceAttributes,
 	opts UpdateOptions,
-) (*ConsumptionConfig, error) {
-	res, err := client.UpdateConsumptionConfig(&config_v1.UpdateConsumptionConfigParams{
+) (*ServiceAttributes, error) {
+	res, err := client.UpdateServiceAttributes(&config_v1.UpdateServiceAttributesParams{
 		Context: ctx,
-		Body: &models.Configv1UpdateConsumptionConfigRequest{
+		Body: &models.Configv1UpdateServiceAttributesRequest{
 			CreateIfMissing:   opts.CreateIfMissing,
 			DryRun:            opts.DryRun,
-			ConsumptionConfig: entity.Spec,
+			ServiceAttributes: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
 
-	return NewConsumptionConfig(res.Payload.ConsumptionConfig), nil
+	return NewServiceAttributes(res.Payload.ServiceAttributes), nil
 }
 
-func newConsumptionConfigUpdateCmd() *cobra.Command {
+func newServiceAttributesUpdateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		createIfMissing   bool
@@ -231,7 +231,7 @@ func newConsumptionConfigUpdateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "update -f <filename>",
 		GroupID: groups.Commands.ID,
-		Short:   "Updates an existing ConsumptionConfig.",
+		Short:   "Updates an existing ServiceAttributes.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
 			defer cancel()
@@ -252,7 +252,7 @@ func newConsumptionConfigUpdateCmd() *cobra.Command {
 			}
 			defer file.Close() //nolint:errcheck
 
-			consumptionConfig, err := types.MustDecodeSingleObject[*ConsumptionConfig](file, permissiveParsing)
+			serviceAttributes, err := types.MustDecodeSingleObject[*ServiceAttributes](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -266,18 +266,18 @@ func newConsumptionConfigUpdateCmd() *cobra.Command {
 				stderr.Println("--dry-run is set, update not persisted")
 			}
 
-			fullConsumptionConfig, err := UpdateConsumptionConfig(ctx, client, consumptionConfig, updateOpts)
+			fullServiceAttributes, err := UpdateServiceAttributes(ctx, client, serviceAttributes, updateOpts)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("ConsumptionConfig is valid and can be updated")
+				stderr.Println("ServiceAttributes is valid and can be updated")
 				return nil
 			}
-			stderr.Printf("ConsumptionConfig applied successfully\n")
+			stderr.Printf("ServiceAttributes applied successfully\n")
 
-			if err := outputFlags.WriteObject(fullConsumptionConfig, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullServiceAttributes, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -288,16 +288,16 @@ func newConsumptionConfigUpdateCmd() *cobra.Command {
 	outputFlags.AddFlags(cmd)
 	fileFlags.AddFlags(cmd)
 	cmd.Flags().BoolVar(&permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are allowed. Defaults to false.")
-	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the ConsumptionConfig if it does not already exist. Defaults to false.")
+	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the ServiceAttributes if it does not already exist. Defaults to false.")
 
 	return cmd
 }
 
-func DeleteConsumptionConfig(
+func DeleteServiceAttributes(
 	ctx context.Context,
 	client config_v1.ClientService,
 ) error {
-	_, err := client.DeleteConsumptionConfig(&config_v1.DeleteConsumptionConfigParams{
+	_, err := client.DeleteServiceAttributes(&config_v1.DeleteServiceAttributesParams{
 		Context: ctx,
 	})
 	if err != nil {
@@ -306,14 +306,14 @@ func DeleteConsumptionConfig(
 	return nil
 }
 
-func newConsumptionConfigDeleteCmd() *cobra.Command {
+func newServiceAttributesDeleteCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
 		Use:     "delete",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes the ConsumptionConfig singleton",
+		Short:   "Deletes the ServiceAttributes singleton",
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -328,14 +328,14 @@ func newConsumptionConfigDeleteCmd() *cobra.Command {
 				return err
 			}
 
-			res, err := client.DeleteConsumptionConfig(&config_v1.DeleteConsumptionConfigParams{
+			res, err := client.DeleteServiceAttributes(&config_v1.DeleteServiceAttributesParams{
 				Context: ctx,
 			})
 			if err != nil {
 				return clienterror.Wrap(err)
 			}
 			_ = res
-			fmt.Fprintf(cmd.OutOrStdout(), "deleted ConsumptionConfig")
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted ServiceAttributes")
 			return nil
 		},
 	}
@@ -344,72 +344,48 @@ func newConsumptionConfigDeleteCmd() *cobra.Command {
 	return cmd
 }
 
-const ConsumptionConfigScaffoldYAML = `api_version: v1/config
-kind: ConsumptionConfig
+const ServiceAttributesScaffoldYAML = `api_version: v1/config
+kind: ServiceAttribute
 spec:
-    # Partitions define non-overlapping groupings of telemetry data. Partitions are
-    # defined in order of precedence, where incoming requests are allocated to the
-    # first partition that matches. Requests that don't match any partition use an
-    # implicit 'default' partition.
-    partitions:
-        - # Name of the partition. Must be unique within the parent partition. You can
-          # modify this value after the partition is created.
-          name: <string>
-          # Criteria that defines which data matches the 'partition'. Filters are
-          # concatenated together as implied 'AND' operators. A request must match every
-          # filter to match the 'partition'.
-          filters:
-            - # Conditions for the query to match.
-              conditions:
-                - # If set, matches incoming data that belongs to the specified dataset.
-                  # The dataset type must match the budget resource. For example,
-                  # 'resource=LOG_PERSISTED_BYTES', then the dataset type must be
-                  # 'type=LOGS'.
-
-                  # Exactly one of 'dataset_slug' or 'log_filter' must be set.
-                  dataset_slug: <string>
-                  log_filter:
-                    # Returns logs that match this query. The query can include only top-level
-                    # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
-                    # operator is allowed.
-                    query: <string>
-              operator: <IN|NOT_IN>
-          # Optional. Child partitions of this partition. If set, requests that match the
-          # current partition are allocated to the first child partition that matches.
-          # Requests that don't match any child partition are assigned to an implicit 'default'
-          # child partition.
-          partitions: []
-          # Immutable identifier of the partition. Must be unique within the parent
-          # partition. You can't modify this value after the partition is created.
-          slug: <string>
+    # The name of the service. You can modify this value after the service
+    # attributes are created.
+    name: <string>
+    # The slug of the service.
+    service_slug: <string>
+    # The slug of the team that the associated service belongs to.
+    team_slug: <string>
+    # The slug of the notification policy for the associated service.
+    notification_policy_slug: <string>
+    # A description of the service.
+    description: <string>
 `
 
-func newConsumptionConfigScaffoldCmd() *cobra.Command {
+func newServiceAttributesScaffoldCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "scaffold",
 		GroupID: groups.Commands.ID,
 		Short:   "Scaffolds a complete object with placeholder values",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Fprint(cmd.OutOrStdout(), ConsumptionConfigScaffoldYAML)
+			fmt.Fprint(cmd.OutOrStdout(), ServiceAttributesScaffoldYAML)
 		},
 	}
 	return cmd
 }
 
-func NewConsumptionConfigCmd() *cobra.Command {
+func NewServiceAttributesCmd() *cobra.Command {
 	root := &cobra.Command{
-		Use:     "consumption-config",
+		Use:     "service-attributes",
 		GroupID: groups.Config.ID,
-		Short:   "All commands for ConsumptionConfig",
+		Short:   "All commands for ServiceAttributes",
 	}
 
 	root.AddGroup(groups.Commands)
 	root.AddCommand(
-		newConsumptionConfigCreateCmd(),
-		newConsumptionConfigReadCmd(),
-		newConsumptionConfigUpdateCmd(),
-		newConsumptionConfigDeleteCmd(),
-		newConsumptionConfigScaffoldCmd(),
+		newServiceAttributesCreateCmd(),
+		newServiceAttributesReadCmd(),
+		newServiceAttributesUpdateCmd(),
+		newServiceAttributesDeleteCmd(),
+		newServiceAttributesScaffoldCmd(),
 	)
 	return root
 }

@@ -101,6 +101,17 @@
       ],
       "type": "string"
     },
+    "ConfigV1CreateServiceAttributeBody": {
+      "properties": {
+        "service_attribute": {
+          "$ref": "#/definitions/configv1ServiceAttribute"
+        },
+        "dry_run": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateAzureMetricsIntegrationBody": {
       "properties": {
         "azure_metrics_integration": {
@@ -453,6 +464,20 @@
       },
       "type": "object"
     },
+    "ConfigV1UpdateServiceAttributeBody": {
+      "properties": {
+        "service_attribute": {
+          "$ref": "#/definitions/configv1ServiceAttribute"
+        },
+        "create_if_missing": {
+          "type": "boolean"
+        },
+        "dry_run": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateTeamBody": {
       "properties": {
         "team": {
@@ -576,7 +601,7 @@
     "ConsumptionBudgetPriorityFilter": {
       "properties": {
         "dataset_slug": {
-          "description": "Optional. If set, matches data that belongs to the specified dataset. The\ndataset type must match the budget resource. For example, if `resource=LOG_PERSISTED_BYTES`\nthen only dataset `type=LOGS` is allowed. You can't set a value for this\nfield if a value is set for `log_filter`.",
+          "description": "If set, matches incoming data that belongs to the specified dataset.\nThe dataset type must match the budget resource. For example,\n`resource=LOG_PERSISTED_BYTES`, then the dataset type must be\n`type=LOGS`.\n\nExactly one of `dataset_slug` or `log_filter` must be set.",
           "type": "string"
         },
         "log_filter": {
@@ -599,7 +624,9 @@
         "INSTANT_RATE",
         "WEEKLY_VOLUME",
         "MONTHLY_VOLUME",
-        "HOURLY_VOLUME"
+        "HOURLY_VOLUME",
+        "ROLLING_1_HOUR_VOLUME",
+        "ROLLING_3_HOUR_VOLUME"
       ],
       "type": "string"
     },
@@ -1005,7 +1032,7 @@
       "description": "DropField is the configuration for a drop field action.",
       "properties": {
         "field_regex": {
-          "description": "Regular expression to match the field name(s) to drop.",
+          "description": "Defines the the regular expression that determines which fields to drop.",
           "type": "string"
         },
         "parent_path": {
@@ -1021,18 +1048,18 @@
           "$ref": "#/definitions/EmitMetricsMetricMode"
         },
         "name": {
-          "description": "The name of the metric to emit. This name has to be unique, and conform to Prometheus naming conventions.",
+          "description": "A unique name for the generated metric. This name must conform to Prometheus\nnaming conventions.",
           "type": "string"
         },
         "labels": {
-          "description": "The labels to emit the metric with. This is a prom-valid label name mapped to a log key.",
+          "description": "The labels to emit with the metric, specified as key/value pairs. The\ngenerated label is a valid Prometheus label name, mapped to a log key.",
           "items": {
             "$ref": "#/definitions/LogControlRuleEmitMetricsLabel"
           },
           "type": "array"
         },
         "drop_log": {
-          "description": "Drop log after emitting the metric.",
+          "description": "Optional. If `true`, drops the entire log after emitting the defined metric.",
           "type": "boolean"
         },
         "counter": {
@@ -1065,11 +1092,11 @@
           "$ref": "#/definitions/configv1LogFieldPath"
         },
         "replace_regex": {
-          "description": "Regular expression to specify what part of the field to replace.",
+          "description": "Defines the the regular expression that determines which part of the field to\nreplace.",
           "type": "string"
         },
         "replace_all": {
-          "description": "Whether to replace all matches or just the first one.",
+          "description": "Determines whether to replace all matches or just the first match.",
           "type": "boolean"
         },
         "replace_mode": {
@@ -1088,7 +1115,7 @@
       "description": "Sample is the configuration for the sample logs action.",
       "properties": {
         "rate": {
-          "description": "Percentage of matching logs to keep. Must be in the range (0, 1].",
+          "description": "Percentage of matching logs to keep. Must be in the range `[0, 1]`, where `1`\nis equal to 100% of logs. For example, to keep 25% of logs, enter `0.25` as\nthe `rate`.",
           "format": "double",
           "type": "number"
         }
@@ -2089,7 +2116,7 @@
     "PartitionFilterCondition": {
       "properties": {
         "dataset_slug": {
-          "description": "Optional. If set, matches data that belongs to the specified dataset. The\ndataset type must match the budget resource. For example, if `type=LOGS`\nthen set `resource=LOG_PERSISTED_BYTES`. You can't set a value for this\nfield if a value is set for `log_filter`.",
+          "description": "If set, matches incoming data that belongs to the specified dataset.\nThe dataset type must match the budget resource. For example,\n`resource=LOG_PERSISTED_BYTES`, then the dataset type must be\n`type=LOGS`.\n\nExactly one of `dataset_slug` or `log_filter` must be set.",
           "type": "string"
         },
         "log_filter": {
@@ -2114,25 +2141,25 @@
       "description": "MappedValue is the configuration for mapped value replace mode.",
       "properties": {
         "pairs": {
-          "description": "List of key value pairs.",
+          "description": "A list of key/value pairs to replace matched content with.",
           "items": {
             "$ref": "#/definitions/MappedValueReplacePair"
           },
           "type": "array"
         },
         "use_default": {
-          "description": "If no matching key is found, fall back to default value. If use_default is false,\nthe value will be left unchanged if no matching key is found.",
+          "description": "If `true`, specifies a default value if no matching key is found. If\n`false`, the value will be unchanged if no matching key is found.",
           "type": "boolean"
         },
         "default_value": {
-          "description": "Value to use if no value is found.",
+          "description": "The value to use if no matching value is found.",
           "type": "string"
         }
       },
       "type": "object"
     },
     "ReplaceFieldReplaceMode": {
-      "description": " - HASH: Hash the selected content.\n - STATIC_VALUE: Replace the selected content with a static string.\n - MAPPED_VALUE: Replace the selected content with a mapped value.",
+      "description": " - HASH: Replace the matched content with a hashed string, which can help reduce the\nsize of large strings. After replacing the original content with a string,\nthere’s no way to recover that information.\n - STATIC_VALUE: Replace the matched content with a static string. For example, replace\npunctuation in a field with an empty string, or truncate the ends of long\nstack traces.\n - MAPPED_VALUE: Replace the matched content with specified key/value pairs. For example,\nreduce log volume by replacing a string error with a specific error code. If\nnone of the key/value pairs match, the provided default value is used.\n\n@REQUIRED",
       "enum": [
         "HASH",
         "STATIC_VALUE",
@@ -2144,7 +2171,7 @@
       "description": "StaticValue is the configuration for the replace field control rule in static value\nmode. Used to replace the selected content with a static value.",
       "properties": {
         "value": {
-          "description": "The value to replace selected content with.\nIf empty, action will remove the content.",
+          "description": "The value to replace selected content with. If empty, the action removes the\nselected content.",
           "type": "string"
         }
       },
@@ -3899,6 +3926,17 @@
       },
       "type": "object"
     },
+    "configv1CreateServiceAttributeResponse": {
+      "properties": {
+        "service_slug": {
+          "type": "string"
+        },
+        "service_attribute": {
+          "$ref": "#/definitions/configv1ServiceAttribute"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateTeamRequest": {
       "properties": {
         "team": {
@@ -4202,6 +4240,9 @@
       "type": "object"
     },
     "configv1DeleteServiceAccountResponse": {
+      "type": "object"
+    },
+    "configv1DeleteServiceAttributeResponse": {
       "type": "object"
     },
     "configv1DeleteTeamResponse": {
@@ -4831,6 +4872,20 @@
       },
       "type": "object"
     },
+    "configv1ListServiceAttributesResponse": {
+      "properties": {
+        "service_attributes": {
+          "items": {
+            "$ref": "#/definitions/configv1ServiceAttribute"
+          },
+          "type": "array"
+        },
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        }
+      },
+      "type": "object"
+    },
     "configv1ListServicesResponse": {
       "properties": {
         "page": {
@@ -4970,14 +5025,14 @@
       "description": "LogControlRule is the configuration for a log control rule.",
       "properties": {
         "name": {
-          "description": "Name is the name of the control rule.",
+          "description": "User-defined name of the control rule.",
           "type": "string"
         },
         "mode": {
           "$ref": "#/definitions/configv1LogControlRuleMode"
         },
         "filter": {
-          "description": "Log query syntax to select logs. Only matching logs will have control action applied.",
+          "description": "Log query filter to return log data for the control rule. The control action\napplies to only matching logs.",
           "type": "string"
         },
         "type": {
@@ -5026,7 +5081,7 @@
     "configv1LogFieldPath": {
       "properties": {
         "selector": {
-          "description": "The LogQL selector to indicate the field path. Use `parent[child]` syntax to\nindicate nesting.",
+          "description": "The log filter used to indicate the field path. Use `parent[child]` syntax to\nindicate nesting.",
           "type": "string"
         }
       },
@@ -5818,6 +5873,17 @@
       },
       "type": "object"
     },
+    "configv1ReadServiceAttributeResponse": {
+      "properties": {
+        "service_slug": {
+          "type": "string"
+        },
+        "service_attribute": {
+          "$ref": "#/definitions/configv1ServiceAttribute"
+        }
+      },
+      "type": "object"
+    },
     "configv1ReadServiceResponse": {
       "properties": {
         "service": {
@@ -5977,7 +6043,7 @@
           "type": "array"
         },
         "priority_thresholds": {
-          "description": "Optional. For supported licenses, defines thresholds with strict limits for\nwhen to drop new consumption of the license for a pool. Only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported.",
+          "description": "Defines thresholds with strict limits for when to drop new consumption of the\npersisted cardinality license for a pool. Setting `priority_thresholds` is\nrequired to set limits for cardinality licenses. Only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported.",
           "items": {
             "$ref": "#/definitions/AllocationThresholds"
           },
@@ -6277,6 +6343,43 @@
         },
         "metrics_restriction": {
           "$ref": "#/definitions/ServiceAccountMetricsRestriction"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ServiceAttribute": {
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the service attributes were created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the service attributes were updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the service. You can modify this value after the service\nattributes are created.",
+          "type": "string"
+        },
+        "service_slug": {
+          "description": "The slug of the service.",
+          "type": "string"
+        },
+        "team_slug": {
+          "description": "The slug of the team that the associated service belongs to.",
+          "type": "string"
+        },
+        "notification_policy_slug": {
+          "description": "The slug of the notification policy for the associated service.",
+          "type": "string"
+        },
+        "description": {
+          "description": "A description of the service.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -6924,6 +7027,17 @@
       "properties": {
         "slo": {
           "$ref": "#/definitions/configv1SLO"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateServiceAttributeResponse": {
+      "properties": {
+        "service_slug": {
+          "type": "string"
+        },
+        "service_attribute": {
+          "$ref": "#/definitions/configv1ServiceAttribute"
         }
       },
       "type": "object"
@@ -8170,7 +8284,8 @@
             "items": {
               "enum": [
                 "LOG_PERSISTED_BYTES",
-                "LOG_PROCESSED_BYTES"
+                "LOG_PROCESSED_BYTES",
+                "METRIC_PERSISTED_SERIES"
               ],
               "type": "string"
             },
@@ -13918,6 +14033,58 @@
         ]
       }
     },
+    "/api/v1/config/service-attributes": {
+      "get": {
+        "operationId": "ListServiceAttributes",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListServiceAttributesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ServiceAttribute"
+        ]
+      }
+    },
     "/api/v1/config/services": {
       "get": {
         "operationId": "ListServices",
@@ -13998,6 +14165,136 @@
         },
         "tags": [
           "Service"
+        ]
+      }
+    },
+    "/api/v1/config/services/{service_slug}/attributes": {
+      "delete": {
+        "operationId": "DeleteServiceAttribute",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "service_slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteServiceAttributeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "ConfigV1"
+        ]
+      },
+      "get": {
+        "operationId": "ReadServiceAttribute",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "service_slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadServiceAttributeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "ConfigV1"
+        ]
+      },
+      "post": {
+        "operationId": "CreateServiceAttribute",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "service_slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1CreateServiceAttributeBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateServiceAttributeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "ConfigV1"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateServiceAttribute",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "service_slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateServiceAttributeBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateServiceAttributeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "ConfigV1"
         ]
       }
     },

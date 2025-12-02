@@ -18,13 +18,14 @@ import (
 // swagger:model configv1LogControlRule
 type Configv1LogControlRule struct {
 
-	// Name is the name of the control rule.
+	// User-defined name of the control rule.
 	Name string `json:"name,omitempty"`
 
 	// mode
 	Mode Configv1LogControlRuleMode `json:"mode,omitempty"`
 
-	// Log query syntax to select logs. Only matching logs will have control action applied.
+	// Log query filter to return log data for the control rule. The control action
+	// applies to only matching logs.
 	Filter string `json:"filter,omitempty"`
 
 	// type

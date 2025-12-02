@@ -166,7 +166,10 @@
       "enum": [
         "STRING",
         "LOW_CARDINALITY_STRING",
-        "NUMBER"
+        "INT_32",
+        "INT_64",
+        "FLOAT_32",
+        "FLOAT_64"
       ],
       "type": "string"
     },

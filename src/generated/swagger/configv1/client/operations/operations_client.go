@@ -86,6 +86,8 @@ type ClientService interface {
 
 	CreateServiceAccount(params *CreateServiceAccountParams, opts ...ClientOption) (*CreateServiceAccountOK, error)
 
+	CreateServiceAttribute(params *CreateServiceAttributeParams, opts ...ClientOption) (*CreateServiceAttributeOK, error)
+
 	CreateTeam(params *CreateTeamParams, opts ...ClientOption) (*CreateTeamOK, error)
 
 	CreateTraceBehavior(params *CreateTraceBehaviorParams, opts ...ClientOption) (*CreateTraceBehaviorOK, error)
@@ -156,6 +158,8 @@ type ClientService interface {
 
 	DeleteServiceAccount(params *DeleteServiceAccountParams, opts ...ClientOption) (*DeleteServiceAccountOK, error)
 
+	DeleteServiceAttribute(params *DeleteServiceAttributeParams, opts ...ClientOption) (*DeleteServiceAttributeOK, error)
+
 	DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*DeleteTeamOK, error)
 
 	DeleteTraceBehavior(params *DeleteTraceBehaviorParams, opts ...ClientOption) (*DeleteTraceBehaviorOK, error)
@@ -213,6 +217,8 @@ type ClientService interface {
 	ListSLOs(params *ListSLOsParams, opts ...ClientOption) (*ListSLOsOK, error)
 
 	ListServiceAccounts(params *ListServiceAccountsParams, opts ...ClientOption) (*ListServiceAccountsOK, error)
+
+	ListServiceAttributes(params *ListServiceAttributesParams, opts ...ClientOption) (*ListServiceAttributesOK, error)
 
 	ListServices(params *ListServicesParams, opts ...ClientOption) (*ListServicesOK, error)
 
@@ -284,6 +290,8 @@ type ClientService interface {
 
 	ReadServiceAccount(params *ReadServiceAccountParams, opts ...ClientOption) (*ReadServiceAccountOK, error)
 
+	ReadServiceAttribute(params *ReadServiceAttributeParams, opts ...ClientOption) (*ReadServiceAttributeOK, error)
+
 	ReadTeam(params *ReadTeamParams, opts ...ClientOption) (*ReadTeamOK, error)
 
 	ReadTraceBehavior(params *ReadTraceBehaviorParams, opts ...ClientOption) (*ReadTraceBehaviorOK, error)
@@ -351,6 +359,8 @@ type ClientService interface {
 	UpdateRollupRule(params *UpdateRollupRuleParams, opts ...ClientOption) (*UpdateRollupRuleOK, error)
 
 	UpdateSLO(params *UpdateSLOParams, opts ...ClientOption) (*UpdateSLOOK, error)
+
+	UpdateServiceAttribute(params *UpdateServiceAttributeParams, opts ...ClientOption) (*UpdateServiceAttributeOK, error)
 
 	UpdateTeam(params *UpdateTeamParams, opts ...ClientOption) (*UpdateTeamOK, error)
 
@@ -1437,6 +1447,43 @@ func (a *Client) CreateServiceAccount(params *CreateServiceAccountParams, opts .
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateServiceAccountDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateServiceAttribute create service attribute API
+*/
+func (a *Client) CreateServiceAttribute(params *CreateServiceAttributeParams, opts ...ClientOption) (*CreateServiceAttributeOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateServiceAttributeParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateServiceAttribute",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/services/{service_slug}/attributes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateServiceAttributeReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateServiceAttributeOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateServiceAttributeDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2739,6 +2786,43 @@ func (a *Client) DeleteServiceAccount(params *DeleteServiceAccountParams, opts .
 }
 
 /*
+DeleteServiceAttribute delete service attribute API
+*/
+func (a *Client) DeleteServiceAttribute(params *DeleteServiceAttributeParams, opts ...ClientOption) (*DeleteServiceAttributeOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteServiceAttributeParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteServiceAttribute",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/services/{service_slug}/attributes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteServiceAttributeReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteServiceAttributeOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteServiceAttributeDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteTeam delete team API
 */
 func (a *Client) DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*DeleteTeamOK, error) {
@@ -3808,6 +3892,43 @@ func (a *Client) ListServiceAccounts(params *ListServiceAccountsParams, opts ...
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListServiceAccountsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListServiceAttributes list service attributes API
+*/
+func (a *Client) ListServiceAttributes(params *ListServiceAttributesParams, opts ...ClientOption) (*ListServiceAttributesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListServiceAttributesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListServiceAttributes",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/service-attributes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListServiceAttributesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListServiceAttributesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListServiceAttributesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5107,6 +5228,43 @@ func (a *Client) ReadServiceAccount(params *ReadServiceAccountParams, opts ...Cl
 }
 
 /*
+ReadServiceAttribute read service attribute API
+*/
+func (a *Client) ReadServiceAttribute(params *ReadServiceAttributeParams, opts ...ClientOption) (*ReadServiceAttributeOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadServiceAttributeParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadServiceAttribute",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/services/{service_slug}/attributes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadServiceAttributeReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadServiceAttributeOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadServiceAttributeDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadTeam read team API
 */
 func (a *Client) ReadTeam(params *ReadTeamParams, opts ...ClientOption) (*ReadTeamOK, error) {
@@ -6361,6 +6519,43 @@ func (a *Client) UpdateSLO(params *UpdateSLOParams, opts ...ClientOption) (*Upda
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateSLODefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateServiceAttribute update service attribute API
+*/
+func (a *Client) UpdateServiceAttribute(params *UpdateServiceAttributeParams, opts ...ClientOption) (*UpdateServiceAttributeOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateServiceAttributeParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateServiceAttribute",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/services/{service_slug}/attributes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateServiceAttributeReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateServiceAttributeOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateServiceAttributeDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

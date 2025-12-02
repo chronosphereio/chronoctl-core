@@ -3,28 +3,6 @@
     "application/json"
   ],
   "definitions": {
-    "ConsumptionBudgetResource": {
-      "enum": [
-        "LOG_PERSISTED_BYTES",
-        "LOG_PROCESSED_BYTES"
-      ],
-      "type": "string"
-    },
-    "DatasetFilterDataset": {
-      "properties": {
-        "dataset_slug": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "DatasetFilterOperator": {
-      "enum": [
-        "IN",
-        "NOT_IN"
-      ],
-      "type": "string"
-    },
     "ListMonitorStatusesRequestSortOrder": {
       "enum": [
         "SORT_BY_STATE"
@@ -127,35 +105,6 @@
       ],
       "type": "string"
     },
-    "configunstableDatasetFilter": {
-      "description": "TODO(codyg): remove; still in-use by stateunstable.",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/DatasetFilterOperator"
-        },
-        "datasets": {
-          "items": {
-            "$ref": "#/definitions/DatasetFilterDataset"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "configv1PageParams": {
-      "properties": {
-        "max_size": {
-          "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
-          "format": "int64",
-          "type": "integer"
-        },
-        "token": {
-          "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "genericError": {
       "additionalProperties": true,
       "type": "object"
@@ -179,86 +128,10 @@
       ],
       "type": "string"
     },
-    "stateunstableConsumptionDatapoint": {
-      "description": "ConsumptionDatapoint represents a cumulative consumption volume at some point in time.",
-      "properties": {
-        "timestamp": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "volume": {
-          "format": "int64",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableConsumptionGroupKey": {
-      "description": "ConsumptionGroupKey uniquely identifies a specific time series returned from\nthe consumption query APIs.",
-      "properties": {
-        "partition_slug_path": {
-          "type": "string"
-        },
-        "dataset_slug": {
-          "type": "string"
-        },
-        "matches": {
-          "type": "boolean"
-        },
-        "dynamic_label_value": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableConsumptionRateDatapoint": {
-      "description": "ConsumptionRateDatapoint represents a consumption rate at some point in time.",
-      "properties": {
-        "timestamp": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "volume_per_sec": {
-          "format": "double",
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
     "stateunstableEchoResponse": {
       "properties": {
         "message": {
           "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableGroupedRateTimeSeries": {
-      "description": "GroupedRateTimeSeries represents a time series of consumption rate for a dataset.",
-      "properties": {
-        "group_key": {
-          "$ref": "#/definitions/stateunstableConsumptionGroupKey"
-        },
-        "datapoints": {
-          "items": {
-            "$ref": "#/definitions/stateunstableConsumptionRateDatapoint"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableGroupedTimeSeries": {
-      "description": "GroupedTimeSeries represents a time series of cumulative consumption for a dataset.",
-      "properties": {
-        "group_key": {
-          "$ref": "#/definitions/stateunstableConsumptionGroupKey"
-        },
-        "datapoints": {
-          "items": {
-            "$ref": "#/definitions/stateunstableConsumptionDatapoint"
-          },
-          "type": "array"
         }
       },
       "type": "object"
@@ -291,116 +164,6 @@
             "$ref": "#/definitions/MonitorStatusSignalStatus"
           },
           "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableQueryConsumptionRateRequest": {
-      "description": "QueryConsumptionRateRequest for querying consumption rates.",
-      "properties": {
-        "resource": {
-          "$ref": "#/definitions/ConsumptionBudgetResource"
-        },
-        "start_at": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "end_at": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "step_secs": {
-          "format": "int32",
-          "type": "integer"
-        },
-        "partition_name_path": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "group_by_dataset_slug": {
-          "type": "string"
-        },
-        "dataset_filters": {
-          "items": {
-            "$ref": "#/definitions/configunstableDatasetFilter"
-          },
-          "type": "array"
-        },
-        "page": {
-          "$ref": "#/definitions/configv1PageParams"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableQueryConsumptionRateResponse": {
-      "properties": {
-        "series": {
-          "items": {
-            "$ref": "#/definitions/stateunstableGroupedRateTimeSeries"
-          },
-          "type": "array"
-        },
-        "page": {
-          "$ref": "#/definitions/configv1PageParams"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableQueryConsumptionRequest": {
-      "description": "QueryConsumptionRequest for querying cumulative consumption volumes.",
-      "properties": {
-        "resource": {
-          "$ref": "#/definitions/ConsumptionBudgetResource"
-        },
-        "start_at": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "end_at": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "step_secs": {
-          "format": "int32",
-          "type": "integer"
-        },
-        "cumulative_period_start_at": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "partition_name_path": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "group_by_dataset_slug": {
-          "type": "string"
-        },
-        "dataset_filters": {
-          "items": {
-            "$ref": "#/definitions/configunstableDatasetFilter"
-          },
-          "type": "array"
-        },
-        "page": {
-          "$ref": "#/definitions/configv1PageParams"
-        }
-      },
-      "type": "object"
-    },
-    "stateunstableQueryConsumptionResponse": {
-      "properties": {
-        "series": {
-          "items": {
-            "$ref": "#/definitions/stateunstableGroupedTimeSeries"
-          },
-          "type": "array"
-        },
-        "page": {
-          "$ref": "#/definitions/configv1PageParams"
         }
       },
       "type": "object"

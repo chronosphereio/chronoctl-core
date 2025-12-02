@@ -520,10 +520,12 @@ spec:
           # concatenated together as implied 'AND' operators. A request must match every
           # filter to match the 'priority'.
           filters:
-            - # Optional. If set, matches data that belongs to the specified dataset. The
-              # dataset type must match the budget resource. For example, if 'resource=LOG_PERSISTED_BYTES'
-              # then only dataset 'type=LOGS' is allowed. You can't set a value for this
-              # field if a value is set for 'log_filter'.
+            - # If set, matches incoming data that belongs to the specified dataset.
+              # The dataset type must match the budget resource. For example,
+              # 'resource=LOG_PERSISTED_BYTES', then the dataset type must be
+              # 'type=LOGS'.
+
+              # Exactly one of 'dataset_slug' or 'log_filter' must be set.
               dataset_slug: <string>
               log_filter:
                 # Returns logs that match this query. The query can include only top-level
@@ -539,7 +541,7 @@ spec:
           instant_rate:
             # Value of the fixed rate threshold.
             fixed_value_per_sec: <int64>
-          type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME|HOURLY_VOLUME>
+          type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME|HOURLY_VOLUME|ROLLING_1_HOUR_VOLUME|ROLLING_3_HOUR_VOLUME>
           volume:
             # Value of the volume threshold.
             fixed_value: <int64>
