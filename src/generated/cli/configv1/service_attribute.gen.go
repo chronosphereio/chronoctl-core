@@ -17,55 +17,56 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func init() { types.MustRegisterObject(ServiceAttributesTypeMeta, &ServiceAttributes{}) }
+func init() { types.MustRegisterObject(ServiceAttributeTypeMeta, &ServiceAttribute{}) }
 
-var _ types.Object = &ServiceAttributes{}
+var _ types.Object = &ServiceAttribute{}
 
-var ServiceAttributesTypeMeta = types.TypeMeta{
+var ServiceAttributeTypeMeta = types.TypeMeta{
 	APIVersion: "v1/config",
-	Kind:       "ServiceAttributes",
+	Kind:       "ServiceAttribute",
 }
 
-type ServiceAttributes struct {
+type ServiceAttribute struct {
 	types.TypeMeta `json:",inline"`
-	Spec           *models.Configv1ServiceAttributes `json:"spec"`
+	Spec           *models.Configv1ServiceAttribute `json:"spec"`
 }
 
-func NewServiceAttributes(spec *models.Configv1ServiceAttributes) *ServiceAttributes {
-	return &ServiceAttributes{
-		TypeMeta: ServiceAttributesTypeMeta,
+func NewServiceAttribute(spec *models.Configv1ServiceAttribute) *ServiceAttribute {
+	return &ServiceAttribute{
+		TypeMeta: ServiceAttributeTypeMeta,
 		Spec:     spec,
 	}
 }
 
-func (e *ServiceAttributes) Description() string {
+func (e *ServiceAttribute) Description() string {
 	return types.TypeDescription(e)
 }
 
-func (e *ServiceAttributes) Identifier() string {
-	return "ServiceAttributes"
+func (e *ServiceAttribute) Identifier() string {
+	return "ServiceAttribute"
 }
 
-func CreateServiceAttributes(
+func CreateServiceAttribute(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *ServiceAttributes,
+	entity *ServiceAttribute,
 	dryRun bool,
-) (*ServiceAttributes, error) {
-	res, err := client.CreateServiceAttributes(&config_v1.CreateServiceAttributesParams{
-		Context: ctx,
-		Body: &models.Configv1CreateServiceAttributesRequest{
-			DryRun:            dryRun,
-			ServiceAttributes: entity.Spec,
+) (*ServiceAttribute, error) {
+	res, err := client.CreateServiceAttribute(&config_v1.CreateServiceAttributeParams{
+		Context:     ctx,
+		ServiceSlug: entity.Spec.ServiceSlug,
+		Body: &models.ConfigV1CreateServiceAttributeBody{
+			DryRun:           dryRun,
+			ServiceAttribute: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewServiceAttributes(res.Payload.ServiceAttributes), nil
+	return NewServiceAttribute(res.Payload.ServiceAttribute), nil
 }
 
-func newServiceAttributesCreateCmd() *cobra.Command {
+func newServiceAttributeCreateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		dryRunFlags       = dry.NewFlags()
@@ -79,7 +80,7 @@ func newServiceAttributesCreateCmd() *cobra.Command {
 		short string
 	)
 	use = "create -f <file>"
-	short = "Creates a single ServiceAttributes."
+	short = "Creates a single ServiceAttribute."
 
 	cmd := &cobra.Command{
 		Use:     use,
@@ -99,13 +100,13 @@ func newServiceAttributesCreateCmd() *cobra.Command {
 				return err
 			}
 
-			var serviceAttributes *ServiceAttributes
+			var serviceAttribute *ServiceAttribute
 			file, err := fileFlags.File()
 			if err != nil {
 				return err
 			}
 			defer file.Close() //nolint:errcheck
-			serviceAttributes, err = types.MustDecodeSingleObject[*ServiceAttributes](file, permissiveParsing)
+			serviceAttribute, err = types.MustDecodeSingleObject[*ServiceAttribute](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -113,18 +114,18 @@ func newServiceAttributesCreateCmd() *cobra.Command {
 			if dryRunFlags.DryRun {
 				stderr.Println("--dry-run is set")
 			}
-			fullServiceAttributes, err := CreateServiceAttributes(ctx, client, serviceAttributes, dryRunFlags.DryRun)
+			fullServiceAttribute, err := CreateServiceAttribute(ctx, client, serviceAttribute, dryRunFlags.DryRun)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("ServiceAttributes is valid and can be created")
+				stderr.Println("ServiceAttribute is valid and can be created")
 				return nil
 			}
-			stderr.Printf("ServiceAttributes created successfully\n")
+			stderr.Printf("ServiceAttribute created successfully\n")
 
-			if err := outputFlags.WriteObject(fullServiceAttributes, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullServiceAttribute, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -139,20 +140,22 @@ func newServiceAttributesCreateCmd() *cobra.Command {
 	return cmd
 }
 
-func GetServiceAttributes(
+func GetServiceAttribute(
 	ctx context.Context,
 	client config_v1.ClientService,
-) (*ServiceAttributes, error) {
-	res, err := client.ReadServiceAttributes(&config_v1.ReadServiceAttributesParams{
-		Context: ctx,
+	serviceSlug string,
+) (*ServiceAttribute, error) {
+	res, err := client.ReadServiceAttribute(&config_v1.ReadServiceAttributeParams{
+		Context:     ctx,
+		ServiceSlug: serviceSlug,
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewServiceAttributes(res.GetPayload().ServiceAttributes), nil
+	return NewServiceAttribute(res.GetPayload().ServiceAttribute), nil
 }
 
-func newServiceAttributesReadCmd() *cobra.Command {
+func newServiceAttributeReadCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 	var (
@@ -160,8 +163,9 @@ func newServiceAttributesReadCmd() *cobra.Command {
 		use   string
 		args  cobra.PositionalArgs
 	)
-	short = "Reads a ServiceAttributes singleton"
-	use = "read"
+	short = "Reads a single ServiceAttribute by service slug"
+	use = "read <service_slug>"
+	args = cobra.ExactArgs(1)
 
 	cmd := &cobra.Command{
 		Use:     use,
@@ -180,7 +184,7 @@ func newServiceAttributesReadCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			entity, err := GetServiceAttributes(ctx, client)
+			entity, err := GetServiceAttribute(ctx, client, args[0])
 			if err != nil {
 				return err
 			}
@@ -197,28 +201,29 @@ func newServiceAttributesReadCmd() *cobra.Command {
 	return cmd
 }
 
-func UpdateServiceAttributes(
+func UpdateServiceAttribute(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *ServiceAttributes,
+	entity *ServiceAttribute,
 	opts UpdateOptions,
-) (*ServiceAttributes, error) {
-	res, err := client.UpdateServiceAttributes(&config_v1.UpdateServiceAttributesParams{
-		Context: ctx,
-		Body: &models.Configv1UpdateServiceAttributesRequest{
-			CreateIfMissing:   opts.CreateIfMissing,
-			DryRun:            opts.DryRun,
-			ServiceAttributes: entity.Spec,
+) (*ServiceAttribute, error) {
+	res, err := client.UpdateServiceAttribute(&config_v1.UpdateServiceAttributeParams{
+		Context:     ctx,
+		ServiceSlug: entity.Spec.ServiceSlug,
+		Body: &models.ConfigV1UpdateServiceAttributeBody{
+			CreateIfMissing:  opts.CreateIfMissing,
+			DryRun:           opts.DryRun,
+			ServiceAttribute: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
 
-	return NewServiceAttributes(res.Payload.ServiceAttributes), nil
+	return NewServiceAttribute(res.Payload.ServiceAttribute), nil
 }
 
-func newServiceAttributesUpdateCmd() *cobra.Command {
+func newServiceAttributeUpdateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		createIfMissing   bool
@@ -231,7 +236,7 @@ func newServiceAttributesUpdateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "update -f <filename>",
 		GroupID: groups.Commands.ID,
-		Short:   "Updates an existing ServiceAttributes.",
+		Short:   "Updates an existing ServiceAttribute.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
 			defer cancel()
@@ -252,7 +257,7 @@ func newServiceAttributesUpdateCmd() *cobra.Command {
 			}
 			defer file.Close() //nolint:errcheck
 
-			serviceAttributes, err := types.MustDecodeSingleObject[*ServiceAttributes](file, permissiveParsing)
+			serviceAttribute, err := types.MustDecodeSingleObject[*ServiceAttribute](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -266,18 +271,18 @@ func newServiceAttributesUpdateCmd() *cobra.Command {
 				stderr.Println("--dry-run is set, update not persisted")
 			}
 
-			fullServiceAttributes, err := UpdateServiceAttributes(ctx, client, serviceAttributes, updateOpts)
+			fullServiceAttribute, err := UpdateServiceAttribute(ctx, client, serviceAttribute, updateOpts)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("ServiceAttributes is valid and can be updated")
+				stderr.Println("ServiceAttribute is valid and can be updated")
 				return nil
 			}
-			stderr.Printf("ServiceAttributes applied successfully\n")
+			stderr.Printf("ServiceAttribute applied successfully\n")
 
-			if err := outputFlags.WriteObject(fullServiceAttributes, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullServiceAttribute, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -288,17 +293,19 @@ func newServiceAttributesUpdateCmd() *cobra.Command {
 	outputFlags.AddFlags(cmd)
 	fileFlags.AddFlags(cmd)
 	cmd.Flags().BoolVar(&permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are allowed. Defaults to false.")
-	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the ServiceAttributes if it does not already exist. Defaults to false.")
+	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the ServiceAttribute if it does not already exist. Defaults to false.")
 
 	return cmd
 }
 
-func DeleteServiceAttributes(
+func DeleteServiceAttribute(
 	ctx context.Context,
 	client config_v1.ClientService,
+	serviceSlug string,
 ) error {
-	_, err := client.DeleteServiceAttributes(&config_v1.DeleteServiceAttributesParams{
-		Context: ctx,
+	_, err := client.DeleteServiceAttribute(&config_v1.DeleteServiceAttributeParams{
+		Context:     ctx,
+		ServiceSlug: serviceSlug,
 	})
 	if err != nil {
 		return clienterror.Wrap(err)
@@ -306,15 +313,15 @@ func DeleteServiceAttributes(
 	return nil
 }
 
-func newServiceAttributesDeleteCmd() *cobra.Command {
+func newServiceAttributeDeleteCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
-		Use:     "delete",
+		Use:     "delete <service_slug>",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes the ServiceAttributes singleton",
-		Args:    cobra.NoArgs,
+		Short:   "Deletes a single ServiceAttribute by service slug",
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
 			defer cancel()
@@ -328,14 +335,15 @@ func newServiceAttributesDeleteCmd() *cobra.Command {
 				return err
 			}
 
-			res, err := client.DeleteServiceAttributes(&config_v1.DeleteServiceAttributesParams{
-				Context: ctx,
+			res, err := client.DeleteServiceAttribute(&config_v1.DeleteServiceAttributeParams{
+				Context:     ctx,
+				ServiceSlug: args[0],
 			})
 			if err != nil {
 				return clienterror.Wrap(err)
 			}
 			_ = res
-			fmt.Fprintf(cmd.OutOrStdout(), "deleted ServiceAttributes")
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted ServiceAttribute with service slug %q\n", args[0])
 			return nil
 		},
 	}
@@ -344,7 +352,7 @@ func newServiceAttributesDeleteCmd() *cobra.Command {
 	return cmd
 }
 
-const ServiceAttributesScaffoldYAML = `api_version: v1/config
+const ServiceAttributeScaffoldYAML = `api_version: v1/config
 kind: ServiceAttribute
 spec:
     # The name of the service. You can modify this value after the service
@@ -360,32 +368,32 @@ spec:
     description: <string>
 `
 
-func newServiceAttributesScaffoldCmd() *cobra.Command {
+func newServiceAttributeScaffoldCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "scaffold",
 		GroupID: groups.Commands.ID,
 		Short:   "Scaffolds a complete object with placeholder values",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Fprint(cmd.OutOrStdout(), ServiceAttributesScaffoldYAML)
+			fmt.Fprint(cmd.OutOrStdout(), ServiceAttributeScaffoldYAML)
 		},
 	}
 	return cmd
 }
 
-func NewServiceAttributesCmd() *cobra.Command {
+func NewServiceAttributeCmd() *cobra.Command {
 	root := &cobra.Command{
-		Use:     "service-attributes",
+		Use:     "service-attribute",
 		GroupID: groups.Config.ID,
-		Short:   "All commands for ServiceAttributes",
+		Short:   "All commands for ServiceAttribute",
 	}
 
 	root.AddGroup(groups.Commands)
 	root.AddCommand(
-		newServiceAttributesCreateCmd(),
-		newServiceAttributesReadCmd(),
-		newServiceAttributesUpdateCmd(),
-		newServiceAttributesDeleteCmd(),
-		newServiceAttributesScaffoldCmd(),
+		newServiceAttributeCreateCmd(),
+		newServiceAttributeReadCmd(),
+		newServiceAttributeUpdateCmd(),
+		newServiceAttributeDeleteCmd(),
+		newServiceAttributeScaffoldCmd(),
 	)
 	return root
 }

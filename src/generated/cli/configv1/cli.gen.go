@@ -41,7 +41,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewRollupRuleCmd())
 	root.AddCommand(NewSLOCmd())
 	root.AddCommand(NewServiceAccountCmd())
-	root.AddCommand(NewServiceAttributesCmd())
+	root.AddCommand(NewServiceAttributeCmd())
 	root.AddCommand(NewTeamCmd())
 	root.AddCommand(NewTraceBehaviorCmd())
 	root.AddCommand(NewTraceBehaviorConfigCmd())
@@ -500,17 +500,17 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 			}
 			return nil
 		},
-		ServiceAttributesTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
-			entity, ok := obj.(*ServiceAttributes)
+		ServiceAttributeTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*ServiceAttribute)
 			if !ok {
-				return types.WrongObjectErr((&ServiceAttributes{}), obj)
+				return types.WrongObjectErr((&ServiceAttribute{}), obj)
 			}
 
 			updateOpts := UpdateOptions{
 				DryRun:          dryRun,
 				CreateIfMissing: true,
 			}
-			_, err := UpdateServiceAttributes(ctx, clients.ConfigV1, entity, updateOpts)
+			_, err := UpdateServiceAttribute(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

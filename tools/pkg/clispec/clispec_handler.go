@@ -100,9 +100,10 @@ func (c *cliSpecGen) getEntity(path string) (*Entity, error) {
 
 	var entityName string
 
-	// Special case service attributes nested path: /api/v1/config/services/{service_slug}/attributes
-	if len(pathParts) >= 6 && pathParts[3] == "services" && pathParts[5] == "attributes" {
-		entityName = "service-attributes"
+	// Handle service attributes paths - both nested and flat
+	if (len(pathParts) >= 6 && pathParts[3] == "services" && pathParts[5] == "attributes") ||
+		pathParts[3] == "service-attributes" {
+		entityName = "service-attribute"
 	} else {
 		entityName = pathParts[3]
 	}

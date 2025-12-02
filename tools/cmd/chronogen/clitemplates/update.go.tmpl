@@ -10,6 +10,9 @@ func Update{{ .Name }}(
 		{{- if .Entity.IsNotSingleton }}
 		Slug: entity.Spec.Slug,
 		Body: &models.{{.Pkg.Swagger}}Update{{ .Name }}Body{
+		{{- else if eq .Name "ServiceAttribute" }}
+		ServiceSlug: entity.Spec.ServiceSlug,
+		Body: &models.{{ .Pkg.Swagger }}Update{{ .Name }}Body{
 		{{ else }}
 		Body: &models.{{.Pkg.Model}}Update{{ .Name }}Request{
 		{{- end }}

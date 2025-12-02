@@ -4,12 +4,16 @@ func Delete{{ .Name }}(
 	client {{ .Pkg.Client }}.ClientService,
 	{{- if .Entity.IsNotSingleton }}
 	slug string,
+	{{- else if eq .Name "ServiceAttribute" }}
+	serviceSlug string,
 	{{- end }}
 ) error {
 	_, err := client.Delete{{ .Name }}(&{{ .Pkg.Client }}.Delete{{ .Name }}Params{
 	  Context: ctx,
 	{{- if .Entity.IsNotSingleton }}
 		Slug: slug,
+	{{- else if eq .Name "ServiceAttribute" }}
+		ServiceSlug: serviceSlug,
 	{{- end }}
 	})
 	if err != nil {
@@ -31,6 +35,11 @@ func new{{ .Name }}DeleteCmd() *cobra.Command {
 		Use: "delete <slug>",
 		GroupID: groups.Commands.ID,
 		Short: "Deletes a single {{ .Name }} by slug",
+		Args: cobra.ExactArgs(1),
+		{{- else if eq .Name "ServiceAttribute" }}
+		Use: "delete <service_slug>",
+		GroupID: groups.Commands.ID,
+		Short: "Deletes a single {{ .Name }} by service slug",
 		Args: cobra.ExactArgs(1),
 		{{- else }}
 		Use: "delete",
@@ -55,6 +64,8 @@ func new{{ .Name }}DeleteCmd() *cobra.Command {
 				Context: ctx,
 				{{- if .Entity.IsNotSingleton }}
 				Slug:  args[0],
+				{{- else if eq .Name "ServiceAttribute" }}
+				ServiceSlug:  args[0],
 				{{- end }}
 				{{- if .Entity.SupportsForceDelete }}
 				ForceDelete: &forceDelete,
@@ -67,7 +78,11 @@ func new{{ .Name }}DeleteCmd() *cobra.Command {
 			{{- if .Entity.IsNotSingleton }}
 			fmt.Fprintf(cmd.OutOrStdout(), "deleted {{ .Name }} with slug %q\n", args[0])
 			{{ else }}
+			{{- if eq .Name "ServiceAttribute" }}
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted {{ .Name }} with service slug %q\n", args[0])
+			{{- else }}
 			fmt.Fprintf(cmd.OutOrStdout(), "deleted {{ .Name }}")
+			{{- end }}
 			{{- end }}
 			{{- if .Entity.SupportsForceDelete }}
 			for _, change := range res.Payload.Changes {
