@@ -112,7 +112,7 @@ func new{{ .Name }}CreateCmd() *cobra.Command {
 			}
 
 			{{- if .Entity.IsNotSingleton }}
-			stderr.Printf("{{ .Name }} with slug %q created successfully\n", full{{ .Name }}.Spec.Slug)
+			stderr.Printf("{{ .Name }} with slug %q created successfully\n", full{{ .Name }}.Spec.{{ .Entity.SlugFieldName }})
 			{{ else }}
 			stderr.Printf("{{ .Name }} created successfully\n")
 			{{- end }}

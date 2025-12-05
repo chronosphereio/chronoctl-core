@@ -114,6 +114,12 @@ func (c *Command) SupportsDryRun() bool {
 // 2. There is a  list path.
 // 3. Update is parameterized.
 func (e *Entity) processSingleton() {
+	// service-attribute is a special case - it has both individual CRUD operations
+	// and global list functionality, so we don't want to treat it as a singleton
+	if e.Name == "service-attribute" {
+		return
+	}
+	
 	updateNotParamerterized := e.Update != nil && !isParameterizedPath(e.Update.Path)
 	if e.Get == nil && e.List != nil && updateNotParamerterized {
 		e.IsSingleton = true
