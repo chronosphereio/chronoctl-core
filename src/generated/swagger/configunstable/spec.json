@@ -1080,6 +1080,9 @@
         "materialize_expression": {
           "description": "Materialize expression allows providing more complex instructions\nhow to get field value, for example using conditions, instead\nof simply targeting field defined by targeted_field.\nIf materialize_expression is provided targeted_field should be empty.",
           "type": "string"
+        },
+        "origin": {
+          "type": "string"
         }
       },
       "type": "object"

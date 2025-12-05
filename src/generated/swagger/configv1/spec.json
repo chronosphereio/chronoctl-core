@@ -6138,6 +6138,10 @@
         },
         "graphite_label_policy": {
           "$ref": "#/definitions/RollupRuleGraphiteLabelPolicy"
+        },
+        "skip_on_conflict": {
+          "description": "If `true`, this rollup rule is skipped if another rollup rule produces the same output metric name.",
+          "type": "boolean"
         }
       },
       "type": "object"
