@@ -50,9 +50,6 @@ type ConfigunstableLogInternalMaterializedField struct {
 	// of simply targeting field defined by targeted_field.
 	// If materialize_expression is provided targeted_field should be empty.
 	MaterializeExpression string `json:"materialize_expression,omitempty"`
-
-	// origin
-	Origin string `json:"origin,omitempty"`
 }
 
 // Validate validates this configunstable log internal materialized field
