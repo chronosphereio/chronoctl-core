@@ -291,9 +291,7 @@ func (c *cliSpecGen) EndParam() error {
 
 // A parameterized path is one that contains a path parameter, e.g. /foo/{bar}.
 func isParameterizedPath(path string) bool {
-	parts := strings.Split(path, "/")
-	last := parts[len(parts)-1]
-	return strings.HasPrefix(last, "{")
+	return strings.Contains(path, "{")
 }
 
 func parameterPlace(in string) (ParameterPlace, error) {

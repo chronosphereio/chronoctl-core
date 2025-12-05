@@ -144,6 +144,67 @@ func newServiceAttributeCreateCmd() *cobra.Command {
 	return cmd
 }
 
+func GetServiceAttribute(
+	ctx context.Context,
+	client config_v1.ClientService,
+	serviceSlug string,
+) (*ServiceAttribute, error) {
+	res, err := client.ReadServiceAttribute(&config_v1.ReadServiceAttributeParams{
+		Context:     ctx,
+		ServiceSlug: serviceSlug,
+	})
+	if err != nil {
+		return nil, clienterror.Wrap(err)
+	}
+	return NewServiceAttribute(res.GetPayload().ServiceAttribute), nil
+}
+
+func newServiceAttributeReadCmd() *cobra.Command {
+	clientFlags := client.NewClientFlags()
+	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
+	var (
+		short string
+		use   string
+		args  cobra.PositionalArgs
+	)
+	short = "Reads a single ServiceAttribute by slug"
+	use = "read <slug>"
+	args = cobra.ExactArgs(1)
+
+	cmd := &cobra.Command{
+		Use:     use,
+		GroupID: groups.Commands.ID,
+		Short:   short,
+		Args:    args,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
+			defer cancel()
+			if err := outputFlags.Validate(); err != nil {
+				return err
+			}
+			defer outputFlags.Close(cmd.OutOrStdout())
+
+			client, err := clientFlags.ConfigV1Client()
+			if err != nil {
+				return err
+			}
+			entity, err := GetServiceAttribute(ctx, client, args[0])
+			if err != nil {
+				return err
+			}
+			if err := outputFlags.WriteObject(entity, cmd.OutOrStdout()); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+
+	clientFlags.AddFlags(cmd)
+	outputFlags.AddFlags(cmd)
+
+	return cmd
+}
+
 func UpdateServiceAttribute(
 	ctx context.Context,
 	client config_v1.ClientService,
@@ -462,6 +523,7 @@ func NewServiceAttributeCmd() *cobra.Command {
 	root.AddGroup(groups.Commands)
 	root.AddCommand(
 		newServiceAttributeCreateCmd(),
+		newServiceAttributeReadCmd(),
 		newServiceAttributeUpdateCmd(),
 		newServiceAttributeDeleteCmd(),
 		newServiceAttributeListCmd(),

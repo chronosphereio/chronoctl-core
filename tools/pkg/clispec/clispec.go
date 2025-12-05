@@ -115,7 +115,7 @@ func (c *Command) SupportsDryRun() bool {
 // 3. Update is parameterized.
 func (e *Entity) processSingleton() {
 	// service-attribute is a special case - it has both individual CRUD operations
-	// and global list functionality, so we don't want to treat it as a singleton
+	// and global list functionality, so we should not treat it as a singleton
 	if e.Name == "service-attribute" {
 		return
 	}
