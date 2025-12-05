@@ -303,12 +303,12 @@ type ServiceAttributeListOpts struct {
 	PageToken string
 	// PageMaxSize is the maximum page size to use when making List calls.
 	PageMaxSize int
-	Slugs []string
+	Slugs       []string
 }
 
 func (r *ServiceAttributeListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any ServiceAttribute with a matching slug in the given list (and matches all other filters) will be returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
