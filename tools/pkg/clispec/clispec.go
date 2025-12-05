@@ -119,7 +119,7 @@ func (e *Entity) processSingleton() {
 	if e.Name == "service-attribute" {
 		return
 	}
-	
+
 	updateNotParamerterized := e.Update != nil && !isParameterizedPath(e.Update.Path)
 	if e.Get == nil && e.List != nil && updateNotParamerterized {
 		e.IsSingleton = true
@@ -257,12 +257,6 @@ func (p *Parameter) FlagType() string {
 
 // SwaggerName returns the name of the field in the Swagger generated List parameters.
 func (p *Parameter) SwaggerName() string {
-	// Special case: for service-attribute entities, ensure "slugs" parameter stays as "Slugs"
-	// and doesn't get transformed to use EntityLinkedSingletonSlug
-	if p.Name == "slugs" {
-		return "Slugs"
-	}
-
 	name := inflect.Camelize(p.Name)
 
 	// Camelize doesn't handle acronyms, and uses Json instead of JSON.
