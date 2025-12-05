@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Add `skip_on_conflict` field to `chronosphere_rollup_rule` resource.
+
 ## v1.16.0
 
 * Adds new resource `v1/config/AzureMetricsIntegration`
