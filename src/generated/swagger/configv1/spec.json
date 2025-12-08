@@ -6140,7 +6140,7 @@
           "$ref": "#/definitions/RollupRuleGraphiteLabelPolicy"
         },
         "skip_on_conflict": {
-          "description": "If `true`, this rollup rule is skipped if another rollup rule produces the same output metric name.",
+          "description": "If true, this rollup rule is skipped if another rollup rule produces a\nmetric with the same output name. Use this flag to write rollup rules that\nproduce metrics only if no other rollup rule produces a series with the\nsame name.",
           "type": "boolean"
         }
       },

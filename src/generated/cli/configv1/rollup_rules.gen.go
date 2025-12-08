@@ -565,7 +565,10 @@ spec:
     # Defines whether to automatically generate drop rules for this rollup rule. Set
     # to 'true' to remove raw metrics that match this rollup rule. Default: 'false'.
     drop_raw: <true|false>
-    # If 'true', this rollup rule is skipped if another rollup rule produces the same output metric name.
+    # If true, this rollup rule is skipped if another rollup rule produces a
+    # metric with the same output name. Use this flag to write rollup rules that
+    # produce metrics only if no other rollup rule produces a series with the
+    # same name.
     skip_on_conflict: <true|false>
     aggregation: <LAST|MIN|MAX|MEAN|MEDIAN|COUNT|SUM|SUMSQ|STDEV|P10|P20|P30|P40|P50|P60|P70|P80|P90|P95|P99|P999|P9999|P25|P75|COUNT_SAMPLES|HISTOGRAM>
     graphite_label_policy:
