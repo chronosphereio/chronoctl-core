@@ -5,16 +5,20 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/chronosphereio/chronoctl-core/src/cmd/cli"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/client"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/clienterror"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/dry"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/file"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/output"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/pagination"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/ptr"
 	config_v1 "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/client/operations"
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 	"github.com/chronosphereio/chronoctl-core/src/types"
 	"github.com/spf13/cobra"
+	flag "github.com/spf13/pflag"
 )
 
 func init() { types.MustRegisterObject(ServiceAttributeTypeMeta, &ServiceAttribute{}) }
@@ -39,11 +43,11 @@ func NewServiceAttribute(spec *models.Configv1ServiceAttribute) *ServiceAttribut
 }
 
 func (e *ServiceAttribute) Description() string {
-	return types.TypeDescription(e)
+	return types.TypeDescription(e, "name", e.Spec.Name, "slug", e.Spec.ServiceSlug)
 }
 
 func (e *ServiceAttribute) Identifier() string {
-	return "ServiceAttribute"
+	return e.Spec.ServiceSlug
 }
 
 func CreateServiceAttribute(
@@ -123,7 +127,7 @@ func newServiceAttributeCreateCmd() *cobra.Command {
 				stderr.Println("ServiceAttribute is valid and can be created")
 				return nil
 			}
-			stderr.Printf("ServiceAttribute created successfully\n")
+			stderr.Printf("ServiceAttribute with slug %q created successfully\n", fullServiceAttribute.Spec.ServiceSlug)
 
 			if err := outputFlags.WriteObject(fullServiceAttribute, cmd.OutOrStdout()); err != nil {
 				return err
@@ -163,8 +167,8 @@ func newServiceAttributeReadCmd() *cobra.Command {
 		use   string
 		args  cobra.PositionalArgs
 	)
-	short = "Reads a single ServiceAttribute by serviceSlug"
-	use = "read <serviceSlug>"
+	short = "Reads a single ServiceAttribute by slug"
+	use = "read <slug>"
 	args = cobra.ExactArgs(1)
 
 	cmd := &cobra.Command{
@@ -280,7 +284,7 @@ func newServiceAttributeUpdateCmd() *cobra.Command {
 				stderr.Println("ServiceAttribute is valid and can be updated")
 				return nil
 			}
-			stderr.Printf("ServiceAttribute applied successfully\n")
+			stderr.Printf("ServiceAttribute with slug %q applied successfully\n", fullServiceAttribute.Spec.ServiceSlug)
 
 			if err := outputFlags.WriteObject(fullServiceAttribute, cmd.OutOrStdout()); err != nil {
 				return err
@@ -318,9 +322,9 @@ func newServiceAttributeDeleteCmd() *cobra.Command {
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
-		Use:     "delete <serviceSlug>",
+		Use:     "delete <slug>",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes a single ServiceAttribute by serviceSlug",
+		Short:   "Deletes a single ServiceAttribute by slug",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -350,6 +354,134 @@ func newServiceAttributeDeleteCmd() *cobra.Command {
 	}
 	clientFlags.AddFlags(cmd)
 	outputFlags.AddFlags(cmd)
+	return cmd
+}
+
+type ServiceAttributeListOpts struct {
+	// Limit represents that maximum number of items we wish to return.
+	Limit int
+	// PageToken is the pagination token we want to start our request at.
+	PageToken string
+	// PageMaxSize is the maximum page size to use when making List calls.
+	PageMaxSize int
+	Slugs       []string
+}
+
+func (r *ServiceAttributeListOpts) registerFlags(flags *flag.FlagSet) {
+	var emptySlugs []string
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "")
+	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
+	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
+	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
+}
+
+func ListServiceAttributes(
+	ctx context.Context,
+	client config_v1.ClientService,
+	streamer output.Streamer[*ServiceAttribute],
+	opts ServiceAttributeListOpts,
+) (pagination.Token, error) {
+	var (
+		gotItems    = 0
+		nextToken   = opts.PageToken
+		pageMaxSize = opts.PageMaxSize
+	)
+
+	// Use the limit if it's set, and smaller than a set page size.
+	if opts.Limit > 0 && (opts.Limit < pageMaxSize || pageMaxSize == 0) {
+		pageMaxSize = opts.Limit
+	}
+
+	for {
+		res, err := client.ListServiceAttributes(&config_v1.ListServiceAttributesParams{
+			Context:     ctx,
+			PageToken:   &nextToken,
+			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
+			Slugs:       opts.Slugs,
+		})
+		if err != nil {
+			return pagination.Token(""), clienterror.Wrap(err)
+		}
+
+		for _, v := range res.Payload.ServiceAttributes {
+			if err := streamer(NewServiceAttribute(v)); err != nil {
+				return pagination.Token(""), err
+			}
+			gotItems++
+		}
+
+		nextToken = res.Payload.Page.NextToken
+		if nextToken == "" {
+			return pagination.Token(""), nil
+		}
+
+		if opts.Limit > 0 && gotItems >= opts.Limit {
+			return pagination.Token(nextToken), nil
+		}
+
+		pageMaxSize = pagination.CalculatePageSize(pagination.Calculation{
+			GotItems:    gotItems,
+			MaxItems:    opts.Limit,
+			MaxPageSize: len(res.Payload.ServiceAttributes),
+		})
+	}
+}
+
+func newServiceAttributeListCmd() *cobra.Command {
+	var listOptions ServiceAttributeListOpts
+	clientFlags := client.NewClientFlags()
+	outputFlags := output.NewFlags()
+
+	cmd := &cobra.Command{
+		Use:     "list",
+		Short:   "Lists all ServiceAttributes and applies optional filters",
+		GroupID: groups.Commands.ID,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
+			defer cancel()
+			if err := outputFlags.Validate(); err != nil {
+				return err
+			}
+
+			writer, err := outputFlags.NewWriterManager(cmd.OutOrStdout())
+			if err != nil {
+				return err
+			}
+			defer writer.Close()
+
+			client, err := clientFlags.ConfigV1Client()
+			if err != nil {
+				return err
+			}
+
+			streamer := output.NewWriteObjectStreamer[*ServiceAttribute](writer)
+			nextToken, err := ListServiceAttributes(ctx, client, streamer, listOptions)
+			if err != nil {
+				return err
+			}
+
+			if nextToken != "" {
+				nextPage := pagination.Result{
+					Kind:          pagination.ResultKind,
+					Message:       "There are additional serviceAttributes. To view more, use the next page token or run the full command.",
+					NextPageToken: nextToken,
+					FullCommand: fmt.Sprintf("%s --page-token %q",
+						cli.BuildCommandString(cmd, []string{"page-token"}),
+						nextToken),
+				}
+				if err := outputFlags.WriteObject(nextPage, cmd.OutOrStdout()); err != nil {
+					return err
+				}
+			}
+
+			return nil
+		},
+	}
+
+	listOptions.registerFlags(cmd.Flags())
+	clientFlags.AddFlags(cmd)
+	outputFlags.AddFlags(cmd)
+
 	return cmd
 }
 
@@ -385,7 +517,7 @@ func NewServiceAttributeCmd() *cobra.Command {
 	root := &cobra.Command{
 		Use:     "service-attribute",
 		GroupID: groups.Config.ID,
-		Short:   "All commands for ServiceAttribute",
+		Short:   "All commands for ServiceAttributes",
 	}
 
 	root.AddGroup(groups.Commands)
@@ -394,6 +526,7 @@ func NewServiceAttributeCmd() *cobra.Command {
 		newServiceAttributeReadCmd(),
 		newServiceAttributeUpdateCmd(),
 		newServiceAttributeDeleteCmd(),
+		newServiceAttributeListCmd(),
 		newServiceAttributeScaffoldCmd(),
 	)
 	return root

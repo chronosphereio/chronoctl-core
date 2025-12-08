@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Adds new resource for service attributes. 
+
 ## v1.16.0
 
 * Adds new resource `v1/config/AzureMetricsIntegration`

@@ -7,14 +7,23 @@ type {{ .Name }}ListOpts struct {
 	// PageMaxSize is the maximum page size to use when making List calls. 
 	PageMaxSize int 
 {{- range .ListParameters }}
+	{{- if and (ne $.Entity.EntityLinkedSingletonSlug "") (eq .Name "slugs") }}
+	Slugs {{ .GoType }}
+	{{- else }}
 	{{ .SwaggerName }} {{ .GoType }}
+	{{- end }}
 {{- end }}
 }
 
 func (r *{{ .Name }}ListOpts) registerFlags(flags *flag.FlagSet) {
 {{- range .ListParameters }}
+	{{- if and (ne $.Entity.EntityLinkedSingletonSlug "") (eq .Name "slugs") }}
+	var emptySlugs {{ .GoType }}
+	flags.{{ .FlagType }}(&r.Slugs, "{{ .Name | dasherize }}", emptySlugs, "{{ .Description | stripNewlines }}")
+	{{- else }}
 	var empty{{ .SwaggerName }} {{ .GoType }}
 	flags.{{ .FlagType }}(&r.{{ .SwaggerName }}, "{{ .Name | dasherize }}", empty{{ .SwaggerName }}, "{{ .Description | stripNewlines }}")
+	{{- end }}
 {{- end }}
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
@@ -43,9 +52,13 @@ func List{{ .NameP }}(
 			Context: ctx,
 			PageToken: &nextToken,
 			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
-			{{ range .ListParameters -}}
+			{{- range .ListParameters }}
+			{{- if and (ne $.Entity.EntityLinkedSingletonSlug "") (eq .Name "slugs") }}
+			Slugs: opts.Slugs,
+			{{- else }}
 			{{ .SwaggerName }}: {{ if shouldReference . -}}&{{ end -}}opts.{{ .SwaggerName }},
-			{{ end -}}
+			{{- end }}
+			{{- end }}
 		})
 		if err != nil {
 			return pagination.Token(""), clienterror.Wrap(err)

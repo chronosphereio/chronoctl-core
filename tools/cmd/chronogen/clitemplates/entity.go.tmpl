@@ -50,7 +50,7 @@ func New{{ .Name }}(spec *models.{{ .ModelName }}) *{{ .Name }} {
 
 func (e *{{ .Name }}) Description() string {
 	{{- if .Entity.IsNotSingleton }}
-	return types.TypeDescription(e, "name", e.Spec.Name, "slug", e.Spec.Slug)
+	return types.TypeDescription(e, "name", e.Spec.Name, "slug", e.Spec.{{ .Entity.SlugFieldName }})
 	{{ else }}
 	return types.TypeDescription(e)
 	{{- end }}
@@ -58,7 +58,7 @@ func (e *{{ .Name }}) Description() string {
 
 func (e *{{ .Name }}) Identifier() string {
 	{{- if .Entity.IsNotSingleton }}
-	return e.Spec.Slug
+	return e.Spec.{{ .Entity.SlugFieldName }}
 	{{ else }}
 	return "{{ .Name }}"
 	{{- end }}
