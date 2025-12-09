@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+Added:
+* Add `skip_on_conflict` field to `v1/config/RollupRule`.
 * Adds new resource for service attributes. 
 
 ## v1.16.0

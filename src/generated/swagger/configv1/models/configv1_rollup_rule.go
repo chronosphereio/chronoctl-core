@@ -125,6 +125,12 @@ type Configv1RollupRule struct {
 
 	// graphite label policy
 	GraphiteLabelPolicy *RollupRuleGraphiteLabelPolicy `json:"graphite_label_policy,omitempty"`
+
+	// If true, this rollup rule is skipped if another rollup rule produces a
+	// metric with the same output name. Use this flag to write rollup rules that
+	// produce metrics only if no other rollup rule produces a series with the
+	// same name.
+	SkipOnConflict bool `json:"skip_on_conflict,omitempty"`
 }
 
 // Validate validates this configv1 rollup rule
