@@ -89,7 +89,7 @@ func new{{ .Name }}UpdateCmd() *cobra.Command {
 			}
 
 			{{- if .Entity.IsNotSingleton }}
-			stderr.Printf("{{ .Name }} with slug %q applied successfully\n", full{{ .Name }}.Spec.Slug)
+			stderr.Printf("{{ .Name }} with slug %q applied successfully\n", full{{ .Name }}.Spec.{{ .Entity.SlugFieldName }})
 			{{ else }}
 			stderr.Printf("{{ .Name }} applied successfully\n")
 			{{- end }}
