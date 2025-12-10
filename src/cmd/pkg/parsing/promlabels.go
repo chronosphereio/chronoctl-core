@@ -73,7 +73,7 @@ type PromLabels struct {
 
 // PromLabel represents a single key-value pair.
 type PromLabel struct {
-	Name  string `@Ident`                                     //nolint:govet
+	Name  string `@(Ident | String)`                          //nolint:govet
 	Op    string `@(("=" "~") | "=" | ("!" "=") | ("!" "~"))` //nolint:govet
 	Value string `@String`                                    //nolint:govet
 }

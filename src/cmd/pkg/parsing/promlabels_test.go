@@ -44,6 +44,13 @@ func TestFromPromLabelsToMutingRuleLabelMatchers(t *testing.T) {
 			},
 		},
 		{
+			expr: `{"foo.😎.bar"="baz", "a=b=c"!="def"}`,
+			expected: []*models.Configv1MutingRuleLabelMatcher{
+				{Name: "foo.😎.bar", Value: "baz", Type: models.Configv1MutingRuleLabelMatcherMatcherTypeEXACT},
+				{Name: "a=b=c", Value: "def", Type: models.Configv1MutingRuleLabelMatcherMatcherTypeNOTEXACT},
+			},
+		},
+		{
 			expr: `{foo="a\"b=c"}`,
 			expected: []*models.Configv1MutingRuleLabelMatcher{
 				{Name: "foo", Value: `a"b=c`, Type: models.Configv1MutingRuleLabelMatcherMatcherTypeEXACT},
@@ -75,10 +82,6 @@ func TestFromPromLabelsToMutingRuleLabelMatchers(t *testing.T) {
 		{
 			expr: `{foo="bar}`,
 			err:  "invalid labels string: 1:11: literal not terminated",
-		},
-		{
-			expr: `{"foo"="bar"}`,
-			err:  "invalid labels string: 1:2: unexpected token \"foo\" (expected \"}\")",
 		},
 		{
 			expr: `{foo=~"bar"}`,
