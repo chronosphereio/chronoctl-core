@@ -626,7 +626,9 @@
         "MONTHLY_VOLUME",
         "HOURLY_VOLUME",
         "ROLLING_1_HOUR_VOLUME",
-        "ROLLING_3_HOUR_VOLUME"
+        "ROLLING_3_HOUR_VOLUME",
+        "ROLLING_1_DAY_VOLUME",
+        "ROLLING_7_DAY_VOLUME"
       ],
       "type": "string"
     },
@@ -900,6 +902,17 @@
       ],
       "type": "string"
     },
+    "GcpMetricsIntegrationLabelContext": {
+      "description": "- RESOURCE_LABELS: Scopes labels to resources.\n - METRIC_LABELS: Scopes labels to metrics.\n - METADATA_SYSTEM_LABELS: Scopes labels to system metadata.\n - METADATA_USER_LABELS: Scopes labels to user metadata.",
+      "enum": [
+        "RESOURCE_LABELS",
+        "METRIC_LABELS",
+        "METADATA_SYSTEM_LABELS",
+        "METADATA_USER_LABELS"
+      ],
+      "title": "LabelContext represents the scope of a label in GCP (used for filters and aggregations).",
+      "type": "string"
+    },
     "GcpMetricsIntegrationMetricGroup": {
       "properties": {
         "project_id": {
@@ -914,6 +927,32 @@
           "type": "array"
         }
       },
+      "type": "object"
+    },
+    "GcpMetricsIntegrationRollupRuleLabel": {
+      "properties": {
+        "name": {
+          "description": "Name of the label.",
+          "type": "string"
+        },
+        "context": {
+          "$ref": "#/definitions/GcpMetricsIntegrationLabelContext"
+        }
+      },
+      "title": "Specifies a label to keep during aggregation.",
+      "type": "object"
+    },
+    "GcpMetricsIntegrationRollupRuleLabelPolicy": {
+      "properties": {
+        "keep": {
+          "description": "Labels to keep during aggregation.",
+          "items": {
+            "$ref": "#/definitions/GcpMetricsIntegrationRollupRuleLabel"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Specifies which labels to preserve during aggregation.",
       "type": "object"
     },
     "GraphiteLabelPolicyReplace": {
@@ -4461,6 +4500,50 @@
           "type": "array"
         }
       },
+      "type": "object"
+    },
+    "configv1GcpMetricsIntegrationAggregation": {
+      "enum": [
+        "MEAN",
+        "MIN",
+        "MAX",
+        "SUM",
+        "COUNT"
+      ],
+      "title": "Specifies the cross-series aggregation method.",
+      "type": "string"
+    },
+    "configv1GcpMetricsIntegrationFilter": {
+      "properties": {
+        "name": {
+          "description": "Label name to filter on.",
+          "type": "string"
+        },
+        "value_glob": {
+          "description": "Value pattern using glob syntax, such as `\"prod-*\"` or `\"us-east-?\"`.\nIf a glob pattern isn't specified, an exact match is applied.",
+          "type": "string"
+        },
+        "context": {
+          "$ref": "#/definitions/GcpMetricsIntegrationLabelContext"
+        }
+      },
+      "title": "Defines a filter to apply to metrics.",
+      "type": "object"
+    },
+    "configv1GcpMetricsIntegrationRollupRule": {
+      "properties": {
+        "metric_name": {
+          "description": "Metric name to apply the aggregation to, such as `\"cloudsql.googleapis.com/database/uptime\"`.",
+          "type": "string"
+        },
+        "aggregation": {
+          "$ref": "#/definitions/configv1GcpMetricsIntegrationAggregation"
+        },
+        "label_policy": {
+          "$ref": "#/definitions/GcpMetricsIntegrationRollupRuleLabelPolicy"
+        }
+      },
+      "title": "Defines server-side aggregation rules for metrics.",
       "type": "object"
     },
     "configv1GcpMetricsIntegrationServiceAccount": {

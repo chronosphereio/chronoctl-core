@@ -541,7 +541,7 @@ spec:
           instant_rate:
             # Value of the fixed rate threshold.
             fixed_value_per_sec: <int64>
-          type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME|HOURLY_VOLUME|ROLLING_1_HOUR_VOLUME|ROLLING_3_HOUR_VOLUME>
+          type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME|HOURLY_VOLUME|ROLLING_1_HOUR_VOLUME|ROLLING_3_HOUR_VOLUME|ROLLING_1_DAY_VOLUME|ROLLING_7_DAY_VOLUME>
           volume:
             # Value of the volume threshold.
             fixed_value: <int64>
