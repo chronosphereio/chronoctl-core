@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v1.18.0
+
+Added:
+* Add `ROLLING_1_DAY_VOLUME` and `ROLLING_7_DAY_VOLUME` thresholds to `v1/config/ConsumptionBudget`.
+* Update Prom label grammar to support UTF-8 label names.
+
 ## v1.17.0
 
 Added:
