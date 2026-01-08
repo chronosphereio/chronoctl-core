@@ -517,7 +517,6 @@ spec:
     dashboard_json: <string>
     collection:
         slug: <string>
-        # Type values must match entitiespb.Collection.CollectionType.
         type: <SIMPLE|SERVICE>
 `
 

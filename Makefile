@@ -103,3 +103,4 @@ release-snapshot:
 	@echo Building binaries with goreleaser
 	# --snapshot mode allows building artifacts w/o release tag present and w/ publishing mode disabled useful when we want to test whether we can build binaries, but not publish yet.
 	make release GO_RELEASER_RELEASE_ARGS="--snapshot --clean --skip=publish"
+	

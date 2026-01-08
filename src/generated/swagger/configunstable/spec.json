@@ -84,6 +84,22 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateLogPrimaryKeyBody": {
+      "properties": {
+        "log_primary_key": {
+          "$ref": "#/definitions/configunstableLogPrimaryKey"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the LogPrimaryKey will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the LogPrimaryKey does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the LogPrimaryKey. If the specified configuration is valid, the endpoint returns a partial response without the LogPrimaryKey. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateNoopEntityBody": {
       "properties": {
         "noop_entity": {
@@ -172,6 +188,19 @@
         "FLOAT_64"
       ],
       "type": "string"
+    },
+    "LogPrimaryKeyLogPrimaryKeyField": {
+      "properties": {
+        "name": {
+          "description": "name of the field as it will be referred to in queries; could be omitted and targeted_field would be used as the PK name in that case",
+          "type": "string"
+        },
+        "source": {
+          "description": "source is the name of the source field",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "NoopEntityNestedEnum": {
       "enum": [
@@ -689,6 +718,26 @@
       },
       "type": "object"
     },
+    "configunstableCreateLogPrimaryKeyRequest": {
+      "properties": {
+        "log_primary_key": {
+          "$ref": "#/definitions/configunstableLogPrimaryKey"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the LogPrimaryKey. If the specified configuration is valid, the endpoint returns a partial response without the LogPrimaryKey. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateLogPrimaryKeyResponse": {
+      "properties": {
+        "log_primary_key": {
+          "$ref": "#/definitions/configunstableLogPrimaryKey"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateNoopEntityRequest": {
       "properties": {
         "noop_entity": {
@@ -873,6 +922,9 @@
     "configunstableDeleteLogInternalMaterializedFieldResponse": {
       "type": "object"
     },
+    "configunstableDeleteLogPrimaryKeyResponse": {
+      "type": "object"
+    },
     "configunstableDeleteNoopEntityResponse": {
       "properties": {
         "not_hidden": {
@@ -968,6 +1020,20 @@
         "log_internal_materialized_fields": {
           "items": {
             "$ref": "#/definitions/configunstableLogInternalMaterializedField"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListLogPrimaryKeysResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "log_primary_keys": {
+          "items": {
+            "$ref": "#/definitions/configunstableLogPrimaryKey"
           },
           "type": "array"
         }
@@ -1087,6 +1153,41 @@
       },
       "type": "object"
     },
+    "configunstableLogPrimaryKey": {
+      "properties": {
+        "slug": {
+          "description": "The unique identifier of the LogPrimaryKey. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the LogPrimaryKey is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the LogPrimaryKey. You can modify this value after the LogPrimaryKey is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the LogPrimaryKey was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the LogPrimaryKey was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "version": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/definitions/LogPrimaryKeyLogPrimaryKeyField"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configunstableNoopEntity": {
       "properties": {
         "slug": {
@@ -1160,6 +1261,14 @@
       "properties": {
         "log_internal_materialized_field": {
           "$ref": "#/definitions/configunstableLogInternalMaterializedField"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadLogPrimaryKeyResponse": {
+      "properties": {
+        "log_primary_key": {
+          "$ref": "#/definitions/configunstableLogPrimaryKey"
         }
       },
       "type": "object"
@@ -1471,6 +1580,14 @@
       "properties": {
         "log_internal_materialized_field": {
           "$ref": "#/definitions/configunstableLogInternalMaterializedField"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateLogPrimaryKeyResponse": {
+      "properties": {
+        "log_primary_key": {
+          "$ref": "#/definitions/configunstableLogPrimaryKey"
         }
       },
       "type": "object"
@@ -2165,6 +2282,265 @@
         },
         "tags": [
           "LinkTemplate"
+        ]
+      }
+    },
+    "/api/unstable/config/log-primary-keys": {
+      "get": {
+        "operationId": "ListLogPrimaryKeys",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any LogPrimaryKey with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any LogPrimaryKey with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListLogPrimaryKeysResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogPrimaryKey"
+        ]
+      },
+      "post": {
+        "operationId": "CreateLogPrimaryKey",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateLogPrimaryKeyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created LogPrimaryKey.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateLogPrimaryKeyResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the LogPrimaryKey because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the LogPrimaryKey because there is a conflict with an existing LogPrimaryKey.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogPrimaryKey"
+        ]
+      }
+    },
+    "/api/unstable/config/log-primary-keys/{slug}": {
+      "delete": {
+        "operationId": "DeleteLogPrimaryKey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteLogPrimaryKeyResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the LogPrimaryKey because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the LogPrimaryKey because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogPrimaryKey"
+        ]
+      },
+      "get": {
+        "operationId": "ReadLogPrimaryKey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadLogPrimaryKeyResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the LogPrimaryKey because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogPrimaryKey"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateLogPrimaryKey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateLogPrimaryKeyBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated LogPrimaryKey.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateLogPrimaryKeyResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the LogPrimaryKey because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the LogPrimaryKey because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the LogPrimaryKey because there is a conflict with an existing LogPrimaryKey.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogPrimaryKey"
         ]
       }
     },
