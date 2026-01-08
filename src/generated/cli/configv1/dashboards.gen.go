@@ -512,7 +512,6 @@ spec:
         key_1: <string>
     collection:
         slug: <string>
-        # Type values must match entitiespb.Collection.CollectionType.
         type: <SIMPLE|SERVICE>
 `
 

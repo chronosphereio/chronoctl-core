@@ -32,6 +32,8 @@ type ClientService interface {
 
 	CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...ClientOption) (*CreateLinkTemplateOK, error)
 
+	CreateLogPrimaryKey(params *CreateLogPrimaryKeyParams, opts ...ClientOption) (*CreateLogPrimaryKeyOK, error)
+
 	CreateNoopEntity(params *CreateNoopEntityParams, opts ...ClientOption) (*CreateNoopEntityOK, error)
 
 	CreateObjectDiscoveryRule(params *CreateObjectDiscoveryRuleParams, opts ...ClientOption) (*CreateObjectDiscoveryRuleOK, error)
@@ -49,6 +51,8 @@ type ClientService interface {
 	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error)
 
 	DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...ClientOption) (*DeleteLinkTemplateOK, error)
+
+	DeleteLogPrimaryKey(params *DeleteLogPrimaryKeyParams, opts ...ClientOption) (*DeleteLogPrimaryKeyOK, error)
 
 	DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...ClientOption) (*DeleteNoopEntityOK, error)
 
@@ -68,6 +72,8 @@ type ClientService interface {
 
 	ListLinkTemplates(params *ListLinkTemplatesParams, opts ...ClientOption) (*ListLinkTemplatesOK, error)
 
+	ListLogPrimaryKeys(params *ListLogPrimaryKeysParams, opts ...ClientOption) (*ListLogPrimaryKeysOK, error)
+
 	ListObjectDiscoveryRule(params *ListObjectDiscoveryRuleParams, opts ...ClientOption) (*ListObjectDiscoveryRuleOK, error)
 
 	ListSavedTraceSearches(params *ListSavedTraceSearchesParams, opts ...ClientOption) (*ListSavedTraceSearchesOK, error)
@@ -79,6 +85,8 @@ type ClientService interface {
 	ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error)
 
 	ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...ClientOption) (*ReadLinkTemplateOK, error)
+
+	ReadLogPrimaryKey(params *ReadLogPrimaryKeyParams, opts ...ClientOption) (*ReadLogPrimaryKeyOK, error)
 
 	ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOption) (*ReadNoopEntityOK, error)
 
@@ -99,6 +107,8 @@ type ClientService interface {
 	UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOption) (*UpdateDashboardOK, error)
 
 	UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error)
+
+	UpdateLogPrimaryKey(params *UpdateLogPrimaryKeyParams, opts ...ClientOption) (*UpdateLogPrimaryKeyOK, error)
 
 	UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...ClientOption) (*UpdateNoopEntityOK, error)
 
@@ -188,6 +198,43 @@ func (a *Client) CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...Cl
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateLinkTemplateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateLogPrimaryKey create log primary key API
+*/
+func (a *Client) CreateLogPrimaryKey(params *CreateLogPrimaryKeyParams, opts ...ClientOption) (*CreateLogPrimaryKeyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateLogPrimaryKeyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateLogPrimaryKey",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/log-primary-keys",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateLogPrimaryKeyReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateLogPrimaryKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateLogPrimaryKeyDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -528,6 +575,43 @@ func (a *Client) DeleteLinkTemplate(params *DeleteLinkTemplateParams, opts ...Cl
 }
 
 /*
+DeleteLogPrimaryKey delete log primary key API
+*/
+func (a *Client) DeleteLogPrimaryKey(params *DeleteLogPrimaryKeyParams, opts ...ClientOption) (*DeleteLogPrimaryKeyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteLogPrimaryKeyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteLogPrimaryKey",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/log-primary-keys/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteLogPrimaryKeyReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteLogPrimaryKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteLogPrimaryKeyDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteNoopEntity delete noop entity API
 */
 func (a *Client) DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...ClientOption) (*DeleteNoopEntityOK, error) {
@@ -861,6 +945,43 @@ func (a *Client) ListLinkTemplates(params *ListLinkTemplatesParams, opts ...Clie
 }
 
 /*
+ListLogPrimaryKeys list log primary keys API
+*/
+func (a *Client) ListLogPrimaryKeys(params *ListLogPrimaryKeysParams, opts ...ClientOption) (*ListLogPrimaryKeysOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListLogPrimaryKeysParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListLogPrimaryKeys",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/log-primary-keys",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListLogPrimaryKeysReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListLogPrimaryKeysOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListLogPrimaryKeysDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListObjectDiscoveryRule list object discovery rule API
 */
 func (a *Client) ListObjectDiscoveryRule(params *ListObjectDiscoveryRuleParams, opts ...ClientOption) (*ListObjectDiscoveryRuleOK, error) {
@@ -1079,6 +1200,43 @@ func (a *Client) ReadLinkTemplate(params *ReadLinkTemplateParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadLinkTemplateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadLogPrimaryKey read log primary key API
+*/
+func (a *Client) ReadLogPrimaryKey(params *ReadLogPrimaryKeyParams, opts ...ClientOption) (*ReadLogPrimaryKeyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadLogPrimaryKeyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadLogPrimaryKey",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/log-primary-keys/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadLogPrimaryKeyReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadLogPrimaryKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadLogPrimaryKeyDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1452,6 +1610,43 @@ func (a *Client) UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...Cl
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateLinkTemplateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateLogPrimaryKey update log primary key API
+*/
+func (a *Client) UpdateLogPrimaryKey(params *UpdateLogPrimaryKeyParams, opts ...ClientOption) (*UpdateLogPrimaryKeyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateLogPrimaryKeyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateLogPrimaryKey",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/log-primary-keys/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateLogPrimaryKeyReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateLogPrimaryKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateLogPrimaryKeyDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

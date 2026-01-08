@@ -518,7 +518,6 @@ spec:
         key_1: <string>
     collection_ref:
         slug: <string>
-        # Type values must match entitiespb.Collection.CollectionType.
         type: <SIMPLE|SERVICE>
     definition:
         # The SLO target percentage, which represents the availability of the SLO.

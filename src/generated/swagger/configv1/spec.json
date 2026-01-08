@@ -903,14 +903,13 @@
       "type": "string"
     },
     "GcpMetricsIntegrationLabelContext": {
-      "description": "- RESOURCE_LABELS: Scopes labels to resources.\n - METRIC_LABELS: Scopes labels to metrics.\n - METADATA_SYSTEM_LABELS: Scopes labels to system metadata.\n - METADATA_USER_LABELS: Scopes labels to user metadata.",
+      "description": "LabelContext represents the scope of a label in GCP (used for filters and aggregations).\n\n - RESOURCE_LABELS: Scopes labels to resources.\n - METRIC_LABELS: Scopes labels to metrics.\n - METADATA_SYSTEM_LABELS: Scopes labels to system metadata.\n - METADATA_USER_LABELS: Scopes labels to user metadata.",
       "enum": [
         "RESOURCE_LABELS",
         "METRIC_LABELS",
         "METADATA_SYSTEM_LABELS",
         "METADATA_USER_LABELS"
       ],
-      "title": "LabelContext represents the scope of a label in GCP (used for filters and aggregations).",
       "type": "string"
     },
     "GcpMetricsIntegrationMetricGroup": {
@@ -920,9 +919,22 @@
           "type": "string"
         },
         "prefixes": {
-          "description": "A list of Google Cloud metric prefixes to ingest.",
+          "description": "A list of Google Cloud metric prefixes to ingest.\n\nFilters to apply to metrics in this group.",
           "items": {
             "type": "string"
+          },
+          "type": "array"
+        },
+        "filters": {
+          "description": "Rollup rules to apply server-side aggregations to metrics in this group.",
+          "items": {
+            "$ref": "#/definitions/configv1GcpMetricsIntegrationFilter"
+          },
+          "type": "array"
+        },
+        "rollup_rules": {
+          "items": {
+            "$ref": "#/definitions/configv1GcpMetricsIntegrationRollupRule"
           },
           "type": "array"
         }
@@ -930,6 +942,7 @@
       "type": "object"
     },
     "GcpMetricsIntegrationRollupRuleLabel": {
+      "description": "Specifies a label to keep during aggregation.",
       "properties": {
         "name": {
           "description": "Name of the label.",
@@ -939,10 +952,10 @@
           "$ref": "#/definitions/GcpMetricsIntegrationLabelContext"
         }
       },
-      "title": "Specifies a label to keep during aggregation.",
       "type": "object"
     },
     "GcpMetricsIntegrationRollupRuleLabelPolicy": {
+      "description": "Specifies which labels to preserve during aggregation.",
       "properties": {
         "keep": {
           "description": "Labels to keep during aggregation.",
@@ -952,7 +965,6 @@
           "type": "array"
         }
       },
-      "title": "Specifies which labels to preserve during aggregation.",
       "type": "object"
     },
     "GraphiteLabelPolicyReplace": {
@@ -1162,11 +1174,8 @@
       "type": "object"
     },
     "LogIngestConfigFieldNormalization": {
-      "description": "FieldNormalization allows you to map and normalize well-known fields from your logs.\nThese mappings run after parsing to standardize common fields like timestamp,\nseverity level, primary key name, and message across different log formats.",
+      "description": "FieldNormalization allows you to map and normalize well-known fields from your logs.\nThese mappings run after parsing to standardize common fields like timestamp,\nseverity level, and message across different log formats.",
       "properties": {
-        "primary_key": {
-          "$ref": "#/definitions/LogIngestConfigNamedStringNormalization"
-        },
         "timestamp": {
           "$ref": "#/definitions/LogIngestConfigTimestampNormalization"
         },
@@ -1182,6 +1191,9 @@
             "$ref": "#/definitions/LogIngestConfigNamedStringNormalization"
           },
           "type": "array"
+        },
+        "service": {
+          "$ref": "#/definitions/LogIngestConfigStringNormalization"
         }
       },
       "type": "object"
@@ -3272,11 +3284,11 @@
       "type": "object"
     },
     "configv1CollectionReferenceType": {
-      "description": "Type values must match entitiespb.Collection.CollectionType.",
       "enum": [
         "SIMPLE",
         "SERVICE"
       ],
+      "title": "Type values must match entitiespb.Collection.CollectionType.",
       "type": "string"
     },
     "configv1ConsumptionBudget": {
@@ -4503,6 +4515,7 @@
       "type": "object"
     },
     "configv1GcpMetricsIntegrationAggregation": {
+      "description": "Specifies the cross-series aggregation method.",
       "enum": [
         "MEAN",
         "MIN",
@@ -4510,10 +4523,10 @@
         "SUM",
         "COUNT"
       ],
-      "title": "Specifies the cross-series aggregation method.",
       "type": "string"
     },
     "configv1GcpMetricsIntegrationFilter": {
+      "description": "Defines a filter to apply to metrics.",
       "properties": {
         "name": {
           "description": "Label name to filter on.",
@@ -4527,10 +4540,10 @@
           "$ref": "#/definitions/GcpMetricsIntegrationLabelContext"
         }
       },
-      "title": "Defines a filter to apply to metrics.",
       "type": "object"
     },
     "configv1GcpMetricsIntegrationRollupRule": {
+      "description": "Defines server-side aggregation rules for metrics.",
       "properties": {
         "metric_name": {
           "description": "Metric name to apply the aggregation to, such as `\"cloudsql.googleapis.com/database/uptime\"`.",
@@ -4543,7 +4556,6 @@
           "$ref": "#/definitions/GcpMetricsIntegrationRollupRuleLabelPolicy"
         }
       },
-      "title": "Defines server-side aggregation rules for metrics.",
       "type": "object"
     },
     "configv1GcpMetricsIntegrationServiceAccount": {
@@ -8372,7 +8384,8 @@
               "enum": [
                 "LOG_PERSISTED_BYTES",
                 "LOG_PROCESSED_BYTES",
-                "METRIC_PERSISTED_SERIES"
+                "METRIC_PERSISTED_SERIES",
+                "METRIC_CREDITS"
               ],
               "type": "string"
             },

@@ -534,7 +534,6 @@ spec:
     logging_query: <string>
     collection:
         slug: <string>
-        # Type values must match entitiespb.Collection.CollectionType.
         type: <SIMPLE|SERVICE>
     schedule:
         # The timezone of the time ranges.

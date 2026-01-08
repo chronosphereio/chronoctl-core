@@ -16,7 +16,7 @@ import (
 
 // GcpMetricsIntegrationLabelContext LabelContext represents the scope of a label in GCP (used for filters and aggregations).
 //
-// - RESOURCE_LABELS: Scopes labels to resources.
+//   - RESOURCE_LABELS: Scopes labels to resources.
 //   - METRIC_LABELS: Scopes labels to metrics.
 //   - METADATA_SYSTEM_LABELS: Scopes labels to system metadata.
 //   - METADATA_USER_LABELS: Scopes labels to user metadata.

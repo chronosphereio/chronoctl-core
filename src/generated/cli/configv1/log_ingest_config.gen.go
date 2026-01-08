@@ -401,7 +401,7 @@ spec:
             selector: <string>
     # FieldNormalization allows you to map and normalize well-known fields from your logs.
     # These mappings run after parsing to standardize common fields like timestamp,
-    # severity level, primary key name, and message across different log formats.
+    # severity level, and message across different log formats.
     field_normalization:
         # Maps additional custom fields from your logs. These will not be indexed.
         # Use these for any other fields you want to normalize, such as environment, region, or user ID.
@@ -446,29 +446,25 @@ spec:
             # For example: "^.*level=([A-Z]+).*$" to extract log level from a string.
             sanitize_patterns:
                 - <string>
-        # NamedStringNormalization maps a field to a named target with optional transformations.
-        primary_key:
-            # The name of the target field where the normalized value will be stored.
-            target: <string>
-            # StringNormalization defines how to extract and transform string values from log fields.
-            normalization:
-                # List of field paths to check for values, in priority order.
-                # The first non-empty value found will be used.
-                source:
-                    - # The log filter used to indicate the field path. Use 'parent[child]' syntax to
-                      # indicate nesting.
-                      selector: <string>
-                # Default value to use when no source fields contain values.
-                default_value: <string>
-                # Optional mapping to normalize values.
-                # For example: {"warn": "WARNING", "err": "ERROR"} to standardize severity levels.
-                value_map:
-                    key_1: <string>
-                # Optional regex patterns to extract and sanitize values.
-                # Each pattern must have exactly one capturing group that will be used as the result.
-                # For example: "^.*level=([A-Z]+).*$" to extract log level from a string.
-                sanitize_patterns:
-                    - <string>
+        # StringNormalization defines how to extract and transform string values from log fields.
+        service:
+            # List of field paths to check for values, in priority order.
+            # The first non-empty value found will be used.
+            source:
+                - # The log filter used to indicate the field path. Use 'parent[child]' syntax to
+                  # indicate nesting.
+                  selector: <string>
+            # Default value to use when no source fields contain values.
+            default_value: <string>
+            # Optional mapping to normalize values.
+            # For example: {"warn": "WARNING", "err": "ERROR"} to standardize severity levels.
+            value_map:
+                key_1: <string>
+            # Optional regex patterns to extract and sanitize values.
+            # Each pattern must have exactly one capturing group that will be used as the result.
+            # For example: "^.*level=([A-Z]+).*$" to extract log level from a string.
+            sanitize_patterns:
+                - <string>
         # StringNormalization defines how to extract and transform string values from log fields.
         severity:
             # List of field paths to check for values, in priority order.

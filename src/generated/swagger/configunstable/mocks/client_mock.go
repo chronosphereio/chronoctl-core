@@ -75,6 +75,26 @@ func (mr *MockClientServiceMockRecorder) CreateLinkTemplate(params interface{}, 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLinkTemplate", reflect.TypeOf((*MockClientService)(nil).CreateLinkTemplate), varargs...)
 }
 
+// CreateLogPrimaryKey mocks base method.
+func (m *MockClientService) CreateLogPrimaryKey(params *operations.CreateLogPrimaryKeyParams, opts ...operations.ClientOption) (*operations.CreateLogPrimaryKeyOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateLogPrimaryKey", varargs...)
+	ret0, _ := ret[0].(*operations.CreateLogPrimaryKeyOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateLogPrimaryKey indicates an expected call of CreateLogPrimaryKey.
+func (mr *MockClientServiceMockRecorder) CreateLogPrimaryKey(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLogPrimaryKey", reflect.TypeOf((*MockClientService)(nil).CreateLogPrimaryKey), varargs...)
+}
+
 // CreateNoopEntity mocks base method.
 func (m *MockClientService) CreateNoopEntity(params *operations.CreateNoopEntityParams, opts ...operations.ClientOption) (*operations.CreateNoopEntityOK, error) {
 	m.ctrl.T.Helper()
@@ -253,6 +273,26 @@ func (mr *MockClientServiceMockRecorder) DeleteLinkTemplate(params interface{}, 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLinkTemplate", reflect.TypeOf((*MockClientService)(nil).DeleteLinkTemplate), varargs...)
+}
+
+// DeleteLogPrimaryKey mocks base method.
+func (m *MockClientService) DeleteLogPrimaryKey(params *operations.DeleteLogPrimaryKeyParams, opts ...operations.ClientOption) (*operations.DeleteLogPrimaryKeyOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteLogPrimaryKey", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteLogPrimaryKeyOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteLogPrimaryKey indicates an expected call of DeleteLogPrimaryKey.
+func (mr *MockClientServiceMockRecorder) DeleteLogPrimaryKey(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLogPrimaryKey", reflect.TypeOf((*MockClientService)(nil).DeleteLogPrimaryKey), varargs...)
 }
 
 // DeleteNoopEntity mocks base method.
@@ -435,6 +475,26 @@ func (mr *MockClientServiceMockRecorder) ListLinkTemplates(params interface{}, o
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListLinkTemplates", reflect.TypeOf((*MockClientService)(nil).ListLinkTemplates), varargs...)
 }
 
+// ListLogPrimaryKeys mocks base method.
+func (m *MockClientService) ListLogPrimaryKeys(params *operations.ListLogPrimaryKeysParams, opts ...operations.ClientOption) (*operations.ListLogPrimaryKeysOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListLogPrimaryKeys", varargs...)
+	ret0, _ := ret[0].(*operations.ListLogPrimaryKeysOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListLogPrimaryKeys indicates an expected call of ListLogPrimaryKeys.
+func (mr *MockClientServiceMockRecorder) ListLogPrimaryKeys(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListLogPrimaryKeys", reflect.TypeOf((*MockClientService)(nil).ListLogPrimaryKeys), varargs...)
+}
+
 // ListObjectDiscoveryRule mocks base method.
 func (m *MockClientService) ListObjectDiscoveryRule(params *operations.ListObjectDiscoveryRuleParams, opts ...operations.ClientOption) (*operations.ListObjectDiscoveryRuleOK, error) {
 	m.ctrl.T.Helper()
@@ -553,6 +613,26 @@ func (mr *MockClientServiceMockRecorder) ReadLinkTemplate(params interface{}, op
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLinkTemplate", reflect.TypeOf((*MockClientService)(nil).ReadLinkTemplate), varargs...)
+}
+
+// ReadLogPrimaryKey mocks base method.
+func (m *MockClientService) ReadLogPrimaryKey(params *operations.ReadLogPrimaryKeyParams, opts ...operations.ClientOption) (*operations.ReadLogPrimaryKeyOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadLogPrimaryKey", varargs...)
+	ret0, _ := ret[0].(*operations.ReadLogPrimaryKeyOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadLogPrimaryKey indicates an expected call of ReadLogPrimaryKey.
+func (mr *MockClientServiceMockRecorder) ReadLogPrimaryKey(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLogPrimaryKey", reflect.TypeOf((*MockClientService)(nil).ReadLogPrimaryKey), varargs...)
 }
 
 // ReadNoopEntity mocks base method.
@@ -765,6 +845,26 @@ func (mr *MockClientServiceMockRecorder) UpdateLinkTemplate(params interface{}, 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLinkTemplate", reflect.TypeOf((*MockClientService)(nil).UpdateLinkTemplate), varargs...)
+}
+
+// UpdateLogPrimaryKey mocks base method.
+func (m *MockClientService) UpdateLogPrimaryKey(params *operations.UpdateLogPrimaryKeyParams, opts ...operations.ClientOption) (*operations.UpdateLogPrimaryKeyOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateLogPrimaryKey", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateLogPrimaryKeyOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateLogPrimaryKey indicates an expected call of UpdateLogPrimaryKey.
+func (mr *MockClientServiceMockRecorder) UpdateLogPrimaryKey(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLogPrimaryKey", reflect.TypeOf((*MockClientService)(nil).UpdateLogPrimaryKey), varargs...)
 }
 
 // UpdateNoopEntity mocks base method.

@@ -500,8 +500,42 @@ spec:
         - # The Google Cloud project ID that can access the metric data.
           project_id: <string>
           # A list of Google Cloud metric prefixes to ingest.
+
+          # Filters to apply to metrics in this group.
           prefixes:
             - <string>
+          # Rollup rules to apply server-side aggregations to metrics in this group.
+          filters:
+            - # Label name to filter on.
+              name: <string>
+              # Value pattern using glob syntax, such as '"prod-*"' or '"us-east-?"'.
+              # If a glob pattern isn't specified, an exact match is applied.
+              value_glob: <string>
+              # LabelContext represents the scope of a label in GCP (used for filters and aggregations).
+
+              #  - RESOURCE_LABELS: Scopes labels to resources.
+              #  - METRIC_LABELS: Scopes labels to metrics.
+              #  - METADATA_SYSTEM_LABELS: Scopes labels to system metadata.
+              #  - METADATA_USER_LABELS: Scopes labels to user metadata.
+              context: <RESOURCE_LABELS|METRIC_LABELS|METADATA_SYSTEM_LABELS|METADATA_USER_LABELS>
+          rollup_rules:
+            - # Metric name to apply the aggregation to, such as '"cloudsql.googleapis.com/database/uptime"'.
+              metric_name: <string>
+              # Specifies the cross-series aggregation method.
+              aggregation: <MEAN|MIN|MAX|SUM|COUNT>
+              # Specifies which labels to preserve during aggregation.
+              label_policy:
+                # Labels to keep during aggregation.
+                keep:
+                    - # Name of the label.
+                      name: <string>
+                      # LabelContext represents the scope of a label in GCP (used for filters and aggregations).
+
+                      #  - RESOURCE_LABELS: Scopes labels to resources.
+                      #  - METRIC_LABELS: Scopes labels to metrics.
+                      #  - METADATA_SYSTEM_LABELS: Scopes labels to system metadata.
+                      #  - METADATA_USER_LABELS: Scopes labels to user metadata.
+                      context: <RESOURCE_LABELS|METRIC_LABELS|METADATA_SYSTEM_LABELS|METADATA_USER_LABELS>
     service_account:
         # The email address of the Google Cloud service account to impersonate for authentication.
         client_email: <string>
