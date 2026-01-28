@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v1.20.0
+
+Added:
+* Add `service` to `chronosphere_log_ingest_config` resource. This field replaces the `primary_key` field, which is deprecated. **This is a breaking change**.
+* Add `ROLLING_1_DAY_VOLUME` and `ROLLING_7_DAY_VOLUME` thresholds to `chronosphere_consumption_budget` resource.
+
+Deprecated:
+* Deprecate the `primary_key` field in the `chronosphere_log_ingest_config` resource in favor of the `service` field. This field can no longer be set.
+
 ## v1.18.0
 
 Added:
