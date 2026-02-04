@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Added:
+* Add `execution_mode` field to `v1/config/RecordingRule`.
+* Add `v1/config/ConsumptionBudget` resource.
+
 ## v1.20.0
 
 Added:
