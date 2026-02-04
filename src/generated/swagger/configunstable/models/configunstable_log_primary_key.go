@@ -37,7 +37,7 @@ type ConfigunstableLogPrimaryKey struct {
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
 	// version
-	Version int32 `json:"version,omitempty"`
+	Version int64 `json:"version,omitempty"`
 
 	// fields
 	Fields []*LogPrimaryKeyLogPrimaryKeyField `json:"fields"`

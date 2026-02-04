@@ -62,6 +62,9 @@ type Configv1RecordingRule struct {
 	// evaluated. Required if `bucket_slug` is not set.  If both `bucket_slug` and
 	// `execution_group` are set, their values must match.
 	ExecutionGroup string `json:"execution_group,omitempty"`
+
+	// execution mode
+	ExecutionMode RecordingRuleExecutionMode `json:"execution_mode,omitempty"`
 }
 
 // Validate validates this configv1 recording rule
@@ -77,6 +80,10 @@ func (m *Configv1RecordingRule) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateLabelPolicy(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateExecutionMode(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -129,6 +136,23 @@ func (m *Configv1RecordingRule) validateLabelPolicy(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *Configv1RecordingRule) validateExecutionMode(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExecutionMode) { // not required
+		return nil
+	}
+
+	if err := m.ExecutionMode.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("execution_mode")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("execution_mode")
+		}
+		return err
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 recording rule based on the context it is used
 func (m *Configv1RecordingRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -142,6 +166,10 @@ func (m *Configv1RecordingRule) ContextValidate(ctx context.Context, formats str
 	}
 
 	if err := m.contextValidateLabelPolicy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExecutionMode(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -185,6 +213,24 @@ func (m *Configv1RecordingRule) contextValidateLabelPolicy(ctx context.Context, 
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *Configv1RecordingRule) contextValidateExecutionMode(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ExecutionMode) { // not required
+		return nil
+	}
+
+	if err := m.ExecutionMode.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("execution_mode")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("execution_mode")
+		}
+		return err
 	}
 
 	return nil

@@ -601,7 +601,7 @@
     "ConsumptionBudgetPriorityFilter": {
       "properties": {
         "dataset_slug": {
-          "description": "If set, matches incoming data that belongs to the specified dataset.\nThe dataset type must match the budget resource. For example,\n`resource=LOG_PERSISTED_BYTES`, then the dataset type must be\n`type=LOGS`.\n\nExactly one of `dataset_slug` or `log_filter` must be set.",
+          "description": "If set, matches incoming data that belongs to the specified dataset.\n\nExactly one of `dataset_slug` or `log_filter` must be set.",
           "type": "string"
         },
         "log_filter": {
@@ -609,6 +609,13 @@
         }
       },
       "type": "object"
+    },
+    "ConsumptionBudgetSKUGroup": {
+      "enum": [
+        "LOG_PERSISTED_BYTES",
+        "LOG_PROCESSED_BYTES"
+      ],
+      "type": "string"
     },
     "ConsumptionBudgetThresholdAction": {
       "enum": [
@@ -629,6 +636,12 @@
         "ROLLING_3_HOUR_VOLUME",
         "ROLLING_1_DAY_VOLUME",
         "ROLLING_7_DAY_VOLUME"
+      ],
+      "type": "string"
+    },
+    "ConsumptionBudgetUnit": {
+      "enum": [
+        "NATIVE"
       ],
       "type": "string"
     },
@@ -2188,6 +2201,13 @@
       },
       "type": "object"
     },
+    "RecordingRuleExecutionMode": {
+      "description": "ExecutionMode controls how a recording rule is assigned to shards for execution.\n\n - EXECUTION_MODE_SYNCHRONIZED: Synchronized: shard rule by execution group, which ensures that all\nsynchronized rules in the same group execute on the same shard.",
+      "enum": [
+        "EXECUTION_MODE_SYNCHRONIZED"
+      ],
+      "type": "string"
+    },
     "ReplaceFieldMappedValue": {
       "description": "MappedValue is the configuration for mapped value replace mode.",
       "properties": {
@@ -3314,7 +3334,7 @@
           "type": "string"
         },
         "resource": {
-          "$ref": "#/definitions/configv1ConsumptionBudgetResource"
+          "$ref": "#/definitions/ConsumptionBudgetSKUGroup"
         },
         "partition_slug_path": {
           "description": "Path of the budget's partition, delimited by forward slashes (`/`), in the\nformat `global/SLUG1/SLUG2`, where `SLUG1` is a top-level partition, and `SLUG2`\nis a child partition of `SLUG1`.\n\nA well-formed partition path always starts with the `global` partition slug, and\nhas no leading or trailing forward slashes.",
@@ -3349,13 +3369,6 @@
       },
       "type": "object"
     },
-    "configv1ConsumptionBudgetResource": {
-      "enum": [
-        "LOG_PERSISTED_BYTES",
-        "LOG_PROCESSED_BYTES"
-      ],
-      "type": "string"
-    },
     "configv1ConsumptionBudgetThreshold": {
       "properties": {
         "action": {
@@ -3369,6 +3382,12 @@
         },
         "volume": {
           "$ref": "#/definitions/ThresholdVolume"
+        },
+        "sku_group": {
+          "$ref": "#/definitions/ConsumptionBudgetSKUGroup"
+        },
+        "unit": {
+          "$ref": "#/definitions/ConsumptionBudgetUnit"
         }
       },
       "type": "object"
@@ -6080,6 +6099,9 @@
         "execution_group": {
           "description": "The slug of the execution group in which the recording rule will be\nevaluated. Required if `bucket_slug` is not set.  If both `bucket_slug` and\n`execution_group` are set, their values must match.",
           "type": "string"
+        },
+        "execution_mode": {
+          "$ref": "#/definitions/RecordingRuleExecutionMode"
         }
       },
       "type": "object"
@@ -8385,7 +8407,7 @@
                 "LOG_PERSISTED_BYTES",
                 "LOG_PROCESSED_BYTES",
                 "METRIC_PERSISTED_SERIES",
-                "METRIC_CREDITS"
+                "METRIC_ALL"
               ],
               "type": "string"
             },

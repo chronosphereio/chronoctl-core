@@ -523,6 +523,11 @@ spec:
     # evaluated. Required if 'bucket_slug' is not set.  If both 'bucket_slug' and
     # 'execution_group' are set, their values must match.
     execution_group: <string>
+    # ExecutionMode controls how a recording rule is assigned to shards for execution.
+
+    #  - EXECUTION_MODE_SYNCHRONIZED: Synchronized: shard rule by execution group, which ensures that all
+    # synchronized rules in the same group execute on the same shard.
+    execution_mode: <EXECUTION_MODE_SYNCHRONIZED>
     label_policy:
         # A list of labels to add or overwrite before storing the result.
         add:

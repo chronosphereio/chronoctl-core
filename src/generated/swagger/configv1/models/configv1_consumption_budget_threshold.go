@@ -29,6 +29,12 @@ type Configv1ConsumptionBudgetThreshold struct {
 
 	// volume
 	Volume *ThresholdVolume `json:"volume,omitempty"`
+
+	// sku group
+	SkuGroup ConsumptionBudgetSKUGroup `json:"sku_group,omitempty"`
+
+	// unit
+	Unit ConsumptionBudgetUnit `json:"unit,omitempty"`
 }
 
 // Validate validates this configv1 consumption budget threshold
@@ -48,6 +54,14 @@ func (m *Configv1ConsumptionBudgetThreshold) Validate(formats strfmt.Registry) e
 	}
 
 	if err := m.validateVolume(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSkuGroup(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUnit(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -129,6 +143,40 @@ func (m *Configv1ConsumptionBudgetThreshold) validateVolume(formats strfmt.Regis
 	return nil
 }
 
+func (m *Configv1ConsumptionBudgetThreshold) validateSkuGroup(formats strfmt.Registry) error {
+	if swag.IsZero(m.SkuGroup) { // not required
+		return nil
+	}
+
+	if err := m.SkuGroup.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("sku_group")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("sku_group")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *Configv1ConsumptionBudgetThreshold) validateUnit(formats strfmt.Registry) error {
+	if swag.IsZero(m.Unit) { // not required
+		return nil
+	}
+
+	if err := m.Unit.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("unit")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("unit")
+		}
+		return err
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 consumption budget threshold based on the context it is used
 func (m *Configv1ConsumptionBudgetThreshold) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -146,6 +194,14 @@ func (m *Configv1ConsumptionBudgetThreshold) ContextValidate(ctx context.Context
 	}
 
 	if err := m.contextValidateVolume(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSkuGroup(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUnit(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -228,6 +284,42 @@ func (m *Configv1ConsumptionBudgetThreshold) contextValidateVolume(ctx context.C
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *Configv1ConsumptionBudgetThreshold) contextValidateSkuGroup(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.SkuGroup) { // not required
+		return nil
+	}
+
+	if err := m.SkuGroup.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("sku_group")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("sku_group")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *Configv1ConsumptionBudgetThreshold) contextValidateUnit(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Unit) { // not required
+		return nil
+	}
+
+	if err := m.Unit.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("unit")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("unit")
+		}
+		return err
 	}
 
 	return nil
