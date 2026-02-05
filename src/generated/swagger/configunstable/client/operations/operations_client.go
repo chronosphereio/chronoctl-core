@@ -108,8 +108,6 @@ type ClientService interface {
 
 	UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error)
 
-	UpdateLogPrimaryKey(params *UpdateLogPrimaryKeyParams, opts ...ClientOption) (*UpdateLogPrimaryKeyOK, error)
-
 	UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...ClientOption) (*UpdateNoopEntityOK, error)
 
 	UpdateObjectDiscoveryRule(params *UpdateObjectDiscoveryRuleParams, opts ...ClientOption) (*UpdateObjectDiscoveryRuleOK, error)
@@ -1610,43 +1608,6 @@ func (a *Client) UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...Cl
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateLinkTemplateDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-UpdateLogPrimaryKey update log primary key API
-*/
-func (a *Client) UpdateLogPrimaryKey(params *UpdateLogPrimaryKeyParams, opts ...ClientOption) (*UpdateLogPrimaryKeyOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateLogPrimaryKeyParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateLogPrimaryKey",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/log-primary-keys/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateLogPrimaryKeyReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateLogPrimaryKeyOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateLogPrimaryKeyDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

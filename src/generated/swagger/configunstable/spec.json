@@ -84,22 +84,6 @@
       },
       "type": "object"
     },
-    "ConfigUnstableUpdateLogPrimaryKeyBody": {
-      "properties": {
-        "log_primary_key": {
-          "$ref": "#/definitions/configunstableLogPrimaryKey"
-        },
-        "create_if_missing": {
-          "description": "If `true`, the LogPrimaryKey will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the LogPrimaryKey does not already exist.",
-          "type": "boolean"
-        },
-        "dry_run": {
-          "description": "If `true`, validates the specified configuration without creating or updating the LogPrimaryKey. If the specified configuration is valid, the endpoint returns a partial response without the LogPrimaryKey. If the specified configuration is invalid, the endpoint returns an error.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
     "ConfigUnstableUpdateNoopEntityBody": {
       "properties": {
         "noop_entity": {
@@ -1176,7 +1160,7 @@
           "type": "string"
         },
         "version": {
-          "format": "int32",
+          "format": "int64",
           "type": "integer"
         },
         "fields": {
@@ -1580,14 +1564,6 @@
       "properties": {
         "log_internal_materialized_field": {
           "$ref": "#/definitions/configunstableLogInternalMaterializedField"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableUpdateLogPrimaryKeyResponse": {
-      "properties": {
-        "log_primary_key": {
-          "$ref": "#/definitions/configunstableLogPrimaryKey"
         }
       },
       "type": "object"
@@ -2462,66 +2438,6 @@
           },
           "404": {
             "description": "Cannot read the LogPrimaryKey because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "LogPrimaryKey"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateLogPrimaryKey",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ConfigUnstableUpdateLogPrimaryKeyBody"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated LogPrimaryKey.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateLogPrimaryKeyResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the LogPrimaryKey because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the LogPrimaryKey because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot update the LogPrimaryKey because there is a conflict with an existing LogPrimaryKey.",
             "schema": {
               "$ref": "#/definitions/apiError"
             }

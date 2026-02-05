@@ -847,26 +847,6 @@ func (mr *MockClientServiceMockRecorder) UpdateLinkTemplate(params interface{}, 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLinkTemplate", reflect.TypeOf((*MockClientService)(nil).UpdateLinkTemplate), varargs...)
 }
 
-// UpdateLogPrimaryKey mocks base method.
-func (m *MockClientService) UpdateLogPrimaryKey(params *operations.UpdateLogPrimaryKeyParams, opts ...operations.ClientOption) (*operations.UpdateLogPrimaryKeyOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateLogPrimaryKey", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateLogPrimaryKeyOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateLogPrimaryKey indicates an expected call of UpdateLogPrimaryKey.
-func (mr *MockClientServiceMockRecorder) UpdateLogPrimaryKey(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLogPrimaryKey", reflect.TypeOf((*MockClientService)(nil).UpdateLogPrimaryKey), varargs...)
-}
-
 // UpdateNoopEntity mocks base method.
 func (m *MockClientService) UpdateNoopEntity(params *operations.UpdateNoopEntityParams, opts ...operations.ClientOption) (*operations.UpdateNoopEntityOK, error) {
 	m.ctrl.T.Helper()

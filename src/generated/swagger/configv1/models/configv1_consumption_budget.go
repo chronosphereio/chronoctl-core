@@ -37,7 +37,7 @@ type Configv1ConsumptionBudget struct {
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
 	// resource
-	Resource Configv1ConsumptionBudgetResource `json:"resource,omitempty"`
+	Resource ConsumptionBudgetSKUGroup `json:"resource,omitempty"`
 
 	// Path of the budget's partition, delimited by forward slashes (`/`), in the
 	// format `global/SLUG1/SLUG2`, where `SLUG1` is a top-level partition, and `SLUG2`

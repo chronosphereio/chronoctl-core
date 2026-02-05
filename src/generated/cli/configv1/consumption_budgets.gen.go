@@ -521,9 +521,6 @@ spec:
           # filter to match the 'priority'.
           filters:
             - # If set, matches incoming data that belongs to the specified dataset.
-              # The dataset type must match the budget resource. For example,
-              # 'resource=LOG_PERSISTED_BYTES', then the dataset type must be
-              # 'type=LOGS'.
 
               # Exactly one of 'dataset_slug' or 'log_filter' must be set.
               dataset_slug: <string>
@@ -541,7 +538,9 @@ spec:
           instant_rate:
             # Value of the fixed rate threshold.
             fixed_value_per_sec: <int64>
+          sku_group: <LOG_PERSISTED_BYTES|LOG_PROCESSED_BYTES>
           type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME|HOURLY_VOLUME|ROLLING_1_HOUR_VOLUME|ROLLING_3_HOUR_VOLUME|ROLLING_1_DAY_VOLUME|ROLLING_7_DAY_VOLUME>
+          unit: <NATIVE>
           volume:
             # Value of the volume threshold.
             fixed_value: <int64>
