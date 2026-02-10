@@ -441,7 +441,7 @@ func TestClientFlagsNewRequest(t *testing.T) {
 			wantBasePath: "/api",
 		},
 		{
-			name:      "actor header is set from env",
+			name: "actor header is set from env",
 			flags: &Flags{
 				APIUrl:   TestChronosphereURL,
 				APIToken: "token",
