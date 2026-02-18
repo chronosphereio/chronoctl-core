@@ -133,6 +133,7 @@ func (f *Flags) Transport(component transport.Component, basePath string) (*http
 		AllowHTTP:          f.AllowHTTP,
 		DefaultBasePath:    basePath,
 		EntityNamespace:    f.getEntityNamespace(),
+		Actor:              f.getActor(),
 	})
 	if err != nil {
 		return nil, err
@@ -156,6 +157,9 @@ func (f *Flags) NewRequest(method, basePath string, body io.Reader) (*http.Reque
 		return nil, err
 	}
 	req.Header.Add("API-Token", apiToken)
+	if actor := f.getActor(); actor != "" {
+		req.Header.Set(transport.ActorHeader, actor)
+	}
 	return req, nil
 }
 
@@ -185,10 +189,11 @@ func (f *Flags) Timeout() time.Duration {
 }
 
 func (f *Flags) getEntityNamespace() string {
-	if ns := os.Getenv(env.ChronosphereEntityNamespace); ns != "" {
-		return ns
-	}
-	return ""
+	return os.Getenv(env.ChronosphereEntityNamespace)
+}
+
+func (f *Flags) getActor() string {
+	return os.Getenv(env.ChronosphereActor)
 }
 
 func (f *Flags) getAPIToken(apiURL string) (string, error) {

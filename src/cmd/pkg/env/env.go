@@ -24,4 +24,6 @@ const (
 	ChronosphereAPITokenKey = "CHRONOSPHERE_API_TOKEN"
 	// ChronosphereEntityNamespace is the environment variable that specifies the Chronosphere entity namespace
 	ChronosphereEntityNamespace = "CHRONOSPHERE_ENTITY_NAMESPACE"
+	// ChronosphereActor is the environment variable that specifies the Chronosphere actor
+	ChronosphereActor = "CHRONOSPHERE_ACTOR"
 )

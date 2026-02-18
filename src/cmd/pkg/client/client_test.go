@@ -294,6 +294,7 @@ func TestClientFlagsNewRequest(t *testing.T) {
 	type envVars struct {
 		token string
 		org   string
+		actor string
 	}
 	tests := []struct {
 		name         string
@@ -301,6 +302,7 @@ func TestClientFlagsNewRequest(t *testing.T) {
 		env          envVars
 		basePath     string
 		wantToken    string
+		wantActor    string
 		wantErr      string
 		wantHost     string
 		wantBasePath string
@@ -439,6 +441,19 @@ func TestClientFlagsNewRequest(t *testing.T) {
 			wantBasePath: "/api",
 		},
 		{
+			name: "actor header is set from env",
+			flags: &Flags{
+				APIUrl:   TestChronosphereURL,
+				APIToken: "token",
+			},
+			env:          envVars{actor: "my-actor"},
+			basePath:     "/api",
+			wantToken:    "token",
+			wantActor:    "my-actor",
+			wantHost:     "myorg.chronosphere.io",
+			wantBasePath: "/api",
+		},
+		{
 			name: "api url overrides the base path",
 			flags: &Flags{
 				APIUrl:   "https://myorg.chronosphere.io/notthebasepath",
@@ -463,6 +478,7 @@ func TestClientFlagsNewRequest(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Setenv(env.ChronosphereAPITokenKey, tt.env.token)
 			t.Setenv(env.ChronosphereOrgNameKey, tt.env.org)
+			t.Setenv(env.ChronosphereActor, tt.env.actor)
 
 			if tt.flags.TokenStoreDir == "" {
 				tt.flags.TokenStoreDir = t.TempDir()
@@ -477,6 +493,7 @@ func TestClientFlagsNewRequest(t *testing.T) {
 			assert.Equal(t, tt.wantHost, req.Host)
 			assert.Equal(t, tt.wantBasePath, req.URL.Path)
 			assert.Equal(t, tt.wantToken, req.Header.Get("API-Token"))
+			assert.Equal(t, tt.wantActor, req.Header.Get(transport.ActorHeader))
 		})
 	}
 }

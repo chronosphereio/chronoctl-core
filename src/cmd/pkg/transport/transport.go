@@ -32,6 +32,9 @@ import (
 
 const (
 	apiTokenHeader = "api-token"
+
+	// ActorHeader is the HTTP header used to identify the actor making a request.
+	ActorHeader = "Chronosphere-Actor"
 )
 
 // Component is a value that indicates the part of the CLI that is invoking an
@@ -54,6 +57,7 @@ type RuntimeConfig struct {
 	AllowHTTP          bool
 	DefaultBasePath    string
 	EntityNamespace    string
+	Actor              string
 }
 
 // New creates a new HTTP transport that can communicate with the Chronosphere API.
@@ -91,7 +95,7 @@ func New(config RuntimeConfig) (*httptransport.Runtime, error) {
 	transport.DefaultAuthentication = httptransport.APIKeyAuth(apiTokenHeader, "header", config.APIToken)
 
 	transport.Transport = xswagger.WithRequestIDTrailerTransport(
-		withCustomHeaders(config.Component, config.EntityNamespace, transport.Transport),
+		withCustomHeaders(config.Component, config.EntityNamespace, config.Actor, transport.Transport),
 	)
 	transport.Consumers[httpruntime.JSONMime] = xswagger.JSONConsumer()
 	transport.Consumers[httpruntime.HTMLMime] = xswagger.TextConsumer()
@@ -108,10 +112,11 @@ const userAgentHeader = "User-Agent"
 type CustomHeaderTransport struct {
 	agent           string
 	entityNamespace string
+	actor           string
 	Rt              http.RoundTripper
 }
 
-func withCustomHeaders(component Component, entityNamespace string, rt http.RoundTripper) http.RoundTripper {
+func withCustomHeaders(component Component, entityNamespace string, actor string, rt http.RoundTripper) http.RoundTripper {
 	if rt == nil {
 		rt = http.DefaultTransport
 	}
@@ -127,6 +132,7 @@ func withCustomHeaders(component Component, entityNamespace string, rt http.Roun
 			runtime.GOARCH,
 		),
 		entityNamespace: entityNamespace,
+		actor:           actor,
 	}
 }
 
@@ -135,6 +141,9 @@ func (c CustomHeaderTransport) RoundTrip(req *http.Request) (*http.Response, err
 	req.Header.Set(userAgentHeader, c.agent)
 	if c.entityNamespace != "" {
 		req.Header.Set("Chrono-Entity-Namespace", c.entityNamespace)
+	}
+	if c.actor != "" {
+		req.Header.Set(ActorHeader, c.actor)
 	}
 	return c.Rt.RoundTrip(req)
 }
