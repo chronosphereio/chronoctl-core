@@ -43,7 +43,7 @@ type Configv1RecordingRule struct {
 	// label policy
 	LabelPolicy *Configv1RecordingRuleLabelPolicy `json:"label_policy,omitempty"`
 
-	// Specifies how often to evaluate the recording rule.
+	// Specifies how often to evaluate the recording rule. Default: `60s`.
 	IntervalSecs int32 `json:"interval_secs,omitempty"`
 
 	// The name of the time series to use for the output of `prometheus_expr`.
@@ -58,9 +58,15 @@ type Configv1RecordingRule struct {
 	// time series defined by the value of `name`.
 	PrometheusExpr string `json:"prometheus_expr,omitempty"`
 
-	// The slug of the execution group in which the recording rule will be
-	// evaluated. Required if `bucket_slug` is not set.  If both `bucket_slug` and
-	// `execution_group` are set, their values must match.
+	// The slug of the execution group in which the recording rule will be evaluated.
+	// Rules in the same execution group run at intervals. All rules in a group must
+	// complete before the rules in that group run again. Required if `bucket_slug`
+	// isn't set. If both `bucket_slug` and `execution_group` are set, their values
+	// must match.
+	//
+	// Creating too many rules in an execution group can cause delays in execution of
+	// the next iteration. Chronosphere recommends limiting the number of rules in an
+	// execution group to 200-300 maximum.
 	ExecutionGroup string `json:"execution_group,omitempty"`
 
 	// execution mode
