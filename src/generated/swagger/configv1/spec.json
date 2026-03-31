@@ -304,6 +304,22 @@
       },
       "type": "object"
     },
+    "ConfigV1UpdateLogRetentionConfigBody": {
+      "properties": {
+        "log_retention_config": {
+          "$ref": "#/definitions/configv1LogRetentionConfig"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the LogRetentionConfig will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the LogRetentionConfig does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the LogRetentionConfig. If the specified configuration is valid, the endpoint returns a partial response without the LogRetentionConfig. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateLogScaleActionBody": {
       "properties": {
         "log_scale_action": {
@@ -3736,6 +3752,26 @@
       },
       "type": "object"
     },
+    "configv1CreateLogRetentionConfigRequest": {
+      "properties": {
+        "log_retention_config": {
+          "$ref": "#/definitions/configv1LogRetentionConfig"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the LogRetentionConfig. If the specified configuration is valid, the endpoint returns a partial response without the LogRetentionConfig. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateLogRetentionConfigResponse": {
+      "properties": {
+        "log_retention_config": {
+          "$ref": "#/definitions/configv1LogRetentionConfig"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateLogScaleActionRequest": {
       "properties": {
         "log_scale_action": {
@@ -4271,6 +4307,9 @@
       "type": "object"
     },
     "configv1DeleteLogIngestConfigResponse": {
+      "type": "object"
+    },
+    "configv1DeleteLogRetentionConfigResponse": {
       "type": "object"
     },
     "configv1DeleteLogScaleActionResponse": {
@@ -4832,6 +4871,20 @@
       },
       "type": "object"
     },
+    "configv1ListLogRetentionConfigsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "log_retention_configs": {
+          "items": {
+            "$ref": "#/definitions/configv1LogRetentionConfig"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configv1ListLogScaleActionsResponse": {
       "properties": {
         "page": {
@@ -5235,6 +5288,51 @@
         }
       },
       "type": "object"
+    },
+    "configv1LogRetentionConfig": {
+      "description": "LogRetentionConfig configures long-term retention policies for log data.\nEach config specifies a filter to match logs and retention parameters for\ncold storage (Iceberg). Multiple configs per tenant are supported; when\nconfigs overlap, the longest retention wins.",
+      "properties": {
+        "slug": {
+          "description": "The unique identifier of the LogRetentionConfig. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the LogRetentionConfig is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the LogRetentionConfig. You can modify this value after the LogRetentionConfig is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the LogRetentionConfig was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the LogRetentionConfig was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "mode": {
+          "$ref": "#/definitions/configv1LogRetentionConfigMode"
+        },
+        "filter": {
+          "description": "Log query filter. Only matching logs will have the retention config applied.",
+          "type": "string"
+        },
+        "retention_days": {
+          "description": "Number of days to retain matching logs in long-term (Iceberg) storage\nafter they are exported. Once this period elapses, data is expired from\nIceberg by the IcebergDeleter.",
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "configv1LogRetentionConfigMode": {
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ],
+      "type": "string"
     },
     "configv1LogScaleAction": {
       "properties": {
@@ -5883,6 +5981,14 @@
       },
       "type": "object"
     },
+    "configv1ReadLogRetentionConfigResponse": {
+      "properties": {
+        "log_retention_config": {
+          "$ref": "#/definitions/configv1LogRetentionConfig"
+        }
+      },
+      "type": "object"
+    },
     "configv1ReadLogScaleActionResponse": {
       "properties": {
         "log_scale_action": {
@@ -6084,7 +6190,7 @@
           "$ref": "#/definitions/configv1RecordingRuleLabelPolicy"
         },
         "interval_secs": {
-          "description": "Specifies how often to evaluate the recording rule.",
+          "description": "Specifies how often to evaluate the recording rule. Default: `60s`.",
           "format": "int32",
           "type": "integer"
         },
@@ -6097,7 +6203,7 @@
           "type": "string"
         },
         "execution_group": {
-          "description": "The slug of the execution group in which the recording rule will be\nevaluated. Required if `bucket_slug` is not set.  If both `bucket_slug` and\n`execution_group` are set, their values must match.",
+          "description": "The slug of the execution group in which the recording rule will be evaluated.\nRules in the same execution group run at intervals. All rules in a group must\ncomplete before the rules in that group run again. Required if `bucket_slug`\nisn't set. If both `bucket_slug` and `execution_group` are set, their values\nmust match.\n\nCreating too many rules in an execution group can cause delays in execution of\nthe next iteration. Chronosphere recommends limiting the number of rules in an\nexecution group to 200-300 maximum.",
           "type": "string"
         },
         "execution_mode": {
@@ -7020,6 +7126,14 @@
       "properties": {
         "log_ingest_config": {
           "$ref": "#/definitions/configv1LogIngestConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateLogRetentionConfigResponse": {
+      "properties": {
+        "log_retention_config": {
+          "$ref": "#/definitions/configv1LogRetentionConfig"
         }
       },
       "type": "object"
@@ -11173,6 +11287,265 @@
         },
         "tags": [
           "LogIngestConfig"
+        ]
+      }
+    },
+    "/api/v1/config/log-retention-configs": {
+      "get": {
+        "operationId": "ListLogRetentionConfigs",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any LogRetentionConfig with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any LogRetentionConfig with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListLogRetentionConfigsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogRetentionConfig"
+        ]
+      },
+      "post": {
+        "operationId": "CreateLogRetentionConfig",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogRetentionConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created LogRetentionConfig.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateLogRetentionConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the LogRetentionConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the LogRetentionConfig because there is a conflict with an existing LogRetentionConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogRetentionConfig"
+        ]
+      }
+    },
+    "/api/v1/config/log-retention-configs/{slug}": {
+      "delete": {
+        "operationId": "DeleteLogRetentionConfig",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteLogRetentionConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the LogRetentionConfig because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the LogRetentionConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogRetentionConfig"
+        ]
+      },
+      "get": {
+        "operationId": "ReadLogRetentionConfig",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadLogRetentionConfigResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the LogRetentionConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogRetentionConfig"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateLogRetentionConfig",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateLogRetentionConfigBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated LogRetentionConfig.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateLogRetentionConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the LogRetentionConfig because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the LogRetentionConfig because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the LogRetentionConfig because there is a conflict with an existing LogRetentionConfig.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "LogRetentionConfig"
         ]
       }
     },

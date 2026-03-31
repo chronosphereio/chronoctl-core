@@ -355,6 +355,26 @@ func (mr *MockClientServiceMockRecorder) CreateLogIngestConfig(params interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLogIngestConfig", reflect.TypeOf((*MockClientService)(nil).CreateLogIngestConfig), varargs...)
 }
 
+// CreateLogRetentionConfig mocks base method.
+func (m *MockClientService) CreateLogRetentionConfig(params *operations.CreateLogRetentionConfigParams, opts ...operations.ClientOption) (*operations.CreateLogRetentionConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateLogRetentionConfig", varargs...)
+	ret0, _ := ret[0].(*operations.CreateLogRetentionConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateLogRetentionConfig indicates an expected call of CreateLogRetentionConfig.
+func (mr *MockClientServiceMockRecorder) CreateLogRetentionConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLogRetentionConfig", reflect.TypeOf((*MockClientService)(nil).CreateLogRetentionConfig), varargs...)
+}
+
 // CreateLogScaleAction mocks base method.
 func (m *MockClientService) CreateLogScaleAction(params *operations.CreateLogScaleActionParams, opts ...operations.ClientOption) (*operations.CreateLogScaleActionOK, error) {
 	m.ctrl.T.Helper()
@@ -1075,6 +1095,26 @@ func (mr *MockClientServiceMockRecorder) DeleteLogIngestConfig(params interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLogIngestConfig", reflect.TypeOf((*MockClientService)(nil).DeleteLogIngestConfig), varargs...)
 }
 
+// DeleteLogRetentionConfig mocks base method.
+func (m *MockClientService) DeleteLogRetentionConfig(params *operations.DeleteLogRetentionConfigParams, opts ...operations.ClientOption) (*operations.DeleteLogRetentionConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteLogRetentionConfig", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteLogRetentionConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteLogRetentionConfig indicates an expected call of DeleteLogRetentionConfig.
+func (mr *MockClientServiceMockRecorder) DeleteLogRetentionConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLogRetentionConfig", reflect.TypeOf((*MockClientService)(nil).DeleteLogRetentionConfig), varargs...)
+}
+
 // DeleteLogScaleAction mocks base method.
 func (m *MockClientService) DeleteLogScaleAction(params *operations.DeleteLogScaleActionParams, opts ...operations.ClientOption) (*operations.DeleteLogScaleActionOK, error) {
 	m.ctrl.T.Helper()
@@ -1713,6 +1753,26 @@ func (mr *MockClientServiceMockRecorder) ListGrafanaDashboards(params interface{
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListGrafanaDashboards", reflect.TypeOf((*MockClientService)(nil).ListGrafanaDashboards), varargs...)
+}
+
+// ListLogRetentionConfigs mocks base method.
+func (m *MockClientService) ListLogRetentionConfigs(params *operations.ListLogRetentionConfigsParams, opts ...operations.ClientOption) (*operations.ListLogRetentionConfigsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListLogRetentionConfigs", varargs...)
+	ret0, _ := ret[0].(*operations.ListLogRetentionConfigsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListLogRetentionConfigs indicates an expected call of ListLogRetentionConfigs.
+func (mr *MockClientServiceMockRecorder) ListLogRetentionConfigs(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListLogRetentionConfigs", reflect.TypeOf((*MockClientService)(nil).ListLogRetentionConfigs), varargs...)
 }
 
 // ListLogScaleActions mocks base method.
@@ -2373,6 +2433,26 @@ func (mr *MockClientServiceMockRecorder) ReadLogIngestConfig(params interface{},
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLogIngestConfig", reflect.TypeOf((*MockClientService)(nil).ReadLogIngestConfig), varargs...)
+}
+
+// ReadLogRetentionConfig mocks base method.
+func (m *MockClientService) ReadLogRetentionConfig(params *operations.ReadLogRetentionConfigParams, opts ...operations.ClientOption) (*operations.ReadLogRetentionConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadLogRetentionConfig", varargs...)
+	ret0, _ := ret[0].(*operations.ReadLogRetentionConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadLogRetentionConfig indicates an expected call of ReadLogRetentionConfig.
+func (mr *MockClientServiceMockRecorder) ReadLogRetentionConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLogRetentionConfig", reflect.TypeOf((*MockClientService)(nil).ReadLogRetentionConfig), varargs...)
 }
 
 // ReadLogScaleAction mocks base method.
@@ -3125,6 +3205,26 @@ func (mr *MockClientServiceMockRecorder) UpdateLogIngestConfig(params interface{
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLogIngestConfig", reflect.TypeOf((*MockClientService)(nil).UpdateLogIngestConfig), varargs...)
+}
+
+// UpdateLogRetentionConfig mocks base method.
+func (m *MockClientService) UpdateLogRetentionConfig(params *operations.UpdateLogRetentionConfigParams, opts ...operations.ClientOption) (*operations.UpdateLogRetentionConfigOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateLogRetentionConfig", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateLogRetentionConfigOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateLogRetentionConfig indicates an expected call of UpdateLogRetentionConfig.
+func (mr *MockClientServiceMockRecorder) UpdateLogRetentionConfig(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLogRetentionConfig", reflect.TypeOf((*MockClientService)(nil).UpdateLogRetentionConfig), varargs...)
 }
 
 // UpdateLogScaleAction mocks base method.

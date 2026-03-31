@@ -21,55 +21,55 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-func init() { types.MustRegisterObject(RecordingRuleTypeMeta, &RecordingRule{}) }
+func init() { types.MustRegisterObject(LogRetentionConfigTypeMeta, &LogRetentionConfig{}) }
 
-var _ types.Object = &RecordingRule{}
+var _ types.Object = &LogRetentionConfig{}
 
-var RecordingRuleTypeMeta = types.TypeMeta{
+var LogRetentionConfigTypeMeta = types.TypeMeta{
 	APIVersion: "v1/config",
-	Kind:       "RecordingRule",
+	Kind:       "LogRetentionConfig",
 }
 
-type RecordingRule struct {
+type LogRetentionConfig struct {
 	types.TypeMeta `json:",inline"`
-	Spec           *models.Configv1RecordingRule `json:"spec"`
+	Spec           *models.Configv1LogRetentionConfig `json:"spec"`
 }
 
-func NewRecordingRule(spec *models.Configv1RecordingRule) *RecordingRule {
-	return &RecordingRule{
-		TypeMeta: RecordingRuleTypeMeta,
+func NewLogRetentionConfig(spec *models.Configv1LogRetentionConfig) *LogRetentionConfig {
+	return &LogRetentionConfig{
+		TypeMeta: LogRetentionConfigTypeMeta,
 		Spec:     spec,
 	}
 }
 
-func (e *RecordingRule) Description() string {
+func (e *LogRetentionConfig) Description() string {
 	return types.TypeDescription(e, "name", e.Spec.Name, "slug", e.Spec.Slug)
 }
 
-func (e *RecordingRule) Identifier() string {
+func (e *LogRetentionConfig) Identifier() string {
 	return e.Spec.Slug
 }
 
-func CreateRecordingRule(
+func CreateLogRetentionConfig(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *RecordingRule,
+	entity *LogRetentionConfig,
 	dryRun bool,
-) (*RecordingRule, error) {
-	res, err := client.CreateRecordingRule(&config_v1.CreateRecordingRuleParams{
+) (*LogRetentionConfig, error) {
+	res, err := client.CreateLogRetentionConfig(&config_v1.CreateLogRetentionConfigParams{
 		Context: ctx,
-		Body: &models.Configv1CreateRecordingRuleRequest{
-			DryRun:        dryRun,
-			RecordingRule: entity.Spec,
+		Body: &models.Configv1CreateLogRetentionConfigRequest{
+			DryRun:             dryRun,
+			LogRetentionConfig: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewRecordingRule(res.Payload.RecordingRule), nil
+	return NewLogRetentionConfig(res.Payload.LogRetentionConfig), nil
 }
 
-func newRecordingRuleCreateCmd() *cobra.Command {
+func newLogRetentionConfigCreateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		dryRunFlags       = dry.NewFlags()
@@ -83,7 +83,7 @@ func newRecordingRuleCreateCmd() *cobra.Command {
 		short string
 	)
 	use = "create -f <file>"
-	short = "Creates a single RecordingRule."
+	short = "Creates a single LogRetentionConfig."
 
 	cmd := &cobra.Command{
 		Use:     use,
@@ -103,13 +103,13 @@ func newRecordingRuleCreateCmd() *cobra.Command {
 				return err
 			}
 
-			var recordingRule *RecordingRule
+			var logRetentionConfig *LogRetentionConfig
 			file, err := fileFlags.File()
 			if err != nil {
 				return err
 			}
 			defer file.Close() //nolint:errcheck
-			recordingRule, err = types.MustDecodeSingleObject[*RecordingRule](file, permissiveParsing)
+			logRetentionConfig, err = types.MustDecodeSingleObject[*LogRetentionConfig](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -117,18 +117,18 @@ func newRecordingRuleCreateCmd() *cobra.Command {
 			if dryRunFlags.DryRun {
 				stderr.Println("--dry-run is set")
 			}
-			fullRecordingRule, err := CreateRecordingRule(ctx, client, recordingRule, dryRunFlags.DryRun)
+			fullLogRetentionConfig, err := CreateLogRetentionConfig(ctx, client, logRetentionConfig, dryRunFlags.DryRun)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("RecordingRule is valid and can be created")
+				stderr.Println("LogRetentionConfig is valid and can be created")
 				return nil
 			}
-			stderr.Printf("RecordingRule with slug %q created successfully\n", fullRecordingRule.Spec.Slug)
+			stderr.Printf("LogRetentionConfig with slug %q created successfully\n", fullLogRetentionConfig.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullRecordingRule, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullLogRetentionConfig, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -143,22 +143,22 @@ func newRecordingRuleCreateCmd() *cobra.Command {
 	return cmd
 }
 
-func GetRecordingRule(
+func GetLogRetentionConfig(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
-) (*RecordingRule, error) {
-	res, err := client.ReadRecordingRule(&config_v1.ReadRecordingRuleParams{
+) (*LogRetentionConfig, error) {
+	res, err := client.ReadLogRetentionConfig(&config_v1.ReadLogRetentionConfigParams{
 		Context: ctx,
 		Slug:    slug,
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return NewRecordingRule(res.GetPayload().RecordingRule), nil
+	return NewLogRetentionConfig(res.GetPayload().LogRetentionConfig), nil
 }
 
-func newRecordingRuleReadCmd() *cobra.Command {
+func newLogRetentionConfigReadCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 	var (
@@ -166,7 +166,7 @@ func newRecordingRuleReadCmd() *cobra.Command {
 		use   string
 		args  cobra.PositionalArgs
 	)
-	short = "Reads a single RecordingRule by slug"
+	short = "Reads a single LogRetentionConfig by slug"
 	use = "read <slug>"
 	args = cobra.ExactArgs(1)
 
@@ -187,7 +187,7 @@ func newRecordingRuleReadCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			entity, err := GetRecordingRule(ctx, client, args[0])
+			entity, err := GetLogRetentionConfig(ctx, client, args[0])
 			if err != nil {
 				return err
 			}
@@ -204,29 +204,29 @@ func newRecordingRuleReadCmd() *cobra.Command {
 	return cmd
 }
 
-func UpdateRecordingRule(
+func UpdateLogRetentionConfig(
 	ctx context.Context,
 	client config_v1.ClientService,
-	entity *RecordingRule,
+	entity *LogRetentionConfig,
 	opts UpdateOptions,
-) (*RecordingRule, error) {
-	res, err := client.UpdateRecordingRule(&config_v1.UpdateRecordingRuleParams{
+) (*LogRetentionConfig, error) {
+	res, err := client.UpdateLogRetentionConfig(&config_v1.UpdateLogRetentionConfigParams{
 		Context: ctx,
 		Slug:    entity.Spec.Slug,
-		Body: &models.ConfigV1UpdateRecordingRuleBody{
-			CreateIfMissing: opts.CreateIfMissing,
-			DryRun:          opts.DryRun,
-			RecordingRule:   entity.Spec,
+		Body: &models.ConfigV1UpdateLogRetentionConfigBody{
+			CreateIfMissing:    opts.CreateIfMissing,
+			DryRun:             opts.DryRun,
+			LogRetentionConfig: entity.Spec,
 		},
 	})
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
 
-	return NewRecordingRule(res.Payload.RecordingRule), nil
+	return NewLogRetentionConfig(res.Payload.LogRetentionConfig), nil
 }
 
-func newRecordingRuleUpdateCmd() *cobra.Command {
+func newLogRetentionConfigUpdateCmd() *cobra.Command {
 	var (
 		permissiveParsing bool
 		createIfMissing   bool
@@ -239,7 +239,7 @@ func newRecordingRuleUpdateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "update -f <filename>",
 		GroupID: groups.Commands.ID,
-		Short:   "Updates an existing RecordingRule.",
+		Short:   "Updates an existing LogRetentionConfig.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
 			defer cancel()
@@ -260,7 +260,7 @@ func newRecordingRuleUpdateCmd() *cobra.Command {
 			}
 			defer file.Close() //nolint:errcheck
 
-			recordingRule, err := types.MustDecodeSingleObject[*RecordingRule](file, permissiveParsing)
+			logRetentionConfig, err := types.MustDecodeSingleObject[*LogRetentionConfig](file, permissiveParsing)
 			if err != nil {
 				return err
 			}
@@ -274,18 +274,18 @@ func newRecordingRuleUpdateCmd() *cobra.Command {
 				stderr.Println("--dry-run is set, update not persisted")
 			}
 
-			fullRecordingRule, err := UpdateRecordingRule(ctx, client, recordingRule, updateOpts)
+			fullLogRetentionConfig, err := UpdateLogRetentionConfig(ctx, client, logRetentionConfig, updateOpts)
 			if err != nil {
 				return err
 			}
 
 			if dryRunFlags.DryRun {
-				stderr.Println("RecordingRule is valid and can be updated")
+				stderr.Println("LogRetentionConfig is valid and can be updated")
 				return nil
 			}
-			stderr.Printf("RecordingRule with slug %q applied successfully\n", fullRecordingRule.Spec.Slug)
+			stderr.Printf("LogRetentionConfig with slug %q applied successfully\n", fullLogRetentionConfig.Spec.Slug)
 
-			if err := outputFlags.WriteObject(fullRecordingRule, cmd.OutOrStdout()); err != nil {
+			if err := outputFlags.WriteObject(fullLogRetentionConfig, cmd.OutOrStdout()); err != nil {
 				return err
 			}
 			return nil
@@ -296,17 +296,17 @@ func newRecordingRuleUpdateCmd() *cobra.Command {
 	outputFlags.AddFlags(cmd)
 	fileFlags.AddFlags(cmd)
 	cmd.Flags().BoolVar(&permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are allowed. Defaults to false.")
-	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the RecordingRule if it does not already exist. Defaults to false.")
+	cmd.Flags().BoolVar(&createIfMissing, "create-if-missing", false, "If set, creates the LogRetentionConfig if it does not already exist. Defaults to false.")
 
 	return cmd
 }
 
-func DeleteRecordingRule(
+func DeleteLogRetentionConfig(
 	ctx context.Context,
 	client config_v1.ClientService,
 	slug string,
 ) error {
-	_, err := client.DeleteRecordingRule(&config_v1.DeleteRecordingRuleParams{
+	_, err := client.DeleteLogRetentionConfig(&config_v1.DeleteLogRetentionConfigParams{
 		Context: ctx,
 		Slug:    slug,
 	})
@@ -316,14 +316,14 @@ func DeleteRecordingRule(
 	return nil
 }
 
-func newRecordingRuleDeleteCmd() *cobra.Command {
+func newLogRetentionConfigDeleteCmd() *cobra.Command {
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags(output.WithoutOutputDirectory(), output.WithoutCreateFilePerObject())
 
 	cmd := &cobra.Command{
 		Use:     "delete <slug>",
 		GroupID: groups.Commands.ID,
-		Short:   "Deletes a single RecordingRule by slug",
+		Short:   "Deletes a single LogRetentionConfig by slug",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -338,7 +338,7 @@ func newRecordingRuleDeleteCmd() *cobra.Command {
 				return err
 			}
 
-			res, err := client.DeleteRecordingRule(&config_v1.DeleteRecordingRuleParams{
+			res, err := client.DeleteLogRetentionConfig(&config_v1.DeleteLogRetentionConfigParams{
 				Context: ctx,
 				Slug:    args[0],
 			})
@@ -346,7 +346,7 @@ func newRecordingRuleDeleteCmd() *cobra.Command {
 				return clienterror.Wrap(err)
 			}
 			_ = res
-			fmt.Fprintf(cmd.OutOrStdout(), "deleted RecordingRule with slug %q\n", args[0])
+			fmt.Fprintf(cmd.OutOrStdout(), "deleted LogRetentionConfig with slug %q\n", args[0])
 
 			return nil
 		},
@@ -356,38 +356,32 @@ func newRecordingRuleDeleteCmd() *cobra.Command {
 	return cmd
 }
 
-type RecordingRuleListOpts struct {
+type LogRetentionConfigListOpts struct {
 	// Limit represents that maximum number of items we wish to return.
 	Limit int
 	// PageToken is the pagination token we want to start our request at.
 	PageToken string
 	// PageMaxSize is the maximum page size to use when making List calls.
-	PageMaxSize     int
-	BucketSlugs     []string
-	ExecutionGroups []string
-	Names           []string
-	Slugs           []string
+	PageMaxSize int
+	Names       []string
+	Slugs       []string
 }
 
-func (r *RecordingRuleListOpts) registerFlags(flags *flag.FlagSet) {
-	var emptyBucketSlugs []string
-	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "The execution_groups filter cannot be used when a bucket_slug filter is provided.")
-	var emptyExecutionGroups []string
-	flags.StringSliceVar(&r.ExecutionGroups, "execution-groups", emptyExecutionGroups, "The bucket_slugs filter cannot be used when an execution_group filter is provided.")
+func (r *LogRetentionConfigListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyNames []string
-	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any RecordingRule with a matching name in the given list (and matches all other filters) will be returned.")
+	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any LogRetentionConfig with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
-	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any RecordingRule with a matching slug in the given list (and matches all other filters) will be returned.")
+	flags.StringSliceVar(&r.Slugs, "slugs", emptySlugs, "Filters results by slug, where any LogRetentionConfig with a matching slug in the given list (and matches all other filters) will be returned.")
 	flags.IntVar(&r.Limit, "limit", 0, "maximum number of items to return")
 	flags.IntVar(&r.PageMaxSize, "page-max-size", 0, "maximum page size")
 	flags.StringVar(&r.PageToken, "page-token", "", "begins listing items at the start of the pagination token")
 }
 
-func ListRecordingRules(
+func ListLogRetentionConfigs(
 	ctx context.Context,
 	client config_v1.ClientService,
-	streamer output.Streamer[*RecordingRule],
-	opts RecordingRuleListOpts,
+	streamer output.Streamer[*LogRetentionConfig],
+	opts LogRetentionConfigListOpts,
 ) (pagination.Token, error) {
 	var (
 		gotItems    = 0
@@ -401,21 +395,19 @@ func ListRecordingRules(
 	}
 
 	for {
-		res, err := client.ListRecordingRules(&config_v1.ListRecordingRulesParams{
-			Context:         ctx,
-			PageToken:       &nextToken,
-			PageMaxSize:     ptr.Int64(int64(pageMaxSize)),
-			BucketSlugs:     opts.BucketSlugs,
-			ExecutionGroups: opts.ExecutionGroups,
-			Names:           opts.Names,
-			Slugs:           opts.Slugs,
+		res, err := client.ListLogRetentionConfigs(&config_v1.ListLogRetentionConfigsParams{
+			Context:     ctx,
+			PageToken:   &nextToken,
+			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
+			Names:       opts.Names,
+			Slugs:       opts.Slugs,
 		})
 		if err != nil {
 			return pagination.Token(""), clienterror.Wrap(err)
 		}
 
-		for _, v := range res.Payload.RecordingRules {
-			if err := streamer(NewRecordingRule(v)); err != nil {
+		for _, v := range res.Payload.LogRetentionConfigs {
+			if err := streamer(NewLogRetentionConfig(v)); err != nil {
 				return pagination.Token(""), err
 			}
 			gotItems++
@@ -433,19 +425,19 @@ func ListRecordingRules(
 		pageMaxSize = pagination.CalculatePageSize(pagination.Calculation{
 			GotItems:    gotItems,
 			MaxItems:    opts.Limit,
-			MaxPageSize: len(res.Payload.RecordingRules),
+			MaxPageSize: len(res.Payload.LogRetentionConfigs),
 		})
 	}
 }
 
-func newRecordingRuleListCmd() *cobra.Command {
-	var listOptions RecordingRuleListOpts
+func newLogRetentionConfigListCmd() *cobra.Command {
+	var listOptions LogRetentionConfigListOpts
 	clientFlags := client.NewClientFlags()
 	outputFlags := output.NewFlags()
 
 	cmd := &cobra.Command{
 		Use:     "list",
-		Short:   "Lists all RecordingRules and applies optional filters",
+		Short:   "Lists all LogRetentionConfigs and applies optional filters",
 		GroupID: groups.Commands.ID,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithTimeout(cmd.Context(), clientFlags.Timeout())
@@ -465,8 +457,8 @@ func newRecordingRuleListCmd() *cobra.Command {
 				return err
 			}
 
-			streamer := output.NewWriteObjectStreamer[*RecordingRule](writer)
-			nextToken, err := ListRecordingRules(ctx, client, streamer, listOptions)
+			streamer := output.NewWriteObjectStreamer[*LogRetentionConfig](writer)
+			nextToken, err := ListLogRetentionConfigs(ctx, client, streamer, listOptions)
 			if err != nil {
 				return err
 			}
@@ -474,7 +466,7 @@ func newRecordingRuleListCmd() *cobra.Command {
 			if nextToken != "" {
 				nextPage := pagination.Result{
 					Kind:          pagination.ResultKind,
-					Message:       "There are additional recordingRules. To view more, use the next page token or run the full command.",
+					Message:       "There are additional logRetentionConfigs. To view more, use the next page token or run the full command.",
 					NextPageToken: nextToken,
 					FullCommand: fmt.Sprintf("%s --page-token %q",
 						cli.BuildCommandString(cmd, []string{"page-token"}),
@@ -496,77 +488,49 @@ func newRecordingRuleListCmd() *cobra.Command {
 	return cmd
 }
 
-const RecordingRuleScaffoldYAML = `api_version: v1/config
-kind: RecordingRule
+const LogRetentionConfigScaffoldYAML = `api_version: v1/config
+kind: LogRetentionConfig
 spec:
-    # The unique identifier of the RecordingRule. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the RecordingRule is created.
+    # The unique identifier of the LogRetentionConfig. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the LogRetentionConfig is created.
     slug: <string>
-    # The name of the RecordingRule. You can modify this value after the RecordingRule is created.
+    # The name of the LogRetentionConfig. You can modify this value after the LogRetentionConfig is created.
     name: <string>
-    # The slug of the bucket the recording rule belongs to. Required if
-    # 'execution_group' is not set. If both 'bucket_slug' and 'execution_group'
-    # are set, their values must match.
-    bucket_slug: <string>
-    # Specifies how often to evaluate the recording rule. Default: '60s'.
-    interval_secs: <integer>
-    # The name of the time series to use for the output of 'prometheus_expr'.
-    # This value must be a valid metric name. If you don't set this value,
-    # the output of 'prometheus_expr' is output to a time series with a name
-    # defined by the value of 'name'.
-    metric_name: <string>
-    # The PromQL expression to evaluate at the time of each evaluation cycle. The
-    # result is output to a new time series with a name defined by the value of
-    # 'metric_name'. If 'metric_name' is unset, the result is output to a
-    # time series defined by the value of 'name'.
-    prometheus_expr: <string>
-    # The slug of the execution group in which the recording rule will be evaluated.
-    # Rules in the same execution group run at intervals. All rules in a group must
-    # complete before the rules in that group run again. Required if 'bucket_slug'
-    # isn't set. If both 'bucket_slug' and 'execution_group' are set, their values
-    # must match.
-
-    # Creating too many rules in an execution group can cause delays in execution of
-    # the next iteration. Chronosphere recommends limiting the number of rules in an
-    # execution group to 200-300 maximum.
-    execution_group: <string>
-    # ExecutionMode controls how a recording rule is assigned to shards for execution.
-
-    #  - EXECUTION_MODE_SYNCHRONIZED: Synchronized: shard rule by execution group, which ensures that all
-    # synchronized rules in the same group execute on the same shard.
-    execution_mode: <EXECUTION_MODE_SYNCHRONIZED>
-    label_policy:
-        # A list of labels to add or overwrite before storing the result.
-        add:
-            key_1: <string>
+    # Log query filter. Only matching logs will have the retention config applied.
+    filter: <string>
+    # Number of days to retain matching logs in long-term (Iceberg) storage
+    # after they are exported. Once this period elapses, data is expired from
+    # Iceberg by the IcebergDeleter.
+    retention_days: <integer>
+    mode: <ENABLED|DISABLED>
 `
 
-func newRecordingRuleScaffoldCmd() *cobra.Command {
+func newLogRetentionConfigScaffoldCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "scaffold",
 		GroupID: groups.Commands.ID,
 		Short:   "Scaffolds a complete object with placeholder values",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Fprint(cmd.OutOrStdout(), RecordingRuleScaffoldYAML)
+			fmt.Fprint(cmd.OutOrStdout(), LogRetentionConfigScaffoldYAML)
 		},
 	}
 	return cmd
 }
 
-func NewRecordingRuleCmd() *cobra.Command {
+func NewLogRetentionConfigCmd() *cobra.Command {
 	root := &cobra.Command{
-		Use:     "recording-rules",
+		Use:     "log-retention-configs",
 		GroupID: groups.Config.ID,
-		Short:   "All commands for RecordingRules",
+		Short:   "All commands for LogRetentionConfigs",
 	}
 
 	root.AddGroup(groups.Commands)
 	root.AddCommand(
-		newRecordingRuleCreateCmd(),
-		newRecordingRuleReadCmd(),
-		newRecordingRuleUpdateCmd(),
-		newRecordingRuleDeleteCmd(),
-		newRecordingRuleListCmd(),
-		newRecordingRuleScaffoldCmd(),
+		newLogRetentionConfigCreateCmd(),
+		newLogRetentionConfigReadCmd(),
+		newLogRetentionConfigUpdateCmd(),
+		newLogRetentionConfigDeleteCmd(),
+		newLogRetentionConfigListCmd(),
+		newLogRetentionConfigScaffoldCmd(),
 	)
 	return root
 }

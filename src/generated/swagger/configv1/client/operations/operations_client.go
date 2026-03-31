@@ -60,6 +60,8 @@ type ClientService interface {
 
 	CreateLogIngestConfig(params *CreateLogIngestConfigParams, opts ...ClientOption) (*CreateLogIngestConfigOK, error)
 
+	CreateLogRetentionConfig(params *CreateLogRetentionConfigParams, opts ...ClientOption) (*CreateLogRetentionConfigOK, error)
+
 	CreateLogScaleAction(params *CreateLogScaleActionParams, opts ...ClientOption) (*CreateLogScaleActionOK, error)
 
 	CreateLogScaleAlert(params *CreateLogScaleAlertParams, opts ...ClientOption) (*CreateLogScaleAlertOK, error)
@@ -132,6 +134,8 @@ type ClientService interface {
 
 	DeleteLogIngestConfig(params *DeleteLogIngestConfigParams, opts ...ClientOption) (*DeleteLogIngestConfigOK, error)
 
+	DeleteLogRetentionConfig(params *DeleteLogRetentionConfigParams, opts ...ClientOption) (*DeleteLogRetentionConfigOK, error)
+
 	DeleteLogScaleAction(params *DeleteLogScaleActionParams, opts ...ClientOption) (*DeleteLogScaleActionOK, error)
 
 	DeleteLogScaleAlert(params *DeleteLogScaleAlertParams, opts ...ClientOption) (*DeleteLogScaleAlertOK, error)
@@ -195,6 +199,8 @@ type ClientService interface {
 	ListGcpMetricsIntegrations(params *ListGcpMetricsIntegrationsParams, opts ...ClientOption) (*ListGcpMetricsIntegrationsOK, error)
 
 	ListGrafanaDashboards(params *ListGrafanaDashboardsParams, opts ...ClientOption) (*ListGrafanaDashboardsOK, error)
+
+	ListLogRetentionConfigs(params *ListLogRetentionConfigsParams, opts ...ClientOption) (*ListLogRetentionConfigsOK, error)
 
 	ListLogScaleActions(params *ListLogScaleActionsParams, opts ...ClientOption) (*ListLogScaleActionsOK, error)
 
@@ -261,6 +267,8 @@ type ClientService interface {
 	ReadLogControlConfig(params *ReadLogControlConfigParams, opts ...ClientOption) (*ReadLogControlConfigOK, error)
 
 	ReadLogIngestConfig(params *ReadLogIngestConfigParams, opts ...ClientOption) (*ReadLogIngestConfigOK, error)
+
+	ReadLogRetentionConfig(params *ReadLogRetentionConfigParams, opts ...ClientOption) (*ReadLogRetentionConfigOK, error)
 
 	ReadLogScaleAction(params *ReadLogScaleActionParams, opts ...ClientOption) (*ReadLogScaleActionOK, error)
 
@@ -335,6 +343,8 @@ type ClientService interface {
 	UpdateLogControlConfig(params *UpdateLogControlConfigParams, opts ...ClientOption) (*UpdateLogControlConfigOK, error)
 
 	UpdateLogIngestConfig(params *UpdateLogIngestConfigParams, opts ...ClientOption) (*UpdateLogIngestConfigOK, error)
+
+	UpdateLogRetentionConfig(params *UpdateLogRetentionConfigParams, opts ...ClientOption) (*UpdateLogRetentionConfigOK, error)
 
 	UpdateLogScaleAction(params *UpdateLogScaleActionParams, opts ...ClientOption) (*UpdateLogScaleActionOK, error)
 
@@ -966,6 +976,43 @@ func (a *Client) CreateLogIngestConfig(params *CreateLogIngestConfigParams, opts
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateLogIngestConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateLogRetentionConfig create log retention config API
+*/
+func (a *Client) CreateLogRetentionConfig(params *CreateLogRetentionConfigParams, opts ...ClientOption) (*CreateLogRetentionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateLogRetentionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateLogRetentionConfig",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/log-retention-configs",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateLogRetentionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateLogRetentionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateLogRetentionConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2305,6 +2352,43 @@ func (a *Client) DeleteLogIngestConfig(params *DeleteLogIngestConfigParams, opts
 }
 
 /*
+DeleteLogRetentionConfig delete log retention config API
+*/
+func (a *Client) DeleteLogRetentionConfig(params *DeleteLogRetentionConfigParams, opts ...ClientOption) (*DeleteLogRetentionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteLogRetentionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteLogRetentionConfig",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/log-retention-configs/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteLogRetentionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteLogRetentionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteLogRetentionConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteLogScaleAction delete log scale action API
 */
 func (a *Client) DeleteLogScaleAction(params *DeleteLogScaleActionParams, opts ...ClientOption) (*DeleteLogScaleActionOK, error) {
@@ -3485,6 +3569,43 @@ func (a *Client) ListGrafanaDashboards(params *ListGrafanaDashboardsParams, opts
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListGrafanaDashboardsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListLogRetentionConfigs list log retention configs API
+*/
+func (a *Client) ListLogRetentionConfigs(params *ListLogRetentionConfigsParams, opts ...ClientOption) (*ListLogRetentionConfigsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListLogRetentionConfigsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListLogRetentionConfigs",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/log-retention-configs",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListLogRetentionConfigsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListLogRetentionConfigsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListLogRetentionConfigsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -4706,6 +4827,43 @@ func (a *Client) ReadLogIngestConfig(params *ReadLogIngestConfigParams, opts ...
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadLogIngestConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadLogRetentionConfig read log retention config API
+*/
+func (a *Client) ReadLogRetentionConfig(params *ReadLogRetentionConfigParams, opts ...ClientOption) (*ReadLogRetentionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadLogRetentionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadLogRetentionConfig",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/log-retention-configs/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadLogRetentionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadLogRetentionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadLogRetentionConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -6075,6 +6233,43 @@ func (a *Client) UpdateLogIngestConfig(params *UpdateLogIngestConfigParams, opts
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateLogIngestConfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateLogRetentionConfig update log retention config API
+*/
+func (a *Client) UpdateLogRetentionConfig(params *UpdateLogRetentionConfigParams, opts ...ClientOption) (*UpdateLogRetentionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateLogRetentionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateLogRetentionConfig",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/log-retention-configs/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateLogRetentionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateLogRetentionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateLogRetentionConfigDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

@@ -5,6 +5,7 @@
 Added:
 * Add `execution_mode` field to `v1/config/RecordingRule`.
 * Pass the value of the `CHRONOSPHERE_ACTOR` environment variable in header `Chronosphere-Actor` header on API requests. The value is recorded as change metadata in Version History.
+* Add support for resource `v1/config/LogRetentionConfig`.
 
 ## v1.20.0
 
