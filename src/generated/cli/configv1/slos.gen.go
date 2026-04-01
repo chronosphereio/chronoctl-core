@@ -606,7 +606,7 @@ spec:
             condition:
                 # The value to compare against.
                 value: <number>
-                op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS>
+                op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
             # Defines the supported time slice sizes for time slice SLIs.
             timeslice_size: <TIMESLICE_SIZE_ONE_MINUTE|TIMESLICE_SIZE_FIVE_MINUTES>
 `

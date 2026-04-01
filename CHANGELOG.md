@@ -6,6 +6,7 @@ Added:
 * Add `execution_mode` field to `v1/config/RecordingRule`.
 * Pass the value of the `CHRONOSPHERE_ACTOR` environment variable in header `Chronosphere-Actor` header on API requests. The value is recorded as change metadata in Version History.
 * Add support for resource `v1/config/LogRetentionConfig`.
+* Add `SIGNAL_NOT_EXISTS` condition op to `v1/config/Monitor`. Signal no longer exists. Behavior varies by alert type: single monitor alerts trigger if all series are missing; signal-based alerts trigger if all series in the signal go missing; alert-on-every-series alerts trigger if any individual series disappears.
 
 ## v1.20.0
 

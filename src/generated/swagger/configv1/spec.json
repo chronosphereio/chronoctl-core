@@ -97,7 +97,8 @@
         "EQ",
         "NEQ",
         "EXISTS",
-        "NOT_EXISTS"
+        "NOT_EXISTS",
+        "SIGNAL_NOT_EXISTS"
       ],
       "type": "string"
     },
