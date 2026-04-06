@@ -6,7 +6,7 @@
     "AllocationFixedValue": {
       "properties": {
         "license": {
-          "$ref": "#/definitions/ResourcePoolsLicense"
+          "$ref": "#/definitions/configv1ResourcePoolsLicense"
         },
         "value": {
           "format": "int64",
@@ -19,7 +19,7 @@
       "description": "Thresholds define strict quota limits for each metrics license.",
       "properties": {
         "license": {
-          "$ref": "#/definitions/ResourcePoolsLicense"
+          "$ref": "#/definitions/configv1ResourcePoolsLicense"
         },
         "all_priorities": {
           "$ref": "#/definitions/ResourcePoolsAllocationThreshold"
@@ -669,7 +669,7 @@
           "type": "string"
         },
         "filters": {
-          "description": "Criteria that defines which data matches the `partition`. Filters are\nconcatenated together as implied `AND` operators. A request must match every\nfilter to match the `partition`.",
+          "description": "Criteria that defines which data matches the `partition`. Filters are\nconcatenated together as implied `AND` operators. A request must match every\nfilter to match the `partition`. At most one `IN` filter and one `NOT_IN`\nfilter is allowed, since multiple filters of the same operator type are\nalways reducible to a single filter.",
           "items": {
             "$ref": "#/definitions/ConsumptionConfigPartitionFilter"
           },
@@ -2197,7 +2197,7 @@
     "PartitionFilterCondition": {
       "properties": {
         "dataset_slug": {
-          "description": "If set, matches incoming data that belongs to the specified dataset.\nThe dataset type must match the budget resource. For example,\n`resource=LOG_PERSISTED_BYTES`, then the dataset type must be\n`type=LOGS`.\n\nExactly one of `dataset_slug` or `log_filter` must be set.",
+          "description": "Deprecated. Use `log_filter` instead.",
           "type": "string"
         },
         "log_filter": {
@@ -2335,17 +2335,6 @@
         }
       },
       "type": "object"
-    },
-    "ResourcePoolsLicense": {
-      "enum": [
-        "PERSISTED_WRITES_STANDARD",
-        "PERSISTED_WRITES_HISTOGRAM",
-        "PERSISTED_CARDINALITY_STANDARD",
-        "PERSISTED_CARDINALITY_HISTOGRAM",
-        "MATCHED_WRITES_STANDARD",
-        "MATCHED_WRITES_HISTOGRAM"
-      ],
-      "type": "string"
     },
     "ResourcePoolsPool": {
       "properties": {
@@ -5649,6 +5638,12 @@
           "description": "Amount of time the query needs to no longer fire before resolving. Must be an\ninteger. Accepts one of `s` (seconds), `m` (minutes), or `h` (hours) as units.",
           "format": "int32",
           "type": "integer"
+        },
+        "resolve_value": {
+          "description": "Value the query must reach to resolve the alert. If not set, the alert\nresolves when the condition that triggered it is no longer true.",
+          "format": "double",
+          "type": "number",
+          "x-nullable": true
         }
       },
       "type": "object"
@@ -6275,6 +6270,17 @@
         }
       },
       "type": "object"
+    },
+    "configv1ResourcePoolsLicense": {
+      "enum": [
+        "PERSISTED_WRITES_STANDARD",
+        "PERSISTED_WRITES_HISTOGRAM",
+        "PERSISTED_CARDINALITY_STANDARD",
+        "PERSISTED_CARDINALITY_HISTOGRAM",
+        "MATCHED_WRITES_STANDARD",
+        "MATCHED_WRITES_HISTOGRAM"
+      ],
+      "type": "string"
     },
     "configv1ResourceType": {
       "enum": [

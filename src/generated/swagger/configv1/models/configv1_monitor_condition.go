@@ -32,6 +32,10 @@ type Configv1MonitorCondition struct {
 	// Amount of time the query needs to no longer fire before resolving. Must be an
 	// integer. Accepts one of `s` (seconds), `m` (minutes), or `h` (hours) as units.
 	ResolveSustainSecs int32 `json:"resolve_sustain_secs,omitempty"`
+
+	// Value the query must reach to resolve the alert. If not set, the alert
+	// resolves when the condition that triggered it is no longer true.
+	ResolveValue *float64 `json:"resolve_value,omitempty"`
 }
 
 // Validate validates this configv1 monitor condition

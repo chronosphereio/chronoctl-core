@@ -357,16 +357,13 @@ spec:
           name: <string>
           # Criteria that defines which data matches the 'partition'. Filters are
           # concatenated together as implied 'AND' operators. A request must match every
-          # filter to match the 'partition'.
+          # filter to match the 'partition'. At most one 'IN' filter and one 'NOT_IN'
+          # filter is allowed, since multiple filters of the same operator type are
+          # always reducible to a single filter.
           filters:
             - # Conditions for the query to match.
               conditions:
-                - # If set, matches incoming data that belongs to the specified dataset.
-                  # The dataset type must match the budget resource. For example,
-                  # 'resource=LOG_PERSISTED_BYTES', then the dataset type must be
-                  # 'type=LOGS'.
-
-                  # Exactly one of 'dataset_slug' or 'log_filter' must be set.
+                - # Deprecated. Use 'log_filter' instead.
                   dataset_slug: <string>
                   log_filter:
                     # Returns logs that match this query. The query can include only top-level

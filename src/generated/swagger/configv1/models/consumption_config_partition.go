@@ -25,7 +25,9 @@ type ConsumptionConfigPartition struct {
 
 	// Criteria that defines which data matches the `partition`. Filters are
 	// concatenated together as implied `AND` operators. A request must match every
-	// filter to match the `partition`.
+	// filter to match the `partition`. At most one `IN` filter and one `NOT_IN`
+	// filter is allowed, since multiple filters of the same operator type are
+	// always reducible to a single filter.
 	Filters []*ConsumptionConfigPartitionFilter `json:"filters"`
 
 	// Optional. Child partitions of this partition. If set, requests that match the

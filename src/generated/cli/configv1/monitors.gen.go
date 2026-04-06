@@ -636,6 +636,9 @@ spec:
                           # Amount of time the query needs to no longer fire before resolving. Must be an
                           # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                           resolve_sustain_secs: <integer>
+                          # Value the query must reach to resolve the alert. If not set, the alert
+                          # resolves when the condition that triggered it is no longer true.
+                          resolve_value: <number>
                           op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
                 warn:
                     # List of conditions to evaluate against a series. Only one condition must
@@ -650,6 +653,9 @@ spec:
                           # Amount of time the query needs to no longer fire before resolving. Must be an
                           # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                           resolve_sustain_secs: <integer>
+                          # Value the query must reach to resolve the alert. If not set, the alert
+                          # resolves when the condition that triggered it is no longer true.
+                          resolve_value: <number>
                           op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
         defaults:
             critical:
@@ -665,6 +671,9 @@ spec:
                       # Amount of time the query needs to no longer fire before resolving. Must be an
                       # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                       resolve_sustain_secs: <integer>
+                      # Value the query must reach to resolve the alert. If not set, the alert
+                      # resolves when the condition that triggered it is no longer true.
+                      resolve_value: <number>
                       op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
             warn:
                 # List of conditions to evaluate against a series. Only one condition must
@@ -679,6 +688,9 @@ spec:
                       # Amount of time the query needs to no longer fire before resolving. Must be an
                       # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                       resolve_sustain_secs: <integer>
+                      # Value the query must reach to resolve the alert. If not set, the alert
+                      # resolves when the condition that triggered it is no longer true.
+                      resolve_value: <number>
                       op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
     # SignalGrouping defines how the set of series from the query are split into signals.
     signal_grouping:
