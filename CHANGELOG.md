@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.23.0
+
 Added:
 * Add `resolve_value` field to `v1/config/Monitor` conditions. Allows configuring a different threshold for resolving an alert.
 
