@@ -6,7 +6,7 @@
     "AllocationFixedValue": {
       "properties": {
         "license": {
-          "$ref": "#/definitions/configv1ResourcePoolsLicense"
+          "$ref": "#/definitions/ResourcePoolsLicense"
         },
         "value": {
           "format": "int64",
@@ -19,7 +19,7 @@
       "description": "Thresholds define strict quota limits for each metrics license.",
       "properties": {
         "license": {
-          "$ref": "#/definitions/configv1ResourcePoolsLicense"
+          "$ref": "#/definitions/ResourcePoolsLicense"
         },
         "all_priorities": {
           "$ref": "#/definitions/ResourcePoolsAllocationThreshold"
@@ -2335,6 +2335,17 @@
         }
       },
       "type": "object"
+    },
+    "ResourcePoolsLicense": {
+      "enum": [
+        "PERSISTED_WRITES_STANDARD",
+        "PERSISTED_WRITES_HISTOGRAM",
+        "PERSISTED_CARDINALITY_STANDARD",
+        "PERSISTED_CARDINALITY_HISTOGRAM",
+        "MATCHED_WRITES_STANDARD",
+        "MATCHED_WRITES_HISTOGRAM"
+      ],
+      "type": "string"
     },
     "ResourcePoolsPool": {
       "properties": {
@@ -5640,10 +5651,7 @@
           "type": "integer"
         },
         "resolve_value": {
-          "description": "Value the query must reach to resolve the alert. If not set, the alert\nresolves when the condition that triggered it is no longer true.",
-          "format": "double",
-          "type": "number",
-          "x-nullable": true
+          "$ref": "#/definitions/configv1OptionalDouble"
         }
       },
       "type": "object"
@@ -5801,6 +5809,20 @@
         },
         "discard": {
           "description": "If `true`, enables the `discard` integration, which discards all\nnotifications. Cannot be set if another integration is set.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1OptionalDouble": {
+      "properties": {
+        "value": {
+          "description": "The configured value, which is ignored if enabled is false.",
+          "format": "double",
+          "type": "number"
+        },
+        "enabled": {
+          "description": "Whether the value is enabled.",
           "type": "boolean"
         }
       },
@@ -6270,17 +6292,6 @@
         }
       },
       "type": "object"
-    },
-    "configv1ResourcePoolsLicense": {
-      "enum": [
-        "PERSISTED_WRITES_STANDARD",
-        "PERSISTED_WRITES_HISTOGRAM",
-        "PERSISTED_CARDINALITY_STANDARD",
-        "PERSISTED_CARDINALITY_HISTOGRAM",
-        "MATCHED_WRITES_STANDARD",
-        "MATCHED_WRITES_HISTOGRAM"
-      ],
-      "type": "string"
     },
     "configv1ResourceType": {
       "enum": [

@@ -19,7 +19,7 @@ import (
 type AllocationThresholds struct {
 
 	// license
-	License Configv1ResourcePoolsLicense `json:"license,omitempty"`
+	License ResourcePoolsLicense `json:"license,omitempty"`
 
 	// all priorities
 	AllPriorities *ResourcePoolsAllocationThreshold `json:"all_priorities,omitempty"`

@@ -19,7 +19,7 @@ import (
 type AllocationFixedValue struct {
 
 	// license
-	License Configv1ResourcePoolsLicense `json:"license,omitempty"`
+	License ResourcePoolsLicense `json:"license,omitempty"`
 
 	// value
 	Value string `json:"value,omitempty"`
