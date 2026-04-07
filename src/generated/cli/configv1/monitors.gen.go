@@ -535,6 +535,11 @@ spec:
     collection:
         slug: <string>
         type: <SIMPLE|SERVICE>
+    notification_template:
+        # Go template for the alert title.
+        title: <string>
+        # Go template for the alert description.
+        description: <string>
     schedule:
         # The timezone of the time ranges.
         timezone: <string>

@@ -80,6 +80,9 @@ type Configv1Monitor struct {
 
 	// Logging query to evaluate for the alert. If set, no other queries can be set.
 	LoggingQuery string `json:"logging_query,omitempty"`
+
+	// notification template
+	NotificationTemplate *MonitorNotificationTemplate `json:"notification_template,omitempty"`
 }
 
 // Validate validates this configv1 monitor
@@ -107,6 +110,10 @@ func (m *Configv1Monitor) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSchedule(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNotificationTemplate(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -216,6 +223,25 @@ func (m *Configv1Monitor) validateSchedule(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Configv1Monitor) validateNotificationTemplate(formats strfmt.Registry) error {
+	if swag.IsZero(m.NotificationTemplate) { // not required
+		return nil
+	}
+
+	if m.NotificationTemplate != nil {
+		if err := m.NotificationTemplate.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("notification_template")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("notification_template")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 monitor based on the context it is used
 func (m *Configv1Monitor) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -241,6 +267,10 @@ func (m *Configv1Monitor) ContextValidate(ctx context.Context, formats strfmt.Re
 	}
 
 	if err := m.contextValidateSchedule(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNotificationTemplate(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -344,6 +374,27 @@ func (m *Configv1Monitor) contextValidateSchedule(ctx context.Context, formats s
 				return ve.ValidateName("schedule")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("schedule")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1Monitor) contextValidateNotificationTemplate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NotificationTemplate != nil {
+
+		if swag.IsZero(m.NotificationTemplate) { // not required
+			return nil
+		}
+
+		if err := m.NotificationTemplate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("notification_template")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("notification_template")
 			}
 			return err
 		}
