@@ -637,6 +637,11 @@ spec:
                           # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                           resolve_sustain_secs: <integer>
                           op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
+                          resolve_value:
+                            # The configured value, which is ignored if enabled is false.
+                            value: <number>
+                            # Whether the value is enabled.
+                            enabled: <true|false>
                 warn:
                     # List of conditions to evaluate against a series. Only one condition must
                     # match to assign a severity to a signal.
@@ -651,6 +656,11 @@ spec:
                           # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                           resolve_sustain_secs: <integer>
                           op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
+                          resolve_value:
+                            # The configured value, which is ignored if enabled is false.
+                            value: <number>
+                            # Whether the value is enabled.
+                            enabled: <true|false>
         defaults:
             critical:
                 # List of conditions to evaluate against a series. Only one condition must
@@ -666,6 +676,11 @@ spec:
                       # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                       resolve_sustain_secs: <integer>
                       op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
+                      resolve_value:
+                        # The configured value, which is ignored if enabled is false.
+                        value: <number>
+                        # Whether the value is enabled.
+                        enabled: <true|false>
             warn:
                 # List of conditions to evaluate against a series. Only one condition must
                 # match to assign a severity to a signal.
@@ -680,6 +695,11 @@ spec:
                       # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                       resolve_sustain_secs: <integer>
                       op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
+                      resolve_value:
+                        # The configured value, which is ignored if enabled is false.
+                        value: <number>
+                        # Whether the value is enabled.
+                        enabled: <true|false>
     # SignalGrouping defines how the set of series from the query are split into signals.
     signal_grouping:
         # Set of label names used to split series into signals. Each unique combination

@@ -669,7 +669,7 @@
           "type": "string"
         },
         "filters": {
-          "description": "Criteria that defines which data matches the `partition`. Filters are\nconcatenated together as implied `AND` operators. A request must match every\nfilter to match the `partition`.",
+          "description": "Criteria that defines which data matches the `partition`. Filters are\nconcatenated together as implied `AND` operators. A request must match every\nfilter to match the `partition`. At most one `IN` filter and one `NOT_IN`\nfilter is allowed, since multiple filters of the same operator type are\nalways reducible to a single filter.",
           "items": {
             "$ref": "#/definitions/ConsumptionConfigPartitionFilter"
           },
@@ -2197,7 +2197,7 @@
     "PartitionFilterCondition": {
       "properties": {
         "dataset_slug": {
-          "description": "If set, matches incoming data that belongs to the specified dataset.\nThe dataset type must match the budget resource. For example,\n`resource=LOG_PERSISTED_BYTES`, then the dataset type must be\n`type=LOGS`.\n\nExactly one of `dataset_slug` or `log_filter` must be set.",
+          "description": "Deprecated. Use `log_filter` instead.",
           "type": "string"
         },
         "log_filter": {
@@ -5649,6 +5649,9 @@
           "description": "Amount of time the query needs to no longer fire before resolving. Must be an\ninteger. Accepts one of `s` (seconds), `m` (minutes), or `h` (hours) as units.",
           "format": "int32",
           "type": "integer"
+        },
+        "resolve_value": {
+          "$ref": "#/definitions/configv1OptionalDouble"
         }
       },
       "type": "object"
@@ -5806,6 +5809,20 @@
         },
         "discard": {
           "description": "If `true`, enables the `discard` integration, which discards all\nnotifications. Cannot be set if another integration is set.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1OptionalDouble": {
+      "properties": {
+        "value": {
+          "description": "The configured value, which is ignored if enabled is false.",
+          "format": "double",
+          "type": "number"
+        },
+        "enabled": {
+          "description": "Whether the value is enabled.",
           "type": "boolean"
         }
       },

@@ -32,6 +32,9 @@ type Configv1MonitorCondition struct {
 	// Amount of time the query needs to no longer fire before resolving. Must be an
 	// integer. Accepts one of `s` (seconds), `m` (minutes), or `h` (hours) as units.
 	ResolveSustainSecs int32 `json:"resolve_sustain_secs,omitempty"`
+
+	// resolve value
+	ResolveValue *Configv1OptionalDouble `json:"resolve_value,omitempty"`
 }
 
 // Validate validates this configv1 monitor condition
@@ -39,6 +42,10 @@ func (m *Configv1MonitorCondition) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOp(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateResolveValue(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -65,11 +72,34 @@ func (m *Configv1MonitorCondition) validateOp(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Configv1MonitorCondition) validateResolveValue(formats strfmt.Registry) error {
+	if swag.IsZero(m.ResolveValue) { // not required
+		return nil
+	}
+
+	if m.ResolveValue != nil {
+		if err := m.ResolveValue.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("resolve_value")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("resolve_value")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 monitor condition based on the context it is used
 func (m *Configv1MonitorCondition) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateOp(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateResolveValue(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -92,6 +122,27 @@ func (m *Configv1MonitorCondition) contextValidateOp(ctx context.Context, format
 			return ce.ValidateName("op")
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m *Configv1MonitorCondition) contextValidateResolveValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ResolveValue != nil {
+
+		if swag.IsZero(m.ResolveValue) { // not required
+			return nil
+		}
+
+		if err := m.ResolveValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("resolve_value")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("resolve_value")
+			}
+			return err
+		}
 	}
 
 	return nil
