@@ -1685,6 +1685,19 @@
       ],
       "type": "string"
     },
+    "MonitorNotificationTemplate": {
+      "properties": {
+        "title": {
+          "description": "Go template for the alert title.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Go template for the alert description.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "MonitorSchedule": {
       "properties": {
         "timezone": {
@@ -5626,6 +5639,9 @@
         "logging_query": {
           "description": "Logging query to evaluate for the alert. If set, no other queries can be set.",
           "type": "string"
+        },
+        "notification_template": {
+          "$ref": "#/definitions/MonitorNotificationTemplate"
         }
       },
       "type": "object"
