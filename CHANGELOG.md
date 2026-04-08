@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.24.0
+
 Added:
 * Add `notification_template` field to `v1/config/Monitor` for customizing notification title and description.
 
