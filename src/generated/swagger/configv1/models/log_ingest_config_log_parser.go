@@ -26,6 +26,9 @@ type LogIngestConfigLogParser struct {
 
 	// key value parser
 	KeyValueParser *LogParserKeyValueParser `json:"key_value_parser,omitempty"`
+
+	// grok parser
+	GrokParser *LogParserGrokParser `json:"grok_parser,omitempty"`
 }
 
 // Validate validates this log ingest config log parser
@@ -41,6 +44,10 @@ func (m *LogIngestConfigLogParser) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateKeyValueParser(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateGrokParser(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -105,6 +112,25 @@ func (m *LogIngestConfigLogParser) validateKeyValueParser(formats strfmt.Registr
 	return nil
 }
 
+func (m *LogIngestConfigLogParser) validateGrokParser(formats strfmt.Registry) error {
+	if swag.IsZero(m.GrokParser) { // not required
+		return nil
+	}
+
+	if m.GrokParser != nil {
+		if err := m.GrokParser.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("grok_parser")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("grok_parser")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this log ingest config log parser based on the context it is used
 func (m *LogIngestConfigLogParser) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -118,6 +144,10 @@ func (m *LogIngestConfigLogParser) ContextValidate(ctx context.Context, formats 
 	}
 
 	if err := m.contextValidateKeyValueParser(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGrokParser(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -179,6 +209,27 @@ func (m *LogIngestConfigLogParser) contextValidateKeyValueParser(ctx context.Con
 				return ve.ValidateName("key_value_parser")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("key_value_parser")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LogIngestConfigLogParser) contextValidateGrokParser(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GrokParser != nil {
+
+		if swag.IsZero(m.GrokParser) { // not required
+			return nil
+		}
+
+		if err := m.GrokParser.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("grok_parser")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("grok_parser")
 			}
 			return err
 		}

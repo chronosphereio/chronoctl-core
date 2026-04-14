@@ -38,6 +38,9 @@ const (
 
 	// LogParserParserTypeKEYVALUE captures enum value "KEY_VALUE"
 	LogParserParserTypeKEYVALUE LogParserParserType = "KEY_VALUE"
+
+	// LogParserParserTypeGROK captures enum value "GROK"
+	LogParserParserTypeGROK LogParserParserType = "GROK"
 )
 
 // for schema
@@ -45,7 +48,7 @@ var logParserParserTypeEnum []interface{}
 
 func init() {
 	var res []LogParserParserType
-	if err := json.Unmarshal([]byte(`["JSON","REGEX","KEY_VALUE"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["JSON","REGEX","KEY_VALUE","GROK"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

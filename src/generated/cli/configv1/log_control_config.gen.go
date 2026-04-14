@@ -395,6 +395,36 @@ spec:
                     selector: <string>
             mode: <COUNTER|GAUGE|HISTOGRAM>
           mode: <ENABLED|DISABLED>
+          # ParseField is the configuration for a parse field action.
+          parse_field:
+            destination:
+                # The log filter used to indicate the field path. Use 'parent[child]' syntax to
+                # indicate nesting.
+                selector: <string>
+            parser:
+                grok_parser:
+                    # The grok pattern to apply. Named capture groups become named fields in 
+                    # the extracted log.
+                    pattern: <string>
+                # A parser to extract key/value pairs from a string.
+                # If duplicate keys are found, the first instance is used.
+                key_value_parser:
+                    # The string for splitting each pair into its key and value.
+                    pair_separator: <string>
+                    # The string for splitting the input into key/value pairs.
+                    delimiter: <string>
+                    # Specifies the code points of any Unicode characters to trim from the
+                    # beginning and end of keys and values.
+                    trim_set: <string>
+                parser_type: <JSON|REGEX|KEY_VALUE|GROK>
+                regex_parser:
+                    # The regular expression parser pattern to apply. Must use RE2 syntax.
+                    # Named capturing groups become named fields in the extracted log.
+                    regex: <string>
+            source:
+                # The log filter used to indicate the field path. Use 'parent[child]' syntax to
+                # indicate nesting.
+                selector: <string>
           # ReplaceField is the configuration for a replace field action.
           replace_field:
             # Defines the the regular expression that determines which part of the field to
@@ -441,7 +471,7 @@ spec:
             # is equal to 100% of logs. For example, to keep 25% of logs, enter '0.25' as
             # the 'rate'.
             rate: <number>
-          type: <DROP|SAMPLE|DROP_FIELD|REPLACE_FIELD|EMIT_METRICS>
+          type: <DROP|SAMPLE|DROP_FIELD|REPLACE_FIELD|EMIT_METRICS|PARSE_FIELD>
 `
 
 func newLogControlConfigScaffoldCmd() *cobra.Command {

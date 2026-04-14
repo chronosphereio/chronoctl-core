@@ -634,7 +634,7 @@
     "ConsumptionBudgetPriorityFilter": {
       "properties": {
         "dataset_slug": {
-          "description": "If set, matches incoming data that belongs to the specified dataset.\n\nExactly one of `dataset_slug` or `log_filter` must be set.",
+          "description": "Deprecated. Use `log_filter` instead.",
           "type": "string"
         },
         "log_filter": {
@@ -646,7 +646,9 @@
     "ConsumptionBudgetSKUGroup": {
       "enum": [
         "LOG_PERSISTED_BYTES",
-        "LOG_PROCESSED_BYTES"
+        "LOG_PROCESSED_BYTES",
+        "METRIC_PERSISTED_SERIES",
+        "METRIC_ALL"
       ],
       "type": "string"
     },
@@ -674,7 +676,8 @@
     },
     "ConsumptionBudgetUnit": {
       "enum": [
-        "NATIVE"
+        "NATIVE",
+        "CREDITS"
       ],
       "type": "string"
     },
@@ -1247,6 +1250,21 @@
       },
       "type": "object"
     },
+    "LogControlRuleParseField": {
+      "description": "ParseField is the configuration for a parse field action.",
+      "properties": {
+        "source": {
+          "$ref": "#/definitions/configv1LogFieldPath"
+        },
+        "destination": {
+          "$ref": "#/definitions/configv1LogFieldPath"
+        },
+        "parser": {
+          "$ref": "#/definitions/LogIngestConfigLogParser"
+        }
+      },
+      "type": "object"
+    },
     "LogControlRuleReplaceField": {
       "description": "ReplaceField is the configuration for a replace field action.",
       "properties": {
@@ -1343,6 +1361,9 @@
         },
         "key_value_parser": {
           "$ref": "#/definitions/LogParserKeyValueParser"
+        },
+        "grok_parser": {
+          "$ref": "#/definitions/LogParserGrokParser"
         }
       },
       "type": "object"
@@ -1430,6 +1451,15 @@
       },
       "type": "object"
     },
+    "LogParserGrokParser": {
+      "properties": {
+        "pattern": {
+          "description": "The grok pattern to apply. Named capture groups become named fields in \nthe extracted log.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "LogParserKeyValueParser": {
       "description": "A parser to extract key/value pairs from a string.\nIf duplicate keys are found, the first instance is used.",
       "properties": {
@@ -1452,7 +1482,8 @@
       "enum": [
         "JSON",
         "REGEX",
-        "KEY_VALUE"
+        "KEY_VALUE",
+        "GROK"
       ],
       "type": "string"
     },
@@ -2026,11 +2057,18 @@
     "PartitionFilterCondition": {
       "properties": {
         "dataset_slug": {
-          "description": "Deprecated. Use `log_filter` instead.",
+          "description": "Deprecated. Use `log_filter`, `metric_filters`, or `trace_filter` instead.",
           "type": "string"
         },
         "log_filter": {
           "$ref": "#/definitions/configv1LogSearchFilter"
+        },
+        "metric_filters": {
+          "description": "If set, matches incoming metric data by label. If multiple label\nfilters are specified, an incoming metric must match every label\nfilter to match the condition. Label values support glob patterns,\nincluding matching multiple patterns with an `OR`, such as\n`service:{svc1,svc2}`.\n\nExactly one of `log_filter`, `metric_filters`, or `trace_filter` must be set.",
+          "items": {
+            "$ref": "#/definitions/configv1LabelFilter"
+          },
+          "type": "array"
         },
         "trace_filter": {
           "$ref": "#/definitions/configv1TraceSearchFilter"
@@ -5259,6 +5297,9 @@
         },
         "emit_metrics": {
           "$ref": "#/definitions/LogControlRuleEmitMetrics"
+        },
+        "parse_field": {
+          "$ref": "#/definitions/LogControlRuleParseField"
         }
       },
       "type": "object"
@@ -5276,7 +5317,8 @@
         "SAMPLE",
         "DROP_FIELD",
         "REPLACE_FIELD",
-        "EMIT_METRICS"
+        "EMIT_METRICS",
+        "PARSE_FIELD"
       ],
       "type": "string"
     },
