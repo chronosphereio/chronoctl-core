@@ -13,13 +13,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NotifierVictorOpsConfig notifier victor ops config
+// Configv1NotifierVictorOpsConfig configv1 notifier victor ops config
 //
-// swagger:model NotifierVictorOpsConfig
-type NotifierVictorOpsConfig struct {
+// swagger:model configv1NotifierVictorOpsConfig
+type Configv1NotifierVictorOpsConfig struct {
 
 	// http config
-	HTTPConfig *NotifierHTTPConfig `json:"http_config,omitempty"`
+	HTTPConfig *Configv1NotifierHTTPConfig `json:"http_config,omitempty"`
 
 	// Your VictorOps API key. Required if including a `victor_ops` object in
 	// your request body.
@@ -50,8 +50,8 @@ type NotifierVictorOpsConfig struct {
 	CustomFields map[string]string `json:"custom_fields,omitempty"`
 }
 
-// Validate validates this notifier victor ops config
-func (m *NotifierVictorOpsConfig) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 notifier victor ops config
+func (m *Configv1NotifierVictorOpsConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateHTTPConfig(formats); err != nil {
@@ -64,7 +64,7 @@ func (m *NotifierVictorOpsConfig) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *NotifierVictorOpsConfig) validateHTTPConfig(formats strfmt.Registry) error {
+func (m *Configv1NotifierVictorOpsConfig) validateHTTPConfig(formats strfmt.Registry) error {
 	if swag.IsZero(m.HTTPConfig) { // not required
 		return nil
 	}
@@ -83,8 +83,8 @@ func (m *NotifierVictorOpsConfig) validateHTTPConfig(formats strfmt.Registry) er
 	return nil
 }
 
-// ContextValidate validate this notifier victor ops config based on the context it is used
-func (m *NotifierVictorOpsConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 notifier victor ops config based on the context it is used
+func (m *Configv1NotifierVictorOpsConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateHTTPConfig(ctx, formats); err != nil {
@@ -97,7 +97,7 @@ func (m *NotifierVictorOpsConfig) ContextValidate(ctx context.Context, formats s
 	return nil
 }
 
-func (m *NotifierVictorOpsConfig) contextValidateHTTPConfig(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1NotifierVictorOpsConfig) contextValidateHTTPConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HTTPConfig != nil {
 
@@ -119,7 +119,7 @@ func (m *NotifierVictorOpsConfig) contextValidateHTTPConfig(ctx context.Context,
 }
 
 // MarshalBinary interface implementation
-func (m *NotifierVictorOpsConfig) MarshalBinary() ([]byte, error) {
+func (m *Configv1NotifierVictorOpsConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -127,8 +127,8 @@ func (m *NotifierVictorOpsConfig) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *NotifierVictorOpsConfig) UnmarshalBinary(b []byte) error {
-	var res NotifierVictorOpsConfig
+func (m *Configv1NotifierVictorOpsConfig) UnmarshalBinary(b []byte) error {
+	var res Configv1NotifierVictorOpsConfig
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

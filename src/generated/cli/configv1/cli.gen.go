@@ -23,6 +23,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewDerivedLabelCmd())
 	root.AddCommand(NewDerivedMetricCmd())
 	root.AddCommand(NewDropRuleCmd())
+	root.AddCommand(NewExternalConnectionCmd())
 	root.AddCommand(NewGcpMetricsIntegrationCmd())
 	root.AddCommand(NewGrafanaDashboardCmd())
 	root.AddCommand(NewLogAllocationConfigCmd())
@@ -224,6 +225,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateDropRule(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		ExternalConnectionTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*ExternalConnection)
+			if !ok {
+				return types.WrongObjectErr((&ExternalConnection{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateExternalConnection(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

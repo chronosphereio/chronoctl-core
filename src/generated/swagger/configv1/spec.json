@@ -273,6 +273,22 @@
       },
       "type": "object"
     },
+    "ConfigV1UpdateExternalConnectionBody": {
+      "properties": {
+        "external_connection": {
+          "$ref": "#/definitions/configv1ExternalConnection"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the ExternalConnection will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the ExternalConnection does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the ExternalConnection. If the specified configuration is valid, the endpoint returns a partial response without the ExternalConnection. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateGcpMetricsIntegrationBody": {
       "properties": {
         "gcp_metrics_integration": {
@@ -848,6 +864,81 @@
       },
       "type": "object"
     },
+    "DestinationEmailTarget": {
+      "properties": {
+        "addresses": {
+          "description": "The email addresses to send notifications to.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "DestinationOpsGenieTarget": {
+      "properties": {
+        "external_connection_slug": {
+          "description": "The slug of the ExternalConnection that holds OpsGenie credentials.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DestinationPagerdutyTarget": {
+      "properties": {
+        "external_connection_slug": {
+          "description": "The slug of the ExternalConnection that holds PagerDuty credentials.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DestinationSlackTarget": {
+      "properties": {
+        "external_connection_slug": {
+          "description": "The slug of the ExternalConnection that holds Slack credentials.",
+          "type": "string"
+        },
+        "channels": {
+          "description": "The Slack channels to send notifications to.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "DestinationVictorOpsTarget": {
+      "properties": {
+        "external_connection_slug": {
+          "description": "The slug of the ExternalConnection that holds VictorOps credentials.",
+          "type": "string"
+        },
+        "routing_key": {
+          "description": "The VictorOps routing key that determines where notifications are routed.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DestinationWebhookTarget": {
+      "properties": {
+        "external_connection_slug": {
+          "description": "The slug of the ExternalConnection that holds webhook credentials.",
+          "type": "string"
+        },
+        "query_parameters": {
+          "description": "Query parameters to add to the webhook URL.\nIf the webhook URL already contains parameters, these will be appended.",
+          "items": {
+            "$ref": "#/definitions/WebhookTargetQueryParameter"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "DropRuleConditionalRateBasedDrop": {
       "description": "No longer supported and cannot be used.\nDefines behavior for conditional drop policies.",
       "properties": {
@@ -914,6 +1005,16 @@
         "COUNTER",
         "GAUGE",
         "HISTOGRAM"
+      ],
+      "type": "string"
+    },
+    "ExternalConnectionConnectionType": {
+      "enum": [
+        "SLACK",
+        "PAGERDUTY",
+        "WEBHOOK",
+        "VICTOROPS",
+        "OPSGENIE"
       ],
       "type": "string"
     },
@@ -1033,26 +1134,6 @@
         "TAG"
       ],
       "type": "string"
-    },
-    "HTTPConfigBasicAuth": {
-      "properties": {
-        "username": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "HTTPConfigTLSConfig": {
-      "properties": {
-        "insecure_skip_verify": {
-          "description": "If `true`, disables validation of the server certificate.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
     },
     "ListMutingRulesRequestState": {
       "enum": [
@@ -1817,229 +1898,6 @@
       },
       "type": "object"
     },
-    "NotifierHTTPConfig": {
-      "properties": {
-        "basic_auth": {
-          "$ref": "#/definitions/HTTPConfigBasicAuth"
-        },
-        "bearer_token": {
-          "description": "Sets a token for bearer authentication. Cannot be set if `basic_auth` is set.",
-          "type": "string"
-        },
-        "proxy_url": {
-          "description": "Your proxy URL. (This parameter is deprecated, and custom proxies are\nunsupported.)",
-          "type": "string"
-        },
-        "tls_config": {
-          "$ref": "#/definitions/HTTPConfigTLSConfig"
-        }
-      },
-      "type": "object"
-    },
-    "NotifierOpsGenieConfig": {
-      "properties": {
-        "http_config": {
-          "$ref": "#/definitions/NotifierHTTPConfig"
-        },
-        "api_key": {
-          "description": "Your Opsgenie API key. Required if including an `ops_genie` object in your\nrequest body.",
-          "type": "string"
-        },
-        "api_url": {
-          "description": "The Opsgenie API URL to send requests to. Required if including an\n`ops_genie` object in your request body.",
-          "example": "https://api.opsgenie.com/",
-          "type": "string"
-        },
-        "message": {
-          "description": "The alert text.",
-          "type": "string"
-        },
-        "description": {
-          "description": "A description of the alert.",
-          "type": "string"
-        },
-        "source": {
-          "description": "A backlink to the sender of the notification.",
-          "type": "string"
-        },
-        "details": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "A set of key/value pairs with additional information about the alert. These\nkey/value pairs can include any arbitrary data.",
-          "type": "object"
-        },
-        "responders": {
-          "description": "List of responders responsible for notifications.",
-          "items": {
-            "$ref": "#/definitions/OpsGenieConfigResponder"
-          },
-          "type": "array"
-        },
-        "tags": {
-          "description": "A comma-separated list of tags attached to the notifications.",
-          "type": "string"
-        },
-        "note": {
-          "description": "A note about the alert.",
-          "type": "string"
-        },
-        "priority": {
-          "description": "The priority level of alert. Possible values are `P1`, `P2`, `P3`, `P4`, and `P5`.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "NotifierPagerdutyConfig": {
-      "properties": {
-        "http_config": {
-          "$ref": "#/definitions/NotifierHTTPConfig"
-        },
-        "url": {
-          "description": "The Pagerduty URL to send API requests to.",
-          "type": "string"
-        },
-        "client": {
-          "description": "The client identification of the notification sender.",
-          "type": "string"
-        },
-        "client_url": {
-          "description": "A backlink to the sender of the notification.",
-          "type": "string"
-        },
-        "description": {
-          "description": "A description of the incident.",
-          "type": "string"
-        },
-        "severity": {
-          "description": "The severity of the incident. Possible values: `critical`, `error`,\n`warning`, or `info`.",
-          "type": "string"
-        },
-        "class": {
-          "description": "The class of the event.",
-          "type": "string"
-        },
-        "component": {
-          "description": "The part or component of the affected system that is broken.",
-          "type": "string"
-        },
-        "group": {
-          "description": "A cluster or grouping of services.",
-          "type": "string"
-        },
-        "details": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "A set of key/value pairs with additional information about the incident. These\nkey/value pairs can include any arbitrary data.",
-          "type": "object"
-        },
-        "images": {
-          "description": "Images to attach to the incident.",
-          "items": {
-            "$ref": "#/definitions/PagerdutyConfigImage"
-          },
-          "type": "array"
-        },
-        "links": {
-          "description": "Links to attach to the incident.",
-          "items": {
-            "$ref": "#/definitions/PagerdutyConfigLink"
-          },
-          "type": "array"
-        },
-        "service_key": {
-          "description": "Your PagerDuty integration key, if using the PagerDuty integration type\n`Prometheus`. Cannot be set if `routing_key` is set.",
-          "type": "string"
-        },
-        "routing_key": {
-          "description": "Your PagerDuty integration key, if using the PagerDuty integration type\n`Events API v2`. Cannot be set if `service_key` is set.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "NotifierSlackConfig": {
-      "properties": {
-        "http_config": {
-          "$ref": "#/definitions/NotifierHTTPConfig"
-        },
-        "api_url": {
-          "description": "Your Slack webhook API URL. Required if including a `slack` object in\nyour request body.",
-          "type": "string"
-        },
-        "channel": {
-          "description": "The channel to send notifications to.",
-          "type": "string"
-        },
-        "username": {
-          "description": "The user to send notifications to.",
-          "type": "string"
-        },
-        "color": {
-          "type": "string"
-        },
-        "title": {
-          "type": "string"
-        },
-        "title_link": {
-          "type": "string"
-        },
-        "pretext": {
-          "type": "string"
-        },
-        "text": {
-          "type": "string"
-        },
-        "footer": {
-          "type": "string"
-        },
-        "fallback": {
-          "type": "string"
-        },
-        "callback_id": {
-          "type": "string"
-        },
-        "icon_emoji": {
-          "type": "string"
-        },
-        "icon_url": {
-          "type": "string"
-        },
-        "image_url": {
-          "type": "string"
-        },
-        "thumb_url": {
-          "type": "string"
-        },
-        "short_fields": {
-          "type": "boolean"
-        },
-        "link_names": {
-          "type": "boolean"
-        },
-        "mrkdwn_in": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "fields": {
-          "items": {
-            "$ref": "#/definitions/SlackConfigField"
-          },
-          "type": "array"
-        },
-        "actions": {
-          "items": {
-            "$ref": "#/definitions/NotifierSlackConfigAction"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "NotifierSlackConfigAction": {
       "properties": {
         "type": {
@@ -2062,60 +1920,6 @@
         },
         "confirm_field": {
           "$ref": "#/definitions/SlackConfigConfirmationField"
-        }
-      },
-      "type": "object"
-    },
-    "NotifierVictorOpsConfig": {
-      "properties": {
-        "http_config": {
-          "$ref": "#/definitions/NotifierHTTPConfig"
-        },
-        "api_key": {
-          "description": "Your VictorOps API key. Required if including a `victor_ops` object in\nyour request body.",
-          "type": "string"
-        },
-        "api_url": {
-          "description": "The VictorOps API URL. Required if including a `victor_ops` object in your\nrequest body.",
-          "type": "string"
-        },
-        "routing_key": {
-          "description": "Your VictorOps routing key. Required if including a `victor_ops` object in\nyour request body.",
-          "type": "string"
-        },
-        "message_type": {
-          "description": "The behavior of the alert. Possible values are `CRITICAL`, `WARNING`, and\n`INFO`.",
-          "type": "string"
-        },
-        "entity_display_name": {
-          "description": "A summary of the alerted problem.",
-          "type": "string"
-        },
-        "state_message": {
-          "description": "A detailed explanation of the alerted problem.",
-          "type": "string"
-        },
-        "monitoring_tool": {
-          "description": "The monitoring tool from which the state message originated.",
-          "type": "string"
-        },
-        "custom_fields": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type": "object"
-        }
-      },
-      "type": "object"
-    },
-    "NotifierWebhookConfig": {
-      "properties": {
-        "http_config": {
-          "$ref": "#/definitions/NotifierHTTPConfig"
-        },
-        "url": {
-          "description": "Your webhook URL. This URL will be called as a `POST` request. Required\nif including a `webhook` object in your request body.",
-          "type": "string"
         }
       },
       "type": "object"
@@ -2207,6 +2011,18 @@
       },
       "type": "object"
     },
+    "PagerdutyConfigPagerdutyEventsConfig": {
+      "properties": {
+        "version": {
+          "$ref": "#/definitions/configv1PagerdutyEventsVersion"
+        },
+        "api_key": {
+          "description": "The PagerDuty integration key used to authenticate with the Events API.\nPagerDuty calls this the \"routing key\" in Events v2 and the\n\"service key\" in Events v1.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "PartitionFilterCondition": {
       "properties": {
         "dataset_slug": {
@@ -2215,6 +2031,9 @@
         },
         "log_filter": {
           "$ref": "#/definitions/configv1LogSearchFilter"
+        },
+        "trace_filter": {
+          "$ref": "#/definitions/configv1TraceSearchFilter"
         }
       },
       "type": "object"
@@ -2441,6 +2260,33 @@
       ],
       "type": "string"
     },
+    "RoutesDestination": {
+      "properties": {
+        "email": {
+          "$ref": "#/definitions/DestinationEmailTarget"
+        },
+        "slack": {
+          "$ref": "#/definitions/DestinationSlackTarget"
+        },
+        "pagerduty": {
+          "$ref": "#/definitions/DestinationPagerdutyTarget"
+        },
+        "webhook": {
+          "$ref": "#/definitions/DestinationWebhookTarget"
+        },
+        "ops_genie": {
+          "$ref": "#/definitions/DestinationOpsGenieTarget"
+        },
+        "victor_ops": {
+          "$ref": "#/definitions/DestinationVictorOpsTarget"
+        },
+        "disable_resolves": {
+          "description": "If true, do not send notifications when alerts resolve.\nDefaults to false (resolve notifications are sent).",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "RoutesNotifierList": {
       "properties": {
         "notifier_slugs": {
@@ -2457,6 +2303,13 @@
         },
         "group_by": {
           "$ref": "#/definitions/NotificationPolicyRoutesGroupBy"
+        },
+        "destinations": {
+          "description": "Notification destinations. Cannot be set if notifier_slugs is set.",
+          "items": {
+            "$ref": "#/definitions/RoutesDestination"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -3128,6 +2981,17 @@
       ],
       "type": "string"
     },
+    "WebhookTargetQueryParameter": {
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "apiError": {
       "properties": {
         "code": {
@@ -3662,6 +3526,26 @@
       "properties": {
         "drop_rule": {
           "$ref": "#/definitions/configv1DropRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateExternalConnectionRequest": {
+      "properties": {
+        "external_connection": {
+          "$ref": "#/definitions/configv1ExternalConnection"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the ExternalConnection. If the specified configuration is valid, the endpoint returns a partial response without the ExternalConnection. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateExternalConnectionResponse": {
+      "properties": {
+        "external_connection": {
+          "$ref": "#/definitions/configv1ExternalConnection"
         }
       },
       "type": "object"
@@ -4308,6 +4192,9 @@
     "configv1DeleteDropRuleResponse": {
       "type": "object"
     },
+    "configv1DeleteExternalConnectionResponse": {
+      "type": "object"
+    },
     "configv1DeleteGcpMetricsIntegrationResponse": {
       "type": "object"
     },
@@ -4550,6 +4437,134 @@
         "PREVIEW"
       ],
       "type": "string"
+    },
+    "configv1ExternalConnection": {
+      "properties": {
+        "slug": {
+          "description": "The unique identifier of the ExternalConnection. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the ExternalConnection is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the ExternalConnection. You can modify this value after the ExternalConnection is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the ExternalConnection was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the ExternalConnection was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "slack": {
+          "$ref": "#/definitions/configv1ExternalConnectionSlackConfig"
+        },
+        "pagerduty": {
+          "$ref": "#/definitions/configv1ExternalConnectionPagerdutyConfig"
+        },
+        "webhook": {
+          "$ref": "#/definitions/configv1ExternalConnectionWebhookConfig"
+        },
+        "victor_ops": {
+          "$ref": "#/definitions/configv1ExternalConnectionVictorOpsConfig"
+        },
+        "ops_genie": {
+          "$ref": "#/definitions/configv1ExternalConnectionOpsGenieConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ExternalConnectionHTTPConfig": {
+      "properties": {
+        "basic_auth": {
+          "$ref": "#/definitions/configv1ExternalConnectionHTTPConfigBasicAuth"
+        },
+        "bearer_token": {
+          "type": "string"
+        },
+        "tls_config": {
+          "$ref": "#/definitions/configv1ExternalConnectionHTTPConfigTLSConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ExternalConnectionHTTPConfigBasicAuth": {
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ExternalConnectionHTTPConfigTLSConfig": {
+      "properties": {
+        "insecure_skip_verify": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ExternalConnectionOpsGenieConfig": {
+      "properties": {
+        "api_key": {
+          "type": "string"
+        },
+        "api_url": {
+          "type": "string"
+        },
+        "http_config": {
+          "$ref": "#/definitions/configv1ExternalConnectionHTTPConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ExternalConnectionPagerdutyConfig": {
+      "properties": {
+        "events": {
+          "$ref": "#/definitions/PagerdutyConfigPagerdutyEventsConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ExternalConnectionSlackConfig": {
+      "properties": {
+        "api_url": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ExternalConnectionVictorOpsConfig": {
+      "properties": {
+        "api_key": {
+          "type": "string"
+        },
+        "api_url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ExternalConnectionWebhookConfig": {
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "http_config": {
+          "$ref": "#/definitions/configv1ExternalConnectionHTTPConfig"
+        }
+      },
+      "type": "object"
     },
     "configv1GcpMetricsIntegration": {
       "properties": {
@@ -4851,6 +4866,20 @@
         "drop_rules": {
           "items": {
             "$ref": "#/definitions/configv1DropRule"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListExternalConnectionsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "external_connections": {
+          "items": {
+            "$ref": "#/definitions/configv1ExternalConnection"
           },
           "type": "array"
         }
@@ -5806,26 +5835,323 @@
           "type": "boolean"
         },
         "webhook": {
-          "$ref": "#/definitions/NotifierWebhookConfig"
+          "$ref": "#/definitions/configv1NotifierWebhookConfig"
         },
         "slack": {
-          "$ref": "#/definitions/NotifierSlackConfig"
+          "$ref": "#/definitions/configv1NotifierSlackConfig"
         },
         "pagerduty": {
-          "$ref": "#/definitions/NotifierPagerdutyConfig"
+          "$ref": "#/definitions/configv1NotifierPagerdutyConfig"
         },
         "email": {
           "$ref": "#/definitions/NotifierEmailConfig"
         },
         "ops_genie": {
-          "$ref": "#/definitions/NotifierOpsGenieConfig"
+          "$ref": "#/definitions/configv1NotifierOpsGenieConfig"
         },
         "victor_ops": {
-          "$ref": "#/definitions/NotifierVictorOpsConfig"
+          "$ref": "#/definitions/configv1NotifierVictorOpsConfig"
         },
         "discard": {
           "description": "If `true`, enables the `discard` integration, which discards all\nnotifications. Cannot be set if another integration is set.",
           "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1NotifierHTTPConfig": {
+      "properties": {
+        "basic_auth": {
+          "$ref": "#/definitions/configv1NotifierHTTPConfigBasicAuth"
+        },
+        "bearer_token": {
+          "description": "Sets a token for bearer authentication. Cannot be set if `basic_auth` is set.",
+          "type": "string"
+        },
+        "proxy_url": {
+          "description": "Your proxy URL. (This parameter is deprecated, and custom proxies are\nunsupported.)",
+          "type": "string"
+        },
+        "tls_config": {
+          "$ref": "#/definitions/configv1NotifierHTTPConfigTLSConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configv1NotifierHTTPConfigBasicAuth": {
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1NotifierHTTPConfigTLSConfig": {
+      "properties": {
+        "insecure_skip_verify": {
+          "description": "If `true`, disables validation of the server certificate.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1NotifierOpsGenieConfig": {
+      "properties": {
+        "http_config": {
+          "$ref": "#/definitions/configv1NotifierHTTPConfig"
+        },
+        "api_key": {
+          "description": "Your Opsgenie API key. Required if including an `ops_genie` object in your\nrequest body.",
+          "type": "string"
+        },
+        "api_url": {
+          "description": "The Opsgenie API URL to send requests to. Required if including an\n`ops_genie` object in your request body.",
+          "example": "https://api.opsgenie.com/",
+          "type": "string"
+        },
+        "message": {
+          "description": "The alert text.",
+          "type": "string"
+        },
+        "description": {
+          "description": "A description of the alert.",
+          "type": "string"
+        },
+        "source": {
+          "description": "A backlink to the sender of the notification.",
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "A set of key/value pairs with additional information about the alert. These\nkey/value pairs can include any arbitrary data.",
+          "type": "object"
+        },
+        "responders": {
+          "description": "List of responders responsible for notifications.",
+          "items": {
+            "$ref": "#/definitions/OpsGenieConfigResponder"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "description": "A comma-separated list of tags attached to the notifications.",
+          "type": "string"
+        },
+        "note": {
+          "description": "A note about the alert.",
+          "type": "string"
+        },
+        "priority": {
+          "description": "The priority level of alert. Possible values are `P1`, `P2`, `P3`, `P4`, and `P5`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1NotifierPagerdutyConfig": {
+      "properties": {
+        "http_config": {
+          "$ref": "#/definitions/configv1NotifierHTTPConfig"
+        },
+        "url": {
+          "description": "The Pagerduty URL to send API requests to.",
+          "type": "string"
+        },
+        "client": {
+          "description": "The client identification of the notification sender.",
+          "type": "string"
+        },
+        "client_url": {
+          "description": "A backlink to the sender of the notification.",
+          "type": "string"
+        },
+        "description": {
+          "description": "A description of the incident.",
+          "type": "string"
+        },
+        "severity": {
+          "description": "The severity of the incident. Possible values: `critical`, `error`,\n`warning`, or `info`.",
+          "type": "string"
+        },
+        "class": {
+          "description": "The class of the event.",
+          "type": "string"
+        },
+        "component": {
+          "description": "The part or component of the affected system that is broken.",
+          "type": "string"
+        },
+        "group": {
+          "description": "A cluster or grouping of services.",
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "A set of key/value pairs with additional information about the incident. These\nkey/value pairs can include any arbitrary data.",
+          "type": "object"
+        },
+        "images": {
+          "description": "Images to attach to the incident.",
+          "items": {
+            "$ref": "#/definitions/PagerdutyConfigImage"
+          },
+          "type": "array"
+        },
+        "links": {
+          "description": "Links to attach to the incident.",
+          "items": {
+            "$ref": "#/definitions/PagerdutyConfigLink"
+          },
+          "type": "array"
+        },
+        "service_key": {
+          "description": "Your PagerDuty integration key, if using the PagerDuty integration type\n`Prometheus`. Cannot be set if `routing_key` is set.",
+          "type": "string"
+        },
+        "routing_key": {
+          "description": "Your PagerDuty integration key, if using the PagerDuty integration type\n`Events API v2`. Cannot be set if `service_key` is set.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1NotifierSlackConfig": {
+      "properties": {
+        "http_config": {
+          "$ref": "#/definitions/configv1NotifierHTTPConfig"
+        },
+        "api_url": {
+          "description": "Your Slack webhook API URL. Required if including a `slack` object in\nyour request body.",
+          "type": "string"
+        },
+        "channel": {
+          "description": "The channel to send notifications to.",
+          "type": "string"
+        },
+        "username": {
+          "description": "The user to send notifications to.",
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "title_link": {
+          "type": "string"
+        },
+        "pretext": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "footer": {
+          "type": "string"
+        },
+        "fallback": {
+          "type": "string"
+        },
+        "callback_id": {
+          "type": "string"
+        },
+        "icon_emoji": {
+          "type": "string"
+        },
+        "icon_url": {
+          "type": "string"
+        },
+        "image_url": {
+          "type": "string"
+        },
+        "thumb_url": {
+          "type": "string"
+        },
+        "short_fields": {
+          "type": "boolean"
+        },
+        "link_names": {
+          "type": "boolean"
+        },
+        "mrkdwn_in": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/definitions/SlackConfigField"
+          },
+          "type": "array"
+        },
+        "actions": {
+          "items": {
+            "$ref": "#/definitions/NotifierSlackConfigAction"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1NotifierVictorOpsConfig": {
+      "properties": {
+        "http_config": {
+          "$ref": "#/definitions/configv1NotifierHTTPConfig"
+        },
+        "api_key": {
+          "description": "Your VictorOps API key. Required if including a `victor_ops` object in\nyour request body.",
+          "type": "string"
+        },
+        "api_url": {
+          "description": "The VictorOps API URL. Required if including a `victor_ops` object in your\nrequest body.",
+          "type": "string"
+        },
+        "routing_key": {
+          "description": "Your VictorOps routing key. Required if including a `victor_ops` object in\nyour request body.",
+          "type": "string"
+        },
+        "message_type": {
+          "description": "The behavior of the alert. Possible values are `CRITICAL`, `WARNING`, and\n`INFO`.",
+          "type": "string"
+        },
+        "entity_display_name": {
+          "description": "A summary of the alerted problem.",
+          "type": "string"
+        },
+        "state_message": {
+          "description": "A detailed explanation of the alerted problem.",
+          "type": "string"
+        },
+        "monitoring_tool": {
+          "description": "The monitoring tool from which the state message originated.",
+          "type": "string"
+        },
+        "custom_fields": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "configv1NotifierWebhookConfig": {
+      "properties": {
+        "http_config": {
+          "$ref": "#/definitions/configv1NotifierHTTPConfig"
+        },
+        "url": {
+          "description": "Your webhook URL. This URL will be called as a `POST` request. Required\nif including a `webhook` object in your request body.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -5886,6 +6212,14 @@
         }
       },
       "type": "object"
+    },
+    "configv1PagerdutyEventsVersion": {
+      "description": "PagerdutyEventsVersion selects the PagerDuty Events API version.\nThe version determines which PagerDuty Events API payload format is used\nwhen delivering alerts through this external connection.\n\n - PAGERDUTY_EVENTS_VERSION_V1: V1 is the legacy PagerDuty Events API version.\n - PAGERDUTY_EVENTS_VERSION_V2: V2 is the default and recommended version.",
+      "enum": [
+        "PAGERDUTY_EVENTS_VERSION_V1",
+        "PAGERDUTY_EVENTS_VERSION_V2"
+      ],
+      "type": "string"
     },
     "configv1ReadAzureMetricsIntegrationResponse": {
       "properties": {
@@ -5971,6 +6305,14 @@
       "properties": {
         "drop_rule": {
           "$ref": "#/definitions/configv1DropRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadExternalConnectionResponse": {
+      "properties": {
+        "external_connection": {
+          "$ref": "#/definitions/configv1ExternalConnection"
         }
       },
       "type": "object"
@@ -7072,6 +7414,14 @@
       "properties": {
         "drop_rule": {
           "$ref": "#/definitions/configv1DropRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateExternalConnectionResponse": {
+      "properties": {
+        "external_connection": {
+          "$ref": "#/definitions/configv1ExternalConnection"
         }
       },
       "type": "object"
@@ -10270,6 +10620,281 @@
         },
         "tags": [
           "DropRule"
+        ]
+      }
+    },
+    "/api/v1/config/external-connections": {
+      "get": {
+        "operationId": "ListExternalConnections",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any ExternalConnection with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any ExternalConnection with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "in": "query",
+            "items": {
+              "enum": [
+                "SLACK",
+                "PAGERDUTY",
+                "WEBHOOK",
+                "VICTOROPS",
+                "OPSGENIE"
+              ],
+              "type": "string"
+            },
+            "name": "connection_types",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListExternalConnectionsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ExternalConnection"
+        ]
+      },
+      "post": {
+        "operationId": "CreateExternalConnection",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateExternalConnectionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created ExternalConnection.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateExternalConnectionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the ExternalConnection because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the ExternalConnection because there is a conflict with an existing ExternalConnection.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ExternalConnection"
+        ]
+      }
+    },
+    "/api/v1/config/external-connections/{slug}": {
+      "delete": {
+        "operationId": "DeleteExternalConnection",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteExternalConnectionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the ExternalConnection because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the ExternalConnection because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ExternalConnection"
+        ]
+      },
+      "get": {
+        "operationId": "ReadExternalConnection",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadExternalConnectionResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the ExternalConnection because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ExternalConnection"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateExternalConnection",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateExternalConnectionBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated ExternalConnection.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateExternalConnectionResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the ExternalConnection because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the ExternalConnection because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the ExternalConnection because there is a conflict with an existing ExternalConnection.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "ExternalConnection"
         ]
       }
     },

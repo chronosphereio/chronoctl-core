@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Added:
+* Add support for resource `v1/config/ExternalConnection`. Manages external connections for notification targets including Slack, PagerDuty, Webhook, VictorOps, and OpsGenie.
+* Update `v1/config/NotificationPolicy` to allow configuration of notification routing to an external connection.
+
 ## v1.24.0
 
 Added:

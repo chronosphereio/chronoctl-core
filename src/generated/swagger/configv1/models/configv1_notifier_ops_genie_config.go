@@ -14,13 +14,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NotifierOpsGenieConfig notifier ops genie config
+// Configv1NotifierOpsGenieConfig configv1 notifier ops genie config
 //
-// swagger:model NotifierOpsGenieConfig
-type NotifierOpsGenieConfig struct {
+// swagger:model configv1NotifierOpsGenieConfig
+type Configv1NotifierOpsGenieConfig struct {
 
 	// http config
-	HTTPConfig *NotifierHTTPConfig `json:"http_config,omitempty"`
+	HTTPConfig *Configv1NotifierHTTPConfig `json:"http_config,omitempty"`
 
 	// Your Opsgenie API key. Required if including an `ops_genie` object in your
 	// request body.
@@ -57,8 +57,8 @@ type NotifierOpsGenieConfig struct {
 	Priority string `json:"priority,omitempty"`
 }
 
-// Validate validates this notifier ops genie config
-func (m *NotifierOpsGenieConfig) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 notifier ops genie config
+func (m *Configv1NotifierOpsGenieConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateHTTPConfig(formats); err != nil {
@@ -75,7 +75,7 @@ func (m *NotifierOpsGenieConfig) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *NotifierOpsGenieConfig) validateHTTPConfig(formats strfmt.Registry) error {
+func (m *Configv1NotifierOpsGenieConfig) validateHTTPConfig(formats strfmt.Registry) error {
 	if swag.IsZero(m.HTTPConfig) { // not required
 		return nil
 	}
@@ -94,7 +94,7 @@ func (m *NotifierOpsGenieConfig) validateHTTPConfig(formats strfmt.Registry) err
 	return nil
 }
 
-func (m *NotifierOpsGenieConfig) validateResponders(formats strfmt.Registry) error {
+func (m *Configv1NotifierOpsGenieConfig) validateResponders(formats strfmt.Registry) error {
 	if swag.IsZero(m.Responders) { // not required
 		return nil
 	}
@@ -120,8 +120,8 @@ func (m *NotifierOpsGenieConfig) validateResponders(formats strfmt.Registry) err
 	return nil
 }
 
-// ContextValidate validate this notifier ops genie config based on the context it is used
-func (m *NotifierOpsGenieConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 notifier ops genie config based on the context it is used
+func (m *Configv1NotifierOpsGenieConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateHTTPConfig(ctx, formats); err != nil {
@@ -138,7 +138,7 @@ func (m *NotifierOpsGenieConfig) ContextValidate(ctx context.Context, formats st
 	return nil
 }
 
-func (m *NotifierOpsGenieConfig) contextValidateHTTPConfig(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1NotifierOpsGenieConfig) contextValidateHTTPConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HTTPConfig != nil {
 
@@ -159,7 +159,7 @@ func (m *NotifierOpsGenieConfig) contextValidateHTTPConfig(ctx context.Context, 
 	return nil
 }
 
-func (m *NotifierOpsGenieConfig) contextValidateResponders(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1NotifierOpsGenieConfig) contextValidateResponders(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Responders); i++ {
 
@@ -185,7 +185,7 @@ func (m *NotifierOpsGenieConfig) contextValidateResponders(ctx context.Context, 
 }
 
 // MarshalBinary interface implementation
-func (m *NotifierOpsGenieConfig) MarshalBinary() ([]byte, error) {
+func (m *Configv1NotifierOpsGenieConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -193,8 +193,8 @@ func (m *NotifierOpsGenieConfig) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *NotifierOpsGenieConfig) UnmarshalBinary(b []byte) error {
-	var res NotifierOpsGenieConfig
+func (m *Configv1NotifierOpsGenieConfig) UnmarshalBinary(b []byte) error {
+	var res Configv1NotifierOpsGenieConfig
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

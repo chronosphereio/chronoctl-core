@@ -13,27 +13,23 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NotifierHTTPConfig notifier HTTP config
+// Configv1ExternalConnectionHTTPConfig configv1 external connection HTTP config
 //
-// swagger:model NotifierHTTPConfig
-type NotifierHTTPConfig struct {
+// swagger:model configv1ExternalConnectionHTTPConfig
+type Configv1ExternalConnectionHTTPConfig struct {
 
 	// basic auth
-	BasicAuth *HTTPConfigBasicAuth `json:"basic_auth,omitempty"`
+	BasicAuth *Configv1ExternalConnectionHTTPConfigBasicAuth `json:"basic_auth,omitempty"`
 
-	// Sets a token for bearer authentication. Cannot be set if `basic_auth` is set.
+	// bearer token
 	BearerToken string `json:"bearer_token,omitempty"`
 
-	// Your proxy URL. (This parameter is deprecated, and custom proxies are
-	// unsupported.)
-	ProxyURL string `json:"proxy_url,omitempty"`
-
 	// tls config
-	TLSConfig *HTTPConfigTLSConfig `json:"tls_config,omitempty"`
+	TLSConfig *Configv1ExternalConnectionHTTPConfigTLSConfig `json:"tls_config,omitempty"`
 }
 
-// Validate validates this notifier HTTP config
-func (m *NotifierHTTPConfig) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 external connection HTTP config
+func (m *Configv1ExternalConnectionHTTPConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateBasicAuth(formats); err != nil {
@@ -50,7 +46,7 @@ func (m *NotifierHTTPConfig) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *NotifierHTTPConfig) validateBasicAuth(formats strfmt.Registry) error {
+func (m *Configv1ExternalConnectionHTTPConfig) validateBasicAuth(formats strfmt.Registry) error {
 	if swag.IsZero(m.BasicAuth) { // not required
 		return nil
 	}
@@ -69,7 +65,7 @@ func (m *NotifierHTTPConfig) validateBasicAuth(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *NotifierHTTPConfig) validateTLSConfig(formats strfmt.Registry) error {
+func (m *Configv1ExternalConnectionHTTPConfig) validateTLSConfig(formats strfmt.Registry) error {
 	if swag.IsZero(m.TLSConfig) { // not required
 		return nil
 	}
@@ -88,8 +84,8 @@ func (m *NotifierHTTPConfig) validateTLSConfig(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this notifier HTTP config based on the context it is used
-func (m *NotifierHTTPConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 external connection HTTP config based on the context it is used
+func (m *Configv1ExternalConnectionHTTPConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateBasicAuth(ctx, formats); err != nil {
@@ -106,7 +102,7 @@ func (m *NotifierHTTPConfig) ContextValidate(ctx context.Context, formats strfmt
 	return nil
 }
 
-func (m *NotifierHTTPConfig) contextValidateBasicAuth(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ExternalConnectionHTTPConfig) contextValidateBasicAuth(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.BasicAuth != nil {
 
@@ -127,7 +123,7 @@ func (m *NotifierHTTPConfig) contextValidateBasicAuth(ctx context.Context, forma
 	return nil
 }
 
-func (m *NotifierHTTPConfig) contextValidateTLSConfig(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ExternalConnectionHTTPConfig) contextValidateTLSConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.TLSConfig != nil {
 
@@ -149,7 +145,7 @@ func (m *NotifierHTTPConfig) contextValidateTLSConfig(ctx context.Context, forma
 }
 
 // MarshalBinary interface implementation
-func (m *NotifierHTTPConfig) MarshalBinary() ([]byte, error) {
+func (m *Configv1ExternalConnectionHTTPConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -157,8 +153,8 @@ func (m *NotifierHTTPConfig) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *NotifierHTTPConfig) UnmarshalBinary(b []byte) error {
-	var res NotifierHTTPConfig
+func (m *Configv1ExternalConnectionHTTPConfig) UnmarshalBinary(b []byte) error {
+	var res Configv1ExternalConnectionHTTPConfig
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

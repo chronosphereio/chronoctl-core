@@ -23,6 +23,9 @@ type PartitionFilterCondition struct {
 
 	// log filter
 	LogFilter *Configv1LogSearchFilter `json:"log_filter,omitempty"`
+
+	// trace filter
+	TraceFilter *Configv1TraceSearchFilter `json:"trace_filter,omitempty"`
 }
 
 // Validate validates this partition filter condition
@@ -30,6 +33,10 @@ func (m *PartitionFilterCondition) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateLogFilter(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTraceFilter(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -58,11 +65,34 @@ func (m *PartitionFilterCondition) validateLogFilter(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *PartitionFilterCondition) validateTraceFilter(formats strfmt.Registry) error {
+	if swag.IsZero(m.TraceFilter) { // not required
+		return nil
+	}
+
+	if m.TraceFilter != nil {
+		if err := m.TraceFilter.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("trace_filter")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("trace_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this partition filter condition based on the context it is used
 func (m *PartitionFilterCondition) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateLogFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTraceFilter(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -85,6 +115,27 @@ func (m *PartitionFilterCondition) contextValidateLogFilter(ctx context.Context,
 				return ve.ValidateName("log_filter")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("log_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *PartitionFilterCondition) contextValidateTraceFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TraceFilter != nil {
+
+		if swag.IsZero(m.TraceFilter) { // not required
+			return nil
+		}
+
+		if err := m.TraceFilter.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("trace_filter")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("trace_filter")
 			}
 			return err
 		}

@@ -1561,8 +1561,8 @@ func TestExpandReceiver(t *testing.T) {
 		notifiersFromV1([]*models.Configv1Notifier{
 			{
 				Name: "rname",
-				Webhook: &models.NotifierWebhookConfig{
-					HTTPConfig: &models.NotifierHTTPConfig{},
+				Webhook: &models.Configv1NotifierWebhookConfig{
+					HTTPConfig: &models.Configv1NotifierHTTPConfig{},
 					URL:        "wh-one",
 				},
 			},
@@ -1583,16 +1583,16 @@ func TestExpandReceiver(t *testing.T) {
 			{
 				Name:         "rname (0)",
 				SkipResolved: true,
-				Webhook: &models.NotifierWebhookConfig{
-					HTTPConfig: &models.NotifierHTTPConfig{},
+				Webhook: &models.Configv1NotifierWebhookConfig{
+					HTTPConfig: &models.Configv1NotifierHTTPConfig{},
 					URL:        "wh-one",
 				},
 			},
 			{
 				Name:         "rname (1)",
 				SkipResolved: true,
-				Webhook: &models.NotifierWebhookConfig{
-					HTTPConfig: &models.NotifierHTTPConfig{},
+				Webhook: &models.Configv1NotifierWebhookConfig{
+					HTTPConfig: &models.Configv1NotifierHTTPConfig{},
 					URL:        "wh-two",
 				},
 			},
@@ -1611,24 +1611,24 @@ func TestExpandReceiver(t *testing.T) {
 			{
 				Name:         "rname (0)",
 				SkipResolved: true,
-				Webhook: &models.NotifierWebhookConfig{
-					HTTPConfig: &models.NotifierHTTPConfig{},
+				Webhook: &models.Configv1NotifierWebhookConfig{
+					HTTPConfig: &models.Configv1NotifierHTTPConfig{},
 					URL:        "wh-one",
 				},
 			},
 			{
 				Name:         "rname (1)",
 				SkipResolved: true,
-				Webhook: &models.NotifierWebhookConfig{
-					HTTPConfig: &models.NotifierHTTPConfig{},
+				Webhook: &models.Configv1NotifierWebhookConfig{
+					HTTPConfig: &models.Configv1NotifierHTTPConfig{},
 					URL:        "wh-two",
 				},
 			},
 			{
 				Name:         "rname (2)",
 				SkipResolved: true,
-				Slack: &models.NotifierSlackConfig{
-					HTTPConfig: &models.NotifierHTTPConfig{},
+				Slack: &models.Configv1NotifierSlackConfig{
+					HTTPConfig: &models.Configv1NotifierHTTPConfig{},
 					Channel:    "s-one",
 					Fields:     []*models.SlackConfigField{},
 					Actions:    []*models.NotifierSlackConfigAction{},

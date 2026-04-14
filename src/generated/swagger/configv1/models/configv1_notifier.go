@@ -40,22 +40,22 @@ type Configv1Notifier struct {
 	SkipResolved bool `json:"skip_resolved,omitempty"`
 
 	// webhook
-	Webhook *NotifierWebhookConfig `json:"webhook,omitempty"`
+	Webhook *Configv1NotifierWebhookConfig `json:"webhook,omitempty"`
 
 	// slack
-	Slack *NotifierSlackConfig `json:"slack,omitempty"`
+	Slack *Configv1NotifierSlackConfig `json:"slack,omitempty"`
 
 	// pagerduty
-	Pagerduty *NotifierPagerdutyConfig `json:"pagerduty,omitempty"`
+	Pagerduty *Configv1NotifierPagerdutyConfig `json:"pagerduty,omitempty"`
 
 	// email
 	Email *NotifierEmailConfig `json:"email,omitempty"`
 
 	// ops genie
-	OpsGenie *NotifierOpsGenieConfig `json:"ops_genie,omitempty"`
+	OpsGenie *Configv1NotifierOpsGenieConfig `json:"ops_genie,omitempty"`
 
 	// victor ops
-	VictorOps *NotifierVictorOpsConfig `json:"victor_ops,omitempty"`
+	VictorOps *Configv1NotifierVictorOpsConfig `json:"victor_ops,omitempty"`
 
 	// If `true`, enables the `discard` integration, which discards all
 	// notifications. Cannot be set if another integration is set.
