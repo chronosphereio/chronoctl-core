@@ -534,6 +534,40 @@ spec:
                         - <string>
                     # The frequency at which to resend alerts.
                     repeat_interval_secs: <integer>
+                    # Notification destinations. Cannot be set if notifier_slugs is set.
+                    destinations:
+                        - # If true, do not send notifications when alerts resolve.
+                          # Defaults to false (resolve notifications are sent).
+                          disable_resolves: <true|false>
+                          email:
+                            # The email addresses to send notifications to.
+                            addresses:
+                                - <string>
+                          ops_genie:
+                            # The slug of the ExternalConnection that holds OpsGenie credentials.
+                            external_connection_slug: <string>
+                          pagerduty:
+                            # The slug of the ExternalConnection that holds PagerDuty credentials.
+                            external_connection_slug: <string>
+                          slack:
+                            # The slug of the ExternalConnection that holds Slack credentials.
+                            external_connection_slug: <string>
+                            # The Slack channels to send notifications to.
+                            channels:
+                                - <string>
+                          victor_ops:
+                            # The slug of the ExternalConnection that holds VictorOps credentials.
+                            external_connection_slug: <string>
+                            # The VictorOps routing key that determines where notifications are routed.
+                            routing_key: <string>
+                          webhook:
+                            # The slug of the ExternalConnection that holds webhook credentials.
+                            external_connection_slug: <string>
+                            # Query parameters to add to the webhook URL.
+                            # If the webhook URL already contains parameters, these will be appended.
+                            query_parameters:
+                                - key: <string>
+                                  value: <string>
                     group_by:
                         # Set of label names used to group alerts.
                         # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
@@ -546,6 +580,40 @@ spec:
                         - <string>
                     # The frequency at which to resend alerts.
                     repeat_interval_secs: <integer>
+                    # Notification destinations. Cannot be set if notifier_slugs is set.
+                    destinations:
+                        - # If true, do not send notifications when alerts resolve.
+                          # Defaults to false (resolve notifications are sent).
+                          disable_resolves: <true|false>
+                          email:
+                            # The email addresses to send notifications to.
+                            addresses:
+                                - <string>
+                          ops_genie:
+                            # The slug of the ExternalConnection that holds OpsGenie credentials.
+                            external_connection_slug: <string>
+                          pagerduty:
+                            # The slug of the ExternalConnection that holds PagerDuty credentials.
+                            external_connection_slug: <string>
+                          slack:
+                            # The slug of the ExternalConnection that holds Slack credentials.
+                            external_connection_slug: <string>
+                            # The Slack channels to send notifications to.
+                            channels:
+                                - <string>
+                          victor_ops:
+                            # The slug of the ExternalConnection that holds VictorOps credentials.
+                            external_connection_slug: <string>
+                            # The VictorOps routing key that determines where notifications are routed.
+                            routing_key: <string>
+                          webhook:
+                            # The slug of the ExternalConnection that holds webhook credentials.
+                            external_connection_slug: <string>
+                            # Query parameters to add to the webhook URL.
+                            # If the webhook URL already contains parameters, these will be appended.
+                            query_parameters:
+                                - key: <string>
+                                  value: <string>
                     group_by:
                         # Set of label names used to group alerts.
                         # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
@@ -559,6 +627,40 @@ spec:
                     - <string>
                 # The frequency at which to resend alerts.
                 repeat_interval_secs: <integer>
+                # Notification destinations. Cannot be set if notifier_slugs is set.
+                destinations:
+                    - # If true, do not send notifications when alerts resolve.
+                      # Defaults to false (resolve notifications are sent).
+                      disable_resolves: <true|false>
+                      email:
+                        # The email addresses to send notifications to.
+                        addresses:
+                            - <string>
+                      ops_genie:
+                        # The slug of the ExternalConnection that holds OpsGenie credentials.
+                        external_connection_slug: <string>
+                      pagerduty:
+                        # The slug of the ExternalConnection that holds PagerDuty credentials.
+                        external_connection_slug: <string>
+                      slack:
+                        # The slug of the ExternalConnection that holds Slack credentials.
+                        external_connection_slug: <string>
+                        # The Slack channels to send notifications to.
+                        channels:
+                            - <string>
+                      victor_ops:
+                        # The slug of the ExternalConnection that holds VictorOps credentials.
+                        external_connection_slug: <string>
+                        # The VictorOps routing key that determines where notifications are routed.
+                        routing_key: <string>
+                      webhook:
+                        # The slug of the ExternalConnection that holds webhook credentials.
+                        external_connection_slug: <string>
+                        # Query parameters to add to the webhook URL.
+                        # If the webhook URL already contains parameters, these will be appended.
+                        query_parameters:
+                            - key: <string>
+                              value: <string>
                 group_by:
                     # Set of label names used to group alerts.
                     # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
@@ -571,6 +673,40 @@ spec:
                     - <string>
                 # The frequency at which to resend alerts.
                 repeat_interval_secs: <integer>
+                # Notification destinations. Cannot be set if notifier_slugs is set.
+                destinations:
+                    - # If true, do not send notifications when alerts resolve.
+                      # Defaults to false (resolve notifications are sent).
+                      disable_resolves: <true|false>
+                      email:
+                        # The email addresses to send notifications to.
+                        addresses:
+                            - <string>
+                      ops_genie:
+                        # The slug of the ExternalConnection that holds OpsGenie credentials.
+                        external_connection_slug: <string>
+                      pagerduty:
+                        # The slug of the ExternalConnection that holds PagerDuty credentials.
+                        external_connection_slug: <string>
+                      slack:
+                        # The slug of the ExternalConnection that holds Slack credentials.
+                        external_connection_slug: <string>
+                        # The Slack channels to send notifications to.
+                        channels:
+                            - <string>
+                      victor_ops:
+                        # The slug of the ExternalConnection that holds VictorOps credentials.
+                        external_connection_slug: <string>
+                        # The VictorOps routing key that determines where notifications are routed.
+                        routing_key: <string>
+                      webhook:
+                        # The slug of the ExternalConnection that holds webhook credentials.
+                        external_connection_slug: <string>
+                        # Query parameters to add to the webhook URL.
+                        # If the webhook URL already contains parameters, these will be appended.
+                        query_parameters:
+                            - key: <string>
+                              value: <string>
                 group_by:
                     # Set of label names used to group alerts.
                     # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}

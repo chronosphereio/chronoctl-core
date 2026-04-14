@@ -50,6 +50,8 @@ type ClientService interface {
 
 	CreateDropRule(params *CreateDropRuleParams, opts ...ClientOption) (*CreateDropRuleOK, error)
 
+	CreateExternalConnection(params *CreateExternalConnectionParams, opts ...ClientOption) (*CreateExternalConnectionOK, error)
+
 	CreateGcpMetricsIntegration(params *CreateGcpMetricsIntegrationParams, opts ...ClientOption) (*CreateGcpMetricsIntegrationOK, error)
 
 	CreateGrafanaDashboard(params *CreateGrafanaDashboardParams, opts ...ClientOption) (*CreateGrafanaDashboardOK, error)
@@ -124,6 +126,8 @@ type ClientService interface {
 
 	DeleteDropRule(params *DeleteDropRuleParams, opts ...ClientOption) (*DeleteDropRuleOK, error)
 
+	DeleteExternalConnection(params *DeleteExternalConnectionParams, opts ...ClientOption) (*DeleteExternalConnectionOK, error)
+
 	DeleteGcpMetricsIntegration(params *DeleteGcpMetricsIntegrationParams, opts ...ClientOption) (*DeleteGcpMetricsIntegrationOK, error)
 
 	DeleteGrafanaDashboard(params *DeleteGrafanaDashboardParams, opts ...ClientOption) (*DeleteGrafanaDashboardOK, error)
@@ -196,6 +200,8 @@ type ClientService interface {
 
 	ListDropRules(params *ListDropRulesParams, opts ...ClientOption) (*ListDropRulesOK, error)
 
+	ListExternalConnections(params *ListExternalConnectionsParams, opts ...ClientOption) (*ListExternalConnectionsOK, error)
+
 	ListGcpMetricsIntegrations(params *ListGcpMetricsIntegrationsParams, opts ...ClientOption) (*ListGcpMetricsIntegrationsOK, error)
 
 	ListGrafanaDashboards(params *ListGrafanaDashboardsParams, opts ...ClientOption) (*ListGrafanaDashboardsOK, error)
@@ -257,6 +263,8 @@ type ClientService interface {
 	ReadDerivedMetric(params *ReadDerivedMetricParams, opts ...ClientOption) (*ReadDerivedMetricOK, error)
 
 	ReadDropRule(params *ReadDropRuleParams, opts ...ClientOption) (*ReadDropRuleOK, error)
+
+	ReadExternalConnection(params *ReadExternalConnectionParams, opts ...ClientOption) (*ReadExternalConnectionOK, error)
 
 	ReadGcpMetricsIntegration(params *ReadGcpMetricsIntegrationParams, opts ...ClientOption) (*ReadGcpMetricsIntegrationOK, error)
 
@@ -333,6 +341,8 @@ type ClientService interface {
 	UpdateDerivedMetric(params *UpdateDerivedMetricParams, opts ...ClientOption) (*UpdateDerivedMetricOK, error)
 
 	UpdateDropRule(params *UpdateDropRuleParams, opts ...ClientOption) (*UpdateDropRuleOK, error)
+
+	UpdateExternalConnection(params *UpdateExternalConnectionParams, opts ...ClientOption) (*UpdateExternalConnectionOK, error)
 
 	UpdateGcpMetricsIntegration(params *UpdateGcpMetricsIntegrationParams, opts ...ClientOption) (*UpdateGcpMetricsIntegrationOK, error)
 
@@ -791,6 +801,43 @@ func (a *Client) CreateDropRule(params *CreateDropRuleParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateDropRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateExternalConnection create external connection API
+*/
+func (a *Client) CreateExternalConnection(params *CreateExternalConnectionParams, opts ...ClientOption) (*CreateExternalConnectionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateExternalConnectionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateExternalConnection",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/external-connections",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateExternalConnectionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateExternalConnectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateExternalConnectionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2167,6 +2214,43 @@ func (a *Client) DeleteDropRule(params *DeleteDropRuleParams, opts ...ClientOpti
 }
 
 /*
+DeleteExternalConnection delete external connection API
+*/
+func (a *Client) DeleteExternalConnection(params *DeleteExternalConnectionParams, opts ...ClientOption) (*DeleteExternalConnectionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteExternalConnectionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteExternalConnection",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/external-connections/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteExternalConnectionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteExternalConnectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteExternalConnectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteGcpMetricsIntegration delete gcp metrics integration API
 */
 func (a *Client) DeleteGcpMetricsIntegration(params *DeleteGcpMetricsIntegrationParams, opts ...ClientOption) (*DeleteGcpMetricsIntegrationOK, error) {
@@ -3499,6 +3583,43 @@ func (a *Client) ListDropRules(params *ListDropRulesParams, opts ...ClientOption
 }
 
 /*
+ListExternalConnections list external connections API
+*/
+func (a *Client) ListExternalConnections(params *ListExternalConnectionsParams, opts ...ClientOption) (*ListExternalConnectionsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListExternalConnectionsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListExternalConnections",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/external-connections",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListExternalConnectionsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListExternalConnectionsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListExternalConnectionsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListGcpMetricsIntegrations list gcp metrics integrations API
 */
 func (a *Client) ListGcpMetricsIntegrations(params *ListGcpMetricsIntegrationsParams, opts ...ClientOption) (*ListGcpMetricsIntegrationsOK, error) {
@@ -4642,6 +4763,43 @@ func (a *Client) ReadDropRule(params *ReadDropRuleParams, opts ...ClientOption) 
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadDropRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadExternalConnection read external connection API
+*/
+func (a *Client) ReadExternalConnection(params *ReadExternalConnectionParams, opts ...ClientOption) (*ReadExternalConnectionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadExternalConnectionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadExternalConnection",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/external-connections/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadExternalConnectionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadExternalConnectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadExternalConnectionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -6048,6 +6206,43 @@ func (a *Client) UpdateDropRule(params *UpdateDropRuleParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateDropRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateExternalConnection update external connection API
+*/
+func (a *Client) UpdateExternalConnection(params *UpdateExternalConnectionParams, opts ...ClientOption) (*UpdateExternalConnectionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateExternalConnectionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateExternalConnection",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/external-connections/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateExternalConnectionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateExternalConnectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateExternalConnectionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

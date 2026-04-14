@@ -136,6 +136,18 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateSyntheticTestBody": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configunstableSyntheticTest"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the SyntheticTest will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the SyntheticTest does not already exist.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateTraceJaegerRemoteSamplingStrategyBody": {
       "properties": {
         "trace_jaeger_remote_sampling_strategy": {
@@ -151,6 +163,12 @@
         }
       },
       "type": "object"
+    },
+    "HttpTestConfigHttpMethod": {
+      "enum": [
+        "GET"
+      ],
+      "type": "string"
     },
     "LogInternalMaterializedFieldMaterializedFieldStatus": {
       "enum": [
@@ -409,6 +427,53 @@
         "BUCKETS"
       ],
       "title": "TODO: confirm naming with InfoModel team",
+      "type": "string"
+    },
+    "SyntheticTestHttpTestConfig": {
+      "properties": {
+        "method": {
+          "$ref": "#/definitions/HttpTestConfigHttpMethod"
+        },
+        "url": {
+          "type": "string"
+        },
+        "status_code_assertions": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestStatusCodeAssertion"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestStatusCodeAssertion": {
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestStatusCodeAssertionOperator"
+        },
+        "target": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestStatusCodeAssertionOperator": {
+      "enum": [
+        "EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestTestLocation": {
+      "enum": [
+        "AWS_US_EAST_1"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestTestType": {
+      "enum": [
+        "HTTP"
+      ],
       "type": "string"
     },
     "TraceJaegerRemoteSamplingStrategyAppliedStrategy": {
@@ -790,6 +855,22 @@
       },
       "type": "object"
     },
+    "configunstableCreateSyntheticTestRequest": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configunstableSyntheticTest"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateSyntheticTestResponse": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configunstableSyntheticTest"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateTraceJaegerRemoteSamplingStrategyRequest": {
       "properties": {
         "trace_jaeger_remote_sampling_strategy": {
@@ -924,6 +1005,9 @@
       "type": "object"
     },
     "configunstableDeleteServiceResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteSyntheticTestResponse": {
       "type": "object"
     },
     "configunstableDeleteTraceJaegerRemoteSamplingStrategyResponse": {
@@ -1075,6 +1159,20 @@
         "services": {
           "items": {
             "$ref": "#/definitions/configunstableService"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListSyntheticTestsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "synthetic_tests": {
+          "items": {
+            "$ref": "#/definitions/configunstableSyntheticTest"
           },
           "type": "array"
         }
@@ -1289,6 +1387,14 @@
       },
       "type": "object"
     },
+    "configunstableReadSyntheticTestResponse": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configunstableSyntheticTest"
+        }
+      },
+      "type": "object"
+    },
     "configunstableReadTraceJaegerRemoteSamplingStrategyResponse": {
       "properties": {
         "trace_jaeger_remote_sampling_strategy": {
@@ -1420,6 +1526,66 @@
         }
       },
       "type": "object"
+    },
+    "configunstableSyntheticTest": {
+      "properties": {
+        "name": {
+          "description": "The name of the SyntheticTest. You can modify this value after the SyntheticTest is created.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "The unique identifier of the SyntheticTest. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the SyntheticTest is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the SyntheticTest was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the SyntheticTest was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "test_type": {
+          "$ref": "#/definitions/SyntheticTestTestType"
+        },
+        "interval_secs": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "locations": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestTestLocation"
+          },
+          "type": "array"
+        },
+        "http_test": {
+          "$ref": "#/definitions/SyntheticTestHttpTestConfig"
+        },
+        "status": {
+          "$ref": "#/definitions/configunstableSyntheticTestStatus"
+        },
+        "description": {
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableSyntheticTestStatus": {
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ],
+      "type": "string"
     },
     "configunstableTraceJaegerRemoteSamplingStrategy": {
       "properties": {
@@ -1600,6 +1766,14 @@
       },
       "type": "object"
     },
+    "configunstableUpdateSyntheticTestResponse": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configunstableSyntheticTest"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateTraceJaegerRemoteSamplingStrategyResponse": {
       "properties": {
         "trace_jaeger_remote_sampling_strategy": {
@@ -1699,6 +1873,24 @@
     },
     "genericError": {
       "additionalProperties": true,
+      "type": "object"
+    },
+    "googlerpcStatus": {
+      "properties": {
+        "code": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          },
+          "type": "array"
+        }
+      },
       "type": "object"
     },
     "protobufAny": {
@@ -3466,12 +3658,297 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/apiError"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
         "tags": [
           "SyncPrometheus"
+        ]
+      }
+    },
+    "/api/unstable/config/synthetic-tests": {
+      "get": {
+        "operationId": "ListSyntheticTests",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any SyntheticTest with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any SyntheticTest with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by test_type, where any SyntheticTest with a matching test_type in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "enum": [
+                "HTTP"
+              ],
+              "type": "string"
+            },
+            "name": "test_types",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "in": "query",
+            "items": {
+              "enum": [
+                "ENABLED",
+                "DISABLED"
+              ],
+              "type": "string"
+            },
+            "name": "statuses",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListSyntheticTestsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
+        ]
+      },
+      "post": {
+        "operationId": "CreateSyntheticTest",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateSyntheticTestRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created SyntheticTest.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateSyntheticTestResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the SyntheticTest because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the SyntheticTest because there is a conflict with an existing SyntheticTest.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
+        ]
+      }
+    },
+    "/api/unstable/config/synthetic-tests/{slug}": {
+      "delete": {
+        "operationId": "DeleteSyntheticTest",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteSyntheticTestResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the SyntheticTest because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the SyntheticTest because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
+        ]
+      },
+      "get": {
+        "operationId": "ReadSyntheticTest",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadSyntheticTestResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the SyntheticTest because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateSyntheticTest",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateSyntheticTestBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated SyntheticTest.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateSyntheticTestResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the SyntheticTest because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the SyntheticTest because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the SyntheticTest because there is a conflict with an existing SyntheticTest.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
         ]
       }
     },

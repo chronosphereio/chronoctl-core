@@ -255,6 +255,26 @@ func (mr *MockClientServiceMockRecorder) CreateDropRule(params interface{}, opts
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDropRule", reflect.TypeOf((*MockClientService)(nil).CreateDropRule), varargs...)
 }
 
+// CreateExternalConnection mocks base method.
+func (m *MockClientService) CreateExternalConnection(params *operations.CreateExternalConnectionParams, opts ...operations.ClientOption) (*operations.CreateExternalConnectionOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateExternalConnection", varargs...)
+	ret0, _ := ret[0].(*operations.CreateExternalConnectionOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateExternalConnection indicates an expected call of CreateExternalConnection.
+func (mr *MockClientServiceMockRecorder) CreateExternalConnection(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateExternalConnection", reflect.TypeOf((*MockClientService)(nil).CreateExternalConnection), varargs...)
+}
+
 // CreateGcpMetricsIntegration mocks base method.
 func (m *MockClientService) CreateGcpMetricsIntegration(params *operations.CreateGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.CreateGcpMetricsIntegrationOK, error) {
 	m.ctrl.T.Helper()
@@ -995,6 +1015,26 @@ func (mr *MockClientServiceMockRecorder) DeleteDropRule(params interface{}, opts
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDropRule", reflect.TypeOf((*MockClientService)(nil).DeleteDropRule), varargs...)
 }
 
+// DeleteExternalConnection mocks base method.
+func (m *MockClientService) DeleteExternalConnection(params *operations.DeleteExternalConnectionParams, opts ...operations.ClientOption) (*operations.DeleteExternalConnectionOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteExternalConnection", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteExternalConnectionOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteExternalConnection indicates an expected call of DeleteExternalConnection.
+func (mr *MockClientServiceMockRecorder) DeleteExternalConnection(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteExternalConnection", reflect.TypeOf((*MockClientService)(nil).DeleteExternalConnection), varargs...)
+}
+
 // DeleteGcpMetricsIntegration mocks base method.
 func (m *MockClientService) DeleteGcpMetricsIntegration(params *operations.DeleteGcpMetricsIntegrationParams, opts ...operations.ClientOption) (*operations.DeleteGcpMetricsIntegrationOK, error) {
 	m.ctrl.T.Helper()
@@ -1715,6 +1755,26 @@ func (mr *MockClientServiceMockRecorder) ListDropRules(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDropRules", reflect.TypeOf((*MockClientService)(nil).ListDropRules), varargs...)
 }
 
+// ListExternalConnections mocks base method.
+func (m *MockClientService) ListExternalConnections(params *operations.ListExternalConnectionsParams, opts ...operations.ClientOption) (*operations.ListExternalConnectionsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListExternalConnections", varargs...)
+	ret0, _ := ret[0].(*operations.ListExternalConnectionsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListExternalConnections indicates an expected call of ListExternalConnections.
+func (mr *MockClientServiceMockRecorder) ListExternalConnections(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListExternalConnections", reflect.TypeOf((*MockClientService)(nil).ListExternalConnections), varargs...)
+}
+
 // ListGcpMetricsIntegrations mocks base method.
 func (m *MockClientService) ListGcpMetricsIntegrations(params *operations.ListGcpMetricsIntegrationsParams, opts ...operations.ClientOption) (*operations.ListGcpMetricsIntegrationsOK, error) {
 	m.ctrl.T.Helper()
@@ -2333,6 +2393,26 @@ func (mr *MockClientServiceMockRecorder) ReadDropRule(params interface{}, opts .
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadDropRule", reflect.TypeOf((*MockClientService)(nil).ReadDropRule), varargs...)
+}
+
+// ReadExternalConnection mocks base method.
+func (m *MockClientService) ReadExternalConnection(params *operations.ReadExternalConnectionParams, opts ...operations.ClientOption) (*operations.ReadExternalConnectionOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadExternalConnection", varargs...)
+	ret0, _ := ret[0].(*operations.ReadExternalConnectionOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadExternalConnection indicates an expected call of ReadExternalConnection.
+func (mr *MockClientServiceMockRecorder) ReadExternalConnection(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadExternalConnection", reflect.TypeOf((*MockClientService)(nil).ReadExternalConnection), varargs...)
 }
 
 // ReadGcpMetricsIntegration mocks base method.
@@ -3105,6 +3185,26 @@ func (mr *MockClientServiceMockRecorder) UpdateDropRule(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDropRule", reflect.TypeOf((*MockClientService)(nil).UpdateDropRule), varargs...)
+}
+
+// UpdateExternalConnection mocks base method.
+func (m *MockClientService) UpdateExternalConnection(params *operations.UpdateExternalConnectionParams, opts ...operations.ClientOption) (*operations.UpdateExternalConnectionOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateExternalConnection", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateExternalConnectionOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateExternalConnection indicates an expected call of UpdateExternalConnection.
+func (mr *MockClientServiceMockRecorder) UpdateExternalConnection(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateExternalConnection", reflect.TypeOf((*MockClientService)(nil).UpdateExternalConnection), varargs...)
 }
 
 // UpdateGcpMetricsIntegration mocks base method.

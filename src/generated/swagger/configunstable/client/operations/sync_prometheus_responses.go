@@ -124,7 +124,7 @@ An unexpected error response.
 type SyncPrometheusDefault struct {
 	_statusCode int
 
-	Payload *models.APIError
+	Payload *models.GooglerpcStatus
 }
 
 // IsSuccess returns true when this sync prometheus default response has a 2xx status code
@@ -165,13 +165,13 @@ func (o *SyncPrometheusDefault) String() string {
 	return fmt.Sprintf("[POST /api/unstable/config/sync-prometheus][%d] SyncPrometheus default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *SyncPrometheusDefault) GetPayload() *models.APIError {
+func (o *SyncPrometheusDefault) GetPayload() *models.GooglerpcStatus {
 	return o.Payload
 }
 
 func (o *SyncPrometheusDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIError)
+	o.Payload = new(models.GooglerpcStatus)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

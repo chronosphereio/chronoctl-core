@@ -13,21 +13,21 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NotifierWebhookConfig notifier webhook config
+// Configv1NotifierWebhookConfig configv1 notifier webhook config
 //
-// swagger:model NotifierWebhookConfig
-type NotifierWebhookConfig struct {
+// swagger:model configv1NotifierWebhookConfig
+type Configv1NotifierWebhookConfig struct {
 
 	// http config
-	HTTPConfig *NotifierHTTPConfig `json:"http_config,omitempty"`
+	HTTPConfig *Configv1NotifierHTTPConfig `json:"http_config,omitempty"`
 
 	// Your webhook URL. This URL will be called as a `POST` request. Required
 	// if including a `webhook` object in your request body.
 	URL string `json:"url,omitempty"`
 }
 
-// Validate validates this notifier webhook config
-func (m *NotifierWebhookConfig) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 notifier webhook config
+func (m *Configv1NotifierWebhookConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateHTTPConfig(formats); err != nil {
@@ -40,7 +40,7 @@ func (m *NotifierWebhookConfig) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *NotifierWebhookConfig) validateHTTPConfig(formats strfmt.Registry) error {
+func (m *Configv1NotifierWebhookConfig) validateHTTPConfig(formats strfmt.Registry) error {
 	if swag.IsZero(m.HTTPConfig) { // not required
 		return nil
 	}
@@ -59,8 +59,8 @@ func (m *NotifierWebhookConfig) validateHTTPConfig(formats strfmt.Registry) erro
 	return nil
 }
 
-// ContextValidate validate this notifier webhook config based on the context it is used
-func (m *NotifierWebhookConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 notifier webhook config based on the context it is used
+func (m *Configv1NotifierWebhookConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateHTTPConfig(ctx, formats); err != nil {
@@ -73,7 +73,7 @@ func (m *NotifierWebhookConfig) ContextValidate(ctx context.Context, formats str
 	return nil
 }
 
-func (m *NotifierWebhookConfig) contextValidateHTTPConfig(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1NotifierWebhookConfig) contextValidateHTTPConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HTTPConfig != nil {
 
@@ -95,7 +95,7 @@ func (m *NotifierWebhookConfig) contextValidateHTTPConfig(ctx context.Context, f
 }
 
 // MarshalBinary interface implementation
-func (m *NotifierWebhookConfig) MarshalBinary() ([]byte, error) {
+func (m *Configv1NotifierWebhookConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -103,8 +103,8 @@ func (m *NotifierWebhookConfig) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *NotifierWebhookConfig) UnmarshalBinary(b []byte) error {
-	var res NotifierWebhookConfig
+func (m *Configv1NotifierWebhookConfig) UnmarshalBinary(b []byte) error {
+	var res Configv1NotifierWebhookConfig
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

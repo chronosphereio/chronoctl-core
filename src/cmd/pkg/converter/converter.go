@@ -1776,8 +1776,8 @@ func expandReceiver(r config.Receiver) []*Notifier {
 	return receivers
 }
 
-func webhookReceiver(w *config.WebhookConfig) *models.NotifierWebhookConfig {
-	return &models.NotifierWebhookConfig{
+func webhookReceiver(w *config.WebhookConfig) *models.Configv1NotifierWebhookConfig {
+	return &models.Configv1NotifierWebhookConfig{
 		URL:        w.URL.String(),
 		HTTPConfig: fromHTTPClientConfig(w.HTTPConfig),
 	}
@@ -1791,12 +1791,12 @@ func emailReceiver(e *config.EmailConfig) *models.NotifierEmailConfig {
 	}
 }
 
-func slackReceiver(s *config.SlackConfig) *models.NotifierSlackConfig {
+func slackReceiver(s *config.SlackConfig) *models.Configv1NotifierSlackConfig {
 	apiURL := ""
 	if s.APIURL != nil {
 		apiURL = s.APIURL.String()
 	}
-	cfg := &models.NotifierSlackConfig{
+	cfg := &models.Configv1NotifierSlackConfig{
 		HTTPConfig:  fromHTTPClientConfig(s.HTTPConfig),
 		APIURL:      apiURL,
 		Channel:     s.Channel,
@@ -1827,8 +1827,8 @@ func slackReceiver(s *config.SlackConfig) *models.NotifierSlackConfig {
 	return cfg
 }
 
-func pagerdutyReceiver(p *config.PagerdutyConfig) *models.NotifierPagerdutyConfig {
-	cfg := &models.NotifierPagerdutyConfig{
+func pagerdutyReceiver(p *config.PagerdutyConfig) *models.Configv1NotifierPagerdutyConfig {
+	cfg := &models.Configv1NotifierPagerdutyConfig{
 		HTTPConfig:  fromHTTPClientConfig(p.HTTPConfig),
 		URL:         p.URL.String(),
 		ServiceKey:  string(p.ServiceKey),
@@ -1853,8 +1853,8 @@ func pagerdutyReceiver(p *config.PagerdutyConfig) *models.NotifierPagerdutyConfi
 	return cfg
 }
 
-func opsGenieReceiver(o *config.OpsGenieConfig) *models.NotifierOpsGenieConfig {
-	cfg := &models.NotifierOpsGenieConfig{
+func opsGenieReceiver(o *config.OpsGenieConfig) *models.Configv1NotifierOpsGenieConfig {
+	cfg := &models.Configv1NotifierOpsGenieConfig{
 		HTTPConfig:  fromHTTPClientConfig(o.HTTPConfig),
 		APIKey:      string(o.APIKey),
 		APIURL:      o.APIURL.String(),
@@ -1874,8 +1874,8 @@ func opsGenieReceiver(o *config.OpsGenieConfig) *models.NotifierOpsGenieConfig {
 	return cfg
 }
 
-func victorOpsReceiver(v *config.VictorOpsConfig) *models.NotifierVictorOpsConfig {
-	return &models.NotifierVictorOpsConfig{
+func victorOpsReceiver(v *config.VictorOpsConfig) *models.Configv1NotifierVictorOpsConfig {
+	return &models.Configv1NotifierVictorOpsConfig{
 		HTTPConfig:        fromHTTPClientConfig(v.HTTPConfig),
 		APIKey:            string(v.APIKey),
 		APIURL:            v.APIURL.String(),
@@ -1890,14 +1890,14 @@ func victorOpsReceiver(v *config.VictorOpsConfig) *models.NotifierVictorOpsConfi
 
 func fromHTTPClientConfig(
 	value *commoncfg.HTTPClientConfig,
-) *models.NotifierHTTPConfig {
-	result := &models.NotifierHTTPConfig{}
+) *models.Configv1NotifierHTTPConfig {
+	result := &models.Configv1NotifierHTTPConfig{}
 	if value == nil {
 		return result
 	}
 
 	if elem := value.BasicAuth; elem != nil {
-		result.BasicAuth = &models.HTTPConfigBasicAuth{
+		result.BasicAuth = &models.Configv1NotifierHTTPConfigBasicAuth{
 			Username: elem.Username,
 			Password: string(elem.Password),
 		}
@@ -1911,7 +1911,7 @@ func fromHTTPClientConfig(
 		result.ProxyURL = elem.String()
 	}
 
-	result.TLSConfig = &models.HTTPConfigTLSConfig{
+	result.TLSConfig = &models.Configv1NotifierHTTPConfigTLSConfig{
 		InsecureSkipVerify: value.TLSConfig.InsecureSkipVerify,
 	}
 

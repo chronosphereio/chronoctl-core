@@ -14,13 +14,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NotifierPagerdutyConfig notifier pagerduty config
+// Configv1NotifierPagerdutyConfig configv1 notifier pagerduty config
 //
-// swagger:model NotifierPagerdutyConfig
-type NotifierPagerdutyConfig struct {
+// swagger:model configv1NotifierPagerdutyConfig
+type Configv1NotifierPagerdutyConfig struct {
 
 	// http config
-	HTTPConfig *NotifierHTTPConfig `json:"http_config,omitempty"`
+	HTTPConfig *Configv1NotifierHTTPConfig `json:"http_config,omitempty"`
 
 	// The Pagerduty URL to send API requests to.
 	URL string `json:"url,omitempty"`
@@ -66,8 +66,8 @@ type NotifierPagerdutyConfig struct {
 	RoutingKey string `json:"routing_key,omitempty"`
 }
 
-// Validate validates this notifier pagerduty config
-func (m *NotifierPagerdutyConfig) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 notifier pagerduty config
+func (m *Configv1NotifierPagerdutyConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateHTTPConfig(formats); err != nil {
@@ -88,7 +88,7 @@ func (m *NotifierPagerdutyConfig) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *NotifierPagerdutyConfig) validateHTTPConfig(formats strfmt.Registry) error {
+func (m *Configv1NotifierPagerdutyConfig) validateHTTPConfig(formats strfmt.Registry) error {
 	if swag.IsZero(m.HTTPConfig) { // not required
 		return nil
 	}
@@ -107,7 +107,7 @@ func (m *NotifierPagerdutyConfig) validateHTTPConfig(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *NotifierPagerdutyConfig) validateImages(formats strfmt.Registry) error {
+func (m *Configv1NotifierPagerdutyConfig) validateImages(formats strfmt.Registry) error {
 	if swag.IsZero(m.Images) { // not required
 		return nil
 	}
@@ -133,7 +133,7 @@ func (m *NotifierPagerdutyConfig) validateImages(formats strfmt.Registry) error 
 	return nil
 }
 
-func (m *NotifierPagerdutyConfig) validateLinks(formats strfmt.Registry) error {
+func (m *Configv1NotifierPagerdutyConfig) validateLinks(formats strfmt.Registry) error {
 	if swag.IsZero(m.Links) { // not required
 		return nil
 	}
@@ -159,8 +159,8 @@ func (m *NotifierPagerdutyConfig) validateLinks(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this notifier pagerduty config based on the context it is used
-func (m *NotifierPagerdutyConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 notifier pagerduty config based on the context it is used
+func (m *Configv1NotifierPagerdutyConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateHTTPConfig(ctx, formats); err != nil {
@@ -181,7 +181,7 @@ func (m *NotifierPagerdutyConfig) ContextValidate(ctx context.Context, formats s
 	return nil
 }
 
-func (m *NotifierPagerdutyConfig) contextValidateHTTPConfig(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1NotifierPagerdutyConfig) contextValidateHTTPConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HTTPConfig != nil {
 
@@ -202,7 +202,7 @@ func (m *NotifierPagerdutyConfig) contextValidateHTTPConfig(ctx context.Context,
 	return nil
 }
 
-func (m *NotifierPagerdutyConfig) contextValidateImages(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1NotifierPagerdutyConfig) contextValidateImages(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Images); i++ {
 
@@ -227,7 +227,7 @@ func (m *NotifierPagerdutyConfig) contextValidateImages(ctx context.Context, for
 	return nil
 }
 
-func (m *NotifierPagerdutyConfig) contextValidateLinks(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1NotifierPagerdutyConfig) contextValidateLinks(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Links); i++ {
 
@@ -253,7 +253,7 @@ func (m *NotifierPagerdutyConfig) contextValidateLinks(ctx context.Context, form
 }
 
 // MarshalBinary interface implementation
-func (m *NotifierPagerdutyConfig) MarshalBinary() ([]byte, error) {
+func (m *Configv1NotifierPagerdutyConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -261,8 +261,8 @@ func (m *NotifierPagerdutyConfig) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *NotifierPagerdutyConfig) UnmarshalBinary(b []byte) error {
-	var res NotifierPagerdutyConfig
+func (m *Configv1NotifierPagerdutyConfig) UnmarshalBinary(b []byte) error {
+	var res Configv1NotifierPagerdutyConfig
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
