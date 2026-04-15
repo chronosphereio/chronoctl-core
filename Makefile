@@ -86,7 +86,7 @@ chronoctl:
 go-version-check:
 	# make sure you're running the right version of Go, otherwise builds/codegen/tests
 	# may have inconsistent results that are hard to debug.
-	go version | grep go1.25 || (echo "Error: you must be running go1.25.x" && exit 1)
+	go version | grep go1.26 || (echo "Error: you must be running go1.26.x" && exit 1)
 
 .PHONY: release
 release:
