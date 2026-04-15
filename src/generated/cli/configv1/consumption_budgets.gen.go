@@ -520,9 +520,7 @@ spec:
           # concatenated together as implied 'AND' operators. A request must match every
           # filter to match the 'priority'.
           filters:
-            - # If set, matches incoming data that belongs to the specified dataset.
-
-              # Exactly one of 'dataset_slug' or 'log_filter' must be set.
+            - # Deprecated. Use 'log_filter' instead.
               dataset_slug: <string>
               log_filter:
                 # Returns logs that match this query. The query can include only top-level
@@ -538,9 +536,9 @@ spec:
           instant_rate:
             # Value of the fixed rate threshold.
             fixed_value_per_sec: <int64>
-          sku_group: <LOG_PERSISTED_BYTES|LOG_PROCESSED_BYTES>
+          sku_group: <LOG_PERSISTED_BYTES|LOG_PROCESSED_BYTES|METRIC_PERSISTED_SERIES|METRIC_ALL>
           type: <DAILY_VOLUME|INSTANT_RATE|WEEKLY_VOLUME|MONTHLY_VOLUME|HOURLY_VOLUME|ROLLING_1_HOUR_VOLUME|ROLLING_3_HOUR_VOLUME|ROLLING_1_DAY_VOLUME|ROLLING_7_DAY_VOLUME>
-          unit: <NATIVE>
+          unit: <NATIVE|CREDITS>
           volume:
             # Value of the volume threshold.
             fixed_value: <int64>
@@ -567,7 +565,7 @@ spec:
         # order to fire an alert. By default, the sustain is 0: any consumption
         # over the threshold will fire an alert.
         instant_rate_sustain_secs: <integer>
-    resource: <LOG_PERSISTED_BYTES|LOG_PROCESSED_BYTES>
+    resource: <LOG_PERSISTED_BYTES|LOG_PROCESSED_BYTES|METRIC_PERSISTED_SERIES|METRIC_ALL>
 `
 
 func newConsumptionBudgetScaffoldCmd() *cobra.Command {

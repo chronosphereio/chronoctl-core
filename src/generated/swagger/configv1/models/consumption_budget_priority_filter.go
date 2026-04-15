@@ -18,9 +18,7 @@ import (
 // swagger:model ConsumptionBudgetPriorityFilter
 type ConsumptionBudgetPriorityFilter struct {
 
-	// If set, matches incoming data that belongs to the specified dataset.
-	//
-	// Exactly one of `dataset_slug` or `log_filter` must be set.
+	// Deprecated. Use `log_filter` instead.
 	DatasetSlug string `json:"dataset_slug,omitempty"`
 
 	// log filter

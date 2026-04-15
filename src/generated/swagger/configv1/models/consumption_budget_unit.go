@@ -32,6 +32,9 @@ const (
 
 	// ConsumptionBudgetUnitNATIVE captures enum value "NATIVE"
 	ConsumptionBudgetUnitNATIVE ConsumptionBudgetUnit = "NATIVE"
+
+	// ConsumptionBudgetUnitCREDITS captures enum value "CREDITS"
+	ConsumptionBudgetUnitCREDITS ConsumptionBudgetUnit = "CREDITS"
 )
 
 // for schema
@@ -39,7 +42,7 @@ var consumptionBudgetUnitEnum []interface{}
 
 func init() {
 	var res []ConsumptionBudgetUnit
-	if err := json.Unmarshal([]byte(`["NATIVE"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["NATIVE","CREDITS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

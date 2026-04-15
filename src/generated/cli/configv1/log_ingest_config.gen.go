@@ -357,6 +357,10 @@ spec:
           keep_original: <true|false>
           mode: <ENABLED|DISABLED>
           parser:
+            grok_parser:
+                # The grok pattern to apply. Named capture groups become named fields in 
+                # the extracted log.
+                pattern: <string>
             # A parser to extract key/value pairs from a string.
             # If duplicate keys are found, the first instance is used.
             key_value_parser:
@@ -367,7 +371,7 @@ spec:
                 # Specifies the code points of any Unicode characters to trim from the
                 # beginning and end of keys and values.
                 trim_set: <string>
-            parser_type: <JSON|REGEX|KEY_VALUE>
+            parser_type: <JSON|REGEX|KEY_VALUE|GROK>
             regex_parser:
                 # The regular expression parser pattern to apply. Must use RE2 syntax.
                 # Named capturing groups become named fields in the extracted log.
@@ -380,6 +384,10 @@ spec:
             selector: <string>
           mode: <ENABLED|DISABLED>
           parser:
+            grok_parser:
+                # The grok pattern to apply. Named capture groups become named fields in 
+                # the extracted log.
+                pattern: <string>
             # A parser to extract key/value pairs from a string.
             # If duplicate keys are found, the first instance is used.
             key_value_parser:
@@ -390,7 +398,7 @@ spec:
                 # Specifies the code points of any Unicode characters to trim from the
                 # beginning and end of keys and values.
                 trim_set: <string>
-            parser_type: <JSON|REGEX|KEY_VALUE>
+            parser_type: <JSON|REGEX|KEY_VALUE|GROK>
             regex_parser:
                 # The regular expression parser pattern to apply. Must use RE2 syntax.
                 # Named capturing groups become named fields in the extracted log.

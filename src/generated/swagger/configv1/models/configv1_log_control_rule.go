@@ -42,6 +42,9 @@ type Configv1LogControlRule struct {
 
 	// emit metrics
 	EmitMetrics *LogControlRuleEmitMetrics `json:"emit_metrics,omitempty"`
+
+	// parse field
+	ParseField *LogControlRuleParseField `json:"parse_field,omitempty"`
 }
 
 // Validate validates this configv1 log control rule
@@ -69,6 +72,10 @@ func (m *Configv1LogControlRule) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEmitMetrics(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateParseField(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -188,6 +195,25 @@ func (m *Configv1LogControlRule) validateEmitMetrics(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *Configv1LogControlRule) validateParseField(formats strfmt.Registry) error {
+	if swag.IsZero(m.ParseField) { // not required
+		return nil
+	}
+
+	if m.ParseField != nil {
+		if err := m.ParseField.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("parse_field")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("parse_field")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 log control rule based on the context it is used
 func (m *Configv1LogControlRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -213,6 +239,10 @@ func (m *Configv1LogControlRule) ContextValidate(ctx context.Context, formats st
 	}
 
 	if err := m.contextValidateEmitMetrics(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParseField(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -334,6 +364,27 @@ func (m *Configv1LogControlRule) contextValidateEmitMetrics(ctx context.Context,
 				return ve.ValidateName("emit_metrics")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("emit_metrics")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1LogControlRule) contextValidateParseField(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ParseField != nil {
+
+		if swag.IsZero(m.ParseField) { // not required
+			return nil
+		}
+
+		if err := m.ParseField.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("parse_field")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("parse_field")
 			}
 			return err
 		}

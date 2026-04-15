@@ -35,6 +35,12 @@ const (
 
 	// ConsumptionBudgetSKUGroupLOGPROCESSEDBYTES captures enum value "LOG_PROCESSED_BYTES"
 	ConsumptionBudgetSKUGroupLOGPROCESSEDBYTES ConsumptionBudgetSKUGroup = "LOG_PROCESSED_BYTES"
+
+	// ConsumptionBudgetSKUGroupMETRICPERSISTEDSERIES captures enum value "METRIC_PERSISTED_SERIES"
+	ConsumptionBudgetSKUGroupMETRICPERSISTEDSERIES ConsumptionBudgetSKUGroup = "METRIC_PERSISTED_SERIES"
+
+	// ConsumptionBudgetSKUGroupMETRICALL captures enum value "METRIC_ALL"
+	ConsumptionBudgetSKUGroupMETRICALL ConsumptionBudgetSKUGroup = "METRIC_ALL"
 )
 
 // for schema
@@ -42,7 +48,7 @@ var consumptionBudgetSKUGroupEnum []interface{}
 
 func init() {
 	var res []ConsumptionBudgetSKUGroup
-	if err := json.Unmarshal([]byte(`["LOG_PERSISTED_BYTES","LOG_PROCESSED_BYTES"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["LOG_PERSISTED_BYTES","LOG_PROCESSED_BYTES","METRIC_PERSISTED_SERIES","METRIC_ALL"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

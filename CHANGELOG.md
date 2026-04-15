@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Added:
+* Add `metric_filters` and `trace_filter` fields to `v1/config/ConsumptionConfig` partition filter conditions.
+* Add `METRIC_PERSISTED_SERIES` and `METRIC_ALL` SKU groups and `CREDITS` unit to `v1/config/ConsumptionBudget`.
+
 ## v1.25.0
 
 Added:

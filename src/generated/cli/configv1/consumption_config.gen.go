@@ -363,8 +363,20 @@ spec:
           filters:
             - # Conditions for the query to match.
               conditions:
-                - # Deprecated. Use 'log_filter' instead.
+                - # Deprecated. Use 'log_filter', 'metric_filters', or 'trace_filter' instead.
                   dataset_slug: <string>
+                  # If set, matches incoming metric data by label. If multiple label
+                  # filters are specified, an incoming metric must match every label
+                  # filter to match the condition. Label values support glob patterns,
+                  # including matching multiple patterns with an 'OR', such as
+                  # 'service:{svc1,svc2}'.
+
+                  # Exactly one of 'log_filter', 'metric_filters', or 'trace_filter' must be set.
+                  metric_filters:
+                    - # The name of the label to match.
+                      name: <string>
+                      # The glob value of the label to match.
+                      value_glob: <string>
                   log_filter:
                     # Returns logs that match this query. The query can include only top-level
                     # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
