@@ -2,11 +2,15 @@
 
 ## Unreleased
 
+## v1.26.0
+
 Added:
 * Add `metric_filters` and `trace_filter` fields to `v1/config/ConsumptionConfig` partition filter conditions.
 * Add `METRIC_PERSISTED_SERIES` and `METRIC_ALL` SKU groups and `CREDITS` unit to `v1/config/ConsumptionBudget`.
 * Add `parse_field` rule type to `v1/config/LogControlConfig`.
 * Add `grok_parser` to `v1/config/LogIngestConfig`.
+
+Internal:
 * Upgrade to Go 1.26.
 
 ## v1.25.0
