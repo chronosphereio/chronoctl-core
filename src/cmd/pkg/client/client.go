@@ -134,6 +134,7 @@ func (f *Flags) Transport(component transport.Component, basePath string) (*http
 		DefaultBasePath:    basePath,
 		EntityNamespace:    f.getEntityNamespace(),
 		Actor:              f.getActor(),
+		UserAgent:          f.getUserAgent(),
 	})
 	if err != nil {
 		return nil, err
@@ -194,6 +195,10 @@ func (f *Flags) getEntityNamespace() string {
 
 func (f *Flags) getActor() string {
 	return os.Getenv(env.ChronosphereActor)
+}
+
+func (f *Flags) getUserAgent() string {
+	return os.Getenv(env.ChronosphereUserAgent)
 }
 
 func (f *Flags) getAPIToken(apiURL string) (string, error) {

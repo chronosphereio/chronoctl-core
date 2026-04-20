@@ -26,4 +26,6 @@ const (
 	ChronosphereEntityNamespace = "CHRONOSPHERE_ENTITY_NAMESPACE"
 	// ChronosphereActor is the environment variable that specifies the Chronosphere actor
 	ChronosphereActor = "CHRONOSPHERE_ACTOR"
+	// ChronosphereUserAgent is the environment variable that overrides the User-Agent header
+	ChronosphereUserAgent = "CHRONOSPHERE_USER_AGENT"
 )

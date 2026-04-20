@@ -58,6 +58,7 @@ type RuntimeConfig struct {
 	DefaultBasePath    string
 	EntityNamespace    string
 	Actor              string
+	UserAgent          string
 }
 
 // New creates a new HTTP transport that can communicate with the Chronosphere API.
@@ -95,7 +96,7 @@ func New(config RuntimeConfig) (*httptransport.Runtime, error) {
 	transport.DefaultAuthentication = httptransport.APIKeyAuth(apiTokenHeader, "header", config.APIToken)
 
 	transport.Transport = xswagger.WithRequestIDTrailerTransport(
-		withCustomHeaders(config.Component, config.EntityNamespace, config.Actor, transport.Transport),
+		withCustomHeaders(config.Component, config.EntityNamespace, config.Actor, config.UserAgent, transport.Transport),
 	)
 	transport.Consumers[httpruntime.JSONMime] = xswagger.JSONConsumer()
 	transport.Consumers[httpruntime.HTMLMime] = xswagger.TextConsumer()
@@ -116,21 +117,26 @@ type CustomHeaderTransport struct {
 	Rt              http.RoundTripper
 }
 
-func withCustomHeaders(component Component, entityNamespace string, actor string, rt http.RoundTripper) http.RoundTripper {
+func withCustomHeaders(component Component, entityNamespace string, actor string, userAgent string, rt http.RoundTripper) http.RoundTripper {
 	if rt == nil {
 		rt = http.DefaultTransport
 	}
 
-	return CustomHeaderTransport{
-		Rt: rt,
-		agent: fmt.Sprintf("%s/%v-%v (%s; %s; %s)",
+	agent := userAgent
+	if agent == "" {
+		agent = fmt.Sprintf("%s/%v-%v (%s; %s; %s)",
 			component,
 			buildinfo.Version,
 			buildinfo.SHA,
 			runtime.Version(),
 			runtime.GOOS,
 			runtime.GOARCH,
-		),
+		)
+	}
+
+	return CustomHeaderTransport{
+		Rt:              rt,
+		agent:           agent,
 		entityNamespace: entityNamespace,
 		actor:           actor,
 	}
