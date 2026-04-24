@@ -20,6 +20,9 @@ type Configv1ExternalConnectionPagerdutyConfig struct {
 
 	// events
 	Events *PagerdutyConfigPagerdutyEventsConfig `json:"events,omitempty"`
+
+	// rest
+	Rest *PagerdutyConfigPagerdutyRESTConfig `json:"rest,omitempty"`
 }
 
 // Validate validates this configv1 external connection pagerduty config
@@ -27,6 +30,10 @@ func (m *Configv1ExternalConnectionPagerdutyConfig) Validate(formats strfmt.Regi
 	var res []error
 
 	if err := m.validateEvents(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateRest(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -55,11 +62,34 @@ func (m *Configv1ExternalConnectionPagerdutyConfig) validateEvents(formats strfm
 	return nil
 }
 
+func (m *Configv1ExternalConnectionPagerdutyConfig) validateRest(formats strfmt.Registry) error {
+	if swag.IsZero(m.Rest) { // not required
+		return nil
+	}
+
+	if m.Rest != nil {
+		if err := m.Rest.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("rest")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("rest")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 external connection pagerduty config based on the context it is used
 func (m *Configv1ExternalConnectionPagerdutyConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateEvents(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRest(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -82,6 +112,27 @@ func (m *Configv1ExternalConnectionPagerdutyConfig) contextValidateEvents(ctx co
 				return ve.ValidateName("events")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("events")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1ExternalConnectionPagerdutyConfig) contextValidateRest(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Rest != nil {
+
+		if swag.IsZero(m.Rest) { // not required
+			return nil
+		}
+
+		if err := m.Rest.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("rest")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("rest")
 			}
 			return err
 		}

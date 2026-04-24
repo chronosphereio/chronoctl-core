@@ -96,6 +96,18 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateNotebookBody": {
+      "properties": {
+        "notebook": {
+          "$ref": "#/definitions/configunstableNotebook"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the Notebook will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the Notebook does not already exist.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateObjectDiscoveryRuleBody": {
       "properties": {
         "object_discovery_rule": {
@@ -803,6 +815,22 @@
       },
       "type": "object"
     },
+    "configunstableCreateNotebookRequest": {
+      "properties": {
+        "notebook": {
+          "$ref": "#/definitions/configunstableNotebook"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateNotebookResponse": {
+      "properties": {
+        "notebook": {
+          "$ref": "#/definitions/configunstableNotebook"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateObjectDiscoveryRuleRequest": {
       "properties": {
         "object_discovery_rule": {
@@ -998,6 +1026,9 @@
       },
       "type": "object"
     },
+    "configunstableDeleteNotebookResponse": {
+      "type": "object"
+    },
     "configunstableDeleteObjectDiscoveryRuleResponse": {
       "type": "object"
     },
@@ -1118,6 +1149,20 @@
         },
         "page": {
           "$ref": "#/definitions/configv1PageResult"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListNotebooksResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "notebooks": {
+          "items": {
+            "$ref": "#/definitions/configunstableNotebook"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1307,6 +1352,39 @@
       ],
       "type": "string"
     },
+    "configunstableNotebook": {
+      "properties": {
+        "slug": {
+          "description": "The unique identifier of the Notebook. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the Notebook is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the Notebook. You can modify this value after the Notebook is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the Notebook was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the Notebook was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "collection_slug": {
+          "description": "Required slug of the collection the notebook belongs to.",
+          "type": "string"
+        },
+        "notebook_json": {
+          "description": "Required raw JSON of the notebook.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configunstableObjectDiscoveryRule": {
       "properties": {
         "slug": {
@@ -1359,6 +1437,14 @@
       "properties": {
         "noop_entity": {
           "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadNotebookResponse": {
+      "properties": {
+        "notebook": {
+          "$ref": "#/definitions/configunstableNotebook"
         }
       },
       "type": "object"
@@ -1738,6 +1824,14 @@
       "properties": {
         "noop_entity": {
           "$ref": "#/definitions/configunstableNoopEntity"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateNotebookResponse": {
+      "properties": {
+        "notebook": {
+          "$ref": "#/definitions/configunstableNotebook"
         }
       },
       "type": "object"
@@ -2847,6 +2941,281 @@
         },
         "tags": [
           "NoopEntity"
+        ]
+      }
+    },
+    "/api/unstable/config/notebooks": {
+      "get": {
+        "operationId": "ListNotebooks",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any Notebook with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by collection_slug, where any Notebook with a matching collection_slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "collection_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any Notebook with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "description": "Optional flag to populate the notebook_json of the returned notebooks.\nBy default, notebook_json will be left empty.",
+            "in": "query",
+            "name": "include_notebook_json",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListNotebooksResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Notebook"
+        ]
+      },
+      "post": {
+        "operationId": "CreateNotebook",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateNotebookRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created Notebook.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateNotebookResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the Notebook because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the Notebook because there is a conflict with an existing Notebook.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Notebook"
+        ]
+      }
+    },
+    "/api/unstable/config/notebooks/{slug}": {
+      "delete": {
+        "operationId": "DeleteNotebook",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteNotebookResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the Notebook because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the Notebook because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Notebook"
+        ]
+      },
+      "get": {
+        "operationId": "ReadNotebook",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadNotebookResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the Notebook because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Notebook"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateNotebook",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateNotebookBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated Notebook.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateNotebookResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the Notebook because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the Notebook because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the Notebook because there is a conflict with an existing Notebook.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "Notebook"
         ]
       }
     },

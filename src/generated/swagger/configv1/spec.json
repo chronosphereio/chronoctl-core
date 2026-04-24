@@ -919,9 +919,12 @@
           "description": "The slug of the ExternalConnection that holds VictorOps credentials.",
           "type": "string"
         },
-        "routing_key": {
-          "description": "The VictorOps routing key that determines where notifications are routed.",
-          "type": "string"
+        "routing_keys": {
+          "description": "The VictorOps routing keys that determine where notifications are routed.\nA separate notification is sent for each routing key.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -2049,6 +2052,15 @@
         },
         "api_key": {
           "description": "The PagerDuty integration key used to authenticate with the Events API.\nPagerDuty calls this the \"routing key\" in Events v2 and the\n\"service key\" in Events v1.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PagerdutyConfigPagerdutyRESTConfig": {
+      "properties": {
+        "api_key": {
+          "description": "The PagerDuty REST API token used to authenticate note polling.",
           "type": "string"
         }
       },
@@ -4567,6 +4579,9 @@
       "properties": {
         "events": {
           "$ref": "#/definitions/PagerdutyConfigPagerdutyEventsConfig"
+        },
+        "rest": {
+          "$ref": "#/definitions/PagerdutyConfigPagerdutyRESTConfig"
         }
       },
       "type": "object"

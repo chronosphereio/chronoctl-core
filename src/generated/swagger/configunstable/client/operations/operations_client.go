@@ -36,6 +36,8 @@ type ClientService interface {
 
 	CreateNoopEntity(params *CreateNoopEntityParams, opts ...ClientOption) (*CreateNoopEntityOK, error)
 
+	CreateNotebook(params *CreateNotebookParams, opts ...ClientOption) (*CreateNotebookOK, error)
+
 	CreateObjectDiscoveryRule(params *CreateObjectDiscoveryRuleParams, opts ...ClientOption) (*CreateObjectDiscoveryRuleOK, error)
 
 	CreateSavedTraceSearch(params *CreateSavedTraceSearchParams, opts ...ClientOption) (*CreateSavedTraceSearchOK, error)
@@ -58,6 +60,8 @@ type ClientService interface {
 
 	DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...ClientOption) (*DeleteNoopEntityOK, error)
 
+	DeleteNotebook(params *DeleteNotebookParams, opts ...ClientOption) (*DeleteNotebookOK, error)
+
 	DeleteObjectDiscoveryRule(params *DeleteObjectDiscoveryRuleParams, opts ...ClientOption) (*DeleteObjectDiscoveryRuleOK, error)
 
 	DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error)
@@ -78,6 +82,8 @@ type ClientService interface {
 
 	ListLogPrimaryKeys(params *ListLogPrimaryKeysParams, opts ...ClientOption) (*ListLogPrimaryKeysOK, error)
 
+	ListNotebooks(params *ListNotebooksParams, opts ...ClientOption) (*ListNotebooksOK, error)
+
 	ListObjectDiscoveryRule(params *ListObjectDiscoveryRuleParams, opts ...ClientOption) (*ListObjectDiscoveryRuleOK, error)
 
 	ListSavedTraceSearches(params *ListSavedTraceSearchesParams, opts ...ClientOption) (*ListSavedTraceSearchesOK, error)
@@ -95,6 +101,8 @@ type ClientService interface {
 	ReadLogPrimaryKey(params *ReadLogPrimaryKeyParams, opts ...ClientOption) (*ReadLogPrimaryKeyOK, error)
 
 	ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOption) (*ReadNoopEntityOK, error)
+
+	ReadNotebook(params *ReadNotebookParams, opts ...ClientOption) (*ReadNotebookOK, error)
 
 	ReadObjectDiscoveryRule(params *ReadObjectDiscoveryRuleParams, opts ...ClientOption) (*ReadObjectDiscoveryRuleOK, error)
 
@@ -117,6 +125,8 @@ type ClientService interface {
 	UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error)
 
 	UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...ClientOption) (*UpdateNoopEntityOK, error)
+
+	UpdateNotebook(params *UpdateNotebookParams, opts ...ClientOption) (*UpdateNotebookOK, error)
 
 	UpdateObjectDiscoveryRule(params *UpdateObjectDiscoveryRuleParams, opts ...ClientOption) (*UpdateObjectDiscoveryRuleOK, error)
 
@@ -280,6 +290,43 @@ func (a *Client) CreateNoopEntity(params *CreateNoopEntityParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateNoopEntityDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateNotebook create notebook API
+*/
+func (a *Client) CreateNotebook(params *CreateNotebookParams, opts ...ClientOption) (*CreateNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateNotebook",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/notebooks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateNotebookDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -694,6 +741,43 @@ func (a *Client) DeleteNoopEntity(params *DeleteNoopEntityParams, opts ...Client
 }
 
 /*
+DeleteNotebook delete notebook API
+*/
+func (a *Client) DeleteNotebook(params *DeleteNotebookParams, opts ...ClientOption) (*DeleteNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteNotebook",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/notebooks/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteNotebookDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteObjectDiscoveryRule delete object discovery rule API
 */
 func (a *Client) DeleteObjectDiscoveryRule(params *DeleteObjectDiscoveryRuleParams, opts ...ClientOption) (*DeleteObjectDiscoveryRuleOK, error) {
@@ -1064,6 +1148,43 @@ func (a *Client) ListLogPrimaryKeys(params *ListLogPrimaryKeysParams, opts ...Cl
 }
 
 /*
+ListNotebooks list notebooks API
+*/
+func (a *Client) ListNotebooks(params *ListNotebooksParams, opts ...ClientOption) (*ListNotebooksOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListNotebooksParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListNotebooks",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/notebooks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListNotebooksReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListNotebooksOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListNotebooksDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListObjectDiscoveryRule list object discovery rule API
 */
 func (a *Client) ListObjectDiscoveryRule(params *ListObjectDiscoveryRuleParams, opts ...ClientOption) (*ListObjectDiscoveryRuleOK, error) {
@@ -1393,6 +1514,43 @@ func (a *Client) ReadNoopEntity(params *ReadNoopEntityParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadNoopEntityDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadNotebook read notebook API
+*/
+func (a *Client) ReadNotebook(params *ReadNotebookParams, opts ...ClientOption) (*ReadNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadNotebook",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/notebooks/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadNotebookDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1803,6 +1961,43 @@ func (a *Client) UpdateNoopEntity(params *UpdateNoopEntityParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateNoopEntityDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateNotebook update notebook API
+*/
+func (a *Client) UpdateNotebook(params *UpdateNotebookParams, opts ...ClientOption) (*UpdateNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateNotebook",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/notebooks/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateNotebookDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

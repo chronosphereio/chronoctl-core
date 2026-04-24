@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+* `v1/config/NotificationPolicy` VictorOps destinations now expose `routing_keys` (repeated) instead of `routing_key`, matching the public API.
+
 ## v1.26.0
 
 Added:

@@ -20,8 +20,9 @@ type DestinationVictorOpsTarget struct {
 	// The slug of the ExternalConnection that holds VictorOps credentials.
 	ExternalConnectionSlug string `json:"external_connection_slug,omitempty"`
 
-	// The VictorOps routing key that determines where notifications are routed.
-	RoutingKey string `json:"routing_key,omitempty"`
+	// The VictorOps routing keys that determine where notifications are routed.
+	// A separate notification is sent for each routing key.
+	RoutingKeys []string `json:"routing_keys"`
 }
 
 // Validate validates this destination victor ops target
