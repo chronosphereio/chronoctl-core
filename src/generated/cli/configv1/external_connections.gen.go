@@ -522,6 +522,9 @@ spec:
             #  - PAGERDUTY_EVENTS_VERSION_V1: V1 is the legacy PagerDuty Events API version.
             #  - PAGERDUTY_EVENTS_VERSION_V2: V2 is the default and recommended version.
             version: <PAGERDUTY_EVENTS_VERSION_V1|PAGERDUTY_EVENTS_VERSION_V2>
+        rest:
+            # The PagerDuty REST API token used to authenticate note polling.
+            api_key: <string>
     slack:
         api_url: <string>
         token: <string>

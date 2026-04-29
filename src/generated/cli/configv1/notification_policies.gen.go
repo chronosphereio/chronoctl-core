@@ -558,8 +558,10 @@ spec:
                           victor_ops:
                             # The slug of the ExternalConnection that holds VictorOps credentials.
                             external_connection_slug: <string>
-                            # The VictorOps routing key that determines where notifications are routed.
-                            routing_key: <string>
+                            # The VictorOps routing keys that determine where notifications are routed.
+                            # A separate notification is sent for each routing key.
+                            routing_keys:
+                                - <string>
                           webhook:
                             # The slug of the ExternalConnection that holds webhook credentials.
                             external_connection_slug: <string>
@@ -604,8 +606,10 @@ spec:
                           victor_ops:
                             # The slug of the ExternalConnection that holds VictorOps credentials.
                             external_connection_slug: <string>
-                            # The VictorOps routing key that determines where notifications are routed.
-                            routing_key: <string>
+                            # The VictorOps routing keys that determine where notifications are routed.
+                            # A separate notification is sent for each routing key.
+                            routing_keys:
+                                - <string>
                           webhook:
                             # The slug of the ExternalConnection that holds webhook credentials.
                             external_connection_slug: <string>
@@ -651,8 +655,10 @@ spec:
                       victor_ops:
                         # The slug of the ExternalConnection that holds VictorOps credentials.
                         external_connection_slug: <string>
-                        # The VictorOps routing key that determines where notifications are routed.
-                        routing_key: <string>
+                        # The VictorOps routing keys that determine where notifications are routed.
+                        # A separate notification is sent for each routing key.
+                        routing_keys:
+                            - <string>
                       webhook:
                         # The slug of the ExternalConnection that holds webhook credentials.
                         external_connection_slug: <string>
@@ -697,8 +703,10 @@ spec:
                       victor_ops:
                         # The slug of the ExternalConnection that holds VictorOps credentials.
                         external_connection_slug: <string>
-                        # The VictorOps routing key that determines where notifications are routed.
-                        routing_key: <string>
+                        # The VictorOps routing keys that determine where notifications are routed.
+                        # A separate notification is sent for each routing key.
+                        routing_keys:
+                            - <string>
                       webhook:
                         # The slug of the ExternalConnection that holds webhook credentials.
                         external_connection_slug: <string>
