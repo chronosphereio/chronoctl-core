@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.27.0
+
 ### Changed
 * Changed the singular `routing_key` field in the VictorOps destination in `v1/config/NotificationPolicy` to be plural `routing_keys`
 
