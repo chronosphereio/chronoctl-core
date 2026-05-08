@@ -56,6 +56,9 @@ const (
 
 	// ConsumptionBudgetThresholdTypeROLLING7DAYVOLUME captures enum value "ROLLING_7_DAY_VOLUME"
 	ConsumptionBudgetThresholdTypeROLLING7DAYVOLUME ConsumptionBudgetThresholdType = "ROLLING_7_DAY_VOLUME"
+
+	// ConsumptionBudgetThresholdTypeROLLING30MINUTEVOLUME captures enum value "ROLLING_30_MINUTE_VOLUME"
+	ConsumptionBudgetThresholdTypeROLLING30MINUTEVOLUME ConsumptionBudgetThresholdType = "ROLLING_30_MINUTE_VOLUME"
 )
 
 // for schema
@@ -63,7 +66,7 @@ var consumptionBudgetThresholdTypeEnum []interface{}
 
 func init() {
 	var res []ConsumptionBudgetThresholdType
-	if err := json.Unmarshal([]byte(`["DAILY_VOLUME","INSTANT_RATE","WEEKLY_VOLUME","MONTHLY_VOLUME","HOURLY_VOLUME","ROLLING_1_HOUR_VOLUME","ROLLING_3_HOUR_VOLUME","ROLLING_1_DAY_VOLUME","ROLLING_7_DAY_VOLUME"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["DAILY_VOLUME","INSTANT_RATE","WEEKLY_VOLUME","MONTHLY_VOLUME","HOURLY_VOLUME","ROLLING_1_HOUR_VOLUME","ROLLING_3_HOUR_VOLUME","ROLLING_1_DAY_VOLUME","ROLLING_7_DAY_VOLUME","ROLLING_30_MINUTE_VOLUME"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+* Add `ROLLING_30_MINUTE_VOLUME` threshold type to `v1/config/ConsumptionBudget`.
+* Add `CLOUDFLARE` connection type and `cloudflare` config to `v1/config/ExternalConnection`.
+* Add `GCP_US_LOS_ANGELES` location to `unstable/config/SyntheticTest`, replacing `AWS_US_EAST_1`.
+
 ## v1.27.0
 
 ### Changed

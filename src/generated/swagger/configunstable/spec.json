@@ -478,7 +478,7 @@
     },
     "SyntheticTestTestLocation": {
       "enum": [
-        "AWS_US_EAST_1"
+        "GCP_US_LOS_ANGELES"
       ],
       "type": "string"
     },

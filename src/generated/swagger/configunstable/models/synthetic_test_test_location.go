@@ -30,8 +30,8 @@ func (m SyntheticTestTestLocation) Pointer() *SyntheticTestTestLocation {
 
 const (
 
-	// SyntheticTestTestLocationAWSUSEAST1 captures enum value "AWS_US_EAST_1"
-	SyntheticTestTestLocationAWSUSEAST1 SyntheticTestTestLocation = "AWS_US_EAST_1"
+	// SyntheticTestTestLocationGCPUSLOSANGELES captures enum value "GCP_US_LOS_ANGELES"
+	SyntheticTestTestLocationGCPUSLOSANGELES SyntheticTestTestLocation = "GCP_US_LOS_ANGELES"
 )
 
 // for schema
@@ -39,7 +39,7 @@ var syntheticTestTestLocationEnum []interface{}
 
 func init() {
 	var res []SyntheticTestTestLocation
-	if err := json.Unmarshal([]byte(`["AWS_US_EAST_1"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["GCP_US_LOS_ANGELES"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
