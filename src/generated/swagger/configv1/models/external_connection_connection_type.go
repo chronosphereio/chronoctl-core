@@ -44,6 +44,9 @@ const (
 
 	// ExternalConnectionConnectionTypeOPSGENIE captures enum value "OPSGENIE"
 	ExternalConnectionConnectionTypeOPSGENIE ExternalConnectionConnectionType = "OPSGENIE"
+
+	// ExternalConnectionConnectionTypeCLOUDFLARE captures enum value "CLOUDFLARE"
+	ExternalConnectionConnectionTypeCLOUDFLARE ExternalConnectionConnectionType = "CLOUDFLARE"
 )
 
 // for schema
@@ -51,7 +54,7 @@ var externalConnectionConnectionTypeEnum []interface{}
 
 func init() {
 	var res []ExternalConnectionConnectionType
-	if err := json.Unmarshal([]byte(`["SLACK","PAGERDUTY","WEBHOOK","VICTOROPS","OPSGENIE"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["SLACK","PAGERDUTY","WEBHOOK","VICTOROPS","OPSGENIE","CLOUDFLARE"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

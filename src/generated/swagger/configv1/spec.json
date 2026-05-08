@@ -670,7 +670,8 @@
         "ROLLING_1_HOUR_VOLUME",
         "ROLLING_3_HOUR_VOLUME",
         "ROLLING_1_DAY_VOLUME",
-        "ROLLING_7_DAY_VOLUME"
+        "ROLLING_7_DAY_VOLUME",
+        "ROLLING_30_MINUTE_VOLUME"
       ],
       "type": "string"
     },
@@ -1014,13 +1015,23 @@
       ],
       "type": "string"
     },
+    "ExternalConnectionCloudflareConfig": {
+      "properties": {
+        "api_token": {
+          "description": "Cloudflare API Token. Accepts User API Tokens (cfut_ prefix) and\nAccount API Tokens (cfat_ prefix).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ExternalConnectionConnectionType": {
       "enum": [
         "SLACK",
         "PAGERDUTY",
         "WEBHOOK",
         "VICTOROPS",
-        "OPSGENIE"
+        "OPSGENIE",
+        "CLOUDFLARE"
       ],
       "type": "string"
     },
@@ -4524,6 +4535,9 @@
         },
         "ops_genie": {
           "$ref": "#/definitions/configv1ExternalConnectionOpsGenieConfig"
+        },
+        "cloudflare": {
+          "$ref": "#/definitions/ExternalConnectionCloudflareConfig"
         }
       },
       "type": "object"
@@ -10726,7 +10740,8 @@
                 "PAGERDUTY",
                 "WEBHOOK",
                 "VICTOROPS",
-                "OPSGENIE"
+                "OPSGENIE",
+                "CLOUDFLARE"
               ],
               "type": "string"
             },

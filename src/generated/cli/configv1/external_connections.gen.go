@@ -499,6 +499,10 @@ spec:
     slug: <string>
     # The name of the ExternalConnection. You can modify this value after the ExternalConnection is created.
     name: <string>
+    cloudflare:
+        # Cloudflare API Token. Accepts User API Tokens (cfut_ prefix) and
+        # Account API Tokens (cfat_ prefix).
+        api_token: <string>
     ops_genie:
         api_key: <string>
         api_url: <string>
