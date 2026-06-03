@@ -20,6 +20,9 @@ type ConfigunstableCreateSyntheticTestRequest struct {
 
 	// synthetic test
 	SyntheticTest *ConfigunstableSyntheticTest `json:"synthetic_test,omitempty"`
+
+	// If `true`, validates the specified configuration without creating the SyntheticTest. If the specified configuration is valid, the endpoint returns a partial response without the SyntheticTest. If the specified configuration is invalid, the endpoint returns an error.
+	DryRun bool `json:"dry_run,omitempty"`
 }
 
 // Validate validates this configunstable create synthetic test request

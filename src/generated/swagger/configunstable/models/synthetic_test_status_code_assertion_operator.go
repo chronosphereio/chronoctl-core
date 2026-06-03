@@ -32,6 +32,15 @@ const (
 
 	// SyntheticTestStatusCodeAssertionOperatorEQUALS captures enum value "EQUALS"
 	SyntheticTestStatusCodeAssertionOperatorEQUALS SyntheticTestStatusCodeAssertionOperator = "EQUALS"
+
+	// SyntheticTestStatusCodeAssertionOperatorNOTEQUALS captures enum value "NOT_EQUALS"
+	SyntheticTestStatusCodeAssertionOperatorNOTEQUALS SyntheticTestStatusCodeAssertionOperator = "NOT_EQUALS"
+
+	// SyntheticTestStatusCodeAssertionOperatorREGEXEQUALS captures enum value "REGEX_EQUALS"
+	SyntheticTestStatusCodeAssertionOperatorREGEXEQUALS SyntheticTestStatusCodeAssertionOperator = "REGEX_EQUALS"
+
+	// SyntheticTestStatusCodeAssertionOperatorREGEXNOTEQUALS captures enum value "REGEX_NOT_EQUALS"
+	SyntheticTestStatusCodeAssertionOperatorREGEXNOTEQUALS SyntheticTestStatusCodeAssertionOperator = "REGEX_NOT_EQUALS"
 )
 
 // for schema
@@ -39,7 +48,7 @@ var syntheticTestStatusCodeAssertionOperatorEnum []interface{}
 
 func init() {
 	var res []SyntheticTestStatusCodeAssertionOperator
-	if err := json.Unmarshal([]byte(`["EQUALS"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["EQUALS","NOT_EQUALS","REGEX_EQUALS","REGEX_NOT_EQUALS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

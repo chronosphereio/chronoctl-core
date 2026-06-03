@@ -6,6 +6,7 @@
 * Add `ROLLING_30_MINUTE_VOLUME` threshold type to `v1/config/ConsumptionBudget`.
 * Add `CLOUDFLARE` connection type and `cloudflare` config to `v1/config/ExternalConnection`.
 * Add `GCP_US_LOS_ANGELES` location to `unstable/config/SyntheticTest`, replacing `AWS_US_EAST_1`.
+* Add `resource_group` field to `v1/config/ConsumptionBudget` thresholds as an alias of the deprecated `sku_group`. Regenerated the `configv1` swagger client/models from the updated public spec, which renames the generated enum type `ConsumptionBudgetSKUGroup` to `ConsumptionBudgetResourceGroup` (enum values are unchanged).
 
 ## v1.27.0
 

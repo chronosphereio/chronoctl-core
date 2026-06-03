@@ -32,6 +32,9 @@ const (
 
 	// HTTPTestConfigHTTPMethodGET captures enum value "GET"
 	HTTPTestConfigHTTPMethodGET HTTPTestConfigHTTPMethod = "GET"
+
+	// HTTPTestConfigHTTPMethodPOST captures enum value "POST"
+	HTTPTestConfigHTTPMethodPOST HTTPTestConfigHTTPMethod = "POST"
 )
 
 // for schema
@@ -39,7 +42,7 @@ var httpTestConfigHttpMethodEnum []interface{}
 
 func init() {
 	var res []HTTPTestConfigHTTPMethod
-	if err := json.Unmarshal([]byte(`["GET"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["GET","POST"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
