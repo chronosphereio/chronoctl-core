@@ -3,6 +3,30 @@
     "application/json"
   ],
   "definitions": {
+    "BodyHashAssertionAlgorithm": {
+      "enum": [
+        "MD5",
+        "SHA1",
+        "SHA256"
+      ],
+      "type": "string"
+    },
+    "BodyJSONPathAssertionMatchType": {
+      "enum": [
+        "FIRST_ELEMENT",
+        "EVERY_ELEMENT",
+        "AT_LEAST_ONE_ELEMENT",
+        "SERIALIZATION"
+      ],
+      "type": "string"
+    },
+    "BodyJSONSchemaAssertionSchemaDraft": {
+      "enum": [
+        "DRAFT_06",
+        "DRAFT_07"
+      ],
+      "type": "string"
+    },
     "ChronoConfigCollectionsConfig": {
       "properties": {
         "group_teams": {
@@ -38,6 +62,22 @@
         },
         "team_slug": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ConfigUnstableUpdateCloudIntegrationBody": {
+      "properties": {
+        "cloud_integration": {
+          "$ref": "#/definitions/configunstableCloudIntegration"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the CloudIntegration will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the CloudIntegration does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the CloudIntegration. If the specified configuration is valid, the endpoint returns a partial response without the CloudIntegration. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -148,6 +188,22 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateSyntheticGlobalVariableBody": {
+      "properties": {
+        "synthetic_global_variable": {
+          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the SyntheticGlobalVariable will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the SyntheticGlobalVariable does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the SyntheticGlobalVariable. If the specified configuration is valid, the endpoint returns a partial response without the SyntheticGlobalVariable. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateSyntheticTestBody": {
       "properties": {
         "synthetic_test": {
@@ -155,6 +211,10 @@
         },
         "create_if_missing": {
           "description": "If `true`, the SyntheticTest will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the SyntheticTest does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the SyntheticTest. If the specified configuration is valid, the endpoint returns a partial response without the SyntheticTest. If the specified configuration is invalid, the endpoint returns an error.",
           "type": "boolean"
         }
       },
@@ -176,9 +236,121 @@
       },
       "type": "object"
     },
+    "DeleteSyntheticGlobalVariableResponseTestReference": {
+      "properties": {
+        "test_slug": {
+          "type": "string"
+        },
+        "test_name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GcpConfigMetricGroup": {
+      "description": "MetricGroup defines a set of metrics to collect from a GCP project.",
+      "properties": {
+        "project_id": {
+          "description": "GCP project ID that has access to the metric data.",
+          "type": "string"
+        },
+        "prefixes": {
+          "description": "List of GCP metric prefixes to ingest (e.g., \"compute.googleapis.com/\").",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GcpConfigServiceAccount": {
+      "description": "ServiceAccount specifies the GCP service account to impersonate for API calls.",
+      "properties": {
+        "client_email": {
+          "description": "Email address of the service account to impersonate.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "HttpTestConfigAssertion": {
+      "description": "Wraps the assertion types valid for HTTP tests. Exactly one assertion\nfield must be set per entry; enforced by validation. Each test type\ndeclares its own Assertion wrapper enumerating the subset of\nSyntheticTest-level assertion messages valid for it.",
+      "properties": {
+        "status_code_assertion": {
+          "$ref": "#/definitions/SyntheticTestStatusCodeAssertion"
+        },
+        "response_time_assertion": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
+        },
+        "body_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyAssertion"
+        },
+        "body_json_path_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyJSONPathAssertion"
+        },
+        "body_json_schema_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyJSONSchemaAssertion"
+        },
+        "body_xpath_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyXPathAssertion"
+        },
+        "body_hash_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyHashAssertion"
+        },
+        "header_assertion": {
+          "$ref": "#/definitions/SyntheticTestHeaderAssertion"
+        }
+      },
+      "type": "object"
+    },
+    "HttpTestConfigContentType": {
+      "description": "Content type sent with the request. Mapped to a Content-Type request\nheader when writing the ADEM config. Validation rejects setting this\nalongside an explicit Content-Type header.",
+      "enum": [
+        "CONTENT_TYPE_APPLICATION_JSON",
+        "CONTENT_TYPE_APPLICATION_X_WWW_FORM_URLENCODED",
+        "CONTENT_TYPE_TEXT_PLAIN",
+        "CONTENT_TYPE_TEXT_XML",
+        "CONTENT_TYPE_TEXT_HTML",
+        "CONTENT_TYPE_MULTIPART_FORM_DATA",
+        "CONTENT_TYPE_APPLICATION_OCTET_STREAM",
+        "CONTENT_TYPE_GRAPHQL"
+      ],
+      "type": "string"
+    },
+    "HttpTestConfigHeader": {
+      "description": "Single HTTP request header. Modeled as a message rather than\nmap\u003cstring,string\u003e to preserve order and leave room for future\nper-header fields. Duplicate names (case-insensitive) are rejected\nby validation.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "HttpTestConfigHttpAuth": {
+      "description": "One of the following auth mechanisms may be set; additional auth types\n(OAuth, APITokenAuth) will be added as siblings. Validation enforces\nexactly-one when authentication is set.",
+      "properties": {
+        "basic_auth": {
+          "$ref": "#/definitions/configunstableBasicAuth"
+        }
+      },
+      "type": "object"
+    },
     "HttpTestConfigHttpMethod": {
       "enum": [
-        "GET"
+        "GET",
+        "POST"
+      ],
+      "type": "string"
+    },
+    "HttpTestConfigHttpVersion": {
+      "description": "HTTP protocol version used for the request. When unset, ADEM applies its\ndefault (negotiate HTTP/2 with fallback to HTTP/1.1).",
+      "enum": [
+        "HTTP_VERSION_HTTP_1_1",
+        "HTTP_VERSION_HTTP_2"
       ],
       "type": "string"
     },
@@ -261,6 +433,13 @@
         }
       },
       "type": "object"
+    },
+    "ResponseTimeAssertionScope": {
+      "enum": [
+        "INCLUDING_DNS",
+        "WITHOUT_DNS"
+      ],
+      "type": "string"
     },
     "SavedTraceSearchBetweenTimeFilter": {
       "properties": {
@@ -441,6 +620,145 @@
       "title": "TODO: confirm naming with InfoModel team",
       "type": "string"
     },
+    "SyntheticTestBodyAssertion": {
+      "description": "Asserts that the raw response body matches the target string.",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestBodyAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestBodyHashAssertion": {
+      "description": "Asserts that a hash of the response body equals the target.",
+      "properties": {
+        "algorithm": {
+          "$ref": "#/definitions/BodyHashAssertionAlgorithm"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyJSONPathAssertion": {
+      "description": "Asserts that a value extracted via JSONPath matches the target.\nmatch_type controls how multiple matches are evaluated.",
+      "properties": {
+        "json_path": {
+          "type": "string"
+        },
+        "match_type": {
+          "$ref": "#/definitions/BodyJSONPathAssertionMatchType"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestBodyJSONPathAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyJSONPathAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "IS_UNDEFINED"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestBodyJSONSchemaAssertion": {
+      "description": "Asserts that the JSON response body conforms to a JSON schema.",
+      "properties": {
+        "draft": {
+          "$ref": "#/definitions/BodyJSONSchemaAssertionSchemaDraft"
+        },
+        "schema": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyXPathAssertion": {
+      "description": "Asserts that a value extracted via XPath 1.0 matches the target.",
+      "properties": {
+        "xpath": {
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestBodyXPathAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyXPathAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "IS_UNDEFINED"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestHeaderAssertion": {
+      "description": "Asserts that the named response header satisfies the operator.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestHeaderAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestHeaderAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS",
+        "NOT_EXISTS",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUAL",
+        "GREATER_THAN",
+        "GREATER_THAN_OR_EQUAL"
+      ],
+      "type": "string"
+    },
     "SyntheticTestHttpTestConfig": {
       "properties": {
         "method": {
@@ -449,36 +767,95 @@
         "url": {
           "type": "string"
         },
-        "status_code_assertions": {
+        "authentication": {
+          "$ref": "#/definitions/HttpTestConfigHttpAuth"
+        },
+        "headers": {
           "items": {
-            "$ref": "#/definitions/SyntheticTestStatusCodeAssertion"
+            "$ref": "#/definitions/HttpTestConfigHeader"
+          },
+          "type": "array"
+        },
+        "request_body": {
+          "format": "byte",
+          "type": "string"
+        },
+        "query_params": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "follow_redirects": {
+          "type": "boolean"
+        },
+        "content_type": {
+          "$ref": "#/definitions/HttpTestConfigContentType"
+        },
+        "http_version": {
+          "$ref": "#/definitions/HttpTestConfigHttpVersion"
+        },
+        "max_redirects": {
+          "description": "optional — 0-10; defaults to 10 when follow_redirects is set",
+          "format": "int32",
+          "type": "integer"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/definitions/HttpTestConfigAssertion"
           },
           "type": "array"
         }
       },
       "type": "object"
     },
+    "SyntheticTestResponseTimeAssertion": {
+      "description": "Asserts that the request response time is below the target, in\nmilliseconds. Scope selects whether DNS resolution time is included.",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertionOperator"
+        },
+        "target_ms": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "$ref": "#/definitions/ResponseTimeAssertionScope"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestResponseTimeAssertionOperator": {
+      "enum": [
+        "LESS_THAN"
+      ],
+      "type": "string"
+    },
     "SyntheticTestStatusCodeAssertion": {
+      "description": "Asserts that the HTTP response status code matches the target.\n`target` is a string so regex patterns (e.g. \"2..\") can share the field\nwith literal codes (e.g. \"200\").",
       "properties": {
         "operator": {
           "$ref": "#/definitions/SyntheticTestStatusCodeAssertionOperator"
         },
         "target": {
-          "format": "int32",
-          "type": "integer"
+          "type": "string"
         }
       },
       "type": "object"
     },
     "SyntheticTestStatusCodeAssertionOperator": {
       "enum": [
-        "EQUALS"
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS"
       ],
       "type": "string"
     },
     "SyntheticTestTestLocation": {
       "enum": [
-        "GCP_US_LOS_ANGELES"
+        "GCP_US_LOS_ANGELES",
+        "GCP_US_IOWA"
       ],
       "type": "string"
     },
@@ -724,6 +1101,113 @@
       },
       "type": "object"
     },
+    "cloudintegrationconfigGcpConfig": {
+      "description": "GcpConfig contains configuration for scraping GCP Cloud Monitoring metrics.",
+      "properties": {
+        "service_account": {
+          "$ref": "#/definitions/GcpConfigServiceAccount"
+        },
+        "metric_groups": {
+          "description": "Metric groups to collect. Each group specifies a project and metric prefixes.",
+          "items": {
+            "$ref": "#/definitions/GcpConfigMetricGroup"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableBasicAuth": {
+      "description": "BasicAuth carries HTTP basic auth credentials used by a SyntheticTest.\nTop-level so future non-HTTP test types can reuse it.",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "description": "May contain a {{VAR_NAME}} reference resolved at test execution to a\nSyntheticGlobalVariable value.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCloudIntegration": {
+      "description": "CloudIntegration represents a configuration for collecting metrics from a\ncloud provider. Each integration contains provider-specific configuration.",
+      "properties": {
+        "slug": {
+          "description": "Unique slug identifying the CloudIntegration.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Unique name of the CloudIntegration.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the CloudIntegration was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the CloudIntegration was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "metric_labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels applied to all metrics emitted from this integration.",
+          "type": "object"
+        },
+        "state": {
+          "$ref": "#/definitions/configunstableCloudIntegrationState"
+        },
+        "provider_type": {
+          "$ref": "#/definitions/configunstableCloudIntegrationType"
+        },
+        "gcp": {
+          "$ref": "#/definitions/cloudintegrationconfigGcpConfig"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCloudIntegrationState": {
+      "description": "State represents the operational state of a CloudIntegration.\n\n - STATE_ENABLED: Integration is fully enabled and actively collecting metrics.\n - STATE_DISABLED: Integration is disabled and not collecting metrics.\n - STATE_PREVIEW: Integration is in preview mode for estimating cardinality/license impact\nbefore full enablement.",
+      "enum": [
+        "STATE_ENABLED",
+        "STATE_DISABLED",
+        "STATE_PREVIEW"
+      ],
+      "type": "string"
+    },
+    "configunstableCloudIntegrationType": {
+      "description": "CloudIntegrationType identifies the cloud provider for a CloudIntegration.\nThis is server-derived from whichever provider config is set.\n\n - GCP: Google Cloud Platform.",
+      "enum": [
+        "GCP"
+      ],
+      "type": "string"
+    },
+    "configunstableCreateCloudIntegrationRequest": {
+      "properties": {
+        "cloud_integration": {
+          "$ref": "#/definitions/configunstableCloudIntegration"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the CloudIntegration. If the specified configuration is valid, the endpoint returns a partial response without the CloudIntegration. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateCloudIntegrationResponse": {
+      "properties": {
+        "cloud_integration": {
+          "$ref": "#/definitions/configunstableCloudIntegration"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateDashboardRequest": {
       "properties": {
         "dashboard": {
@@ -883,10 +1367,34 @@
       },
       "type": "object"
     },
+    "configunstableCreateSyntheticGlobalVariableRequest": {
+      "properties": {
+        "synthetic_global_variable": {
+          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the SyntheticGlobalVariable. If the specified configuration is valid, the endpoint returns a partial response without the SyntheticGlobalVariable. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateSyntheticGlobalVariableResponse": {
+      "properties": {
+        "synthetic_global_variable": {
+          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateSyntheticTestRequest": {
       "properties": {
         "synthetic_test": {
           "$ref": "#/definitions/configunstableSyntheticTest"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the SyntheticTest. If the specified configuration is valid, the endpoint returns a partial response without the SyntheticTest. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -1006,6 +1514,9 @@
       },
       "type": "object"
     },
+    "configunstableDeleteCloudIntegrationResponse": {
+      "type": "object"
+    },
     "configunstableDeleteDashboardResponse": {
       "type": "object"
     },
@@ -1036,6 +1547,18 @@
       "type": "object"
     },
     "configunstableDeleteServiceResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteSyntheticGlobalVariableResponse": {
+      "properties": {
+        "referencing_tests": {
+          "description": "Tests that referenced this variable at delete time.",
+          "items": {
+            "$ref": "#/definitions/DeleteSyntheticGlobalVariableResponseTestReference"
+          },
+          "type": "array"
+        }
+      },
       "type": "object"
     },
     "configunstableDeleteSyntheticTestResponse": {
@@ -1079,6 +1602,20 @@
         "ui_component": {
           "description": "Link template is scoped to the specified string representing a UI component here.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListCloudIntegrationsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "cloud_integrations": {
+          "items": {
+            "$ref": "#/definitions/configunstableCloudIntegration"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1204,6 +1741,20 @@
         "services": {
           "items": {
             "$ref": "#/definitions/configunstableService"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListSyntheticGlobalVariablesResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "synthetic_global_variables": {
+          "items": {
+            "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
           },
           "type": "array"
         }
@@ -1401,6 +1952,14 @@
       },
       "type": "object"
     },
+    "configunstableReadCloudIntegrationResponse": {
+      "properties": {
+        "cloud_integration": {
+          "$ref": "#/definitions/configunstableCloudIntegration"
+        }
+      },
+      "type": "object"
+    },
     "configunstableReadDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -1469,6 +2028,14 @@
       "properties": {
         "service": {
           "$ref": "#/definitions/configunstableService"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadSyntheticGlobalVariableResponse": {
+      "properties": {
+        "synthetic_global_variable": {
+          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
         }
       },
       "type": "object"
@@ -1613,6 +2180,43 @@
       },
       "type": "object"
     },
+    "configunstableSyntheticGlobalVariable": {
+      "description": "SyntheticGlobalVariable is a tenant-scoped named string variable that\nsynthetic tests would reference inline via {{NAME}} template syntax. The\nfeature is deferred — see src/synthetics/docs/decision-log.md DECISION-020\nfor the current scope. The proto and CRUD remain in-tree but are not\nreferenced by any active test-side code path.",
+      "properties": {
+        "slug": {
+          "description": "The unique identifier of the SyntheticGlobalVariable. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the SyntheticGlobalVariable is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the SyntheticGlobalVariable. You can modify this value after the SyntheticGlobalVariable is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the SyntheticGlobalVariable was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the SyntheticGlobalVariable was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "protected": {
+          "description": "Always true in Phase 1; field exists so Phase 2 can introduce non-protected\nvariables without a schema migration.",
+          "type": "boolean"
+        },
+        "value": {
+          "description": "The variable value. Required on create. For protected variables the\nserver cannot read the value back, so reads always return \"\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configunstableSyntheticTest": {
       "properties": {
         "name": {
@@ -1662,6 +2266,11 @@
             "type": "string"
           },
           "type": "object"
+        },
+        "timeout_secs": {
+          "description": "optional — 1-60s; defaults to 60s",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -1796,6 +2405,14 @@
       },
       "type": "object"
     },
+    "configunstableUpdateCloudIntegrationResponse": {
+      "properties": {
+        "cloud_integration": {
+          "$ref": "#/definitions/configunstableCloudIntegration"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -1856,6 +2473,14 @@
       "properties": {
         "service": {
           "$ref": "#/definitions/configunstableService"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateSyntheticGlobalVariableResponse": {
+      "properties": {
+        "synthetic_global_variable": {
+          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
         }
       },
       "type": "object"
@@ -2003,6 +2628,293 @@
     "version": "UNSTABLE"
   },
   "paths": {
+    "/api/unstable/config/cloud-integrations": {
+      "get": {
+        "operationId": "ListCloudIntegrations",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any CloudIntegration with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any CloudIntegration with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter by provider type.\n\n - GCP: Google Cloud Platform.",
+            "in": "query",
+            "items": {
+              "enum": [
+                "GCP"
+              ],
+              "type": "string"
+            },
+            "name": "provider_types",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter by integration state.\n\n - STATE_ENABLED: Integration is fully enabled and actively collecting metrics.\n - STATE_DISABLED: Integration is disabled and not collecting metrics.\n - STATE_PREVIEW: Integration is in preview mode for estimating cardinality/license impact\nbefore full enablement.",
+            "in": "query",
+            "items": {
+              "enum": [
+                "STATE_ENABLED",
+                "STATE_DISABLED",
+                "STATE_PREVIEW"
+              ],
+              "type": "string"
+            },
+            "name": "states",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListCloudIntegrationsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CloudIntegration"
+        ]
+      },
+      "post": {
+        "operationId": "CreateCloudIntegration",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateCloudIntegrationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created CloudIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateCloudIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the CloudIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the CloudIntegration because there is a conflict with an existing CloudIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CloudIntegration"
+        ]
+      }
+    },
+    "/api/unstable/config/cloud-integrations/{slug}": {
+      "delete": {
+        "operationId": "DeleteCloudIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteCloudIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the CloudIntegration because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the CloudIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CloudIntegration"
+        ]
+      },
+      "get": {
+        "operationId": "ReadCloudIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadCloudIntegrationResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the CloudIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CloudIntegration"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateCloudIntegration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateCloudIntegrationBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated CloudIntegration.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateCloudIntegrationResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the CloudIntegration because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the CloudIntegration because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the CloudIntegration because there is a conflict with an existing CloudIntegration.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CloudIntegration"
+        ]
+      }
+    },
     "/api/unstable/config/dashboards": {
       "get": {
         "operationId": "ListDashboards",
@@ -4033,6 +4945,271 @@
         },
         "tags": [
           "SyncPrometheus"
+        ]
+      }
+    },
+    "/api/unstable/config/synthetic-global-variables": {
+      "get": {
+        "operationId": "ListSyntheticGlobalVariables",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any SyntheticGlobalVariable with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any SyntheticGlobalVariable with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListSyntheticGlobalVariablesResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticGlobalVariable"
+        ]
+      },
+      "post": {
+        "operationId": "CreateSyntheticGlobalVariable",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateSyntheticGlobalVariableRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created SyntheticGlobalVariable.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateSyntheticGlobalVariableResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the SyntheticGlobalVariable because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the SyntheticGlobalVariable because there is a conflict with an existing SyntheticGlobalVariable.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticGlobalVariable"
+        ]
+      }
+    },
+    "/api/unstable/config/synthetic-global-variables/{slug}": {
+      "delete": {
+        "operationId": "DeleteSyntheticGlobalVariable",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "When true, returns referencing tests without mutating.",
+            "in": "query",
+            "name": "dry_run",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteSyntheticGlobalVariableResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the SyntheticGlobalVariable because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the SyntheticGlobalVariable because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticGlobalVariable"
+        ]
+      },
+      "get": {
+        "operationId": "ReadSyntheticGlobalVariable",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadSyntheticGlobalVariableResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the SyntheticGlobalVariable because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticGlobalVariable"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateSyntheticGlobalVariable",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateSyntheticGlobalVariableBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated SyntheticGlobalVariable.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateSyntheticGlobalVariableResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the SyntheticGlobalVariable because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the SyntheticGlobalVariable because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the SyntheticGlobalVariable because there is a conflict with an existing SyntheticGlobalVariable.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticGlobalVariable"
         ]
       }
     },

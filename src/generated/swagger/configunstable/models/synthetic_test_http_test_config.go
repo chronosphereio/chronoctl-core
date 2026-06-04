@@ -25,8 +25,33 @@ type SyntheticTestHTTPTestConfig struct {
 	// url
 	URL string `json:"url,omitempty"`
 
-	// status code assertions
-	StatusCodeAssertions []*SyntheticTestStatusCodeAssertion `json:"status_code_assertions"`
+	// authentication
+	Authentication *HTTPTestConfigHTTPAuth `json:"authentication,omitempty"`
+
+	// headers
+	Headers []*HTTPTestConfigHeader `json:"headers"`
+
+	// request body
+	// Format: byte
+	RequestBody strfmt.Base64 `json:"request_body,omitempty"`
+
+	// query params
+	QueryParams map[string]string `json:"query_params,omitempty"`
+
+	// follow redirects
+	FollowRedirects bool `json:"follow_redirects,omitempty"`
+
+	// content type
+	ContentType HTTPTestConfigContentType `json:"content_type,omitempty"`
+
+	// http version
+	HTTPVersion HTTPTestConfigHTTPVersion `json:"http_version,omitempty"`
+
+	// optional — 0-10; defaults to 10 when follow_redirects is set
+	MaxRedirects int32 `json:"max_redirects,omitempty"`
+
+	// assertions
+	Assertions []*HTTPTestConfigAssertion `json:"assertions"`
 }
 
 // Validate validates this synthetic test Http test config
@@ -37,7 +62,23 @@ func (m *SyntheticTestHTTPTestConfig) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateStatusCodeAssertions(formats); err != nil {
+	if err := m.validateAuthentication(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateHeaders(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateContentType(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateHTTPVersion(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateAssertions(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -64,22 +105,101 @@ func (m *SyntheticTestHTTPTestConfig) validateMethod(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *SyntheticTestHTTPTestConfig) validateStatusCodeAssertions(formats strfmt.Registry) error {
-	if swag.IsZero(m.StatusCodeAssertions) { // not required
+func (m *SyntheticTestHTTPTestConfig) validateAuthentication(formats strfmt.Registry) error {
+	if swag.IsZero(m.Authentication) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.StatusCodeAssertions); i++ {
-		if swag.IsZero(m.StatusCodeAssertions[i]) { // not required
+	if m.Authentication != nil {
+		if err := m.Authentication.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("authentication")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("authentication")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SyntheticTestHTTPTestConfig) validateHeaders(formats strfmt.Registry) error {
+	if swag.IsZero(m.Headers) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Headers); i++ {
+		if swag.IsZero(m.Headers[i]) { // not required
 			continue
 		}
 
-		if m.StatusCodeAssertions[i] != nil {
-			if err := m.StatusCodeAssertions[i].Validate(formats); err != nil {
+		if m.Headers[i] != nil {
+			if err := m.Headers[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("status_code_assertions" + "." + strconv.Itoa(i))
+					return ve.ValidateName("headers" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("status_code_assertions" + "." + strconv.Itoa(i))
+					return ce.ValidateName("headers" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SyntheticTestHTTPTestConfig) validateContentType(formats strfmt.Registry) error {
+	if swag.IsZero(m.ContentType) { // not required
+		return nil
+	}
+
+	if err := m.ContentType.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("content_type")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("content_type")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *SyntheticTestHTTPTestConfig) validateHTTPVersion(formats strfmt.Registry) error {
+	if swag.IsZero(m.HTTPVersion) { // not required
+		return nil
+	}
+
+	if err := m.HTTPVersion.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("http_version")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("http_version")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *SyntheticTestHTTPTestConfig) validateAssertions(formats strfmt.Registry) error {
+	if swag.IsZero(m.Assertions) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Assertions); i++ {
+		if swag.IsZero(m.Assertions[i]) { // not required
+			continue
+		}
+
+		if m.Assertions[i] != nil {
+			if err := m.Assertions[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("assertions" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("assertions" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -98,7 +218,23 @@ func (m *SyntheticTestHTTPTestConfig) ContextValidate(ctx context.Context, forma
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateStatusCodeAssertions(ctx, formats); err != nil {
+	if err := m.contextValidateAuthentication(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHeaders(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHTTPVersion(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAssertions(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -126,21 +262,103 @@ func (m *SyntheticTestHTTPTestConfig) contextValidateMethod(ctx context.Context,
 	return nil
 }
 
-func (m *SyntheticTestHTTPTestConfig) contextValidateStatusCodeAssertions(ctx context.Context, formats strfmt.Registry) error {
+func (m *SyntheticTestHTTPTestConfig) contextValidateAuthentication(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.StatusCodeAssertions); i++ {
+	if m.Authentication != nil {
 
-		if m.StatusCodeAssertions[i] != nil {
+		if swag.IsZero(m.Authentication) { // not required
+			return nil
+		}
 
-			if swag.IsZero(m.StatusCodeAssertions[i]) { // not required
+		if err := m.Authentication.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("authentication")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("authentication")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SyntheticTestHTTPTestConfig) contextValidateHeaders(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Headers); i++ {
+
+		if m.Headers[i] != nil {
+
+			if swag.IsZero(m.Headers[i]) { // not required
 				return nil
 			}
 
-			if err := m.StatusCodeAssertions[i].ContextValidate(ctx, formats); err != nil {
+			if err := m.Headers[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("status_code_assertions" + "." + strconv.Itoa(i))
+					return ve.ValidateName("headers" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("status_code_assertions" + "." + strconv.Itoa(i))
+					return ce.ValidateName("headers" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SyntheticTestHTTPTestConfig) contextValidateContentType(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ContentType) { // not required
+		return nil
+	}
+
+	if err := m.ContentType.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("content_type")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("content_type")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *SyntheticTestHTTPTestConfig) contextValidateHTTPVersion(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.HTTPVersion) { // not required
+		return nil
+	}
+
+	if err := m.HTTPVersion.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("http_version")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("http_version")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *SyntheticTestHTTPTestConfig) contextValidateAssertions(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Assertions); i++ {
+
+		if m.Assertions[i] != nil {
+
+			if swag.IsZero(m.Assertions[i]) { // not required
+				return nil
+			}
+
+			if err := m.Assertions[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("assertions" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("assertions" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

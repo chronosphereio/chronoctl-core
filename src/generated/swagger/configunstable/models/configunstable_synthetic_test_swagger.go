@@ -56,6 +56,9 @@ type ConfigunstableSyntheticTest struct {
 
 	// labels
 	Labels map[string]string `json:"labels,omitempty"`
+
+	// optional — 1-60s; defaults to 60s
+	TimeoutSecs int32 `json:"timeout_secs,omitempty"`
 }
 
 // Validate validates this configunstable synthetic test

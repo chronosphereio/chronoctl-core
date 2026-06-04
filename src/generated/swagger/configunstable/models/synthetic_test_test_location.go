@@ -32,6 +32,9 @@ const (
 
 	// SyntheticTestTestLocationGCPUSLOSANGELES captures enum value "GCP_US_LOS_ANGELES"
 	SyntheticTestTestLocationGCPUSLOSANGELES SyntheticTestTestLocation = "GCP_US_LOS_ANGELES"
+
+	// SyntheticTestTestLocationGCPUSIOWA captures enum value "GCP_US_IOWA"
+	SyntheticTestTestLocationGCPUSIOWA SyntheticTestTestLocation = "GCP_US_IOWA"
 )
 
 // for schema
@@ -39,7 +42,7 @@ var syntheticTestTestLocationEnum []interface{}
 
 func init() {
 	var res []SyntheticTestTestLocation
-	if err := json.Unmarshal([]byte(`["GCP_US_LOS_ANGELES"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["GCP_US_LOS_ANGELES","GCP_US_IOWA"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

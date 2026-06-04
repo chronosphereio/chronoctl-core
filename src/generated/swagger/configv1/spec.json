@@ -643,7 +643,7 @@
       },
       "type": "object"
     },
-    "ConsumptionBudgetSKUGroup": {
+    "ConsumptionBudgetResourceGroup": {
       "enum": [
         "LOG_PERSISTED_BYTES",
         "LOG_PROCESSED_BYTES",
@@ -3289,7 +3289,7 @@
           "type": "string"
         },
         "resource": {
-          "$ref": "#/definitions/ConsumptionBudgetSKUGroup"
+          "$ref": "#/definitions/ConsumptionBudgetResourceGroup"
         },
         "partition_slug_path": {
           "description": "Path of the budget's partition, delimited by forward slashes (`/`), in the\nformat `global/SLUG1/SLUG2`, where `SLUG1` is a top-level partition, and `SLUG2`\nis a child partition of `SLUG1`.\n\nA well-formed partition path always starts with the `global` partition slug, and\nhas no leading or trailing forward slashes.",
@@ -3339,10 +3339,13 @@
           "$ref": "#/definitions/ThresholdVolume"
         },
         "sku_group": {
-          "$ref": "#/definitions/ConsumptionBudgetSKUGroup"
+          "$ref": "#/definitions/ConsumptionBudgetResourceGroup"
         },
         "unit": {
           "$ref": "#/definitions/ConsumptionBudgetUnit"
+        },
+        "resource_group": {
+          "$ref": "#/definitions/ConsumptionBudgetResourceGroup"
         }
       },
       "type": "object"

@@ -35,6 +35,26 @@ func (m *MockClientService) EXPECT() *MockClientServiceMockRecorder {
 	return m.recorder
 }
 
+// CreateCloudIntegration mocks base method.
+func (m *MockClientService) CreateCloudIntegration(params *operations.CreateCloudIntegrationParams, opts ...operations.ClientOption) (*operations.CreateCloudIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateCloudIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.CreateCloudIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateCloudIntegration indicates an expected call of CreateCloudIntegration.
+func (mr *MockClientServiceMockRecorder) CreateCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCloudIntegration", reflect.TypeOf((*MockClientService)(nil).CreateCloudIntegration), varargs...)
+}
+
 // CreateDashboard mocks base method.
 func (m *MockClientService) CreateDashboard(params *operations.CreateDashboardParams, opts ...operations.ClientOption) (*operations.CreateDashboardOK, error) {
 	m.ctrl.T.Helper()
@@ -195,6 +215,26 @@ func (mr *MockClientServiceMockRecorder) CreateService(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateService", reflect.TypeOf((*MockClientService)(nil).CreateService), varargs...)
 }
 
+// CreateSyntheticGlobalVariable mocks base method.
+func (m *MockClientService) CreateSyntheticGlobalVariable(params *operations.CreateSyntheticGlobalVariableParams, opts ...operations.ClientOption) (*operations.CreateSyntheticGlobalVariableOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateSyntheticGlobalVariable", varargs...)
+	ret0, _ := ret[0].(*operations.CreateSyntheticGlobalVariableOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateSyntheticGlobalVariable indicates an expected call of CreateSyntheticGlobalVariable.
+func (mr *MockClientServiceMockRecorder) CreateSyntheticGlobalVariable(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSyntheticGlobalVariable", reflect.TypeOf((*MockClientService)(nil).CreateSyntheticGlobalVariable), varargs...)
+}
+
 // CreateSyntheticTest mocks base method.
 func (m *MockClientService) CreateSyntheticTest(params *operations.CreateSyntheticTestParams, opts ...operations.ClientOption) (*operations.CreateSyntheticTestOK, error) {
 	m.ctrl.T.Helper()
@@ -273,6 +313,26 @@ func (mr *MockClientServiceMockRecorder) CreateTraceTopTagConfig(params interfac
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).CreateTraceTopTagConfig), varargs...)
+}
+
+// DeleteCloudIntegration mocks base method.
+func (m *MockClientService) DeleteCloudIntegration(params *operations.DeleteCloudIntegrationParams, opts ...operations.ClientOption) (*operations.DeleteCloudIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteCloudIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteCloudIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteCloudIntegration indicates an expected call of DeleteCloudIntegration.
+func (mr *MockClientServiceMockRecorder) DeleteCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCloudIntegration", reflect.TypeOf((*MockClientService)(nil).DeleteCloudIntegration), varargs...)
 }
 
 // DeleteDashboard mocks base method.
@@ -435,6 +495,26 @@ func (mr *MockClientServiceMockRecorder) DeleteService(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteService", reflect.TypeOf((*MockClientService)(nil).DeleteService), varargs...)
 }
 
+// DeleteSyntheticGlobalVariable mocks base method.
+func (m *MockClientService) DeleteSyntheticGlobalVariable(params *operations.DeleteSyntheticGlobalVariableParams, opts ...operations.ClientOption) (*operations.DeleteSyntheticGlobalVariableOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteSyntheticGlobalVariable", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteSyntheticGlobalVariableOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteSyntheticGlobalVariable indicates an expected call of DeleteSyntheticGlobalVariable.
+func (mr *MockClientServiceMockRecorder) DeleteSyntheticGlobalVariable(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSyntheticGlobalVariable", reflect.TypeOf((*MockClientService)(nil).DeleteSyntheticGlobalVariable), varargs...)
+}
+
 // DeleteSyntheticTest mocks base method.
 func (m *MockClientService) DeleteSyntheticTest(params *operations.DeleteSyntheticTestParams, opts ...operations.ClientOption) (*operations.DeleteSyntheticTestOK, error) {
 	m.ctrl.T.Helper()
@@ -513,6 +593,26 @@ func (mr *MockClientServiceMockRecorder) DeleteTraceTopTagConfig(params interfac
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).DeleteTraceTopTagConfig), varargs...)
+}
+
+// ListCloudIntegrations mocks base method.
+func (m *MockClientService) ListCloudIntegrations(params *operations.ListCloudIntegrationsParams, opts ...operations.ClientOption) (*operations.ListCloudIntegrationsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListCloudIntegrations", varargs...)
+	ret0, _ := ret[0].(*operations.ListCloudIntegrationsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListCloudIntegrations indicates an expected call of ListCloudIntegrations.
+func (mr *MockClientServiceMockRecorder) ListCloudIntegrations(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCloudIntegrations", reflect.TypeOf((*MockClientService)(nil).ListCloudIntegrations), varargs...)
 }
 
 // ListDashboards mocks base method.
@@ -655,6 +755,26 @@ func (mr *MockClientServiceMockRecorder) ListServices(params interface{}, opts .
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListServices", reflect.TypeOf((*MockClientService)(nil).ListServices), varargs...)
 }
 
+// ListSyntheticGlobalVariables mocks base method.
+func (m *MockClientService) ListSyntheticGlobalVariables(params *operations.ListSyntheticGlobalVariablesParams, opts ...operations.ClientOption) (*operations.ListSyntheticGlobalVariablesOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListSyntheticGlobalVariables", varargs...)
+	ret0, _ := ret[0].(*operations.ListSyntheticGlobalVariablesOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListSyntheticGlobalVariables indicates an expected call of ListSyntheticGlobalVariables.
+func (mr *MockClientServiceMockRecorder) ListSyntheticGlobalVariables(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSyntheticGlobalVariables", reflect.TypeOf((*MockClientService)(nil).ListSyntheticGlobalVariables), varargs...)
+}
+
 // ListSyntheticTests mocks base method.
 func (m *MockClientService) ListSyntheticTests(params *operations.ListSyntheticTestsParams, opts ...operations.ClientOption) (*operations.ListSyntheticTestsOK, error) {
 	m.ctrl.T.Helper()
@@ -693,6 +813,26 @@ func (mr *MockClientServiceMockRecorder) ListTraceJaegerRemoteSamplingStrategies
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTraceJaegerRemoteSamplingStrategies", reflect.TypeOf((*MockClientService)(nil).ListTraceJaegerRemoteSamplingStrategies), varargs...)
+}
+
+// ReadCloudIntegration mocks base method.
+func (m *MockClientService) ReadCloudIntegration(params *operations.ReadCloudIntegrationParams, opts ...operations.ClientOption) (*operations.ReadCloudIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadCloudIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.ReadCloudIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadCloudIntegration indicates an expected call of ReadCloudIntegration.
+func (mr *MockClientServiceMockRecorder) ReadCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadCloudIntegration", reflect.TypeOf((*MockClientService)(nil).ReadCloudIntegration), varargs...)
 }
 
 // ReadDashboard mocks base method.
@@ -855,6 +995,26 @@ func (mr *MockClientServiceMockRecorder) ReadService(params interface{}, opts ..
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadService", reflect.TypeOf((*MockClientService)(nil).ReadService), varargs...)
 }
 
+// ReadSyntheticGlobalVariable mocks base method.
+func (m *MockClientService) ReadSyntheticGlobalVariable(params *operations.ReadSyntheticGlobalVariableParams, opts ...operations.ClientOption) (*operations.ReadSyntheticGlobalVariableOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadSyntheticGlobalVariable", varargs...)
+	ret0, _ := ret[0].(*operations.ReadSyntheticGlobalVariableOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadSyntheticGlobalVariable indicates an expected call of ReadSyntheticGlobalVariable.
+func (mr *MockClientServiceMockRecorder) ReadSyntheticGlobalVariable(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadSyntheticGlobalVariable", reflect.TypeOf((*MockClientService)(nil).ReadSyntheticGlobalVariable), varargs...)
+}
+
 // ReadSyntheticTest mocks base method.
 func (m *MockClientService) ReadSyntheticTest(params *operations.ReadSyntheticTestParams, opts ...operations.ClientOption) (*operations.ReadSyntheticTestOK, error) {
 	m.ctrl.T.Helper()
@@ -965,6 +1125,26 @@ func (mr *MockClientServiceMockRecorder) SyncPrometheus(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SyncPrometheus", reflect.TypeOf((*MockClientService)(nil).SyncPrometheus), varargs...)
+}
+
+// UpdateCloudIntegration mocks base method.
+func (m *MockClientService) UpdateCloudIntegration(params *operations.UpdateCloudIntegrationParams, opts ...operations.ClientOption) (*operations.UpdateCloudIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateCloudIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateCloudIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateCloudIntegration indicates an expected call of UpdateCloudIntegration.
+func (mr *MockClientServiceMockRecorder) UpdateCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateCloudIntegration", reflect.TypeOf((*MockClientService)(nil).UpdateCloudIntegration), varargs...)
 }
 
 // UpdateDashboard mocks base method.
@@ -1105,6 +1285,26 @@ func (mr *MockClientServiceMockRecorder) UpdateService(params interface{}, opts 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateService", reflect.TypeOf((*MockClientService)(nil).UpdateService), varargs...)
+}
+
+// UpdateSyntheticGlobalVariable mocks base method.
+func (m *MockClientService) UpdateSyntheticGlobalVariable(params *operations.UpdateSyntheticGlobalVariableParams, opts ...operations.ClientOption) (*operations.UpdateSyntheticGlobalVariableOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateSyntheticGlobalVariable", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateSyntheticGlobalVariableOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateSyntheticGlobalVariable indicates an expected call of UpdateSyntheticGlobalVariable.
+func (mr *MockClientServiceMockRecorder) UpdateSyntheticGlobalVariable(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSyntheticGlobalVariable", reflect.TypeOf((*MockClientService)(nil).UpdateSyntheticGlobalVariable), varargs...)
 }
 
 // UpdateSyntheticTest mocks base method.
