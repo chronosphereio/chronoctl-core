@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.28.0
+
 ### Added
 * Add `ROLLING_30_MINUTE_VOLUME` threshold type to `v1/config/ConsumptionBudget`.
 * Add `CLOUDFLARE` connection type and `cloudflare` config to `v1/config/ExternalConnection`.
