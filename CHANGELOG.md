@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.29.0
+
 ### Added
 * Add `PARENT_SERVICE`, `PARENT_OPERATION`, `ROOT_SERVICE`, and `ROOT_OPERATION` group-by key types to `v1/config/TraceMetricsRule`.
 
