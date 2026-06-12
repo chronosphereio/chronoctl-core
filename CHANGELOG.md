@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Added
+* Add `PARENT_SERVICE`, `PARENT_OPERATION`, `ROOT_SERVICE`, and `ROOT_OPERATION` group-by key types to `v1/config/TraceMetricsRule`.
+
+### Removed
+* Remove the deprecated `sku_group` field from `v1/config/ConsumptionBudget` thresholds. Use `resource_group` instead.
+
 ## v1.28.0
 
 ### Added
