@@ -389,7 +389,9 @@ spec:
                     # satisfy every span filter to match the condition. Match alternatives
                     # with an 'IN' string filter or with separate conditions.
                     span_filters:
-                        - # Matches the tags of the candidate span.
+                        - # Matches the tags of the candidate span. A numeric matcher also
+                          # compares numeric-looking string tag values. To match alternatives,
+                          # use separate conditions.
                           tags:
                             - # The key or name of the span tag that this filter inspects.
                               key: <string>

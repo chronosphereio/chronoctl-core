@@ -746,7 +746,7 @@
           "$ref": "#/definitions/TraceSearchFilterBoolFilter"
         },
         "tags": {
-          "description": "Matches the tags of the candidate span.",
+          "description": "Matches the tags of the candidate span. A numeric matcher also\ncompares numeric-looking string tag values. To match alternatives,\nuse separate conditions.",
           "items": {
             "$ref": "#/definitions/TraceSearchFilterTagFilter"
           },
