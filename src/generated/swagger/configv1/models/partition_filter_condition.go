@@ -35,7 +35,7 @@ type PartitionFilterCondition struct {
 	MetricFilters []*Configv1LabelFilter `json:"metric_filters"`
 
 	// trace filter
-	TraceFilter *Configv1TraceSearchFilter `json:"trace_filter,omitempty"`
+	TraceFilter *Configv1ConsumptionTraceFilter `json:"trace_filter,omitempty"`
 }
 
 // Validate validates this partition filter condition

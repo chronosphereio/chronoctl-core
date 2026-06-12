@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Added
+* Add `PARENT_SERVICE`, `PARENT_OPERATION`, `ROOT_SERVICE`, and `ROOT_OPERATION` group-by key types to `v1/config/TraceMetricsRules`.
+
+### Changed
+* Change the `trace_filter` field on `v1/config/ConsumptionConfig` partition filter conditions from the trace search filter shape to the span-level `ConsumptionTraceFilter` shape: a list of `span_filters`, where trace data matches if any single span satisfies all criteria of one of the span filters. This field is in preview and gated by the `enable-consumption-trace-api` feature flag.
+
+### Removed
+* Remove the deprecated `sku_group` field from `v1/config/ConsumptionBudget` thresholds in favor of `resource_group`. **This is a breaking change**.
+
 ## v1.28.0
 
 ### Added
