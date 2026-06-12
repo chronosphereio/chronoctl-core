@@ -3413,7 +3413,7 @@
       "description": "ConsumptionTraceFilter matches incoming trace data for consumption\npartitioning. Matching happens at the span level.",
       "properties": {
         "span_filters": {
-          "description": "Span-level filters. A span matches if it satisfies any of the span\nfilters.",
+          "description": "Span-level filters. If multiple span filters are specified, a span must\nsatisfy every span filter to match the condition. Match alternatives\nwith an `IN` string filter or with separate conditions.",
           "items": {
             "$ref": "#/definitions/ConsumptionTraceFilterConsumptionSpanFilter"
           },

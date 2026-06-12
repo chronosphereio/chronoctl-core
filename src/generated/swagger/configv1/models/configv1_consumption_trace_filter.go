@@ -20,8 +20,9 @@ import (
 // swagger:model configv1ConsumptionTraceFilter
 type Configv1ConsumptionTraceFilter struct {
 
-	// Span-level filters. A span matches if it satisfies any of the span
-	// filters.
+	// Span-level filters. If multiple span filters are specified, a span must
+	// satisfy every span filter to match the condition. Match alternatives
+	// with an `IN` string filter or with separate conditions.
 	SpanFilters []*ConsumptionTraceFilterConsumptionSpanFilter `json:"span_filters"`
 }
 
