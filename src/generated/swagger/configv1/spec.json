@@ -724,6 +724,40 @@
       },
       "type": "object"
     },
+    "ConsumptionTraceFilterConsumptionSpanFilter": {
+      "description": "ConsumptionSpanFilter matches one span at a time: every criterion must\nhold on the same candidate span.",
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "operation": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "parent_service": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "parent_operation": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "duration": {
+          "$ref": "#/definitions/TraceSearchFilterDurationFilter"
+        },
+        "error": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
+        },
+        "tags": {
+          "description": "Matches the tags of the candidate span.",
+          "items": {
+            "$ref": "#/definitions/TraceSearchFilterTagFilter"
+          },
+          "type": "array"
+        },
+        "is_root_span": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
+        }
+      },
+      "type": "object"
+    },
     "DatasetDatasetConfiguration": {
       "properties": {
         "type": {
@@ -1144,11 +1178,15 @@
       "type": "object"
     },
     "GroupByKeyGroupByKeyType": {
-      "description": " - SERVICE: The service to group by.\n - OPERATION: The operation to group by.\n - TAG: The span tag to group by.",
+      "description": " - SERVICE: The service to group by.\n - OPERATION: The operation to group by.\n - TAG: The span tag to group by.\n - PARENT_SERVICE: The parent service to group by.\n - PARENT_OPERATION: The parent operation to group by.\n - ROOT_SERVICE: The root service to group by.\n - ROOT_OPERATION: The root operation to group by.",
       "enum": [
         "SERVICE",
         "OPERATION",
-        "TAG"
+        "TAG",
+        "PARENT_SERVICE",
+        "PARENT_OPERATION",
+        "ROOT_SERVICE",
+        "ROOT_OPERATION"
       ],
       "type": "string"
     },
@@ -2094,7 +2132,7 @@
           "type": "array"
         },
         "trace_filter": {
-          "$ref": "#/definitions/configv1TraceSearchFilter"
+          "$ref": "#/definitions/configv1ConsumptionTraceFilter"
         }
       },
       "type": "object"
@@ -3338,9 +3376,6 @@
         "volume": {
           "$ref": "#/definitions/ThresholdVolume"
         },
-        "sku_group": {
-          "$ref": "#/definitions/ConsumptionBudgetResourceGroup"
-        },
         "unit": {
           "$ref": "#/definitions/ConsumptionBudgetUnit"
         },
@@ -3368,6 +3403,19 @@
           "description": "Partitions define non-overlapping groupings of telemetry data. Partitions are\ndefined in order of precedence, where incoming requests are allocated to the\nfirst partition that matches. Requests that don't match any partition use an\nimplicit `default` partition.",
           "items": {
             "$ref": "#/definitions/ConsumptionConfigPartition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ConsumptionTraceFilter": {
+      "description": "ConsumptionTraceFilter matches incoming trace data for consumption\npartitioning. Matching happens at the span level.",
+      "properties": {
+        "span_filters": {
+          "description": "Span-level filters. If multiple span filters are specified, a span must\nsatisfy every span filter to match the condition. Match alternatives\nwith an `IN` string filter or with separate conditions.",
+          "items": {
+            "$ref": "#/definitions/ConsumptionTraceFilterConsumptionSpanFilter"
           },
           "type": "array"
         }
