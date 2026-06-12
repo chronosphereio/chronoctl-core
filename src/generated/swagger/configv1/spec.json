@@ -1144,11 +1144,15 @@
       "type": "object"
     },
     "GroupByKeyGroupByKeyType": {
-      "description": " - SERVICE: The service to group by.\n - OPERATION: The operation to group by.\n - TAG: The span tag to group by.",
+      "description": " - SERVICE: The service to group by.\n - OPERATION: The operation to group by.\n - TAG: The span tag to group by.\n - PARENT_SERVICE: The parent service to group by.\n - PARENT_OPERATION: The parent operation to group by.\n - ROOT_SERVICE: The root service to group by.\n - ROOT_OPERATION: The root operation to group by.",
       "enum": [
         "SERVICE",
         "OPERATION",
-        "TAG"
+        "TAG",
+        "PARENT_SERVICE",
+        "PARENT_OPERATION",
+        "ROOT_SERVICE",
+        "ROOT_OPERATION"
       ],
       "type": "string"
     },
@@ -3337,9 +3341,6 @@
         },
         "volume": {
           "$ref": "#/definitions/ThresholdVolume"
-        },
-        "sku_group": {
-          "$ref": "#/definitions/ConsumptionBudgetResourceGroup"
         },
         "unit": {
           "$ref": "#/definitions/ConsumptionBudgetUnit"

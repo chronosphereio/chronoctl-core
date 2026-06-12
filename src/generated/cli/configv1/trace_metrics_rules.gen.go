@@ -519,7 +519,11 @@ spec:
             #  - SERVICE: The service to group by.
             #  - OPERATION: The operation to group by.
             #  - TAG: The span tag to group by.
-            type: <SERVICE|OPERATION|TAG>
+            #  - PARENT_SERVICE: The parent service to group by.
+            #  - PARENT_OPERATION: The parent operation to group by.
+            #  - ROOT_SERVICE: The root service to group by.
+            #  - ROOT_OPERATION: The root operation to group by.
+            type: <SERVICE|OPERATION|TAG|PARENT_SERVICE|PARENT_OPERATION|ROOT_SERVICE|ROOT_OPERATION>
     scope_filter:
         # Specifies the span filters that define which spans contribute to the metrics calculation.
         # Only spans matching these filters will be included in the metrics aggregation.
