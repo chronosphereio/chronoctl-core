@@ -14,11 +14,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConsumptionTraceFilterConsumptionSpanFilter ConsumptionSpanFilter matches one span at a time: every criterion must
-// hold on the same candidate span.
+// Configv1ConsumptionSpanFilter configv1 consumption span filter
 //
-// swagger:model ConsumptionTraceFilterConsumptionSpanFilter
-type ConsumptionTraceFilterConsumptionSpanFilter struct {
+// swagger:model configv1ConsumptionSpanFilter
+type Configv1ConsumptionSpanFilter struct {
 
 	// service
 	Service *TraceSearchFilterStringFilter `json:"service,omitempty"`
@@ -47,8 +46,8 @@ type ConsumptionTraceFilterConsumptionSpanFilter struct {
 	IsRootSpan *TraceSearchFilterBoolFilter `json:"is_root_span,omitempty"`
 }
 
-// Validate validates this consumption trace filter consumption span filter
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 consumption span filter
+func (m *Configv1ConsumptionSpanFilter) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateService(formats); err != nil {
@@ -89,7 +88,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) Validate(formats strfmt.Re
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateService(formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) validateService(formats strfmt.Registry) error {
 	if swag.IsZero(m.Service) { // not required
 		return nil
 	}
@@ -108,7 +107,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateService(formats st
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateOperation(formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) validateOperation(formats strfmt.Registry) error {
 	if swag.IsZero(m.Operation) { // not required
 		return nil
 	}
@@ -127,7 +126,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateOperation(formats 
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateParentService(formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) validateParentService(formats strfmt.Registry) error {
 	if swag.IsZero(m.ParentService) { // not required
 		return nil
 	}
@@ -146,7 +145,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateParentService(form
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateParentOperation(formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) validateParentOperation(formats strfmt.Registry) error {
 	if swag.IsZero(m.ParentOperation) { // not required
 		return nil
 	}
@@ -165,7 +164,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateParentOperation(fo
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateDuration(formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) validateDuration(formats strfmt.Registry) error {
 	if swag.IsZero(m.Duration) { // not required
 		return nil
 	}
@@ -184,7 +183,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateDuration(formats s
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateError(formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) validateError(formats strfmt.Registry) error {
 	if swag.IsZero(m.Error) { // not required
 		return nil
 	}
@@ -203,7 +202,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateError(formats strf
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateTags(formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) validateTags(formats strfmt.Registry) error {
 	if swag.IsZero(m.Tags) { // not required
 		return nil
 	}
@@ -229,7 +228,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateTags(formats strfm
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateIsRootSpan(formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) validateIsRootSpan(formats strfmt.Registry) error {
 	if swag.IsZero(m.IsRootSpan) { // not required
 		return nil
 	}
@@ -248,8 +247,8 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) validateIsRootSpan(formats
 	return nil
 }
 
-// ContextValidate validate this consumption trace filter consumption span filter based on the context it is used
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 consumption span filter based on the context it is used
+func (m *Configv1ConsumptionSpanFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateService(ctx, formats); err != nil {
@@ -290,7 +289,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) ContextValidate(ctx contex
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateService(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) contextValidateService(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Service != nil {
 
@@ -311,7 +310,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateService(ctx
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateOperation(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) contextValidateOperation(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Operation != nil {
 
@@ -332,7 +331,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateOperation(c
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateParentService(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) contextValidateParentService(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ParentService != nil {
 
@@ -353,7 +352,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateParentServi
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateParentOperation(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) contextValidateParentOperation(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ParentOperation != nil {
 
@@ -374,7 +373,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateParentOpera
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateDuration(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) contextValidateDuration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Duration != nil {
 
@@ -395,7 +394,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateDuration(ct
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateError(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) contextValidateError(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Error != nil {
 
@@ -416,7 +415,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateError(ctx c
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Tags); i++ {
 
@@ -441,7 +440,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateTags(ctx co
 	return nil
 }
 
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateIsRootSpan(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ConsumptionSpanFilter) contextValidateIsRootSpan(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.IsRootSpan != nil {
 
@@ -463,7 +462,7 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) contextValidateIsRootSpan(
 }
 
 // MarshalBinary interface implementation
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) MarshalBinary() ([]byte, error) {
+func (m *Configv1ConsumptionSpanFilter) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -471,8 +470,8 @@ func (m *ConsumptionTraceFilterConsumptionSpanFilter) MarshalBinary() ([]byte, e
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConsumptionTraceFilterConsumptionSpanFilter) UnmarshalBinary(b []byte) error {
-	var res ConsumptionTraceFilterConsumptionSpanFilter
+func (m *Configv1ConsumptionSpanFilter) UnmarshalBinary(b []byte) error {
+	var res Configv1ConsumptionSpanFilter
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
