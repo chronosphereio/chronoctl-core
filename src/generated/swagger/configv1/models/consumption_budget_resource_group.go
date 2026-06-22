@@ -41,6 +41,9 @@ const (
 
 	// ConsumptionBudgetResourceGroupMETRICALL captures enum value "METRIC_ALL"
 	ConsumptionBudgetResourceGroupMETRICALL ConsumptionBudgetResourceGroup = "METRIC_ALL"
+
+	// ConsumptionBudgetResourceGroupLOGALL captures enum value "LOG_ALL"
+	ConsumptionBudgetResourceGroupLOGALL ConsumptionBudgetResourceGroup = "LOG_ALL"
 )
 
 // for schema
@@ -48,7 +51,7 @@ var consumptionBudgetResourceGroupEnum []interface{}
 
 func init() {
 	var res []ConsumptionBudgetResourceGroup
-	if err := json.Unmarshal([]byte(`["LOG_PERSISTED_BYTES","LOG_PROCESSED_BYTES","METRIC_PERSISTED_SERIES","METRIC_ALL"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["LOG_PERSISTED_BYTES","LOG_PROCESSED_BYTES","METRIC_PERSISTED_SERIES","METRIC_ALL","LOG_ALL"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

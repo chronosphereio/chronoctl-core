@@ -503,6 +503,11 @@ spec:
         # Cloudflare API Token. Accepts User API Tokens (cfut_ prefix) and
         # Account API Tokens (cfat_ prefix).
         api_token: <string>
+    mongodb_atlas:
+        # Service Account client ID.
+        client_id: <string>
+        # Service Account client secret.
+        client_secret: <string>
     ops_genie:
         api_key: <string>
         api_url: <string>

@@ -52,6 +52,9 @@ type Configv1ExternalConnection struct {
 
 	// cloudflare
 	Cloudflare *ExternalConnectionCloudflareConfig `json:"cloudflare,omitempty"`
+
+	// mongodb atlas
+	MongodbAtlas *ExternalConnectionMongoDbAtlasConfig `json:"mongodb_atlas,omitempty"`
 }
 
 // Validate validates this configv1 external connection
@@ -87,6 +90,10 @@ func (m *Configv1ExternalConnection) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCloudflare(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateMongodbAtlas(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -234,6 +241,25 @@ func (m *Configv1ExternalConnection) validateCloudflare(formats strfmt.Registry)
 	return nil
 }
 
+func (m *Configv1ExternalConnection) validateMongodbAtlas(formats strfmt.Registry) error {
+	if swag.IsZero(m.MongodbAtlas) { // not required
+		return nil
+	}
+
+	if m.MongodbAtlas != nil {
+		if err := m.MongodbAtlas.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("mongodb_atlas")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("mongodb_atlas")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 external connection based on the context it is used
 func (m *Configv1ExternalConnection) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -267,6 +293,10 @@ func (m *Configv1ExternalConnection) ContextValidate(ctx context.Context, format
 	}
 
 	if err := m.contextValidateCloudflare(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMongodbAtlas(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -412,6 +442,27 @@ func (m *Configv1ExternalConnection) contextValidateCloudflare(ctx context.Conte
 				return ve.ValidateName("cloudflare")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("cloudflare")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1ExternalConnection) contextValidateMongodbAtlas(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MongodbAtlas != nil {
+
+		if swag.IsZero(m.MongodbAtlas) { // not required
+			return nil
+		}
+
+		if err := m.MongodbAtlas.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("mongodb_atlas")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("mongodb_atlas")
 			}
 			return err
 		}

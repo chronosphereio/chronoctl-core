@@ -82,6 +82,22 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateCommandCenterGroupBody": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configunstableCommandCenterGroup"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the CommandCenterGroup will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the CommandCenterGroup does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the CommandCenterGroup. If the specified configuration is valid, the endpoint returns a partial response without the CommandCenterGroup. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateDashboardBody": {
       "properties": {
         "dashboard": {
@@ -809,6 +825,33 @@
       },
       "type": "object"
     },
+    "SyntheticTestMonitorConfig": {
+      "description": "Alerting configuration for the test. An alert fires when at least\nmin_failing_locations locations are simultaneously failing within the\nfailing-duration window, and resolves automatically (no separate resolve\nduration).",
+      "properties": {
+        "min_failing_locations": {
+          "description": "Peak count of simultaneously-failing locations within the window\nrequired to fire. Must be between 1 and the number of test locations.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "failing_duration_secs": {
+          "description": "Failure-duration window in seconds. 0 means alert on first failure.\nOtherwise must be at least interval_secs.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Annotations attached to the generated alert.",
+          "type": "object"
+        },
+        "notification_policy_slug": {
+          "description": "Notification policy that routes the generated alert.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "SyntheticTestResponseTimeAssertion": {
       "description": "Asserts that the request response time is below the target, in\nmilliseconds. Scope selects whether DNS resolution time is included.",
       "properties": {
@@ -1188,6 +1231,35 @@
       ],
       "type": "string"
     },
+    "configunstableCommandCenterGroup": {
+      "description": "CommandCenterGroup is a group of signals tracked in the command center.",
+      "properties": {
+        "slug": {
+          "description": "Unique slug identifying the CommandCenterGroup.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Unique name of the CommandCenterGroup.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the CommandCenterGroup was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the CommandCenterGroup was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "group_slo_reference": {
+          "$ref": "#/definitions/configunstableSloReference"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateCloudIntegrationRequest": {
       "properties": {
         "cloud_integration": {
@@ -1204,6 +1276,26 @@
       "properties": {
         "cloud_integration": {
           "$ref": "#/definitions/configunstableCloudIntegration"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateCommandCenterGroupRequest": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configunstableCommandCenterGroup"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the CommandCenterGroup. If the specified configuration is valid, the endpoint returns a partial response without the CommandCenterGroup. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateCommandCenterGroupResponse": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configunstableCommandCenterGroup"
         }
       },
       "type": "object"
@@ -1517,6 +1609,9 @@
     "configunstableDeleteCloudIntegrationResponse": {
       "type": "object"
     },
+    "configunstableDeleteCommandCenterGroupResponse": {
+      "type": "object"
+    },
     "configunstableDeleteDashboardResponse": {
       "type": "object"
     },
@@ -1614,6 +1709,20 @@
         "cloud_integrations": {
           "items": {
             "$ref": "#/definitions/configunstableCloudIntegration"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableListCommandCenterGroupsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "command_center_groups": {
+          "items": {
+            "$ref": "#/definitions/configunstableCommandCenterGroup"
           },
           "type": "array"
         }
@@ -1960,6 +2069,14 @@
       },
       "type": "object"
     },
+    "configunstableReadCommandCenterGroupResponse": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configunstableCommandCenterGroup"
+        }
+      },
+      "type": "object"
+    },
     "configunstableReadDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -2144,6 +2261,16 @@
       },
       "type": "object"
     },
+    "configunstableSloReference": {
+      "description": "SloReference references an SLO by slug.",
+      "properties": {
+        "slug": {
+          "description": "Slug of the referenced SLO.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configunstableSyncPrometheusRequest": {
       "properties": {
         "rules_yaml": {
@@ -2271,6 +2398,16 @@
           "description": "optional — 1-60s; defaults to 60s",
           "format": "int32",
           "type": "integer"
+        },
+        "monitor_config": {
+          "$ref": "#/definitions/SyntheticTestMonitorConfig"
+        },
+        "collection_slug": {
+          "description": "Slug of the collection that owns the test. Required if `collection` isn't\nset.",
+          "type": "string"
+        },
+        "collection": {
+          "$ref": "#/definitions/configv1CollectionReference"
         }
       },
       "type": "object"
@@ -2413,6 +2550,14 @@
       },
       "type": "object"
     },
+    "configunstableUpdateCommandCenterGroupResponse": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configunstableCommandCenterGroup"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateDashboardResponse": {
       "properties": {
         "dashboard": {
@@ -2548,6 +2693,25 @@
         }
       },
       "type": "object"
+    },
+    "configv1CollectionReference": {
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/configv1CollectionReferenceType"
+        },
+        "slug": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CollectionReferenceType": {
+      "enum": [
+        "SIMPLE",
+        "SERVICE"
+      ],
+      "title": "Type values must match entitiespb.Collection.CollectionType.",
+      "type": "string"
     },
     "configv1PageParams": {
       "properties": {
@@ -2912,6 +3076,265 @@
         },
         "tags": [
           "CloudIntegration"
+        ]
+      }
+    },
+    "/api/unstable/config/command-center-groups": {
+      "get": {
+        "operationId": "ListCommandCenterGroups",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any CommandCenterGroup with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any CommandCenterGroup with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListCommandCenterGroupsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      },
+      "post": {
+        "operationId": "CreateCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateCommandCenterGroupRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateCommandCenterGroupResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the CommandCenterGroup because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the CommandCenterGroup because there is a conflict with an existing CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      }
+    },
+    "/api/unstable/config/command-center-groups/{slug}": {
+      "delete": {
+        "operationId": "DeleteCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteCommandCenterGroupResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the CommandCenterGroup because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the CommandCenterGroup because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      },
+      "get": {
+        "operationId": "ReadCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadCommandCenterGroupResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the CommandCenterGroup because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateCommandCenterGroupBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateCommandCenterGroupResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the CommandCenterGroup because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the CommandCenterGroup because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the CommandCenterGroup because there is a conflict with an existing CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
         ]
       }
     },
@@ -5274,6 +5697,26 @@
               "type": "string"
             },
             "name": "statuses",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter returned tests by the collections that own them.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "collection_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter returned tests by the teams that own the collections they belong to.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "team_slugs",
             "type": "array"
           }
         ],

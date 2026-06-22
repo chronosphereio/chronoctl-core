@@ -62,6 +62,12 @@ ListSyntheticTestsParams contains all the parameters to send to the API endpoint
 */
 type ListSyntheticTestsParams struct {
 
+	/* CollectionSlugs.
+
+	   Filter returned tests by the collections that own them.
+	*/
+	CollectionSlugs []string
+
 	/* Names.
 
 	   Filters results by name, where any SyntheticTest with a matching name in the given list (and matches all other filters) will be returned.
@@ -93,6 +99,12 @@ type ListSyntheticTestsParams struct {
 
 	// Statuses.
 	Statuses []string
+
+	/* TeamSlugs.
+
+	   Filter returned tests by the teams that own the collections they belong to.
+	*/
+	TeamSlugs []string
 
 	/* TestTypes.
 
@@ -153,6 +165,17 @@ func (o *ListSyntheticTestsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCollectionSlugs adds the collectionSlugs to the list synthetic tests params
+func (o *ListSyntheticTestsParams) WithCollectionSlugs(collectionSlugs []string) *ListSyntheticTestsParams {
+	o.SetCollectionSlugs(collectionSlugs)
+	return o
+}
+
+// SetCollectionSlugs adds the collectionSlugs to the list synthetic tests params
+func (o *ListSyntheticTestsParams) SetCollectionSlugs(collectionSlugs []string) {
+	o.CollectionSlugs = collectionSlugs
+}
+
 // WithNames adds the names to the list synthetic tests params
 func (o *ListSyntheticTestsParams) WithNames(names []string) *ListSyntheticTestsParams {
 	o.SetNames(names)
@@ -208,6 +231,17 @@ func (o *ListSyntheticTestsParams) SetStatuses(statuses []string) {
 	o.Statuses = statuses
 }
 
+// WithTeamSlugs adds the teamSlugs to the list synthetic tests params
+func (o *ListSyntheticTestsParams) WithTeamSlugs(teamSlugs []string) *ListSyntheticTestsParams {
+	o.SetTeamSlugs(teamSlugs)
+	return o
+}
+
+// SetTeamSlugs adds the teamSlugs to the list synthetic tests params
+func (o *ListSyntheticTestsParams) SetTeamSlugs(teamSlugs []string) {
+	o.TeamSlugs = teamSlugs
+}
+
 // WithTestTypes adds the testTypes to the list synthetic tests params
 func (o *ListSyntheticTestsParams) WithTestTypes(testTypes []string) *ListSyntheticTestsParams {
 	o.SetTestTypes(testTypes)
@@ -226,6 +260,17 @@ func (o *ListSyntheticTestsParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return err
 	}
 	var res []error
+
+	if o.CollectionSlugs != nil {
+
+		// binding items for collection_slugs
+		joinedCollectionSlugs := o.bindParamCollectionSlugs(reg)
+
+		// query array param collection_slugs
+		if err := r.SetQueryParam("collection_slugs", joinedCollectionSlugs...); err != nil {
+			return err
+		}
+	}
 
 	if o.Names != nil {
 
@@ -294,6 +339,17 @@ func (o *ListSyntheticTestsParams) WriteToRequest(r runtime.ClientRequest, reg s
 		}
 	}
 
+	if o.TeamSlugs != nil {
+
+		// binding items for team_slugs
+		joinedTeamSlugs := o.bindParamTeamSlugs(reg)
+
+		// query array param team_slugs
+		if err := r.SetQueryParam("team_slugs", joinedTeamSlugs...); err != nil {
+			return err
+		}
+	}
+
 	if o.TestTypes != nil {
 
 		// binding items for test_types
@@ -309,6 +365,23 @@ func (o *ListSyntheticTestsParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
+}
+
+// bindParamListSyntheticTests binds the parameter collection_slugs
+func (o *ListSyntheticTestsParams) bindParamCollectionSlugs(formats strfmt.Registry) []string {
+	collectionSlugsIR := o.CollectionSlugs
+
+	var collectionSlugsIC []string
+	for _, collectionSlugsIIR := range collectionSlugsIR { // explode []string
+
+		collectionSlugsIIV := collectionSlugsIIR // string as string
+		collectionSlugsIC = append(collectionSlugsIC, collectionSlugsIIV)
+	}
+
+	// items.CollectionFormat: "multi"
+	collectionSlugsIS := swag.JoinByFormat(collectionSlugsIC, "multi")
+
+	return collectionSlugsIS
 }
 
 // bindParamListSyntheticTests binds the parameter names
@@ -360,6 +433,23 @@ func (o *ListSyntheticTestsParams) bindParamStatuses(formats strfmt.Registry) []
 	statusesIS := swag.JoinByFormat(statusesIC, "multi")
 
 	return statusesIS
+}
+
+// bindParamListSyntheticTests binds the parameter team_slugs
+func (o *ListSyntheticTestsParams) bindParamTeamSlugs(formats strfmt.Registry) []string {
+	teamSlugsIR := o.TeamSlugs
+
+	var teamSlugsIC []string
+	for _, teamSlugsIIR := range teamSlugsIR { // explode []string
+
+		teamSlugsIIV := teamSlugsIIR // string as string
+		teamSlugsIC = append(teamSlugsIC, teamSlugsIIV)
+	}
+
+	// items.CollectionFormat: "multi"
+	teamSlugsIS := swag.JoinByFormat(teamSlugsIC, "multi")
+
+	return teamSlugsIS
 }
 
 // bindParamListSyntheticTests binds the parameter test_types

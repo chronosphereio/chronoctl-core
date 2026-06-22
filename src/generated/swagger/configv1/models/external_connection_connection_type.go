@@ -47,6 +47,9 @@ const (
 
 	// ExternalConnectionConnectionTypeCLOUDFLARE captures enum value "CLOUDFLARE"
 	ExternalConnectionConnectionTypeCLOUDFLARE ExternalConnectionConnectionType = "CLOUDFLARE"
+
+	// ExternalConnectionConnectionTypeMONGODBATLAS captures enum value "MONGODB_ATLAS"
+	ExternalConnectionConnectionTypeMONGODBATLAS ExternalConnectionConnectionType = "MONGODB_ATLAS"
 )
 
 // for schema
@@ -54,7 +57,7 @@ var externalConnectionConnectionTypeEnum []interface{}
 
 func init() {
 	var res []ExternalConnectionConnectionType
-	if err := json.Unmarshal([]byte(`["SLACK","PAGERDUTY","WEBHOOK","VICTOROPS","OPSGENIE","CLOUDFLARE"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["SLACK","PAGERDUTY","WEBHOOK","VICTOROPS","OPSGENIE","CLOUDFLARE","MONGODB_ATLAS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

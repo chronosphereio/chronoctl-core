@@ -59,6 +59,16 @@ type ConfigunstableSyntheticTest struct {
 
 	// optional — 1-60s; defaults to 60s
 	TimeoutSecs int32 `json:"timeout_secs,omitempty"`
+
+	// monitor config
+	MonitorConfig *SyntheticTestMonitorConfig `json:"monitor_config,omitempty"`
+
+	// Slug of the collection that owns the test. Required if `collection` isn't
+	// set.
+	CollectionSlug string `json:"collection_slug,omitempty"`
+
+	// collection
+	Collection *Configv1CollectionReference `json:"collection,omitempty"`
 }
 
 // Validate validates this configunstable synthetic test
@@ -86,6 +96,14 @@ func (m *ConfigunstableSyntheticTest) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateStatus(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateMonitorConfig(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCollection(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -193,6 +211,44 @@ func (m *ConfigunstableSyntheticTest) validateStatus(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *ConfigunstableSyntheticTest) validateMonitorConfig(formats strfmt.Registry) error {
+	if swag.IsZero(m.MonitorConfig) { // not required
+		return nil
+	}
+
+	if m.MonitorConfig != nil {
+		if err := m.MonitorConfig.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("monitor_config")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("monitor_config")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableSyntheticTest) validateCollection(formats strfmt.Registry) error {
+	if swag.IsZero(m.Collection) { // not required
+		return nil
+	}
+
+	if m.Collection != nil {
+		if err := m.Collection.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("collection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("collection")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configunstable synthetic test based on the context it is used
 func (m *ConfigunstableSyntheticTest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -218,6 +274,14 @@ func (m *ConfigunstableSyntheticTest) ContextValidate(ctx context.Context, forma
 	}
 
 	if err := m.contextValidateStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMonitorConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCollection(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -319,6 +383,48 @@ func (m *ConfigunstableSyntheticTest) contextValidateStatus(ctx context.Context,
 			return ce.ValidateName("status")
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableSyntheticTest) contextValidateMonitorConfig(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MonitorConfig != nil {
+
+		if swag.IsZero(m.MonitorConfig) { // not required
+			return nil
+		}
+
+		if err := m.MonitorConfig.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("monitor_config")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("monitor_config")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableSyntheticTest) contextValidateCollection(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Collection != nil {
+
+		if swag.IsZero(m.Collection) { // not required
+			return nil
+		}
+
+		if err := m.Collection.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("collection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("collection")
+			}
+			return err
+		}
 	}
 
 	return nil

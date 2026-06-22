@@ -19,7 +19,7 @@ import (
 // swagger:model PartitionFilterCondition
 type PartitionFilterCondition struct {
 
-	// Deprecated. Use `log_filter`, `metric_filters`, or `trace_filter` instead.
+	// Deprecated. Use `log_filter`, `metric_filters`, or `trace_span_filters` instead.
 	DatasetSlug string `json:"dataset_slug,omitempty"`
 
 	// log filter
@@ -31,11 +31,16 @@ type PartitionFilterCondition struct {
 	// including matching multiple patterns with an `OR`, such as
 	// `service:{svc1,svc2}`.
 	//
-	// Exactly one of `log_filter`, `metric_filters`, or `trace_filter` must be set.
+	// Exactly one of `log_filter`, `metric_filters`, or `trace_span_filters` must be set.
 	MetricFilters []*Configv1LabelFilter `json:"metric_filters"`
 
-	// trace filter
-	TraceFilter *Configv1TraceSearchFilter `json:"trace_filter,omitempty"`
+	// If set, matches incoming trace data at the span level: a span
+	// matches the condition only if it satisfies every span filter.
+	// Match alternatives with an `IN` string filter or with separate
+	// conditions.
+	//
+	// Exactly one of `log_filter`, `metric_filters`, or `trace_span_filters` must be set.
+	TraceSpanFilters []*Configv1ConsumptionSpanFilter `json:"trace_span_filters"`
 }
 
 // Validate validates this partition filter condition
@@ -50,7 +55,7 @@ func (m *PartitionFilterCondition) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateTraceFilter(formats); err != nil {
+	if err := m.validateTraceSpanFilters(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -105,20 +110,27 @@ func (m *PartitionFilterCondition) validateMetricFilters(formats strfmt.Registry
 	return nil
 }
 
-func (m *PartitionFilterCondition) validateTraceFilter(formats strfmt.Registry) error {
-	if swag.IsZero(m.TraceFilter) { // not required
+func (m *PartitionFilterCondition) validateTraceSpanFilters(formats strfmt.Registry) error {
+	if swag.IsZero(m.TraceSpanFilters) { // not required
 		return nil
 	}
 
-	if m.TraceFilter != nil {
-		if err := m.TraceFilter.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("trace_filter")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("trace_filter")
-			}
-			return err
+	for i := 0; i < len(m.TraceSpanFilters); i++ {
+		if swag.IsZero(m.TraceSpanFilters[i]) { // not required
+			continue
 		}
+
+		if m.TraceSpanFilters[i] != nil {
+			if err := m.TraceSpanFilters[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("trace_span_filters" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("trace_span_filters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil
@@ -136,7 +148,7 @@ func (m *PartitionFilterCondition) ContextValidate(ctx context.Context, formats 
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateTraceFilter(ctx, formats); err != nil {
+	if err := m.contextValidateTraceSpanFilters(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -192,22 +204,26 @@ func (m *PartitionFilterCondition) contextValidateMetricFilters(ctx context.Cont
 	return nil
 }
 
-func (m *PartitionFilterCondition) contextValidateTraceFilter(ctx context.Context, formats strfmt.Registry) error {
+func (m *PartitionFilterCondition) contextValidateTraceSpanFilters(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.TraceFilter != nil {
+	for i := 0; i < len(m.TraceSpanFilters); i++ {
 
-		if swag.IsZero(m.TraceFilter) { // not required
-			return nil
-		}
+		if m.TraceSpanFilters[i] != nil {
 
-		if err := m.TraceFilter.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("trace_filter")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("trace_filter")
+			if swag.IsZero(m.TraceSpanFilters[i]) { // not required
+				return nil
 			}
-			return err
+
+			if err := m.TraceSpanFilters[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("trace_span_filters" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("trace_span_filters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
 		}
+
 	}
 
 	return nil

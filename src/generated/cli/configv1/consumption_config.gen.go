@@ -363,7 +363,7 @@ spec:
           filters:
             - # Conditions for the query to match.
               conditions:
-                - # Deprecated. Use 'log_filter', 'metric_filters', or 'trace_filter' instead.
+                - # Deprecated. Use 'log_filter', 'metric_filters', or 'trace_span_filters' instead.
                   dataset_slug: <string>
                   # If set, matches incoming metric data by label. If multiple label
                   # filters are specified, an incoming metric must match every label
@@ -371,157 +371,80 @@ spec:
                   # including matching multiple patterns with an 'OR', such as
                   # 'service:{svc1,svc2}'.
 
-                  # Exactly one of 'log_filter', 'metric_filters', or 'trace_filter' must be set.
+                  # Exactly one of 'log_filter', 'metric_filters', or 'trace_span_filters' must be set.
                   metric_filters:
                     - # The name of the label to match.
                       name: <string>
                       # The glob value of the label to match.
                       value_glob: <string>
+                  # If set, matches incoming trace data at the span level: a span
+                  # matches the condition only if it satisfies every span filter.
+                  # Match alternatives with an 'IN' string filter or with separate
+                  # conditions.
+
+                  # Exactly one of 'log_filter', 'metric_filters', or 'trace_span_filters' must be set.
+                  trace_span_filters:
+                    - # Matches the tags of the candidate span. A numeric matcher also
+                      # compares numeric-looking string tag values. To match alternatives,
+                      # use separate conditions.
+                      tags:
+                        - # The key or name of the span tag that this filter inspects.
+                          key: <string>
+                          numeric_value:
+                            # The filter value used in comparison against match candidates.
+                            value: <number>
+                            comparison: <EQUAL|NOT_EQUAL|GREATER_THAN|GREATER_THAN_OR_EQUAL|LESS_THAN|LESS_THAN_OR_EQUAL>
+                          value:
+                            # The value of the filter compared to the target trace or span field.
+                            value: <string>
+                            # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
+                            in_values:
+                                - <string>
+                            match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
+                      duration:
+                        # Minimum duration, in seconds, required for a span or trace to match.
+                        min_secs: <number>
+                        # Maximum duration, in seconds, required for a span or trace to match.
+                        max_secs: <number>
+                      error:
+                        # The value of the filter compared to the target trace or span field.
+                        value: <true|false>
+                      is_root_span:
+                        # The value of the filter compared to the target trace or span field.
+                        value: <true|false>
+                      operation:
+                        # The value of the filter compared to the target trace or span field.
+                        value: <string>
+                        # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
+                        in_values:
+                            - <string>
+                        match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
+                      parent_operation:
+                        # The value of the filter compared to the target trace or span field.
+                        value: <string>
+                        # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
+                        in_values:
+                            - <string>
+                        match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
+                      parent_service:
+                        # The value of the filter compared to the target trace or span field.
+                        value: <string>
+                        # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
+                        in_values:
+                            - <string>
+                        match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
+                      service:
+                        # The value of the filter compared to the target trace or span field.
+                        value: <string>
+                        # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
+                        in_values:
+                            - <string>
+                        match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
                   log_filter:
                     # Returns logs that match this query. The query can include only top-level
                     # operations. Nested clauses aren't supported. Only one type of 'AND' or 'OR'
                     # operator is allowed.
                     query: <string>
-                  trace_filter:
-                    # Specifies the span conditions to match on. All conditions must be true in a
-                    # single span for the span to be considered a match. If 'span_count' is specified,
-                    # the number of spans within the trace that match span conditions must be within
-                    # '[min, max]'. You can specify multiple span conditions, and each can be
-                    # satisfied by any number of spans within the trace.
-                    span:
-                        - # Matches the tags of the candidate span.
-                          tags:
-                            - # The key or name of the span tag that this filter inspects.
-                              key: <string>
-                              numeric_value:
-                                # The filter value used in comparison against match candidates.
-                                value: <number>
-                                comparison: <EQUAL|NOT_EQUAL|GREATER_THAN|GREATER_THAN_OR_EQUAL|LESS_THAN|LESS_THAN_OR_EQUAL>
-                              value:
-                                # The value of the filter compared to the target trace or span field.
-                                value: <string>
-                                # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                                in_values:
-                                    - <string>
-                                match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                          duration:
-                            # Minimum duration, in seconds, required for a span or trace to match.
-                            min_secs: <number>
-                            # Maximum duration, in seconds, required for a span or trace to match.
-                            max_secs: <number>
-                          error:
-                            # The value of the filter compared to the target trace or span field.
-                            value: <true|false>
-                          is_root_span:
-                            # The value of the filter compared to the target trace or span field.
-                            value: <true|false>
-                          match_type: <INCLUDE|EXCLUDE>
-                          operation:
-                            # The value of the filter compared to the target trace or span field.
-                            value: <string>
-                            # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                            in_values:
-                                - <string>
-                            match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                          parent_operation:
-                            # The value of the filter compared to the target trace or span field.
-                            value: <string>
-                            # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                            in_values:
-                                - <string>
-                            match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                          parent_service:
-                            # The value of the filter compared to the target trace or span field.
-                            value: <string>
-                            # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                            in_values:
-                                - <string>
-                            match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                          service:
-                            # The value of the filter compared to the target trace or span field.
-                            value: <string>
-                            # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                            in_values:
-                                - <string>
-                            match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                          span_count:
-                            # Minimum number of spans that must match a span query, inclusive.
-                            min: <integer>
-                            # Maximum number of spans that must match a span query, inclusive.
-                            max: <integer>
-                    scope_filter:
-                        # Specifies the span filters that define which spans contribute to the metrics calculation.
-                        # Only spans matching these filters will be included in the metrics aggregation.
-                        span_scopes:
-                            - # Matches the tags of the candidate span.
-                              tags:
-                                - # The key or name of the span tag that this filter inspects.
-                                  key: <string>
-                                  numeric_value:
-                                    # The filter value used in comparison against match candidates.
-                                    value: <number>
-                                    comparison: <EQUAL|NOT_EQUAL|GREATER_THAN|GREATER_THAN_OR_EQUAL|LESS_THAN|LESS_THAN_OR_EQUAL>
-                                  value:
-                                    # The value of the filter compared to the target trace or span field.
-                                    value: <string>
-                                    # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                                    in_values:
-                                        - <string>
-                                    match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                              duration:
-                                # Minimum duration, in seconds, required for a span or trace to match.
-                                min_secs: <number>
-                                # Maximum duration, in seconds, required for a span or trace to match.
-                                max_secs: <number>
-                              error:
-                                # The value of the filter compared to the target trace or span field.
-                                value: <true|false>
-                              is_root_span:
-                                # The value of the filter compared to the target trace or span field.
-                                value: <true|false>
-                              match_type: <INCLUDE|EXCLUDE>
-                              operation:
-                                # The value of the filter compared to the target trace or span field.
-                                value: <string>
-                                # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                                in_values:
-                                    - <string>
-                                match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                              parent_operation:
-                                # The value of the filter compared to the target trace or span field.
-                                value: <string>
-                                # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                                in_values:
-                                    - <string>
-                                match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                              parent_service:
-                                # The value of the filter compared to the target trace or span field.
-                                value: <string>
-                                # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                                in_values:
-                                    - <string>
-                                match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                              service:
-                                # The value of the filter compared to the target trace or span field.
-                                value: <string>
-                                # Values the filter tests against when using 'IN' or 'NOT_IN' match type.
-                                in_values:
-                                    - <string>
-                                match: <EXACT|REGEX|EXACT_NEGATION|REGEX_NEGATION|IN|NOT_IN>
-                              span_count:
-                                # Minimum number of spans that must match a span query, inclusive.
-                                min: <integer>
-                                # Maximum number of spans that must match a span query, inclusive.
-                                max: <integer>
-                    trace:
-                        duration:
-                            # Minimum duration, in seconds, required for a span or trace to match.
-                            min_secs: <number>
-                            # Maximum duration, in seconds, required for a span or trace to match.
-                            max_secs: <number>
-                        error:
-                            # The value of the filter compared to the target trace or span field.
-                            value: <true|false>
               operator: <IN|NOT_IN>
           # Optional. Child partitions of this partition. If set, requests that match the
           # current partition are allocated to the first child partition that matches.
