@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.30.0
+
 ### Added
 * Add `MONGODB_ATLAS` connection type and `mongodb_atlas` config to `v1/config/ExternalConnection`.
 * Add `LOG_ALL` resource group to `v1/config/ConsumptionBudget`.
