@@ -648,7 +648,8 @@
         "LOG_PERSISTED_BYTES",
         "LOG_PROCESSED_BYTES",
         "METRIC_PERSISTED_SERIES",
-        "METRIC_ALL"
+        "METRIC_ALL",
+        "LOG_ALL"
       ],
       "type": "string"
     },
@@ -1031,9 +1032,23 @@
         "WEBHOOK",
         "VICTOROPS",
         "OPSGENIE",
-        "CLOUDFLARE"
+        "CLOUDFLARE",
+        "MONGODB_ATLAS"
       ],
       "type": "string"
+    },
+    "ExternalConnectionMongoDbAtlasConfig": {
+      "properties": {
+        "client_id": {
+          "description": "Service Account client ID.",
+          "type": "string"
+        },
+        "client_secret": {
+          "description": "Service Account client secret.",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "FilterOperator": {
       "enum": [
@@ -2084,21 +2099,25 @@
     "PartitionFilterCondition": {
       "properties": {
         "dataset_slug": {
-          "description": "Deprecated. Use `log_filter`, `metric_filters`, or `trace_filter` instead.",
+          "description": "Deprecated. Use `log_filter`, `metric_filters`, or `trace_span_filters` instead.",
           "type": "string"
         },
         "log_filter": {
           "$ref": "#/definitions/configv1LogSearchFilter"
         },
         "metric_filters": {
-          "description": "If set, matches incoming metric data by label. If multiple label\nfilters are specified, an incoming metric must match every label\nfilter to match the condition. Label values support glob patterns,\nincluding matching multiple patterns with an `OR`, such as\n`service:{svc1,svc2}`.\n\nExactly one of `log_filter`, `metric_filters`, or `trace_filter` must be set.",
+          "description": "If set, matches incoming metric data by label. If multiple label\nfilters are specified, an incoming metric must match every label\nfilter to match the condition. Label values support glob patterns,\nincluding matching multiple patterns with an `OR`, such as\n`service:{svc1,svc2}`.\n\nExactly one of `log_filter`, `metric_filters`, or `trace_span_filters` must be set.",
           "items": {
             "$ref": "#/definitions/configv1LabelFilter"
           },
           "type": "array"
         },
-        "trace_filter": {
-          "$ref": "#/definitions/configv1TraceSearchFilter"
+        "trace_span_filters": {
+          "description": "If set, matches incoming trace data at the span level: a span\nmatches the condition only if it satisfies every span filter.\nMatch alternatives with an `IN` string filter or with separate\nconditions.\n\nExactly one of `log_filter`, `metric_filters`, or `trace_span_filters` must be set.",
+          "items": {
+            "$ref": "#/definitions/configv1ConsumptionSpanFilter"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -3375,6 +3394,39 @@
       },
       "type": "object"
     },
+    "configv1ConsumptionSpanFilter": {
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "operation": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "parent_service": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "parent_operation": {
+          "$ref": "#/definitions/TraceSearchFilterStringFilter"
+        },
+        "duration": {
+          "$ref": "#/definitions/TraceSearchFilterDurationFilter"
+        },
+        "error": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
+        },
+        "tags": {
+          "description": "Matches the tags of the candidate span. A numeric matcher also\ncompares numeric-looking string tag values. To match alternatives,\nuse separate conditions.",
+          "items": {
+            "$ref": "#/definitions/TraceSearchFilterTagFilter"
+          },
+          "type": "array"
+        },
+        "is_root_span": {
+          "$ref": "#/definitions/TraceSearchFilterBoolFilter"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateAzureMetricsIntegrationRequest": {
       "properties": {
         "azure_metrics_integration": {
@@ -4542,6 +4594,9 @@
         },
         "cloudflare": {
           "$ref": "#/definitions/ExternalConnectionCloudflareConfig"
+        },
+        "mongodb_atlas": {
+          "$ref": "#/definitions/ExternalConnectionMongoDbAtlasConfig"
         }
       },
       "type": "object"
@@ -8980,7 +9035,8 @@
                 "LOG_PERSISTED_BYTES",
                 "LOG_PROCESSED_BYTES",
                 "METRIC_PERSISTED_SERIES",
-                "METRIC_ALL"
+                "METRIC_ALL",
+                "LOG_ALL"
               ],
               "type": "string"
             },
@@ -10745,7 +10801,8 @@
                 "WEBHOOK",
                 "VICTOROPS",
                 "OPSGENIE",
-                "CLOUDFLARE"
+                "CLOUDFLARE",
+                "MONGODB_ATLAS"
               ],
               "type": "string"
             },
