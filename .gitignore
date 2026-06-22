@@ -43,3 +43,9 @@ dist/
 
 # Docs directory
 site/
+
+# Claude
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/worktrees/
+CLAUDE.local.md
