@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Added
+* Add `MONGODB_ATLAS` connection type and `mongodb_atlas` config to `v1/config/ExternalConnection`.
+* Add `LOG_ALL` resource group to `v1/config/ConsumptionBudget`.
+
+### Changed
+* Replace the `trace_filter` field with `trace_span_filters` in `v1/config/ConsumptionConfig` partition filter conditions.
+
 ## v1.29.0
 
 ### Added
