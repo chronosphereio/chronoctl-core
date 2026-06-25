@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+* Add `TRACE_PROCESSED_BYTES`, `TRACE_PERSISTED_BYTES`, and `TRACE_ALL` resource groups to `v1/config/ConsumptionBudget`.
+
 ## v1.30.0
 
 ### Added
