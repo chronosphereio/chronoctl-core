@@ -45,6 +45,10 @@ type ConfigunstableCloudIntegration struct {
 	// provider type
 	ProviderType ConfigunstableCloudIntegrationType `json:"provider_type,omitempty"`
 
+	// Slug of the ExternalConnection used for credentials. Optional — providers
+	// that use workload identity (e.g. GCP) leave this empty.
+	ExternalConnectionSlug string `json:"external_connection_slug,omitempty"`
+
 	// gcp
 	Gcp *CloudintegrationconfigGcpConfig `json:"gcp,omitempty"`
 }

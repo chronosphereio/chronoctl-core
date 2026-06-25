@@ -263,6 +263,26 @@
       },
       "type": "object"
     },
+    "DnsRecordAssertionMatchScope": {
+      "enum": [
+        "EVERY_AVAILABLE",
+        "AT_LEAST_ONE"
+      ],
+      "type": "string"
+    },
+    "DnsRecordAssertionRecordType": {
+      "enum": [
+        "A",
+        "AAAA",
+        "CNAME",
+        "MX",
+        "NS",
+        "TXT",
+        "SOA",
+        "SRV"
+      ],
+      "type": "string"
+    },
     "GcpConfigMetricGroup": {
       "description": "MetricGroup defines a set of metrics to collect from a GCP project.",
       "properties": {
@@ -290,38 +310,8 @@
       },
       "type": "object"
     },
-    "HttpTestConfigAssertion": {
-      "description": "Wraps the assertion types valid for HTTP tests. Exactly one assertion\nfield must be set per entry; enforced by validation. Each test type\ndeclares its own Assertion wrapper enumerating the subset of\nSyntheticTest-level assertion messages valid for it.",
-      "properties": {
-        "status_code_assertion": {
-          "$ref": "#/definitions/SyntheticTestStatusCodeAssertion"
-        },
-        "response_time_assertion": {
-          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
-        },
-        "body_assertion": {
-          "$ref": "#/definitions/SyntheticTestBodyAssertion"
-        },
-        "body_json_path_assertion": {
-          "$ref": "#/definitions/SyntheticTestBodyJSONPathAssertion"
-        },
-        "body_json_schema_assertion": {
-          "$ref": "#/definitions/SyntheticTestBodyJSONSchemaAssertion"
-        },
-        "body_xpath_assertion": {
-          "$ref": "#/definitions/SyntheticTestBodyXPathAssertion"
-        },
-        "body_hash_assertion": {
-          "$ref": "#/definitions/SyntheticTestBodyHashAssertion"
-        },
-        "header_assertion": {
-          "$ref": "#/definitions/SyntheticTestHeaderAssertion"
-        }
-      },
-      "type": "object"
-    },
     "HttpTestConfigContentType": {
-      "description": "Content type sent with the request. Mapped to a Content-Type request\nheader when writing the ADEM config. Validation rejects setting this\nalongside an explicit Content-Type header.",
+      "description": "Content type sent with the request. Mapped to a Content-Type request\nheader. Validation rejects setting this alongside an explicit\nContent-Type header.",
       "enum": [
         "CONTENT_TYPE_APPLICATION_JSON",
         "CONTENT_TYPE_APPLICATION_X_WWW_FORM_URLENCODED",
@@ -363,7 +353,7 @@
       "type": "string"
     },
     "HttpTestConfigHttpVersion": {
-      "description": "HTTP protocol version used for the request. When unset, ADEM applies its\ndefault (negotiate HTTP/2 with fallback to HTTP/1.1).",
+      "description": "HTTP protocol version used for the request. When unset, the default is to\nnegotiate HTTP/2 with fallback to HTTP/1.1.",
       "enum": [
         "HTTP_VERSION_HTTP_1_1",
         "HTTP_VERSION_HTTP_2"
@@ -744,6 +734,140 @@
       ],
       "type": "string"
     },
+    "SyntheticTestCertificateAssertion": {
+      "description": "Asserts on the leaf certificate's expiration window, in days.",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestCertificateAssertionOperator"
+        },
+        "target_days": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestCertificateAssertionOperator": {
+      "enum": [
+        "EXPIRES_IN_MORE_THAN_DAYS",
+        "EXPIRES_IN_LESS_THAN_DAYS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestCertificatePropertyAssertion": {
+      "description": "Asserts on a named property of the leaf certificate, e.g. subject, issuer,\nor a Subject Alternative Name.",
+      "properties": {
+        "property": {
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestCertificatePropertyAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestCertificatePropertyAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestConnectionAssertion": {
+      "description": "Asserts on the outcome of the TCP connection attempt. Only the EQUALS\noperator is supported (e.g. connection is Established).",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestConnectionAssertionOperator"
+        },
+        "target": {
+          "$ref": "#/definitions/SyntheticTestConnectionAssertionStatus"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestConnectionAssertionOperator": {
+      "enum": [
+        "EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestConnectionAssertionStatus": {
+      "enum": [
+        "ESTABLISHED",
+        "REFUSED",
+        "TIMEOUT"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestDnsRecordAssertion": {
+      "description": "Asserts on DNS records returned for the query. match_scope selects whether\nthe operator must hold for every record of record_type or for at least\none. SOA and SRV record types are only valid with AT_LEAST_ONE.",
+      "properties": {
+        "match_scope": {
+          "$ref": "#/definitions/DnsRecordAssertionMatchScope"
+        },
+        "record_type": {
+          "$ref": "#/definitions/DnsRecordAssertionRecordType"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestDnsRecordAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestDnsRecordAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestDnsTestConfig": {
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "dns_server": {
+          "description": "Optional explicit nameserver to query; runner default resolver if unset.",
+          "type": "string"
+        },
+        "dns_server_port": {
+          "description": "Nameserver port; required when dns_server is set, rejected without it.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestDnsTestConfigAssertion"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestDnsTestConfigAssertion": {
+      "description": "Wraps the assertion types valid for DNS tests. Exactly one assertion\nfield must be set per entry; enforced by validation.",
+      "properties": {
+        "response_time_assertion": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
+        },
+        "dns_record_assertion": {
+          "$ref": "#/definitions/SyntheticTestDnsRecordAssertion"
+        }
+      },
+      "type": "object"
+    },
     "SyntheticTestHeaderAssertion": {
       "description": "Asserts that the named response header satisfies the operator.",
       "properties": {
@@ -818,9 +942,52 @@
         },
         "assertions": {
           "items": {
-            "$ref": "#/definitions/HttpTestConfigAssertion"
+            "$ref": "#/definitions/SyntheticTestHttpTestConfigAssertion"
           },
           "type": "array"
+        },
+        "allow_insecure_tls": {
+          "description": "Skip TLS certificate verification for HTTPS requests.",
+          "type": "boolean"
+        },
+        "max_response_body_bytes": {
+          "description": "Cap on captured response-body size in bytes; 0 means use the default.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "do_not_save_response_body_on_failure": {
+          "description": "When set, the captured body is not persisted on failed executions.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestHttpTestConfigAssertion": {
+      "description": "Wraps the assertion types valid for HTTP tests. Exactly one assertion\nfield must be set per entry; enforced by validation. Each test type\ndeclares its own Assertion wrapper enumerating the subset of\nSyntheticTest-level assertion messages valid for it.",
+      "properties": {
+        "status_code_assertion": {
+          "$ref": "#/definitions/SyntheticTestStatusCodeAssertion"
+        },
+        "response_time_assertion": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
+        },
+        "body_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyAssertion"
+        },
+        "body_json_path_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyJSONPathAssertion"
+        },
+        "body_json_schema_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyJSONSchemaAssertion"
+        },
+        "body_xpath_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyXPathAssertion"
+        },
+        "body_hash_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyHashAssertion"
+        },
+        "header_assertion": {
+          "$ref": "#/definitions/SyntheticTestHeaderAssertion"
         }
       },
       "type": "object"
@@ -851,6 +1018,29 @@
         }
       },
       "type": "object"
+    },
+    "SyntheticTestNetworkHopsAssertion": {
+      "description": "Asserts on the number of network hops to the target.",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestNetworkHopsAssertionOperator"
+        },
+        "target": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestNetworkHopsAssertionOperator": {
+      "enum": [
+        "EQUALS",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUAL",
+        "GREATER_THAN",
+        "GREATER_THAN_OR_EQUAL"
+      ],
+      "type": "string"
     },
     "SyntheticTestResponseTimeAssertion": {
       "description": "Asserts that the request response time is below the target, in\nmilliseconds. Scope selects whether DNS resolution time is included.",
@@ -895,6 +1085,39 @@
       ],
       "type": "string"
     },
+    "SyntheticTestTcpTestConfig": {
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestTcpTestConfigAssertion"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestTcpTestConfigAssertion": {
+      "description": "Wraps the assertion types valid for TCP tests. Exactly one assertion\nfield must be set per entry; enforced by validation.",
+      "properties": {
+        "response_time_assertion": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
+        },
+        "network_hops_assertion": {
+          "$ref": "#/definitions/SyntheticTestNetworkHopsAssertion"
+        },
+        "connection_assertion": {
+          "$ref": "#/definitions/SyntheticTestConnectionAssertion"
+        }
+      },
+      "type": "object"
+    },
     "SyntheticTestTestLocation": {
       "enum": [
         "GCP_US_LOS_ANGELES",
@@ -904,7 +1127,91 @@
     },
     "SyntheticTestTestType": {
       "enum": [
-        "HTTP"
+        "HTTP",
+        "DNS",
+        "TCP",
+        "TLS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestTlsTestConfig": {
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "server_name": {
+          "description": "SNI server name; defaults to host when unset.",
+          "type": "string"
+        },
+        "accept_self_signed": {
+          "type": "boolean"
+        },
+        "fail_on_revoked_ocsp": {
+          "type": "boolean"
+        },
+        "fail_on_incomplete_chain": {
+          "type": "boolean"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestTlsTestConfigAssertion"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestTlsTestConfigAssertion": {
+      "description": "Wraps the assertion types valid for TLS tests. Exactly one assertion\nfield must be set per entry; enforced by validation.",
+      "properties": {
+        "response_time_assertion": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
+        },
+        "certificate_assertion": {
+          "$ref": "#/definitions/SyntheticTestCertificateAssertion"
+        },
+        "cert_property_assertion": {
+          "$ref": "#/definitions/SyntheticTestCertificatePropertyAssertion"
+        },
+        "tls_version_assertion": {
+          "$ref": "#/definitions/SyntheticTestTlsVersionAssertion"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestTlsVersionAssertion": {
+      "description": "Asserts on the negotiated TLS version. bound selects whether the assertion\nconstrains the maximum or minimum acceptable version. target is a version\nstring, e.g. \"1.2\".",
+      "properties": {
+        "bound": {
+          "$ref": "#/definitions/TlsVersionAssertionBound"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestTlsVersionAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestTlsVersionAssertionOperator": {
+      "enum": [
+        "EQUALS",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUAL",
+        "GREATER_THAN",
+        "GREATER_THAN_OR_EQUAL"
+      ],
+      "type": "string"
+    },
+    "TlsVersionAssertionBound": {
+      "enum": [
+        "MAX",
+        "MIN"
       ],
       "type": "string"
     },
@@ -1208,6 +1515,10 @@
         },
         "provider_type": {
           "$ref": "#/definitions/configunstableCloudIntegrationType"
+        },
+        "external_connection_slug": {
+          "description": "Slug of the ExternalConnection used for credentials. Optional — providers\nthat use workload identity (e.g. GCP) leave this empty.",
+          "type": "string"
         },
         "gcp": {
           "$ref": "#/definitions/cloudintegrationconfigGcpConfig"
@@ -2384,6 +2695,15 @@
         },
         "status": {
           "$ref": "#/definitions/configunstableSyntheticTestStatus"
+        },
+        "dns_test": {
+          "$ref": "#/definitions/SyntheticTestDnsTestConfig"
+        },
+        "tcp_test": {
+          "$ref": "#/definitions/SyntheticTestTcpTestConfig"
+        },
+        "tls_test": {
+          "$ref": "#/definitions/SyntheticTestTlsTestConfig"
         },
         "description": {
           "type": "string"
@@ -5679,7 +5999,10 @@
             "in": "query",
             "items": {
               "enum": [
-                "HTTP"
+                "HTTP",
+                "DNS",
+                "TCP",
+                "TLS"
               ],
               "type": "string"
             },

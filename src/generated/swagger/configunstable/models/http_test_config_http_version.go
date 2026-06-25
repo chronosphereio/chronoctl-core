@@ -14,8 +14,8 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// HTTPTestConfigHTTPVersion HTTP protocol version used for the request. When unset, ADEM applies its
-// default (negotiate HTTP/2 with fallback to HTTP/1.1).
+// HTTPTestConfigHTTPVersion HTTP protocol version used for the request. When unset, the default is to
+// negotiate HTTP/2 with fallback to HTTP/1.1.
 //
 // swagger:model HttpTestConfigHttpVersion
 type HTTPTestConfigHTTPVersion string

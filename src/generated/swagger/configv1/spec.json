@@ -649,7 +649,10 @@
         "LOG_PROCESSED_BYTES",
         "METRIC_PERSISTED_SERIES",
         "METRIC_ALL",
-        "LOG_ALL"
+        "LOG_ALL",
+        "TRACE_PROCESSED_BYTES",
+        "TRACE_PERSISTED_BYTES",
+        "TRACE_ALL"
       ],
       "type": "string"
     },
@@ -9036,7 +9039,10 @@
                 "LOG_PROCESSED_BYTES",
                 "METRIC_PERSISTED_SERIES",
                 "METRIC_ALL",
-                "LOG_ALL"
+                "LOG_ALL",
+                "TRACE_PROCESSED_BYTES",
+                "TRACE_PERSISTED_BYTES",
+                "TRACE_ALL"
               ],
               "type": "string"
             },
