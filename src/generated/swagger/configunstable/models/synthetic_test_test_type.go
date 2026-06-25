@@ -32,6 +32,15 @@ const (
 
 	// SyntheticTestTestTypeHTTP captures enum value "HTTP"
 	SyntheticTestTestTypeHTTP SyntheticTestTestType = "HTTP"
+
+	// SyntheticTestTestTypeDNS captures enum value "DNS"
+	SyntheticTestTestTypeDNS SyntheticTestTestType = "DNS"
+
+	// SyntheticTestTestTypeTCP captures enum value "TCP"
+	SyntheticTestTestTypeTCP SyntheticTestTestType = "TCP"
+
+	// SyntheticTestTestTypeTLS captures enum value "TLS"
+	SyntheticTestTestTypeTLS SyntheticTestTestType = "TLS"
 )
 
 // for schema
@@ -39,7 +48,7 @@ var syntheticTestTestTypeEnum []interface{}
 
 func init() {
 	var res []SyntheticTestTestType
-	if err := json.Unmarshal([]byte(`["HTTP"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["HTTP","DNS","TCP","TLS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

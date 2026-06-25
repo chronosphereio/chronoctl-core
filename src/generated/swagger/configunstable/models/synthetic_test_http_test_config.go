@@ -51,7 +51,16 @@ type SyntheticTestHTTPTestConfig struct {
 	MaxRedirects int32 `json:"max_redirects,omitempty"`
 
 	// assertions
-	Assertions []*HTTPTestConfigAssertion `json:"assertions"`
+	Assertions []*SyntheticTestHTTPTestConfigAssertion `json:"assertions"`
+
+	// Skip TLS certificate verification for HTTPS requests.
+	AllowInsecureTLS bool `json:"allow_insecure_tls,omitempty"`
+
+	// Cap on captured response-body size in bytes; 0 means use the default.
+	MaxResponseBodyBytes int64 `json:"max_response_body_bytes,omitempty"`
+
+	// When set, the captured body is not persisted on failed executions.
+	DoNotSaveResponseBodyOnFailure bool `json:"do_not_save_response_body_on_failure,omitempty"`
 }
 
 // Validate validates this synthetic test Http test config

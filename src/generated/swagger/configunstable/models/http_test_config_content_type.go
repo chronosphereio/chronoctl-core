@@ -15,8 +15,8 @@ import (
 )
 
 // HTTPTestConfigContentType Content type sent with the request. Mapped to a Content-Type request
-// header when writing the ADEM config. Validation rejects setting this
-// alongside an explicit Content-Type header.
+// header. Validation rejects setting this alongside an explicit
+// Content-Type header.
 //
 // swagger:model HttpTestConfigContentType
 type HTTPTestConfigContentType string
