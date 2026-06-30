@@ -652,7 +652,8 @@
         "LOG_ALL",
         "TRACE_PROCESSED_BYTES",
         "TRACE_PERSISTED_BYTES",
-        "TRACE_ALL"
+        "TRACE_ALL",
+        "ALL"
       ],
       "type": "string"
     },
@@ -9042,7 +9043,8 @@
                 "LOG_ALL",
                 "TRACE_PROCESSED_BYTES",
                 "TRACE_PERSISTED_BYTES",
-                "TRACE_ALL"
+                "TRACE_ALL",
+                "ALL"
               ],
               "type": "string"
             },
