@@ -337,10 +337,16 @@
       "type": "object"
     },
     "HttpTestConfigHttpAuth": {
-      "description": "One of the following auth mechanisms may be set; additional auth types\n(OAuth, APITokenAuth) will be added as siblings. Validation enforces\nexactly-one when authentication is set.",
+      "description": "Any combination of these auth mechanisms may be set; additional auth types\n(APITokenAuth) will be added as siblings. Validation checks the required\nfields of whichever methods are set.",
       "properties": {
         "basic_auth": {
           "$ref": "#/definitions/configunstableBasicAuth"
+        },
+        "oauth2_client_credentials": {
+          "$ref": "#/definitions/configunstableOAuth2ClientCredentials"
+        },
+        "oauth2_resource_owner_password": {
+          "$ref": "#/definitions/configunstableOAuth2ResourceOwnerPassword"
         }
       },
       "type": "object"
@@ -2355,6 +2361,74 @@
         }
       },
       "type": "object"
+    },
+    "configunstableOAuth2ClientCredentials": {
+      "description": "OAuth2ClientCredentials configures the OAuth 2.0 client-credentials grant.",
+      "properties": {
+        "common": {
+          "$ref": "#/definitions/configunstableOAuth2Common"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "client_secret": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableOAuth2Common": {
+      "description": "OAuth2Common holds the OAuth 2.0 token-endpoint parameters shared by the\ngrants below. Top-level so future non-HTTP test types can reuse it.",
+      "properties": {
+        "access_token_url": {
+          "type": "string"
+        },
+        "token_auth_method": {
+          "$ref": "#/definitions/configunstableOAuth2TokenAuthMethod"
+        },
+        "audience": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "scopes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableOAuth2ResourceOwnerPassword": {
+      "description": "OAuth2ResourceOwnerPassword configures the OAuth 2.0 resource-owner\npassword-credentials grant. client_id/client_secret are optional, set when\nthe token endpoint also authenticates the client.",
+      "properties": {
+        "common": {
+          "$ref": "#/definitions/configunstableOAuth2Common"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "client_secret": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableOAuth2TokenAuthMethod": {
+      "description": "OAuth2TokenAuthMethod selects how client credentials are sent to the OAuth\n2.0 token endpoint. OTAM_INVALID (unset) defaults to an HTTP Basic auth\nheader (RFC 6749 section 2.3.1).",
+      "enum": [
+        "OTAM_BASIC_AUTH_HEADER",
+        "OTAM_REQUEST_BODY"
+      ],
+      "type": "string"
     },
     "configunstableObjectDiscoveryRule": {
       "properties": {

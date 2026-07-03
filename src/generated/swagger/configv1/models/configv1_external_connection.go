@@ -55,6 +55,9 @@ type Configv1ExternalConnection struct {
 
 	// mongodb atlas
 	MongodbAtlas *ExternalConnectionMongoDbAtlasConfig `json:"mongodb_atlas,omitempty"`
+
+	// sendgrid
+	Sendgrid *ExternalConnectionSendgridConfig `json:"sendgrid,omitempty"`
 }
 
 // Validate validates this configv1 external connection
@@ -94,6 +97,10 @@ func (m *Configv1ExternalConnection) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateMongodbAtlas(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSendgrid(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -260,6 +267,25 @@ func (m *Configv1ExternalConnection) validateMongodbAtlas(formats strfmt.Registr
 	return nil
 }
 
+func (m *Configv1ExternalConnection) validateSendgrid(formats strfmt.Registry) error {
+	if swag.IsZero(m.Sendgrid) { // not required
+		return nil
+	}
+
+	if m.Sendgrid != nil {
+		if err := m.Sendgrid.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("sendgrid")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("sendgrid")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 external connection based on the context it is used
 func (m *Configv1ExternalConnection) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -297,6 +323,10 @@ func (m *Configv1ExternalConnection) ContextValidate(ctx context.Context, format
 	}
 
 	if err := m.contextValidateMongodbAtlas(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSendgrid(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -463,6 +493,27 @@ func (m *Configv1ExternalConnection) contextValidateMongodbAtlas(ctx context.Con
 				return ve.ValidateName("mongodb_atlas")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("mongodb_atlas")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1ExternalConnection) contextValidateSendgrid(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Sendgrid != nil {
+
+		if swag.IsZero(m.Sendgrid) { // not required
+			return nil
+		}
+
+		if err := m.Sendgrid.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("sendgrid")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("sendgrid")
 			}
 			return err
 		}

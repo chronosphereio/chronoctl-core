@@ -1037,7 +1037,8 @@
         "VICTOROPS",
         "OPSGENIE",
         "CLOUDFLARE",
-        "MONGODB_ATLAS"
+        "MONGODB_ATLAS",
+        "SENDGRID"
       ],
       "type": "string"
     },
@@ -1049,6 +1050,15 @@
         },
         "client_secret": {
           "description": "Service Account client secret.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ExternalConnectionSendgridConfig": {
+      "properties": {
+        "api_key": {
+          "description": "SendGrid API key (Bearer token).",
           "type": "string"
         }
       },
@@ -2385,7 +2395,7 @@
           "type": "array"
         },
         "repeat_interval_secs": {
-          "description": "The frequency at which to resend alerts.",
+          "description": "The frequency at which to resend alerts. Ignored when disable_repeat is true.",
           "format": "int32",
           "type": "integer"
         },
@@ -2398,6 +2408,10 @@
             "$ref": "#/definitions/RoutesDestination"
           },
           "type": "array"
+        },
+        "disable_repeat": {
+          "description": "If true, alerts are notified once and on state changes (new firing alerts,\nresolves) but are never re-sent on the repeat_interval timer.\nDefaults to false (alerts repeat on repeat_interval_secs).",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -4601,6 +4615,9 @@
         },
         "mongodb_atlas": {
           "$ref": "#/definitions/ExternalConnectionMongoDbAtlasConfig"
+        },
+        "sendgrid": {
+          "$ref": "#/definitions/ExternalConnectionSendgridConfig"
         }
       },
       "type": "object"
@@ -10810,7 +10827,8 @@
                 "VICTOROPS",
                 "OPSGENIE",
                 "CLOUDFLARE",
-                "MONGODB_ATLAS"
+                "MONGODB_ATLAS",
+                "SENDGRID"
               ],
               "type": "string"
             },
