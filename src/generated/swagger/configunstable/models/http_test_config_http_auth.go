@@ -13,15 +13,21 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// HTTPTestConfigHTTPAuth One of the following auth mechanisms may be set; additional auth types
-// (OAuth, APITokenAuth) will be added as siblings. Validation enforces
-// exactly-one when authentication is set.
+// HTTPTestConfigHTTPAuth Any combination of these auth mechanisms may be set; additional auth types
+// (APITokenAuth) will be added as siblings. Validation checks the required
+// fields of whichever methods are set.
 //
 // swagger:model HttpTestConfigHttpAuth
 type HTTPTestConfigHTTPAuth struct {
 
 	// basic auth
 	BasicAuth *ConfigunstableBasicAuth `json:"basic_auth,omitempty"`
+
+	// oauth2 client credentials
+	Oauth2ClientCredentials *ConfigunstableOAuth2ClientCredentials `json:"oauth2_client_credentials,omitempty"`
+
+	// oauth2 resource owner password
+	Oauth2ResourceOwnerPassword *ConfigunstableOAuth2ResourceOwnerPassword `json:"oauth2_resource_owner_password,omitempty"`
 }
 
 // Validate validates this Http test config Http auth
@@ -29,6 +35,14 @@ func (m *HTTPTestConfigHTTPAuth) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateBasicAuth(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOauth2ClientCredentials(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOauth2ResourceOwnerPassword(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -57,11 +71,57 @@ func (m *HTTPTestConfigHTTPAuth) validateBasicAuth(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *HTTPTestConfigHTTPAuth) validateOauth2ClientCredentials(formats strfmt.Registry) error {
+	if swag.IsZero(m.Oauth2ClientCredentials) { // not required
+		return nil
+	}
+
+	if m.Oauth2ClientCredentials != nil {
+		if err := m.Oauth2ClientCredentials.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauth2_client_credentials")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauth2_client_credentials")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *HTTPTestConfigHTTPAuth) validateOauth2ResourceOwnerPassword(formats strfmt.Registry) error {
+	if swag.IsZero(m.Oauth2ResourceOwnerPassword) { // not required
+		return nil
+	}
+
+	if m.Oauth2ResourceOwnerPassword != nil {
+		if err := m.Oauth2ResourceOwnerPassword.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauth2_resource_owner_password")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauth2_resource_owner_password")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this Http test config Http auth based on the context it is used
 func (m *HTTPTestConfigHTTPAuth) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateBasicAuth(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOauth2ClientCredentials(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOauth2ResourceOwnerPassword(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -84,6 +144,48 @@ func (m *HTTPTestConfigHTTPAuth) contextValidateBasicAuth(ctx context.Context, f
 				return ve.ValidateName("basic_auth")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("basic_auth")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *HTTPTestConfigHTTPAuth) contextValidateOauth2ClientCredentials(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Oauth2ClientCredentials != nil {
+
+		if swag.IsZero(m.Oauth2ClientCredentials) { // not required
+			return nil
+		}
+
+		if err := m.Oauth2ClientCredentials.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauth2_client_credentials")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauth2_client_credentials")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *HTTPTestConfigHTTPAuth) contextValidateOauth2ResourceOwnerPassword(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Oauth2ResourceOwnerPassword != nil {
+
+		if swag.IsZero(m.Oauth2ResourceOwnerPassword) { // not required
+			return nil
+		}
+
+		if err := m.Oauth2ResourceOwnerPassword.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauth2_resource_owner_password")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauth2_resource_owner_password")
 			}
 			return err
 		}

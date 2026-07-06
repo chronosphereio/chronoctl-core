@@ -534,6 +534,9 @@ spec:
         rest:
             # The PagerDuty REST API token used to authenticate note polling.
             api_key: <string>
+    sendgrid:
+        # SendGrid API key (Bearer token).
+        api_key: <string>
     slack:
         api_url: <string>
         token: <string>

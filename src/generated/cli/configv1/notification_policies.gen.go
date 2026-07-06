@@ -532,7 +532,7 @@ spec:
                     # The slugs of the notifiers that will receive the alerts.
                     notifier_slugs:
                         - <string>
-                    # The frequency at which to resend alerts.
+                    # The frequency at which to resend alerts. Ignored when disable_repeat is true.
                     repeat_interval_secs: <integer>
                     # Notification destinations. Cannot be set if notifier_slugs is set.
                     destinations:
@@ -570,6 +570,10 @@ spec:
                             query_parameters:
                                 - key: <string>
                                   value: <string>
+                    # If true, alerts are notified once and on state changes (new firing alerts,
+                    # resolves) but are never re-sent on the repeat_interval timer.
+                    # Defaults to false (alerts repeat on repeat_interval_secs).
+                    disable_repeat: <true|false>
                     group_by:
                         # Set of label names used to group alerts.
                         # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
@@ -580,7 +584,7 @@ spec:
                     # The slugs of the notifiers that will receive the alerts.
                     notifier_slugs:
                         - <string>
-                    # The frequency at which to resend alerts.
+                    # The frequency at which to resend alerts. Ignored when disable_repeat is true.
                     repeat_interval_secs: <integer>
                     # Notification destinations. Cannot be set if notifier_slugs is set.
                     destinations:
@@ -618,6 +622,10 @@ spec:
                             query_parameters:
                                 - key: <string>
                                   value: <string>
+                    # If true, alerts are notified once and on state changes (new firing alerts,
+                    # resolves) but are never re-sent on the repeat_interval timer.
+                    # Defaults to false (alerts repeat on repeat_interval_secs).
+                    disable_repeat: <true|false>
                     group_by:
                         # Set of label names used to group alerts.
                         # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
@@ -629,7 +637,7 @@ spec:
                 # The slugs of the notifiers that will receive the alerts.
                 notifier_slugs:
                     - <string>
-                # The frequency at which to resend alerts.
+                # The frequency at which to resend alerts. Ignored when disable_repeat is true.
                 repeat_interval_secs: <integer>
                 # Notification destinations. Cannot be set if notifier_slugs is set.
                 destinations:
@@ -667,6 +675,10 @@ spec:
                         query_parameters:
                             - key: <string>
                               value: <string>
+                # If true, alerts are notified once and on state changes (new firing alerts,
+                # resolves) but are never re-sent on the repeat_interval timer.
+                # Defaults to false (alerts repeat on repeat_interval_secs).
+                disable_repeat: <true|false>
                 group_by:
                     # Set of label names used to group alerts.
                     # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
@@ -677,7 +689,7 @@ spec:
                 # The slugs of the notifiers that will receive the alerts.
                 notifier_slugs:
                     - <string>
-                # The frequency at which to resend alerts.
+                # The frequency at which to resend alerts. Ignored when disable_repeat is true.
                 repeat_interval_secs: <integer>
                 # Notification destinations. Cannot be set if notifier_slugs is set.
                 destinations:
@@ -715,6 +727,10 @@ spec:
                         query_parameters:
                             - key: <string>
                               value: <string>
+                # If true, alerts are notified once and on state changes (new firing alerts,
+                # resolves) but are never re-sent on the repeat_interval timer.
+                # Defaults to false (alerts repeat on repeat_interval_secs).
+                disable_repeat: <true|false>
                 group_by:
                     # Set of label names used to group alerts.
                     # For example, if label_names is ["service", "code"] then all alerts including labels {service="foo",code="404"}
