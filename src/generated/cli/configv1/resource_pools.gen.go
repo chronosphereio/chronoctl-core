@@ -433,7 +433,7 @@ spec:
         # Optional. For supported licenses, defines thresholds with strict limits for
         # when to drop new consumption of the license for a pool. Only
         # 'PERSISTED_CARDINALITY_STANDARD' and 'PERSISTED_CARDINALITY_HISTOGRAM' are
-        # supported. See the [product documentation](https://docs.chronosphere.io/control/shaping/quotas/define-pools#pool-thresholds)
+        # supported. See the [product documentation](https://docs.chronosphere.io/control/shaping/shape-metrics/quotas/define-pools#pool-thresholds)
         # for more information.
         priority_thresholds:
             - all_priorities:

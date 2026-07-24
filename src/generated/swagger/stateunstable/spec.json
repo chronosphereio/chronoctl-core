@@ -3,12 +3,6 @@
     "application/json"
   ],
   "definitions": {
-    "ListMonitorStatusesRequestSortOrder": {
-      "enum": [
-        "SORT_BY_STATE"
-      ],
-      "type": "string"
-    },
     "MonitorStatusSignalStatus": {
       "properties": {
         "state": {
@@ -75,44 +69,6 @@
           "type": "string"
         },
         "value": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "commonPromQLMatcher": {
-      "properties": {
-        "type": {
-          "$ref": "#/definitions/commonPromQLMatcherType"
-        },
-        "name": {
-          "description": "Prometheus label name for the matcher",
-          "type": "string"
-        },
-        "value": {
-          "description": "Prometheus label value for the matcher",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "commonPromQLMatcherType": {
-      "enum": [
-        "MatchEqual",
-        "MatchRegexp",
-        "MatchNotEqual",
-        "MatchNotRegexp"
-      ],
-      "type": "string"
-    },
-    "genericError": {
-      "additionalProperties": true,
-      "type": "object"
-    },
-    "protobufAny": {
-      "additionalProperties": {},
-      "properties": {
-        "@type": {
           "type": "string"
         }
       },
@@ -257,6 +213,16 @@
             "in": "query",
             "name": "sort_by",
             "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Optional signal filters in PromQL matcher syntax, e.g. `service=\"foo\"` or\n`namespace=~\"prod-.*\"`. Semantically identical to signal_filters and\nAND-ed with it; representable as a repeated query parameter on GET.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "signal_filter_exprs",
+            "type": "array"
           }
         ],
         "responses": {

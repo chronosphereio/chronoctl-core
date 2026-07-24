@@ -53,7 +53,7 @@ type Configv1DropRule struct {
 	// Drops data points if values are Not a Number (NaN). If set to true, Chronosphere
 	// drops NaN data points, along with any published staleness markers. See the
 	// [drop rules
-	// documentation](https://docs.chronosphere.io/control/shaping/rules/drop-rules#define-a-value-based-drop-rule)
+	// documentation](https://docs.chronosphere.io/control/shaping/shape-metrics/rules/drop-rules#define-a-value-based-drop-rule)
 	// for more information.
 	DropNanValue bool `json:"drop_nan_value,omitempty"`
 }

@@ -36,7 +36,7 @@ type Configv1TraceBehaviorConfig struct {
 	// dataset when there is no active override. Only one main behavior can be assigned
 	// to a dataset. See the documentation for
 	// [customizing your sampling
-	// strategy](https://docs.chronosphere.io/control/sampling/behaviors#customize-your-sampling-strategy)
+	// strategy](https://docs.chronosphere.io/control/shaping/sample-traces/behaviors#customize-your-sampling-strategy)
 	// for more information.
 	MainBehaviorAssignments []*TraceBehaviorConfigMainBehaviorAssignment `json:"main_behavior_assignments"`
 

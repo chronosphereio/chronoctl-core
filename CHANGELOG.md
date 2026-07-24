@@ -5,7 +5,7 @@
 ### Added
 * Add `disable_repeat` field to `v1/config/NotificationPolicy` routes. When `true`, alerts are notified once and on state changes but are never re-sent on the repeat interval.
 * Add `SENDGRID` connection type and `sendgrid` config to `v1/config/ExternalConnection`.
-* Add OAuth2 client-credentials and resource-owner-password authentication to the HTTP test config in `unstable/config/SyntheticTest`.
+* Add `resolve_sustain_for_no_data` field to `v1/config/Monitor` series conditions, controlling how a firing condition resolves once its series stops returning data.
 
 ## v1.31.0
 
