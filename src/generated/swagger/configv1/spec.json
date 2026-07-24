@@ -1029,19 +1029,6 @@
       },
       "type": "object"
     },
-    "ExternalConnectionConnectionType": {
-      "enum": [
-        "SLACK",
-        "PAGERDUTY",
-        "WEBHOOK",
-        "VICTOROPS",
-        "OPSGENIE",
-        "CLOUDFLARE",
-        "MONGODB_ATLAS",
-        "SENDGRID"
-      ],
-      "type": "string"
-    },
     "ExternalConnectionMongoDbAtlasConfig": {
       "properties": {
         "client_id": {
@@ -1182,14 +1169,6 @@
         "PARENT_OPERATION",
         "ROOT_SERVICE",
         "ROOT_OPERATION"
-      ],
-      "type": "string"
-    },
-    "ListMutingRulesRequestState": {
-      "enum": [
-        "PENDING",
-        "ACTIVE",
-        "EXPIRED"
       ],
       "type": "string"
     },
@@ -2257,7 +2236,7 @@
           "$ref": "#/definitions/ResourcePoolsPriorities"
         },
         "priority_thresholds": {
-          "description": "Optional. For supported licenses, defines thresholds with strict limits for\nwhen to drop new consumption of the license for a pool. Only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported. See the [product documentation](https://docs.chronosphere.io/control/shaping/quotas/define-pools#pool-thresholds)\nfor more information.",
+          "description": "Optional. For supported licenses, defines thresholds with strict limits for\nwhen to drop new consumption of the license for a pool. Only\n`PERSISTED_CARDINALITY_STANDARD` and `PERSISTED_CARDINALITY_HISTOGRAM` are\nsupported. See the [product documentation](https://docs.chronosphere.io/control/shaping/shape-metrics/quotas/define-pools#pool-thresholds)\nfor more information.",
           "items": {
             "$ref": "#/definitions/AllocationThresholds"
           },
@@ -4559,7 +4538,7 @@
           "$ref": "#/definitions/DropRuleValueBasedDrop"
         },
         "drop_nan_value": {
-          "description": "Drops data points if values are Not a Number (NaN). If set to true, Chronosphere\ndrops NaN data points, along with any published staleness markers. See the\n[drop rules\ndocumentation](https://docs.chronosphere.io/control/shaping/rules/drop-rules#define-a-value-based-drop-rule)\nfor more information.",
+          "description": "Drops data points if values are Not a Number (NaN). If set to true, Chronosphere\ndrops NaN data points, along with any published staleness markers. See the\n[drop rules\ndocumentation](https://docs.chronosphere.io/control/shaping/shape-metrics/rules/drop-rules#define-a-value-based-drop-rule)\nfor more information.",
           "type": "boolean"
         }
       },
@@ -5848,6 +5827,9 @@
         },
         "resolve_value": {
           "$ref": "#/definitions/configv1OptionalDouble"
+        },
+        "resolve_sustain_for_no_data": {
+          "$ref": "#/definitions/configv1ResolveSustainForNoData"
         }
       },
       "type": "object"
@@ -6341,20 +6323,6 @@
       },
       "type": "object"
     },
-    "configv1PageParams": {
-      "properties": {
-        "max_size": {
-          "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
-          "format": "int64",
-          "type": "integer"
-        },
-        "token": {
-          "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "configv1PageResult": {
       "properties": {
         "next_token": {
@@ -6751,6 +6719,21 @@
       },
       "type": "object"
     },
+    "configv1ResolveSustainForNoData": {
+      "properties": {
+        "enabled": {
+          "description": "Whether missing data is treated distinctly from passing data for this\ncondition. When false (default), a missing data point is treated exactly\nlike a passing one and `resolve_sustain_secs` governs recovery for both.\nWhen true, a firing alert keeps firing while its data is missing and\nauto-resolves once data has been missing for `secs`, independently of\n`resolve_sustain_secs`.",
+          "type": "boolean"
+        },
+        "secs": {
+          "description": "How long a firing alert keeps firing after its data goes missing before\nauto-resolving, in seconds. Only applies when `enabled` is true. `0`\nresolves immediately on missing data. Must be at least `0` and at most 1\nyear (31536000 seconds).",
+          "example": "3600",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "configv1ResourcePools": {
       "properties": {
         "created_at": {
@@ -6842,7 +6825,7 @@
           "type": "string"
         },
         "filters": {
-          "description": "Filters incoming metrics by label. If multiple label filters are specified, an\nincoming metric must match every label filter to match the rule. Label values\nsupport glob patterns, including matching multiple patterns with an `OR`, such\nas `service:{svc1,svc2}`. These special filters are available for matching\nmetrics by non-label request metadata:\n * `__metric_type__`: Matches the incoming metric's [Observability Platform\n   metric\n   type](https://docs.chronosphere.io/control/shaping/types#observability-platform-types).\n   This is the recommended method for filtering on metric type. Valid values:\n   `cumulative_counter`, `cumulative_exponential_histogram`, `delta_counter`,\n   `delta_exponential_histogram`, `gauge`, `measurement`.\n * `__metric_source__`: Matches the incoming metric's [source\n   format](https://docs.chronosphere.io/control/shaping/types#supported-formats).\n   Valid values: `carbon`, `chrono_gcp`, `dogstatsd`, `open_metrics`,\n   `open_telemetry`, `prometheus`, `signalfx`, `statsd`, `wavefront`.\n * `__m3_prom_type__`: When ingesting metric data with Prometheus, matches the\n   incoming metric's [Prometheus metric\n   type](https://docs.chronosphere.io/control/shaping/types#prometheus). Valid\n   values: `counter`, `gauge`, `histogram`, `gauge_histogram`, `summary`,\n   `info`, `state_set`, `quantile`.\n * `__otel_type__`: When ingesting with OpenTelemetry, matches on the incoming\n   metric's [OpenTelemetry metric\n   type](https://docs.chronosphere.io/control/shaping/types#opentelemetry).\n   Valid values: `sum`, `monotonic_sum`, `gauge`, `histogram`, `exp_histogram`,\n  `summary`. For example, the following filter matches any cumulative counter\n  metric with a `service=gateway` label whose metric name starts with\n  `http_requests_`:\n```\n__metric_type__:cumulative_counter service:gateway __name__:http_requests_*\n```",
+          "description": "Filters incoming metrics by label. If multiple label filters are specified, an\nincoming metric must match every label filter to match the rule. Label values\nsupport glob patterns, including matching multiple patterns with an `OR`, such\nas `service:{svc1,svc2}`. These special filters are available for matching\nmetrics by non-label request metadata:\n * `__metric_type__`: Matches the incoming metric's [Observability Platform\n   metric\n   type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#observability-platform-types).\n   This is the recommended method for filtering on metric type. Valid values:\n   `cumulative_counter`, `cumulative_exponential_histogram`, `delta_counter`,\n   `delta_exponential_histogram`, `gauge`, `measurement`.\n * `__metric_source__`: Matches the incoming metric's [source\n   format](https://docs.chronosphere.io/control/shaping/shape-metrics/types#supported-formats).\n   Valid values: `carbon`, `chrono_gcp`, `dogstatsd`, `open_metrics`,\n   `open_telemetry`, `prometheus`, `signalfx`, `statsd`, `wavefront`.\n * `__m3_prom_type__`: When ingesting metric data with Prometheus, matches the\n   incoming metric's [Prometheus metric\n   type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#prometheus). Valid\n   values: `counter`, `gauge`, `histogram`, `gauge_histogram`, `summary`,\n   `info`, `state_set`, `quantile`.\n * `__otel_type__`: When ingesting with OpenTelemetry, matches on the incoming\n   metric's [OpenTelemetry metric\n   type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#opentelemetry).\n   Valid values: `sum`, `monotonic_sum`, `gauge`, `histogram`, `exp_histogram`,\n  `summary`. For example, the following filter matches any cumulative counter\n  metric with a `service=gateway` label whose metric name starts with\n  `http_requests_`:\n```\n__metric_type__:cumulative_counter service:gateway __name__:http_requests_*\n```",
           "items": {
             "$ref": "#/definitions/configv1LabelFilter"
           },
@@ -6862,7 +6845,7 @@
           "$ref": "#/definitions/configv1RollupRuleStoragePolicy"
         },
         "interval": {
-          "description": "Optional. Sets a custom interval that defines the amount of\ntime between aggregated data points. Intervals are based on your\n[retention policy](https://docs.chronosphere.io/administer/licensing#retention-policies).\nThis field was known as `storage_policies` in version\n0.286.0-2023-01-06-release.1\nand earlier.",
+          "description": "Optional. Sets a custom interval that defines the amount of\ntime between aggregated data points. Intervals are based on your\n[retention policy](https://docs.chronosphere.io/administer/limits-licensing/licensing).\nThis field was known as `storage_policies` in version\n0.286.0-2023-01-06-release.1\nand earlier.",
           "type": "string"
         },
         "expansive_match": {
@@ -7243,7 +7226,7 @@
           "type": "string"
         },
         "main_behavior_assignments": {
-          "description": "List of assignments for the main behavior. The referenced datasets will be\nenrolled in behaviors. The referenced behaviors are the active behaviors for the\ndataset when there is no active override. Only one main behavior can be assigned\nto a dataset. See the documentation for\n[customizing your sampling\nstrategy](https://docs.chronosphere.io/control/sampling/behaviors#customize-your-sampling-strategy)\nfor more information.",
+          "description": "List of assignments for the main behavior. The referenced datasets will be\nenrolled in behaviors. The referenced behaviors are the active behaviors for the\ndataset when there is no active override. Only one main behavior can be assigned\nto a dataset. See the documentation for\n[customizing your sampling\nstrategy](https://docs.chronosphere.io/control/shaping/sample-traces/behaviors#customize-your-sampling-strategy)\nfor more information.",
           "items": {
             "$ref": "#/definitions/TraceBehaviorConfigMainBehaviorAssignment"
           },
@@ -7894,15 +7877,6 @@
     },
     "genericError": {
       "additionalProperties": true,
-      "type": "object"
-    },
-    "protobufAny": {
-      "additionalProperties": {},
-      "properties": {
-        "@type": {
-          "type": "string"
-        }
-      },
       "type": "object"
     }
   },

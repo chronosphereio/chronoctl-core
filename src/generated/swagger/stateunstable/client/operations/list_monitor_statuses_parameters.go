@@ -87,6 +87,14 @@ type ListMonitorStatusesParams struct {
 	*/
 	MonitorSlugs []string
 
+	/* SignalFilterExprs.
+
+	     Optional signal filters in PromQL matcher syntax, e.g. `service="foo"` or
+	`namespace=~"prod-.*"`. Semantically identical to signal_filters and
+	AND-ed with it; representable as a repeated query parameter on GET.
+	*/
+	SignalFilterExprs []string
+
 	// SortBy.
 	SortBy *string
 
@@ -193,6 +201,17 @@ func (o *ListMonitorStatusesParams) SetMonitorSlugs(monitorSlugs []string) {
 	o.MonitorSlugs = monitorSlugs
 }
 
+// WithSignalFilterExprs adds the signalFilterExprs to the list monitor statuses params
+func (o *ListMonitorStatusesParams) WithSignalFilterExprs(signalFilterExprs []string) *ListMonitorStatusesParams {
+	o.SetSignalFilterExprs(signalFilterExprs)
+	return o
+}
+
+// SetSignalFilterExprs adds the signalFilterExprs to the list monitor statuses params
+func (o *ListMonitorStatusesParams) SetSignalFilterExprs(signalFilterExprs []string) {
+	o.SignalFilterExprs = signalFilterExprs
+}
+
 // WithSortBy adds the sortBy to the list monitor statuses params
 func (o *ListMonitorStatusesParams) WithSortBy(sortBy *string) *ListMonitorStatusesParams {
 	o.SetSortBy(sortBy)
@@ -279,6 +298,17 @@ func (o *ListMonitorStatusesParams) WriteToRequest(r runtime.ClientRequest, reg 
 		}
 	}
 
+	if o.SignalFilterExprs != nil {
+
+		// binding items for signal_filter_exprs
+		joinedSignalFilterExprs := o.bindParamSignalFilterExprs(reg)
+
+		// query array param signal_filter_exprs
+		if err := r.SetQueryParam("signal_filter_exprs", joinedSignalFilterExprs...); err != nil {
+			return err
+		}
+	}
+
 	if o.SortBy != nil {
 
 		// query param sort_by
@@ -345,6 +375,23 @@ func (o *ListMonitorStatusesParams) bindParamMonitorSlugs(formats strfmt.Registr
 	monitorSlugsIS := swag.JoinByFormat(monitorSlugsIC, "multi")
 
 	return monitorSlugsIS
+}
+
+// bindParamListMonitorStatuses binds the parameter signal_filter_exprs
+func (o *ListMonitorStatusesParams) bindParamSignalFilterExprs(formats strfmt.Registry) []string {
+	signalFilterExprsIR := o.SignalFilterExprs
+
+	var signalFilterExprsIC []string
+	for _, signalFilterExprsIIR := range signalFilterExprsIR { // explode []string
+
+		signalFilterExprsIIV := signalFilterExprsIIR // string as string
+		signalFilterExprsIC = append(signalFilterExprsIC, signalFilterExprsIIV)
+	}
+
+	// items.CollectionFormat: "multi"
+	signalFilterExprsIS := swag.JoinByFormat(signalFilterExprsIC, "multi")
+
+	return signalFilterExprsIS
 }
 
 // bindParamListMonitorStatuses binds the parameter team_slugs

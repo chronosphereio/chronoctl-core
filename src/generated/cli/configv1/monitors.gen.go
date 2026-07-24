@@ -642,6 +642,19 @@ spec:
                           # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                           resolve_sustain_secs: <integer>
                           op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
+                          resolve_sustain_for_no_data:
+                            # Whether missing data is treated distinctly from passing data for this
+                            # condition. When false (default), a missing data point is treated exactly
+                            # like a passing one and 'resolve_sustain_secs' governs recovery for both.
+                            # When true, a firing alert keeps firing while its data is missing and
+                            # auto-resolves once data has been missing for 'secs', independently of
+                            # 'resolve_sustain_secs'.
+                            enabled: <true|false>
+                            # How long a firing alert keeps firing after its data goes missing before
+                            # auto-resolving, in seconds. Only applies when 'enabled' is true. '0'
+                            # resolves immediately on missing data. Must be at least '0' and at most 1
+                            # year (31536000 seconds).
+                            secs: <integer>
                           resolve_value:
                             # The configured value, which is ignored if enabled is false.
                             value: <number>
@@ -661,6 +674,19 @@ spec:
                           # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                           resolve_sustain_secs: <integer>
                           op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
+                          resolve_sustain_for_no_data:
+                            # Whether missing data is treated distinctly from passing data for this
+                            # condition. When false (default), a missing data point is treated exactly
+                            # like a passing one and 'resolve_sustain_secs' governs recovery for both.
+                            # When true, a firing alert keeps firing while its data is missing and
+                            # auto-resolves once data has been missing for 'secs', independently of
+                            # 'resolve_sustain_secs'.
+                            enabled: <true|false>
+                            # How long a firing alert keeps firing after its data goes missing before
+                            # auto-resolving, in seconds. Only applies when 'enabled' is true. '0'
+                            # resolves immediately on missing data. Must be at least '0' and at most 1
+                            # year (31536000 seconds).
+                            secs: <integer>
                           resolve_value:
                             # The configured value, which is ignored if enabled is false.
                             value: <number>
@@ -681,6 +707,19 @@ spec:
                       # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                       resolve_sustain_secs: <integer>
                       op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
+                      resolve_sustain_for_no_data:
+                        # Whether missing data is treated distinctly from passing data for this
+                        # condition. When false (default), a missing data point is treated exactly
+                        # like a passing one and 'resolve_sustain_secs' governs recovery for both.
+                        # When true, a firing alert keeps firing while its data is missing and
+                        # auto-resolves once data has been missing for 'secs', independently of
+                        # 'resolve_sustain_secs'.
+                        enabled: <true|false>
+                        # How long a firing alert keeps firing after its data goes missing before
+                        # auto-resolving, in seconds. Only applies when 'enabled' is true. '0'
+                        # resolves immediately on missing data. Must be at least '0' and at most 1
+                        # year (31536000 seconds).
+                        secs: <integer>
                       resolve_value:
                         # The configured value, which is ignored if enabled is false.
                         value: <number>
@@ -700,6 +739,19 @@ spec:
                       # integer. Accepts one of 's' (seconds), 'm' (minutes), or 'h' (hours) as units.
                       resolve_sustain_secs: <integer>
                       op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
+                      resolve_sustain_for_no_data:
+                        # Whether missing data is treated distinctly from passing data for this
+                        # condition. When false (default), a missing data point is treated exactly
+                        # like a passing one and 'resolve_sustain_secs' governs recovery for both.
+                        # When true, a firing alert keeps firing while its data is missing and
+                        # auto-resolves once data has been missing for 'secs', independently of
+                        # 'resolve_sustain_secs'.
+                        enabled: <true|false>
+                        # How long a firing alert keeps firing after its data goes missing before
+                        # auto-resolving, in seconds. Only applies when 'enabled' is true. '0'
+                        # resolves immediately on missing data. Must be at least '0' and at most 1
+                        # year (31536000 seconds).
+                        secs: <integer>
                       resolve_value:
                         # The configured value, which is ignored if enabled is false.
                         value: <number>

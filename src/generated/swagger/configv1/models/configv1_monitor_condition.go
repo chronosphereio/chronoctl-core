@@ -35,6 +35,9 @@ type Configv1MonitorCondition struct {
 
 	// resolve value
 	ResolveValue *Configv1OptionalDouble `json:"resolve_value,omitempty"`
+
+	// resolve sustain for no data
+	ResolveSustainForNoData *Configv1ResolveSustainForNoData `json:"resolve_sustain_for_no_data,omitempty"`
 }
 
 // Validate validates this configv1 monitor condition
@@ -46,6 +49,10 @@ func (m *Configv1MonitorCondition) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateResolveValue(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateResolveSustainForNoData(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -91,6 +98,25 @@ func (m *Configv1MonitorCondition) validateResolveValue(formats strfmt.Registry)
 	return nil
 }
 
+func (m *Configv1MonitorCondition) validateResolveSustainForNoData(formats strfmt.Registry) error {
+	if swag.IsZero(m.ResolveSustainForNoData) { // not required
+		return nil
+	}
+
+	if m.ResolveSustainForNoData != nil {
+		if err := m.ResolveSustainForNoData.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("resolve_sustain_for_no_data")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("resolve_sustain_for_no_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 monitor condition based on the context it is used
 func (m *Configv1MonitorCondition) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -100,6 +126,10 @@ func (m *Configv1MonitorCondition) ContextValidate(ctx context.Context, formats 
 	}
 
 	if err := m.contextValidateResolveValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateResolveSustainForNoData(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -140,6 +170,27 @@ func (m *Configv1MonitorCondition) contextValidateResolveValue(ctx context.Conte
 				return ve.ValidateName("resolve_value")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("resolve_value")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1MonitorCondition) contextValidateResolveSustainForNoData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ResolveSustainForNoData != nil {
+
+		if swag.IsZero(m.ResolveSustainForNoData) { // not required
+			return nil
+		}
+
+		if err := m.ResolveSustainForNoData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("resolve_sustain_for_no_data")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("resolve_sustain_for_no_data")
 			}
 			return err
 		}

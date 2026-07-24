@@ -3,18 +3,6 @@
     "application/json"
   ],
   "definitions": {
-    "MetricUsageOrderBy": {
-      "enum": [
-        "VALUABLE",
-        "DPPS",
-        "UTILITY",
-        "REFERENCES",
-        "EXECUTIONS",
-        "UNIQUE_VALUES",
-        "UNIQUE_USERS"
-      ],
-      "type": "string"
-    },
     "MetricUsageQueryExecutionCountsByType": {
       "properties": {
         "explorer": {
@@ -78,37 +66,10 @@
       },
       "type": "object"
     },
-    "configv1PageParams": {
-      "properties": {
-        "max_size": {
-          "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
-          "format": "int64",
-          "type": "integer"
-        },
-        "token": {
-          "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "configv1PageResult": {
       "properties": {
         "next_token": {
           "description": "An opaque page token that identifies the next page of items that the\nclient should request. An empty value indicates that there are no\nmore items to return.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "genericError": {
-      "additionalProperties": true,
-      "type": "object"
-    },
-    "protobufAny": {
-      "additionalProperties": {},
-      "properties": {
-        "@type": {
           "type": "string"
         }
       },
@@ -218,17 +179,6 @@
         "dpps": {
           "format": "double",
           "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "statev1MetricUsageOrder": {
-      "properties": {
-        "ascending": {
-          "type": "boolean"
-        },
-        "by": {
-          "$ref": "#/definitions/MetricUsageOrderBy"
         }
       },
       "type": "object"

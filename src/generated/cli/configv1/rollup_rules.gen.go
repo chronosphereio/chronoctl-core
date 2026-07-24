@@ -508,22 +508,22 @@ spec:
     # metrics by non-label request metadata:
     #  * '__metric_type__': Matches the incoming metric's [Observability Platform
     #    metric
-    #    type](https://docs.chronosphere.io/control/shaping/types#observability-platform-types).
+    #    type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#observability-platform-types).
     #    This is the recommended method for filtering on metric type. Valid values:
     #    'cumulative_counter', 'cumulative_exponential_histogram', 'delta_counter',
     #    'delta_exponential_histogram', 'gauge', 'measurement'.
     #  * '__metric_source__': Matches the incoming metric's [source
-    #    format](https://docs.chronosphere.io/control/shaping/types#supported-formats).
+    #    format](https://docs.chronosphere.io/control/shaping/shape-metrics/types#supported-formats).
     #    Valid values: 'carbon', 'chrono_gcp', 'dogstatsd', 'open_metrics',
     #    'open_telemetry', 'prometheus', 'signalfx', 'statsd', 'wavefront'.
     #  * '__m3_prom_type__': When ingesting metric data with Prometheus, matches the
     #    incoming metric's [Prometheus metric
-    #    type](https://docs.chronosphere.io/control/shaping/types#prometheus). Valid
+    #    type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#prometheus). Valid
     #    values: 'counter', 'gauge', 'histogram', 'gauge_histogram', 'summary',
     #    'info', 'state_set', 'quantile'.
     #  * '__otel_type__': When ingesting with OpenTelemetry, matches on the incoming
     #    metric's [OpenTelemetry metric
-    #    type](https://docs.chronosphere.io/control/shaping/types#opentelemetry).
+    #    type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#opentelemetry).
     #    Valid values: 'sum', 'monotonic_sum', 'gauge', 'histogram', 'exp_histogram',
     #   'summary'. For example, the following filter matches any cumulative counter
     #   metric with a 'service=gateway' label whose metric name starts with
@@ -545,7 +545,7 @@ spec:
     metric_name: <string>
     # Optional. Sets a custom interval that defines the amount of
     # time between aggregated data points. Intervals are based on your
-    # [retention policy](https://docs.chronosphere.io/administer/licensing#retention-policies).
+    # [retention policy](https://docs.chronosphere.io/administer/limits-licensing/licensing).
     # This field was known as 'storage_policies' in version
     # 0.286.0-2023-01-06-release.1
     # and earlier.

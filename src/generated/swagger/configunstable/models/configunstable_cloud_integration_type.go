@@ -18,6 +18,7 @@ import (
 // This is server-derived from whichever provider config is set.
 //
 //   - GCP: Google Cloud Platform.
+//   - MONGODB_ATLAS: MongoDB Atlas.
 //
 // swagger:model configunstableCloudIntegrationType
 type ConfigunstableCloudIntegrationType string
@@ -35,6 +36,9 @@ const (
 
 	// ConfigunstableCloudIntegrationTypeGCP captures enum value "GCP"
 	ConfigunstableCloudIntegrationTypeGCP ConfigunstableCloudIntegrationType = "GCP"
+
+	// ConfigunstableCloudIntegrationTypeMONGODBATLAS captures enum value "MONGODB_ATLAS"
+	ConfigunstableCloudIntegrationTypeMONGODBATLAS ConfigunstableCloudIntegrationType = "MONGODB_ATLAS"
 )
 
 // for schema
@@ -42,7 +46,7 @@ var configunstableCloudIntegrationTypeEnum []interface{}
 
 func init() {
 	var res []ConfigunstableCloudIntegrationType
-	if err := json.Unmarshal([]byte(`["GCP"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["GCP","MONGODB_ATLAS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
