@@ -38,6 +38,27 @@ type Configv1MonitorCondition struct {
 
 	// resolve sustain for no data
 	ResolveSustainForNoData *Configv1ResolveSustainForNoData `json:"resolve_sustain_for_no_data,omitempty"`
+
+	// How long a newly observed series is suppressed before it can trigger an
+	// alert. A series counts as new until `new_series_delay_secs` has elapsed
+	// since it was first seen. It need not be present continuously over that
+	// period, but it must return at least one datapoint every 24 hours to stay
+	// tracked: a series that goes missing for longer than 24 hours is forgotten
+	// and counts as new again when it comes back. Existence is tracked by
+	// observing the series whether or not it violates the condition.
+	//
+	// This is additive with `sustain_secs`: the sustain clock only starts once
+	// the delay has elapsed. A delay of `3600` combined with a sustain of `300`
+	// means a new violating series becomes pending after 60 minutes and fires
+	// after 65 minutes. A newly created monitor therefore does not alert for up
+	// to `new_series_delay_secs`.
+	//
+	// `0`, the default, disables the delay. Must be at least `0` and at most 1
+	// week (604800 seconds).
+	//
+	// Not supported for `EXISTS`, `NOT_EXISTS`, or `SIGNAL_NOT_EXISTS`
+	// conditions, or for Graphite monitors.
+	NewSeriesDelaySecs int32 `json:"new_series_delay_secs,omitempty"`
 }
 
 // Validate validates this configv1 monitor condition
