@@ -6,6 +6,8 @@
 * Add `disable_repeat` field to `v1/config/NotificationPolicy` routes. When `true`, alerts are notified once and on state changes but are never re-sent on the repeat interval.
 * Add `SENDGRID` connection type and `sendgrid` config to `v1/config/ExternalConnection`.
 * Add `resolve_sustain_for_no_data` field to `v1/config/Monitor` series conditions, controlling how a firing condition resolves once its series stops returning data.
+* Add `new_series_delay_secs` field to `v1/config/Monitor` conditions, suppressing alerts for a newly observed series until the delay has elapsed since the series was first seen.
+* Add `CLOUDFLARE` provider type and `cloudflare` config to `unstable/config/CloudIntegration`.
 
 ## v1.31.0
 
