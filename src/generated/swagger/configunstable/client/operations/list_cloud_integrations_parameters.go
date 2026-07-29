@@ -91,6 +91,7 @@ type ListCloudIntegrationsParams struct {
 
 	- GCP: Google Cloud Platform.
 	- MONGODB_ATLAS: MongoDB Atlas.
+	- CLOUDFLARE: Cloudflare.
 	*/
 	ProviderTypes []string
 

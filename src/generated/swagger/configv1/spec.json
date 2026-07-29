@@ -5830,6 +5830,11 @@
         },
         "resolve_sustain_for_no_data": {
           "$ref": "#/definitions/configv1ResolveSustainForNoData"
+        },
+        "new_series_delay_secs": {
+          "description": "How long a newly observed series is suppressed before it can trigger an\nalert. A series counts as new until `new_series_delay_secs` has elapsed\nsince it was first seen. It need not be present continuously over that\nperiod, but it must return at least one datapoint every 24 hours to stay\ntracked: a series that goes missing for longer than 24 hours is forgotten\nand counts as new again when it comes back. Existence is tracked by\nobserving the series whether or not it violates the condition.\n\nThis is additive with `sustain_secs`: the sustain clock only starts once\nthe delay has elapsed. A delay of `3600` combined with a sustain of `300`\nmeans a new violating series becomes pending after 60 minutes and fires\nafter 65 minutes. A newly created monitor therefore does not alert for up\nto `new_series_delay_secs`.\n\n`0`, the default, disables the delay. Must be at least `0` and at most 1\nweek (604800 seconds).\n\nNot supported for `EXISTS`, `NOT_EXISTS`, or `SIGNAL_NOT_EXISTS`\nconditions, or for Graphite monitors.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"

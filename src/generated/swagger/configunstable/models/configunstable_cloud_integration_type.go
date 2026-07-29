@@ -19,6 +19,7 @@ import (
 //
 //   - GCP: Google Cloud Platform.
 //   - MONGODB_ATLAS: MongoDB Atlas.
+//   - CLOUDFLARE: Cloudflare.
 //
 // swagger:model configunstableCloudIntegrationType
 type ConfigunstableCloudIntegrationType string
@@ -39,6 +40,9 @@ const (
 
 	// ConfigunstableCloudIntegrationTypeMONGODBATLAS captures enum value "MONGODB_ATLAS"
 	ConfigunstableCloudIntegrationTypeMONGODBATLAS ConfigunstableCloudIntegrationType = "MONGODB_ATLAS"
+
+	// ConfigunstableCloudIntegrationTypeCLOUDFLARE captures enum value "CLOUDFLARE"
+	ConfigunstableCloudIntegrationTypeCLOUDFLARE ConfigunstableCloudIntegrationType = "CLOUDFLARE"
 )
 
 // for schema
@@ -46,7 +50,7 @@ var configunstableCloudIntegrationTypeEnum []interface{}
 
 func init() {
 	var res []ConfigunstableCloudIntegrationType
-	if err := json.Unmarshal([]byte(`["GCP","MONGODB_ATLAS"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["GCP","MONGODB_ATLAS","CLOUDFLARE"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

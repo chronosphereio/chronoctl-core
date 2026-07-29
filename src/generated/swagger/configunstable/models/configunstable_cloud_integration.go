@@ -54,6 +54,9 @@ type ConfigunstableCloudIntegration struct {
 
 	// mongodb atlas metrics
 	MongodbAtlasMetrics *CloudintegrationconfigMongoDbAtlasMetricsConfig `json:"mongodb_atlas_metrics,omitempty"`
+
+	// cloudflare
+	Cloudflare *CloudintegrationconfigCloudflareConfig `json:"cloudflare,omitempty"`
 }
 
 // Validate validates this configunstable cloud integration
@@ -81,6 +84,10 @@ func (m *ConfigunstableCloudIntegration) Validate(formats strfmt.Registry) error
 	}
 
 	if err := m.validateMongodbAtlasMetrics(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCloudflare(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -186,6 +193,25 @@ func (m *ConfigunstableCloudIntegration) validateMongodbAtlasMetrics(formats str
 	return nil
 }
 
+func (m *ConfigunstableCloudIntegration) validateCloudflare(formats strfmt.Registry) error {
+	if swag.IsZero(m.Cloudflare) { // not required
+		return nil
+	}
+
+	if m.Cloudflare != nil {
+		if err := m.Cloudflare.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("cloudflare")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("cloudflare")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configunstable cloud integration based on the context it is used
 func (m *ConfigunstableCloudIntegration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -211,6 +237,10 @@ func (m *ConfigunstableCloudIntegration) ContextValidate(ctx context.Context, fo
 	}
 
 	if err := m.contextValidateMongodbAtlasMetrics(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCloudflare(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -308,6 +338,27 @@ func (m *ConfigunstableCloudIntegration) contextValidateMongodbAtlasMetrics(ctx 
 				return ve.ValidateName("mongodb_atlas_metrics")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("mongodb_atlas_metrics")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableCloudIntegration) contextValidateCloudflare(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Cloudflare != nil {
+
+		if swag.IsZero(m.Cloudflare) { // not required
+			return nil
+		}
+
+		if err := m.Cloudflare.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("cloudflare")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("cloudflare")
 			}
 			return err
 		}

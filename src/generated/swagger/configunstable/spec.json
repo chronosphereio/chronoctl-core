@@ -789,6 +789,19 @@
       },
       "type": "object"
     },
+    "cloudintegrationconfigCloudflareConfig": {
+      "description": "CloudflareConfig contains configuration for scraping Cloudflare metrics.",
+      "properties": {
+        "zone_names": {
+          "description": "Zones to scrape. Empty means all zones accessible by the token.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "cloudintegrationconfigGcpConfig": {
       "description": "GcpConfig contains configuration for scraping GCP Cloud Monitoring metrics.",
       "properties": {
@@ -867,6 +880,9 @@
         },
         "mongodb_atlas_metrics": {
           "$ref": "#/definitions/cloudintegrationconfigMongoDbAtlasMetricsConfig"
+        },
+        "cloudflare": {
+          "$ref": "#/definitions/cloudintegrationconfigCloudflareConfig"
         }
       },
       "type": "object"
@@ -881,10 +897,11 @@
       "type": "string"
     },
     "configunstableCloudIntegrationType": {
-      "description": "CloudIntegrationType identifies the cloud provider for a CloudIntegration.\nThis is server-derived from whichever provider config is set.\n\n - GCP: Google Cloud Platform.\n - MONGODB_ATLAS: MongoDB Atlas.",
+      "description": "CloudIntegrationType identifies the cloud provider for a CloudIntegration.\nThis is server-derived from whichever provider config is set.\n\n - GCP: Google Cloud Platform.\n - MONGODB_ATLAS: MongoDB Atlas.\n - CLOUDFLARE: Cloudflare.",
       "enum": [
         "GCP",
-        "MONGODB_ATLAS"
+        "MONGODB_ATLAS",
+        "CLOUDFLARE"
       ],
       "type": "string"
     },
@@ -2120,12 +2137,13 @@
           },
           {
             "collectionFormat": "multi",
-            "description": "Filter by provider type.\n\n - GCP: Google Cloud Platform.\n - MONGODB_ATLAS: MongoDB Atlas.",
+            "description": "Filter by provider type.\n\n - GCP: Google Cloud Platform.\n - MONGODB_ATLAS: MongoDB Atlas.\n - CLOUDFLARE: Cloudflare.",
             "in": "query",
             "items": {
               "enum": [
                 "GCP",
-                "MONGODB_ATLAS"
+                "MONGODB_ATLAS",
+                "CLOUDFLARE"
               ],
               "type": "string"
             },
