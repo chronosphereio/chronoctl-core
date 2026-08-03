@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.32.0
+
 ### Added
 * Add `disable_repeat` field to `v1/config/NotificationPolicy` routes. When `true`, alerts are notified once and on state changes but are never re-sent on the repeat interval.
 * Add `SENDGRID` connection type and `sendgrid` config to `v1/config/ExternalConnection`.
