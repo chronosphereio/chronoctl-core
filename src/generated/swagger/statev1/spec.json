@@ -52,6 +52,14 @@
       ],
       "type": "string"
     },
+    "RuleEvaluationSeverity": {
+      "description": "Severity of the rule evaluation issue.\n\n - SEVERITY_ERROR: A hard evaluation failure.\n - SEVERITY_WARNING: A non-fatal warning; the evaluation succeeded but something needs attention.",
+      "enum": [
+        "SEVERITY_ERROR",
+        "SEVERITY_WARNING"
+      ],
+      "type": "string"
+    },
     "apiError": {
       "properties": {
         "code": {
@@ -205,6 +213,9 @@
         "message": {
           "description": "Detailed message related to rule evaluation issue. See \"Admin \u003e Evaluation failures\" in the Chronosphere documentation for more information.",
           "type": "string"
+        },
+        "severity": {
+          "$ref": "#/definitions/RuleEvaluationSeverity"
         }
       },
       "type": "object"
@@ -382,6 +393,12 @@
             "in": "query",
             "name": "page.token",
             "type": "string"
+          },
+          {
+            "description": "When false (default), only failures are returned. Set true to also include non-fatal warnings.",
+            "in": "query",
+            "name": "include_warnings",
+            "type": "boolean"
           }
         ],
         "responses": {

@@ -34,6 +34,8 @@ type ClientService interface {
 
 	CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error)
 
+	CreateDashboardFromClassic(params *CreateDashboardFromClassicParams, opts ...ClientOption) (*CreateDashboardFromClassicOK, error)
+
 	CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...ClientOption) (*CreateLinkTemplateOK, error)
 
 	CreateLogPrimaryKey(params *CreateLogPrimaryKeyParams, opts ...ClientOption) (*CreateLogPrimaryKeyOK, error)
@@ -47,6 +49,10 @@ type ClientService interface {
 	CreateSavedTraceSearch(params *CreateSavedTraceSearchParams, opts ...ClientOption) (*CreateSavedTraceSearchOK, error)
 
 	CreateService(params *CreateServiceParams, opts ...ClientOption) (*CreateServiceOK, error)
+
+	CreateSyntheticGlobalVariable(params *CreateSyntheticGlobalVariableParams, opts ...ClientOption) (*CreateSyntheticGlobalVariableOK, error)
+
+	CreateSyntheticTest(params *CreateSyntheticTestParams, opts ...ClientOption) (*CreateSyntheticTestOK, error)
 
 	CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*CreateTraceJaegerRemoteSamplingStrategyOK, error)
 
@@ -74,6 +80,10 @@ type ClientService interface {
 
 	DeleteService(params *DeleteServiceParams, opts ...ClientOption) (*DeleteServiceOK, error)
 
+	DeleteSyntheticGlobalVariable(params *DeleteSyntheticGlobalVariableParams, opts ...ClientOption) (*DeleteSyntheticGlobalVariableOK, error)
+
+	DeleteSyntheticTest(params *DeleteSyntheticTestParams, opts ...ClientOption) (*DeleteSyntheticTestOK, error)
+
 	DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error)
 
 	DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRulesParams, opts ...ClientOption) (*DeleteTraceTailSamplingRulesOK, error)
@@ -98,6 +108,10 @@ type ClientService interface {
 
 	ListServices(params *ListServicesParams, opts ...ClientOption) (*ListServicesOK, error)
 
+	ListSyntheticGlobalVariables(params *ListSyntheticGlobalVariablesParams, opts ...ClientOption) (*ListSyntheticGlobalVariablesOK, error)
+
+	ListSyntheticTests(params *ListSyntheticTestsParams, opts ...ClientOption) (*ListSyntheticTestsOK, error)
+
 	ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error)
 
 	ReadCloudIntegration(params *ReadCloudIntegrationParams, opts ...ClientOption) (*ReadCloudIntegrationOK, error)
@@ -119,6 +133,10 @@ type ClientService interface {
 	ReadSavedTraceSearch(params *ReadSavedTraceSearchParams, opts ...ClientOption) (*ReadSavedTraceSearchOK, error)
 
 	ReadService(params *ReadServiceParams, opts ...ClientOption) (*ReadServiceOK, error)
+
+	ReadSyntheticGlobalVariable(params *ReadSyntheticGlobalVariableParams, opts ...ClientOption) (*ReadSyntheticGlobalVariableOK, error)
+
+	ReadSyntheticTest(params *ReadSyntheticTestParams, opts ...ClientOption) (*ReadSyntheticTestOK, error)
 
 	ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*ReadTraceJaegerRemoteSamplingStrategyOK, error)
 
@@ -145,6 +163,10 @@ type ClientService interface {
 	UpdateSavedTraceSearch(params *UpdateSavedTraceSearchParams, opts ...ClientOption) (*UpdateSavedTraceSearchOK, error)
 
 	UpdateService(params *UpdateServiceParams, opts ...ClientOption) (*UpdateServiceOK, error)
+
+	UpdateSyntheticGlobalVariable(params *UpdateSyntheticGlobalVariableParams, opts ...ClientOption) (*UpdateSyntheticGlobalVariableOK, error)
+
+	UpdateSyntheticTest(params *UpdateSyntheticTestParams, opts ...ClientOption) (*UpdateSyntheticTestOK, error)
 
 	UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*UpdateTraceJaegerRemoteSamplingStrategyOK, error)
 
@@ -263,6 +285,47 @@ func (a *Client) CreateDashboard(params *CreateDashboardParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+	CreateDashboardFromClassic Converts raw classic (Grafana) dashboard JSON to the standard dashboard
+
+format and creates it as a standard Dashboard entity in one call.
+Conversion is delegated to cloud-ui-gateway; when that service is
+unavailable this endpoint fails closed with SERVICE_UNAVAILABLE.
+*/
+func (a *Client) CreateDashboardFromClassic(params *CreateDashboardFromClassicParams, opts ...ClientOption) (*CreateDashboardFromClassicOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateDashboardFromClassicParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateDashboardFromClassic",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/dashboards:createFromClassic",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateDashboardFromClassicReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateDashboardFromClassicOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateDashboardFromClassicDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -525,6 +588,80 @@ func (a *Client) CreateService(params *CreateServiceParams, opts ...ClientOption
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateServiceDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateSyntheticGlobalVariable create synthetic global variable API
+*/
+func (a *Client) CreateSyntheticGlobalVariable(params *CreateSyntheticGlobalVariableParams, opts ...ClientOption) (*CreateSyntheticGlobalVariableOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateSyntheticGlobalVariableParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateSyntheticGlobalVariable",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/synthetic-global-variables",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateSyntheticGlobalVariableReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateSyntheticGlobalVariableOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateSyntheticGlobalVariableDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateSyntheticTest create synthetic test API
+*/
+func (a *Client) CreateSyntheticTest(params *CreateSyntheticTestParams, opts ...ClientOption) (*CreateSyntheticTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateSyntheticTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateSyntheticTest",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/synthetic-tests",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateSyntheticTestReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateSyntheticTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1010,6 +1147,80 @@ func (a *Client) DeleteService(params *DeleteServiceParams, opts ...ClientOption
 }
 
 /*
+DeleteSyntheticGlobalVariable delete synthetic global variable API
+*/
+func (a *Client) DeleteSyntheticGlobalVariable(params *DeleteSyntheticGlobalVariableParams, opts ...ClientOption) (*DeleteSyntheticGlobalVariableOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteSyntheticGlobalVariableParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteSyntheticGlobalVariable",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/synthetic-global-variables/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteSyntheticGlobalVariableReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteSyntheticGlobalVariableOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteSyntheticGlobalVariableDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteSyntheticTest delete synthetic test API
+*/
+func (a *Client) DeleteSyntheticTest(params *DeleteSyntheticTestParams, opts ...ClientOption) (*DeleteSyntheticTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteSyntheticTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteSyntheticTest",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/synthetic-tests/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteSyntheticTestReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteSyntheticTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteSyntheticTestDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteTraceJaegerRemoteSamplingStrategy delete trace jaeger remote sampling strategy API
 */
 func (a *Client) DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error) {
@@ -1454,6 +1665,80 @@ func (a *Client) ListServices(params *ListServicesParams, opts ...ClientOption) 
 }
 
 /*
+ListSyntheticGlobalVariables list synthetic global variables API
+*/
+func (a *Client) ListSyntheticGlobalVariables(params *ListSyntheticGlobalVariablesParams, opts ...ClientOption) (*ListSyntheticGlobalVariablesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListSyntheticGlobalVariablesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListSyntheticGlobalVariables",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/synthetic-global-variables",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListSyntheticGlobalVariablesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListSyntheticGlobalVariablesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListSyntheticGlobalVariablesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListSyntheticTests list synthetic tests API
+*/
+func (a *Client) ListSyntheticTests(params *ListSyntheticTestsParams, opts ...ClientOption) (*ListSyntheticTestsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListSyntheticTestsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListSyntheticTests",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/synthetic-tests",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListSyntheticTestsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListSyntheticTestsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListSyntheticTestsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListTraceJaegerRemoteSamplingStrategies list trace jaeger remote sampling strategies API
 */
 func (a *Client) ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error) {
@@ -1857,6 +2142,80 @@ func (a *Client) ReadService(params *ReadServiceParams, opts ...ClientOption) (*
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadServiceDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadSyntheticGlobalVariable read synthetic global variable API
+*/
+func (a *Client) ReadSyntheticGlobalVariable(params *ReadSyntheticGlobalVariableParams, opts ...ClientOption) (*ReadSyntheticGlobalVariableOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadSyntheticGlobalVariableParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadSyntheticGlobalVariable",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/synthetic-global-variables/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadSyntheticGlobalVariableReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadSyntheticGlobalVariableOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadSyntheticGlobalVariableDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadSyntheticTest read synthetic test API
+*/
+func (a *Client) ReadSyntheticTest(params *ReadSyntheticTestParams, opts ...ClientOption) (*ReadSyntheticTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadSyntheticTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadSyntheticTest",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/synthetic-tests/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadSyntheticTestReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadSyntheticTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2341,6 +2700,80 @@ func (a *Client) UpdateService(params *UpdateServiceParams, opts ...ClientOption
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateServiceDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateSyntheticGlobalVariable update synthetic global variable API
+*/
+func (a *Client) UpdateSyntheticGlobalVariable(params *UpdateSyntheticGlobalVariableParams, opts ...ClientOption) (*UpdateSyntheticGlobalVariableOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateSyntheticGlobalVariableParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateSyntheticGlobalVariable",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/synthetic-global-variables/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateSyntheticGlobalVariableReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateSyntheticGlobalVariableOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateSyntheticGlobalVariableDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateSyntheticTest update synthetic test API
+*/
+func (a *Client) UpdateSyntheticTest(params *UpdateSyntheticTestParams, opts ...ClientOption) (*UpdateSyntheticTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateSyntheticTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateSyntheticTest",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/synthetic-tests/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateSyntheticTestReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateSyntheticTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
