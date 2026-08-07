@@ -3,9 +3,7 @@
 ## Unreleased
 
 ### Added
-* Restore support for resource `unstable/config/SyntheticTest`, dropped from the client in v1.32.0. Configures HTTP, DNS, TCP, and TLS probes that run from a set of locations on a schedule, with per-type assertions, retry config, and optional alerting on failures.
-* Restore support for resource `unstable/config/SyntheticGlobalVariable`, also dropped in v1.32.0. Holds values shared across synthetic tests.
-* Add OAuth2 client-credentials and resource-owner-password, API token, and mTLS client-certificate authentication to `unstable/config/SyntheticTest` HTTP tests, and mTLS client certificates to TLS tests.
+* Add support for resource `unstable/config/SyntheticTest`. Configures HTTP, DNS, TCP, and TLS probes that run from a set of locations on a schedule, with per-type assertions, retry config, and optional alerting on failures.
 * Add a `dashboards:createFromClassic` endpoint to `unstable/config`, which converts raw classic (Grafana) dashboard JSON and creates the result as a standard Dashboard in one call.
 * Add `severity` to `v1/state` rule evaluations, distinguishing hard evaluation failures from non-fatal warnings, and an `include_warnings` query parameter on the rule evaluation list endpoint. Both are available to library consumers only; the `rule-evaluations list` command does not expose them.
 
