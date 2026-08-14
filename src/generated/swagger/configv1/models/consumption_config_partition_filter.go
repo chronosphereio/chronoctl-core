@@ -20,7 +20,7 @@ import (
 type ConsumptionConfigPartitionFilter struct {
 
 	// operator
-	Operator FilterOperator `json:"operator,omitempty"`
+	Operator PartitionFilterOperator `json:"operator,omitempty"`
 
 	// Conditions for the query to match.
 	Conditions []*PartitionFilterCondition `json:"conditions"`

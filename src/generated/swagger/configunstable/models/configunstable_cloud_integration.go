@@ -42,21 +42,15 @@ type ConfigunstableCloudIntegration struct {
 	// state
 	State ConfigunstableCloudIntegrationState `json:"state,omitempty"`
 
-	// provider type
-	ProviderType ConfigunstableCloudIntegrationType `json:"provider_type,omitempty"`
-
-	// Slug of the ExternalConnection used for credentials. Optional — providers
-	// that use workload identity (e.g. GCP) leave this empty.
+	// Slug of the ExternalConnection used for credentials. Optional depending on
+	// the provider.
 	ExternalConnectionSlug string `json:"external_connection_slug,omitempty"`
 
-	// gcp
-	Gcp *CloudintegrationconfigGcpConfig `json:"gcp,omitempty"`
+	// Provider-specific configuration. Structure depends on provider_type.
+	ProviderConfig interface{} `json:"provider_config,omitempty"`
 
-	// mongodb atlas metrics
-	MongodbAtlasMetrics *CloudintegrationconfigMongoDbAtlasMetricsConfig `json:"mongodb_atlas_metrics,omitempty"`
-
-	// cloudflare
-	Cloudflare *CloudintegrationconfigCloudflareConfig `json:"cloudflare,omitempty"`
+	// Required on create/update. Identifies the cloud provider.
+	ProviderType string `json:"provider_type,omitempty"`
 }
 
 // Validate validates this configunstable cloud integration
@@ -72,22 +66,6 @@ func (m *ConfigunstableCloudIntegration) Validate(formats strfmt.Registry) error
 	}
 
 	if err := m.validateState(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateProviderType(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateGcp(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateMongodbAtlasMetrics(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateCloudflare(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -138,80 +116,6 @@ func (m *ConfigunstableCloudIntegration) validateState(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *ConfigunstableCloudIntegration) validateProviderType(formats strfmt.Registry) error {
-	if swag.IsZero(m.ProviderType) { // not required
-		return nil
-	}
-
-	if err := m.ProviderType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("provider_type")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("provider_type")
-		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCloudIntegration) validateGcp(formats strfmt.Registry) error {
-	if swag.IsZero(m.Gcp) { // not required
-		return nil
-	}
-
-	if m.Gcp != nil {
-		if err := m.Gcp.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("gcp")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("gcp")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCloudIntegration) validateMongodbAtlasMetrics(formats strfmt.Registry) error {
-	if swag.IsZero(m.MongodbAtlasMetrics) { // not required
-		return nil
-	}
-
-	if m.MongodbAtlasMetrics != nil {
-		if err := m.MongodbAtlasMetrics.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("mongodb_atlas_metrics")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("mongodb_atlas_metrics")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCloudIntegration) validateCloudflare(formats strfmt.Registry) error {
-	if swag.IsZero(m.Cloudflare) { // not required
-		return nil
-	}
-
-	if m.Cloudflare != nil {
-		if err := m.Cloudflare.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("cloudflare")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("cloudflare")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 // ContextValidate validate this configunstable cloud integration based on the context it is used
 func (m *ConfigunstableCloudIntegration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -225,22 +129,6 @@ func (m *ConfigunstableCloudIntegration) ContextValidate(ctx context.Context, fo
 	}
 
 	if err := m.contextValidateState(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateProviderType(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateGcp(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateMongodbAtlasMetrics(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateCloudflare(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -281,87 +169,6 @@ func (m *ConfigunstableCloudIntegration) contextValidateState(ctx context.Contex
 			return ce.ValidateName("state")
 		}
 		return err
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCloudIntegration) contextValidateProviderType(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ProviderType) { // not required
-		return nil
-	}
-
-	if err := m.ProviderType.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("provider_type")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("provider_type")
-		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCloudIntegration) contextValidateGcp(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Gcp != nil {
-
-		if swag.IsZero(m.Gcp) { // not required
-			return nil
-		}
-
-		if err := m.Gcp.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("gcp")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("gcp")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCloudIntegration) contextValidateMongodbAtlasMetrics(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.MongodbAtlasMetrics != nil {
-
-		if swag.IsZero(m.MongodbAtlasMetrics) { // not required
-			return nil
-		}
-
-		if err := m.MongodbAtlasMetrics.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("mongodb_atlas_metrics")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("mongodb_atlas_metrics")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCloudIntegration) contextValidateCloudflare(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Cloudflare != nil {
-
-		if swag.IsZero(m.Cloudflare) { // not required
-			return nil
-		}
-
-		if err := m.Cloudflare.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("cloudflare")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("cloudflare")
-			}
-			return err
-		}
 	}
 
 	return nil

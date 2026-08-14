@@ -503,6 +503,13 @@ spec:
         # Cloudflare API Token. Accepts User API Tokens (cfut_ prefix) and
         # Account API Tokens (cfat_ prefix).
         api_token: <string>
+    datadog:
+        # Datadog API key.
+        api_key: <string>
+        # Datadog application key.
+        app_key: <string>
+        # Datadog site, e.g. "datadoghq.com" (default) or "datadoghq.eu".
+        site: <string>
     mongodb_atlas:
         # Service Account client ID.
         client_id: <string>

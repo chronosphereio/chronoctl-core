@@ -42,6 +42,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewSLOCmd())
 	root.AddCommand(NewServiceAccountCmd())
 	root.AddCommand(NewServiceAttributeCmd())
+	root.AddCommand(NewSyntheticTestCmd())
 	root.AddCommand(NewTeamCmd())
 	root.AddCommand(NewTraceBehaviorCmd())
 	root.AddCommand(NewTraceBehaviorConfigCmd())
@@ -511,6 +512,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateServiceAttribute(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		SyntheticTestTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*SyntheticTest)
+			if !ok {
+				return types.WrongObjectErr((&SyntheticTest{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateSyntheticTest(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

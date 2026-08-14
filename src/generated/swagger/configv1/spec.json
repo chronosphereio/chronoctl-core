@@ -88,6 +88,30 @@
       },
       "type": "object"
     },
+    "BodyHashAssertionAlgorithm": {
+      "enum": [
+        "MD5",
+        "SHA1",
+        "SHA256"
+      ],
+      "type": "string"
+    },
+    "BodyJSONPathAssertionMatchType": {
+      "enum": [
+        "FIRST_ELEMENT",
+        "EVERY_ELEMENT",
+        "AT_LEAST_ONE_ELEMENT",
+        "SERIALIZATION"
+      ],
+      "type": "string"
+    },
+    "BodyJSONSchemaAssertionSchemaDraft": {
+      "enum": [
+        "DRAFT_06",
+        "DRAFT_07"
+      ],
+      "type": "string"
+    },
     "ConditionOp": {
       "enum": [
         "GEQ",
@@ -479,6 +503,22 @@
       },
       "type": "object"
     },
+    "ConfigV1UpdateSyntheticTestBody": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configv1SyntheticTest"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the SyntheticTest will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the SyntheticTest does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the SyntheticTest. If the specified configuration is valid, the endpoint returns a partial response without the SyntheticTest. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateTeamBody": {
       "properties": {
         "team": {
@@ -542,6 +582,14 @@
         }
       },
       "type": "object"
+    },
+    "ConnectionAssertionConnectionStatus": {
+      "enum": [
+        "ESTABLISHED",
+        "REFUSED",
+        "TIMEOUT"
+      ],
+      "type": "string"
     },
     "ConstructedLabelValueDefinition": {
       "properties": {
@@ -685,7 +733,7 @@
     "ConsumptionConfigPartitionFilter": {
       "properties": {
         "operator": {
-          "$ref": "#/definitions/FilterOperator"
+          "$ref": "#/definitions/PartitionFilterOperator"
         },
         "conditions": {
           "description": "Conditions for the query to match.",
@@ -919,6 +967,26 @@
       },
       "type": "object"
     },
+    "DnsRecordAssertionMatchScope": {
+      "enum": [
+        "EVERY_AVAILABLE",
+        "AT_LEAST_ONE"
+      ],
+      "type": "string"
+    },
+    "DnsRecordAssertionRecordType": {
+      "enum": [
+        "A",
+        "AAAA",
+        "CNAME",
+        "MX",
+        "NS",
+        "TXT",
+        "SOA",
+        "SRV"
+      ],
+      "type": "string"
+    },
     "DropRuleConditionalRateBasedDrop": {
       "description": "No longer supported and cannot be used.\nDefines behavior for conditional drop policies.",
       "properties": {
@@ -997,6 +1065,23 @@
       },
       "type": "object"
     },
+    "ExternalConnectionDatadogConfig": {
+      "properties": {
+        "api_key": {
+          "description": "Datadog API key.",
+          "type": "string"
+        },
+        "app_key": {
+          "description": "Datadog application key.",
+          "type": "string"
+        },
+        "site": {
+          "description": "Datadog site, e.g. \"datadoghq.com\" (default) or \"datadoghq.eu\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ExternalConnectionMongoDbAtlasConfig": {
       "properties": {
         "client_id": {
@@ -1018,13 +1103,6 @@
         }
       },
       "type": "object"
-    },
-    "FilterOperator": {
-      "enum": [
-        "IN",
-        "NOT_IN"
-      ],
-      "type": "string"
     },
     "GaugeAggregationType": {
       "enum": [
@@ -1137,6 +1215,80 @@
         "PARENT_OPERATION",
         "ROOT_SERVICE",
         "ROOT_OPERATION"
+      ],
+      "type": "string"
+    },
+    "HttpTestConfigContentType": {
+      "description": "Content type sent with the request. Mapped to a Content-Type request\nheader. Validation rejects setting this alongside an explicit\nContent-Type header.",
+      "enum": [
+        "CONTENT_TYPE_APPLICATION_JSON",
+        "CONTENT_TYPE_APPLICATION_X_WWW_FORM_URLENCODED",
+        "CONTENT_TYPE_TEXT_PLAIN",
+        "CONTENT_TYPE_TEXT_XML",
+        "CONTENT_TYPE_TEXT_HTML",
+        "CONTENT_TYPE_MULTIPART_FORM_DATA",
+        "CONTENT_TYPE_APPLICATION_OCTET_STREAM",
+        "CONTENT_TYPE_GRAPHQL"
+      ],
+      "type": "string"
+    },
+    "HttpTestConfigCookie": {
+      "description": "Single cookie sent with the request. All cookies are combined into one\nCookie request header (\"name=value; name2=value2\") in order. Duplicate\nnames (case-sensitive, unlike headers) are rejected by validation, as\nis setting cookies alongside an explicit Cookie header.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "HttpTestConfigHeader": {
+      "description": "Single HTTP request header. Modeled as a message rather than\nmap\u003cstring,string\u003e to preserve order and leave room for future\nper-header fields. Duplicate names (case-insensitive) are rejected\nby validation.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "HttpTestConfigHttpAuth": {
+      "description": "Any combination of these auth mechanisms may be set; additional auth types\nwill be added as siblings. Validation checks the required fields of\nwhichever methods are set.",
+      "properties": {
+        "basic_auth": {
+          "$ref": "#/definitions/configv1BasicAuth"
+        },
+        "oauth2_client_credentials": {
+          "$ref": "#/definitions/configv1OAuth2ClientCredentials"
+        },
+        "oauth2_resource_owner_password": {
+          "$ref": "#/definitions/configv1OAuth2ResourceOwnerPassword"
+        },
+        "api_token_auth": {
+          "$ref": "#/definitions/configv1APITokenAuth"
+        },
+        "client_certificate": {
+          "$ref": "#/definitions/configv1ClientCertificate"
+        }
+      },
+      "type": "object"
+    },
+    "HttpTestConfigHttpMethod": {
+      "enum": [
+        "GET",
+        "POST"
+      ],
+      "type": "string"
+    },
+    "HttpTestConfigHttpVersion": {
+      "description": "HTTP protocol version used for the request. When unset, the default is to\nnegotiate HTTP/2 with fallback to HTTP/1.1.",
+      "enum": [
+        "HTTP_VERSION_HTTP_1_1",
+        "HTTP_VERSION_HTTP_2"
       ],
       "type": "string"
     },
@@ -1879,6 +2031,13 @@
       },
       "type": "object"
     },
+    "PartitionFilterOperator": {
+      "enum": [
+        "IN",
+        "NOT_IN"
+      ],
+      "type": "string"
+    },
     "PerOperationSamplingStrategiesPerOperationSamplingStrategy": {
       "properties": {
         "operation": {
@@ -2067,6 +2226,13 @@
         "USER",
         "ESCALATION",
         "SCHEDULE"
+      ],
+      "type": "string"
+    },
+    "ResponseTimeAssertionScope": {
+      "enum": [
+        "INCLUDING_DNS",
+        "WITHOUT_DNS"
       ],
       "type": "string"
     },
@@ -2400,6 +2566,609 @@
       ],
       "type": "string"
     },
+    "SyntheticTestBodyAssertion": {
+      "description": "Asserts that the raw response body matches the target string.",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestBodyAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestBodyHashAssertion": {
+      "description": "Asserts that a hash of the response body equals the target.",
+      "properties": {
+        "algorithm": {
+          "$ref": "#/definitions/BodyHashAssertionAlgorithm"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyJSONPathAssertion": {
+      "description": "Asserts that a value extracted via JSONPath matches the target.\nmatch_type controls how multiple matches are evaluated.",
+      "properties": {
+        "json_path": {
+          "type": "string"
+        },
+        "match_type": {
+          "$ref": "#/definitions/BodyJSONPathAssertionMatchType"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestBodyJSONPathAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyJSONPathAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "IS_UNDEFINED"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestBodyJSONSchemaAssertion": {
+      "description": "Asserts that the JSON response body conforms to a JSON schema.",
+      "properties": {
+        "draft": {
+          "$ref": "#/definitions/BodyJSONSchemaAssertionSchemaDraft"
+        },
+        "schema": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyXPathAssertion": {
+      "description": "Asserts that a value extracted via XPath 1.0 matches the target.",
+      "properties": {
+        "xpath": {
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestBodyXPathAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestBodyXPathAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "IS_UNDEFINED"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestCertificateAssertion": {
+      "description": "Asserts on the leaf certificate's expiration window, in days.",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestCertificateAssertionOperator"
+        },
+        "target_days": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestCertificateAssertionOperator": {
+      "enum": [
+        "EXPIRES_IN_MORE_THAN_DAYS",
+        "EXPIRES_IN_LESS_THAN_DAYS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestCertificatePropertyAssertion": {
+      "description": "Asserts on a named property of the leaf certificate, e.g. subject, issuer,\nor a Subject Alternative Name.",
+      "properties": {
+        "property": {
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestCertificatePropertyAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestCertificatePropertyAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestConnectionAssertion": {
+      "description": "Asserts on the outcome of the TCP connection attempt. Only the EQUALS\noperator is supported (e.g. connection is Established).",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestConnectionAssertionOperator"
+        },
+        "target": {
+          "$ref": "#/definitions/ConnectionAssertionConnectionStatus"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestConnectionAssertionOperator": {
+      "enum": [
+        "EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestDnsRecordAssertion": {
+      "description": "Asserts on DNS records returned for the query. match_scope selects whether\nthe operator must hold for every record of record_type or for at least\none. SOA and SRV record types are only valid with AT_LEAST_ONE.",
+      "properties": {
+        "match_scope": {
+          "$ref": "#/definitions/DnsRecordAssertionMatchScope"
+        },
+        "record_type": {
+          "$ref": "#/definitions/DnsRecordAssertionRecordType"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestDnsRecordAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestDnsRecordAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestDnsTestConfig": {
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "dns_server": {
+          "description": "Optional explicit nameserver to query; runner default resolver if unset.",
+          "type": "string"
+        },
+        "dns_server_port": {
+          "description": "Nameserver port; required when dns_server is set, rejected without it.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestDnsTestConfigAssertion"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestDnsTestConfigAssertion": {
+      "description": "Wraps the assertion types valid for DNS tests. Exactly one assertion\nfield must be set per entry; enforced by validation.",
+      "properties": {
+        "response_time_assertion": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
+        },
+        "dns_record_assertion": {
+          "$ref": "#/definitions/SyntheticTestDnsRecordAssertion"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestHeaderAssertion": {
+      "description": "Asserts that the named response header satisfies the operator.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestHeaderAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestHeaderAssertionOperator": {
+      "enum": [
+        "CONTAINS",
+        "NOT_CONTAINS",
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS",
+        "NOT_EXISTS",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUAL",
+        "GREATER_THAN",
+        "GREATER_THAN_OR_EQUAL"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestHttpTestConfig": {
+      "properties": {
+        "method": {
+          "$ref": "#/definitions/HttpTestConfigHttpMethod"
+        },
+        "url": {
+          "type": "string"
+        },
+        "authentication": {
+          "$ref": "#/definitions/HttpTestConfigHttpAuth"
+        },
+        "headers": {
+          "items": {
+            "$ref": "#/definitions/HttpTestConfigHeader"
+          },
+          "type": "array"
+        },
+        "request_body": {
+          "format": "byte",
+          "type": "string"
+        },
+        "query_params": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "follow_redirects": {
+          "type": "boolean"
+        },
+        "content_type": {
+          "$ref": "#/definitions/HttpTestConfigContentType"
+        },
+        "http_version": {
+          "$ref": "#/definitions/HttpTestConfigHttpVersion"
+        },
+        "max_redirects": {
+          "description": "optional — 0-10; defaults to 10 when follow_redirects is set",
+          "format": "int32",
+          "type": "integer"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestHttpTestConfigAssertion"
+          },
+          "type": "array"
+        },
+        "allow_insecure_tls": {
+          "description": "Skip TLS certificate verification for HTTPS requests.",
+          "type": "boolean"
+        },
+        "max_response_body_bytes": {
+          "description": "Cap on captured response-body size in bytes; 0 means use the default.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "do_not_save_response_body_on_failure": {
+          "description": "When set, the captured body is not persisted on failed executions.",
+          "type": "boolean"
+        },
+        "cookies": {
+          "items": {
+            "$ref": "#/definitions/HttpTestConfigCookie"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestHttpTestConfigAssertion": {
+      "description": "Wraps the assertion types valid for HTTP tests. Exactly one assertion\nfield must be set per entry; enforced by validation. Each test type\ndeclares its own Assertion wrapper enumerating the subset of\nSyntheticTest-level assertion messages valid for it.",
+      "properties": {
+        "status_code_assertion": {
+          "$ref": "#/definitions/SyntheticTestStatusCodeAssertion"
+        },
+        "response_time_assertion": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
+        },
+        "body_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyAssertion"
+        },
+        "body_json_path_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyJSONPathAssertion"
+        },
+        "body_json_schema_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyJSONSchemaAssertion"
+        },
+        "body_xpath_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyXPathAssertion"
+        },
+        "body_hash_assertion": {
+          "$ref": "#/definitions/SyntheticTestBodyHashAssertion"
+        },
+        "header_assertion": {
+          "$ref": "#/definitions/SyntheticTestHeaderAssertion"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestMonitorConfig": {
+      "description": "Alerting configuration for the test. An alert fires when at least\nmin_failing_locations locations are simultaneously failing within the\nfailing-duration window, and resolves automatically (no separate resolve\nduration).",
+      "properties": {
+        "min_failing_locations": {
+          "description": "Peak count of simultaneously-failing locations within the window\nrequired to fire. Must be between 1 and the number of test locations.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "failing_duration_secs": {
+          "description": "Failure-duration window in seconds. 0 means alert on first failure.\nOtherwise must be at least interval_secs.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Annotations attached to the generated alert.",
+          "type": "object"
+        },
+        "notification_policy_slug": {
+          "description": "Notification policy that routes the generated alert.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestNetworkHopsAssertion": {
+      "description": "Asserts on the number of network hops to the target.",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestNetworkHopsAssertionOperator"
+        },
+        "target": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestNetworkHopsAssertionOperator": {
+      "enum": [
+        "EQUALS",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUAL",
+        "GREATER_THAN",
+        "GREATER_THAN_OR_EQUAL"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestResponseTimeAssertion": {
+      "description": "Asserts that the request response time is below the target, in\nmilliseconds. Scope selects whether DNS resolution time is included.",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertionOperator"
+        },
+        "target_ms": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "$ref": "#/definitions/ResponseTimeAssertionScope"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestResponseTimeAssertionOperator": {
+      "enum": [
+        "LESS_THAN"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestRetryConfig": {
+      "description": "Per-location retry behavior after a failed attempt. No retries when\nunset.",
+      "properties": {
+        "max_retries": {
+          "description": "Number of retries after the initial failed attempt (0-3). 0 or unset\nmeans no retry.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "retry_interval_ms": {
+          "description": "Delay between attempts in milliseconds (up to 5000). 0 is treated as\nunset and defaults to 300 when max_retries is set.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestStatusCodeAssertion": {
+      "description": "Asserts that the HTTP response status code matches the target.\n`target` is a string so regex patterns (e.g. \"2..\") can share the field\nwith literal codes (e.g. \"200\").",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestStatusCodeAssertionOperator"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestStatusCodeAssertionOperator": {
+      "enum": [
+        "EQUALS",
+        "NOT_EQUALS",
+        "REGEX_EQUALS",
+        "REGEX_NOT_EQUALS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestTcpTestConfig": {
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestTcpTestConfigAssertion"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestTcpTestConfigAssertion": {
+      "description": "Wraps the assertion types valid for TCP tests. Exactly one assertion\nfield must be set per entry; enforced by validation.",
+      "properties": {
+        "response_time_assertion": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
+        },
+        "network_hops_assertion": {
+          "$ref": "#/definitions/SyntheticTestNetworkHopsAssertion"
+        },
+        "connection_assertion": {
+          "$ref": "#/definitions/SyntheticTestConnectionAssertion"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestTestLocation": {
+      "enum": [
+        "GCP_US_OREGON",
+        "GCP_US_VIRGINIA"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestTestStatus": {
+      "enum": [
+        "ENABLED",
+        "PAUSED"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestTestType": {
+      "enum": [
+        "HTTP",
+        "DNS",
+        "TCP",
+        "TLS"
+      ],
+      "type": "string"
+    },
+    "SyntheticTestTlsTestConfig": {
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "server_name": {
+          "description": "SNI server name; defaults to host when unset.",
+          "type": "string"
+        },
+        "accept_self_signed": {
+          "type": "boolean"
+        },
+        "fail_on_incomplete_chain": {
+          "type": "boolean"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestTlsTestConfigAssertion"
+          },
+          "type": "array"
+        },
+        "authentication": {
+          "$ref": "#/definitions/TlsTestConfigTlsAuth"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestTlsTestConfigAssertion": {
+      "description": "Wraps the assertion types valid for TLS tests. Exactly one assertion\nfield must be set per entry; enforced by validation.",
+      "properties": {
+        "response_time_assertion": {
+          "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
+        },
+        "certificate_assertion": {
+          "$ref": "#/definitions/SyntheticTestCertificateAssertion"
+        },
+        "cert_property_assertion": {
+          "$ref": "#/definitions/SyntheticTestCertificatePropertyAssertion"
+        },
+        "tls_version_assertion": {
+          "$ref": "#/definitions/SyntheticTestTlsVersionAssertion"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestTlsVersionAssertion": {
+      "description": "Asserts on the negotiated TLS version. bound selects whether the assertion\nconstrains the maximum or minimum acceptable version.",
+      "properties": {
+        "bound": {
+          "$ref": "#/definitions/TlsVersionAssertionBound"
+        },
+        "operator": {
+          "$ref": "#/definitions/SyntheticTestTlsVersionAssertionOperator"
+        },
+        "target": {
+          "$ref": "#/definitions/TlsVersionAssertionVersion"
+        }
+      },
+      "type": "object"
+    },
+    "SyntheticTestTlsVersionAssertionOperator": {
+      "enum": [
+        "EQUALS",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUAL",
+        "GREATER_THAN",
+        "GREATER_THAN_OR_EQUAL"
+      ],
+      "type": "string"
+    },
     "ThresholdInstantRate": {
       "properties": {
         "fixed_value_per_sec": {
@@ -2419,6 +3188,31 @@
         }
       },
       "type": "object"
+    },
+    "TlsTestConfigTlsAuth": {
+      "description": "Credentials presented during the handshake.",
+      "properties": {
+        "client_certificate": {
+          "$ref": "#/definitions/configv1ClientCertificate"
+        }
+      },
+      "type": "object"
+    },
+    "TlsVersionAssertionBound": {
+      "enum": [
+        "MAX",
+        "MIN"
+      ],
+      "type": "string"
+    },
+    "TlsVersionAssertionVersion": {
+      "enum": [
+        "TLS_1_0",
+        "TLS_1_1",
+        "TLS_1_2",
+        "TLS_1_3"
+      ],
+      "type": "string"
     },
     "TraceBehaviorConfigMainBehaviorAssignment": {
       "properties": {
@@ -2864,6 +3658,18 @@
       ],
       "type": "string"
     },
+    "configv1APITokenAuth": {
+      "description": "APITokenAuth configures static API-token authentication: each request\ncarries a `\u003ckey\u003e: \u003ctoken\u003e` header, where key is the header name (e.g.\n\"Authorization\", \"X-API-Key\") and token is the full header value (e.g.\n\"Bearer \u003csecret\u003e\"), treated as a secret in its entirety. Top-level so\nfuture non-HTTP test types can reuse it.",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configv1AggregationType": {
       "enum": [
         "LAST",
@@ -2938,6 +3744,18 @@
       },
       "type": "object"
     },
+    "configv1BasicAuth": {
+      "description": "BasicAuth carries HTTP basic auth credentials used by a SyntheticTest.\nTop-level so future non-HTTP test types can reuse it.",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configv1Bucket": {
       "properties": {
         "slug": {
@@ -2977,6 +3795,20 @@
         },
         "notification_policy_slug": {
           "description": "Slug of the notification policy used by default for monitors in this bucket.\nThis is optional if the bucket does not contain monitors or all of its monitors explicitly reference a policy.\nThis policy takes precedence over a bucket-owned notification policy.\nThis does not override the policy used when a monitor explicitly references a policy.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ClientCertificate": {
+      "description": "ClientCertificate is the certificate presented during the TLS handshake\n(mTLS).",
+      "properties": {
+        "certificate": {
+          "description": "PEM leaf certificate plus any intermediates.",
+          "type": "string"
+        },
+        "private_key": {
+          "description": "Matching unencrypted PKCS#8/PKCS#1/SEC1 PEM key. Write-only: reads return\n**REDACTED**, and writing that sentinel back preserves the stored key.",
           "type": "string"
         }
       },
@@ -3767,6 +4599,26 @@
       },
       "type": "object"
     },
+    "configv1CreateSyntheticTestRequest": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configv1SyntheticTest"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the SyntheticTest. If the specified configuration is valid, the endpoint returns a partial response without the SyntheticTest. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateSyntheticTestResponse": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configv1SyntheticTest"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateTeamRequest": {
       "properties": {
         "team": {
@@ -4075,6 +4927,9 @@
     "configv1DeleteServiceAttributeResponse": {
       "type": "object"
     },
+    "configv1DeleteSyntheticTestResponse": {
+      "type": "object"
+    },
     "configv1DeleteTeamResponse": {
       "type": "object"
     },
@@ -4303,6 +5158,9 @@
         },
         "sendgrid": {
           "$ref": "#/definitions/ExternalConnectionSendgridConfig"
+        },
+        "datadog": {
+          "$ref": "#/definitions/ExternalConnectionDatadogConfig"
         }
       },
       "type": "object"
@@ -4908,6 +5766,20 @@
         "services": {
           "items": {
             "$ref": "#/definitions/configv1Service"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListSyntheticTestsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "synthetic_tests": {
+          "items": {
+            "$ref": "#/definitions/configv1SyntheticTest"
           },
           "type": "array"
         }
@@ -5835,6 +6707,74 @@
       },
       "type": "object"
     },
+    "configv1OAuth2ClientCredentials": {
+      "description": "OAuth2ClientCredentials configures the OAuth 2.0 client-credentials grant.",
+      "properties": {
+        "common": {
+          "$ref": "#/definitions/configv1OAuth2Common"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "client_secret": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1OAuth2Common": {
+      "description": "OAuth2Common holds the OAuth 2.0 token-endpoint parameters shared by the\ngrants below. Top-level so future non-HTTP test types can reuse it.",
+      "properties": {
+        "access_token_url": {
+          "type": "string"
+        },
+        "token_auth_method": {
+          "$ref": "#/definitions/configv1OAuth2TokenAuthMethod"
+        },
+        "audience": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "scopes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1OAuth2ResourceOwnerPassword": {
+      "description": "OAuth2ResourceOwnerPassword configures the OAuth 2.0 resource-owner\npassword-credentials grant. client_id/client_secret are optional, set when\nthe token endpoint also authenticates the client.",
+      "properties": {
+        "common": {
+          "$ref": "#/definitions/configv1OAuth2Common"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "client_secret": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1OAuth2TokenAuthMethod": {
+      "description": "OAuth2TokenAuthMethod selects how client credentials are sent to the OAuth\n2.0 token endpoint. OTAM_INVALID (unset) defaults to an HTTP Basic auth\nheader (RFC 6749 section 2.3.1).",
+      "enum": [
+        "OTAM_BASIC_AUTH_HEADER",
+        "OTAM_REQUEST_BODY"
+      ],
+      "type": "string"
+    },
     "configv1OptionalDouble": {
       "properties": {
         "value": {
@@ -6133,6 +7073,14 @@
       "properties": {
         "service": {
           "$ref": "#/definitions/configv1Service"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadSyntheticTestResponse": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configv1SyntheticTest"
         }
       },
       "type": "object"
@@ -6647,6 +7595,86 @@
         "description": {
           "description": "A description of the service.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1SyntheticTest": {
+      "properties": {
+        "name": {
+          "description": "The name of the SyntheticTest. You can modify this value after the SyntheticTest is created.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "The unique identifier of the SyntheticTest. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the SyntheticTest is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the SyntheticTest was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the SyntheticTest was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "test_type": {
+          "$ref": "#/definitions/SyntheticTestTestType"
+        },
+        "interval_secs": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "locations": {
+          "items": {
+            "$ref": "#/definitions/SyntheticTestTestLocation"
+          },
+          "type": "array"
+        },
+        "http_test": {
+          "$ref": "#/definitions/SyntheticTestHttpTestConfig"
+        },
+        "status": {
+          "$ref": "#/definitions/SyntheticTestTestStatus"
+        },
+        "dns_test": {
+          "$ref": "#/definitions/SyntheticTestDnsTestConfig"
+        },
+        "tcp_test": {
+          "$ref": "#/definitions/SyntheticTestTcpTestConfig"
+        },
+        "tls_test": {
+          "$ref": "#/definitions/SyntheticTestTlsTestConfig"
+        },
+        "description": {
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "timeout_secs": {
+          "description": "optional — 1-60s; defaults to 60s",
+          "format": "int32",
+          "type": "integer"
+        },
+        "monitor_config": {
+          "$ref": "#/definitions/SyntheticTestMonitorConfig"
+        },
+        "retry_config": {
+          "$ref": "#/definitions/SyntheticTestRetryConfig"
+        },
+        "collection_slug": {
+          "description": "Slug of the collection that owns the test. Required if `collection` isn't\nset.",
+          "type": "string"
+        },
+        "collection": {
+          "$ref": "#/definitions/configv1CollectionReference"
         }
       },
       "type": "object"
@@ -7305,6 +8333,14 @@
         },
         "service_attribute": {
           "$ref": "#/definitions/configv1ServiceAttribute"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateSyntheticTestResponse": {
+      "properties": {
+        "synthetic_test": {
+          "$ref": "#/definitions/configv1SyntheticTest"
         }
       },
       "type": "object"
@@ -10316,7 +11352,8 @@
                 "OPSGENIE",
                 "CLOUDFLARE",
                 "MONGODB_ATLAS",
-                "SENDGRID"
+                "SENDGRID",
+                "DATADOG"
               ],
               "type": "string"
             },
@@ -14897,6 +15934,314 @@
         },
         "tags": [
           "SLO"
+        ]
+      }
+    },
+    "/api/v1/config/synthetic-tests": {
+      "get": {
+        "operationId": "ListSyntheticTests",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any SyntheticTest with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any SyntheticTest with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by test_type, where any SyntheticTest with a matching test_type in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "enum": [
+                "HTTP",
+                "DNS",
+                "TCP",
+                "TLS"
+              ],
+              "type": "string"
+            },
+            "name": "test_types",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "in": "query",
+            "items": {
+              "enum": [
+                "ENABLED",
+                "PAUSED"
+              ],
+              "type": "string"
+            },
+            "name": "statuses",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter returned tests by the collections that own them.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "collection_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter returned tests by the teams that own the collections they belong to.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "team_slugs",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListSyntheticTestsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
+        ]
+      },
+      "post": {
+        "operationId": "CreateSyntheticTest",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateSyntheticTestRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created SyntheticTest.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateSyntheticTestResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the SyntheticTest because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the SyntheticTest because there is a conflict with an existing SyntheticTest.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
+        ]
+      }
+    },
+    "/api/v1/config/synthetic-tests/{slug}": {
+      "delete": {
+        "operationId": "DeleteSyntheticTest",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteSyntheticTestResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the SyntheticTest because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the SyntheticTest because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
+        ]
+      },
+      "get": {
+        "operationId": "ReadSyntheticTest",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadSyntheticTestResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the SyntheticTest because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateSyntheticTest",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateSyntheticTestBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated SyntheticTest.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateSyntheticTestResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the SyntheticTest because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the SyntheticTest because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the SyntheticTest because there is a conflict with an existing SyntheticTest.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "SyntheticTest"
         ]
       }
     },

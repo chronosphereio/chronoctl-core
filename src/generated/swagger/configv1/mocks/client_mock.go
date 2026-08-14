@@ -635,6 +635,26 @@ func (mr *MockClientServiceMockRecorder) CreateServiceAttribute(params interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateServiceAttribute", reflect.TypeOf((*MockClientService)(nil).CreateServiceAttribute), varargs...)
 }
 
+// CreateSyntheticTest mocks base method.
+func (m *MockClientService) CreateSyntheticTest(params *operations.CreateSyntheticTestParams, opts ...operations.ClientOption) (*operations.CreateSyntheticTestOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateSyntheticTest", varargs...)
+	ret0, _ := ret[0].(*operations.CreateSyntheticTestOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateSyntheticTest indicates an expected call of CreateSyntheticTest.
+func (mr *MockClientServiceMockRecorder) CreateSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSyntheticTest", reflect.TypeOf((*MockClientService)(nil).CreateSyntheticTest), varargs...)
+}
+
 // CreateTeam mocks base method.
 func (m *MockClientService) CreateTeam(params *operations.CreateTeamParams, opts ...operations.ClientOption) (*operations.CreateTeamOK, error) {
 	m.ctrl.T.Helper()
@@ -1355,6 +1375,26 @@ func (mr *MockClientServiceMockRecorder) DeleteServiceAttribute(params interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteServiceAttribute", reflect.TypeOf((*MockClientService)(nil).DeleteServiceAttribute), varargs...)
 }
 
+// DeleteSyntheticTest mocks base method.
+func (m *MockClientService) DeleteSyntheticTest(params *operations.DeleteSyntheticTestParams, opts ...operations.ClientOption) (*operations.DeleteSyntheticTestOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteSyntheticTest", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteSyntheticTestOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteSyntheticTest indicates an expected call of DeleteSyntheticTest.
+func (mr *MockClientServiceMockRecorder) DeleteSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSyntheticTest", reflect.TypeOf((*MockClientService)(nil).DeleteSyntheticTest), varargs...)
+}
+
 // DeleteTeam mocks base method.
 func (m *MockClientService) DeleteTeam(params *operations.DeleteTeamParams, opts ...operations.ClientOption) (*operations.DeleteTeamOK, error) {
 	m.ctrl.T.Helper()
@@ -1973,6 +2013,26 @@ func (mr *MockClientServiceMockRecorder) ListServices(params interface{}, opts .
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListServices", reflect.TypeOf((*MockClientService)(nil).ListServices), varargs...)
+}
+
+// ListSyntheticTests mocks base method.
+func (m *MockClientService) ListSyntheticTests(params *operations.ListSyntheticTestsParams, opts ...operations.ClientOption) (*operations.ListSyntheticTestsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListSyntheticTests", varargs...)
+	ret0, _ := ret[0].(*operations.ListSyntheticTestsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListSyntheticTests indicates an expected call of ListSyntheticTests.
+func (mr *MockClientServiceMockRecorder) ListSyntheticTests(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSyntheticTests", reflect.TypeOf((*MockClientService)(nil).ListSyntheticTests), varargs...)
 }
 
 // ListTeams mocks base method.
@@ -2673,6 +2733,26 @@ func (mr *MockClientServiceMockRecorder) ReadServiceAttribute(params interface{}
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadServiceAttribute", reflect.TypeOf((*MockClientService)(nil).ReadServiceAttribute), varargs...)
+}
+
+// ReadSyntheticTest mocks base method.
+func (m *MockClientService) ReadSyntheticTest(params *operations.ReadSyntheticTestParams, opts ...operations.ClientOption) (*operations.ReadSyntheticTestOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadSyntheticTest", varargs...)
+	ret0, _ := ret[0].(*operations.ReadSyntheticTestOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadSyntheticTest indicates an expected call of ReadSyntheticTest.
+func (mr *MockClientServiceMockRecorder) ReadSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadSyntheticTest", reflect.TypeOf((*MockClientService)(nil).ReadSyntheticTest), varargs...)
 }
 
 // ReadTeam mocks base method.
@@ -3385,6 +3465,26 @@ func (mr *MockClientServiceMockRecorder) UpdateServiceAttribute(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateServiceAttribute", reflect.TypeOf((*MockClientService)(nil).UpdateServiceAttribute), varargs...)
+}
+
+// UpdateSyntheticTest mocks base method.
+func (m *MockClientService) UpdateSyntheticTest(params *operations.UpdateSyntheticTestParams, opts ...operations.ClientOption) (*operations.UpdateSyntheticTestOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateSyntheticTest", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateSyntheticTestOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateSyntheticTest indicates an expected call of UpdateSyntheticTest.
+func (mr *MockClientServiceMockRecorder) UpdateSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSyntheticTest", reflect.TypeOf((*MockClientService)(nil).UpdateSyntheticTest), varargs...)
 }
 
 // UpdateTeam mocks base method.

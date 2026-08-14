@@ -21,8 +21,7 @@ type ConfigunstableBasicAuth struct {
 	// username
 	Username string `json:"username,omitempty"`
 
-	// May contain a {{VAR_NAME}} reference resolved at test execution to a
-	// SyntheticGlobalVariable value.
+	// password
 	Password string `json:"password,omitempty"`
 }
 
