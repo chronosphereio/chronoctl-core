@@ -4,7 +4,6 @@
 
 ### Added
 * Add support for resource `v1/config/SyntheticTest` and the `synthetic-tests` commands. Synthetic tests are promoted from the unstable API to v1: configures HTTP, DNS, TCP, and TLS probes that run from a set of locations on a schedule, with per-type assertions, retry config, and optional alerting on failures.
-* Add support for resource `unstable/config/SyntheticTest`. Available to library consumers only. **Deprecated**: use `v1/config/SyntheticTest` instead; the unstable synthetic test endpoints will be removed in an upcoming release.
 * Add `DATADOG` connection type and `datadog` config to `v1/config/ExternalConnection`.
 * Add a `dashboards:createFromClassic` endpoint to `unstable/config`, which converts raw classic (Grafana) dashboard JSON and creates the result as a standard Dashboard in one call.
 * Add `severity` to `v1/state` rule evaluations, distinguishing hard evaluation failures from non-fatal warnings, and an `include_warnings` query parameter on the rule evaluation list endpoint. Both are available to library consumers only; the `rule-evaluations list` command does not expose them.
