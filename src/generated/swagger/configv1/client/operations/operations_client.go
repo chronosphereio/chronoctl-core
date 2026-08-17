@@ -88,6 +88,8 @@ type ClientService interface {
 
 	CreateServiceAttribute(params *CreateServiceAttributeParams, opts ...ClientOption) (*CreateServiceAttributeOK, error)
 
+	CreateSyntheticTest(params *CreateSyntheticTestParams, opts ...ClientOption) (*CreateSyntheticTestOK, error)
+
 	CreateTeam(params *CreateTeamParams, opts ...ClientOption) (*CreateTeamOK, error)
 
 	CreateTraceBehavior(params *CreateTraceBehaviorParams, opts ...ClientOption) (*CreateTraceBehaviorOK, error)
@@ -160,6 +162,8 @@ type ClientService interface {
 
 	DeleteServiceAttribute(params *DeleteServiceAttributeParams, opts ...ClientOption) (*DeleteServiceAttributeOK, error)
 
+	DeleteSyntheticTest(params *DeleteSyntheticTestParams, opts ...ClientOption) (*DeleteSyntheticTestOK, error)
+
 	DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*DeleteTeamOK, error)
 
 	DeleteTraceBehavior(params *DeleteTraceBehaviorParams, opts ...ClientOption) (*DeleteTraceBehaviorOK, error)
@@ -221,6 +225,8 @@ type ClientService interface {
 	ListServiceAttributes(params *ListServiceAttributesParams, opts ...ClientOption) (*ListServiceAttributesOK, error)
 
 	ListServices(params *ListServicesParams, opts ...ClientOption) (*ListServicesOK, error)
+
+	ListSyntheticTests(params *ListSyntheticTestsParams, opts ...ClientOption) (*ListSyntheticTestsOK, error)
 
 	ListTeams(params *ListTeamsParams, opts ...ClientOption) (*ListTeamsOK, error)
 
@@ -292,6 +298,8 @@ type ClientService interface {
 
 	ReadServiceAttribute(params *ReadServiceAttributeParams, opts ...ClientOption) (*ReadServiceAttributeOK, error)
 
+	ReadSyntheticTest(params *ReadSyntheticTestParams, opts ...ClientOption) (*ReadSyntheticTestOK, error)
+
 	ReadTeam(params *ReadTeamParams, opts ...ClientOption) (*ReadTeamOK, error)
 
 	ReadTraceBehavior(params *ReadTraceBehaviorParams, opts ...ClientOption) (*ReadTraceBehaviorOK, error)
@@ -361,6 +369,8 @@ type ClientService interface {
 	UpdateSLO(params *UpdateSLOParams, opts ...ClientOption) (*UpdateSLOOK, error)
 
 	UpdateServiceAttribute(params *UpdateServiceAttributeParams, opts ...ClientOption) (*UpdateServiceAttributeOK, error)
+
+	UpdateSyntheticTest(params *UpdateSyntheticTestParams, opts ...ClientOption) (*UpdateSyntheticTestOK, error)
 
 	UpdateTeam(params *UpdateTeamParams, opts ...ClientOption) (*UpdateTeamOK, error)
 
@@ -1484,6 +1494,43 @@ func (a *Client) CreateServiceAttribute(params *CreateServiceAttributeParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateServiceAttributeDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateSyntheticTest create synthetic test API
+*/
+func (a *Client) CreateSyntheticTest(params *CreateSyntheticTestParams, opts ...ClientOption) (*CreateSyntheticTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateSyntheticTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateSyntheticTest",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/synthetic-tests",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateSyntheticTestReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateSyntheticTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2823,6 +2870,43 @@ func (a *Client) DeleteServiceAttribute(params *DeleteServiceAttributeParams, op
 }
 
 /*
+DeleteSyntheticTest delete synthetic test API
+*/
+func (a *Client) DeleteSyntheticTest(params *DeleteSyntheticTestParams, opts ...ClientOption) (*DeleteSyntheticTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteSyntheticTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteSyntheticTest",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/synthetic-tests/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteSyntheticTestReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteSyntheticTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteSyntheticTestDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteTeam delete team API
 */
 func (a *Client) DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*DeleteTeamOK, error) {
@@ -3966,6 +4050,43 @@ func (a *Client) ListServices(params *ListServicesParams, opts ...ClientOption) 
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListServicesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListSyntheticTests list synthetic tests API
+*/
+func (a *Client) ListSyntheticTests(params *ListSyntheticTestsParams, opts ...ClientOption) (*ListSyntheticTestsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListSyntheticTestsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListSyntheticTests",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/synthetic-tests",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListSyntheticTestsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListSyntheticTestsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListSyntheticTestsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5265,6 +5386,43 @@ func (a *Client) ReadServiceAttribute(params *ReadServiceAttributeParams, opts .
 }
 
 /*
+ReadSyntheticTest read synthetic test API
+*/
+func (a *Client) ReadSyntheticTest(params *ReadSyntheticTestParams, opts ...ClientOption) (*ReadSyntheticTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadSyntheticTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadSyntheticTest",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/synthetic-tests/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadSyntheticTestReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadSyntheticTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadSyntheticTestDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadTeam read team API
 */
 func (a *Client) ReadTeam(params *ReadTeamParams, opts ...ClientOption) (*ReadTeamOK, error) {
@@ -6556,6 +6714,43 @@ func (a *Client) UpdateServiceAttribute(params *UpdateServiceAttributeParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateServiceAttributeDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateSyntheticTest update synthetic test API
+*/
+func (a *Client) UpdateSyntheticTest(params *UpdateSyntheticTestParams, opts ...ClientOption) (*UpdateSyntheticTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateSyntheticTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateSyntheticTest",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/synthetic-tests/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateSyntheticTestReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateSyntheticTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

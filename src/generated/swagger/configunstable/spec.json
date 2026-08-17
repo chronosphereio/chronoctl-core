@@ -190,22 +190,6 @@
       },
       "type": "object"
     },
-    "ConfigUnstableUpdateSyntheticGlobalVariableBody": {
-      "properties": {
-        "synthetic_global_variable": {
-          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
-        },
-        "create_if_missing": {
-          "description": "If `true`, the SyntheticGlobalVariable will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the SyntheticGlobalVariable does not already exist.",
-          "type": "boolean"
-        },
-        "dry_run": {
-          "description": "If `true`, validates the specified configuration without creating or updating the SyntheticGlobalVariable. If the specified configuration is valid, the endpoint returns a partial response without the SyntheticGlobalVariable. If the specified configuration is invalid, the endpoint returns an error.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
     "ConfigUnstableUpdateSyntheticTestBody": {
       "properties": {
         "synthetic_test": {
@@ -259,17 +243,6 @@
       },
       "type": "object"
     },
-    "DeleteSyntheticGlobalVariableResponseTestReference": {
-      "properties": {
-        "test_slug": {
-          "type": "string"
-        },
-        "test_name": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "DnsRecordAssertionMatchScope": {
       "enum": [
         "EVERY_AVAILABLE",
@@ -289,33 +262,6 @@
         "SRV"
       ],
       "type": "string"
-    },
-    "GcpConfigMetricGroup": {
-      "description": "MetricGroup defines a set of metrics to collect from a GCP project.",
-      "properties": {
-        "project_id": {
-          "description": "GCP project ID that has access to the metric data.",
-          "type": "string"
-        },
-        "prefixes": {
-          "description": "List of GCP metric prefixes to ingest (e.g., \"compute.googleapis.com/\").",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "GcpConfigServiceAccount": {
-      "description": "ServiceAccount specifies the GCP service account to impersonate for API calls.",
-      "properties": {
-        "client_email": {
-          "description": "Email address of the service account to impersonate.",
-          "type": "string"
-        }
-      },
-      "type": "object"
     },
     "HttpTestConfigContentType": {
       "description": "Content type sent with the request. Mapped to a Content-Type request\nheader. Validation rejects setting this alongside an explicit\nContent-Type header.",
@@ -400,112 +346,6 @@
         "source": {
           "description": "source is the name of the source field",
           "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "MongoDbAtlasMetricsConfigClusterDatabaseGroup": {
-      "description": "A group of databases to scrape, optionally pinned to one cluster (mirrors the\nAtlas UI). Order-insensitive.",
-      "properties": {
-        "cluster_name": {
-          "description": "Optional; empty = every in-scope cluster; unique across groups (\u003c=1 empty group).",
-          "type": "string"
-        },
-        "database_names": {
-          "description": "Required non-empty allowlist; scraped verbatim (incl. admin/local/config).",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "MongoDbAtlasMetricsConfigDatabaseMetrics": {
-      "description": "Per-database storage (dbStats; mongodb.atlas.dbstats.*). No bounded core:\nenabling collects nothing on its own — cluster_databases is a required allowlist.",
-      "properties": {
-        "enabled": {
-          "description": "Category gate; absent/false = off (collects nothing alone).",
-          "type": "boolean"
-        },
-        "cluster_databases": {
-          "description": "Required non-empty when enabled (enabled + empty = validation error).",
-          "items": {
-            "$ref": "#/definitions/MongoDbAtlasMetricsConfigClusterDatabaseGroup"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "MongoDbAtlasMetricsConfigProjectConfig": {
-      "description": "One Atlas project's scope and opt-in categories; self-contained (no inheritance).",
-      "properties": {
-        "project_id": {
-          "description": "Required — Atlas project (group) ID, 24-hex; unique within projects.",
-          "type": "string"
-        },
-        "include_cluster_names": {
-          "description": "Cluster scope: bounded selector pair; both empty = all + auto-onboard.\ninclude pins a fixed set (no auto-onboard); exclude drops names, keeps it.\nOptional; XOR with exclude_cluster_names; order-insensitive.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "exclude_cluster_names": {
-          "description": "Optional; XOR with include_cluster_names; order-insensitive.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "database_metrics": {
-          "$ref": "#/definitions/MongoDbAtlasMetricsConfigDatabaseMetrics"
-        },
-        "search_metrics": {
-          "$ref": "#/definitions/MongoDbAtlasMetricsConfigSearchMetrics"
-        }
-      },
-      "type": "object"
-    },
-    "MongoDbAtlasMetricsConfigSearchMetrics": {
-      "description": "Atlas Search (FTS). Bounded core: enabling alone collects per-process health\n(mongodb.atlas.search.*); namespaces adds unbounded per-index stats on top.",
-      "properties": {
-        "enabled": {
-          "description": "Category gate; absent/false = off (enabling alone = FTS core).",
-          "type": "boolean"
-        },
-        "namespaces": {
-          "description": "Optional allowlist; empty = core only (NOT all indexes).",
-          "items": {
-            "$ref": "#/definitions/MongoDbAtlasMetricsConfigSearchNamespace"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "MongoDbAtlasMetricsConfigSearchNamespace": {
-      "description": "One Atlas Search namespace (cluster \u003e database \u003e collection \u003e index) for\nper-index stats (mongodb.atlas.search.index.stats.*).",
-      "properties": {
-        "cluster_name": {
-          "description": "Optional; empty = every in-scope cluster with this namespace.",
-          "type": "string"
-        },
-        "database_name": {
-          "description": "Required.",
-          "type": "string"
-        },
-        "collection_name": {
-          "description": "Required.",
-          "type": "string"
-        },
-        "index_names": {
-          "description": "Required non-empty allowlist.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
         }
       },
       "type": "object"
@@ -1607,52 +1447,6 @@
       },
       "type": "object"
     },
-    "cloudintegrationconfigCloudflareConfig": {
-      "description": "CloudflareConfig contains configuration for scraping Cloudflare metrics.",
-      "properties": {
-        "zone_names": {
-          "description": "Zones to scrape. Empty means all zones accessible by the token.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "cloudintegrationconfigGcpConfig": {
-      "description": "GcpConfig contains configuration for scraping GCP Cloud Monitoring metrics.",
-      "properties": {
-        "service_account": {
-          "$ref": "#/definitions/GcpConfigServiceAccount"
-        },
-        "metric_groups": {
-          "description": "Metric groups to collect. Each group specifies a project and metric prefixes.",
-          "items": {
-            "$ref": "#/definitions/GcpConfigMetricGroup"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "cloudintegrationconfigMongoDbAtlasMetricsConfig": {
-      "description": "MongoDbAtlasMetricsConfig configures scraping of MongoDB Atlas metrics. The\ncredential lives on a MONGODB_ATLAS ExternalConnection (by slug). Process and\ndisk metrics are always collected for in-scope clusters; database and search\nmetrics are opt-in per project. Selection is endpoint/shard-level, not per-metric.",
-      "properties": {
-        "organization_id": {
-          "description": "Required — Atlas org ID (24-hex); emitted as the org_id label.",
-          "type": "string"
-        },
-        "projects": {
-          "description": "Optional; empty = all accessible projects, auto-onboarded (process+disk only).",
-          "items": {
-            "$ref": "#/definitions/MongoDbAtlasMetricsConfigProjectConfig"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "configunstableAPITokenAuth": {
       "description": "APITokenAuth configures static API-token authentication: each request\ncarries a `\u003ckey\u003e: \u003ctoken\u003e` header, where key is the header name (e.g.\n\"Authorization\", \"X-API-Key\") and token is the full header value (e.g.\n\"Bearer \u003csecret\u003e\"), treated as a secret in its entirety. Top-level so\nfuture non-HTTP test types can reuse it.",
       "properties": {
@@ -1672,7 +1466,6 @@
           "type": "string"
         },
         "password": {
-          "description": "May contain a {{VAR_NAME}} reference resolved at test execution to a\nSyntheticGlobalVariable value.",
           "type": "string"
         }
       },
@@ -1725,21 +1518,17 @@
         "state": {
           "$ref": "#/definitions/configunstableCloudIntegrationState"
         },
-        "provider_type": {
-          "$ref": "#/definitions/configunstableCloudIntegrationType"
-        },
         "external_connection_slug": {
-          "description": "Slug of the ExternalConnection used for credentials. Optional — providers\nthat use workload identity (e.g. GCP) leave this empty.",
+          "description": "Slug of the ExternalConnection used for credentials. Optional depending on\nthe provider.",
           "type": "string"
         },
-        "gcp": {
-          "$ref": "#/definitions/cloudintegrationconfigGcpConfig"
+        "provider_config": {
+          "description": "Provider-specific configuration. Structure depends on provider_type.",
+          "type": "object"
         },
-        "mongodb_atlas_metrics": {
-          "$ref": "#/definitions/cloudintegrationconfigMongoDbAtlasMetricsConfig"
-        },
-        "cloudflare": {
-          "$ref": "#/definitions/cloudintegrationconfigCloudflareConfig"
+        "provider_type": {
+          "description": "Required on create/update. Identifies the cloud provider.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1750,15 +1539,6 @@
         "STATE_ENABLED",
         "STATE_DISABLED",
         "STATE_PREVIEW"
-      ],
-      "type": "string"
-    },
-    "configunstableCloudIntegrationType": {
-      "description": "CloudIntegrationType identifies the cloud provider for a CloudIntegration.\nThis is server-derived from whichever provider config is set.\n\n - GCP: Google Cloud Platform.\n - MONGODB_ATLAS: MongoDB Atlas.\n - CLOUDFLARE: Cloudflare.",
-      "enum": [
-        "GCP",
-        "MONGODB_ATLAS",
-        "CLOUDFLARE"
       ],
       "type": "string"
     },
@@ -2012,26 +1792,6 @@
       },
       "type": "object"
     },
-    "configunstableCreateSyntheticGlobalVariableRequest": {
-      "properties": {
-        "synthetic_global_variable": {
-          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
-        },
-        "dry_run": {
-          "description": "If `true`, validates the specified configuration without creating the SyntheticGlobalVariable. If the specified configuration is valid, the endpoint returns a partial response without the SyntheticGlobalVariable. If the specified configuration is invalid, the endpoint returns an error.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateSyntheticGlobalVariableResponse": {
-      "properties": {
-        "synthetic_global_variable": {
-          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
-        }
-      },
-      "type": "object"
-    },
     "configunstableCreateSyntheticTestRequest": {
       "properties": {
         "synthetic_test": {
@@ -2192,18 +1952,6 @@
       "type": "object"
     },
     "configunstableDeleteServiceResponse": {
-      "type": "object"
-    },
-    "configunstableDeleteSyntheticGlobalVariableResponse": {
-      "properties": {
-        "referencing_tests": {
-          "description": "Tests that referenced this variable at delete time.",
-          "items": {
-            "$ref": "#/definitions/DeleteSyntheticGlobalVariableResponseTestReference"
-          },
-          "type": "array"
-        }
-      },
       "type": "object"
     },
     "configunstableDeleteSyntheticTestResponse": {
@@ -2372,20 +2120,6 @@
         "services": {
           "items": {
             "$ref": "#/definitions/configunstableService"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableListSyntheticGlobalVariablesResponse": {
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/configv1PageResult"
-        },
-        "synthetic_global_variables": {
-          "items": {
-            "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
           },
           "type": "array"
         }
@@ -2689,14 +2423,6 @@
       },
       "type": "object"
     },
-    "configunstableReadSyntheticGlobalVariableResponse": {
-      "properties": {
-        "synthetic_global_variable": {
-          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
-        }
-      },
-      "type": "object"
-    },
     "configunstableReadSyntheticTestResponse": {
       "properties": {
         "synthetic_test": {
@@ -2843,43 +2569,6 @@
             "$ref": "#/definitions/SyncPrometheusChangeLog"
           },
           "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableSyntheticGlobalVariable": {
-      "description": "SyntheticGlobalVariable is a tenant-scoped named string variable that\nsynthetic tests would reference inline via {{NAME}} template syntax. The\nfeature is deferred — see src/synthetics/docs/decision-log.md DECISION-020\nfor the current scope. The proto and CRUD remain in-tree but are not\nreferenced by any active test-side code path.",
-      "properties": {
-        "slug": {
-          "description": "The unique identifier of the SyntheticGlobalVariable. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the SyntheticGlobalVariable is created.",
-          "type": "string"
-        },
-        "name": {
-          "description": "The name of the SyntheticGlobalVariable. You can modify this value after the SyntheticGlobalVariable is created.",
-          "type": "string"
-        },
-        "created_at": {
-          "description": "Timestamp of when the SyntheticGlobalVariable was created. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Timestamp of when the SyntheticGlobalVariable was last updated. Cannot be set by clients.",
-          "format": "date-time",
-          "readOnly": true,
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "protected": {
-          "description": "Always true in Phase 1; field exists so Phase 2 can introduce non-protected\nvariables without a schema migration.",
-          "type": "boolean"
-        },
-        "value": {
-          "description": "The variable value. Required on create. For protected variables the\nserver cannot read the value back, so reads always return \"\".",
-          "type": "string"
         }
       },
       "type": "object"
@@ -3166,14 +2855,6 @@
       },
       "type": "object"
     },
-    "configunstableUpdateSyntheticGlobalVariableResponse": {
-      "properties": {
-        "synthetic_global_variable": {
-          "$ref": "#/definitions/configunstableSyntheticGlobalVariable"
-        }
-      },
-      "type": "object"
-    },
     "configunstableUpdateSyntheticTestResponse": {
       "properties": {
         "synthetic_test": {
@@ -3361,21 +3042,6 @@
           },
           {
             "collectionFormat": "multi",
-            "description": "Filter by provider type.\n\n - GCP: Google Cloud Platform.\n - MONGODB_ATLAS: MongoDB Atlas.\n - CLOUDFLARE: Cloudflare.",
-            "in": "query",
-            "items": {
-              "enum": [
-                "GCP",
-                "MONGODB_ATLAS",
-                "CLOUDFLARE"
-              ],
-              "type": "string"
-            },
-            "name": "provider_types",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
             "description": "Filter by integration state.\n\n - STATE_ENABLED: Integration is fully enabled and actively collecting metrics.\n - STATE_DISABLED: Integration is disabled and not collecting metrics.\n - STATE_PREVIEW: Integration is in preview mode for estimating cardinality/license impact\nbefore full enablement.",
             "in": "query",
             "items": {
@@ -3387,6 +3053,16 @@
               "type": "string"
             },
             "name": "states",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter by provider type.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "provider_types",
             "type": "array"
           }
         ],
@@ -5934,271 +5610,6 @@
         },
         "tags": [
           "SyncPrometheus"
-        ]
-      }
-    },
-    "/api/unstable/config/synthetic-global-variables": {
-      "get": {
-        "operationId": "ListSyntheticGlobalVariables",
-        "parameters": [
-          {
-            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
-            "format": "int64",
-            "in": "query",
-            "name": "page.max_size",
-            "type": "integer"
-          },
-          {
-            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
-            "in": "query",
-            "name": "page.token",
-            "type": "string"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by slug, where any SyntheticGlobalVariable with a matching slug in the given list (and matches all other filters) will be returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "slugs",
-            "type": "array"
-          },
-          {
-            "collectionFormat": "multi",
-            "description": "Filters results by name, where any SyntheticGlobalVariable with a matching name in the given list (and matches all other filters) will be returned.",
-            "in": "query",
-            "items": {
-              "type": "string"
-            },
-            "name": "names",
-            "type": "array"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableListSyntheticGlobalVariablesResponse"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SyntheticGlobalVariable"
-        ]
-      },
-      "post": {
-        "operationId": "CreateSyntheticGlobalVariable",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateSyntheticGlobalVariableRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the created SyntheticGlobalVariable.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateSyntheticGlobalVariableResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot create the SyntheticGlobalVariable because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot create the SyntheticGlobalVariable because there is a conflict with an existing SyntheticGlobalVariable.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SyntheticGlobalVariable"
-        ]
-      }
-    },
-    "/api/unstable/config/synthetic-global-variables/{slug}": {
-      "delete": {
-        "operationId": "DeleteSyntheticGlobalVariable",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "When true, returns referencing tests without mutating.",
-            "in": "query",
-            "name": "dry_run",
-            "type": "boolean"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableDeleteSyntheticGlobalVariableResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot delete the SyntheticGlobalVariable because it is in use.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot delete the SyntheticGlobalVariable because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SyntheticGlobalVariable"
-        ]
-      },
-      "get": {
-        "operationId": "ReadSyntheticGlobalVariable",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableReadSyntheticGlobalVariableResponse"
-            }
-          },
-          "404": {
-            "description": "Cannot read the SyntheticGlobalVariable because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SyntheticGlobalVariable"
-        ]
-      },
-      "put": {
-        "operationId": "UpdateSyntheticGlobalVariable",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ConfigUnstableUpdateSyntheticGlobalVariableBody"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response containing the updated SyntheticGlobalVariable.",
-            "schema": {
-              "$ref": "#/definitions/configunstableUpdateSyntheticGlobalVariableResponse"
-            }
-          },
-          "400": {
-            "description": "Cannot update the SyntheticGlobalVariable because the request is invalid.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "404": {
-            "description": "Cannot update the SyntheticGlobalVariable because the slug does not exist.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "409": {
-            "description": "Cannot update the SyntheticGlobalVariable because there is a conflict with an existing SyntheticGlobalVariable.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "500": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          },
-          "default": {
-            "description": "An undefined error response.",
-            "schema": {
-              "$ref": "#/definitions/genericError"
-            }
-          }
-        },
-        "tags": [
-          "SyntheticGlobalVariable"
         ]
       }
     },

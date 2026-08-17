@@ -58,6 +58,9 @@ type Configv1ExternalConnection struct {
 
 	// sendgrid
 	Sendgrid *ExternalConnectionSendgridConfig `json:"sendgrid,omitempty"`
+
+	// datadog
+	Datadog *ExternalConnectionDatadogConfig `json:"datadog,omitempty"`
 }
 
 // Validate validates this configv1 external connection
@@ -101,6 +104,10 @@ func (m *Configv1ExternalConnection) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSendgrid(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDatadog(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -286,6 +293,25 @@ func (m *Configv1ExternalConnection) validateSendgrid(formats strfmt.Registry) e
 	return nil
 }
 
+func (m *Configv1ExternalConnection) validateDatadog(formats strfmt.Registry) error {
+	if swag.IsZero(m.Datadog) { // not required
+		return nil
+	}
+
+	if m.Datadog != nil {
+		if err := m.Datadog.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("datadog")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("datadog")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 external connection based on the context it is used
 func (m *Configv1ExternalConnection) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -327,6 +353,10 @@ func (m *Configv1ExternalConnection) ContextValidate(ctx context.Context, format
 	}
 
 	if err := m.contextValidateSendgrid(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDatadog(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -514,6 +544,27 @@ func (m *Configv1ExternalConnection) contextValidateSendgrid(ctx context.Context
 				return ve.ValidateName("sendgrid")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("sendgrid")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1ExternalConnection) contextValidateDatadog(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Datadog != nil {
+
+		if swag.IsZero(m.Datadog) { // not required
+			return nil
+		}
+
+		if err := m.Datadog.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("datadog")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("datadog")
 			}
 			return err
 		}
