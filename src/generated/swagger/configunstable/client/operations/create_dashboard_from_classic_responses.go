@@ -124,7 +124,7 @@ An unexpected error response.
 type CreateDashboardFromClassicDefault struct {
 	_statusCode int
 
-	Payload *models.GooglerpcStatus
+	Payload *models.APIError
 }
 
 // IsSuccess returns true when this create dashboard from classic default response has a 2xx status code
@@ -165,13 +165,13 @@ func (o *CreateDashboardFromClassicDefault) String() string {
 	return fmt.Sprintf("[POST /api/unstable/config/dashboards:createFromClassic][%d] CreateDashboardFromClassic default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *CreateDashboardFromClassicDefault) GetPayload() *models.GooglerpcStatus {
+func (o *CreateDashboardFromClassicDefault) GetPayload() *models.APIError {
 	return o.Payload
 }
 
 func (o *CreateDashboardFromClassicDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.GooglerpcStatus)
+	o.Payload = new(models.APIError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -9,12 +9,12 @@
 * Add `severity` to `v1/state` rule evaluations, distinguishing hard evaluation failures from non-fatal warnings, and an `include_warnings` query parameter on the rule evaluation list endpoint. Both are available to library consumers only; the `rule-evaluations list` command does not expose them.
 
 ### Changed
-* Change the `unstable/config/SyntheticTest` locations to `GCP_US_OREGON` and `GCP_US_VIRGINIA`, replacing `GCP_US_LOS_ANGELES` and `GCP_US_IOWA`. **This is a breaking change**.
 * Replace the per-provider `cloudflare`, `gcp`, and `mongodb_atlas_metrics` config fields on `unstable/config/CloudIntegration` with a generic `provider_config` object, and change `provider_type` from an enum to a string. Available to library consumers only.
 * Rename the generated `configv1` enum type `FilterOperator` to `PartitionFilterOperator` in `v1/config/ConsumptionConfig` partition filter conditions (enum values are unchanged). Available to library consumers only.
 
 ### Removed
 * Remove support for resources `v1/config/LogScaleAlert` and `v1/config/LogScaleAction`, along with the `log-scale-alerts` and `log-scale-actions` commands. These endpoints no longer exist in the public API. **This is a breaking change**.
+* Remove `unstable/config/SyntheticTest` from the generated `configunstable` client, replaced by `v1/config/SyntheticTest` and the `synthetic-tests` commands. The unstable endpoints no longer exist in the public API. Available to library consumers only; there were never unstable `synthetic-tests` commands. **This is a breaking change**.
 
 ## v1.32.0
 
