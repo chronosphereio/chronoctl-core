@@ -35,6 +35,51 @@ const (
 
 	// SyntheticTestTestLocationGCPUSVIRGINIA captures enum value "GCP_US_VIRGINIA"
 	SyntheticTestTestLocationGCPUSVIRGINIA SyntheticTestTestLocation = "GCP_US_VIRGINIA"
+
+	// SyntheticTestTestLocationGCPBRSAOPAULO captures enum value "GCP_BR_SAO_PAULO"
+	SyntheticTestTestLocationGCPBRSAOPAULO SyntheticTestTestLocation = "GCP_BR_SAO_PAULO"
+
+	// SyntheticTestTestLocationGCPSGSINGAPORE captures enum value "GCP_SG_SINGAPORE"
+	SyntheticTestTestLocationGCPSGSINGAPORE SyntheticTestTestLocation = "GCP_SG_SINGAPORE"
+
+	// SyntheticTestTestLocationGCPAUSYDNEY captures enum value "GCP_AU_SYDNEY"
+	SyntheticTestTestLocationGCPAUSYDNEY SyntheticTestTestLocation = "GCP_AU_SYDNEY"
+
+	// SyntheticTestTestLocationGCPINMUMBAI captures enum value "GCP_IN_MUMBAI"
+	SyntheticTestTestLocationGCPINMUMBAI SyntheticTestTestLocation = "GCP_IN_MUMBAI"
+
+	// SyntheticTestTestLocationGCPJPTOKYO captures enum value "GCP_JP_TOKYO"
+	SyntheticTestTestLocationGCPJPTOKYO SyntheticTestTestLocation = "GCP_JP_TOKYO"
+
+	// SyntheticTestTestLocationGCPGBLONDON captures enum value "GCP_GB_LONDON"
+	SyntheticTestTestLocationGCPGBLONDON SyntheticTestTestLocation = "GCP_GB_LONDON"
+
+	// SyntheticTestTestLocationGCPDEFRANKFURT captures enum value "GCP_DE_FRANKFURT"
+	SyntheticTestTestLocationGCPDEFRANKFURT SyntheticTestTestLocation = "GCP_DE_FRANKFURT"
+
+	// SyntheticTestTestLocationGCPZAJOHANNESBURG captures enum value "GCP_ZA_JOHANNESBURG"
+	SyntheticTestTestLocationGCPZAJOHANNESBURG SyntheticTestTestLocation = "GCP_ZA_JOHANNESBURG"
+
+	// SyntheticTestTestLocationGCPIDJAKARTA captures enum value "GCP_ID_JAKARTA"
+	SyntheticTestTestLocationGCPIDJAKARTA SyntheticTestTestLocation = "GCP_ID_JAKARTA"
+
+	// SyntheticTestTestLocationGCPCAMONTREAL captures enum value "GCP_CA_MONTREAL"
+	SyntheticTestTestLocationGCPCAMONTREAL SyntheticTestTestLocation = "GCP_CA_MONTREAL"
+
+	// SyntheticTestTestLocationGCPKRSEOUL captures enum value "GCP_KR_SEOUL"
+	SyntheticTestTestLocationGCPKRSEOUL SyntheticTestTestLocation = "GCP_KR_SEOUL"
+
+	// SyntheticTestTestLocationGCPITMILAN captures enum value "GCP_IT_MILAN"
+	SyntheticTestTestLocationGCPITMILAN SyntheticTestTestLocation = "GCP_IT_MILAN"
+
+	// SyntheticTestTestLocationGCPQADOHA captures enum value "GCP_QA_DOHA"
+	SyntheticTestTestLocationGCPQADOHA SyntheticTestTestLocation = "GCP_QA_DOHA"
+
+	// SyntheticTestTestLocationGCPJPOSAKA captures enum value "GCP_JP_OSAKA"
+	SyntheticTestTestLocationGCPJPOSAKA SyntheticTestTestLocation = "GCP_JP_OSAKA"
+
+	// SyntheticTestTestLocationGCPFRPARIS captures enum value "GCP_FR_PARIS"
+	SyntheticTestTestLocationGCPFRPARIS SyntheticTestTestLocation = "GCP_FR_PARIS"
 )
 
 // for schema
@@ -42,7 +87,7 @@ var syntheticTestTestLocationEnum []interface{}
 
 func init() {
 	var res []SyntheticTestTestLocation
-	if err := json.Unmarshal([]byte(`["GCP_US_OREGON","GCP_US_VIRGINIA"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["GCP_US_OREGON","GCP_US_VIRGINIA","GCP_BR_SAO_PAULO","GCP_SG_SINGAPORE","GCP_AU_SYDNEY","GCP_IN_MUMBAI","GCP_JP_TOKYO","GCP_GB_LONDON","GCP_DE_FRANKFURT","GCP_ZA_JOHANNESBURG","GCP_ID_JAKARTA","GCP_CA_MONTREAL","GCP_KR_SEOUL","GCP_IT_MILAN","GCP_QA_DOHA","GCP_JP_OSAKA","GCP_FR_PARIS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

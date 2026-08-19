@@ -74,6 +74,13 @@ type ListMonitorsParams struct {
 	*/
 	CollectionSlugs []string
 
+	/* NameContains.
+
+	     Filter that returns monitors whose name contains this string. The filter is not
+	case sensitive.
+	*/
+	NameContains *string
+
 	/* Names.
 
 	   Filters results by name, where any Monitor with a matching name in the given list (and matches all other filters) will be returned.
@@ -184,6 +191,17 @@ func (o *ListMonitorsParams) SetCollectionSlugs(collectionSlugs []string) {
 	o.CollectionSlugs = collectionSlugs
 }
 
+// WithNameContains adds the nameContains to the list monitors params
+func (o *ListMonitorsParams) WithNameContains(nameContains *string) *ListMonitorsParams {
+	o.SetNameContains(nameContains)
+	return o
+}
+
+// SetNameContains adds the nameContains to the list monitors params
+func (o *ListMonitorsParams) SetNameContains(nameContains *string) {
+	o.NameContains = nameContains
+}
+
 // WithNames adds the names to the list monitors params
 func (o *ListMonitorsParams) WithNames(names []string) *ListMonitorsParams {
 	o.SetNames(names)
@@ -266,6 +284,23 @@ func (o *ListMonitorsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		// query array param collection_slugs
 		if err := r.SetQueryParam("collection_slugs", joinedCollectionSlugs...); err != nil {
 			return err
+		}
+	}
+
+	if o.NameContains != nil {
+
+		// query param name_contains
+		var qrNameContains string
+
+		if o.NameContains != nil {
+			qrNameContains = *o.NameContains
+		}
+		qNameContains := qrNameContains
+		if qNameContains != "" {
+
+			if err := r.SetQueryParam("name_contains", qNameContains); err != nil {
+				return err
+			}
 		}
 	}
 

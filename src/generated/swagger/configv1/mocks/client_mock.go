@@ -95,6 +95,26 @@ func (mr *MockClientServiceMockRecorder) CreateClassicDashboard(params interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateClassicDashboard", reflect.TypeOf((*MockClientService)(nil).CreateClassicDashboard), varargs...)
 }
 
+// CreateCloudIntegration mocks base method.
+func (m *MockClientService) CreateCloudIntegration(params *operations.CreateCloudIntegrationParams, opts ...operations.ClientOption) (*operations.CreateCloudIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateCloudIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.CreateCloudIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateCloudIntegration indicates an expected call of CreateCloudIntegration.
+func (mr *MockClientServiceMockRecorder) CreateCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCloudIntegration", reflect.TypeOf((*MockClientService)(nil).CreateCloudIntegration), varargs...)
+}
+
 // CreateCollection mocks base method.
 func (m *MockClientService) CreateCollection(params *operations.CreateCollectionParams, opts ...operations.ClientOption) (*operations.CreateCollectionOK, error) {
 	m.ctrl.T.Helper()
@@ -833,6 +853,26 @@ func (mr *MockClientServiceMockRecorder) DeleteClassicDashboard(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteClassicDashboard", reflect.TypeOf((*MockClientService)(nil).DeleteClassicDashboard), varargs...)
+}
+
+// DeleteCloudIntegration mocks base method.
+func (m *MockClientService) DeleteCloudIntegration(params *operations.DeleteCloudIntegrationParams, opts ...operations.ClientOption) (*operations.DeleteCloudIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteCloudIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteCloudIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteCloudIntegration indicates an expected call of DeleteCloudIntegration.
+func (mr *MockClientServiceMockRecorder) DeleteCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCloudIntegration", reflect.TypeOf((*MockClientService)(nil).DeleteCloudIntegration), varargs...)
 }
 
 // DeleteCollection mocks base method.
@@ -1575,6 +1615,26 @@ func (mr *MockClientServiceMockRecorder) ListClassicDashboards(params interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListClassicDashboards", reflect.TypeOf((*MockClientService)(nil).ListClassicDashboards), varargs...)
 }
 
+// ListCloudIntegrations mocks base method.
+func (m *MockClientService) ListCloudIntegrations(params *operations.ListCloudIntegrationsParams, opts ...operations.ClientOption) (*operations.ListCloudIntegrationsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListCloudIntegrations", varargs...)
+	ret0, _ := ret[0].(*operations.ListCloudIntegrationsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListCloudIntegrations indicates an expected call of ListCloudIntegrations.
+func (mr *MockClientServiceMockRecorder) ListCloudIntegrations(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCloudIntegrations", reflect.TypeOf((*MockClientService)(nil).ListCloudIntegrations), varargs...)
+}
+
 // ListCollections mocks base method.
 func (m *MockClientService) ListCollections(params *operations.ListCollectionsParams, opts ...operations.ClientOption) (*operations.ListCollectionsOK, error) {
 	m.ctrl.T.Helper()
@@ -2173,6 +2233,26 @@ func (mr *MockClientServiceMockRecorder) ReadClassicDashboard(params interface{}
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadClassicDashboard", reflect.TypeOf((*MockClientService)(nil).ReadClassicDashboard), varargs...)
+}
+
+// ReadCloudIntegration mocks base method.
+func (m *MockClientService) ReadCloudIntegration(params *operations.ReadCloudIntegrationParams, opts ...operations.ClientOption) (*operations.ReadCloudIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadCloudIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.ReadCloudIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadCloudIntegration indicates an expected call of ReadCloudIntegration.
+func (mr *MockClientServiceMockRecorder) ReadCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadCloudIntegration", reflect.TypeOf((*MockClientService)(nil).ReadCloudIntegration), varargs...)
 }
 
 // ReadCollection mocks base method.
@@ -2945,6 +3025,26 @@ func (mr *MockClientServiceMockRecorder) UpdateClassicDashboard(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateClassicDashboard", reflect.TypeOf((*MockClientService)(nil).UpdateClassicDashboard), varargs...)
+}
+
+// UpdateCloudIntegration mocks base method.
+func (m *MockClientService) UpdateCloudIntegration(params *operations.UpdateCloudIntegrationParams, opts ...operations.ClientOption) (*operations.UpdateCloudIntegrationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateCloudIntegration", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateCloudIntegrationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateCloudIntegration indicates an expected call of UpdateCloudIntegration.
+func (mr *MockClientServiceMockRecorder) UpdateCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateCloudIntegration", reflect.TypeOf((*MockClientService)(nil).UpdateCloudIntegration), varargs...)
 }
 
 // UpdateCollection mocks base method.

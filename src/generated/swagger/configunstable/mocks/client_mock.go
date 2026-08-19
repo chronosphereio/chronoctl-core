@@ -35,26 +35,6 @@ func (m *MockClientService) EXPECT() *MockClientServiceMockRecorder {
 	return m.recorder
 }
 
-// CreateCloudIntegration mocks base method.
-func (m *MockClientService) CreateCloudIntegration(params *operations.CreateCloudIntegrationParams, opts ...operations.ClientOption) (*operations.CreateCloudIntegrationOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateCloudIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.CreateCloudIntegrationOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateCloudIntegration indicates an expected call of CreateCloudIntegration.
-func (mr *MockClientServiceMockRecorder) CreateCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCloudIntegration", reflect.TypeOf((*MockClientService)(nil).CreateCloudIntegration), varargs...)
-}
-
 // CreateCommandCenterGroup mocks base method.
 func (m *MockClientService) CreateCommandCenterGroup(params *operations.CreateCommandCenterGroupParams, opts ...operations.ClientOption) (*operations.CreateCommandCenterGroupOK, error) {
 	m.ctrl.T.Helper()
@@ -255,26 +235,6 @@ func (mr *MockClientServiceMockRecorder) CreateService(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateService", reflect.TypeOf((*MockClientService)(nil).CreateService), varargs...)
 }
 
-// CreateSyntheticTest mocks base method.
-func (m *MockClientService) CreateSyntheticTest(params *operations.CreateSyntheticTestParams, opts ...operations.ClientOption) (*operations.CreateSyntheticTestOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateSyntheticTest", varargs...)
-	ret0, _ := ret[0].(*operations.CreateSyntheticTestOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateSyntheticTest indicates an expected call of CreateSyntheticTest.
-func (mr *MockClientServiceMockRecorder) CreateSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSyntheticTest", reflect.TypeOf((*MockClientService)(nil).CreateSyntheticTest), varargs...)
-}
-
 // CreateTraceJaegerRemoteSamplingStrategy mocks base method.
 func (m *MockClientService) CreateTraceJaegerRemoteSamplingStrategy(params *operations.CreateTraceJaegerRemoteSamplingStrategyParams, opts ...operations.ClientOption) (*operations.CreateTraceJaegerRemoteSamplingStrategyOK, error) {
 	m.ctrl.T.Helper()
@@ -333,26 +293,6 @@ func (mr *MockClientServiceMockRecorder) CreateTraceTopTagConfig(params interfac
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).CreateTraceTopTagConfig), varargs...)
-}
-
-// DeleteCloudIntegration mocks base method.
-func (m *MockClientService) DeleteCloudIntegration(params *operations.DeleteCloudIntegrationParams, opts ...operations.ClientOption) (*operations.DeleteCloudIntegrationOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteCloudIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteCloudIntegrationOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteCloudIntegration indicates an expected call of DeleteCloudIntegration.
-func (mr *MockClientServiceMockRecorder) DeleteCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCloudIntegration", reflect.TypeOf((*MockClientService)(nil).DeleteCloudIntegration), varargs...)
 }
 
 // DeleteCommandCenterGroup mocks base method.
@@ -535,26 +475,6 @@ func (mr *MockClientServiceMockRecorder) DeleteService(params interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteService", reflect.TypeOf((*MockClientService)(nil).DeleteService), varargs...)
 }
 
-// DeleteSyntheticTest mocks base method.
-func (m *MockClientService) DeleteSyntheticTest(params *operations.DeleteSyntheticTestParams, opts ...operations.ClientOption) (*operations.DeleteSyntheticTestOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteSyntheticTest", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteSyntheticTestOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteSyntheticTest indicates an expected call of DeleteSyntheticTest.
-func (mr *MockClientServiceMockRecorder) DeleteSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSyntheticTest", reflect.TypeOf((*MockClientService)(nil).DeleteSyntheticTest), varargs...)
-}
-
 // DeleteTraceJaegerRemoteSamplingStrategy mocks base method.
 func (m *MockClientService) DeleteTraceJaegerRemoteSamplingStrategy(params *operations.DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...operations.ClientOption) (*operations.DeleteTraceJaegerRemoteSamplingStrategyOK, error) {
 	m.ctrl.T.Helper()
@@ -613,26 +533,6 @@ func (mr *MockClientServiceMockRecorder) DeleteTraceTopTagConfig(params interfac
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).DeleteTraceTopTagConfig), varargs...)
-}
-
-// ListCloudIntegrations mocks base method.
-func (m *MockClientService) ListCloudIntegrations(params *operations.ListCloudIntegrationsParams, opts ...operations.ClientOption) (*operations.ListCloudIntegrationsOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ListCloudIntegrations", varargs...)
-	ret0, _ := ret[0].(*operations.ListCloudIntegrationsOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListCloudIntegrations indicates an expected call of ListCloudIntegrations.
-func (mr *MockClientServiceMockRecorder) ListCloudIntegrations(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCloudIntegrations", reflect.TypeOf((*MockClientService)(nil).ListCloudIntegrations), varargs...)
 }
 
 // ListCommandCenterGroups mocks base method.
@@ -795,26 +695,6 @@ func (mr *MockClientServiceMockRecorder) ListServices(params interface{}, opts .
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListServices", reflect.TypeOf((*MockClientService)(nil).ListServices), varargs...)
 }
 
-// ListSyntheticTests mocks base method.
-func (m *MockClientService) ListSyntheticTests(params *operations.ListSyntheticTestsParams, opts ...operations.ClientOption) (*operations.ListSyntheticTestsOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ListSyntheticTests", varargs...)
-	ret0, _ := ret[0].(*operations.ListSyntheticTestsOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListSyntheticTests indicates an expected call of ListSyntheticTests.
-func (mr *MockClientServiceMockRecorder) ListSyntheticTests(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSyntheticTests", reflect.TypeOf((*MockClientService)(nil).ListSyntheticTests), varargs...)
-}
-
 // ListTraceJaegerRemoteSamplingStrategies mocks base method.
 func (m *MockClientService) ListTraceJaegerRemoteSamplingStrategies(params *operations.ListTraceJaegerRemoteSamplingStrategiesParams, opts ...operations.ClientOption) (*operations.ListTraceJaegerRemoteSamplingStrategiesOK, error) {
 	m.ctrl.T.Helper()
@@ -833,26 +713,6 @@ func (mr *MockClientServiceMockRecorder) ListTraceJaegerRemoteSamplingStrategies
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTraceJaegerRemoteSamplingStrategies", reflect.TypeOf((*MockClientService)(nil).ListTraceJaegerRemoteSamplingStrategies), varargs...)
-}
-
-// ReadCloudIntegration mocks base method.
-func (m *MockClientService) ReadCloudIntegration(params *operations.ReadCloudIntegrationParams, opts ...operations.ClientOption) (*operations.ReadCloudIntegrationOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadCloudIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.ReadCloudIntegrationOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadCloudIntegration indicates an expected call of ReadCloudIntegration.
-func (mr *MockClientServiceMockRecorder) ReadCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadCloudIntegration", reflect.TypeOf((*MockClientService)(nil).ReadCloudIntegration), varargs...)
 }
 
 // ReadCommandCenterGroup mocks base method.
@@ -1035,26 +895,6 @@ func (mr *MockClientServiceMockRecorder) ReadService(params interface{}, opts ..
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadService", reflect.TypeOf((*MockClientService)(nil).ReadService), varargs...)
 }
 
-// ReadSyntheticTest mocks base method.
-func (m *MockClientService) ReadSyntheticTest(params *operations.ReadSyntheticTestParams, opts ...operations.ClientOption) (*operations.ReadSyntheticTestOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadSyntheticTest", varargs...)
-	ret0, _ := ret[0].(*operations.ReadSyntheticTestOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadSyntheticTest indicates an expected call of ReadSyntheticTest.
-func (mr *MockClientServiceMockRecorder) ReadSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadSyntheticTest", reflect.TypeOf((*MockClientService)(nil).ReadSyntheticTest), varargs...)
-}
-
 // ReadTraceJaegerRemoteSamplingStrategy mocks base method.
 func (m *MockClientService) ReadTraceJaegerRemoteSamplingStrategy(params *operations.ReadTraceJaegerRemoteSamplingStrategyParams, opts ...operations.ClientOption) (*operations.ReadTraceJaegerRemoteSamplingStrategyOK, error) {
 	m.ctrl.T.Helper()
@@ -1145,26 +985,6 @@ func (mr *MockClientServiceMockRecorder) SyncPrometheus(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SyncPrometheus", reflect.TypeOf((*MockClientService)(nil).SyncPrometheus), varargs...)
-}
-
-// UpdateCloudIntegration mocks base method.
-func (m *MockClientService) UpdateCloudIntegration(params *operations.UpdateCloudIntegrationParams, opts ...operations.ClientOption) (*operations.UpdateCloudIntegrationOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateCloudIntegration", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateCloudIntegrationOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateCloudIntegration indicates an expected call of UpdateCloudIntegration.
-func (mr *MockClientServiceMockRecorder) UpdateCloudIntegration(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateCloudIntegration", reflect.TypeOf((*MockClientService)(nil).UpdateCloudIntegration), varargs...)
 }
 
 // UpdateCommandCenterGroup mocks base method.
@@ -1325,26 +1145,6 @@ func (mr *MockClientServiceMockRecorder) UpdateService(params interface{}, opts 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateService", reflect.TypeOf((*MockClientService)(nil).UpdateService), varargs...)
-}
-
-// UpdateSyntheticTest mocks base method.
-func (m *MockClientService) UpdateSyntheticTest(params *operations.UpdateSyntheticTestParams, opts ...operations.ClientOption) (*operations.UpdateSyntheticTestOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateSyntheticTest", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateSyntheticTestOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateSyntheticTest indicates an expected call of UpdateSyntheticTest.
-func (mr *MockClientServiceMockRecorder) UpdateSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSyntheticTest", reflect.TypeOf((*MockClientService)(nil).UpdateSyntheticTest), varargs...)
 }
 
 // UpdateTraceJaegerRemoteSamplingStrategy mocks base method.

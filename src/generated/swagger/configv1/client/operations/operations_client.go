@@ -34,6 +34,8 @@ type ClientService interface {
 
 	CreateClassicDashboard(params *CreateClassicDashboardParams, opts ...ClientOption) (*CreateClassicDashboardOK, error)
 
+	CreateCloudIntegration(params *CreateCloudIntegrationParams, opts ...ClientOption) (*CreateCloudIntegrationOK, error)
+
 	CreateCollection(params *CreateCollectionParams, opts ...ClientOption) (*CreateCollectionOK, error)
 
 	CreateConsumptionBudget(params *CreateConsumptionBudgetParams, opts ...ClientOption) (*CreateConsumptionBudgetOK, error)
@@ -107,6 +109,8 @@ type ClientService interface {
 	DeleteBucket(params *DeleteBucketParams, opts ...ClientOption) (*DeleteBucketOK, error)
 
 	DeleteClassicDashboard(params *DeleteClassicDashboardParams, opts ...ClientOption) (*DeleteClassicDashboardOK, error)
+
+	DeleteCloudIntegration(params *DeleteCloudIntegrationParams, opts ...ClientOption) (*DeleteCloudIntegrationOK, error)
 
 	DeleteCollection(params *DeleteCollectionParams, opts ...ClientOption) (*DeleteCollectionOK, error)
 
@@ -182,6 +186,8 @@ type ClientService interface {
 
 	ListClassicDashboards(params *ListClassicDashboardsParams, opts ...ClientOption) (*ListClassicDashboardsOK, error)
 
+	ListCloudIntegrations(params *ListCloudIntegrationsParams, opts ...ClientOption) (*ListCloudIntegrationsOK, error)
+
 	ListCollections(params *ListCollectionsParams, opts ...ClientOption) (*ListCollectionsOK, error)
 
 	ListConsumptionBudgets(params *ListConsumptionBudgetsParams, opts ...ClientOption) (*ListConsumptionBudgetsOK, error)
@@ -241,6 +247,8 @@ type ClientService interface {
 	ReadBucket(params *ReadBucketParams, opts ...ClientOption) (*ReadBucketOK, error)
 
 	ReadClassicDashboard(params *ReadClassicDashboardParams, opts ...ClientOption) (*ReadClassicDashboardOK, error)
+
+	ReadCloudIntegration(params *ReadCloudIntegrationParams, opts ...ClientOption) (*ReadCloudIntegrationOK, error)
 
 	ReadCollection(params *ReadCollectionParams, opts ...ClientOption) (*ReadCollectionOK, error)
 
@@ -317,6 +325,8 @@ type ClientService interface {
 	UpdateBucket(params *UpdateBucketParams, opts ...ClientOption) (*UpdateBucketOK, error)
 
 	UpdateClassicDashboard(params *UpdateClassicDashboardParams, opts ...ClientOption) (*UpdateClassicDashboardOK, error)
+
+	UpdateCloudIntegration(params *UpdateCloudIntegrationParams, opts ...ClientOption) (*UpdateCloudIntegrationOK, error)
 
 	UpdateCollection(params *UpdateCollectionParams, opts ...ClientOption) (*UpdateCollectionOK, error)
 
@@ -495,6 +505,43 @@ func (a *Client) CreateClassicDashboard(params *CreateClassicDashboardParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateClassicDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateCloudIntegration create cloud integration API
+*/
+func (a *Client) CreateCloudIntegration(params *CreateCloudIntegrationParams, opts ...ClientOption) (*CreateCloudIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateCloudIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateCloudIntegration",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/cloud-integrations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateCloudIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateCloudIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateCloudIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1871,6 +1918,43 @@ func (a *Client) DeleteClassicDashboard(params *DeleteClassicDashboardParams, op
 }
 
 /*
+DeleteCloudIntegration delete cloud integration API
+*/
+func (a *Client) DeleteCloudIntegration(params *DeleteCloudIntegrationParams, opts ...ClientOption) (*DeleteCloudIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteCloudIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteCloudIntegration",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/cloud-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteCloudIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteCloudIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteCloudIntegrationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteCollection delete collection API
 */
 func (a *Client) DeleteCollection(params *DeleteCollectionParams, opts ...ClientOption) (*DeleteCollectionOK, error) {
@@ -3240,6 +3324,43 @@ func (a *Client) ListClassicDashboards(params *ListClassicDashboardsParams, opts
 }
 
 /*
+ListCloudIntegrations list cloud integrations API
+*/
+func (a *Client) ListCloudIntegrations(params *ListCloudIntegrationsParams, opts ...ClientOption) (*ListCloudIntegrationsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListCloudIntegrationsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListCloudIntegrations",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/cloud-integrations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListCloudIntegrationsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListCloudIntegrationsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListCloudIntegrationsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListCollections list collections API
 */
 func (a *Client) ListCollections(params *ListCollectionsParams, opts ...ClientOption) (*ListCollectionsOK, error) {
@@ -4346,6 +4467,43 @@ func (a *Client) ReadClassicDashboard(params *ReadClassicDashboardParams, opts .
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadClassicDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadCloudIntegration read cloud integration API
+*/
+func (a *Client) ReadCloudIntegration(params *ReadCloudIntegrationParams, opts ...ClientOption) (*ReadCloudIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadCloudIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadCloudIntegration",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/cloud-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadCloudIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadCloudIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadCloudIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5752,6 +5910,43 @@ func (a *Client) UpdateClassicDashboard(params *UpdateClassicDashboardParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateClassicDashboardDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateCloudIntegration update cloud integration API
+*/
+func (a *Client) UpdateCloudIntegration(params *UpdateCloudIntegrationParams, opts ...ClientOption) (*UpdateCloudIntegrationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateCloudIntegrationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateCloudIntegration",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/cloud-integrations/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateCloudIntegrationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateCloudIntegrationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateCloudIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

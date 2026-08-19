@@ -7,14 +7,19 @@
 * Add `DATADOG` connection type and `datadog` config to `v1/config/ExternalConnection`.
 * Add a `dashboards:createFromClassic` endpoint to `unstable/config`, which converts raw classic (Grafana) dashboard JSON and creates the result as a standard Dashboard in one call.
 * Add `severity` to `v1/state` rule evaluations, distinguishing hard evaluation failures from non-fatal warnings, and an `include_warnings` query parameter on the rule evaluation list endpoint. Both are available to library consumers only; the `rule-evaluations list` command does not expose them.
+* Add support for resource `v1/config/CloudIntegration` and the `cloud-integrations` commands. Cloud integrations are promoted from the unstable API to v1: configures ingestion of metrics from an external provider through an external connection, with a `provider_config` object selecting what to ingest and `metric_labels` attached to ingested metrics.
+* Add `slo_type` and `latency_threshold_nanos` to the `v1/config/SLO` SLI. `slo_type` records whether the SLO measures endpoint availability or latency, and `latency_threshold_nanos` is required for latency SLOs; both record intent only, and query generation is unchanged.
+* Add a `name_contains` filter to listing `v1/config/Monitor`, and a matching `--name-contains` flag to `monitors list`. The filter is case-insensitive.
+* Add a `collection` reference and an update-time `dry_run` flag to `unstable/config/Notebook`. Available to library consumers only.
 
 ### Changed
-* Change the `unstable/config/SyntheticTest` locations to `GCP_US_OREGON` and `GCP_US_VIRGINIA`, replacing `GCP_US_LOS_ANGELES` and `GCP_US_IOWA`. **This is a breaking change**.
-* Replace the per-provider `cloudflare`, `gcp`, and `mongodb_atlas_metrics` config fields on `unstable/config/CloudIntegration` with a generic `provider_config` object, and change `provider_type` from an enum to a string. Available to library consumers only.
 * Rename the generated `configv1` enum type `FilterOperator` to `PartitionFilterOperator` in `v1/config/ConsumptionConfig` partition filter conditions (enum values are unchanged). Available to library consumers only.
+* Replace the `configunstable` client's `SyncPrometheus` error payload type `GooglerpcStatus` with `APIError`, and remove the generated `GooglerpcStatus` and `ProtobufAny` models. Available to library consumers only. **This is a breaking change**.
 
 ### Removed
 * Remove support for resources `v1/config/LogScaleAlert` and `v1/config/LogScaleAction`, along with the `log-scale-alerts` and `log-scale-actions` commands. These endpoints no longer exist in the public API. **This is a breaking change**.
+* Remove `unstable/config/SyntheticTest` from the generated `configunstable` client, replaced by `v1/config/SyntheticTest` and the `synthetic-tests` commands. The unstable endpoints no longer exist in the public API. Available to library consumers only; there were never unstable `synthetic-tests` commands. **This is a breaking change**.
+* Remove `unstable/config/CloudIntegration` from the generated `configunstable` client, replaced by `v1/config/CloudIntegration` and the `cloud-integrations` commands. The unstable endpoints no longer exist in the public API. Available to library consumers only; there were never unstable `cloud-integrations` commands. **This is a breaking change**.
 
 ## v1.32.0
 

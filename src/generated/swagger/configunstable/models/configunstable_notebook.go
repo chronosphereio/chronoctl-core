@@ -35,11 +35,15 @@ type ConfigunstableNotebook struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// Required slug of the collection the notebook belongs to.
+	// Slug of the collection the notebook belongs to. Required if `collection`
+	// isn't set.
 	CollectionSlug string `json:"collection_slug,omitempty"`
 
 	// Required raw JSON of the notebook.
 	NotebookJSON string `json:"notebook_json,omitempty"`
+
+	// collection
+	Collection *Configv1CollectionReference `json:"collection,omitempty"`
 }
 
 // Validate validates this configunstable notebook
@@ -51,6 +55,10 @@ func (m *ConfigunstableNotebook) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCollection(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -84,6 +92,25 @@ func (m *ConfigunstableNotebook) validateUpdatedAt(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *ConfigunstableNotebook) validateCollection(formats strfmt.Registry) error {
+	if swag.IsZero(m.Collection) { // not required
+		return nil
+	}
+
+	if m.Collection != nil {
+		if err := m.Collection.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("collection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("collection")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configunstable notebook based on the context it is used
 func (m *ConfigunstableNotebook) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -93,6 +120,10 @@ func (m *ConfigunstableNotebook) ContextValidate(ctx context.Context, formats st
 	}
 
 	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCollection(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -115,6 +146,27 @@ func (m *ConfigunstableNotebook) contextValidateUpdatedAt(ctx context.Context, f
 
 	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableNotebook) contextValidateCollection(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Collection != nil {
+
+		if swag.IsZero(m.Collection) { // not required
+			return nil
+		}
+
+		if err := m.Collection.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("collection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("collection")
+			}
+			return err
+		}
 	}
 
 	return nil
