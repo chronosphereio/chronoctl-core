@@ -10,9 +10,11 @@
 * Add support for resource `v1/config/CloudIntegration` and the `cloud-integrations` commands. Cloud integrations are promoted from the unstable API to v1: configures ingestion of metrics from an external provider through an external connection, with a `provider_config` object selecting what to ingest and `metric_labels` attached to ingested metrics.
 * Add `slo_type` and `latency_threshold_nanos` to the `v1/config/SLO` SLI. `slo_type` records whether the SLO measures endpoint availability or latency, and `latency_threshold_nanos` is required for latency SLOs; both record intent only, and query generation is unchanged.
 * Add a `name_contains` filter to listing `v1/config/Monitor`, and a matching `--name-contains` flag to `monitors list`. The filter is case-insensitive.
+* Add a `collection` reference and an update-time `dry_run` flag to `unstable/config/Notebook`. Available to library consumers only.
 
 ### Changed
 * Rename the generated `configv1` enum type `FilterOperator` to `PartitionFilterOperator` in `v1/config/ConsumptionConfig` partition filter conditions (enum values are unchanged). Available to library consumers only.
+* Replace the `configunstable` client's `SyncPrometheus` error payload type `GooglerpcStatus` with `APIError`, and remove the generated `GooglerpcStatus` and `ProtobufAny` models. Available to library consumers only. **This is a breaking change**.
 
 ### Removed
 * Remove support for resources `v1/config/LogScaleAlert` and `v1/config/LogScaleAction`, along with the `log-scale-alerts` and `log-scale-actions` commands. These endpoints no longer exist in the public API. **This is a breaking change**.
