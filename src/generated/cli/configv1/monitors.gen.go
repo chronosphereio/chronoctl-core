@@ -365,6 +365,7 @@ type MonitorListOpts struct {
 	PageMaxSize     int
 	BucketSlugs     []string
 	CollectionSlugs []string
+	NameContains    string
 	Names           []string
 	Slugs           []string
 	TeamSlugs       []string
@@ -375,6 +376,8 @@ func (r *MonitorListOpts) registerFlags(flags *flag.FlagSet) {
 	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any Monitor with a matching bucket_slug in the given list (and matches all other filters) will be returned.")
 	var emptyCollectionSlugs []string
 	flags.StringSliceVar(&r.CollectionSlugs, "collection-slugs", emptyCollectionSlugs, "Filters results by collection_slug, where any Monitor with a matching collection_slug in the given list (and matches all other filters) will be returned.")
+	var emptyNameContains string
+	flags.StringVar(&r.NameContains, "name-contains", emptyNameContains, "Filter that returns monitors whose name contains this string. The filter is not case sensitive.")
 	var emptyNames []string
 	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any Monitor with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
@@ -410,6 +413,7 @@ func ListMonitors(
 			PageMaxSize:     ptr.Int64(int64(pageMaxSize)),
 			BucketSlugs:     opts.BucketSlugs,
 			CollectionSlugs: opts.CollectionSlugs,
+			NameContains:    &opts.NameContains,
 			Names:           opts.Names,
 			Slugs:           opts.Slugs,
 			TeamSlugs:       opts.TeamSlugs,

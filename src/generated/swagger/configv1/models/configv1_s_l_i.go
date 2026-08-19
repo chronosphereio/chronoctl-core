@@ -36,6 +36,15 @@ type Configv1SLI struct {
 	// Use these filters to reduce the number of metrics used by the SLO.
 	// Example: cluster!~\"dev\
 	AdditionalPromqlFilters []*CommonPromQLMatcher `json:"additional_promql_filters"`
+
+	// slo type
+	SLOType SLISLOType `json:"slo_type,omitempty"`
+
+	// Optional. The latency that requests are measured against, in nanoseconds:
+	// 50000000 is the "50ms" in "P99 < 50ms". Required when `slo_type` is
+	// `LATENCY`, rejected otherwise.
+	// Example: 50000000
+	LatencyThresholdNanos string `json:"latency_threshold_nanos,omitempty"`
 }
 
 // Validate validates this configv1 s l i
@@ -51,6 +60,10 @@ func (m *Configv1SLI) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateAdditionalPromqlFilters(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSLOType(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -124,6 +137,23 @@ func (m *Configv1SLI) validateAdditionalPromqlFilters(formats strfmt.Registry) e
 	return nil
 }
 
+func (m *Configv1SLI) validateSLOType(formats strfmt.Registry) error {
+	if swag.IsZero(m.SLOType) { // not required
+		return nil
+	}
+
+	if err := m.SLOType.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("slo_type")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("slo_type")
+		}
+		return err
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 s l i based on the context it is used
 func (m *Configv1SLI) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -137,6 +167,10 @@ func (m *Configv1SLI) ContextValidate(ctx context.Context, formats strfmt.Regist
 	}
 
 	if err := m.contextValidateAdditionalPromqlFilters(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSLOType(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -208,6 +242,24 @@ func (m *Configv1SLI) contextValidateAdditionalPromqlFilters(ctx context.Context
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *Configv1SLI) contextValidateSLOType(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.SLOType) { // not required
+		return nil
+	}
+
+	if err := m.SLOType.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("slo_type")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("slo_type")
+		}
+		return err
 	}
 
 	return nil

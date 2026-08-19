@@ -15,6 +15,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewAzureMetricsIntegrationCmd())
 	root.AddCommand(NewBucketCmd())
 	root.AddCommand(NewClassicDashboardCmd())
+	root.AddCommand(NewCloudIntegrationCmd())
 	root.AddCommand(NewCollectionCmd())
 	root.AddCommand(NewConsumptionBudgetCmd())
 	root.AddCommand(NewConsumptionConfigCmd())
@@ -96,6 +97,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateClassicDashboard(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		CloudIntegrationTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*CloudIntegration)
+			if !ok {
+				return types.WrongObjectErr((&CloudIntegration{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateCloudIntegration(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

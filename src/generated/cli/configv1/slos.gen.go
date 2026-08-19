@@ -575,6 +575,10 @@ spec:
               # Prometheus label value for the matcher
               value: <string>
               type: <MatchEqual|MatchRegexp|MatchNotEqual|MatchNotRegexp>
+        # Optional. The latency that requests are measured against, in nanoseconds:
+        # 50000000 is the "50ms" in "P99 < 50ms". Required when 'slo_type' is
+        # 'LATENCY', rejected otherwise.
+        latency_threshold_nanos: <int64>
         # Configuration for error ratio SLIs. You can include these variables in PromQL
         # queries for SLIs:
         # - '{{.Window}}': Specifies the window of time that the PromQL query operates on.
@@ -609,6 +613,10 @@ spec:
                 op: <GEQ|GT|LEQ|LT|EQ|NEQ|EXISTS|NOT_EXISTS|SIGNAL_NOT_EXISTS>
             # Defines the supported time slice sizes for time slice SLIs.
             timeslice_size: <TIMESLICE_SIZE_ONE_MINUTE|TIMESLICE_SIZE_FIVE_MINUTES>
+        # What the SLO measures. No query generation depends on it: the queries are
+        # still authored through 'custom_indicator' or 'custom_timeslice_indicator',
+        # and this only records the intent behind them.
+        slo_type: <ENDPOINT_AVAILABILITY|LATENCY>
 `
 
 func newSLOScaffoldCmd() *cobra.Command {

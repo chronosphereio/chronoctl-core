@@ -28,8 +28,6 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateCloudIntegration(params *CreateCloudIntegrationParams, opts ...ClientOption) (*CreateCloudIntegrationOK, error)
-
 	CreateCommandCenterGroup(params *CreateCommandCenterGroupParams, opts ...ClientOption) (*CreateCommandCenterGroupOK, error)
 
 	CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error)
@@ -50,15 +48,11 @@ type ClientService interface {
 
 	CreateService(params *CreateServiceParams, opts ...ClientOption) (*CreateServiceOK, error)
 
-	CreateSyntheticTest(params *CreateSyntheticTestParams, opts ...ClientOption) (*CreateSyntheticTestOK, error)
-
 	CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*CreateTraceJaegerRemoteSamplingStrategyOK, error)
 
 	CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRulesParams, opts ...ClientOption) (*CreateTraceTailSamplingRulesOK, error)
 
 	CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, opts ...ClientOption) (*CreateTraceTopTagConfigOK, error)
-
-	DeleteCloudIntegration(params *DeleteCloudIntegrationParams, opts ...ClientOption) (*DeleteCloudIntegrationOK, error)
 
 	DeleteCommandCenterGroup(params *DeleteCommandCenterGroupParams, opts ...ClientOption) (*DeleteCommandCenterGroupOK, error)
 
@@ -78,15 +72,11 @@ type ClientService interface {
 
 	DeleteService(params *DeleteServiceParams, opts ...ClientOption) (*DeleteServiceOK, error)
 
-	DeleteSyntheticTest(params *DeleteSyntheticTestParams, opts ...ClientOption) (*DeleteSyntheticTestOK, error)
-
 	DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error)
 
 	DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRulesParams, opts ...ClientOption) (*DeleteTraceTailSamplingRulesOK, error)
 
 	DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, opts ...ClientOption) (*DeleteTraceTopTagConfigOK, error)
-
-	ListCloudIntegrations(params *ListCloudIntegrationsParams, opts ...ClientOption) (*ListCloudIntegrationsOK, error)
 
 	ListCommandCenterGroups(params *ListCommandCenterGroupsParams, opts ...ClientOption) (*ListCommandCenterGroupsOK, error)
 
@@ -104,11 +94,7 @@ type ClientService interface {
 
 	ListServices(params *ListServicesParams, opts ...ClientOption) (*ListServicesOK, error)
 
-	ListSyntheticTests(params *ListSyntheticTestsParams, opts ...ClientOption) (*ListSyntheticTestsOK, error)
-
 	ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error)
-
-	ReadCloudIntegration(params *ReadCloudIntegrationParams, opts ...ClientOption) (*ReadCloudIntegrationOK, error)
 
 	ReadCommandCenterGroup(params *ReadCommandCenterGroupParams, opts ...ClientOption) (*ReadCommandCenterGroupOK, error)
 
@@ -128,8 +114,6 @@ type ClientService interface {
 
 	ReadService(params *ReadServiceParams, opts ...ClientOption) (*ReadServiceOK, error)
 
-	ReadSyntheticTest(params *ReadSyntheticTestParams, opts ...ClientOption) (*ReadSyntheticTestOK, error)
-
 	ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*ReadTraceJaegerRemoteSamplingStrategyOK, error)
 
 	ReadTraceTailSamplingRules(params *ReadTraceTailSamplingRulesParams, opts ...ClientOption) (*ReadTraceTailSamplingRulesOK, error)
@@ -137,8 +121,6 @@ type ClientService interface {
 	ReadTraceTopTagConfig(params *ReadTraceTopTagConfigParams, opts ...ClientOption) (*ReadTraceTopTagConfigOK, error)
 
 	SyncPrometheus(params *SyncPrometheusParams, opts ...ClientOption) (*SyncPrometheusOK, error)
-
-	UpdateCloudIntegration(params *UpdateCloudIntegrationParams, opts ...ClientOption) (*UpdateCloudIntegrationOK, error)
 
 	UpdateCommandCenterGroup(params *UpdateCommandCenterGroupParams, opts ...ClientOption) (*UpdateCommandCenterGroupOK, error)
 
@@ -156,8 +138,6 @@ type ClientService interface {
 
 	UpdateService(params *UpdateServiceParams, opts ...ClientOption) (*UpdateServiceOK, error)
 
-	UpdateSyntheticTest(params *UpdateSyntheticTestParams, opts ...ClientOption) (*UpdateSyntheticTestOK, error)
-
 	UpdateTraceJaegerRemoteSamplingStrategy(params *UpdateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*UpdateTraceJaegerRemoteSamplingStrategyOK, error)
 
 	UpdateTraceTailSamplingRules(params *UpdateTraceTailSamplingRulesParams, opts ...ClientOption) (*UpdateTraceTailSamplingRulesOK, error)
@@ -165,43 +145,6 @@ type ClientService interface {
 	UpdateTraceTopTagConfig(params *UpdateTraceTopTagConfigParams, opts ...ClientOption) (*UpdateTraceTopTagConfigOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
-}
-
-/*
-CreateCloudIntegration create cloud integration API
-*/
-func (a *Client) CreateCloudIntegration(params *CreateCloudIntegrationParams, opts ...ClientOption) (*CreateCloudIntegrationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateCloudIntegrationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateCloudIntegration",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/cloud-integrations",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateCloudIntegrationReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateCloudIntegrationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateCloudIntegrationDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -582,43 +525,6 @@ func (a *Client) CreateService(params *CreateServiceParams, opts ...ClientOption
 }
 
 /*
-CreateSyntheticTest create synthetic test API
-*/
-func (a *Client) CreateSyntheticTest(params *CreateSyntheticTestParams, opts ...ClientOption) (*CreateSyntheticTestOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateSyntheticTestParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateSyntheticTest",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/synthetic-tests",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateSyntheticTestReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateSyntheticTestOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateSyntheticTestDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 CreateTraceJaegerRemoteSamplingStrategy create trace jaeger remote sampling strategy API
 */
 func (a *Client) CreateTraceJaegerRemoteSamplingStrategy(params *CreateTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*CreateTraceJaegerRemoteSamplingStrategyOK, error) {
@@ -726,43 +632,6 @@ func (a *Client) CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, 
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateTraceTopTagConfigDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-DeleteCloudIntegration delete cloud integration API
-*/
-func (a *Client) DeleteCloudIntegration(params *DeleteCloudIntegrationParams, opts ...ClientOption) (*DeleteCloudIntegrationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteCloudIntegrationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteCloudIntegration",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/cloud-integrations/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteCloudIntegrationReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteCloudIntegrationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteCloudIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1100,43 +969,6 @@ func (a *Client) DeleteService(params *DeleteServiceParams, opts ...ClientOption
 }
 
 /*
-DeleteSyntheticTest delete synthetic test API
-*/
-func (a *Client) DeleteSyntheticTest(params *DeleteSyntheticTestParams, opts ...ClientOption) (*DeleteSyntheticTestOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteSyntheticTestParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteSyntheticTest",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/synthetic-tests/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteSyntheticTestReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteSyntheticTestOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteSyntheticTestDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 DeleteTraceJaegerRemoteSamplingStrategy delete trace jaeger remote sampling strategy API
 */
 func (a *Client) DeleteTraceJaegerRemoteSamplingStrategy(params *DeleteTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*DeleteTraceJaegerRemoteSamplingStrategyOK, error) {
@@ -1244,43 +1076,6 @@ func (a *Client) DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, 
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteTraceTopTagConfigDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListCloudIntegrations list cloud integrations API
-*/
-func (a *Client) ListCloudIntegrations(params *ListCloudIntegrationsParams, opts ...ClientOption) (*ListCloudIntegrationsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListCloudIntegrationsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ListCloudIntegrations",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/cloud-integrations",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListCloudIntegrationsReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListCloudIntegrationsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListCloudIntegrationsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1581,43 +1376,6 @@ func (a *Client) ListServices(params *ListServicesParams, opts ...ClientOption) 
 }
 
 /*
-ListSyntheticTests list synthetic tests API
-*/
-func (a *Client) ListSyntheticTests(params *ListSyntheticTestsParams, opts ...ClientOption) (*ListSyntheticTestsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListSyntheticTestsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ListSyntheticTests",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/synthetic-tests",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListSyntheticTestsReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListSyntheticTestsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListSyntheticTestsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ListTraceJaegerRemoteSamplingStrategies list trace jaeger remote sampling strategies API
 */
 func (a *Client) ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error) {
@@ -1651,43 +1409,6 @@ func (a *Client) ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaeger
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListTraceJaegerRemoteSamplingStrategiesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ReadCloudIntegration read cloud integration API
-*/
-func (a *Client) ReadCloudIntegration(params *ReadCloudIntegrationParams, opts ...ClientOption) (*ReadCloudIntegrationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadCloudIntegrationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadCloudIntegration",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/cloud-integrations/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadCloudIntegrationReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadCloudIntegrationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadCloudIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2025,43 +1746,6 @@ func (a *Client) ReadService(params *ReadServiceParams, opts ...ClientOption) (*
 }
 
 /*
-ReadSyntheticTest read synthetic test API
-*/
-func (a *Client) ReadSyntheticTest(params *ReadSyntheticTestParams, opts ...ClientOption) (*ReadSyntheticTestOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadSyntheticTestParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadSyntheticTest",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/synthetic-tests/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadSyntheticTestReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadSyntheticTestOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadSyntheticTestDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ReadTraceJaegerRemoteSamplingStrategy read trace jaeger remote sampling strategy API
 */
 func (a *Client) ReadTraceJaegerRemoteSamplingStrategy(params *ReadTraceJaegerRemoteSamplingStrategyParams, opts ...ClientOption) (*ReadTraceJaegerRemoteSamplingStrategyOK, error) {
@@ -2209,43 +1893,6 @@ func (a *Client) SyncPrometheus(params *SyncPrometheusParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*SyncPrometheusDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-UpdateCloudIntegration update cloud integration API
-*/
-func (a *Client) UpdateCloudIntegration(params *UpdateCloudIntegrationParams, opts ...ClientOption) (*UpdateCloudIntegrationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateCloudIntegrationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateCloudIntegration",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/cloud-integrations/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateCloudIntegrationReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateCloudIntegrationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateCloudIntegrationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2542,43 +2189,6 @@ func (a *Client) UpdateService(params *UpdateServiceParams, opts ...ClientOption
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateServiceDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-UpdateSyntheticTest update synthetic test API
-*/
-func (a *Client) UpdateSyntheticTest(params *UpdateSyntheticTestParams, opts ...ClientOption) (*UpdateSyntheticTestOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateSyntheticTestParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateSyntheticTest",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/synthetic-tests/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateSyntheticTestReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateSyntheticTestOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
