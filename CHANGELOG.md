@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.33.0
+
 ### Added
 * Add support for resource `v1/config/SyntheticTest` and the `synthetic-tests` commands. Synthetic tests are promoted from the unstable API to v1: configures HTTP, DNS, TCP, and TLS probes that run from a set of locations on a schedule, with per-type assertions, retry config, and optional alerting on failures.
 * Add `DATADOG` connection type and `datadog` config to `v1/config/ExternalConnection`.
