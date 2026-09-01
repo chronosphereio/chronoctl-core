@@ -13,8 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestDNSTestConfigAssertion Wraps the assertion types valid for DNS tests. Exactly one assertion
-// field must be set per entry; enforced by validation.
+// SyntheticTestDNSTestConfigAssertion Assertion types valid for DNS tests. Set exactly one assertion field
+// per entry.
 //
 // swagger:model SyntheticTestDnsTestConfigAssertion
 type SyntheticTestDNSTestConfigAssertion struct {

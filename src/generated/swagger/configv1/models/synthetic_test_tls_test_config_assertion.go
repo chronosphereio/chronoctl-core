@@ -13,8 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestTLSTestConfigAssertion Wraps the assertion types valid for TLS tests. Exactly one assertion
-// field must be set per entry; enforced by validation.
+// SyntheticTestTLSTestConfigAssertion Assertion types valid for TLS tests. Set exactly one assertion field
+// per entry.
 //
 // swagger:model SyntheticTestTlsTestConfigAssertion
 type SyntheticTestTLSTestConfigAssertion struct {

@@ -12,8 +12,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Configv1ClientCertificate ClientCertificate is the certificate presented during the TLS handshake
-// (mTLS).
+// Configv1ClientCertificate Certificate presented during the TLS handshake for mutual TLS (mTLS).
 //
 // swagger:model configv1ClientCertificate
 type Configv1ClientCertificate struct {
@@ -21,8 +20,9 @@ type Configv1ClientCertificate struct {
 	// PEM leaf certificate plus any intermediates.
 	Certificate string `json:"certificate,omitempty"`
 
-	// Matching unencrypted PKCS#8/PKCS#1/SEC1 PEM key. Write-only: reads return
-	// **REDACTED**, and writing that sentinel back preserves the stored key.
+	// Matching unencrypted PEM key, in PKCS#8, PKCS#1, or SEC1 format. This
+	// field is write-only: reads return `**REDACTED**`, and writing that
+	// sentinel value back preserves the stored key.
 	PrivateKey string `json:"private_key,omitempty"`
 }
 

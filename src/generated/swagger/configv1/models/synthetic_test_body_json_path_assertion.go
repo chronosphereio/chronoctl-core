@@ -13,8 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestBodyJSONPathAssertion Asserts that a value extracted via JSONPath matches the target.
-// match_type controls how multiple matches are evaluated.
+// SyntheticTestBodyJSONPathAssertion Asserts that a value extracted with JSONPath matches the target. The
+// `match_type` field controls how multiple matches are evaluated.
 //
 // swagger:model SyntheticTestBodyJSONPathAssertion
 type SyntheticTestBodyJSONPathAssertion struct {

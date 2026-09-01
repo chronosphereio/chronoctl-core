@@ -19,13 +19,14 @@ import (
 // swagger:model SyntheticTestTcpTestConfig
 type SyntheticTestTCPTestConfig struct {
 
-	// host
+	// Host the test connects to.
+	// Example: db.example.com
 	Host string `json:"host,omitempty"`
 
-	// port
+	// Port the test connects to, from 1 to 65535.
 	Port int64 `json:"port,omitempty"`
 
-	// assertions
+	// Conditions the connection must satisfy for the test to pass.
 	Assertions []*SyntheticTestTCPTestConfigAssertion `json:"assertions"`
 }
 

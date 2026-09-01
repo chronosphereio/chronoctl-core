@@ -44,6 +44,8 @@ type ClientService interface {
 
 	CreateObjectDiscoveryRule(params *CreateObjectDiscoveryRuleParams, opts ...ClientOption) (*CreateObjectDiscoveryRuleOK, error)
 
+	CreateQueryResourcePools(params *CreateQueryResourcePoolsParams, opts ...ClientOption) (*CreateQueryResourcePoolsOK, error)
+
 	CreateSavedTraceSearch(params *CreateSavedTraceSearchParams, opts ...ClientOption) (*CreateSavedTraceSearchOK, error)
 
 	CreateService(params *CreateServiceParams, opts ...ClientOption) (*CreateServiceOK, error)
@@ -67,6 +69,8 @@ type ClientService interface {
 	DeleteNotebook(params *DeleteNotebookParams, opts ...ClientOption) (*DeleteNotebookOK, error)
 
 	DeleteObjectDiscoveryRule(params *DeleteObjectDiscoveryRuleParams, opts ...ClientOption) (*DeleteObjectDiscoveryRuleOK, error)
+
+	DeleteQueryResourcePools(params *DeleteQueryResourcePoolsParams, opts ...ClientOption) (*DeleteQueryResourcePoolsOK, error)
 
 	DeleteSavedTraceSearch(params *DeleteSavedTraceSearchParams, opts ...ClientOption) (*DeleteSavedTraceSearchOK, error)
 
@@ -110,6 +114,8 @@ type ClientService interface {
 
 	ReadObjectDiscoveryRule(params *ReadObjectDiscoveryRuleParams, opts ...ClientOption) (*ReadObjectDiscoveryRuleOK, error)
 
+	ReadQueryResourcePools(params *ReadQueryResourcePoolsParams, opts ...ClientOption) (*ReadQueryResourcePoolsOK, error)
+
 	ReadSavedTraceSearch(params *ReadSavedTraceSearchParams, opts ...ClientOption) (*ReadSavedTraceSearchOK, error)
 
 	ReadService(params *ReadServiceParams, opts ...ClientOption) (*ReadServiceOK, error)
@@ -133,6 +139,8 @@ type ClientService interface {
 	UpdateNotebook(params *UpdateNotebookParams, opts ...ClientOption) (*UpdateNotebookOK, error)
 
 	UpdateObjectDiscoveryRule(params *UpdateObjectDiscoveryRuleParams, opts ...ClientOption) (*UpdateObjectDiscoveryRuleOK, error)
+
+	UpdateQueryResourcePools(params *UpdateQueryResourcePoolsParams, opts ...ClientOption) (*UpdateQueryResourcePoolsOK, error)
 
 	UpdateSavedTraceSearch(params *UpdateSavedTraceSearchParams, opts ...ClientOption) (*UpdateSavedTraceSearchOK, error)
 
@@ -444,6 +452,43 @@ func (a *Client) CreateObjectDiscoveryRule(params *CreateObjectDiscoveryRulePara
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateObjectDiscoveryRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateQueryResourcePools QueryResourcePools CRUD (subset for singleton objects)
+*/
+func (a *Client) CreateQueryResourcePools(params *CreateQueryResourcePoolsParams, opts ...ClientOption) (*CreateQueryResourcePoolsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateQueryResourcePoolsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateQueryResourcePools",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/config/query-resource-pools",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateQueryResourcePoolsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateQueryResourcePoolsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateQueryResourcePoolsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -891,6 +936,43 @@ func (a *Client) DeleteObjectDiscoveryRule(params *DeleteObjectDiscoveryRulePara
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteObjectDiscoveryRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteQueryResourcePools delete query resource pools API
+*/
+func (a *Client) DeleteQueryResourcePools(params *DeleteQueryResourcePoolsParams, opts ...ClientOption) (*DeleteQueryResourcePoolsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteQueryResourcePoolsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteQueryResourcePools",
+		Method:             "DELETE",
+		PathPattern:        "/api/unstable/config/query-resource-pools",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteQueryResourcePoolsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteQueryResourcePoolsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteQueryResourcePoolsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1672,6 +1754,43 @@ func (a *Client) ReadObjectDiscoveryRule(params *ReadObjectDiscoveryRuleParams, 
 }
 
 /*
+ReadQueryResourcePools read query resource pools API
+*/
+func (a *Client) ReadQueryResourcePools(params *ReadQueryResourcePoolsParams, opts ...ClientOption) (*ReadQueryResourcePoolsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadQueryResourcePoolsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadQueryResourcePools",
+		Method:             "GET",
+		PathPattern:        "/api/unstable/config/query-resource-pools",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadQueryResourcePoolsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadQueryResourcePoolsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadQueryResourcePoolsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadSavedTraceSearch read saved trace search API
 */
 func (a *Client) ReadSavedTraceSearch(params *ReadSavedTraceSearchParams, opts ...ClientOption) (*ReadSavedTraceSearchOK, error) {
@@ -2115,6 +2234,43 @@ func (a *Client) UpdateObjectDiscoveryRule(params *UpdateObjectDiscoveryRulePara
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateObjectDiscoveryRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateQueryResourcePools update query resource pools API
+*/
+func (a *Client) UpdateQueryResourcePools(params *UpdateQueryResourcePoolsParams, opts ...ClientOption) (*UpdateQueryResourcePoolsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateQueryResourcePoolsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateQueryResourcePools",
+		Method:             "PUT",
+		PathPattern:        "/api/unstable/config/query-resource-pools",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateQueryResourcePoolsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateQueryResourcePoolsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateQueryResourcePoolsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

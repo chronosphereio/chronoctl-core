@@ -13,8 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestTCPTestConfigAssertion Wraps the assertion types valid for TCP tests. Exactly one assertion
-// field must be set per entry; enforced by validation.
+// SyntheticTestTCPTestConfigAssertion Assertion types valid for TCP tests. Set exactly one assertion field
+// per entry.
 //
 // swagger:model SyntheticTestTcpTestConfigAssertion
 type SyntheticTestTCPTestConfigAssertion struct {

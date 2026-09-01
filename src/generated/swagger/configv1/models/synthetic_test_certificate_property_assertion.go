@@ -13,8 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestCertificatePropertyAssertion Asserts on a named property of the leaf certificate, e.g. subject, issuer,
-// or a Subject Alternative Name.
+// SyntheticTestCertificatePropertyAssertion Asserts on a named property of the leaf certificate, for example
+// `subject`, `issuer`, or a Subject Alternative Name (SAN).
 //
 // swagger:model SyntheticTestCertificatePropertyAssertion
 type SyntheticTestCertificatePropertyAssertion struct {

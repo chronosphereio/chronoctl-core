@@ -22,23 +22,25 @@ type SyntheticTestHTTPTestConfig struct {
 	// method
 	Method HTTPTestConfigHTTPMethod `json:"method,omitempty"`
 
-	// url
+	// URL the test requests.
+	// Example: https://api.example.com/health
 	URL string `json:"url,omitempty"`
 
 	// authentication
 	Authentication *HTTPTestConfigHTTPAuth `json:"authentication,omitempty"`
 
-	// headers
+	// Headers sent with the request.
 	Headers []*HTTPTestConfigHeader `json:"headers"`
 
-	// request body
+	// Body sent with the request.
 	// Format: byte
 	RequestBody strfmt.Base64 `json:"request_body,omitempty"`
 
-	// query params
+	// Query parameters appended to the URL.
 	QueryParams map[string]string `json:"query_params,omitempty"`
 
-	// follow redirects
+	// If `true`, the test follows HTTP redirects up to `max_redirects`. If
+	// `false, the test doesn't follow redirects. Default: `false`.
 	FollowRedirects bool `json:"follow_redirects,omitempty"`
 
 	// content type
@@ -47,22 +49,28 @@ type SyntheticTestHTTPTestConfig struct {
 	// http version
 	HTTPVersion HTTPTestConfigHTTPVersion `json:"http_version,omitempty"`
 
-	// optional — 0-10; defaults to 10 when follow_redirects is set
+	// Maximum number of redirects to follow, from 0 to 10. Applies only when
+	// `follow_redirects` is `true`. Default: `10`.
 	MaxRedirects int32 `json:"max_redirects,omitempty"`
 
-	// assertions
+	// Conditions the response must satisfy for the test to pass.
 	Assertions []*SyntheticTestHTTPTestConfigAssertion `json:"assertions"`
 
-	// Skip TLS certificate verification for HTTPS requests.
+	// If `true`, the test skips TLS certificate verification for HTTPS
+	// requests. If `false`, an invalid certificate fails the test.
+	// Default: `false`.
 	AllowInsecureTLS bool `json:"allow_insecure_tls,omitempty"`
 
-	// Cap on captured response-body size in bytes; 0 means use the default.
+	// Maximum size of the captured response body, in bytes, up to 51200.
+	// A value of `0` lets the probe apply its own capture limit.
 	MaxResponseBodyBytes int64 `json:"max_response_body_bytes,omitempty"`
 
-	// When set, the captured body is not persisted on failed executions.
+	// If `true`, the response body captured on a failed execution isn't stored.
+	// If `false`, the captured body is stored with the failed execution.
+	// Default: `false`.
 	DoNotSaveResponseBodyOnFailure bool `json:"do_not_save_response_body_on_failure,omitempty"`
 
-	// cookies
+	// Cookies sent with the request.
 	Cookies []*HTTPTestConfigCookie `json:"cookies"`
 }
 

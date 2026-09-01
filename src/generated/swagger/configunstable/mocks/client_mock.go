@@ -195,6 +195,26 @@ func (mr *MockClientServiceMockRecorder) CreateObjectDiscoveryRule(params interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateObjectDiscoveryRule", reflect.TypeOf((*MockClientService)(nil).CreateObjectDiscoveryRule), varargs...)
 }
 
+// CreateQueryResourcePools mocks base method.
+func (m *MockClientService) CreateQueryResourcePools(params *operations.CreateQueryResourcePoolsParams, opts ...operations.ClientOption) (*operations.CreateQueryResourcePoolsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateQueryResourcePools", varargs...)
+	ret0, _ := ret[0].(*operations.CreateQueryResourcePoolsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateQueryResourcePools indicates an expected call of CreateQueryResourcePools.
+func (mr *MockClientServiceMockRecorder) CreateQueryResourcePools(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateQueryResourcePools", reflect.TypeOf((*MockClientService)(nil).CreateQueryResourcePools), varargs...)
+}
+
 // CreateSavedTraceSearch mocks base method.
 func (m *MockClientService) CreateSavedTraceSearch(params *operations.CreateSavedTraceSearchParams, opts ...operations.ClientOption) (*operations.CreateSavedTraceSearchOK, error) {
 	m.ctrl.T.Helper()
@@ -433,6 +453,26 @@ func (mr *MockClientServiceMockRecorder) DeleteObjectDiscoveryRule(params interf
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteObjectDiscoveryRule", reflect.TypeOf((*MockClientService)(nil).DeleteObjectDiscoveryRule), varargs...)
+}
+
+// DeleteQueryResourcePools mocks base method.
+func (m *MockClientService) DeleteQueryResourcePools(params *operations.DeleteQueryResourcePoolsParams, opts ...operations.ClientOption) (*operations.DeleteQueryResourcePoolsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteQueryResourcePools", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteQueryResourcePoolsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteQueryResourcePools indicates an expected call of DeleteQueryResourcePools.
+func (mr *MockClientServiceMockRecorder) DeleteQueryResourcePools(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteQueryResourcePools", reflect.TypeOf((*MockClientService)(nil).DeleteQueryResourcePools), varargs...)
 }
 
 // DeleteSavedTraceSearch mocks base method.
@@ -855,6 +895,26 @@ func (mr *MockClientServiceMockRecorder) ReadObjectDiscoveryRule(params interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadObjectDiscoveryRule", reflect.TypeOf((*MockClientService)(nil).ReadObjectDiscoveryRule), varargs...)
 }
 
+// ReadQueryResourcePools mocks base method.
+func (m *MockClientService) ReadQueryResourcePools(params *operations.ReadQueryResourcePoolsParams, opts ...operations.ClientOption) (*operations.ReadQueryResourcePoolsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadQueryResourcePools", varargs...)
+	ret0, _ := ret[0].(*operations.ReadQueryResourcePoolsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadQueryResourcePools indicates an expected call of ReadQueryResourcePools.
+func (mr *MockClientServiceMockRecorder) ReadQueryResourcePools(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadQueryResourcePools", reflect.TypeOf((*MockClientService)(nil).ReadQueryResourcePools), varargs...)
+}
+
 // ReadSavedTraceSearch mocks base method.
 func (m *MockClientService) ReadSavedTraceSearch(params *operations.ReadSavedTraceSearchParams, opts ...operations.ClientOption) (*operations.ReadSavedTraceSearchOK, error) {
 	m.ctrl.T.Helper()
@@ -1105,6 +1165,26 @@ func (mr *MockClientServiceMockRecorder) UpdateObjectDiscoveryRule(params interf
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateObjectDiscoveryRule", reflect.TypeOf((*MockClientService)(nil).UpdateObjectDiscoveryRule), varargs...)
+}
+
+// UpdateQueryResourcePools mocks base method.
+func (m *MockClientService) UpdateQueryResourcePools(params *operations.UpdateQueryResourcePoolsParams, opts ...operations.ClientOption) (*operations.UpdateQueryResourcePoolsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateQueryResourcePools", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateQueryResourcePoolsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateQueryResourcePools indicates an expected call of UpdateQueryResourcePools.
+func (mr *MockClientServiceMockRecorder) UpdateQueryResourcePools(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateQueryResourcePools", reflect.TypeOf((*MockClientService)(nil).UpdateQueryResourcePools), varargs...)
 }
 
 // UpdateSavedTraceSearch mocks base method.

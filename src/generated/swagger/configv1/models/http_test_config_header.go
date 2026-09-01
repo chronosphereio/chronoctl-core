@@ -12,10 +12,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// HTTPTestConfigHeader Single HTTP request header. Modeled as a message rather than
-// map<string,string> to preserve order and leave room for future
-// per-header fields. Duplicate names (case-insensitive) are rejected
-// by validation.
+// HTTPTestConfigHeader Single HTTP request header. Headers are sent in the order listed.
+// Duplicate names are rejected, ignoring case.
 //
 // swagger:model HttpTestConfigHeader
 type HTTPTestConfigHeader struct {

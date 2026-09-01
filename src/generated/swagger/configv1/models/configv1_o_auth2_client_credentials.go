@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Configv1OAuth2ClientCredentials OAuth2ClientCredentials configures the OAuth 2.0 client-credentials grant.
+// Configv1OAuth2ClientCredentials Configures the OAuth 2.0 client-credentials grant.
 //
 // swagger:model configv1OAuth2ClientCredentials
 type Configv1OAuth2ClientCredentials struct {
@@ -21,10 +21,10 @@ type Configv1OAuth2ClientCredentials struct {
 	// common
 	Common *Configv1OAuth2Common `json:"common,omitempty"`
 
-	// client id
+	// Client identifier issued to the test.
 	ClientID string `json:"client_id,omitempty"`
 
-	// client secret
+	// Client secret issued to the test.
 	ClientSecret string `json:"client_secret,omitempty"`
 }
 

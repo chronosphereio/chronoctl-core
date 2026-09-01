@@ -13,9 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestStatusCodeAssertion Asserts that the HTTP response status code matches the target.
-// `target` is a string so regex patterns (e.g. "2..") can share the field
-// with literal codes (e.g. "200").
+// SyntheticTestStatusCodeAssertion Asserts that the HTTP response status code matches the target. The
+// `target` field accepts a literal code such as `200`, or a regular
+// expression such as `2..` when the operator is `REGEX_EQUALS` or
+// `REGEX_NOT_EQUALS`.
 //
 // swagger:model SyntheticTestStatusCodeAssertion
 type SyntheticTestStatusCodeAssertion struct {

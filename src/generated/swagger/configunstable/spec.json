@@ -250,6 +250,65 @@
       },
       "type": "object"
     },
+    "QueryResourcePoolsDataReadLimit": {
+      "description": "DataReadLimit defines the datapoints-read rate limit for a pool and the\ncircuit-breaker behavior applied when the pool exceeds it. If a pool has\nno `data_read_limit`, its consumption is measured but never limited,\nsubject only to the tenant-wide query capacity system limits.",
+      "properties": {
+        "max_datapoints_read_per_second": {
+          "description": "Maximum datapoints read per second for the pool, aggregated across all\nsources in the pool. This field must be set explicitly; a value of `0`\nblocks all queries from the pool.",
+          "format": "int64",
+          "type": "string"
+        },
+        "sustain_secs": {
+          "description": "Optional. How long the pool must remain above\n`max_datapoints_read_per_second` before its queries are rejected. Must\nbe a whole multiple of 60 seconds, between 60 and 300; `0` (or\nomitted) applies the 60-second default. Must be omitted when\n`max_datapoints_read_per_second` is `0`, where queries are rejected\nimmediately.\n\nOnce a pool trips its limit, all of its queries are rejected for a\npenalty period, which increases on repeated offenses and resets after\nthe pool remains under its limit. The penalty behavior is\nsystem-managed and not configurable.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "QueryResourcePoolsDefaultPool": {
+      "properties": {
+        "data_read_limit": {
+          "$ref": "#/definitions/QueryResourcePoolsDataReadLimit"
+        }
+      },
+      "type": "object"
+    },
+    "QueryResourcePoolsPool": {
+      "properties": {
+        "name": {
+          "description": "Name of the pool, which must be unique.",
+          "type": "string"
+        },
+        "source_types": {
+          "description": "Source types that map to this pool. A query source maps to the first\npool, in configured order, whose `source_types` matches its source\ntype and whose `source_names` (if set) matches its source name.",
+          "items": {
+            "$ref": "#/definitions/QueryResourcePoolsSourceType"
+          },
+          "type": "array"
+        },
+        "source_names": {
+          "description": "Optional. Narrows the pool to specific named sources of the pool's\nsource types: service account IDs for `SERVICE_ACCOUNT`, monitor slugs\nfor `MONITOR`, recording rule slugs for `RECORDING_RULE`, and SLO\nslugs for `SLO`.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "data_read_limit": {
+          "$ref": "#/definitions/QueryResourcePoolsDataReadLimit"
+        }
+      },
+      "type": "object"
+    },
+    "QueryResourcePoolsSourceType": {
+      "enum": [
+        "MONITOR",
+        "RECORDING_RULE",
+        "SLO",
+        "SERVICE_ACCOUNT"
+      ],
+      "type": "string"
+    },
     "SavedTraceSearchBetweenTimeFilter": {
       "properties": {
         "min_time": {
@@ -863,6 +922,26 @@
       },
       "type": "object"
     },
+    "configunstableCreateQueryResourcePoolsRequest": {
+      "properties": {
+        "query_resource_pools": {
+          "$ref": "#/definitions/configunstableQueryResourcePools"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the QueryResourcePools. If the specified configuration is valid, the endpoint returns a partial response without the QueryResourcePools. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateQueryResourcePoolsResponse": {
+      "properties": {
+        "query_resource_pools": {
+          "$ref": "#/definitions/configunstableQueryResourcePools"
+        }
+      },
+      "type": "object"
+    },
     "configunstableCreateSavedTraceSearchRequest": {
       "properties": {
         "saved_trace_search": {
@@ -1030,6 +1109,9 @@
       "type": "object"
     },
     "configunstableDeleteObjectDiscoveryRuleResponse": {
+      "type": "object"
+    },
+    "configunstableDeleteQueryResourcePoolsResponse": {
       "type": "object"
     },
     "configunstableDeleteSavedTraceSearchResponse": {
@@ -1331,6 +1413,34 @@
       },
       "type": "object"
     },
+    "configunstableQueryResourcePools": {
+      "description": "QueryResourcePools groups automated metrics query sources (monitors,\nrecording rules, SLOs, and service accounts) into pools with per-pool\ndatapoints-read rate limits. When a pool sustains usage above its limit for\nthe configured sustain period, all of its queries are rejected for a penalty\nperiod, after which the pool is readmitted. Repeat offenses increase the\npenalty period; sustained good behavior resets it.\n\nPools only apply to automated query sources. Queries issued manually (for\nexample, from the UI) are never admission-controlled by pools. Query\nsources that don't match any pool map to the default pool.",
+      "properties": {
+        "pools": {
+          "description": "Optional. Pools that group automated query sources. Query sources map to\nthe first pool that matches, in configured order.",
+          "items": {
+            "$ref": "#/definitions/QueryResourcePoolsPool"
+          },
+          "type": "array"
+        },
+        "default_pool": {
+          "$ref": "#/definitions/QueryResourcePoolsDefaultPool"
+        },
+        "created_at": {
+          "description": "Set in API responses.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Set in API responses.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configunstableReadCommandCenterGroupResponse": {
       "properties": {
         "command_center_group": {
@@ -1383,6 +1493,14 @@
       "properties": {
         "object_discovery_rule": {
           "$ref": "#/definitions/configunstableObjectDiscoveryRule"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadQueryResourcePoolsResponse": {
+      "properties": {
+        "query_resource_pools": {
+          "$ref": "#/definitions/configunstableQueryResourcePools"
         }
       },
       "type": "object"
@@ -1712,6 +1830,30 @@
       "properties": {
         "object_discovery_rule": {
           "$ref": "#/definitions/configunstableObjectDiscoveryRule"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateQueryResourcePoolsRequest": {
+      "properties": {
+        "query_resource_pools": {
+          "$ref": "#/definitions/configunstableQueryResourcePools"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the QueryResourcePools will be created if it does not already exist. If `false`, an error will be returned if the QueryResourcePools does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the QueryResourcePools. If the specified configuration is valid, the endpoint returns a partial response without the QueryResourcePools. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableUpdateQueryResourcePoolsResponse": {
+      "properties": {
+        "query_resource_pools": {
+          "$ref": "#/definitions/configunstableQueryResourcePools"
         }
       },
       "type": "object"
@@ -3590,6 +3732,182 @@
         },
         "tags": [
           "ObjectDiscoveryRule"
+        ]
+      }
+    },
+    "/api/unstable/config/query-resource-pools": {
+      "delete": {
+        "operationId": "DeleteQueryResourcePools",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "dry_run",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteQueryResourcePoolsResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the QueryResourcePools because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the QueryResourcePools because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "QueryResourcePools"
+        ]
+      },
+      "get": {
+        "operationId": "ReadQueryResourcePools",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadQueryResourcePoolsResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the QueryResourcePools because QueryResourcePools has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "QueryResourcePools"
+        ]
+      },
+      "post": {
+        "description": "QueryResourcePools CRUD (subset for singleton objects)",
+        "operationId": "CreateQueryResourcePools",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateQueryResourcePoolsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created QueryResourcePools.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateQueryResourcePoolsResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the QueryResourcePools because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the QueryResourcePools because there is a conflict with an existing QueryResourcePools.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "QueryResourcePools"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateQueryResourcePools",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateQueryResourcePoolsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated QueryResourcePools.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateQueryResourcePoolsResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the QueryResourcePools because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the QueryResourcePools because QueryResourcePools has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "QueryResourcePools"
         ]
       }
     },
