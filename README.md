@@ -22,6 +22,7 @@ to a resource type.
 * `azure-metrics-integrations`
 * `buckets`
 * `classic-dashboards` (`grafana-dashboards`)
+* `cloud-integrations`
 * `collections`
 * `dashboards`
 * `derived-labels`
@@ -37,6 +38,7 @@ to a resource type.
 * `resource-pools`
 * `rollup-rules`
 * `service-accounts`
+* `synthetic-tests`
 * `teams`
 
 These resource commands have subcommands to read and manipulate entities via
