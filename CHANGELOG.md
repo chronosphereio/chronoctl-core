@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.34.0
+
 ### Added
 * Add `PUT` and `DELETE` HTTP methods to `v1/config/SyntheticTest` HTTP test configuration.
 * Add support for resource `unstable/config/QueryResourcePools` and the `query-resource-pools` commands. Query resource pools group automated metrics query sources (monitors, recording rules, SLOs, and service accounts) into pools with per-pool datapoints-read rate limits.
