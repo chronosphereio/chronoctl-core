@@ -13,10 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestHTTPTestConfigAssertion Wraps the assertion types valid for HTTP tests. Exactly one assertion
-// field must be set per entry; enforced by validation. Each test type
-// declares its own Assertion wrapper enumerating the subset of
-// SyntheticTest-level assertion messages valid for it.
+// SyntheticTestHTTPTestConfigAssertion Assertion types valid for HTTP tests. Set exactly one assertion field
+// per entry.
 //
 // swagger:model SyntheticTestHttpTestConfigAssertion
 type SyntheticTestHTTPTestConfigAssertion struct {

@@ -39,10 +39,11 @@ type Configv1SyntheticTest struct {
 	// test type
 	TestType SyntheticTestTestType `json:"test_type,omitempty"`
 
-	// interval secs
+	// How often each location runs the test, in seconds.
+	// Example: 60
 	IntervalSecs int32 `json:"interval_secs,omitempty"`
 
-	// locations
+	// Probe locations that run the test. Specify at least one.
 	Locations []SyntheticTestTestLocation `json:"locations"`
 
 	// http test
@@ -60,13 +61,14 @@ type Configv1SyntheticTest struct {
 	// tls test
 	TLSTest *SyntheticTestTLSTestConfig `json:"tls_test,omitempty"`
 
-	// description
+	// Description of what the test verifies.
 	Description string `json:"description,omitempty"`
 
-	// labels
+	// Labels attached to the test, used to filter the synthetic test list.
 	Labels map[string]string `json:"labels,omitempty"`
 
-	// optional — 1-60s; defaults to 60s
+	// How long a single execution can run before it times out, in seconds, from
+	// 1 to 60. Default: `60`.
 	TimeoutSecs int32 `json:"timeout_secs,omitempty"`
 
 	// monitor config

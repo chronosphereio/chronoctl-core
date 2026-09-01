@@ -1235,7 +1235,7 @@
       "type": "string"
     },
     "HttpTestConfigContentType": {
-      "description": "Content type sent with the request. Mapped to a Content-Type request\nheader. Validation rejects setting this alongside an explicit\nContent-Type header.",
+      "description": "Content type sent with the request, mapped to a `Content-Type` request\nheader. Setting both this field and an explicit `Content-Type` header\nreturns an error.",
       "enum": [
         "CONTENT_TYPE_APPLICATION_JSON",
         "CONTENT_TYPE_APPLICATION_X_WWW_FORM_URLENCODED",
@@ -1249,7 +1249,7 @@
       "type": "string"
     },
     "HttpTestConfigCookie": {
-      "description": "Single cookie sent with the request. All cookies are combined into one\nCookie request header (\"name=value; name2=value2\") in order. Duplicate\nnames (case-sensitive, unlike headers) are rejected by validation, as\nis setting cookies alongside an explicit Cookie header.",
+      "description": "Single cookie sent with the request. All cookies are combined in order\ninto one `Cookie` request header, such as `name=value; name2=value2`.\nDuplicate names are rejected. Unlike header names, cookie names are\nmatched with case sensitivity. Setting cookies alongside an explicit\n`Cookie` header returns an error.",
       "properties": {
         "name": {
           "type": "string"
@@ -1261,7 +1261,7 @@
       "type": "object"
     },
     "HttpTestConfigHeader": {
-      "description": "Single HTTP request header. Modeled as a message rather than\nmap\u003cstring,string\u003e to preserve order and leave room for future\nper-header fields. Duplicate names (case-insensitive) are rejected\nby validation.",
+      "description": "Single HTTP request header. Headers are sent in the order listed.\nDuplicate names are rejected, ignoring case.",
       "properties": {
         "name": {
           "type": "string"
@@ -1273,7 +1273,7 @@
       "type": "object"
     },
     "HttpTestConfigHttpAuth": {
-      "description": "Any combination of these auth mechanisms may be set; additional auth types\nwill be added as siblings. Validation checks the required fields of\nwhichever methods are set.",
+      "description": "Authentication applied to the request. Set any combination of these\nmethods. Each method you set must carry its own required fields.",
       "properties": {
         "basic_auth": {
           "$ref": "#/definitions/configv1BasicAuth"
@@ -1296,12 +1296,14 @@
     "HttpTestConfigHttpMethod": {
       "enum": [
         "GET",
-        "POST"
+        "POST",
+        "PUT",
+        "DELETE"
       ],
       "type": "string"
     },
     "HttpTestConfigHttpVersion": {
-      "description": "HTTP protocol version used for the request. When unset, the default is to\nnegotiate HTTP/2 with fallback to HTTP/1.1.",
+      "description": "HTTP protocol version used for the request. When unset, the request\nnegotiates HTTP/2 and falls back to HTTP/1.1.",
       "enum": [
         "HTTP_VERSION_HTTP_1_1",
         "HTTP_VERSION_HTTP_2"
@@ -2626,7 +2628,7 @@
       "type": "object"
     },
     "SyntheticTestBodyJSONPathAssertion": {
-      "description": "Asserts that a value extracted via JSONPath matches the target.\nmatch_type controls how multiple matches are evaluated.",
+      "description": "Asserts that a value extracted with JSONPath matches the target. The\n`match_type` field controls how multiple matches are evaluated.",
       "properties": {
         "json_path": {
           "type": "string"
@@ -2670,7 +2672,7 @@
       "type": "object"
     },
     "SyntheticTestBodyXPathAssertion": {
-      "description": "Asserts that a value extracted via XPath 1.0 matches the target.",
+      "description": "Asserts that a value extracted with XPath 1.0 matches the target.",
       "properties": {
         "xpath": {
           "type": "string"
@@ -2719,7 +2721,7 @@
       "type": "string"
     },
     "SyntheticTestCertificatePropertyAssertion": {
-      "description": "Asserts on a named property of the leaf certificate, e.g. subject, issuer,\nor a Subject Alternative Name.",
+      "description": "Asserts on a named property of the leaf certificate, for example\n`subject`, `issuer`, or a Subject Alternative Name (SAN).",
       "properties": {
         "property": {
           "type": "string"
@@ -2745,7 +2747,7 @@
       "type": "string"
     },
     "SyntheticTestConnectionAssertion": {
-      "description": "Asserts on the outcome of the TCP connection attempt. Only the EQUALS\noperator is supported (e.g. connection is Established).",
+      "description": "Asserts on the outcome of the TCP connection attempt. Only the `EQUALS`\noperator is supported, for example a target of `ESTABLISHED`.",
       "properties": {
         "operator": {
           "$ref": "#/definitions/SyntheticTestConnectionAssertionOperator"
@@ -2763,7 +2765,7 @@
       "type": "string"
     },
     "SyntheticTestDnsRecordAssertion": {
-      "description": "Asserts on DNS records returned for the query. match_scope selects whether\nthe operator must hold for every record of record_type or for at least\none. SOA and SRV record types are only valid with AT_LEAST_ONE.",
+      "description": "Asserts on DNS records returned for the query. The `match_scope` field\nselects whether the operator must hold for every record of `record_type`\nor for at least one. The `SOA` and `SRV` record types are valid only with\n`AT_LEAST_ONE`.",
       "properties": {
         "match_scope": {
           "$ref": "#/definitions/DnsRecordAssertionMatchScope"
@@ -2792,18 +2794,21 @@
     "SyntheticTestDnsTestConfig": {
       "properties": {
         "domain": {
+          "description": "Domain the test resolves.",
+          "example": "api.example.com",
           "type": "string"
         },
         "dns_server": {
-          "description": "Optional explicit nameserver to query; runner default resolver if unset.",
+          "description": "Nameserver to query. When unset, the test uses the default resolver for\nthe probe location.",
           "type": "string"
         },
         "dns_server_port": {
-          "description": "Nameserver port; required when dns_server is set, rejected without it.",
+          "description": "Port of the nameserver in `dns_server`, from 1 to 65535. Required when\n`dns_server` is set, and rejected when it isn't.",
           "format": "int64",
           "type": "integer"
         },
         "assertions": {
+          "description": "Conditions the response must satisfy for the test to pass.",
           "items": {
             "$ref": "#/definitions/SyntheticTestDnsTestConfigAssertion"
           },
@@ -2813,7 +2818,7 @@
       "type": "object"
     },
     "SyntheticTestDnsTestConfigAssertion": {
-      "description": "Wraps the assertion types valid for DNS tests. Exactly one assertion\nfield must be set per entry; enforced by validation.",
+      "description": "Assertion types valid for DNS tests. Set exactly one assertion field\nper entry.",
       "properties": {
         "response_time_assertion": {
           "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
@@ -2861,18 +2866,22 @@
           "$ref": "#/definitions/HttpTestConfigHttpMethod"
         },
         "url": {
+          "description": "URL the test requests.",
+          "example": "https://api.example.com/health",
           "type": "string"
         },
         "authentication": {
           "$ref": "#/definitions/HttpTestConfigHttpAuth"
         },
         "headers": {
+          "description": "Headers sent with the request.",
           "items": {
             "$ref": "#/definitions/HttpTestConfigHeader"
           },
           "type": "array"
         },
         "request_body": {
+          "description": "Body sent with the request.",
           "format": "byte",
           "type": "string"
         },
@@ -2880,9 +2889,11 @@
           "additionalProperties": {
             "type": "string"
           },
+          "description": "Query parameters appended to the URL.",
           "type": "object"
         },
         "follow_redirects": {
+          "description": "If `true`, the test follows HTTP redirects up to `max_redirects`. If\n`false, the test doesn't follow redirects. Default: `false`.",
           "type": "boolean"
         },
         "content_type": {
@@ -2892,30 +2903,32 @@
           "$ref": "#/definitions/HttpTestConfigHttpVersion"
         },
         "max_redirects": {
-          "description": "optional — 0-10; defaults to 10 when follow_redirects is set",
+          "description": "Maximum number of redirects to follow, from 0 to 10. Applies only when\n`follow_redirects` is `true`. Default: `10`.",
           "format": "int32",
           "type": "integer"
         },
         "assertions": {
+          "description": "Conditions the response must satisfy for the test to pass.",
           "items": {
             "$ref": "#/definitions/SyntheticTestHttpTestConfigAssertion"
           },
           "type": "array"
         },
         "allow_insecure_tls": {
-          "description": "Skip TLS certificate verification for HTTPS requests.",
+          "description": "If `true`, the test skips TLS certificate verification for HTTPS\nrequests. If `false`, an invalid certificate fails the test.\nDefault: `false`.",
           "type": "boolean"
         },
         "max_response_body_bytes": {
-          "description": "Cap on captured response-body size in bytes; 0 means use the default.",
+          "description": "Maximum size of the captured response body, in bytes, up to 51200.\nA value of `0` lets the probe apply its own capture limit.",
           "format": "int64",
           "type": "integer"
         },
         "do_not_save_response_body_on_failure": {
-          "description": "When set, the captured body is not persisted on failed executions.",
+          "description": "If `true`, the response body captured on a failed execution isn't stored.\nIf `false`, the captured body is stored with the failed execution.\nDefault: `false`.",
           "type": "boolean"
         },
         "cookies": {
+          "description": "Cookies sent with the request.",
           "items": {
             "$ref": "#/definitions/HttpTestConfigCookie"
           },
@@ -2925,7 +2938,7 @@
       "type": "object"
     },
     "SyntheticTestHttpTestConfigAssertion": {
-      "description": "Wraps the assertion types valid for HTTP tests. Exactly one assertion\nfield must be set per entry; enforced by validation. Each test type\ndeclares its own Assertion wrapper enumerating the subset of\nSyntheticTest-level assertion messages valid for it.",
+      "description": "Assertion types valid for HTTP tests. Set exactly one assertion field\nper entry.",
       "properties": {
         "status_code_assertion": {
           "$ref": "#/definitions/SyntheticTestStatusCodeAssertion"
@@ -2955,15 +2968,15 @@
       "type": "object"
     },
     "SyntheticTestMonitorConfig": {
-      "description": "Alerting configuration for the test. An alert fires when at least\nmin_failing_locations locations are simultaneously failing within the\nfailing-duration window, and resolves automatically (no separate resolve\nduration).",
+      "description": "Alerting configuration for the test. An alert fires when at least\n`min_failing_locations` locations fail simultaneously within the\n`failing_duration_secs` window. Alerts resolve automatically, and there\nis no separate resolve duration.",
       "properties": {
         "min_failing_locations": {
-          "description": "Peak count of simultaneously-failing locations within the window\nrequired to fire. Must be between 1 and the number of test locations.",
+          "description": "Peak number of locations failing simultaneously within the window that\nis required to fire an alert. Must be between 1 and the number of test\nlocations.",
           "format": "int32",
           "type": "integer"
         },
         "failing_duration_secs": {
-          "description": "Failure-duration window in seconds. 0 means alert on first failure.\nOtherwise must be at least interval_secs.",
+          "description": "Failure-duration window, in seconds. 0 alerts on the first failure. Any\nother value must be at least `interval_secs`.",
           "format": "int32",
           "type": "integer"
         },
@@ -2975,7 +2988,7 @@
           "type": "object"
         },
         "notification_policy_slug": {
-          "description": "Notification policy that routes the generated alert.",
+          "description": "Slug of the notification policy that routes the generated alert.",
           "type": "string"
         }
       },
@@ -3005,7 +3018,7 @@
       "type": "string"
     },
     "SyntheticTestResponseTimeAssertion": {
-      "description": "Asserts that the request response time is below the target, in\nmilliseconds. Scope selects whether DNS resolution time is included.",
+      "description": "Asserts that the request response time is below the target, in\nmilliseconds. The `scope` field selects whether DNS resolution time is\nincluded, and doesn't apply to DNS tests.",
       "properties": {
         "operator": {
           "$ref": "#/definitions/SyntheticTestResponseTimeAssertionOperator"
@@ -3027,15 +3040,15 @@
       "type": "string"
     },
     "SyntheticTestRetryConfig": {
-      "description": "Per-location retry behavior after a failed attempt. No retries when\nunset.",
+      "description": "Per-location retry behavior after a failed attempt. When unset, the test\ndoesn't retry.",
       "properties": {
         "max_retries": {
-          "description": "Number of retries after the initial failed attempt (0-3). 0 or unset\nmeans no retry.",
+          "description": "Number of retries after the initial failed attempt, from 0 to 3. A value\nof `0` disables retries.",
           "format": "int32",
           "type": "integer"
         },
         "retry_interval_ms": {
-          "description": "Delay between attempts in milliseconds (up to 5000). 0 is treated as\nunset and defaults to 300 when max_retries is set.",
+          "description": "Delay between attempts, in milliseconds, up to 5000. Applies only when\n`max_retries` is set. Default: `300`.",
           "format": "int32",
           "type": "integer"
         }
@@ -3043,7 +3056,7 @@
       "type": "object"
     },
     "SyntheticTestStatusCodeAssertion": {
-      "description": "Asserts that the HTTP response status code matches the target.\n`target` is a string so regex patterns (e.g. \"2..\") can share the field\nwith literal codes (e.g. \"200\").",
+      "description": "Asserts that the HTTP response status code matches the target. The\n`target` field accepts a literal code such as `200`, or a regular\nexpression such as `2..` when the operator is `REGEX_EQUALS` or\n`REGEX_NOT_EQUALS`.",
       "properties": {
         "operator": {
           "$ref": "#/definitions/SyntheticTestStatusCodeAssertionOperator"
@@ -3066,13 +3079,17 @@
     "SyntheticTestTcpTestConfig": {
       "properties": {
         "host": {
+          "description": "Host the test connects to.",
+          "example": "db.example.com",
           "type": "string"
         },
         "port": {
+          "description": "Port the test connects to, from 1 to 65535.",
           "format": "int64",
           "type": "integer"
         },
         "assertions": {
+          "description": "Conditions the connection must satisfy for the test to pass.",
           "items": {
             "$ref": "#/definitions/SyntheticTestTcpTestConfigAssertion"
           },
@@ -3082,7 +3099,7 @@
       "type": "object"
     },
     "SyntheticTestTcpTestConfigAssertion": {
-      "description": "Wraps the assertion types valid for TCP tests. Exactly one assertion\nfield must be set per entry; enforced by validation.",
+      "description": "Assertion types valid for TCP tests. Set exactly one assertion field\nper entry.",
       "properties": {
         "response_time_assertion": {
           "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
@@ -3137,23 +3154,29 @@
     "SyntheticTestTlsTestConfig": {
       "properties": {
         "host": {
+          "description": "Host the test connects to.",
+          "example": "api.example.com",
           "type": "string"
         },
         "port": {
+          "description": "Port the test connects to, from 1 to 65535.",
           "format": "int64",
           "type": "integer"
         },
         "server_name": {
-          "description": "SNI server name; defaults to host when unset.",
+          "description": "Server Name Indication (SNI) value sent during the handshake.\nDefault: the value of `host`.",
           "type": "string"
         },
         "accept_self_signed": {
+          "description": "If `true`, a self-signed certificate passes verification. If `false`, a\nself-signed certificate fails the test. Default: `false`.",
           "type": "boolean"
         },
         "fail_on_incomplete_chain": {
+          "description": "If `true`, a certificate chain that omits intermediates fails the test.\nIf false, an incomplete chain passes. Default: `false`.",
           "type": "boolean"
         },
         "assertions": {
+          "description": "Conditions the handshake and certificate must satisfy for the test to\npass.",
           "items": {
             "$ref": "#/definitions/SyntheticTestTlsTestConfigAssertion"
           },
@@ -3166,7 +3189,7 @@
       "type": "object"
     },
     "SyntheticTestTlsTestConfigAssertion": {
-      "description": "Wraps the assertion types valid for TLS tests. Exactly one assertion\nfield must be set per entry; enforced by validation.",
+      "description": "Assertion types valid for TLS tests. Set exactly one assertion field\nper entry.",
       "properties": {
         "response_time_assertion": {
           "$ref": "#/definitions/SyntheticTestResponseTimeAssertion"
@@ -3184,7 +3207,7 @@
       "type": "object"
     },
     "SyntheticTestTlsVersionAssertion": {
-      "description": "Asserts on the negotiated TLS version. bound selects whether the assertion\nconstrains the maximum or minimum acceptable version.",
+      "description": "Asserts on the negotiated TLS version. The `bound` field selects whether\nthe assertion constrains the maximum or the minimum acceptable version.",
       "properties": {
         "bound": {
           "$ref": "#/definitions/TlsVersionAssertionBound"
@@ -3229,7 +3252,7 @@
       "type": "object"
     },
     "TlsTestConfigTlsAuth": {
-      "description": "Credentials presented during the handshake.",
+      "description": "Credentials presented during the TLS handshake.",
       "properties": {
         "client_certificate": {
           "$ref": "#/definitions/configv1ClientCertificate"
@@ -3698,12 +3721,16 @@
       "type": "string"
     },
     "configv1APITokenAuth": {
-      "description": "APITokenAuth configures static API-token authentication: each request\ncarries a `\u003ckey\u003e: \u003ctoken\u003e` header, where key is the header name (e.g.\n\"Authorization\", \"X-API-Key\") and token is the full header value (e.g.\n\"Bearer \u003csecret\u003e\"), treated as a secret in its entirety. Top-level so\nfuture non-HTTP test types can reuse it.",
+      "description": "Configures static API-token authentication. Each request carries a\n`key: token` header. The whole token is treated as a secret.",
       "properties": {
         "key": {
+          "description": "Name of the header that carries the token. Must be a valid HTTP header\nname.",
+          "example": "Authorization",
           "type": "string"
         },
         "token": {
+          "description": "Full value of the header, including any scheme prefix.",
+          "example": "Bearer TOKEN",
           "type": "string"
         }
       },
@@ -3784,12 +3811,14 @@
       "type": "object"
     },
     "configv1BasicAuth": {
-      "description": "BasicAuth carries HTTP basic auth credentials used by a SyntheticTest.\nTop-level so future non-HTTP test types can reuse it.",
+      "description": "HTTP basic authentication credentials used by a synthetic test.",
       "properties": {
         "username": {
+          "description": "User name sent with the request.",
           "type": "string"
         },
         "password": {
+          "description": "Password sent with the request.",
           "type": "string"
         }
       },
@@ -3840,14 +3869,14 @@
       "type": "object"
     },
     "configv1ClientCertificate": {
-      "description": "ClientCertificate is the certificate presented during the TLS handshake\n(mTLS).",
+      "description": "Certificate presented during the TLS handshake for mutual TLS (mTLS).",
       "properties": {
         "certificate": {
           "description": "PEM leaf certificate plus any intermediates.",
           "type": "string"
         },
         "private_key": {
-          "description": "Matching unencrypted PKCS#8/PKCS#1/SEC1 PEM key. Write-only: reads return\n**REDACTED**, and writing that sentinel back preserves the stored key.",
+          "description": "Matching unencrypted PEM key, in PKCS#8, PKCS#1, or SEC1 format. This\nfield is write-only: reads return `**REDACTED**`, and writing that\nsentinel value back preserves the stored key.",
           "type": "string"
         }
       },
@@ -6841,36 +6870,43 @@
       "type": "object"
     },
     "configv1OAuth2ClientCredentials": {
-      "description": "OAuth2ClientCredentials configures the OAuth 2.0 client-credentials grant.",
+      "description": "Configures the OAuth 2.0 client-credentials grant.",
       "properties": {
         "common": {
           "$ref": "#/definitions/configv1OAuth2Common"
         },
         "client_id": {
+          "description": "Client identifier issued to the test.",
           "type": "string"
         },
         "client_secret": {
+          "description": "Client secret issued to the test.",
           "type": "string"
         }
       },
       "type": "object"
     },
     "configv1OAuth2Common": {
-      "description": "OAuth2Common holds the OAuth 2.0 token-endpoint parameters shared by the\ngrants below. Top-level so future non-HTTP test types can reuse it.",
+      "description": "OAuth 2.0 token-endpoint parameters shared by the OAuth 2.0 grant types.",
       "properties": {
         "access_token_url": {
+          "description": "URL of the token endpoint that issues the access token.",
+          "example": "https://auth.example.com/oauth2/token",
           "type": "string"
         },
         "token_auth_method": {
           "$ref": "#/definitions/configv1OAuth2TokenAuthMethod"
         },
         "audience": {
+          "description": "Intended recipient of the access token.",
           "type": "string"
         },
         "resource": {
+          "description": "Resource the access token grants access to.",
           "type": "string"
         },
         "scopes": {
+          "description": "Scopes requested with the access token.",
           "items": {
             "type": "string"
           },
@@ -6880,28 +6916,32 @@
       "type": "object"
     },
     "configv1OAuth2ResourceOwnerPassword": {
-      "description": "OAuth2ResourceOwnerPassword configures the OAuth 2.0 resource-owner\npassword-credentials grant. client_id/client_secret are optional, set when\nthe token endpoint also authenticates the client.",
+      "description": "Configures the OAuth 2.0 resource-owner password-credentials grant. Set\n`client_id` and `client_secret` when the token endpoint also authenticates\nthe client.",
       "properties": {
         "common": {
           "$ref": "#/definitions/configv1OAuth2Common"
         },
         "username": {
+          "description": "User name of the resource owner.",
           "type": "string"
         },
         "password": {
+          "description": "Password of the resource owner.",
           "type": "string"
         },
         "client_id": {
+          "description": "Client identifier issued to the test.",
           "type": "string"
         },
         "client_secret": {
+          "description": "Client secret issued to the test.",
           "type": "string"
         }
       },
       "type": "object"
     },
     "configv1OAuth2TokenAuthMethod": {
-      "description": "OAuth2TokenAuthMethod selects how client credentials are sent to the OAuth\n2.0 token endpoint. OTAM_INVALID (unset) defaults to an HTTP Basic auth\nheader (RFC 6749 section 2.3.1).",
+      "description": "Selects how client credentials are sent to the OAuth 2.0 token endpoint.\nWhen unset, credentials are sent in an HTTP basic authentication header, as\ndescribed in RFC 6749 section 2.3.1.",
       "enum": [
         "OTAM_BASIC_AUTH_HEADER",
         "OTAM_REQUEST_BODY"
@@ -7775,10 +7815,13 @@
           "$ref": "#/definitions/SyntheticTestTestType"
         },
         "interval_secs": {
+          "description": "How often each location runs the test, in seconds.",
+          "example": "60",
           "format": "int32",
           "type": "integer"
         },
         "locations": {
+          "description": "Probe locations that run the test. Specify at least one.",
           "items": {
             "$ref": "#/definitions/SyntheticTestTestLocation"
           },
@@ -7800,16 +7843,18 @@
           "$ref": "#/definitions/SyntheticTestTlsTestConfig"
         },
         "description": {
+          "description": "Description of what the test verifies.",
           "type": "string"
         },
         "labels": {
           "additionalProperties": {
             "type": "string"
           },
+          "description": "Labels attached to the test, used to filter the synthetic test list.",
           "type": "object"
         },
         "timeout_secs": {
-          "description": "optional — 1-60s; defaults to 60s",
+          "description": "How long a single execution can run before it times out, in seconds, from\n1 to 60. Default: `60`.",
           "format": "int32",
           "type": "integer"
         },

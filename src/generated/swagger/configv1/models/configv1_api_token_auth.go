@@ -12,19 +12,19 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Configv1APITokenAuth APITokenAuth configures static API-token authentication: each request
-// carries a `<key>: <token>` header, where key is the header name (e.g.
-// "Authorization", "X-API-Key") and token is the full header value (e.g.
-// "Bearer <secret>"), treated as a secret in its entirety. Top-level so
-// future non-HTTP test types can reuse it.
+// Configv1APITokenAuth Configures static API-token authentication. Each request carries a
+// `key: token` header. The whole token is treated as a secret.
 //
 // swagger:model configv1APITokenAuth
 type Configv1APITokenAuth struct {
 
-	// key
+	// Name of the header that carries the token. Must be a valid HTTP header
+	// name.
+	// Example: Authorization
 	Key string `json:"key,omitempty"`
 
-	// token
+	// Full value of the header, including any scheme prefix.
+	// Example: Bearer TOKEN
 	Token string `json:"token,omitempty"`
 }
 

@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestBodyXPathAssertion Asserts that a value extracted via XPath 1.0 matches the target.
+// SyntheticTestBodyXPathAssertion Asserts that a value extracted with XPath 1.0 matches the target.
 //
 // swagger:model SyntheticTestBodyXPathAssertion
 type SyntheticTestBodyXPathAssertion struct {

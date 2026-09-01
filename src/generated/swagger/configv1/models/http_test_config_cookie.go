@@ -12,10 +12,11 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// HTTPTestConfigCookie Single cookie sent with the request. All cookies are combined into one
-// Cookie request header ("name=value; name2=value2") in order. Duplicate
-// names (case-sensitive, unlike headers) are rejected by validation, as
-// is setting cookies alongside an explicit Cookie header.
+// HTTPTestConfigCookie Single cookie sent with the request. All cookies are combined in order
+// into one `Cookie` request header, such as `name=value; name2=value2`.
+// Duplicate names are rejected. Unlike header names, cookie names are
+// matched with case sensitivity. Setting cookies alongside an explicit
+// `Cookie` header returns an error.
 //
 // swagger:model HttpTestConfigCookie
 type HTTPTestConfigCookie struct {

@@ -13,25 +13,25 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Configv1OAuth2Common OAuth2Common holds the OAuth 2.0 token-endpoint parameters shared by the
-// grants below. Top-level so future non-HTTP test types can reuse it.
+// Configv1OAuth2Common OAuth 2.0 token-endpoint parameters shared by the OAuth 2.0 grant types.
 //
 // swagger:model configv1OAuth2Common
 type Configv1OAuth2Common struct {
 
-	// access token url
+	// URL of the token endpoint that issues the access token.
+	// Example: https://auth.example.com/oauth2/token
 	AccessTokenURL string `json:"access_token_url,omitempty"`
 
 	// token auth method
 	TokenAuthMethod Configv1OAuth2TokenAuthMethod `json:"token_auth_method,omitempty"`
 
-	// audience
+	// Intended recipient of the access token.
 	Audience string `json:"audience,omitempty"`
 
-	// resource
+	// Resource the access token grants access to.
 	Resource string `json:"resource,omitempty"`
 
-	// scopes
+	// Scopes requested with the access token.
 	Scopes []string `json:"scopes"`
 }
 

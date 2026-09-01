@@ -14,9 +14,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// HTTPTestConfigContentType Content type sent with the request. Mapped to a Content-Type request
-// header. Validation rejects setting this alongside an explicit
-// Content-Type header.
+// HTTPTestConfigContentType Content type sent with the request, mapped to a `Content-Type` request
+// header. Setting both this field and an explicit `Content-Type` header
+// returns an error.
 //
 // swagger:model HttpTestConfigContentType
 type HTTPTestConfigContentType string

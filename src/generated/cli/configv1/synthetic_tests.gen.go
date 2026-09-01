@@ -511,13 +511,18 @@ spec:
     name: <string>
     # The unique identifier of the SyntheticTest. If a 'slug' isn't provided, one is generated based on the 'name' field. You can't modify this field after the SyntheticTest is created.
     slug: <string>
+    # How often each location runs the test, in seconds.
     interval_secs: <integer>
+    # Probe locations that run the test. Specify at least one.
     locations:
         - <GCP_US_OREGON|GCP_US_VIRGINIA|GCP_BR_SAO_PAULO|GCP_SG_SINGAPORE|GCP_AU_SYDNEY|GCP_IN_MUMBAI|GCP_JP_TOKYO|GCP_GB_LONDON|GCP_DE_FRANKFURT|GCP_ZA_JOHANNESBURG|GCP_ID_JAKARTA|GCP_CA_MONTREAL|GCP_KR_SEOUL|GCP_IT_MILAN|GCP_QA_DOHA|GCP_JP_OSAKA|GCP_FR_PARIS>
+    # Description of what the test verifies.
     description: <string>
+    # Labels attached to the test, used to filter the synthetic test list.
     labels:
         key_1: <string>
-    # optional — 1-60s; defaults to 60s
+    # How long a single execution can run before it times out, in seconds, from
+    # 1 to 60. Default: '60'.
     timeout_secs: <integer>
     # Slug of the collection that owns the test. Required if 'collection' isn't
     # set.
@@ -526,37 +531,51 @@ spec:
         slug: <string>
         type: <SIMPLE|SERVICE>
     dns_test:
+        # Domain the test resolves.
         domain: <string>
-        # Optional explicit nameserver to query; runner default resolver if unset.
+        # Nameserver to query. When unset, the test uses the default resolver for
+        # the probe location.
         dns_server: <string>
-        # Nameserver port; required when dns_server is set, rejected without it.
+        # Port of the nameserver in 'dns_server', from 1 to 65535. Required when
+        # 'dns_server' is set, and rejected when it isn't.
         dns_server_port: <integer>
+        # Conditions the response must satisfy for the test to pass.
         assertions:
-            - # Asserts on DNS records returned for the query. match_scope selects whether
-              # the operator must hold for every record of record_type or for at least
-              # one. SOA and SRV record types are only valid with AT_LEAST_ONE.
+            - # Asserts on DNS records returned for the query. The 'match_scope' field
+              # selects whether the operator must hold for every record of 'record_type'
+              # or for at least one. The 'SOA' and 'SRV' record types are valid only with
+              # 'AT_LEAST_ONE'.
               dns_record_assertion:
                 target: <string>
                 match_scope: <EVERY_AVAILABLE|AT_LEAST_ONE>
                 operator: <CONTAINS|EQUALS|REGEX_EQUALS|REGEX_NOT_EQUALS>
                 record_type: <A|AAAA|CNAME|MX|NS|TXT|SOA|SRV>
               # Asserts that the request response time is below the target, in
-              # milliseconds. Scope selects whether DNS resolution time is included.
+              # milliseconds. The 'scope' field selects whether DNS resolution time is
+              # included, and doesn't apply to DNS tests.
               response_time_assertion:
                 target_ms: <integer>
                 operator: <LESS_THAN>
                 scope: <INCLUDING_DNS|WITHOUT_DNS>
     http_test:
+        # URL the test requests.
         url: <string>
+        # Headers sent with the request.
         headers:
             - name: <string>
               value: <string>
+        # Body sent with the request.
         request_body: <byte>
+        # Query parameters appended to the URL.
         query_params:
             key_1: <string>
+        # If 'true', the test follows HTTP redirects up to 'max_redirects'. If
+        # 'false, the test doesn't follow redirects. Default: 'false'.
         follow_redirects: <true|false>
-        # optional — 0-10; defaults to 10 when follow_redirects is set
+        # Maximum number of redirects to follow, from 0 to 10. Applies only when
+        # 'follow_redirects' is 'true'. Default: '10'.
         max_redirects: <integer>
+        # Conditions the response must satisfy for the test to pass.
         assertions:
             - # Asserts that the raw response body matches the target string.
               body_assertion:
@@ -566,8 +585,8 @@ spec:
               body_hash_assertion:
                 target: <string>
                 algorithm: <MD5|SHA1|SHA256>
-              # Asserts that a value extracted via JSONPath matches the target.
-              # match_type controls how multiple matches are evaluated.
+              # Asserts that a value extracted with JSONPath matches the target. The
+              # 'match_type' field controls how multiple matches are evaluated.
               body_json_path_assertion:
                 json_path: <string>
                 target: <string>
@@ -577,7 +596,7 @@ spec:
               body_json_schema_assertion:
                 schema: <string>
                 draft: <DRAFT_06|DRAFT_07>
-              # Asserts that a value extracted via XPath 1.0 matches the target.
+              # Asserts that a value extracted with XPath 1.0 matches the target.
               body_xpath_assertion:
                 xpath: <string>
                 target: <string>
@@ -588,127 +607,151 @@ spec:
                 target: <string>
                 operator: <CONTAINS|NOT_CONTAINS|EQUALS|NOT_EQUALS|REGEX_EQUALS|REGEX_NOT_EQUALS|NOT_EXISTS|LESS_THAN|LESS_THAN_OR_EQUAL|GREATER_THAN|GREATER_THAN_OR_EQUAL>
               # Asserts that the request response time is below the target, in
-              # milliseconds. Scope selects whether DNS resolution time is included.
+              # milliseconds. The 'scope' field selects whether DNS resolution time is
+              # included, and doesn't apply to DNS tests.
               response_time_assertion:
                 target_ms: <integer>
                 operator: <LESS_THAN>
                 scope: <INCLUDING_DNS|WITHOUT_DNS>
-              # Asserts that the HTTP response status code matches the target.
-              # 'target' is a string so regex patterns (e.g. "2..") can share the field
-              # with literal codes (e.g. "200").
+              # Asserts that the HTTP response status code matches the target. The
+              # 'target' field accepts a literal code such as '200', or a regular
+              # expression such as '2..' when the operator is 'REGEX_EQUALS' or
+              # 'REGEX_NOT_EQUALS'.
               status_code_assertion:
                 target: <string>
                 operator: <EQUALS|NOT_EQUALS|REGEX_EQUALS|REGEX_NOT_EQUALS>
-        # Skip TLS certificate verification for HTTPS requests.
+        # If 'true', the test skips TLS certificate verification for HTTPS
+        # requests. If 'false', an invalid certificate fails the test.
+        # Default: 'false'.
         allow_insecure_tls: <true|false>
-        # Cap on captured response-body size in bytes; 0 means use the default.
+        # Maximum size of the captured response body, in bytes, up to 51200.
+        # A value of '0' lets the probe apply its own capture limit.
         max_response_body_bytes: <integer>
-        # When set, the captured body is not persisted on failed executions.
+        # If 'true', the response body captured on a failed execution isn't stored.
+        # If 'false', the captured body is stored with the failed execution.
+        # Default: 'false'.
         do_not_save_response_body_on_failure: <true|false>
+        # Cookies sent with the request.
         cookies:
             - name: <string>
               value: <string>
-        # Any combination of these auth mechanisms may be set; additional auth types
-        # will be added as siblings. Validation checks the required fields of
-        # whichever methods are set.
+        # Authentication applied to the request. Set any combination of these
+        # methods. Each method you set must carry its own required fields.
         authentication:
-            # APITokenAuth configures static API-token authentication: each request
-            # carries a '<key>: <token>' header, where key is the header name (e.g.
-            # "Authorization", "X-API-Key") and token is the full header value (e.g.
-            # "Bearer <secret>"), treated as a secret in its entirety. Top-level so
-            # future non-HTTP test types can reuse it.
+            # Configures static API-token authentication. Each request carries a
+            # 'key: token' header. The whole token is treated as a secret.
             api_token_auth:
+                # Name of the header that carries the token. Must be a valid HTTP header
+                # name.
                 key: <string>
+                # Full value of the header, including any scheme prefix.
                 token: <string>
-            # BasicAuth carries HTTP basic auth credentials used by a SyntheticTest.
-            # Top-level so future non-HTTP test types can reuse it.
+            # HTTP basic authentication credentials used by a synthetic test.
             basic_auth:
+                # User name sent with the request.
                 username: <string>
+                # Password sent with the request.
                 password: <string>
-            # ClientCertificate is the certificate presented during the TLS handshake
-            # (mTLS).
+            # Certificate presented during the TLS handshake for mutual TLS (mTLS).
             client_certificate:
                 # PEM leaf certificate plus any intermediates.
                 certificate: <string>
-                # Matching unencrypted PKCS#8/PKCS#1/SEC1 PEM key. Write-only: reads return
-                # **REDACTED**, and writing that sentinel back preserves the stored key.
+                # Matching unencrypted PEM key, in PKCS#8, PKCS#1, or SEC1 format. This
+                # field is write-only: reads return '**REDACTED**', and writing that
+                # sentinel value back preserves the stored key.
                 private_key: <string>
-            # OAuth2ClientCredentials configures the OAuth 2.0 client-credentials grant.
+            # Configures the OAuth 2.0 client-credentials grant.
             oauth2_client_credentials:
+                # Client identifier issued to the test.
                 client_id: <string>
+                # Client secret issued to the test.
                 client_secret: <string>
-                # OAuth2Common holds the OAuth 2.0 token-endpoint parameters shared by the
-                # grants below. Top-level so future non-HTTP test types can reuse it.
+                # OAuth 2.0 token-endpoint parameters shared by the OAuth 2.0 grant types.
                 common:
+                    # URL of the token endpoint that issues the access token.
                     access_token_url: <string>
+                    # Intended recipient of the access token.
                     audience: <string>
+                    # Resource the access token grants access to.
                     resource: <string>
+                    # Scopes requested with the access token.
                     scopes:
                         - <string>
-                    # OAuth2TokenAuthMethod selects how client credentials are sent to the OAuth
-                    # 2.0 token endpoint. OTAM_INVALID (unset) defaults to an HTTP Basic auth
-                    # header (RFC 6749 section 2.3.1).
+                    # Selects how client credentials are sent to the OAuth 2.0 token endpoint.
+                    # When unset, credentials are sent in an HTTP basic authentication header, as
+                    # described in RFC 6749 section 2.3.1.
                     token_auth_method: <OTAM_BASIC_AUTH_HEADER|OTAM_REQUEST_BODY>
-            # OAuth2ResourceOwnerPassword configures the OAuth 2.0 resource-owner
-            # password-credentials grant. client_id/client_secret are optional, set when
-            # the token endpoint also authenticates the client.
+            # Configures the OAuth 2.0 resource-owner password-credentials grant. Set
+            # 'client_id' and 'client_secret' when the token endpoint also authenticates
+            # the client.
             oauth2_resource_owner_password:
+                # User name of the resource owner.
                 username: <string>
+                # Password of the resource owner.
                 password: <string>
+                # Client identifier issued to the test.
                 client_id: <string>
+                # Client secret issued to the test.
                 client_secret: <string>
-                # OAuth2Common holds the OAuth 2.0 token-endpoint parameters shared by the
-                # grants below. Top-level so future non-HTTP test types can reuse it.
+                # OAuth 2.0 token-endpoint parameters shared by the OAuth 2.0 grant types.
                 common:
+                    # URL of the token endpoint that issues the access token.
                     access_token_url: <string>
+                    # Intended recipient of the access token.
                     audience: <string>
+                    # Resource the access token grants access to.
                     resource: <string>
+                    # Scopes requested with the access token.
                     scopes:
                         - <string>
-                    # OAuth2TokenAuthMethod selects how client credentials are sent to the OAuth
-                    # 2.0 token endpoint. OTAM_INVALID (unset) defaults to an HTTP Basic auth
-                    # header (RFC 6749 section 2.3.1).
+                    # Selects how client credentials are sent to the OAuth 2.0 token endpoint.
+                    # When unset, credentials are sent in an HTTP basic authentication header, as
+                    # described in RFC 6749 section 2.3.1.
                     token_auth_method: <OTAM_BASIC_AUTH_HEADER|OTAM_REQUEST_BODY>
-        # Content type sent with the request. Mapped to a Content-Type request
-        # header. Validation rejects setting this alongside an explicit
-        # Content-Type header.
+        # Content type sent with the request, mapped to a 'Content-Type' request
+        # header. Setting both this field and an explicit 'Content-Type' header
+        # returns an error.
         content_type: <CONTENT_TYPE_APPLICATION_JSON|CONTENT_TYPE_APPLICATION_X_WWW_FORM_URLENCODED|CONTENT_TYPE_TEXT_PLAIN|CONTENT_TYPE_TEXT_XML|CONTENT_TYPE_TEXT_HTML|CONTENT_TYPE_MULTIPART_FORM_DATA|CONTENT_TYPE_APPLICATION_OCTET_STREAM|CONTENT_TYPE_GRAPHQL>
-        # HTTP protocol version used for the request. When unset, the default is to
-        # negotiate HTTP/2 with fallback to HTTP/1.1.
+        # HTTP protocol version used for the request. When unset, the request
+        # negotiates HTTP/2 and falls back to HTTP/1.1.
         http_version: <HTTP_VERSION_HTTP_1_1|HTTP_VERSION_HTTP_2>
-        method: <GET|POST>
+        method: <GET|POST|PUT|DELETE>
     # Alerting configuration for the test. An alert fires when at least
-    # min_failing_locations locations are simultaneously failing within the
-    # failing-duration window, and resolves automatically (no separate resolve
-    # duration).
+    # 'min_failing_locations' locations fail simultaneously within the
+    # 'failing_duration_secs' window. Alerts resolve automatically, and there
+    # is no separate resolve duration.
     monitor_config:
-        # Peak count of simultaneously-failing locations within the window
-        # required to fire. Must be between 1 and the number of test locations.
+        # Peak number of locations failing simultaneously within the window that
+        # is required to fire an alert. Must be between 1 and the number of test
+        # locations.
         min_failing_locations: <integer>
-        # Failure-duration window in seconds. 0 means alert on first failure.
-        # Otherwise must be at least interval_secs.
+        # Failure-duration window, in seconds. 0 alerts on the first failure. Any
+        # other value must be at least 'interval_secs'.
         failing_duration_secs: <integer>
         # Annotations attached to the generated alert.
         annotations:
             key_1: <string>
-        # Notification policy that routes the generated alert.
+        # Slug of the notification policy that routes the generated alert.
         notification_policy_slug: <string>
-    # Per-location retry behavior after a failed attempt. No retries when
-    # unset.
+    # Per-location retry behavior after a failed attempt. When unset, the test
+    # doesn't retry.
     retry_config:
-        # Number of retries after the initial failed attempt (0-3). 0 or unset
-        # means no retry.
+        # Number of retries after the initial failed attempt, from 0 to 3. A value
+        # of '0' disables retries.
         max_retries: <integer>
-        # Delay between attempts in milliseconds (up to 5000). 0 is treated as
-        # unset and defaults to 300 when max_retries is set.
+        # Delay between attempts, in milliseconds, up to 5000. Applies only when
+        # 'max_retries' is set. Default: '300'.
         retry_interval_ms: <integer>
     status: <ENABLED|PAUSED>
     tcp_test:
+        # Host the test connects to.
         host: <string>
+        # Port the test connects to, from 1 to 65535.
         port: <integer>
+        # Conditions the connection must satisfy for the test to pass.
         assertions:
-            - # Asserts on the outcome of the TCP connection attempt. Only the EQUALS
-              # operator is supported (e.g. connection is Established).
+            - # Asserts on the outcome of the TCP connection attempt. Only the 'EQUALS'
+              # operator is supported, for example a target of 'ESTABLISHED'.
               connection_assertion:
                 operator: <EQUALS>
                 target: <ESTABLISHED|REFUSED|TIMEOUT>
@@ -717,22 +760,32 @@ spec:
                 target: <integer>
                 operator: <EQUALS|LESS_THAN|LESS_THAN_OR_EQUAL|GREATER_THAN|GREATER_THAN_OR_EQUAL>
               # Asserts that the request response time is below the target, in
-              # milliseconds. Scope selects whether DNS resolution time is included.
+              # milliseconds. The 'scope' field selects whether DNS resolution time is
+              # included, and doesn't apply to DNS tests.
               response_time_assertion:
                 target_ms: <integer>
                 operator: <LESS_THAN>
                 scope: <INCLUDING_DNS|WITHOUT_DNS>
     test_type: <HTTP|DNS|TCP|TLS>
     tls_test:
+        # Host the test connects to.
         host: <string>
+        # Port the test connects to, from 1 to 65535.
         port: <integer>
-        # SNI server name; defaults to host when unset.
+        # Server Name Indication (SNI) value sent during the handshake.
+        # Default: the value of 'host'.
         server_name: <string>
+        # If 'true', a self-signed certificate passes verification. If 'false', a
+        # self-signed certificate fails the test. Default: 'false'.
         accept_self_signed: <true|false>
+        # If 'true', a certificate chain that omits intermediates fails the test.
+        # If false, an incomplete chain passes. Default: 'false'.
         fail_on_incomplete_chain: <true|false>
+        # Conditions the handshake and certificate must satisfy for the test to
+        # pass.
         assertions:
-            - # Asserts on a named property of the leaf certificate, e.g. subject, issuer,
-              # or a Subject Alternative Name.
+            - # Asserts on a named property of the leaf certificate, for example
+              # 'subject', 'issuer', or a Subject Alternative Name (SAN).
               cert_property_assertion:
                 property: <string>
                 target: <string>
@@ -742,26 +795,27 @@ spec:
                 target_days: <integer>
                 operator: <EXPIRES_IN_MORE_THAN_DAYS|EXPIRES_IN_LESS_THAN_DAYS>
               # Asserts that the request response time is below the target, in
-              # milliseconds. Scope selects whether DNS resolution time is included.
+              # milliseconds. The 'scope' field selects whether DNS resolution time is
+              # included, and doesn't apply to DNS tests.
               response_time_assertion:
                 target_ms: <integer>
                 operator: <LESS_THAN>
                 scope: <INCLUDING_DNS|WITHOUT_DNS>
-              # Asserts on the negotiated TLS version. bound selects whether the assertion
-              # constrains the maximum or minimum acceptable version.
+              # Asserts on the negotiated TLS version. The 'bound' field selects whether
+              # the assertion constrains the maximum or the minimum acceptable version.
               tls_version_assertion:
                 bound: <MAX|MIN>
                 operator: <EQUALS|LESS_THAN|LESS_THAN_OR_EQUAL|GREATER_THAN|GREATER_THAN_OR_EQUAL>
                 target: <TLS_1_0|TLS_1_1|TLS_1_2|TLS_1_3>
-        # Credentials presented during the handshake.
+        # Credentials presented during the TLS handshake.
         authentication:
-            # ClientCertificate is the certificate presented during the TLS handshake
-            # (mTLS).
+            # Certificate presented during the TLS handshake for mutual TLS (mTLS).
             client_certificate:
                 # PEM leaf certificate plus any intermediates.
                 certificate: <string>
-                # Matching unencrypted PKCS#8/PKCS#1/SEC1 PEM key. Write-only: reads return
-                # **REDACTED**, and writing that sentinel back preserves the stored key.
+                # Matching unencrypted PEM key, in PKCS#8, PKCS#1, or SEC1 format. This
+                # field is write-only: reads return '**REDACTED**', and writing that
+                # sentinel value back preserves the stored key.
                 private_key: <string>
 `
 

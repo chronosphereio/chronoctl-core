@@ -12,18 +12,18 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestRetryConfig Per-location retry behavior after a failed attempt. No retries when
-// unset.
+// SyntheticTestRetryConfig Per-location retry behavior after a failed attempt. When unset, the test
+// doesn't retry.
 //
 // swagger:model SyntheticTestRetryConfig
 type SyntheticTestRetryConfig struct {
 
-	// Number of retries after the initial failed attempt (0-3). 0 or unset
-	// means no retry.
+	// Number of retries after the initial failed attempt, from 0 to 3. A value
+	// of `0` disables retries.
 	MaxRetries int32 `json:"max_retries,omitempty"`
 
-	// Delay between attempts in milliseconds (up to 5000). 0 is treated as
-	// unset and defaults to 300 when max_retries is set.
+	// Delay between attempts, in milliseconds, up to 5000. Applies only when
+	// `max_retries` is set. Default: `300`.
 	RetryIntervalMs int32 `json:"retry_interval_ms,omitempty"`
 }
 

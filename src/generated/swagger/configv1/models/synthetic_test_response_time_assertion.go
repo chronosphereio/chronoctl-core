@@ -14,7 +14,8 @@ import (
 )
 
 // SyntheticTestResponseTimeAssertion Asserts that the request response time is below the target, in
-// milliseconds. Scope selects whether DNS resolution time is included.
+// milliseconds. The `scope` field selects whether DNS resolution time is
+// included, and doesn't apply to DNS tests.
 //
 // swagger:model SyntheticTestResponseTimeAssertion
 type SyntheticTestResponseTimeAssertion struct {

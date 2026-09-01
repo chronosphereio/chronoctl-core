@@ -14,9 +14,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Configv1OAuth2TokenAuthMethod OAuth2TokenAuthMethod selects how client credentials are sent to the OAuth
-// 2.0 token endpoint. OTAM_INVALID (unset) defaults to an HTTP Basic auth
-// header (RFC 6749 section 2.3.1).
+// Configv1OAuth2TokenAuthMethod Selects how client credentials are sent to the OAuth 2.0 token endpoint.
+// When unset, credentials are sent in an HTTP basic authentication header, as
+// described in RFC 6749 section 2.3.1.
 //
 // swagger:model configv1OAuth2TokenAuthMethod
 type Configv1OAuth2TokenAuthMethod string

@@ -12,16 +12,15 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Configv1BasicAuth BasicAuth carries HTTP basic auth credentials used by a SyntheticTest.
-// Top-level so future non-HTTP test types can reuse it.
+// Configv1BasicAuth HTTP basic authentication credentials used by a synthetic test.
 //
 // swagger:model configv1BasicAuth
 type Configv1BasicAuth struct {
 
-	// username
+	// User name sent with the request.
 	Username string `json:"username,omitempty"`
 
-	// password
+	// Password sent with the request.
 	Password string `json:"password,omitempty"`
 }
 

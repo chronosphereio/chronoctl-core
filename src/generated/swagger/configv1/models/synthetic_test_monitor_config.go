@@ -13,25 +13,26 @@ import (
 )
 
 // SyntheticTestMonitorConfig Alerting configuration for the test. An alert fires when at least
-// min_failing_locations locations are simultaneously failing within the
-// failing-duration window, and resolves automatically (no separate resolve
-// duration).
+// `min_failing_locations` locations fail simultaneously within the
+// `failing_duration_secs` window. Alerts resolve automatically, and there
+// is no separate resolve duration.
 //
 // swagger:model SyntheticTestMonitorConfig
 type SyntheticTestMonitorConfig struct {
 
-	// Peak count of simultaneously-failing locations within the window
-	// required to fire. Must be between 1 and the number of test locations.
+	// Peak number of locations failing simultaneously within the window that
+	// is required to fire an alert. Must be between 1 and the number of test
+	// locations.
 	MinFailingLocations int32 `json:"min_failing_locations,omitempty"`
 
-	// Failure-duration window in seconds. 0 means alert on first failure.
-	// Otherwise must be at least interval_secs.
+	// Failure-duration window, in seconds. 0 alerts on the first failure. Any
+	// other value must be at least `interval_secs`.
 	FailingDurationSecs int32 `json:"failing_duration_secs,omitempty"`
 
 	// Annotations attached to the generated alert.
 	Annotations map[string]string `json:"annotations,omitempty"`
 
-	// Notification policy that routes the generated alert.
+	// Slug of the notification policy that routes the generated alert.
 	NotificationPolicySlug string `json:"notification_policy_slug,omitempty"`
 }
 

@@ -19,22 +19,27 @@ import (
 // swagger:model SyntheticTestTlsTestConfig
 type SyntheticTestTLSTestConfig struct {
 
-	// host
+	// Host the test connects to.
+	// Example: api.example.com
 	Host string `json:"host,omitempty"`
 
-	// port
+	// Port the test connects to, from 1 to 65535.
 	Port int64 `json:"port,omitempty"`
 
-	// SNI server name; defaults to host when unset.
+	// Server Name Indication (SNI) value sent during the handshake.
+	// Default: the value of `host`.
 	ServerName string `json:"server_name,omitempty"`
 
-	// accept self signed
+	// If `true`, a self-signed certificate passes verification. If `false`, a
+	// self-signed certificate fails the test. Default: `false`.
 	AcceptSelfSigned bool `json:"accept_self_signed,omitempty"`
 
-	// fail on incomplete chain
+	// If `true`, a certificate chain that omits intermediates fails the test.
+	// If false, an incomplete chain passes. Default: `false`.
 	FailOnIncompleteChain bool `json:"fail_on_incomplete_chain,omitempty"`
 
-	// assertions
+	// Conditions the handshake and certificate must satisfy for the test to
+	// pass.
 	Assertions []*SyntheticTestTLSTestConfigAssertion `json:"assertions"`
 
 	// authentication

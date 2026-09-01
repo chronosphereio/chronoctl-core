@@ -13,8 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestTLSVersionAssertion Asserts on the negotiated TLS version. bound selects whether the assertion
-// constrains the maximum or minimum acceptable version.
+// SyntheticTestTLSVersionAssertion Asserts on the negotiated TLS version. The `bound` field selects whether
+// the assertion constrains the maximum or the minimum acceptable version.
 //
 // swagger:model SyntheticTestTlsVersionAssertion
 type SyntheticTestTLSVersionAssertion struct {

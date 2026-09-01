@@ -13,9 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// HTTPTestConfigHTTPAuth Any combination of these auth mechanisms may be set; additional auth types
-// will be added as siblings. Validation checks the required fields of
-// whichever methods are set.
+// HTTPTestConfigHTTPAuth Authentication applied to the request. Set any combination of these
+// methods. Each method you set must carry its own required fields.
 //
 // swagger:model HttpTestConfigHttpAuth
 type HTTPTestConfigHTTPAuth struct {

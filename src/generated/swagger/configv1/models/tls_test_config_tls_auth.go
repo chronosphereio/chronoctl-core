@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// TLSTestConfigTLSAuth Credentials presented during the handshake.
+// TLSTestConfigTLSAuth Credentials presented during the TLS handshake.
 //
 // swagger:model TlsTestConfigTlsAuth
 type TLSTestConfigTLSAuth struct {

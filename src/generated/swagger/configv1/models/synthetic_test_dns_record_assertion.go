@@ -13,9 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestDNSRecordAssertion Asserts on DNS records returned for the query. match_scope selects whether
-// the operator must hold for every record of record_type or for at least
-// one. SOA and SRV record types are only valid with AT_LEAST_ONE.
+// SyntheticTestDNSRecordAssertion Asserts on DNS records returned for the query. The `match_scope` field
+// selects whether the operator must hold for every record of `record_type`
+// or for at least one. The `SOA` and `SRV` record types are valid only with
+// `AT_LEAST_ONE`.
 //
 // swagger:model SyntheticTestDnsRecordAssertion
 type SyntheticTestDNSRecordAssertion struct {

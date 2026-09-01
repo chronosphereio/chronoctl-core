@@ -13,8 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SyntheticTestConnectionAssertion Asserts on the outcome of the TCP connection attempt. Only the EQUALS
-// operator is supported (e.g. connection is Established).
+// SyntheticTestConnectionAssertion Asserts on the outcome of the TCP connection attempt. Only the `EQUALS`
+// operator is supported, for example a target of `ESTABLISHED`.
 //
 // swagger:model SyntheticTestConnectionAssertion
 type SyntheticTestConnectionAssertion struct {
