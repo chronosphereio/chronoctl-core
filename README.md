@@ -23,7 +23,7 @@ to a resource type.
 * `buckets`
 * `classic-dashboards` (`grafana-dashboards`)
 * `collections`
-* `dashboards`
+* `dashboards` (also `import-from-classic`, which converts a classic Grafana dashboard JSON file into a Dashboard)
 * `derived-labels`
 * `derived-metrics`
 * `drop-rules`
