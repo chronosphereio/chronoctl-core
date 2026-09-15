@@ -1310,6 +1310,37 @@
       ],
       "type": "string"
     },
+    "ImportDashboardFromClassicResponseUnsupportedFeature": {
+      "properties": {
+        "kind": {
+          "description": "Stable identifier for the kind of feature (e.g. \"unknown-variable\"),\nsafe to key UI copy on.",
+          "type": "string"
+        },
+        "detail": {
+          "description": "Free-form detail specific to this occurrence; not stable, do not key\nlogic on it.",
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "level": {
+          "$ref": "#/definitions/UnsupportedFeatureLevel"
+        },
+        "panel_keys": {
+          "description": "Panel keys this feature was observed on, in first-seen order. Empty\nfor dashboard-level features.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "occurrences": {
+          "description": "Total occurrences de-duplicated into this entry.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "LogAllocationConfigDatasetAllocation": {
       "properties": {
         "dataset_slug": {
@@ -3670,6 +3701,13 @@
       },
       "type": "object"
     },
+    "UnsupportedFeatureLevel": {
+      "enum": [
+        "LEVEL_SUPPORTED",
+        "LEVEL_UNSUPPORTED"
+      ],
+      "type": "string"
+    },
     "WebhookTargetQueryParameter": {
       "properties": {
         "key": {
@@ -5528,6 +5566,51 @@
         "dashboard_json": {
           "description": "Required raw JSON of the Grafana dashboard.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ImportDashboardFromClassicRequest": {
+      "description": "Converts classic dashboard JSON into a standard Dashboard, creating it (or\nupdating an existing one when update_if_exists is set).",
+      "properties": {
+        "classic_dashboard_json": {
+          "description": "Required. Classic dashboard JSON to convert.",
+          "type": "string"
+        },
+        "collection_slug": {
+          "description": "Required slug of the collection the new dashboard will belong to.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Optional name for the new dashboard. Defaults to the classic dashboard's\n`title` when unset.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "Optional slug for the new dashboard. When unset, a slug is generated from\nthe name (same behavior as CreateDashboard). Required when\nupdate_if_exists is set.",
+          "type": "string"
+        },
+        "dry_run": {
+          "description": "When true, converts and validates the dashboard without persisting it.",
+          "type": "boolean"
+        },
+        "update_if_exists": {
+          "description": "When true, updates an existing dashboard with the given slug instead of\nfailing, replacing it entirely (clearing fields such as labels that the\nrequest does not carry).",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ImportDashboardFromClassicResponse": {
+      "properties": {
+        "dashboard": {
+          "$ref": "#/definitions/configv1Dashboard"
+        },
+        "unsupported_features": {
+          "description": "Classic dashboard features that were dropped, approximated, or otherwise\nnoteworthy during conversion, de-duplicated one entry per feature.",
+          "items": {
+            "$ref": "#/definitions/ImportDashboardFromClassicResponseUnsupportedFeature"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -10741,6 +10824,40 @@
         },
         "tags": [
           "Dashboard"
+        ]
+      }
+    },
+    "/api/v1/config/dashboards:importFromClassic": {
+      "post": {
+        "description": "Converts classic dashboard JSON to a standard Dashboard, creating it or\nupdating an existing one in place when update_if_exists is set.",
+        "operationId": "ImportDashboardFromClassic",
+        "parameters": [
+          {
+            "description": "Converts classic dashboard JSON into a standard Dashboard, creating it (or\nupdating an existing one when update_if_exists is set).",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1ImportDashboardFromClassicRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ImportDashboardFromClassicResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "ConfigV1"
         ]
       }
     },

@@ -32,8 +32,6 @@ type ClientService interface {
 
 	CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error)
 
-	CreateDashboardFromClassic(params *CreateDashboardFromClassicParams, opts ...ClientOption) (*CreateDashboardFromClassicOK, error)
-
 	CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...ClientOption) (*CreateLinkTemplateOK, error)
 
 	CreateLogPrimaryKey(params *CreateLogPrimaryKeyParams, opts ...ClientOption) (*CreateLogPrimaryKeyOK, error)
@@ -226,47 +224,6 @@ func (a *Client) CreateDashboard(params *CreateDashboardParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateDashboardDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-	CreateDashboardFromClassic Converts raw classic (Grafana) dashboard JSON to the standard dashboard
-
-format and creates it as a standard Dashboard entity in one call.
-Conversion is delegated to cloud-ui-gateway; when that service is
-unavailable this endpoint fails closed with SERVICE_UNAVAILABLE.
-*/
-func (a *Client) CreateDashboardFromClassic(params *CreateDashboardFromClassicParams, opts ...ClientOption) (*CreateDashboardFromClassicOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateDashboardFromClassicParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateDashboardFromClassic",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/dashboards:createFromClassic",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateDashboardFromClassicReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateDashboardFromClassicOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateDashboardFromClassicDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
