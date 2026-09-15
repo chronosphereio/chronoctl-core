@@ -75,26 +75,6 @@ func (mr *MockClientServiceMockRecorder) CreateDashboard(params interface{}, opt
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDashboard", reflect.TypeOf((*MockClientService)(nil).CreateDashboard), varargs...)
 }
 
-// CreateDashboardFromClassic mocks base method.
-func (m *MockClientService) CreateDashboardFromClassic(params *operations.CreateDashboardFromClassicParams, opts ...operations.ClientOption) (*operations.CreateDashboardFromClassicOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateDashboardFromClassic", varargs...)
-	ret0, _ := ret[0].(*operations.CreateDashboardFromClassicOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateDashboardFromClassic indicates an expected call of CreateDashboardFromClassic.
-func (mr *MockClientServiceMockRecorder) CreateDashboardFromClassic(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDashboardFromClassic", reflect.TypeOf((*MockClientService)(nil).CreateDashboardFromClassic), varargs...)
-}
-
 // CreateLinkTemplate mocks base method.
 func (m *MockClientService) CreateLinkTemplate(params *operations.CreateLinkTemplateParams, opts ...operations.ClientOption) (*operations.CreateLinkTemplateOK, error) {
 	m.ctrl.T.Helper()

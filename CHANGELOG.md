@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Added
+* Add a `dashboards:importFromClassic` endpoint to `v1/config` (`ImportDashboardFromClassic`), promoted from the unstable API: converts raw classic (Grafana) dashboard JSON and creates the result as a standard Dashboard in one call, with `dry_run` and `update_if_exists` options and a de-duplicated list of unsupported classic features in the response. Available to library consumers only.
+
+### Changed
+* Add `primary_slo_reference` and `related_slo_references` to `unstable/config/CommandCenterGroup`, distinguishing the group's primary SLO from the related SLOs it tracks. Available to library consumers only.
+
+### Removed
+* Remove `dashboards:createFromClassic` from the generated `configunstable` client, replaced by the `v1/config` `dashboards:importFromClassic` endpoint. The unstable endpoint no longer exists in the public API. Available to library consumers only; there was never an unstable command. **This is a breaking change**.
+
 ## v1.34.0
 
 ### Added

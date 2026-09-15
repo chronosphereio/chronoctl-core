@@ -180,6 +180,8 @@ type ClientService interface {
 
 	DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRulesParams, opts ...ClientOption) (*DeleteTraceTailSamplingRulesOK, error)
 
+	ImportDashboardFromClassic(params *ImportDashboardFromClassicParams, opts ...ClientOption) (*ImportDashboardFromClassicOK, error)
+
 	ListAzureMetricsIntegrations(params *ListAzureMetricsIntegrationsParams, opts ...ClientOption) (*ListAzureMetricsIntegrationsOK, error)
 
 	ListBuckets(params *ListBucketsParams, opts ...ClientOption) (*ListBucketsOK, error)
@@ -3209,6 +3211,45 @@ func (a *Client) DeleteTraceTailSamplingRules(params *DeleteTraceTailSamplingRul
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteTraceTailSamplingRulesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+	ImportDashboardFromClassic Converts classic dashboard JSON to a standard Dashboard, creating it or
+
+updating an existing one in place when update_if_exists is set.
+*/
+func (a *Client) ImportDashboardFromClassic(params *ImportDashboardFromClassicParams, opts ...ClientOption) (*ImportDashboardFromClassicOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewImportDashboardFromClassicParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ImportDashboardFromClassic",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/dashboards:importFromClassic",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ImportDashboardFromClassicReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ImportDashboardFromClassicOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ImportDashboardFromClassicDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -37,6 +38,12 @@ type ConfigunstableCommandCenterGroup struct {
 
 	// group slo reference
 	GroupSLOReference *ConfigunstableSLOReference `json:"group_slo_reference,omitempty"`
+
+	// Related SLOs tracked by this group, secondary to the primary one.
+	RelatedSLOReferences []*ConfigunstableSLOReference `json:"related_slo_references"`
+
+	// primary slo reference
+	PrimarySLOReference *ConfigunstableSLOReference `json:"primary_slo_reference,omitempty"`
 }
 
 // Validate validates this configunstable command center group
@@ -52,6 +59,14 @@ func (m *ConfigunstableCommandCenterGroup) Validate(formats strfmt.Registry) err
 	}
 
 	if err := m.validateGroupSLOReference(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateRelatedSLOReferences(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePrimarySLOReference(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -104,6 +119,51 @@ func (m *ConfigunstableCommandCenterGroup) validateGroupSLOReference(formats str
 	return nil
 }
 
+func (m *ConfigunstableCommandCenterGroup) validateRelatedSLOReferences(formats strfmt.Registry) error {
+	if swag.IsZero(m.RelatedSLOReferences) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.RelatedSLOReferences); i++ {
+		if swag.IsZero(m.RelatedSLOReferences[i]) { // not required
+			continue
+		}
+
+		if m.RelatedSLOReferences[i] != nil {
+			if err := m.RelatedSLOReferences[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("related_slo_references" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("related_slo_references" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableCommandCenterGroup) validatePrimarySLOReference(formats strfmt.Registry) error {
+	if swag.IsZero(m.PrimarySLOReference) { // not required
+		return nil
+	}
+
+	if m.PrimarySLOReference != nil {
+		if err := m.PrimarySLOReference.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("primary_slo_reference")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("primary_slo_reference")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configunstable command center group based on the context it is used
 func (m *ConfigunstableCommandCenterGroup) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -117,6 +177,14 @@ func (m *ConfigunstableCommandCenterGroup) ContextValidate(ctx context.Context, 
 	}
 
 	if err := m.contextValidateGroupSLOReference(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRelatedSLOReferences(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePrimarySLOReference(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -157,6 +225,52 @@ func (m *ConfigunstableCommandCenterGroup) contextValidateGroupSLOReference(ctx 
 				return ve.ValidateName("group_slo_reference")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("group_slo_reference")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableCommandCenterGroup) contextValidateRelatedSLOReferences(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.RelatedSLOReferences); i++ {
+
+		if m.RelatedSLOReferences[i] != nil {
+
+			if swag.IsZero(m.RelatedSLOReferences[i]) { // not required
+				return nil
+			}
+
+			if err := m.RelatedSLOReferences[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("related_slo_references" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("related_slo_references" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ConfigunstableCommandCenterGroup) contextValidatePrimarySLOReference(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PrimarySLOReference != nil {
+
+		if swag.IsZero(m.PrimarySLOReference) { // not required
+			return nil
+		}
+
+		if err := m.PrimarySLOReference.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("primary_slo_reference")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("primary_slo_reference")
 			}
 			return err
 		}
