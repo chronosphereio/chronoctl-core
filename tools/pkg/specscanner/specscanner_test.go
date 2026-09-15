@@ -50,6 +50,7 @@ func TestScan(t *testing.T) {
 				"/api/v1/config/teams",
 				"/api/v1/config/teams/{slug}",
 				"/api/v1/config/monitors",
+				"/api/v1/config/monitors:bulkDisable",
 			},
 			expectedOps: []string{
 				"GET /api/v1/config/monitors/{slug}",
@@ -62,6 +63,7 @@ func TestScan(t *testing.T) {
 				"DELETE /api/v1/config/teams/{slug}",
 				"GET /api/v1/config/monitors",
 				"POST /api/v1/config/monitors",
+				"POST /api/v1/config/monitors:bulkDisable",
 			},
 			expectedResponses: []string{
 				"200 A successful response.",
@@ -98,6 +100,8 @@ func TestScan(t *testing.T) {
 				"400 Cannot create the Monitor because the request is invalid.",
 				"409 Cannot create the Monitor because there is a conflict with an existing Monitor.",
 				"500 An unexpected error response.",
+				"200 A successful response.",
+				"500 An unexpected error response.",
 			},
 			expectedParams: []string{
 				"GET /api/v1/config/teams/{slug}:slug",
@@ -121,6 +125,7 @@ func TestScan(t *testing.T) {
 				"GET /api/v1/config/teams:slugs",
 				"GET /api/v1/config/teams:names",
 				"POST /api/v1/config/teams:body",
+				"POST /api/v1/config/monitors:bulkDisable:body",
 			},
 		},
 	}

@@ -213,6 +213,28 @@
       },
       "type": "object"
     },
+    "configv1BulkDisableMonitorsRequest": {
+      "properties": {
+        "slugs": {
+          "description": "Slugs of the Monitors to disable.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1BulkDisableMonitorsResponse": {
+      "properties": {
+        "disabled_count": {
+          "description": "Number of Monitors disabled.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateMonitorRequest": {
       "properties": {
         "dry_run": {
@@ -606,6 +628,38 @@
             "description": "Cannot create the Monitor because there is a conflict with an existing Monitor.",
             "schema": {
               "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "Monitor"
+        ]
+      }
+    },
+    "/api/v1/config/monitors:bulkDisable": {
+      "post": {
+        "operationId": "BulkDisableMonitors",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1BulkDisableMonitorsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1BulkDisableMonitorsResponse"
             }
           },
           "500": {

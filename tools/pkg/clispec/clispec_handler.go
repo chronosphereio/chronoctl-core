@@ -35,6 +35,12 @@ type cliSpecGen struct {
 	currentCommand    *Command
 	currentAPIVersion string
 	inflectionRuleset *inflect.Ruleset
+	// skipCurrentPath is set while scanning a Google-style custom action path
+	// (e.g. /api/v1/config/dashboards:importFromClassic). Those paths are not
+	// CRUD entities -- there's no schema to scaffold a create/update command
+	// from -- and are instead hand-written under src/cmd/pkg, so we skip
+	// generating any entity or command for them.
+	skipCurrentPath bool
 }
 
 var (
@@ -115,12 +121,12 @@ func (c *cliSpecGen) getEntity(path string) (*Entity, error) {
 				Kind: c.inflectionRuleset.Typeify(entityName),
 			},
 		}
-		
+
 		// Set the appropriate slug field based on entity type
 		if entityName == "service-attribute" {
 			entity.EntityLinkedSingletonSlug = "ServiceSlug"
 		}
-		
+
 		c.spec.Entities[entityName] = entity
 	}
 
@@ -128,6 +134,14 @@ func (c *cliSpecGen) getEntity(path string) (*Entity, error) {
 }
 
 func (c *cliSpecGen) StartPath(path string, pathSpec spec.PathItem) error {
+	if isActionPath(path) {
+		// Don't call getEntity here: it creates the entity as a side effect,
+		// and a bogus entity with no schema is exactly what we're avoiding.
+		c.skipCurrentPath = true
+		c.currentPath = path
+		return nil
+	}
+	c.skipCurrentPath = false
 	c.currentPath = path
 
 	entity, err := c.getEntity(c.currentPath)
@@ -146,10 +160,15 @@ func (c *cliSpecGen) StartPath(path string, pathSpec spec.PathItem) error {
 
 func (c *cliSpecGen) EndPath() error {
 	c.currentPath = ""
+	c.skipCurrentPath = false
 	return nil
 }
 
 func (c *cliSpecGen) StartOp(op string, opSpec *spec.Operation) error {
+	if c.skipCurrentPath {
+		return nil
+	}
+
 	entity, err := c.getEntity(c.currentPath)
 	if err != nil {
 		return err
@@ -193,6 +212,10 @@ func (c *cliSpecGen) StartOp(op string, opSpec *spec.Operation) error {
 }
 
 func (c *cliSpecGen) EndOp() error {
+	if c.skipCurrentPath {
+		return nil
+	}
+
 	// sort parameters so we have a stable order
 	sort.Slice(c.currentCommand.Parameters, func(i, j int) bool {
 		return c.currentCommand.Parameters[i].Name < c.currentCommand.Parameters[j].Name
@@ -201,6 +224,10 @@ func (c *cliSpecGen) EndOp() error {
 }
 
 func (c *cliSpecGen) StartResponse(statusCode int, response *spec.Response) error {
+	if c.skipCurrentPath {
+		return nil
+	}
+
 	if statusCode != http.StatusOK {
 		return nil
 	}
@@ -229,6 +256,10 @@ func (c *cliSpecGen) EndResponse() error {
 }
 
 func (c *cliSpecGen) StartParam(param *spec.Parameter) error {
+	if c.skipCurrentPath {
+		return nil
+	}
+
 	entity, err := c.getEntity(c.currentPath)
 	if err != nil {
 		return err
@@ -316,6 +347,19 @@ func cleanSummary(summary string) string {
 
 func splitPath(path string) []string {
 	return strings.Split(strings.Trim(path, "/"), "/")
+}
+
+// isActionPath reports whether path is a Google-style custom action path,
+// e.g. /api/v1/config/dashboards:importFromClassic. The colon in the entity
+// segment marks an RPC-style verb bolted onto the resource rather than a
+// CRUD operation on it, so these paths don't fit the generated create/read/
+// update/delete/list command shape and are skipped entirely.
+func isActionPath(path string) bool {
+	pathParts := splitPath(path)
+	if len(pathParts) < 4 {
+		return false
+	}
+	return strings.Contains(pathParts[3], ":")
 }
 
 // withAutoXOrder wraps the swagger generator's WithAutoXOrder which
