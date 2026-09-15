@@ -35,7 +35,7 @@ type Team struct {
 	Spec *models.Configv1Team `json:"spec"`
 }
 
-func newTeam(spec *models.Configv1Team) *Team {
+func NewTeam(spec *models.Configv1Team) *Team {
 	return &Team{
 		TypeMeta: TeamTypeMeta,
 		Spec: spec,
@@ -67,7 +67,7 @@ func CreateTeam(
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return newTeam(res.Payload.Team), nil
+	return NewTeam(res.Payload.Team), nil
 }
 
 func newTeamCreateCmd() *cobra.Command {
@@ -157,7 +157,7 @@ func GetTeam(
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return newTeam(res.GetPayload().Team), nil
+	return NewTeam(res.GetPayload().Team), nil
 }
 
 func newTeamReadCmd() *cobra.Command {
@@ -171,7 +171,6 @@ func newTeamReadCmd() *cobra.Command {
 	short = "Reads a single Team by slug"
 	use = "read <slug>"
 	args = cobra.ExactArgs(1)
-	
 
 	cmd := &cobra.Command{
 		Use: use,
@@ -216,8 +215,7 @@ func UpdateTeam(
 	res, err := client.UpdateTeam(&config_v1.UpdateTeamParams{
 		Context: ctx,
 		Slug: entity.Spec.Slug,
-		Body: config_v1.UpdateTeamBody{
-		
+		Body: &models.ConfigV1UpdateTeamBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			Team: entity.Spec,
 		},
@@ -226,7 +224,7 @@ func UpdateTeam(
 		return nil,	clienterror.Wrap(err)
 	}
 
-	return newTeam(res.Payload.Team), nil
+	return NewTeam(res.Payload.Team), nil
 }
 
 func newTeamUpdateCmd() *cobra.Command {
@@ -343,7 +341,7 @@ func newTeamDeleteCmd() *cobra.Command {
 
 			res, err := client.DeleteTeam(&config_v1.DeleteTeamParams{
 				Context: ctx,
-				Slug:  args[0],
+				Slug: args[0],
 			})
 			if err != nil {
 				return clienterror.Wrap(err)
@@ -404,13 +402,13 @@ func ListTeams(
 			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
 			Names: opts.Names,
 			Slugs: opts.Slugs,
-			})
+		})
 		if err != nil {
 			return pagination.Token(""), clienterror.Wrap(err)
 		}
 
 		for _, v := range res.Payload.Teams {
-			if err := streamer(newTeam(v)); err != nil {
+			if err := streamer(NewTeam(v)); err != nil {
 				return pagination.Token(""), err
 			}
 			gotItems++
