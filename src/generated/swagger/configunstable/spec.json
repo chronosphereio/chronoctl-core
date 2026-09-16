@@ -170,27 +170,6 @@
       },
       "type": "object"
     },
-    "CreateDashboardFromClassicResponseUnsupportedFeature": {
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
-        },
-        "level": {
-          "description": "The converter's feature level ('supported' | 'unsupported'); empty when\nthe converter didn't set one.",
-          "type": "string"
-        },
-        "panel_key": {
-          "type": "string"
-        },
-        "panel_name": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "LogPrimaryKeyLogPrimaryKeyField": {
       "properties": {
         "name": {
@@ -749,6 +728,16 @@
         },
         "group_slo_reference": {
           "$ref": "#/definitions/configunstableSloReference"
+        },
+        "related_slo_references": {
+          "description": "Related SLOs tracked by this group, secondary to the primary one.",
+          "items": {
+            "$ref": "#/definitions/configunstableSloReference"
+          },
+          "type": "array"
+        },
+        "primary_slo_reference": {
+          "$ref": "#/definitions/configunstableSloReference"
         }
       },
       "type": "object"
@@ -769,47 +758,6 @@
       "properties": {
         "command_center_group": {
           "$ref": "#/definitions/configunstableCommandCenterGroup"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateDashboardFromClassicRequest": {
-      "description": "CreateDashboardFromClassicRequest converts raw classic (Grafana) dashboard\nJSON into the standard dashboard format and creates the result as a standard\nDashboard entity in one call. Unlike CreateClassicDashboard, this does NOT\ncreate a classic dashboard entity - the result is a standard Dashboard,\nindistinguishable from one created via CreateDashboard.",
-      "properties": {
-        "classic_dashboard_json": {
-          "description": "Required raw classic (Grafana) dashboard JSON to convert.",
-          "type": "string"
-        },
-        "collection_slug": {
-          "description": "Required slug of the collection the new dashboard will belong to.",
-          "type": "string"
-        },
-        "name": {
-          "description": "Optional name for the new dashboard. Defaults to the classic dashboard's\n`title` when unset.",
-          "type": "string"
-        },
-        "slug": {
-          "description": "Optional slug for the new dashboard. When unset, a slug is generated from\nthe name (same behavior as CreateDashboard).",
-          "type": "string"
-        },
-        "dry_run": {
-          "description": "When true, converts and validates the dashboard without persisting it.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateDashboardFromClassicResponse": {
-      "properties": {
-        "dashboard": {
-          "$ref": "#/definitions/configunstableDashboard"
-        },
-        "unsupported_features": {
-          "description": "Classic dashboard features encountered during conversion that were dropped,\nonly approximated, or otherwise noteworthy. Populated on dry-run as well.",
-          "items": {
-            "$ref": "#/definitions/CreateDashboardFromClassicResponseUnsupportedFeature"
-          },
-          "type": "array"
         }
       },
       "type": "object"
@@ -2518,40 +2466,6 @@
         },
         "tags": [
           "Dashboard"
-        ]
-      }
-    },
-    "/api/unstable/config/dashboards:createFromClassic": {
-      "post": {
-        "description": "Converts raw classic (Grafana) dashboard JSON to the standard dashboard\nformat and creates it as a standard Dashboard entity in one call.\nConversion is delegated to cloud-ui-gateway; when that service is\nunavailable this endpoint fails closed with SERVICE_UNAVAILABLE.",
-        "operationId": "CreateDashboardFromClassic",
-        "parameters": [
-          {
-            "description": "CreateDashboardFromClassicRequest converts raw classic (Grafana) dashboard\nJSON into the standard dashboard format and creates the result as a standard\nDashboard entity in one call. Unlike CreateClassicDashboard, this does NOT\ncreate a classic dashboard entity - the result is a standard Dashboard,\nindistinguishable from one created via CreateDashboard.",
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateDashboardFromClassicRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/configunstableCreateDashboardFromClassicResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/apiError"
-            }
-          }
-        },
-        "tags": [
-          "ConfigUnstable"
         ]
       }
     },
