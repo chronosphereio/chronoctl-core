@@ -35,7 +35,7 @@ type Monitor struct {
 	Spec *models.Configv1Monitor `json:"spec"`
 }
 
-func newMonitor(spec *models.Configv1Monitor) *Monitor {
+func NewMonitor(spec *models.Configv1Monitor) *Monitor {
 	return &Monitor{
 		TypeMeta: MonitorTypeMeta,
 		Spec: spec,
@@ -68,7 +68,7 @@ func CreateMonitor(
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return newMonitor(res.Payload.Monitor), nil
+	return NewMonitor(res.Payload.Monitor), nil
 }
 
 func newMonitorCreateCmd() *cobra.Command {
@@ -159,7 +159,7 @@ func GetMonitor(
 	if err != nil {
 		return nil, clienterror.Wrap(err)
 	}
-	return newMonitor(res.GetPayload().Monitor), nil
+	return NewMonitor(res.GetPayload().Monitor), nil
 }
 
 func newMonitorReadCmd() *cobra.Command {
@@ -173,7 +173,6 @@ func newMonitorReadCmd() *cobra.Command {
 	short = "Reads a single Monitor by slug"
 	use = "read <slug>"
 	args = cobra.ExactArgs(1)
-	
 
 	cmd := &cobra.Command{
 		Use: use,
@@ -218,8 +217,7 @@ func UpdateMonitor(
 	res, err := client.UpdateMonitor(&config_v1.UpdateMonitorParams{
 		Context: ctx,
 		Slug: entity.Spec.Slug,
-		Body: config_v1.UpdateMonitorBody{
-		
+		Body: &models.ConfigV1UpdateMonitorBody{
 			CreateIfMissing: opts.CreateIfMissing,
 			DryRun: opts.DryRun,
 			Monitor: entity.Spec,
@@ -229,7 +227,7 @@ func UpdateMonitor(
 		return nil,	clienterror.Wrap(err)
 	}
 
-	return newMonitor(res.Payload.Monitor), nil
+	return NewMonitor(res.Payload.Monitor), nil
 }
 
 func newMonitorUpdateCmd() *cobra.Command {
@@ -347,7 +345,7 @@ func newMonitorDeleteCmd() *cobra.Command {
 
 			res, err := client.DeleteMonitor(&config_v1.DeleteMonitorParams{
 				Context: ctx,
-				Slug:  args[0],
+				Slug: args[0],
 			})
 			if err != nil {
 				return clienterror.Wrap(err)
@@ -420,13 +418,13 @@ func ListMonitors(
 			Names: opts.Names,
 			Slugs: opts.Slugs,
 			TeamSlugs: opts.TeamSlugs,
-			})
+		})
 		if err != nil {
 			return pagination.Token(""), clienterror.Wrap(err)
 		}
 
 		for _, v := range res.Payload.Monitors {
-			if err := streamer(newMonitor(v)); err != nil {
+			if err := streamer(NewMonitor(v)); err != nil {
 				return pagination.Token(""), err
 			}
 			gotItems++
