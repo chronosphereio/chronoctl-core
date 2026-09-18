@@ -86,6 +86,22 @@
       },
       "type": "object"
     },
+    "ConfigUnstableUpdateMetricNameActiveSeriesLimitBody": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configunstableMetricNameActiveSeriesLimit"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the MetricNameActiveSeriesLimit will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the MetricNameActiveSeriesLimit does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the MetricNameActiveSeriesLimit. If the specified configuration is valid, the endpoint returns a partial response without the MetricNameActiveSeriesLimit. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigUnstableUpdateNoopEntityBody": {
       "properties": {
         "noop_entity": {
@@ -166,27 +182,6 @@
         "dry_run": {
           "description": "If `true`, validates the specified configuration without creating or updating the TraceJaegerRemoteSamplingStrategy. If the specified configuration is valid, the endpoint returns a partial response without the TraceJaegerRemoteSamplingStrategy. If the specified configuration is invalid, the endpoint returns an error.",
           "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "CreateDashboardFromClassicResponseUnsupportedFeature": {
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
-        },
-        "level": {
-          "description": "The converter's feature level ('supported' | 'unsupported'); empty when\nthe converter didn't set one.",
-          "type": "string"
-        },
-        "panel_key": {
-          "type": "string"
-        },
-        "panel_name": {
-          "type": "string"
         }
       },
       "type": "object"
@@ -749,6 +744,16 @@
         },
         "group_slo_reference": {
           "$ref": "#/definitions/configunstableSloReference"
+        },
+        "related_slo_references": {
+          "description": "Related SLOs tracked by this group, secondary to the primary one.",
+          "items": {
+            "$ref": "#/definitions/configunstableSloReference"
+          },
+          "type": "array"
+        },
+        "primary_slo_reference": {
+          "$ref": "#/definitions/configunstableSloReference"
         }
       },
       "type": "object"
@@ -769,47 +774,6 @@
       "properties": {
         "command_center_group": {
           "$ref": "#/definitions/configunstableCommandCenterGroup"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateDashboardFromClassicRequest": {
-      "description": "CreateDashboardFromClassicRequest converts raw classic (Grafana) dashboard\nJSON into the standard dashboard format and creates the result as a standard\nDashboard entity in one call. Unlike CreateClassicDashboard, this does NOT\ncreate a classic dashboard entity - the result is a standard Dashboard,\nindistinguishable from one created via CreateDashboard.",
-      "properties": {
-        "classic_dashboard_json": {
-          "description": "Required raw classic (Grafana) dashboard JSON to convert.",
-          "type": "string"
-        },
-        "collection_slug": {
-          "description": "Required slug of the collection the new dashboard will belong to.",
-          "type": "string"
-        },
-        "name": {
-          "description": "Optional name for the new dashboard. Defaults to the classic dashboard's\n`title` when unset.",
-          "type": "string"
-        },
-        "slug": {
-          "description": "Optional slug for the new dashboard. When unset, a slug is generated from\nthe name (same behavior as CreateDashboard).",
-          "type": "string"
-        },
-        "dry_run": {
-          "description": "When true, converts and validates the dashboard without persisting it.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
-    "configunstableCreateDashboardFromClassicResponse": {
-      "properties": {
-        "dashboard": {
-          "$ref": "#/definitions/configunstableDashboard"
-        },
-        "unsupported_features": {
-          "description": "Classic dashboard features encountered during conversion that were dropped,\nonly approximated, or otherwise noteworthy. Populated on dry-run as well.",
-          "items": {
-            "$ref": "#/definitions/CreateDashboardFromClassicResponseUnsupportedFeature"
-          },
-          "type": "array"
         }
       },
       "type": "object"
@@ -866,6 +830,26 @@
       "properties": {
         "log_primary_key": {
           "$ref": "#/definitions/configunstableLogPrimaryKey"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateMetricNameActiveSeriesLimitRequest": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configunstableMetricNameActiveSeriesLimit"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the MetricNameActiveSeriesLimit. If the specified configuration is valid, the endpoint returns a partial response without the MetricNameActiveSeriesLimit. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableCreateMetricNameActiveSeriesLimitResponse": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configunstableMetricNameActiveSeriesLimit"
         }
       },
       "type": "object"
@@ -1097,6 +1081,9 @@
     "configunstableDeleteLogPrimaryKeyResponse": {
       "type": "object"
     },
+    "configunstableDeleteMetricNameActiveSeriesLimitResponse": {
+      "type": "object"
+    },
     "configunstableDeleteNoopEntityResponse": {
       "properties": {
         "not_hidden": {
@@ -1218,6 +1205,20 @@
       },
       "type": "object"
     },
+    "configunstableListMetricNameActiveSeriesLimitsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "metric_name_active_series_limits": {
+          "items": {
+            "$ref": "#/definitions/configunstableMetricNameActiveSeriesLimit"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configunstableListNotebooksResponse": {
       "properties": {
         "page": {
@@ -1320,6 +1321,41 @@
             "$ref": "#/definitions/LogPrimaryKeyLogPrimaryKeyField"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableMetricNameActiveSeriesLimit": {
+      "properties": {
+        "slug": {
+          "description": "The unique identifier of the MetricNameActiveSeriesLimit. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the MetricNameActiveSeriesLimit is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the MetricNameActiveSeriesLimit. You can modify this value after the MetricNameActiveSeriesLimit is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the MetricNameActiveSeriesLimit was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the MetricNameActiveSeriesLimit was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "metric_name": {
+          "description": "The exact `__name__` this limit applies to. Must be unique.",
+          "example": "http_requests_total",
+          "type": "string"
+        },
+        "max_active_series": {
+          "description": "The total active time series allowed for this metric name over the active\ntime series rolling window. Must be greater than zero.",
+          "format": "int64",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1469,6 +1505,14 @@
       "properties": {
         "log_primary_key": {
           "$ref": "#/definitions/configunstableLogPrimaryKey"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableReadMetricNameActiveSeriesLimitResponse": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configunstableMetricNameActiveSeriesLimit"
         }
       },
       "type": "object"
@@ -1810,6 +1854,14 @@
       },
       "type": "object"
     },
+    "configunstableUpdateMetricNameActiveSeriesLimitResponse": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configunstableMetricNameActiveSeriesLimit"
+        }
+      },
+      "type": "object"
+    },
     "configunstableUpdateNoopEntityResponse": {
       "properties": {
         "noop_entity": {
@@ -1928,6 +1980,19 @@
           "$ref": "#/definitions/configunstableTraceTopTagConfig"
         }
       },
+      "type": "object"
+    },
+    "configunstableValidateDashboardRequest": {
+      "properties": {
+        "dashboard_json": {
+          "description": "Required raw JSON of the dashboard to validate.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configunstableValidateDashboardResponse": {
+      "description": "Deliberately empty: a valid dashboard is a bare 200. Validation failures\nare returned in the error body (INVALID_ARGUMENT), not as response fields.",
       "type": "object"
     },
     "configv1CollectionReference": {
@@ -2521,18 +2586,17 @@
         ]
       }
     },
-    "/api/unstable/config/dashboards:createFromClassic": {
+    "/api/unstable/config/dashboards:validate": {
       "post": {
-        "description": "Converts raw classic (Grafana) dashboard JSON to the standard dashboard\nformat and creates it as a standard Dashboard entity in one call.\nConversion is delegated to cloud-ui-gateway; when that service is\nunavailable this endpoint fails closed with SERVICE_UNAVAILABLE.",
-        "operationId": "CreateDashboardFromClassic",
+        "description": "Validates dashboard JSON without persisting it.",
+        "operationId": "ValidateDashboard",
         "parameters": [
           {
-            "description": "CreateDashboardFromClassicRequest converts raw classic (Grafana) dashboard\nJSON into the standard dashboard format and creates the result as a standard\nDashboard entity in one call. Unlike CreateClassicDashboard, this does NOT\ncreate a classic dashboard entity - the result is a standard Dashboard,\nindistinguishable from one created via CreateDashboard.",
             "in": "body",
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/configunstableCreateDashboardFromClassicRequest"
+              "$ref": "#/definitions/configunstableValidateDashboardRequest"
             }
           }
         ],
@@ -2540,7 +2604,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/configunstableCreateDashboardFromClassicResponse"
+              "$ref": "#/definitions/configunstableValidateDashboardResponse"
             }
           },
           "default": {
@@ -3020,6 +3084,275 @@
         },
         "tags": [
           "LogPrimaryKey"
+        ]
+      }
+    },
+    "/api/unstable/config/metric-name-active-series-limits": {
+      "get": {
+        "operationId": "ListMetricNameActiveSeriesLimits",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any MetricNameActiveSeriesLimit with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any MetricNameActiveSeriesLimit with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results to the limits whose `metric_name` is in the list.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "metric_names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableListMetricNameActiveSeriesLimitsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
+        ]
+      },
+      "post": {
+        "operationId": "CreateMetricNameActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateMetricNameActiveSeriesLimitRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created MetricNameActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/configunstableCreateMetricNameActiveSeriesLimitResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the MetricNameActiveSeriesLimit because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the MetricNameActiveSeriesLimit because there is a conflict with an existing MetricNameActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
+        ]
+      }
+    },
+    "/api/unstable/config/metric-name-active-series-limits/{slug}": {
+      "delete": {
+        "operationId": "DeleteMetricNameActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableDeleteMetricNameActiveSeriesLimitResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the MetricNameActiveSeriesLimit because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the MetricNameActiveSeriesLimit because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
+        ]
+      },
+      "get": {
+        "operationId": "ReadMetricNameActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configunstableReadMetricNameActiveSeriesLimitResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the MetricNameActiveSeriesLimit because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateMetricNameActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigUnstableUpdateMetricNameActiveSeriesLimitBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated MetricNameActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/configunstableUpdateMetricNameActiveSeriesLimitResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the MetricNameActiveSeriesLimit because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the MetricNameActiveSeriesLimit because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the MetricNameActiveSeriesLimit because there is a conflict with an existing MetricNameActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
         ]
       }
     },

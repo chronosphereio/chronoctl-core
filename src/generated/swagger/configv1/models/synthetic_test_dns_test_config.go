@@ -23,14 +23,6 @@ type SyntheticTestDNSTestConfig struct {
 	// Example: api.example.com
 	Domain string `json:"domain,omitempty"`
 
-	// Nameserver to query. When unset, the test uses the default resolver for
-	// the probe location.
-	DNSServer string `json:"dns_server,omitempty"`
-
-	// Port of the nameserver in `dns_server`, from 1 to 65535. Required when
-	// `dns_server` is set, and rejected when it isn't.
-	DNSServerPort int64 `json:"dns_server_port,omitempty"`
-
 	// Conditions the response must satisfy for the test to pass.
 	Assertions []*SyntheticTestDNSTestConfigAssertion `json:"assertions"`
 }
