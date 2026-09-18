@@ -14,21 +14,21 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableCreateDashboardFromClassicResponse configunstable create dashboard from classic response
+// Configv1ImportDashboardFromClassicResponse configv1 import dashboard from classic response
 //
-// swagger:model configunstableCreateDashboardFromClassicResponse
-type ConfigunstableCreateDashboardFromClassicResponse struct {
+// swagger:model configv1ImportDashboardFromClassicResponse
+type Configv1ImportDashboardFromClassicResponse struct {
 
 	// dashboard
-	Dashboard *ConfigunstableDashboard `json:"dashboard,omitempty"`
+	Dashboard *Configv1Dashboard `json:"dashboard,omitempty"`
 
-	// Classic dashboard features encountered during conversion that were dropped,
-	// only approximated, or otherwise noteworthy. Populated on dry-run as well.
-	UnsupportedFeatures []*CreateDashboardFromClassicResponseUnsupportedFeature `json:"unsupported_features"`
+	// Classic dashboard features that were dropped, approximated, or otherwise
+	// noteworthy during conversion, de-duplicated one entry per feature.
+	UnsupportedFeatures []*ImportDashboardFromClassicResponseUnsupportedFeature `json:"unsupported_features"`
 }
 
-// Validate validates this configunstable create dashboard from classic response
-func (m *ConfigunstableCreateDashboardFromClassicResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 import dashboard from classic response
+func (m *Configv1ImportDashboardFromClassicResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateDashboard(formats); err != nil {
@@ -45,7 +45,7 @@ func (m *ConfigunstableCreateDashboardFromClassicResponse) Validate(formats strf
 	return nil
 }
 
-func (m *ConfigunstableCreateDashboardFromClassicResponse) validateDashboard(formats strfmt.Registry) error {
+func (m *Configv1ImportDashboardFromClassicResponse) validateDashboard(formats strfmt.Registry) error {
 	if swag.IsZero(m.Dashboard) { // not required
 		return nil
 	}
@@ -64,7 +64,7 @@ func (m *ConfigunstableCreateDashboardFromClassicResponse) validateDashboard(for
 	return nil
 }
 
-func (m *ConfigunstableCreateDashboardFromClassicResponse) validateUnsupportedFeatures(formats strfmt.Registry) error {
+func (m *Configv1ImportDashboardFromClassicResponse) validateUnsupportedFeatures(formats strfmt.Registry) error {
 	if swag.IsZero(m.UnsupportedFeatures) { // not required
 		return nil
 	}
@@ -90,8 +90,8 @@ func (m *ConfigunstableCreateDashboardFromClassicResponse) validateUnsupportedFe
 	return nil
 }
 
-// ContextValidate validate this configunstable create dashboard from classic response based on the context it is used
-func (m *ConfigunstableCreateDashboardFromClassicResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 import dashboard from classic response based on the context it is used
+func (m *Configv1ImportDashboardFromClassicResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateDashboard(ctx, formats); err != nil {
@@ -108,7 +108,7 @@ func (m *ConfigunstableCreateDashboardFromClassicResponse) ContextValidate(ctx c
 	return nil
 }
 
-func (m *ConfigunstableCreateDashboardFromClassicResponse) contextValidateDashboard(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ImportDashboardFromClassicResponse) contextValidateDashboard(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Dashboard != nil {
 
@@ -129,7 +129,7 @@ func (m *ConfigunstableCreateDashboardFromClassicResponse) contextValidateDashbo
 	return nil
 }
 
-func (m *ConfigunstableCreateDashboardFromClassicResponse) contextValidateUnsupportedFeatures(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1ImportDashboardFromClassicResponse) contextValidateUnsupportedFeatures(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.UnsupportedFeatures); i++ {
 
@@ -155,7 +155,7 @@ func (m *ConfigunstableCreateDashboardFromClassicResponse) contextValidateUnsupp
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableCreateDashboardFromClassicResponse) MarshalBinary() ([]byte, error) {
+func (m *Configv1ImportDashboardFromClassicResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -163,8 +163,8 @@ func (m *ConfigunstableCreateDashboardFromClassicResponse) MarshalBinary() ([]by
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableCreateDashboardFromClassicResponse) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableCreateDashboardFromClassicResponse
+func (m *Configv1ImportDashboardFromClassicResponse) UnmarshalBinary(b []byte) error {
+	var res Configv1ImportDashboardFromClassicResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
