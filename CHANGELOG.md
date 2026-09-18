@@ -3,13 +3,13 @@
 ## Unreleased
 
 ### Added
-* Add a `dashboards:importFromClassic` endpoint to `v1/config`, which converts classic dashboard JSON into a standard Dashboard and creates it, or updates an existing dashboard in place when `update_if_exists` is set. It replaces the unstable `dashboards:createFromClassic` endpoint. Available to library consumers only.
+* Add a `dashboards:importFromClassic` endpoint to `v1/config`, which converts classic dashboard JSON into a standard Dashboard and creates it, or updates an existing dashboard in place when `update_if_exists` is set. Available to library consumers only.
 * Add a `dashboards:validate` endpoint to `unstable/config`, which validates dashboard JSON without persisting it. Available to library consumers only.
 * Add `unstable/config/MetricNameActiveSeriesLimit` to the generated `configunstable` client. A metric name active series limit caps the active time series allowed for a single metric name. Available to library consumers only; there are no `metric-name-active-series-limits` commands.
 * Add `primary_slo_reference` and `related_slo_references` to `unstable/config/CommandCenterGroup`. Available to library consumers only.
 
 ### Removed
-* Remove `dns_server` and `dns_server_port` from the `v1/config/SyntheticTest` DNS test configuration. DNS tests always resolve through Google Public DNS (8.8.8.8:53); the API no longer accepts a custom nameserver, so drop the fields from any `synthetic-tests` YAML that sets them. **This is a breaking change**.
+* Remove `dns_server` and `dns_server_port` from the `v1/config/SyntheticTest` DNS test configuration. The API no longer accepts a custom nameserver, so drop the fields from any `synthetic-tests` YAML that sets them. **This is a breaking change**.
 * Remove the `dashboards:createFromClassic` endpoint from `unstable/config`, replaced by `v1/config` `dashboards:importFromClassic`. Available to library consumers only. **This is a breaking change**.
 
 ## v1.34.0
