@@ -533,12 +533,6 @@ spec:
     dns_test:
         # Domain the test resolves.
         domain: <string>
-        # Nameserver to query. When unset, the test uses the default resolver for
-        # the probe location.
-        dns_server: <string>
-        # Port of the nameserver in 'dns_server', from 1 to 65535. Required when
-        # 'dns_server' is set, and rejected when it isn't.
-        dns_server_port: <integer>
         # Conditions the response must satisfy for the test to pass.
         assertions:
             - # Asserts on DNS records returned for the query. The 'match_scope' field

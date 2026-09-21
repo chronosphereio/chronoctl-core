@@ -1555,6 +1555,26 @@ func (mr *MockClientServiceMockRecorder) DeleteTraceTailSamplingRules(params int
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceTailSamplingRules", reflect.TypeOf((*MockClientService)(nil).DeleteTraceTailSamplingRules), varargs...)
 }
 
+// ImportDashboardFromClassic mocks base method.
+func (m *MockClientService) ImportDashboardFromClassic(params *operations.ImportDashboardFromClassicParams, opts ...operations.ClientOption) (*operations.ImportDashboardFromClassicOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ImportDashboardFromClassic", varargs...)
+	ret0, _ := ret[0].(*operations.ImportDashboardFromClassicOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ImportDashboardFromClassic indicates an expected call of ImportDashboardFromClassic.
+func (mr *MockClientServiceMockRecorder) ImportDashboardFromClassic(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImportDashboardFromClassic", reflect.TypeOf((*MockClientService)(nil).ImportDashboardFromClassic), varargs...)
+}
+
 // ListAzureMetricsIntegrations mocks base method.
 func (m *MockClientService) ListAzureMetricsIntegrations(params *operations.ListAzureMetricsIntegrationsParams, opts ...operations.ClientOption) (*operations.ListAzureMetricsIntegrationsOK, error) {
 	m.ctrl.T.Helper()
