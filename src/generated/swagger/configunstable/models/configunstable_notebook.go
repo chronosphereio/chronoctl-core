@@ -44,6 +44,9 @@ type ConfigunstableNotebook struct {
 
 	// collection
 	Collection *Configv1CollectionReference `json:"collection,omitempty"`
+
+	// labels
+	Labels map[string]string `json:"labels,omitempty"`
 }
 
 // Validate validates this configunstable notebook

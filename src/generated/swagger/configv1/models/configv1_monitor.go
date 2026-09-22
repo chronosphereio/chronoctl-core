@@ -35,6 +35,10 @@ type Configv1Monitor struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
+	// Optional description of the monitor. Markdown is supported when rendered
+	// in the Chronosphere app.
+	Description string `json:"description,omitempty"`
+
 	// Slug of the bucket the monitor belongs to. Required if `collection_slug` isn't
 	// set.
 	BucketSlug string `json:"bucket_slug,omitempty"`

@@ -32,6 +32,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewLogIngestConfigCmd())
 	root.AddCommand(NewLogRetentionConfigCmd())
 	root.AddCommand(NewMappingRuleCmd())
+	root.AddCommand(NewMetricNameActiveSeriesLimitCmd())
 	root.AddCommand(NewMonitorCmd())
 	root.AddCommand(NewMutingRuleCmd())
 	root.AddCommand(NewNotificationPolicyCmd())
@@ -369,6 +370,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateMappingRule(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		MetricNameActiveSeriesLimitTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*MetricNameActiveSeriesLimit)
+			if !ok {
+				return types.WrongObjectErr((&MetricNameActiveSeriesLimit{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateMetricNameActiveSeriesLimit(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

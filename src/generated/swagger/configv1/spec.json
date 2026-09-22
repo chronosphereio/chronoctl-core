@@ -393,6 +393,22 @@
       },
       "type": "object"
     },
+    "ConfigV1UpdateMetricNameActiveSeriesLimitBody": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameActiveSeriesLimit"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the MetricNameActiveSeriesLimit will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the MetricNameActiveSeriesLimit does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the MetricNameActiveSeriesLimit. If the specified configuration is valid, the endpoint returns a partial response without the MetricNameActiveSeriesLimit. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateMonitorBody": {
       "properties": {
         "monitor": {
@@ -1817,7 +1833,33 @@
           "type": "string"
         },
         "weekly_schedule": {
-          "$ref": "#/definitions/ScheduleWeeklySchedule"
+          "$ref": "#/definitions/MonitorScheduleWeeklySchedule"
+        }
+      },
+      "type": "object"
+    },
+    "MonitorScheduleWeeklySchedule": {
+      "properties": {
+        "monday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "tuesday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "wednesday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "thursday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "friday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "saturday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
+        },
+        "sunday": {
+          "$ref": "#/definitions/ScheduleScheduleDay"
         }
       },
       "type": "object"
@@ -1866,6 +1908,58 @@
         "signal_per_series": {
           "description": "If set to `true`, each series will have its own signal. Cannot be used with\n`label_names`.",
           "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "MutingRuleRecurrence": {
+      "description": "Recurrence makes a muting rule mute on a repeating weekly schedule rather\nthan continuously.\n",
+      "properties": {
+        "timezone": {
+          "description": "Required. The timezone the time ranges are interpreted in, as an IANA name\nsuch as `\"America/New_York\"`. Ranges are matched against wall-clock time in\nthis zone, so they keep their local meaning across daylight saving changes.",
+          "type": "string"
+        },
+        "weekly_schedule": {
+          "$ref": "#/definitions/MutingRuleRecurrenceWeeklySchedule"
+        }
+      },
+      "type": "object"
+    },
+    "MutingRuleRecurrenceTimeRange": {
+      "properties": {
+        "start_hh_mm": {
+          "description": "Start time in the format `\"\u003chour\u003e:\u003cminute\u003e\"`. For example, `\"22:00\"`.",
+          "type": "string"
+        },
+        "end_hh_mm": {
+          "description": "End time in the format `\"\u003chour\u003e:\u003cminute\u003e\"`. For example, `\"06:00\"`.\nUse `\"24:00\"` for the end of the day: a window that crosses midnight is\nexpressed as one range ending at `\"24:00\"` and another on the following\nday starting at `\"00:00\"`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MutingRuleRecurrenceWeeklySchedule": {
+      "properties": {
+        "monday": {
+          "$ref": "#/definitions/RecurrenceDaySchedule"
+        },
+        "tuesday": {
+          "$ref": "#/definitions/RecurrenceDaySchedule"
+        },
+        "wednesday": {
+          "$ref": "#/definitions/RecurrenceDaySchedule"
+        },
+        "thursday": {
+          "$ref": "#/definitions/RecurrenceDaySchedule"
+        },
+        "friday": {
+          "$ref": "#/definitions/RecurrenceDaySchedule"
+        },
+        "saturday": {
+          "$ref": "#/definitions/RecurrenceDaySchedule"
+        },
+        "sunday": {
+          "$ref": "#/definitions/RecurrenceDaySchedule"
         }
       },
       "type": "object"
@@ -2105,6 +2199,18 @@
         "EXECUTION_MODE_SYNCHRONIZED"
       ],
       "type": "string"
+    },
+    "RecurrenceDaySchedule": {
+      "properties": {
+        "ranges": {
+          "description": "The time ranges during which the rule mutes on this day. Ranges must not\noverlap.",
+          "items": {
+            "$ref": "#/definitions/MutingRuleRecurrenceTimeRange"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
     },
     "ReplaceFieldMappedValue": {
       "description": "MappedValue is the configuration for mapped value replace mode.",
@@ -2482,19 +2588,6 @@
       ],
       "type": "string"
     },
-    "ScheduleDayTimeRange": {
-      "properties": {
-        "start_hh_mm": {
-          "description": "Start time in the in format `\"\u003chour\u003e:\u003cminute\u003e\"`. For example, `\"15:30\"`.",
-          "type": "string"
-        },
-        "end_hh_mm": {
-          "description": "End time in the in format `\"\u003chour\u003e:\u003cminute\u003e\"`. For example, `\"15:30\"`.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "ScheduleScheduleDay": {
       "properties": {
         "active": {
@@ -2503,35 +2596,22 @@
         "ranges": {
           "description": "The time ranges that the monitor is active on this day. Required if `active`\nis set to `ONLY_DURING_RANGES`. Otherwise, this field must be empty.",
           "items": {
-            "$ref": "#/definitions/ScheduleDayTimeRange"
+            "$ref": "#/definitions/ScheduleScheduleDayTimeRange"
           },
           "type": "array"
         }
       },
       "type": "object"
     },
-    "ScheduleWeeklySchedule": {
+    "ScheduleScheduleDayTimeRange": {
       "properties": {
-        "monday": {
-          "$ref": "#/definitions/ScheduleScheduleDay"
+        "start_hh_mm": {
+          "description": "Start time in the in format `\"\u003chour\u003e:\u003cminute\u003e\"`. For example, `\"15:30\"`.",
+          "type": "string"
         },
-        "tuesday": {
-          "$ref": "#/definitions/ScheduleScheduleDay"
-        },
-        "wednesday": {
-          "$ref": "#/definitions/ScheduleScheduleDay"
-        },
-        "thursday": {
-          "$ref": "#/definitions/ScheduleScheduleDay"
-        },
-        "friday": {
-          "$ref": "#/definitions/ScheduleScheduleDay"
-        },
-        "saturday": {
-          "$ref": "#/definitions/ScheduleScheduleDay"
-        },
-        "sunday": {
-          "$ref": "#/definitions/ScheduleScheduleDay"
+        "end_hh_mm": {
+          "description": "End time in the in format `\"\u003chour\u003e:\u003cminute\u003e\"`. For example, `\"15:30\"`.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -3137,6 +3217,7 @@
     },
     "SyntheticTestTestLocation": {
       "enum": [
+        "GCP_US_LOS_ANGELES",
         "GCP_US_OREGON",
         "GCP_US_VIRGINIA",
         "GCP_BR_SAO_PAULO",
@@ -4562,6 +4643,26 @@
       },
       "type": "object"
     },
+    "configv1CreateMetricNameActiveSeriesLimitRequest": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameActiveSeriesLimit"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the MetricNameActiveSeriesLimit. If the specified configuration is valid, the endpoint returns a partial response without the MetricNameActiveSeriesLimit. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateMetricNameActiveSeriesLimitResponse": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameActiveSeriesLimit"
+        }
+      },
+      "type": "object"
+    },
     "configv1CreateMonitorRequest": {
       "properties": {
         "monitor": {
@@ -5069,6 +5170,9 @@
       "type": "object"
     },
     "configv1DeleteMappingRuleResponse": {
+      "type": "object"
+    },
+    "configv1DeleteMetricNameActiveSeriesLimitResponse": {
       "type": "object"
     },
     "configv1DeleteMonitorResponse": {
@@ -5868,6 +5972,20 @@
       },
       "type": "object"
     },
+    "configv1ListMetricNameActiveSeriesLimitsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "metric_name_active_series_limits": {
+          "items": {
+            "$ref": "#/definitions/configv1MetricNameActiveSeriesLimit"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configv1ListMonitorsResponse": {
       "properties": {
         "page": {
@@ -6369,6 +6487,41 @@
       },
       "type": "object"
     },
+    "configv1MetricNameActiveSeriesLimit": {
+      "properties": {
+        "slug": {
+          "description": "The unique identifier of the MetricNameActiveSeriesLimit. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the MetricNameActiveSeriesLimit is created.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the MetricNameActiveSeriesLimit. You can modify this value after the MetricNameActiveSeriesLimit is created.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the MetricNameActiveSeriesLimit was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the MetricNameActiveSeriesLimit was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "metric_name": {
+          "description": "The exact `__name__` this limit applies to. Must be unique.",
+          "example": "http_requests_total",
+          "type": "string"
+        },
+        "max_active_series": {
+          "description": "The total active time series allowed for this metric name over the active\ntime series rolling window. Must be greater than zero.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configv1Monitor": {
       "properties": {
         "slug": {
@@ -6389,6 +6542,10 @@
           "description": "Timestamp of when the Monitor was last updated. Cannot be set by clients.",
           "format": "date-time",
           "readOnly": true,
+          "type": "string"
+        },
+        "description": {
+          "description": "Optional description of the monitor. Markdown is supported when rendered\nin the Chronosphere app.",
           "type": "string"
         },
         "bucket_slug": {
@@ -6523,13 +6680,16 @@
           "type": "string"
         },
         "ends_at": {
-          "description": "Required. Timestamp of when the muting rule stops being active.",
+          "description": "Required. Timestamp of when the muting rule stops being active. On a\nrecurring rule this bounds the recurrence as a whole rather than any one\noccurrence.",
           "format": "date-time",
           "type": "string"
         },
         "comment": {
           "description": "Descriptive comment that explains why the muting rule was created.",
           "type": "string"
+        },
+        "recurrence": {
+          "$ref": "#/definitions/MutingRuleRecurrence"
         }
       },
       "type": "object"
@@ -7229,6 +7389,14 @@
       "properties": {
         "mapping_rule": {
           "$ref": "#/definitions/configv1MappingRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadMetricNameActiveSeriesLimitResponse": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameActiveSeriesLimit"
         }
       },
       "type": "object"
@@ -8495,6 +8663,14 @@
       "properties": {
         "mapping_rule": {
           "$ref": "#/definitions/configv1MappingRule"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateMetricNameActiveSeriesLimitResponse": {
+      "properties": {
+        "metric_name_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameActiveSeriesLimit"
         }
       },
       "type": "object"
@@ -13756,6 +13932,275 @@
         ]
       }
     },
+    "/api/v1/config/metric-name-active-series-limits": {
+      "get": {
+        "operationId": "ListMetricNameActiveSeriesLimits",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any MetricNameActiveSeriesLimit with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any MetricNameActiveSeriesLimit with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results to the limits whose `metric_name` is in the list.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "metric_names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListMetricNameActiveSeriesLimitsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
+        ]
+      },
+      "post": {
+        "operationId": "CreateMetricNameActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateMetricNameActiveSeriesLimitRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created MetricNameActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateMetricNameActiveSeriesLimitResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the MetricNameActiveSeriesLimit because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the MetricNameActiveSeriesLimit because there is a conflict with an existing MetricNameActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
+        ]
+      }
+    },
+    "/api/v1/config/metric-name-active-series-limits/{slug}": {
+      "delete": {
+        "operationId": "DeleteMetricNameActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteMetricNameActiveSeriesLimitResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the MetricNameActiveSeriesLimit because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the MetricNameActiveSeriesLimit because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
+        ]
+      },
+      "get": {
+        "operationId": "ReadMetricNameActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadMetricNameActiveSeriesLimitResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the MetricNameActiveSeriesLimit because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateMetricNameActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateMetricNameActiveSeriesLimitBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated MetricNameActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateMetricNameActiveSeriesLimitResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the MetricNameActiveSeriesLimit because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the MetricNameActiveSeriesLimit because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the MetricNameActiveSeriesLimit because there is a conflict with an existing MetricNameActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameActiveSeriesLimit"
+        ]
+      }
+    },
     "/api/v1/config/monitors": {
       "get": {
         "operationId": "ListMonitors",
@@ -13828,6 +14273,16 @@
             "in": "query",
             "name": "name_contains",
             "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filter returned monitors by their labels. Each entry is `name=value` or\n`name!=value`, for example `team=payments` or `team!=payments`; the value may be\ndouble-quoted. `=~` and `!~` are not accepted. A monitor is returned only if every\nentry holds for it: `name=value` requires the monitor to carry that label with that\nvalue (it may carry other labels too), and `name!=value` excludes monitors whose\nlabel has that value. With an empty value, `name=` matches monitors that do not have\nthe label and `name!=` matches monitors that have it with any value. Unlike the\nother list filters, whose values are OR'd, entries here are AND'd.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "label_matchers",
+            "type": "array"
           }
         ],
         "responses": {

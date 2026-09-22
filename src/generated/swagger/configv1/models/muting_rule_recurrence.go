@@ -13,20 +13,23 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// MonitorSchedule monitor schedule
+// MutingRuleRecurrence Recurrence makes a muting rule mute on a repeating weekly schedule rather
+// than continuously.
 //
-// swagger:model MonitorSchedule
-type MonitorSchedule struct {
+// swagger:model MutingRuleRecurrence
+type MutingRuleRecurrence struct {
 
-	// The timezone of the time ranges.
+	// Required. The timezone the time ranges are interpreted in, as an IANA name
+	// such as `"America/New_York"`. Ranges are matched against wall-clock time in
+	// this zone, so they keep their local meaning across daylight saving changes.
 	Timezone string `json:"timezone,omitempty"`
 
 	// weekly schedule
-	WeeklySchedule *MonitorScheduleWeeklySchedule `json:"weekly_schedule,omitempty"`
+	WeeklySchedule *MutingRuleRecurrenceWeeklySchedule `json:"weekly_schedule,omitempty"`
 }
 
-// Validate validates this monitor schedule
-func (m *MonitorSchedule) Validate(formats strfmt.Registry) error {
+// Validate validates this muting rule recurrence
+func (m *MutingRuleRecurrence) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateWeeklySchedule(formats); err != nil {
@@ -39,7 +42,7 @@ func (m *MonitorSchedule) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *MonitorSchedule) validateWeeklySchedule(formats strfmt.Registry) error {
+func (m *MutingRuleRecurrence) validateWeeklySchedule(formats strfmt.Registry) error {
 	if swag.IsZero(m.WeeklySchedule) { // not required
 		return nil
 	}
@@ -58,8 +61,8 @@ func (m *MonitorSchedule) validateWeeklySchedule(formats strfmt.Registry) error 
 	return nil
 }
 
-// ContextValidate validate this monitor schedule based on the context it is used
-func (m *MonitorSchedule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this muting rule recurrence based on the context it is used
+func (m *MutingRuleRecurrence) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateWeeklySchedule(ctx, formats); err != nil {
@@ -72,7 +75,7 @@ func (m *MonitorSchedule) ContextValidate(ctx context.Context, formats strfmt.Re
 	return nil
 }
 
-func (m *MonitorSchedule) contextValidateWeeklySchedule(ctx context.Context, formats strfmt.Registry) error {
+func (m *MutingRuleRecurrence) contextValidateWeeklySchedule(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.WeeklySchedule != nil {
 
@@ -94,7 +97,7 @@ func (m *MonitorSchedule) contextValidateWeeklySchedule(ctx context.Context, for
 }
 
 // MarshalBinary interface implementation
-func (m *MonitorSchedule) MarshalBinary() ([]byte, error) {
+func (m *MutingRuleRecurrence) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -102,8 +105,8 @@ func (m *MonitorSchedule) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *MonitorSchedule) UnmarshalBinary(b []byte) error {
-	var res MonitorSchedule
+func (m *MutingRuleRecurrence) UnmarshalBinary(b []byte) error {
+	var res MutingRuleRecurrence
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

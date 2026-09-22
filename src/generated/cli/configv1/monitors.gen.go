@@ -365,6 +365,7 @@ type MonitorListOpts struct {
 	PageMaxSize     int
 	BucketSlugs     []string
 	CollectionSlugs []string
+	LabelMatchers   []string
 	NameContains    string
 	Names           []string
 	Slugs           []string
@@ -376,6 +377,8 @@ func (r *MonitorListOpts) registerFlags(flags *flag.FlagSet) {
 	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any Monitor with a matching bucket_slug in the given list (and matches all other filters) will be returned.")
 	var emptyCollectionSlugs []string
 	flags.StringSliceVar(&r.CollectionSlugs, "collection-slugs", emptyCollectionSlugs, "Filters results by collection_slug, where any Monitor with a matching collection_slug in the given list (and matches all other filters) will be returned.")
+	var emptyLabelMatchers []string
+	flags.StringSliceVar(&r.LabelMatchers, "label-matchers", emptyLabelMatchers, "Filter returned monitors by their labels. Each entry is `name=value` or `name!=value`, for example `team=payments` or `team!=payments`; the value may be double-quoted. `=~` and `!~` are not accepted. A monitor is returned only if every entry holds for it: `name=value` requires the monitor to carry that label with that value (it may carry other labels too), and `name!=value` excludes monitors whose label has that value. With an empty value, `name=` matches monitors that do not have the label and `name!=` matches monitors that have it with any value. Unlike the other list filters, whose values are OR'd, entries here are AND'd.")
 	var emptyNameContains string
 	flags.StringVar(&r.NameContains, "name-contains", emptyNameContains, "Filter that returns monitors whose name contains this string. The filter is not case sensitive.")
 	var emptyNames []string
@@ -413,6 +416,7 @@ func ListMonitors(
 			PageMaxSize:     ptr.Int64(int64(pageMaxSize)),
 			BucketSlugs:     opts.BucketSlugs,
 			CollectionSlugs: opts.CollectionSlugs,
+			LabelMatchers:   opts.LabelMatchers,
 			NameContains:    &opts.NameContains,
 			Names:           opts.Names,
 			Slugs:           opts.Slugs,
@@ -511,6 +515,9 @@ spec:
     slug: <string>
     # The name of the Monitor. You can modify this value after the Monitor is created.
     name: <string>
+    # Optional description of the monitor. Markdown is supported when rendered
+    # in the Chronosphere app.
+    description: <string>
     # Slug of the bucket the monitor belongs to. Required if 'collection_slug' isn't
     # set.
     bucket_slug: <string>

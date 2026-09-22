@@ -528,10 +528,97 @@ spec:
     # Required. Timestamp of when the muting rule becomes active. You can't update
     # this value. Updates must specify the original value.
     starts_at: <date-time>
-    # Required. Timestamp of when the muting rule stops being active.
+    # Required. Timestamp of when the muting rule stops being active. On a
+    # recurring rule this bounds the recurrence as a whole rather than any one
+    # occurrence.
     ends_at: <date-time>
     # Descriptive comment that explains why the muting rule was created.
     comment: <string>
+    # Recurrence makes a muting rule mute on a repeating weekly schedule rather
+    # than continuously.
+    recurrence:
+        # Required. The timezone the time ranges are interpreted in, as an IANA name
+        # such as '"America/New_York"'. Ranges are matched against wall-clock time in
+        # this zone, so they keep their local meaning across daylight saving changes.
+        timezone: <string>
+        weekly_schedule:
+            friday:
+                # The time ranges during which the rule mutes on this day. Ranges must not
+                # overlap.
+                ranges:
+                    - # Start time in the format '"<hour>:<minute>"'. For example, '"22:00"'.
+                      start_hh_mm: <string>
+                      # End time in the format '"<hour>:<minute>"'. For example, '"06:00"'.
+                      # Use '"24:00"' for the end of the day: a window that crosses midnight is
+                      # expressed as one range ending at '"24:00"' and another on the following
+                      # day starting at '"00:00"'.
+                      end_hh_mm: <string>
+            monday:
+                # The time ranges during which the rule mutes on this day. Ranges must not
+                # overlap.
+                ranges:
+                    - # Start time in the format '"<hour>:<minute>"'. For example, '"22:00"'.
+                      start_hh_mm: <string>
+                      # End time in the format '"<hour>:<minute>"'. For example, '"06:00"'.
+                      # Use '"24:00"' for the end of the day: a window that crosses midnight is
+                      # expressed as one range ending at '"24:00"' and another on the following
+                      # day starting at '"00:00"'.
+                      end_hh_mm: <string>
+            saturday:
+                # The time ranges during which the rule mutes on this day. Ranges must not
+                # overlap.
+                ranges:
+                    - # Start time in the format '"<hour>:<minute>"'. For example, '"22:00"'.
+                      start_hh_mm: <string>
+                      # End time in the format '"<hour>:<minute>"'. For example, '"06:00"'.
+                      # Use '"24:00"' for the end of the day: a window that crosses midnight is
+                      # expressed as one range ending at '"24:00"' and another on the following
+                      # day starting at '"00:00"'.
+                      end_hh_mm: <string>
+            sunday:
+                # The time ranges during which the rule mutes on this day. Ranges must not
+                # overlap.
+                ranges:
+                    - # Start time in the format '"<hour>:<minute>"'. For example, '"22:00"'.
+                      start_hh_mm: <string>
+                      # End time in the format '"<hour>:<minute>"'. For example, '"06:00"'.
+                      # Use '"24:00"' for the end of the day: a window that crosses midnight is
+                      # expressed as one range ending at '"24:00"' and another on the following
+                      # day starting at '"00:00"'.
+                      end_hh_mm: <string>
+            thursday:
+                # The time ranges during which the rule mutes on this day. Ranges must not
+                # overlap.
+                ranges:
+                    - # Start time in the format '"<hour>:<minute>"'. For example, '"22:00"'.
+                      start_hh_mm: <string>
+                      # End time in the format '"<hour>:<minute>"'. For example, '"06:00"'.
+                      # Use '"24:00"' for the end of the day: a window that crosses midnight is
+                      # expressed as one range ending at '"24:00"' and another on the following
+                      # day starting at '"00:00"'.
+                      end_hh_mm: <string>
+            tuesday:
+                # The time ranges during which the rule mutes on this day. Ranges must not
+                # overlap.
+                ranges:
+                    - # Start time in the format '"<hour>:<minute>"'. For example, '"22:00"'.
+                      start_hh_mm: <string>
+                      # End time in the format '"<hour>:<minute>"'. For example, '"06:00"'.
+                      # Use '"24:00"' for the end of the day: a window that crosses midnight is
+                      # expressed as one range ending at '"24:00"' and another on the following
+                      # day starting at '"00:00"'.
+                      end_hh_mm: <string>
+            wednesday:
+                # The time ranges during which the rule mutes on this day. Ranges must not
+                # overlap.
+                ranges:
+                    - # Start time in the format '"<hour>:<minute>"'. For example, '"22:00"'.
+                      start_hh_mm: <string>
+                      # End time in the format '"<hour>:<minute>"'. For example, '"06:00"'.
+                      # Use '"24:00"' for the end of the day: a window that crosses midnight is
+                      # expressed as one range ending at '"24:00"' and another on the following
+                      # day starting at '"00:00"'.
+                      end_hh_mm: <string>
 `
 
 func newMutingRuleScaffoldCmd() *cobra.Command {

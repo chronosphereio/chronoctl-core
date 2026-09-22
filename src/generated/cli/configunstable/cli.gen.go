@@ -14,7 +14,6 @@ import (
 func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewDashboardCmd())
 	root.AddCommand(NewLinkTemplateCmd())
-	root.AddCommand(NewMetricNameActiveSeriesLimitCmd())
 	root.AddCommand(NewQueryResourcePoolsCmd())
 	root.AddCommand(NewSavedTraceSearchCmd())
 	root.AddCommand(NewServiceCmd())
@@ -50,22 +49,6 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateLinkTemplate(ctx, clients.ConfigUnstable, entity, updateOpts)
-			if err != nil {
-				return err
-			}
-			return nil
-		},
-		MetricNameActiveSeriesLimitTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
-			entity, ok := obj.(*MetricNameActiveSeriesLimit)
-			if !ok {
-				return types.WrongObjectErr((&MetricNameActiveSeriesLimit{}), obj)
-			}
-
-			updateOpts := UpdateOptions{
-				DryRun:          dryRun,
-				CreateIfMissing: true,
-			}
-			_, err := UpdateMetricNameActiveSeriesLimit(ctx, clients.ConfigUnstable, entity, updateOpts)
 			if err != nil {
 				return err
 			}

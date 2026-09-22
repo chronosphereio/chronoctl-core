@@ -74,6 +74,19 @@ type ListMonitorsParams struct {
 	*/
 	CollectionSlugs []string
 
+	/* LabelMatchers.
+
+	     Filter returned monitors by their labels. Each entry is `name=value` or
+	`name!=value`, for example `team=payments` or `team!=payments`; the value may be
+	double-quoted. `=~` and `!~` are not accepted. A monitor is returned only if every
+	entry holds for it: `name=value` requires the monitor to carry that label with that
+	value (it may carry other labels too), and `name!=value` excludes monitors whose
+	label has that value. With an empty value, `name=` matches monitors that do not have
+	the label and `name!=` matches monitors that have it with any value. Unlike the
+	other list filters, whose values are OR'd, entries here are AND'd.
+	*/
+	LabelMatchers []string
+
 	/* NameContains.
 
 	     Filter that returns monitors whose name contains this string. The filter is not
@@ -191,6 +204,17 @@ func (o *ListMonitorsParams) SetCollectionSlugs(collectionSlugs []string) {
 	o.CollectionSlugs = collectionSlugs
 }
 
+// WithLabelMatchers adds the labelMatchers to the list monitors params
+func (o *ListMonitorsParams) WithLabelMatchers(labelMatchers []string) *ListMonitorsParams {
+	o.SetLabelMatchers(labelMatchers)
+	return o
+}
+
+// SetLabelMatchers adds the labelMatchers to the list monitors params
+func (o *ListMonitorsParams) SetLabelMatchers(labelMatchers []string) {
+	o.LabelMatchers = labelMatchers
+}
+
 // WithNameContains adds the nameContains to the list monitors params
 func (o *ListMonitorsParams) WithNameContains(nameContains *string) *ListMonitorsParams {
 	o.SetNameContains(nameContains)
@@ -283,6 +307,17 @@ func (o *ListMonitorsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 
 		// query array param collection_slugs
 		if err := r.SetQueryParam("collection_slugs", joinedCollectionSlugs...); err != nil {
+			return err
+		}
+	}
+
+	if o.LabelMatchers != nil {
+
+		// binding items for label_matchers
+		joinedLabelMatchers := o.bindParamLabelMatchers(reg)
+
+		// query array param label_matchers
+		if err := r.SetQueryParam("label_matchers", joinedLabelMatchers...); err != nil {
 			return err
 		}
 	}
@@ -409,6 +444,23 @@ func (o *ListMonitorsParams) bindParamCollectionSlugs(formats strfmt.Registry) [
 	collectionSlugsIS := swag.JoinByFormat(collectionSlugsIC, "multi")
 
 	return collectionSlugsIS
+}
+
+// bindParamListMonitors binds the parameter label_matchers
+func (o *ListMonitorsParams) bindParamLabelMatchers(formats strfmt.Registry) []string {
+	labelMatchersIR := o.LabelMatchers
+
+	var labelMatchersIC []string
+	for _, labelMatchersIIR := range labelMatchersIR { // explode []string
+
+		labelMatchersIIV := labelMatchersIIR // string as string
+		labelMatchersIC = append(labelMatchersIC, labelMatchersIIV)
+	}
+
+	// items.CollectionFormat: "multi"
+	labelMatchersIS := swag.JoinByFormat(labelMatchersIC, "multi")
+
+	return labelMatchersIS
 }
 
 // bindParamListMonitors binds the parameter names

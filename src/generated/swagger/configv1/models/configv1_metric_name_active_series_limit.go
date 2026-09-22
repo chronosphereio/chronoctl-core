@@ -14,10 +14,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ConfigunstableMetricNameActiveSeriesLimit configunstable metric name active series limit
+// Configv1MetricNameActiveSeriesLimit configv1 metric name active series limit
 //
-// swagger:model configunstableMetricNameActiveSeriesLimit
-type ConfigunstableMetricNameActiveSeriesLimit struct {
+// swagger:model configv1MetricNameActiveSeriesLimit
+type Configv1MetricNameActiveSeriesLimit struct {
 
 	// The unique identifier of the MetricNameActiveSeriesLimit. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the MetricNameActiveSeriesLimit is created.
 	Slug string `json:"slug,omitempty"`
@@ -44,8 +44,8 @@ type ConfigunstableMetricNameActiveSeriesLimit struct {
 	MaxActiveSeries string `json:"max_active_series,omitempty"`
 }
 
-// Validate validates this configunstable metric name active series limit
-func (m *ConfigunstableMetricNameActiveSeriesLimit) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 metric name active series limit
+func (m *Configv1MetricNameActiveSeriesLimit) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
@@ -62,7 +62,7 @@ func (m *ConfigunstableMetricNameActiveSeriesLimit) Validate(formats strfmt.Regi
 	return nil
 }
 
-func (m *ConfigunstableMetricNameActiveSeriesLimit) validateCreatedAt(formats strfmt.Registry) error {
+func (m *Configv1MetricNameActiveSeriesLimit) validateCreatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -74,7 +74,7 @@ func (m *ConfigunstableMetricNameActiveSeriesLimit) validateCreatedAt(formats st
 	return nil
 }
 
-func (m *ConfigunstableMetricNameActiveSeriesLimit) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *Configv1MetricNameActiveSeriesLimit) validateUpdatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -86,8 +86,8 @@ func (m *ConfigunstableMetricNameActiveSeriesLimit) validateUpdatedAt(formats st
 	return nil
 }
 
-// ContextValidate validate this configunstable metric name active series limit based on the context it is used
-func (m *ConfigunstableMetricNameActiveSeriesLimit) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 metric name active series limit based on the context it is used
+func (m *Configv1MetricNameActiveSeriesLimit) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
@@ -104,7 +104,7 @@ func (m *ConfigunstableMetricNameActiveSeriesLimit) ContextValidate(ctx context.
 	return nil
 }
 
-func (m *ConfigunstableMetricNameActiveSeriesLimit) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1MetricNameActiveSeriesLimit) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
 		return err
@@ -113,7 +113,7 @@ func (m *ConfigunstableMetricNameActiveSeriesLimit) contextValidateCreatedAt(ctx
 	return nil
 }
 
-func (m *ConfigunstableMetricNameActiveSeriesLimit) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1MetricNameActiveSeriesLimit) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
 		return err
@@ -123,7 +123,7 @@ func (m *ConfigunstableMetricNameActiveSeriesLimit) contextValidateUpdatedAt(ctx
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableMetricNameActiveSeriesLimit) MarshalBinary() ([]byte, error) {
+func (m *Configv1MetricNameActiveSeriesLimit) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -131,8 +131,8 @@ func (m *ConfigunstableMetricNameActiveSeriesLimit) MarshalBinary() ([]byte, err
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableMetricNameActiveSeriesLimit) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableMetricNameActiveSeriesLimit
+func (m *Configv1MetricNameActiveSeriesLimit) UnmarshalBinary(b []byte) error {
+	var res Configv1MetricNameActiveSeriesLimit
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

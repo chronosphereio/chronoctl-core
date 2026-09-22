@@ -46,12 +46,17 @@ type Configv1MutingRule struct {
 	// Format: date-time
 	StartsAt strfmt.DateTime `json:"starts_at,omitempty"`
 
-	// Required. Timestamp of when the muting rule stops being active.
+	// Required. Timestamp of when the muting rule stops being active. On a
+	// recurring rule this bounds the recurrence as a whole rather than any one
+	// occurrence.
 	// Format: date-time
 	EndsAt strfmt.DateTime `json:"ends_at,omitempty"`
 
 	// Descriptive comment that explains why the muting rule was created.
 	Comment string `json:"comment,omitempty"`
+
+	// recurrence
+	Recurrence *MutingRuleRecurrence `json:"recurrence,omitempty"`
 }
 
 // Validate validates this configv1 muting rule
@@ -75,6 +80,10 @@ func (m *Configv1MutingRule) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEndsAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateRecurrence(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -158,6 +167,25 @@ func (m *Configv1MutingRule) validateEndsAt(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Configv1MutingRule) validateRecurrence(formats strfmt.Registry) error {
+	if swag.IsZero(m.Recurrence) { // not required
+		return nil
+	}
+
+	if m.Recurrence != nil {
+		if err := m.Recurrence.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("recurrence")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("recurrence")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 muting rule based on the context it is used
 func (m *Configv1MutingRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -171,6 +199,10 @@ func (m *Configv1MutingRule) ContextValidate(ctx context.Context, formats strfmt
 	}
 
 	if err := m.contextValidateLabelMatchers(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRecurrence(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -218,6 +250,27 @@ func (m *Configv1MutingRule) contextValidateLabelMatchers(ctx context.Context, f
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *Configv1MutingRule) contextValidateRecurrence(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Recurrence != nil {
+
+		if swag.IsZero(m.Recurrence) { // not required
+			return nil
+		}
+
+		if err := m.Recurrence.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("recurrence")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("recurrence")
+			}
+			return err
+		}
 	}
 
 	return nil

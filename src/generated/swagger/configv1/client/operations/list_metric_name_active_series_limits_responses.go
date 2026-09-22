@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // ListMetricNameActiveSeriesLimitsReader is a Reader for the ListMetricNameActiveSeriesLimits structure.
@@ -58,7 +58,7 @@ ListMetricNameActiveSeriesLimitsOK describes a response with status code 200, wi
 A successful response.
 */
 type ListMetricNameActiveSeriesLimitsOK struct {
-	Payload *models.ConfigunstableListMetricNameActiveSeriesLimitsResponse
+	Payload *models.Configv1ListMetricNameActiveSeriesLimitsResponse
 }
 
 // IsSuccess returns true when this list metric name active series limits o k response has a 2xx status code
@@ -92,20 +92,20 @@ func (o *ListMetricNameActiveSeriesLimitsOK) Code() int {
 }
 
 func (o *ListMetricNameActiveSeriesLimitsOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits][%d] listMetricNameActiveSeriesLimitsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits][%d] listMetricNameActiveSeriesLimitsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListMetricNameActiveSeriesLimitsOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits][%d] listMetricNameActiveSeriesLimitsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits][%d] listMetricNameActiveSeriesLimitsOK  %+v", 200, o.Payload)
 }
 
-func (o *ListMetricNameActiveSeriesLimitsOK) GetPayload() *models.ConfigunstableListMetricNameActiveSeriesLimitsResponse {
+func (o *ListMetricNameActiveSeriesLimitsOK) GetPayload() *models.Configv1ListMetricNameActiveSeriesLimitsResponse {
 	return o.Payload
 }
 
 func (o *ListMetricNameActiveSeriesLimitsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableListMetricNameActiveSeriesLimitsResponse)
+	o.Payload = new(models.Configv1ListMetricNameActiveSeriesLimitsResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -160,11 +160,11 @@ func (o *ListMetricNameActiveSeriesLimitsInternalServerError) Code() int {
 }
 
 func (o *ListMetricNameActiveSeriesLimitsInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits][%d] listMetricNameActiveSeriesLimitsInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits][%d] listMetricNameActiveSeriesLimitsInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ListMetricNameActiveSeriesLimitsInternalServerError) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits][%d] listMetricNameActiveSeriesLimitsInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits][%d] listMetricNameActiveSeriesLimitsInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ListMetricNameActiveSeriesLimitsInternalServerError) GetPayload() *models.APIError {
@@ -232,11 +232,11 @@ func (o *ListMetricNameActiveSeriesLimitsDefault) Code() int {
 }
 
 func (o *ListMetricNameActiveSeriesLimitsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits][%d] ListMetricNameActiveSeriesLimits default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits][%d] ListMetricNameActiveSeriesLimits default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListMetricNameActiveSeriesLimitsDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits][%d] ListMetricNameActiveSeriesLimits default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits][%d] ListMetricNameActiveSeriesLimits default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListMetricNameActiveSeriesLimitsDefault) GetPayload() models.GenericError {
