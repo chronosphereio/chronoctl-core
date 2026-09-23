@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.35.0
+
 ### Added
 * Add a `dashboards:importFromClassic` endpoint to `v1/config`, which converts classic dashboard JSON into a standard Dashboard and creates it, or updates an existing dashboard in place when `update_if_exists` is set. Available to library consumers only.
 * Add a `dashboards:validate` endpoint to `unstable/config`, which validates dashboard JSON without persisting it. Available to library consumers only.
