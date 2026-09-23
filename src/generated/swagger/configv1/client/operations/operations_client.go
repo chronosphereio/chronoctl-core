@@ -38,6 +38,8 @@ type ClientService interface {
 
 	CreateCollection(params *CreateCollectionParams, opts ...ClientOption) (*CreateCollectionOK, error)
 
+	CreateCommandCenterGroup(params *CreateCommandCenterGroupParams, opts ...ClientOption) (*CreateCommandCenterGroupOK, error)
+
 	CreateConsumptionBudget(params *CreateConsumptionBudgetParams, opts ...ClientOption) (*CreateConsumptionBudgetOK, error)
 
 	CreateConsumptionConfig(params *CreateConsumptionConfigParams, opts ...ClientOption) (*CreateConsumptionConfigOK, error)
@@ -115,6 +117,8 @@ type ClientService interface {
 	DeleteCloudIntegration(params *DeleteCloudIntegrationParams, opts ...ClientOption) (*DeleteCloudIntegrationOK, error)
 
 	DeleteCollection(params *DeleteCollectionParams, opts ...ClientOption) (*DeleteCollectionOK, error)
+
+	DeleteCommandCenterGroup(params *DeleteCommandCenterGroupParams, opts ...ClientOption) (*DeleteCommandCenterGroupOK, error)
 
 	DeleteConsumptionBudget(params *DeleteConsumptionBudgetParams, opts ...ClientOption) (*DeleteConsumptionBudgetOK, error)
 
@@ -196,6 +200,8 @@ type ClientService interface {
 
 	ListCollections(params *ListCollectionsParams, opts ...ClientOption) (*ListCollectionsOK, error)
 
+	ListCommandCenterGroups(params *ListCommandCenterGroupsParams, opts ...ClientOption) (*ListCommandCenterGroupsOK, error)
+
 	ListConsumptionBudgets(params *ListConsumptionBudgetsParams, opts ...ClientOption) (*ListConsumptionBudgetsOK, error)
 
 	ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error)
@@ -259,6 +265,8 @@ type ClientService interface {
 	ReadCloudIntegration(params *ReadCloudIntegrationParams, opts ...ClientOption) (*ReadCloudIntegrationOK, error)
 
 	ReadCollection(params *ReadCollectionParams, opts ...ClientOption) (*ReadCollectionOK, error)
+
+	ReadCommandCenterGroup(params *ReadCommandCenterGroupParams, opts ...ClientOption) (*ReadCommandCenterGroupOK, error)
 
 	ReadConsumptionBudget(params *ReadConsumptionBudgetParams, opts ...ClientOption) (*ReadConsumptionBudgetOK, error)
 
@@ -339,6 +347,8 @@ type ClientService interface {
 	UpdateCloudIntegration(params *UpdateCloudIntegrationParams, opts ...ClientOption) (*UpdateCloudIntegrationOK, error)
 
 	UpdateCollection(params *UpdateCollectionParams, opts ...ClientOption) (*UpdateCollectionOK, error)
+
+	UpdateCommandCenterGroup(params *UpdateCommandCenterGroupParams, opts ...ClientOption) (*UpdateCommandCenterGroupOK, error)
 
 	UpdateConsumptionBudget(params *UpdateConsumptionBudgetParams, opts ...ClientOption) (*UpdateConsumptionBudgetOK, error)
 
@@ -591,6 +601,43 @@ func (a *Client) CreateCollection(params *CreateCollectionParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateCollectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateCommandCenterGroup create command center group API
+*/
+func (a *Client) CreateCommandCenterGroup(params *CreateCommandCenterGroupParams, opts ...ClientOption) (*CreateCommandCenterGroupOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateCommandCenterGroupParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateCommandCenterGroup",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/command-center-groups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateCommandCenterGroupReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateCommandCenterGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateCommandCenterGroupDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2037,6 +2084,43 @@ func (a *Client) DeleteCollection(params *DeleteCollectionParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteCollectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteCommandCenterGroup delete command center group API
+*/
+func (a *Client) DeleteCommandCenterGroup(params *DeleteCommandCenterGroupParams, opts ...ClientOption) (*DeleteCommandCenterGroupOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteCommandCenterGroupParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteCommandCenterGroup",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/command-center-groups/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteCommandCenterGroupReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteCommandCenterGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteCommandCenterGroupDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3523,6 +3607,43 @@ func (a *Client) ListCollections(params *ListCollectionsParams, opts ...ClientOp
 }
 
 /*
+ListCommandCenterGroups list command center groups API
+*/
+func (a *Client) ListCommandCenterGroups(params *ListCommandCenterGroupsParams, opts ...ClientOption) (*ListCommandCenterGroupsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListCommandCenterGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListCommandCenterGroups",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/command-center-groups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListCommandCenterGroupsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListCommandCenterGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListCommandCenterGroupsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListConsumptionBudgets list consumption budgets API
 */
 func (a *Client) ListConsumptionBudgets(params *ListConsumptionBudgetsParams, opts ...ClientOption) (*ListConsumptionBudgetsOK, error) {
@@ -4703,6 +4824,43 @@ func (a *Client) ReadCollection(params *ReadCollectionParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadCollectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadCommandCenterGroup read command center group API
+*/
+func (a *Client) ReadCommandCenterGroup(params *ReadCommandCenterGroupParams, opts ...ClientOption) (*ReadCommandCenterGroupOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadCommandCenterGroupParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadCommandCenterGroup",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/command-center-groups/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadCommandCenterGroupReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadCommandCenterGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadCommandCenterGroupDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -6183,6 +6341,43 @@ func (a *Client) UpdateCollection(params *UpdateCollectionParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateCollectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateCommandCenterGroup update command center group API
+*/
+func (a *Client) UpdateCommandCenterGroup(params *UpdateCommandCenterGroupParams, opts ...ClientOption) (*UpdateCommandCenterGroupOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateCommandCenterGroupParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateCommandCenterGroup",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/command-center-groups/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateCommandCenterGroupReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateCommandCenterGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateCommandCenterGroupDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

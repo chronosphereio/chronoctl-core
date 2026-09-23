@@ -17,6 +17,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewClassicDashboardCmd())
 	root.AddCommand(NewCloudIntegrationCmd())
 	root.AddCommand(NewCollectionCmd())
+	root.AddCommand(NewCommandCenterGroupCmd())
 	root.AddCommand(NewConsumptionBudgetCmd())
 	root.AddCommand(NewConsumptionConfigCmd())
 	root.AddCommand(NewDashboardCmd())
@@ -130,6 +131,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateCollection(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		CommandCenterGroupTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*CommandCenterGroup)
+			if !ok {
+				return types.WrongObjectErr((&CommandCenterGroup{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateCommandCenterGroup(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}
