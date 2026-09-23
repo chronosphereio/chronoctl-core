@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // ReadMetricNameActiveSeriesLimitReader is a Reader for the ReadMetricNameActiveSeriesLimit structure.
@@ -64,7 +64,7 @@ ReadMetricNameActiveSeriesLimitOK describes a response with status code 200, wit
 A successful response.
 */
 type ReadMetricNameActiveSeriesLimitOK struct {
-	Payload *models.ConfigunstableReadMetricNameActiveSeriesLimitResponse
+	Payload *models.Configv1ReadMetricNameActiveSeriesLimitResponse
 }
 
 // IsSuccess returns true when this read metric name active series limit o k response has a 2xx status code
@@ -98,20 +98,20 @@ func (o *ReadMetricNameActiveSeriesLimitOK) Code() int {
 }
 
 func (o *ReadMetricNameActiveSeriesLimitOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitOK  %+v", 200, o.Payload)
 }
 
 func (o *ReadMetricNameActiveSeriesLimitOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitOK  %+v", 200, o.Payload)
 }
 
-func (o *ReadMetricNameActiveSeriesLimitOK) GetPayload() *models.ConfigunstableReadMetricNameActiveSeriesLimitResponse {
+func (o *ReadMetricNameActiveSeriesLimitOK) GetPayload() *models.Configv1ReadMetricNameActiveSeriesLimitResponse {
 	return o.Payload
 }
 
 func (o *ReadMetricNameActiveSeriesLimitOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableReadMetricNameActiveSeriesLimitResponse)
+	o.Payload = new(models.Configv1ReadMetricNameActiveSeriesLimitResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -166,11 +166,11 @@ func (o *ReadMetricNameActiveSeriesLimitNotFound) Code() int {
 }
 
 func (o *ReadMetricNameActiveSeriesLimitNotFound) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadMetricNameActiveSeriesLimitNotFound) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadMetricNameActiveSeriesLimitNotFound) GetPayload() *models.APIError {
@@ -234,11 +234,11 @@ func (o *ReadMetricNameActiveSeriesLimitInternalServerError) Code() int {
 }
 
 func (o *ReadMetricNameActiveSeriesLimitInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadMetricNameActiveSeriesLimitInternalServerError) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits/{slug}][%d] readMetricNameActiveSeriesLimitInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadMetricNameActiveSeriesLimitInternalServerError) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *ReadMetricNameActiveSeriesLimitDefault) Code() int {
 }
 
 func (o *ReadMetricNameActiveSeriesLimitDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits/{slug}][%d] ReadMetricNameActiveSeriesLimit default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits/{slug}][%d] ReadMetricNameActiveSeriesLimit default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadMetricNameActiveSeriesLimitDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/metric-name-active-series-limits/{slug}][%d] ReadMetricNameActiveSeriesLimit default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/metric-name-active-series-limits/{slug}][%d] ReadMetricNameActiveSeriesLimit default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadMetricNameActiveSeriesLimitDefault) GetPayload() models.GenericError {

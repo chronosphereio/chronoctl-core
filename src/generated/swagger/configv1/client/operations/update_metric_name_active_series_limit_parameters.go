@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateMetricNameActiveSeriesLimitParams creates a new UpdateMetricNameActiveSeriesLimitParams object,
@@ -64,7 +64,7 @@ UpdateMetricNameActiveSeriesLimitParams contains all the parameters to send to t
 type UpdateMetricNameActiveSeriesLimitParams struct {
 
 	// Body.
-	Body *models.ConfigUnstableUpdateMetricNameActiveSeriesLimitBody
+	Body *models.ConfigV1UpdateMetricNameActiveSeriesLimitBody
 
 	// Slug.
 	Slug string
@@ -123,13 +123,13 @@ func (o *UpdateMetricNameActiveSeriesLimitParams) SetHTTPClient(client *http.Cli
 }
 
 // WithBody adds the body to the update metric name active series limit params
-func (o *UpdateMetricNameActiveSeriesLimitParams) WithBody(body *models.ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) *UpdateMetricNameActiveSeriesLimitParams {
+func (o *UpdateMetricNameActiveSeriesLimitParams) WithBody(body *models.ConfigV1UpdateMetricNameActiveSeriesLimitBody) *UpdateMetricNameActiveSeriesLimitParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update metric name active series limit params
-func (o *UpdateMetricNameActiveSeriesLimitParams) SetBody(body *models.ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) {
+func (o *UpdateMetricNameActiveSeriesLimitParams) SetBody(body *models.ConfigV1UpdateMetricNameActiveSeriesLimitBody) {
 	o.Body = body
 }
 

@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // DeleteMetricNameActiveSeriesLimitReader is a Reader for the DeleteMetricNameActiveSeriesLimit structure.
@@ -70,7 +70,7 @@ DeleteMetricNameActiveSeriesLimitOK describes a response with status code 200, w
 A successful response.
 */
 type DeleteMetricNameActiveSeriesLimitOK struct {
-	Payload models.ConfigunstableDeleteMetricNameActiveSeriesLimitResponse
+	Payload models.Configv1DeleteMetricNameActiveSeriesLimitResponse
 }
 
 // IsSuccess returns true when this delete metric name active series limit o k response has a 2xx status code
@@ -104,14 +104,14 @@ func (o *DeleteMetricNameActiveSeriesLimitOK) Code() int {
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitOK) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteMetricNameActiveSeriesLimitOK) GetPayload() models.ConfigunstableDeleteMetricNameActiveSeriesLimitResponse {
+func (o *DeleteMetricNameActiveSeriesLimitOK) GetPayload() models.Configv1DeleteMetricNameActiveSeriesLimitResponse {
 	return o.Payload
 }
 
@@ -170,11 +170,11 @@ func (o *DeleteMetricNameActiveSeriesLimitBadRequest) Code() int {
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitBadRequest) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitBadRequest) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitBadRequest) GetPayload() *models.APIError {
@@ -238,11 +238,11 @@ func (o *DeleteMetricNameActiveSeriesLimitNotFound) Code() int {
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitNotFound) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitNotFound) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *DeleteMetricNameActiveSeriesLimitInternalServerError) Code() int {
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitInternalServerError) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitInternalServerError) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] deleteMetricNameActiveSeriesLimitInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitInternalServerError) GetPayload() *models.APIError {
@@ -378,11 +378,11 @@ func (o *DeleteMetricNameActiveSeriesLimitDefault) Code() int {
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] DeleteMetricNameActiveSeriesLimit default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] DeleteMetricNameActiveSeriesLimit default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/metric-name-active-series-limits/{slug}][%d] DeleteMetricNameActiveSeriesLimit default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/metric-name-active-series-limits/{slug}][%d] DeleteMetricNameActiveSeriesLimit default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteMetricNameActiveSeriesLimitDefault) GetPayload() models.GenericError {

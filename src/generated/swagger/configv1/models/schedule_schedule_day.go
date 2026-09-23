@@ -24,7 +24,7 @@ type ScheduleScheduleDay struct {
 
 	// The time ranges that the monitor is active on this day. Required if `active`
 	// is set to `ONLY_DURING_RANGES`. Otherwise, this field must be empty.
-	Ranges []*ScheduleDayTimeRange `json:"ranges"`
+	Ranges []*ScheduleScheduleDayTimeRange `json:"ranges"`
 }
 
 // Validate validates this schedule schedule day

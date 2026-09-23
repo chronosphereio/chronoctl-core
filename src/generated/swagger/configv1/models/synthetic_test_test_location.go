@@ -30,6 +30,9 @@ func (m SyntheticTestTestLocation) Pointer() *SyntheticTestTestLocation {
 
 const (
 
+	// SyntheticTestTestLocationGCPUSLOSANGELES captures enum value "GCP_US_LOS_ANGELES"
+	SyntheticTestTestLocationGCPUSLOSANGELES SyntheticTestTestLocation = "GCP_US_LOS_ANGELES"
+
 	// SyntheticTestTestLocationGCPUSOREGON captures enum value "GCP_US_OREGON"
 	SyntheticTestTestLocationGCPUSOREGON SyntheticTestTestLocation = "GCP_US_OREGON"
 
@@ -87,7 +90,7 @@ var syntheticTestTestLocationEnum []interface{}
 
 func init() {
 	var res []SyntheticTestTestLocation
-	if err := json.Unmarshal([]byte(`["GCP_US_OREGON","GCP_US_VIRGINIA","GCP_BR_SAO_PAULO","GCP_SG_SINGAPORE","GCP_AU_SYDNEY","GCP_IN_MUMBAI","GCP_JP_TOKYO","GCP_GB_LONDON","GCP_DE_FRANKFURT","GCP_ZA_JOHANNESBURG","GCP_ID_JAKARTA","GCP_CA_MONTREAL","GCP_KR_SEOUL","GCP_IT_MILAN","GCP_QA_DOHA","GCP_JP_OSAKA","GCP_FR_PARIS"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["GCP_US_LOS_ANGELES","GCP_US_OREGON","GCP_US_VIRGINIA","GCP_BR_SAO_PAULO","GCP_SG_SINGAPORE","GCP_AU_SYDNEY","GCP_IN_MUMBAI","GCP_JP_TOKYO","GCP_GB_LONDON","GCP_DE_FRANKFURT","GCP_ZA_JOHANNESBURG","GCP_ID_JAKARTA","GCP_CA_MONTREAL","GCP_KR_SEOUL","GCP_IT_MILAN","GCP_QA_DOHA","GCP_JP_OSAKA","GCP_FR_PARIS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

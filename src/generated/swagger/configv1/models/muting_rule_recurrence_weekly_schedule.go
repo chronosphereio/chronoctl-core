@@ -13,35 +13,35 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ScheduleWeeklySchedule schedule weekly schedule
+// MutingRuleRecurrenceWeeklySchedule muting rule recurrence weekly schedule
 //
-// swagger:model ScheduleWeeklySchedule
-type ScheduleWeeklySchedule struct {
+// swagger:model MutingRuleRecurrenceWeeklySchedule
+type MutingRuleRecurrenceWeeklySchedule struct {
 
 	// monday
-	Monday *ScheduleScheduleDay `json:"monday,omitempty"`
+	Monday *RecurrenceDaySchedule `json:"monday,omitempty"`
 
 	// tuesday
-	Tuesday *ScheduleScheduleDay `json:"tuesday,omitempty"`
+	Tuesday *RecurrenceDaySchedule `json:"tuesday,omitempty"`
 
 	// wednesday
-	Wednesday *ScheduleScheduleDay `json:"wednesday,omitempty"`
+	Wednesday *RecurrenceDaySchedule `json:"wednesday,omitempty"`
 
 	// thursday
-	Thursday *ScheduleScheduleDay `json:"thursday,omitempty"`
+	Thursday *RecurrenceDaySchedule `json:"thursday,omitempty"`
 
 	// friday
-	Friday *ScheduleScheduleDay `json:"friday,omitempty"`
+	Friday *RecurrenceDaySchedule `json:"friday,omitempty"`
 
 	// saturday
-	Saturday *ScheduleScheduleDay `json:"saturday,omitempty"`
+	Saturday *RecurrenceDaySchedule `json:"saturday,omitempty"`
 
 	// sunday
-	Sunday *ScheduleScheduleDay `json:"sunday,omitempty"`
+	Sunday *RecurrenceDaySchedule `json:"sunday,omitempty"`
 }
 
-// Validate validates this schedule weekly schedule
-func (m *ScheduleWeeklySchedule) Validate(formats strfmt.Registry) error {
+// Validate validates this muting rule recurrence weekly schedule
+func (m *MutingRuleRecurrenceWeeklySchedule) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateMonday(formats); err != nil {
@@ -78,7 +78,7 @@ func (m *ScheduleWeeklySchedule) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) validateMonday(formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) validateMonday(formats strfmt.Registry) error {
 	if swag.IsZero(m.Monday) { // not required
 		return nil
 	}
@@ -97,7 +97,7 @@ func (m *ScheduleWeeklySchedule) validateMonday(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) validateTuesday(formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) validateTuesday(formats strfmt.Registry) error {
 	if swag.IsZero(m.Tuesday) { // not required
 		return nil
 	}
@@ -116,7 +116,7 @@ func (m *ScheduleWeeklySchedule) validateTuesday(formats strfmt.Registry) error 
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) validateWednesday(formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) validateWednesday(formats strfmt.Registry) error {
 	if swag.IsZero(m.Wednesday) { // not required
 		return nil
 	}
@@ -135,7 +135,7 @@ func (m *ScheduleWeeklySchedule) validateWednesday(formats strfmt.Registry) erro
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) validateThursday(formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) validateThursday(formats strfmt.Registry) error {
 	if swag.IsZero(m.Thursday) { // not required
 		return nil
 	}
@@ -154,7 +154,7 @@ func (m *ScheduleWeeklySchedule) validateThursday(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) validateFriday(formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) validateFriday(formats strfmt.Registry) error {
 	if swag.IsZero(m.Friday) { // not required
 		return nil
 	}
@@ -173,7 +173,7 @@ func (m *ScheduleWeeklySchedule) validateFriday(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) validateSaturday(formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) validateSaturday(formats strfmt.Registry) error {
 	if swag.IsZero(m.Saturday) { // not required
 		return nil
 	}
@@ -192,7 +192,7 @@ func (m *ScheduleWeeklySchedule) validateSaturday(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) validateSunday(formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) validateSunday(formats strfmt.Registry) error {
 	if swag.IsZero(m.Sunday) { // not required
 		return nil
 	}
@@ -211,8 +211,8 @@ func (m *ScheduleWeeklySchedule) validateSunday(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this schedule weekly schedule based on the context it is used
-func (m *ScheduleWeeklySchedule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this muting rule recurrence weekly schedule based on the context it is used
+func (m *MutingRuleRecurrenceWeeklySchedule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateMonday(ctx, formats); err != nil {
@@ -249,7 +249,7 @@ func (m *ScheduleWeeklySchedule) ContextValidate(ctx context.Context, formats st
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) contextValidateMonday(ctx context.Context, formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) contextValidateMonday(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Monday != nil {
 
@@ -270,7 +270,7 @@ func (m *ScheduleWeeklySchedule) contextValidateMonday(ctx context.Context, form
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) contextValidateTuesday(ctx context.Context, formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) contextValidateTuesday(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Tuesday != nil {
 
@@ -291,7 +291,7 @@ func (m *ScheduleWeeklySchedule) contextValidateTuesday(ctx context.Context, for
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) contextValidateWednesday(ctx context.Context, formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) contextValidateWednesday(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Wednesday != nil {
 
@@ -312,7 +312,7 @@ func (m *ScheduleWeeklySchedule) contextValidateWednesday(ctx context.Context, f
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) contextValidateThursday(ctx context.Context, formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) contextValidateThursday(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Thursday != nil {
 
@@ -333,7 +333,7 @@ func (m *ScheduleWeeklySchedule) contextValidateThursday(ctx context.Context, fo
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) contextValidateFriday(ctx context.Context, formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) contextValidateFriday(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Friday != nil {
 
@@ -354,7 +354,7 @@ func (m *ScheduleWeeklySchedule) contextValidateFriday(ctx context.Context, form
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) contextValidateSaturday(ctx context.Context, formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) contextValidateSaturday(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Saturday != nil {
 
@@ -375,7 +375,7 @@ func (m *ScheduleWeeklySchedule) contextValidateSaturday(ctx context.Context, fo
 	return nil
 }
 
-func (m *ScheduleWeeklySchedule) contextValidateSunday(ctx context.Context, formats strfmt.Registry) error {
+func (m *MutingRuleRecurrenceWeeklySchedule) contextValidateSunday(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Sunday != nil {
 
@@ -397,7 +397,7 @@ func (m *ScheduleWeeklySchedule) contextValidateSunday(ctx context.Context, form
 }
 
 // MarshalBinary interface implementation
-func (m *ScheduleWeeklySchedule) MarshalBinary() ([]byte, error) {
+func (m *MutingRuleRecurrenceWeeklySchedule) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -405,8 +405,8 @@ func (m *ScheduleWeeklySchedule) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ScheduleWeeklySchedule) UnmarshalBinary(b []byte) error {
-	var res ScheduleWeeklySchedule
+func (m *MutingRuleRecurrenceWeeklySchedule) UnmarshalBinary(b []byte) error {
+	var res MutingRuleRecurrenceWeeklySchedule
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -68,6 +68,8 @@ type ClientService interface {
 
 	CreateMappingRule(params *CreateMappingRuleParams, opts ...ClientOption) (*CreateMappingRuleOK, error)
 
+	CreateMetricNameActiveSeriesLimit(params *CreateMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*CreateMetricNameActiveSeriesLimitOK, error)
+
 	CreateMonitor(params *CreateMonitorParams, opts ...ClientOption) (*CreateMonitorOK, error)
 
 	CreateMutingRule(params *CreateMutingRuleParams, opts ...ClientOption) (*CreateMutingRuleOK, error)
@@ -144,6 +146,8 @@ type ClientService interface {
 
 	DeleteMappingRule(params *DeleteMappingRuleParams, opts ...ClientOption) (*DeleteMappingRuleOK, error)
 
+	DeleteMetricNameActiveSeriesLimit(params *DeleteMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*DeleteMetricNameActiveSeriesLimitOK, error)
+
 	DeleteMonitor(params *DeleteMonitorParams, opts ...ClientOption) (*DeleteMonitorOK, error)
 
 	DeleteMutingRule(params *DeleteMutingRuleParams, opts ...ClientOption) (*DeleteMutingRuleOK, error)
@@ -214,6 +218,8 @@ type ClientService interface {
 
 	ListMappingRules(params *ListMappingRulesParams, opts ...ClientOption) (*ListMappingRulesOK, error)
 
+	ListMetricNameActiveSeriesLimits(params *ListMetricNameActiveSeriesLimitsParams, opts ...ClientOption) (*ListMetricNameActiveSeriesLimitsOK, error)
+
 	ListMonitors(params *ListMonitorsParams, opts ...ClientOption) (*ListMonitorsOK, error)
 
 	ListMutingRules(params *ListMutingRulesParams, opts ...ClientOption) (*ListMutingRulesOK, error)
@@ -283,6 +289,8 @@ type ClientService interface {
 	ReadLogRetentionConfig(params *ReadLogRetentionConfigParams, opts ...ClientOption) (*ReadLogRetentionConfigOK, error)
 
 	ReadMappingRule(params *ReadMappingRuleParams, opts ...ClientOption) (*ReadMappingRuleOK, error)
+
+	ReadMetricNameActiveSeriesLimit(params *ReadMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*ReadMetricNameActiveSeriesLimitOK, error)
 
 	ReadMonitor(params *ReadMonitorParams, opts ...ClientOption) (*ReadMonitorOK, error)
 
@@ -361,6 +369,8 @@ type ClientService interface {
 	UpdateLogRetentionConfig(params *UpdateLogRetentionConfigParams, opts ...ClientOption) (*UpdateLogRetentionConfigOK, error)
 
 	UpdateMappingRule(params *UpdateMappingRuleParams, opts ...ClientOption) (*UpdateMappingRuleOK, error)
+
+	UpdateMetricNameActiveSeriesLimit(params *UpdateMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*UpdateMetricNameActiveSeriesLimitOK, error)
 
 	UpdateMonitor(params *UpdateMonitorParams, opts ...ClientOption) (*UpdateMonitorOK, error)
 
@@ -1136,6 +1146,43 @@ func (a *Client) CreateMappingRule(params *CreateMappingRuleParams, opts ...Clie
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateMappingRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateMetricNameActiveSeriesLimit create metric name active series limit API
+*/
+func (a *Client) CreateMetricNameActiveSeriesLimit(params *CreateMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*CreateMetricNameActiveSeriesLimitOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateMetricNameActiveSeriesLimitParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateMetricNameActiveSeriesLimit",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/metric-name-active-series-limits",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateMetricNameActiveSeriesLimitReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateMetricNameActiveSeriesLimitOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateMetricNameActiveSeriesLimitDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2549,6 +2596,43 @@ func (a *Client) DeleteMappingRule(params *DeleteMappingRuleParams, opts ...Clie
 }
 
 /*
+DeleteMetricNameActiveSeriesLimit delete metric name active series limit API
+*/
+func (a *Client) DeleteMetricNameActiveSeriesLimit(params *DeleteMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*DeleteMetricNameActiveSeriesLimitOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteMetricNameActiveSeriesLimitParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteMetricNameActiveSeriesLimit",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/metric-name-active-series-limits/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteMetricNameActiveSeriesLimitReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteMetricNameActiveSeriesLimitOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteMetricNameActiveSeriesLimitDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteMonitor delete monitor API
 */
 func (a *Client) DeleteMonitor(params *DeleteMonitorParams, opts ...ClientOption) (*DeleteMonitorOK, error) {
@@ -3846,6 +3930,43 @@ func (a *Client) ListMappingRules(params *ListMappingRulesParams, opts ...Client
 }
 
 /*
+ListMetricNameActiveSeriesLimits list metric name active series limits API
+*/
+func (a *Client) ListMetricNameActiveSeriesLimits(params *ListMetricNameActiveSeriesLimitsParams, opts ...ClientOption) (*ListMetricNameActiveSeriesLimitsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListMetricNameActiveSeriesLimitsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListMetricNameActiveSeriesLimits",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/metric-name-active-series-limits",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListMetricNameActiveSeriesLimitsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListMetricNameActiveSeriesLimitsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListMetricNameActiveSeriesLimitsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListMonitors list monitors API
 */
 func (a *Client) ListMonitors(params *ListMonitorsParams, opts ...ClientOption) (*ListMonitorsOK, error) {
@@ -5137,6 +5258,43 @@ func (a *Client) ReadMappingRule(params *ReadMappingRuleParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadMappingRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadMetricNameActiveSeriesLimit read metric name active series limit API
+*/
+func (a *Client) ReadMetricNameActiveSeriesLimit(params *ReadMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*ReadMetricNameActiveSeriesLimitOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadMetricNameActiveSeriesLimitParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadMetricNameActiveSeriesLimit",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/metric-name-active-series-limits/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadMetricNameActiveSeriesLimitReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadMetricNameActiveSeriesLimitOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadMetricNameActiveSeriesLimitDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -6580,6 +6738,43 @@ func (a *Client) UpdateMappingRule(params *UpdateMappingRuleParams, opts ...Clie
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateMappingRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateMetricNameActiveSeriesLimit update metric name active series limit API
+*/
+func (a *Client) UpdateMetricNameActiveSeriesLimit(params *UpdateMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*UpdateMetricNameActiveSeriesLimitOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateMetricNameActiveSeriesLimitParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateMetricNameActiveSeriesLimit",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/metric-name-active-series-limits/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateMetricNameActiveSeriesLimitReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateMetricNameActiveSeriesLimitOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateMetricNameActiveSeriesLimitDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

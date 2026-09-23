@@ -13,23 +13,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigUnstableUpdateMetricNameActiveSeriesLimitBody config unstable update metric name active series limit body
+// Configv1CreateMetricNameActiveSeriesLimitRequest configv1 create metric name active series limit request
 //
-// swagger:model ConfigUnstableUpdateMetricNameActiveSeriesLimitBody
-type ConfigUnstableUpdateMetricNameActiveSeriesLimitBody struct {
+// swagger:model configv1CreateMetricNameActiveSeriesLimitRequest
+type Configv1CreateMetricNameActiveSeriesLimitRequest struct {
 
 	// metric name active series limit
-	MetricNameActiveSeriesLimit *ConfigunstableMetricNameActiveSeriesLimit `json:"metric_name_active_series_limit,omitempty"`
+	MetricNameActiveSeriesLimit *Configv1MetricNameActiveSeriesLimit `json:"metric_name_active_series_limit,omitempty"`
 
-	// If `true`, the MetricNameActiveSeriesLimit will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the MetricNameActiveSeriesLimit does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If `true`, validates the specified configuration without creating or updating the MetricNameActiveSeriesLimit. If the specified configuration is valid, the endpoint returns a partial response without the MetricNameActiveSeriesLimit. If the specified configuration is invalid, the endpoint returns an error.
+	// If `true`, validates the specified configuration without creating the MetricNameActiveSeriesLimit. If the specified configuration is valid, the endpoint returns a partial response without the MetricNameActiveSeriesLimit. If the specified configuration is invalid, the endpoint returns an error.
 	DryRun bool `json:"dry_run,omitempty"`
 }
 
-// Validate validates this config unstable update metric name active series limit body
-func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 create metric name active series limit request
+func (m *Configv1CreateMetricNameActiveSeriesLimitRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateMetricNameActiveSeriesLimit(formats); err != nil {
@@ -42,7 +39,7 @@ func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) Validate(formats s
 	return nil
 }
 
-func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) validateMetricNameActiveSeriesLimit(formats strfmt.Registry) error {
+func (m *Configv1CreateMetricNameActiveSeriesLimitRequest) validateMetricNameActiveSeriesLimit(formats strfmt.Registry) error {
 	if swag.IsZero(m.MetricNameActiveSeriesLimit) { // not required
 		return nil
 	}
@@ -61,8 +58,8 @@ func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) validateMetricName
 	return nil
 }
 
-// ContextValidate validate this config unstable update metric name active series limit body based on the context it is used
-func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 create metric name active series limit request based on the context it is used
+func (m *Configv1CreateMetricNameActiveSeriesLimitRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateMetricNameActiveSeriesLimit(ctx, formats); err != nil {
@@ -75,7 +72,7 @@ func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) ContextValidate(ct
 	return nil
 }
 
-func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) contextValidateMetricNameActiveSeriesLimit(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1CreateMetricNameActiveSeriesLimitRequest) contextValidateMetricNameActiveSeriesLimit(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.MetricNameActiveSeriesLimit != nil {
 
@@ -97,7 +94,7 @@ func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) contextValidateMet
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) MarshalBinary() ([]byte, error) {
+func (m *Configv1CreateMetricNameActiveSeriesLimitRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -105,8 +102,8 @@ func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) MarshalBinary() ([
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigUnstableUpdateMetricNameActiveSeriesLimitBody) UnmarshalBinary(b []byte) error {
-	var res ConfigUnstableUpdateMetricNameActiveSeriesLimitBody
+func (m *Configv1CreateMetricNameActiveSeriesLimitRequest) UnmarshalBinary(b []byte) error {
+	var res Configv1CreateMetricNameActiveSeriesLimitRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

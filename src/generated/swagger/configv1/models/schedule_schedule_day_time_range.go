@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ScheduleDayTimeRange schedule day time range
+// ScheduleScheduleDayTimeRange schedule schedule day time range
 //
-// swagger:model ScheduleDayTimeRange
-type ScheduleDayTimeRange struct {
+// swagger:model ScheduleScheduleDayTimeRange
+type ScheduleScheduleDayTimeRange struct {
 
 	// Start time in the in format `"<hour>:<minute>"`. For example, `"15:30"`.
 	StartHhMm string `json:"start_hh_mm,omitempty"`
@@ -24,18 +24,18 @@ type ScheduleDayTimeRange struct {
 	EndHhMm string `json:"end_hh_mm,omitempty"`
 }
 
-// Validate validates this schedule day time range
-func (m *ScheduleDayTimeRange) Validate(formats strfmt.Registry) error {
+// Validate validates this schedule schedule day time range
+func (m *ScheduleScheduleDayTimeRange) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this schedule day time range based on context it is used
-func (m *ScheduleDayTimeRange) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this schedule schedule day time range based on context it is used
+func (m *ScheduleScheduleDayTimeRange) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *ScheduleDayTimeRange) MarshalBinary() ([]byte, error) {
+func (m *ScheduleScheduleDayTimeRange) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +43,8 @@ func (m *ScheduleDayTimeRange) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ScheduleDayTimeRange) UnmarshalBinary(b []byte) error {
-	var res ScheduleDayTimeRange
+func (m *ScheduleScheduleDayTimeRange) UnmarshalBinary(b []byte) error {
+	var res ScheduleScheduleDayTimeRange
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

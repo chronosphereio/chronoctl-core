@@ -115,26 +115,6 @@ func (mr *MockClientServiceMockRecorder) CreateLogPrimaryKey(params interface{},
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLogPrimaryKey", reflect.TypeOf((*MockClientService)(nil).CreateLogPrimaryKey), varargs...)
 }
 
-// CreateMetricNameActiveSeriesLimit mocks base method.
-func (m *MockClientService) CreateMetricNameActiveSeriesLimit(params *operations.CreateMetricNameActiveSeriesLimitParams, opts ...operations.ClientOption) (*operations.CreateMetricNameActiveSeriesLimitOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateMetricNameActiveSeriesLimit", varargs...)
-	ret0, _ := ret[0].(*operations.CreateMetricNameActiveSeriesLimitOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateMetricNameActiveSeriesLimit indicates an expected call of CreateMetricNameActiveSeriesLimit.
-func (mr *MockClientServiceMockRecorder) CreateMetricNameActiveSeriesLimit(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMetricNameActiveSeriesLimit", reflect.TypeOf((*MockClientService)(nil).CreateMetricNameActiveSeriesLimit), varargs...)
-}
-
 // CreateNoopEntity mocks base method.
 func (m *MockClientService) CreateNoopEntity(params *operations.CreateNoopEntityParams, opts ...operations.ClientOption) (*operations.CreateNoopEntityOK, error) {
 	m.ctrl.T.Helper()
@@ -393,26 +373,6 @@ func (mr *MockClientServiceMockRecorder) DeleteLogPrimaryKey(params interface{},
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLogPrimaryKey", reflect.TypeOf((*MockClientService)(nil).DeleteLogPrimaryKey), varargs...)
-}
-
-// DeleteMetricNameActiveSeriesLimit mocks base method.
-func (m *MockClientService) DeleteMetricNameActiveSeriesLimit(params *operations.DeleteMetricNameActiveSeriesLimitParams, opts ...operations.ClientOption) (*operations.DeleteMetricNameActiveSeriesLimitOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteMetricNameActiveSeriesLimit", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteMetricNameActiveSeriesLimitOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteMetricNameActiveSeriesLimit indicates an expected call of DeleteMetricNameActiveSeriesLimit.
-func (mr *MockClientServiceMockRecorder) DeleteMetricNameActiveSeriesLimit(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMetricNameActiveSeriesLimit", reflect.TypeOf((*MockClientService)(nil).DeleteMetricNameActiveSeriesLimit), varargs...)
 }
 
 // DeleteNoopEntity mocks base method.
@@ -675,26 +635,6 @@ func (mr *MockClientServiceMockRecorder) ListLogPrimaryKeys(params interface{}, 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListLogPrimaryKeys", reflect.TypeOf((*MockClientService)(nil).ListLogPrimaryKeys), varargs...)
 }
 
-// ListMetricNameActiveSeriesLimits mocks base method.
-func (m *MockClientService) ListMetricNameActiveSeriesLimits(params *operations.ListMetricNameActiveSeriesLimitsParams, opts ...operations.ClientOption) (*operations.ListMetricNameActiveSeriesLimitsOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ListMetricNameActiveSeriesLimits", varargs...)
-	ret0, _ := ret[0].(*operations.ListMetricNameActiveSeriesLimitsOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListMetricNameActiveSeriesLimits indicates an expected call of ListMetricNameActiveSeriesLimits.
-func (mr *MockClientServiceMockRecorder) ListMetricNameActiveSeriesLimits(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMetricNameActiveSeriesLimits", reflect.TypeOf((*MockClientService)(nil).ListMetricNameActiveSeriesLimits), varargs...)
-}
-
 // ListNotebooks mocks base method.
 func (m *MockClientService) ListNotebooks(params *operations.ListNotebooksParams, opts ...operations.ClientOption) (*operations.ListNotebooksOK, error) {
 	m.ctrl.T.Helper()
@@ -873,26 +813,6 @@ func (mr *MockClientServiceMockRecorder) ReadLogPrimaryKey(params interface{}, o
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLogPrimaryKey", reflect.TypeOf((*MockClientService)(nil).ReadLogPrimaryKey), varargs...)
-}
-
-// ReadMetricNameActiveSeriesLimit mocks base method.
-func (m *MockClientService) ReadMetricNameActiveSeriesLimit(params *operations.ReadMetricNameActiveSeriesLimitParams, opts ...operations.ClientOption) (*operations.ReadMetricNameActiveSeriesLimitOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadMetricNameActiveSeriesLimit", varargs...)
-	ret0, _ := ret[0].(*operations.ReadMetricNameActiveSeriesLimitOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadMetricNameActiveSeriesLimit indicates an expected call of ReadMetricNameActiveSeriesLimit.
-func (mr *MockClientServiceMockRecorder) ReadMetricNameActiveSeriesLimit(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadMetricNameActiveSeriesLimit", reflect.TypeOf((*MockClientService)(nil).ReadMetricNameActiveSeriesLimit), varargs...)
 }
 
 // ReadNoopEntity mocks base method.
@@ -1165,26 +1085,6 @@ func (mr *MockClientServiceMockRecorder) UpdateLinkTemplate(params interface{}, 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLinkTemplate", reflect.TypeOf((*MockClientService)(nil).UpdateLinkTemplate), varargs...)
-}
-
-// UpdateMetricNameActiveSeriesLimit mocks base method.
-func (m *MockClientService) UpdateMetricNameActiveSeriesLimit(params *operations.UpdateMetricNameActiveSeriesLimitParams, opts ...operations.ClientOption) (*operations.UpdateMetricNameActiveSeriesLimitOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateMetricNameActiveSeriesLimit", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateMetricNameActiveSeriesLimitOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateMetricNameActiveSeriesLimit indicates an expected call of UpdateMetricNameActiveSeriesLimit.
-func (mr *MockClientServiceMockRecorder) UpdateMetricNameActiveSeriesLimit(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMetricNameActiveSeriesLimit", reflect.TypeOf((*MockClientService)(nil).UpdateMetricNameActiveSeriesLimit), varargs...)
 }
 
 // UpdateNoopEntity mocks base method.

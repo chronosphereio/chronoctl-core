@@ -5,10 +5,16 @@
 ### Added
 * Add a `dashboards:importFromClassic` endpoint to `v1/config`, which converts classic dashboard JSON into a standard Dashboard and creates it, or updates an existing dashboard in place when `update_if_exists` is set. Available to library consumers only.
 * Add a `dashboards:validate` endpoint to `unstable/config`, which validates dashboard JSON without persisting it. Available to library consumers only.
-* Add `unstable/config/MetricNameActiveSeriesLimit` to the generated `configunstable` client. A metric name active series limit caps the active time series allowed for a single metric name. Available to library consumers only; there are no `metric-name-active-series-limits` commands.
+* Add support for resource `v1/config/MetricNameActiveSeriesLimit` and the `metric-name-active-series-limits` commands. A metric name active series limit caps the active time series allowed for a single metric name.
+* Add `description` to `v1/config/Monitor`, an optional Markdown description rendered in the Chronosphere app.
+* Add a `label_matchers` filter to listing `v1/config/Monitor`, and a matching `--label-matchers` flag to `monitors list`. Each entry is `name=value` or `name!=value`; all entries must hold for a monitor to be returned.
+* Add `recurrence` to `v1/config/MutingRule`, which mutes on a repeating weekly schedule instead of continuously.
+* Add `GCP_US_LOS_ANGELES` location to `v1/config/SyntheticTest`.
 * Add `primary_slo_reference` and `related_slo_references` to `unstable/config/CommandCenterGroup`. Available to library consumers only.
 
 ### Removed
+* Remove `unstable/config/MetricNameActiveSeriesLimit` from the generated `configunstable` client, replaced by `v1/config/MetricNameActiveSeriesLimit` and the `metric-name-active-series-limits` commands. The unstable endpoints no longer exist in the public API. Available to library consumers only. **This is a breaking change**.
+* Rename the generated `configv1` monitor schedule model types (`ScheduleWeeklySchedule` becomes `MonitorScheduleWeeklySchedule`, `ScheduleDayTimeRange` becomes `ScheduleScheduleDayTimeRange`). Available to library consumers only. **This is a breaking change**.
 * Remove `dns_server` and `dns_server_port` from the `v1/config/SyntheticTest` DNS test configuration. The API no longer accepts a custom nameserver, so drop the fields from any `synthetic-tests` YAML that sets them. **This is a breaking change**.
 * Remove the `dashboards:createFromClassic` endpoint from `unstable/config`, replaced by `v1/config` `dashboards:importFromClassic`. Available to library consumers only. **This is a breaking change**.
 
