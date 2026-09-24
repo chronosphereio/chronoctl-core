@@ -3233,6 +3233,7 @@
     },
     "SyntheticTestTestLocation": {
       "enum": [
+        "GCP_US_LOS_ANGELES",
         "GCP_US_OREGON",
         "GCP_US_VIRGINIA",
         "GCP_BR_SAO_PAULO",
