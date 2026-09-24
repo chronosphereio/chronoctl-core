@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### Added
-* Add an unstable `dashboards validate` command (`-f`/`--filename`) that validates raw dashboard JSON with the `unstable/config` `dashboards:validate` endpoint without persisting it. The command prints `Dashboard is valid` and exits 0 when the API accepts the dashboard, and exits non-zero with the API's validation failures when it does not.
+* Add an unstable `dashboards validate` command (`-f`/`--filename`) that validates a dashboard with the `unstable/config` `dashboards:validate` endpoint without persisting it. The file may be raw dashboard JSON or a chronoctl `Dashboard` manifest in YAML or JSON, such as the output of `dashboards read`, in which case its `spec.dashboard_json` is validated. The command prints `Dashboard is valid` and exits 0 when the API accepts the dashboard, and exits non-zero with the API's validation failures when it does not.
 
 ## v1.35.0
 

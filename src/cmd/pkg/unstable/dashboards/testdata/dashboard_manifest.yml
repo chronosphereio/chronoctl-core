@@ -1,0 +1,7 @@
+api_version: v1/config
+kind: Dashboard
+spec:
+  slug: api-latency-overview
+  name: API Latency Overview
+  collection_slug: my-collection
+  dashboard_json: '{"kind":"Dashboard","metadata":{"name":"api-latency-overview"},"spec":{"duration":"1h","panels":{},"layouts":[]}}'

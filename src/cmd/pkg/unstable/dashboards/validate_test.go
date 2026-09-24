@@ -1,17 +1,3 @@
-// Copyright 2023 Chronosphere Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package dashboards
 
 import (
@@ -30,13 +16,24 @@ import (
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
 )
 
-const testDashboardPath = "testdata/dashboard.json"
+const (
+	testDashboardPath         = "testdata/dashboard.json"
+	testManifestPath          = "testdata/dashboard_manifest.yml"
+	testManifestDashboardJSON = `{"kind":"Dashboard","metadata":{"name":"api-latency-overview"},"spec":{"duration":"1h","panels":{},"layouts":[]}}`
+)
 
 func readTestDashboard(t *testing.T) string {
 	t.Helper()
 	b, err := os.ReadFile(testDashboardPath)
 	require.NoError(t, err)
 	return string(b)
+}
+
+func readFile(t *testing.T, path string) []byte {
+	t.Helper()
+	b, err := os.ReadFile(path)
+	require.NoError(t, err)
+	return b
 }
 
 func TestValidateRun(t *testing.T) {
@@ -104,10 +101,101 @@ func TestValidateRun(t *testing.T) {
 	}
 }
 
+func TestDashboardJSONFromInput(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   func(t *testing.T) []byte
+		want    string
+		wantErr string
+	}{
+		{
+			name:  "raw json",
+			input: func(t *testing.T) []byte { return readFile(t, testDashboardPath) },
+			want:  readTestDashboard(t),
+		},
+		{
+			name:  "raw json with surrounding whitespace",
+			input: func(t *testing.T) []byte { return []byte("\n  {\"kind\":\"Dashboard\"}\n") },
+			want:  "\n  {\"kind\":\"Dashboard\"}\n",
+		},
+		{
+			name:  "yaml manifest",
+			input: func(t *testing.T) []byte { return readFile(t, testManifestPath) },
+			want:  testManifestDashboardJSON,
+		},
+		{
+			name: "json manifest for the unstable api",
+			input: func(t *testing.T) []byte {
+				return []byte(`{"api_version":"unstable/config","kind":"Dashboard","spec":{"slug":"x","dashboard_json":"{\"kind\":\"Dashboard\"}"}}`)
+			},
+			want: `{"kind":"Dashboard"}`,
+		},
+		{
+			name: "manifest of another kind",
+			input: func(t *testing.T) []byte {
+				return []byte("api_version: v1/config\nkind: Monitor\nspec:\n  slug: m\n")
+			},
+			wantErr: "expected a Dashboard manifest",
+		},
+		{
+			name: "manifest with unknown api version",
+			input: func(t *testing.T) []byte {
+				return []byte("api_version: v2/config\nkind: Dashboard\n")
+			},
+			wantErr: "no registered type",
+		},
+		{
+			name: "manifest without dashboard_json",
+			input: func(t *testing.T) []byte {
+				return []byte("api_version: v1/config\nkind: Dashboard\nspec:\n  slug: x\n")
+			},
+			wantErr: "no spec.dashboard_json",
+		},
+		{
+			name: "manifest with unknown field",
+			input: func(t *testing.T) []byte {
+				return []byte("api_version: v1/config\nkind: Dashboard\nspec:\n  dashbord_json: '{}'\n")
+			},
+			wantErr: "dashbord_json",
+		},
+		{
+			name: "multiple manifests",
+			input: func(t *testing.T) []byte {
+				return []byte("api_version: v1/config\nkind: Dashboard\nspec:\n  dashboard_json: '{}'\n---\napi_version: v1/config\nkind: Dashboard\nspec:\n  dashboard_json: '{}'\n")
+			},
+			wantErr: "more than one item",
+		},
+		{
+			name:    "yaml that is not a manifest",
+			input:   func(t *testing.T) []byte { return []byte("foo: bar\n") },
+			wantErr: "not valid JSON",
+		},
+		{
+			name:    "invalid json",
+			input:   func(t *testing.T) []byte { return []byte("{\"kind\": ") },
+			wantErr: "not valid JSON",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := dashboardJSONFromInput(tt.input(t))
+			if tt.wantErr != "" {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), tt.wantErr)
+				return
+			}
+			require.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
 func TestValidateValidate(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    func(t *testing.T, o *validateOptions)
+		want    string
 		wantErr string
 	}{
 		{
@@ -136,6 +224,14 @@ func TestValidateValidate(t *testing.T) {
 			opts: func(t *testing.T, o *validateOptions) {
 				o.fileFlags.Filename = testDashboardPath
 			},
+			want: readTestDashboard(t),
+		},
+		{
+			name: "manifest file",
+			opts: func(t *testing.T, o *validateOptions) {
+				o.fileFlags.Filename = testManifestPath
+			},
+			want: testManifestDashboardJSON,
 		},
 	}
 
@@ -155,7 +251,7 @@ func TestValidateValidate(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.Equal(t, readTestDashboard(t), o.dashboardJSON)
+			assert.Equal(t, tt.want, o.dashboardJSON)
 		})
 	}
 }

@@ -1,25 +1,14 @@
-// Copyright 2023 Chronosphere Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package dashboards
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 
 	"github.com/spf13/cobra"
 
@@ -27,8 +16,12 @@ import (
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/clienterror"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/file"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
+	"github.com/chronosphereio/chronoctl-core/src/generated/cli/configunstable"
+	"github.com/chronosphereio/chronoctl-core/src/generated/cli/configv1"
 	config_unstable "github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/client/operations"
 	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/thirdparty/yaml"
+	"github.com/chronosphereio/chronoctl-core/src/types"
 )
 
 func newValidateCommand() *cobra.Command {
@@ -37,21 +30,31 @@ func newValidateCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "validate -f <file>",
 		GroupID: groups.Commands.ID,
-		Short:   "Validates raw dashboard JSON without persisting it.",
-		Long: `Validates raw dashboard JSON against the API without creating or updating
-anything.
+		Short:   "Validates a dashboard without persisting it.",
+		Long: `Validates a dashboard against the API without creating or updating anything.
 
--f takes the raw JSON of a dashboard -- the same JSON a Dashboard's
-dashboard_json field holds -- NOT a chronoctl manifest. Supplying "-" reads
-from stdin.
+-f accepts either of two inputs, or "-" to read one from stdin:
+
+  * Raw dashboard JSON: the JSON a Dashboard's dashboard_json field holds.
+  * A chronoctl Dashboard manifest in YAML or JSON, such as the output of
+    "chronoctl dashboards read <slug>". Only its spec.dashboard_json is
+    validated; the other manifest fields are not.
+
+Input with a top-level api_version is treated as a manifest; anything else
+is sent as raw dashboard JSON.
 
 When the API accepts the dashboard the command prints "Dashboard is valid"
 and exits 0. When it does not, the command exits non-zero and the error
 carries the validation failures reported by the API.`,
-		Example: `# Validate a dashboard JSON file.
+		Example: `# Validate raw dashboard JSON.
 chronoctl unstable dashboards validate -f dashboard.json
 
-# Validate dashboard JSON from stdin.
+# Validate an edited copy of an existing dashboard.
+chronoctl dashboards read my-dashboard > dashboard.yml
+# ... edit dashboard.yml ...
+chronoctl unstable dashboards validate -f dashboard.yml
+
+# Validate from stdin.
 cat dashboard.json | chronoctl unstable dashboards validate -f -`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := o.validate(); err != nil {
@@ -104,7 +107,11 @@ func (o *validateOptions) validate() error {
 	if len(content) == 0 {
 		return errors.New("dashboard file is empty")
 	}
-	o.dashboardJSON = string(content)
+	dashboardJSON, err := dashboardJSONFromInput(content)
+	if err != nil {
+		return err
+	}
+	o.dashboardJSON = dashboardJSON
 
 	if o.client == nil {
 		c, err := o.clientFlags.ConfigUnstableClient()
@@ -133,4 +140,62 @@ func (o *validateOptions) run(w io.Writer) error {
 
 	_, err = fmt.Fprintln(w, "Dashboard is valid")
 	return err
+}
+
+var jsonStart = regexp.MustCompile(`^\s*\{`)
+
+// dashboardJSONFromInput returns the raw dashboard JSON to validate. Input
+// with a top-level api_version is a chronoctl manifest and must hold a single
+// Dashboard, whose spec.dashboard_json is returned. Anything else is raw
+// dashboard JSON and is returned verbatim.
+func dashboardJSONFromInput(content []byte) (string, error) {
+	meta, err := peekTypeMeta(content)
+	if err != nil {
+		return "", err
+	}
+
+	if meta.APIVersion == "" {
+		if !json.Valid(content) {
+			return "", errors.New("input is not valid JSON; expected raw dashboard JSON or a chronoctl Dashboard manifest with api_version and kind")
+		}
+		return string(content), nil
+	}
+
+	obj, err := types.MustDecodeSingleObject[types.Object](bytes.NewReader(content), false /* permissiveParsing */)
+	if err != nil {
+		return "", err
+	}
+
+	var dashboardJSON string
+	switch d := obj.(type) {
+	case *configv1.Dashboard:
+		if d.Spec != nil {
+			dashboardJSON = d.Spec.DashboardJSON
+		}
+	case *configunstable.Dashboard:
+		if d.Spec != nil {
+			dashboardJSON = d.Spec.DashboardJSON
+		}
+	default:
+		return "", fmt.Errorf("expected a Dashboard manifest, got %s", obj.Type())
+	}
+	if dashboardJSON == "" {
+		return "", errors.New("manifest has no spec.dashboard_json")
+	}
+	return dashboardJSON, nil
+}
+
+// peekTypeMeta decodes only api_version and kind, choosing the decoder the
+// same way types.Decode does. JSON that does not decode into a TypeMeta is
+// still candidate raw dashboard JSON, so only YAML parse failures are errors.
+func peekTypeMeta(content []byte) (types.TypeMeta, error) {
+	var meta types.TypeMeta
+	if jsonStart.Match(content) {
+		_ = json.Unmarshal(content, &meta)
+		return meta, nil
+	}
+	if err := yaml.Unmarshal(content, &meta); err != nil {
+		return meta, fmt.Errorf("could not parse input as YAML: %w", err)
+	}
+	return meta, nil
 }
