@@ -1,0 +1,57 @@
+{
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "api-latency-overview"
+  },
+  "spec": {
+    "display": {
+      "name": "API Latency Overview"
+    },
+    "duration": "1h",
+    "panels": {
+      "latency": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "p99 latency"
+          },
+          "plugin": {
+            "kind": "TimeSeriesChart",
+            "spec": {}
+          },
+          "queries": [
+            {
+              "kind": "TimeSeriesQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "PrometheusTimeSeriesQuery",
+                  "spec": {
+                    "query": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layouts": [
+      {
+        "kind": "Grid",
+        "spec": {
+          "items": [
+            {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/latency"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

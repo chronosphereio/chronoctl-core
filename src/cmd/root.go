@@ -48,7 +48,11 @@ func New(options Options) (*cobra.Command, error) {
 	cmd.AddGroup(groups.Commands, groups.Config, groups.State)
 	cmd.AddCommand(newVersionCommand())
 	cmd.AddCommand(NewApplyCommand(options.ApplyOptions))
-	cmd.AddCommand(unstable.NewCommand())
+	unstableCmd, err := unstable.NewCommand()
+	if err != nil {
+		return nil, err
+	}
+	cmd.AddCommand(unstableCmd)
 	cmd.AddCommand(ruleevaluations.NewCommand())
 	cmd.AddCommand(metricusages.NewCommands()...)
 	cmd.AddCommand(auth.NewCommand())

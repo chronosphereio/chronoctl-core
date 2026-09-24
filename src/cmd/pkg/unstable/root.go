@@ -16,12 +16,14 @@
 package unstable
 
 import (
-	"github.com/chronosphereio/chronoctl-core/src/generated/cli/configunstable"
 	"github.com/spf13/cobra"
+
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/unstable/dashboards"
+	"github.com/chronosphereio/chronoctl-core/src/generated/cli/configunstable"
 )
 
 // NewCommand returns a new cobra command for the unstable namespace of commands
-func NewCommand() *cobra.Command {
+func NewCommand() (*cobra.Command, error) {
 	root := &cobra.Command{
 		Use:    "unstable",
 		Hidden: true,
@@ -29,5 +31,8 @@ func NewCommand() *cobra.Command {
 	root.AddGroup(&cobra.Group{Title: "Configuration Entities", ID: "config"})
 
 	configunstable.AddCommandsTo(root)
-	return root
+	if err := dashboards.AddCommandsTo(root); err != nil {
+		return nil, err
+	}
+	return root, nil
 }
