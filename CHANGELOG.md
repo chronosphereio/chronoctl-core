@@ -5,9 +5,6 @@
 ### Added
 * Add support for resource `v1/config/CommandCenterGroup` and the `command-center-groups` commands. Command center groups are promoted from the unstable API to v1: a group names a primary SLO and a list of related SLOs by slug. The v1 resource does not carry the deprecated `group_slo_reference` field of the unstable resource; use `primary_slo_reference`.
 
-### Removed
-* Remove the `GCP_US_LOS_ANGELES` location from the `v1/config/SyntheticTest` test locations.
-
 ## v1.35.0
 
 ### Added
