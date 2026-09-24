@@ -217,6 +217,22 @@
       },
       "type": "object"
     },
+    "ConfigV1UpdateCommandCenterGroupBody": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the CommandCenterGroup will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the CommandCenterGroup does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the CommandCenterGroup. If the specified configuration is valid, the endpoint returns a partial response without the CommandCenterGroup. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateConsumptionBudgetBody": {
       "properties": {
         "consumption_budget": {
@@ -4105,6 +4121,42 @@
       "title": "Type values must match entitiespb.Collection.CollectionType.",
       "type": "string"
     },
+    "configv1CommandCenterGroup": {
+      "description": "CommandCenterGroup is a group of signals tracked in the command center.",
+      "properties": {
+        "slug": {
+          "description": "Unique slug identifying the CommandCenterGroup.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Unique name of the CommandCenterGroup.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the CommandCenterGroup was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the CommandCenterGroup was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "primary_slo_reference": {
+          "$ref": "#/definitions/configv1SloReference"
+        },
+        "related_slo_references": {
+          "description": "Related SLOs tracked by this group, secondary to the primary one.",
+          "items": {
+            "$ref": "#/definitions/configv1SloReference"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "configv1ConsumptionBudget": {
       "properties": {
         "slug": {
@@ -4339,6 +4391,26 @@
       "properties": {
         "collection": {
           "$ref": "#/definitions/configv1Collection"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateCommandCenterGroupRequest": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the CommandCenterGroup. If the specified configuration is valid, the endpoint returns a partial response without the CommandCenterGroup. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateCommandCenterGroupResponse": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
         }
       },
       "type": "object"
@@ -5127,6 +5199,9 @@
     "configv1DeleteCollectionResponse": {
       "type": "object"
     },
+    "configv1DeleteCommandCenterGroupResponse": {
+      "type": "object"
+    },
     "configv1DeleteConsumptionBudgetResponse": {
       "type": "object"
     },
@@ -5812,6 +5887,20 @@
         "collections": {
           "items": {
             "$ref": "#/definitions/configv1Collection"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListCommandCenterGroupsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "command_center_groups": {
+          "items": {
+            "$ref": "#/definitions/configv1CommandCenterGroup"
           },
           "type": "array"
         }
@@ -7273,6 +7362,14 @@
       },
       "type": "object"
     },
+    "configv1ReadCommandCenterGroupResponse": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
+        }
+      },
+      "type": "object"
+    },
     "configv1ReadConsumptionBudgetResponse": {
       "properties": {
         "consumption_budget": {
@@ -8031,6 +8128,16 @@
       },
       "type": "object"
     },
+    "configv1SloReference": {
+      "description": "SloReference references an SLO by slug.",
+      "properties": {
+        "slug": {
+          "description": "Slug of the referenced SLO.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configv1SyntheticTest": {
       "properties": {
         "name": {
@@ -8479,6 +8586,14 @@
       "properties": {
         "collection": {
           "$ref": "#/definitions/configv1Collection"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateCommandCenterGroupResponse": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
         }
       },
       "type": "object"
@@ -10258,6 +10373,265 @@
         },
         "tags": [
           "Collection"
+        ]
+      }
+    },
+    "/api/v1/config/command-center-groups": {
+      "get": {
+        "operationId": "ListCommandCenterGroups",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any CommandCenterGroup with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any CommandCenterGroup with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListCommandCenterGroupsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      },
+      "post": {
+        "operationId": "CreateCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateCommandCenterGroupRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateCommandCenterGroupResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the CommandCenterGroup because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the CommandCenterGroup because there is a conflict with an existing CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      }
+    },
+    "/api/v1/config/command-center-groups/{slug}": {
+      "delete": {
+        "operationId": "DeleteCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteCommandCenterGroupResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the CommandCenterGroup because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the CommandCenterGroup because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      },
+      "get": {
+        "operationId": "ReadCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadCommandCenterGroupResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the CommandCenterGroup because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateCommandCenterGroupBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateCommandCenterGroupResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the CommandCenterGroup because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the CommandCenterGroup because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the CommandCenterGroup because there is a conflict with an existing CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
         ]
       }
     },
