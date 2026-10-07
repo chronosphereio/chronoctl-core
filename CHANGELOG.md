@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Removed
+* Remove `unstable/config/CommandCenterGroup` from the generated `configunstable` client. The unstable endpoints no longer exist in the public API, which serves command center groups from `v1/config/CommandCenterGroup` instead. Available to library consumers only. **This is a breaking change**.
+
 ## v1.35.0
 
 ### Added

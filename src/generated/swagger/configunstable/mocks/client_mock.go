@@ -35,26 +35,6 @@ func (m *MockClientService) EXPECT() *MockClientServiceMockRecorder {
 	return m.recorder
 }
 
-// CreateCommandCenterGroup mocks base method.
-func (m *MockClientService) CreateCommandCenterGroup(params *operations.CreateCommandCenterGroupParams, opts ...operations.ClientOption) (*operations.CreateCommandCenterGroupOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateCommandCenterGroup", varargs...)
-	ret0, _ := ret[0].(*operations.CreateCommandCenterGroupOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateCommandCenterGroup indicates an expected call of CreateCommandCenterGroup.
-func (mr *MockClientServiceMockRecorder) CreateCommandCenterGroup(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCommandCenterGroup", reflect.TypeOf((*MockClientService)(nil).CreateCommandCenterGroup), varargs...)
-}
-
 // CreateDashboard mocks base method.
 func (m *MockClientService) CreateDashboard(params *operations.CreateDashboardParams, opts ...operations.ClientOption) (*operations.CreateDashboardOK, error) {
 	m.ctrl.T.Helper()
@@ -293,26 +273,6 @@ func (mr *MockClientServiceMockRecorder) CreateTraceTopTagConfig(params interfac
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).CreateTraceTopTagConfig), varargs...)
-}
-
-// DeleteCommandCenterGroup mocks base method.
-func (m *MockClientService) DeleteCommandCenterGroup(params *operations.DeleteCommandCenterGroupParams, opts ...operations.ClientOption) (*operations.DeleteCommandCenterGroupOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteCommandCenterGroup", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteCommandCenterGroupOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteCommandCenterGroup indicates an expected call of DeleteCommandCenterGroup.
-func (mr *MockClientServiceMockRecorder) DeleteCommandCenterGroup(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCommandCenterGroup", reflect.TypeOf((*MockClientService)(nil).DeleteCommandCenterGroup), varargs...)
 }
 
 // DeleteDashboard mocks base method.
@@ -555,26 +515,6 @@ func (mr *MockClientServiceMockRecorder) DeleteTraceTopTagConfig(params interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTraceTopTagConfig", reflect.TypeOf((*MockClientService)(nil).DeleteTraceTopTagConfig), varargs...)
 }
 
-// ListCommandCenterGroups mocks base method.
-func (m *MockClientService) ListCommandCenterGroups(params *operations.ListCommandCenterGroupsParams, opts ...operations.ClientOption) (*operations.ListCommandCenterGroupsOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ListCommandCenterGroups", varargs...)
-	ret0, _ := ret[0].(*operations.ListCommandCenterGroupsOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListCommandCenterGroups indicates an expected call of ListCommandCenterGroups.
-func (mr *MockClientServiceMockRecorder) ListCommandCenterGroups(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCommandCenterGroups", reflect.TypeOf((*MockClientService)(nil).ListCommandCenterGroups), varargs...)
-}
-
 // ListDashboards mocks base method.
 func (m *MockClientService) ListDashboards(params *operations.ListDashboardsParams, opts ...operations.ClientOption) (*operations.ListDashboardsOK, error) {
 	m.ctrl.T.Helper()
@@ -733,26 +673,6 @@ func (mr *MockClientServiceMockRecorder) ListTraceJaegerRemoteSamplingStrategies
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTraceJaegerRemoteSamplingStrategies", reflect.TypeOf((*MockClientService)(nil).ListTraceJaegerRemoteSamplingStrategies), varargs...)
-}
-
-// ReadCommandCenterGroup mocks base method.
-func (m *MockClientService) ReadCommandCenterGroup(params *operations.ReadCommandCenterGroupParams, opts ...operations.ClientOption) (*operations.ReadCommandCenterGroupOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadCommandCenterGroup", varargs...)
-	ret0, _ := ret[0].(*operations.ReadCommandCenterGroupOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadCommandCenterGroup indicates an expected call of ReadCommandCenterGroup.
-func (mr *MockClientServiceMockRecorder) ReadCommandCenterGroup(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadCommandCenterGroup", reflect.TypeOf((*MockClientService)(nil).ReadCommandCenterGroup), varargs...)
 }
 
 // ReadDashboard mocks base method.
@@ -1025,26 +945,6 @@ func (mr *MockClientServiceMockRecorder) SyncPrometheus(params interface{}, opts
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SyncPrometheus", reflect.TypeOf((*MockClientService)(nil).SyncPrometheus), varargs...)
-}
-
-// UpdateCommandCenterGroup mocks base method.
-func (m *MockClientService) UpdateCommandCenterGroup(params *operations.UpdateCommandCenterGroupParams, opts ...operations.ClientOption) (*operations.UpdateCommandCenterGroupOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateCommandCenterGroup", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateCommandCenterGroupOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateCommandCenterGroup indicates an expected call of UpdateCommandCenterGroup.
-func (mr *MockClientServiceMockRecorder) UpdateCommandCenterGroup(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateCommandCenterGroup", reflect.TypeOf((*MockClientService)(nil).UpdateCommandCenterGroup), varargs...)
 }
 
 // UpdateDashboard mocks base method.
