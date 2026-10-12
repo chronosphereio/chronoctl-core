@@ -13,17 +13,23 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableReadCommandCenterGroupResponse configunstable read command center group response
+// ConfigV1UpdateCommandCenterGroupBody config v1 update command center group body
 //
-// swagger:model configunstableReadCommandCenterGroupResponse
-type ConfigunstableReadCommandCenterGroupResponse struct {
+// swagger:model ConfigV1UpdateCommandCenterGroupBody
+type ConfigV1UpdateCommandCenterGroupBody struct {
 
 	// command center group
-	CommandCenterGroup *ConfigunstableCommandCenterGroup `json:"command_center_group,omitempty"`
+	CommandCenterGroup *Configv1CommandCenterGroup `json:"command_center_group,omitempty"`
+
+	// If `true`, the CommandCenterGroup will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the CommandCenterGroup does not already exist.
+	CreateIfMissing bool `json:"create_if_missing,omitempty"`
+
+	// If `true`, validates the specified configuration without creating or updating the CommandCenterGroup. If the specified configuration is valid, the endpoint returns a partial response without the CommandCenterGroup. If the specified configuration is invalid, the endpoint returns an error.
+	DryRun bool `json:"dry_run,omitempty"`
 }
 
-// Validate validates this configunstable read command center group response
-func (m *ConfigunstableReadCommandCenterGroupResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this config v1 update command center group body
+func (m *ConfigV1UpdateCommandCenterGroupBody) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCommandCenterGroup(formats); err != nil {
@@ -36,7 +42,7 @@ func (m *ConfigunstableReadCommandCenterGroupResponse) Validate(formats strfmt.R
 	return nil
 }
 
-func (m *ConfigunstableReadCommandCenterGroupResponse) validateCommandCenterGroup(formats strfmt.Registry) error {
+func (m *ConfigV1UpdateCommandCenterGroupBody) validateCommandCenterGroup(formats strfmt.Registry) error {
 	if swag.IsZero(m.CommandCenterGroup) { // not required
 		return nil
 	}
@@ -55,8 +61,8 @@ func (m *ConfigunstableReadCommandCenterGroupResponse) validateCommandCenterGrou
 	return nil
 }
 
-// ContextValidate validate this configunstable read command center group response based on the context it is used
-func (m *ConfigunstableReadCommandCenterGroupResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this config v1 update command center group body based on the context it is used
+func (m *ConfigV1UpdateCommandCenterGroupBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCommandCenterGroup(ctx, formats); err != nil {
@@ -69,7 +75,7 @@ func (m *ConfigunstableReadCommandCenterGroupResponse) ContextValidate(ctx conte
 	return nil
 }
 
-func (m *ConfigunstableReadCommandCenterGroupResponse) contextValidateCommandCenterGroup(ctx context.Context, formats strfmt.Registry) error {
+func (m *ConfigV1UpdateCommandCenterGroupBody) contextValidateCommandCenterGroup(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CommandCenterGroup != nil {
 
@@ -91,7 +97,7 @@ func (m *ConfigunstableReadCommandCenterGroupResponse) contextValidateCommandCen
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableReadCommandCenterGroupResponse) MarshalBinary() ([]byte, error) {
+func (m *ConfigV1UpdateCommandCenterGroupBody) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -99,8 +105,8 @@ func (m *ConfigunstableReadCommandCenterGroupResponse) MarshalBinary() ([]byte, 
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableReadCommandCenterGroupResponse) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableReadCommandCenterGroupResponse
+func (m *ConfigV1UpdateCommandCenterGroupBody) UnmarshalBinary(b []byte) error {
+	var res ConfigV1UpdateCommandCenterGroupBody
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

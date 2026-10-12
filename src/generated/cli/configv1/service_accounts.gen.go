@@ -398,7 +398,7 @@ spec:
     slug: <string>
     # The name of the ServiceAccount. You can modify this value after the ServiceAccount is created.
     name: <string>
-    # If set, grants the service account access to all Chronosphere APIs, including
+    # If set, grants the service account access to all Palo Alto Networks APIs, including
     # resource configuration and metric data within the access controls defined by the
     # service account's team membership.
 

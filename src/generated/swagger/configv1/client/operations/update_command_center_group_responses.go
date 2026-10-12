@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // UpdateCommandCenterGroupReader is a Reader for the UpdateCommandCenterGroup structure.
@@ -76,7 +76,7 @@ UpdateCommandCenterGroupOK describes a response with status code 200, with defau
 A successful response containing the updated CommandCenterGroup.
 */
 type UpdateCommandCenterGroupOK struct {
-	Payload *models.ConfigunstableUpdateCommandCenterGroupResponse
+	Payload *models.Configv1UpdateCommandCenterGroupResponse
 }
 
 // IsSuccess returns true when this update command center group o k response has a 2xx status code
@@ -110,20 +110,20 @@ func (o *UpdateCommandCenterGroupOK) Code() int {
 }
 
 func (o *UpdateCommandCenterGroupOK) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupOK) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateCommandCenterGroupOK) GetPayload() *models.ConfigunstableUpdateCommandCenterGroupResponse {
+func (o *UpdateCommandCenterGroupOK) GetPayload() *models.Configv1UpdateCommandCenterGroupResponse {
 	return o.Payload
 }
 
 func (o *UpdateCommandCenterGroupOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableUpdateCommandCenterGroupResponse)
+	o.Payload = new(models.Configv1UpdateCommandCenterGroupResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -178,11 +178,11 @@ func (o *UpdateCommandCenterGroupBadRequest) Code() int {
 }
 
 func (o *UpdateCommandCenterGroupBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupBadRequest) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupBadRequest) GetPayload() *models.APIError {
@@ -246,11 +246,11 @@ func (o *UpdateCommandCenterGroupNotFound) Code() int {
 }
 
 func (o *UpdateCommandCenterGroupNotFound) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupNotFound) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupNotFound  %+v", 404, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupNotFound) GetPayload() *models.APIError {
@@ -314,11 +314,11 @@ func (o *UpdateCommandCenterGroupConflict) Code() int {
 }
 
 func (o *UpdateCommandCenterGroupConflict) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupConflict  %+v", 409, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupConflict) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupConflict  %+v", 409, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupConflict) GetPayload() *models.APIError {
@@ -382,11 +382,11 @@ func (o *UpdateCommandCenterGroupInternalServerError) Code() int {
 }
 
 func (o *UpdateCommandCenterGroupInternalServerError) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupInternalServerError) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] updateCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] updateCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupInternalServerError) GetPayload() *models.APIError {
@@ -454,11 +454,11 @@ func (o *UpdateCommandCenterGroupDefault) Code() int {
 }
 
 func (o *UpdateCommandCenterGroupDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] UpdateCommandCenterGroup default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] UpdateCommandCenterGroup default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupDefault) String() string {
-	return fmt.Sprintf("[PUT /api/unstable/config/command-center-groups/{slug}][%d] UpdateCommandCenterGroup default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/config/command-center-groups/{slug}][%d] UpdateCommandCenterGroup default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateCommandCenterGroupDefault) GetPayload() models.GenericError {

@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // MonitorStatusSignalStatus monitor status signal status
@@ -28,8 +29,12 @@ type MonitorStatusSignalStatus struct {
 	// Signal labels.
 	SignalLabels []*CommonLabel `json:"signal_labels"`
 
-	// series
+	// This field is deprecated.
 	Series []*SignalStatusSeriesStatus `json:"series"`
+
+	// When the signal started firing: the earliest among its firing severities.
+	// Format: date-time
+	StartedAt strfmt.DateTime `json:"started_at,omitempty"`
 }
 
 // Validate validates this monitor status signal status
@@ -45,6 +50,10 @@ func (m *MonitorStatusSignalStatus) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSeries(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStartedAt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -118,6 +127,18 @@ func (m *MonitorStatusSignalStatus) validateSeries(formats strfmt.Registry) erro
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *MonitorStatusSignalStatus) validateStartedAt(formats strfmt.Registry) error {
+	if swag.IsZero(m.StartedAt) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("started_at", "body", "date-time", m.StartedAt.String(), formats); err != nil {
+		return err
 	}
 
 	return nil

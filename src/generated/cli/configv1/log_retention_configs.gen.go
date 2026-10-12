@@ -497,9 +497,8 @@ spec:
     name: <string>
     # Log query filter. Only matching logs will have the retention config applied.
     filter: <string>
-    # Number of days to retain matching logs in long-term (Iceberg) storage
-    # after they are exported. Once this period elapses, data is expired from
-    # Iceberg by the IcebergDeleter.
+    # Number of days to retain matching logs after they are exported. Once
+    # this period elapses, the data is expired.
     retention_days: <integer>
     mode: <ENABLED|DISABLED>
 `

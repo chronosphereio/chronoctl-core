@@ -217,6 +217,22 @@
       },
       "type": "object"
     },
+    "ConfigV1UpdateCommandCenterGroupBody": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the CommandCenterGroup will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the CommandCenterGroup does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the CommandCenterGroup. If the specified configuration is valid, the endpoint returns a partial response without the CommandCenterGroup. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "ConfigV1UpdateConsumptionBudgetBody": {
       "properties": {
         "consumption_budget": {
@@ -1109,6 +1125,10 @@
         },
         "site": {
           "description": "Datadog site, e.g. \"datadoghq.com\" (default) or \"datadoghq.eu\".",
+          "type": "string"
+        },
+        "custom_subdomain": {
+          "description": "Custom sub-domain of the Datadog org's web UI, e.g. \"acme\" for an org\nserved from \"acme.datadoghq.com\". Affects only UI links, never the API.",
           "type": "string"
         }
       },
@@ -4098,12 +4118,49 @@
       "type": "object"
     },
     "configv1CollectionReferenceType": {
+      "description": "Type values must match entitiespb.Collection.CollectionType.\n\n - USER: A user's personal collection. Only notebooks and dashboards can be owned by a user collection; other entity types, Grafana dashboards included, reject a USER owner with a 400.",
       "enum": [
         "SIMPLE",
-        "SERVICE"
+        "SERVICE",
+        "USER"
       ],
-      "title": "Type values must match entitiespb.Collection.CollectionType.",
       "type": "string"
+    },
+    "configv1CommandCenterGroup": {
+      "description": "CommandCenterGroup is a group of signals tracked in the command center.",
+      "properties": {
+        "slug": {
+          "description": "Unique slug identifying the CommandCenterGroup.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Unique name of the CommandCenterGroup.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Timestamp of when the CommandCenterGroup was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the CommandCenterGroup was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "primary_slo_reference": {
+          "$ref": "#/definitions/configv1SloReference"
+        },
+        "related_slo_references": {
+          "description": "Related SLOs tracked by this group, secondary to the primary one.",
+          "items": {
+            "$ref": "#/definitions/configv1SloReference"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
     },
     "configv1ConsumptionBudget": {
       "properties": {
@@ -4339,6 +4396,26 @@
       "properties": {
         "collection": {
           "$ref": "#/definitions/configv1Collection"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateCommandCenterGroupRequest": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the CommandCenterGroup. If the specified configuration is valid, the endpoint returns a partial response without the CommandCenterGroup. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateCommandCenterGroupResponse": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
         }
       },
       "type": "object"
@@ -4659,6 +4736,26 @@
       "properties": {
         "metric_name_active_series_limit": {
           "$ref": "#/definitions/configv1MetricNameActiveSeriesLimit"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateMetricNameDefaultActiveSeriesLimitRequest": {
+      "properties": {
+        "metric_name_default_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameDefaultActiveSeriesLimit"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating the MetricNameDefaultActiveSeriesLimit. If the specified configuration is valid, the endpoint returns a partial response without the MetricNameDefaultActiveSeriesLimit. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1CreateMetricNameDefaultActiveSeriesLimitResponse": {
+      "properties": {
+        "metric_name_default_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameDefaultActiveSeriesLimit"
         }
       },
       "type": "object"
@@ -5127,6 +5224,9 @@
     "configv1DeleteCollectionResponse": {
       "type": "object"
     },
+    "configv1DeleteCommandCenterGroupResponse": {
+      "type": "object"
+    },
     "configv1DeleteConsumptionBudgetResponse": {
       "type": "object"
     },
@@ -5173,6 +5273,9 @@
       "type": "object"
     },
     "configv1DeleteMetricNameActiveSeriesLimitResponse": {
+      "type": "object"
+    },
+    "configv1DeleteMetricNameDefaultActiveSeriesLimitResponse": {
       "type": "object"
     },
     "configv1DeleteMonitorResponse": {
@@ -5380,7 +5483,7 @@
           "$ref": "#/definitions/DropRuleValueBasedDrop"
         },
         "drop_nan_value": {
-          "description": "Drops data points if values are Not a Number (NaN). If set to true, Chronosphere\ndrops NaN data points, along with any published staleness markers. See the\n[drop rules\ndocumentation](https://docs.chronosphere.io/control/shaping/shape-metrics/rules/drop-rules#define-a-value-based-drop-rule)\nfor more information.",
+          "description": "Drops data points if values are Not a Number (NaN). If set to true, Palo Alto Networks\ndrops NaN data points, along with any published staleness markers. See the\n[drop rules\ndocumentation](https://docs.chronosphere.io/control/shaping/shape-metrics/rules/drop-rules#define-a-value-based-drop-rule)\nfor more information.",
           "type": "boolean"
         }
       },
@@ -5812,6 +5915,20 @@
         "collections": {
           "items": {
             "$ref": "#/definitions/configv1Collection"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ListCommandCenterGroupsResponse": {
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/configv1PageResult"
+        },
+        "command_center_groups": {
+          "items": {
+            "$ref": "#/definitions/configv1CommandCenterGroup"
           },
           "type": "array"
         }
@@ -6367,7 +6484,7 @@
       "type": "object"
     },
     "configv1LogRetentionConfig": {
-      "description": "LogRetentionConfig configures long-term retention policies for log data.\nEach config specifies a filter to match logs and retention parameters for\ncold storage (Iceberg). Multiple configs per tenant are supported; when\nconfigs overlap, the longest retention wins.",
+      "description": "LogRetentionConfig configures long-term retention policies for log data.\nEach config specifies a filter to match logs and retention parameters for\nwarm tier. Multiple configs per tenant are supported; when\nconfigs overlap, the longest retention wins.",
       "properties": {
         "slug": {
           "description": "The unique identifier of the LogRetentionConfig. If a `slug` isn't provided, one is generated based on the `name` field. You can't modify this field after the LogRetentionConfig is created.",
@@ -6397,7 +6514,7 @@
           "type": "string"
         },
         "retention_days": {
-          "description": "Number of days to retain matching logs in long-term (Iceberg) storage\nafter they are exported. Once this period elapses, data is expired from\nIceberg by the IcebergDeleter.",
+          "description": "Number of days to retain matching logs after they are exported. Once\nthis period elapses, the data is expired.",
           "format": "int64",
           "type": "integer"
         }
@@ -6522,6 +6639,33 @@
       },
       "type": "object"
     },
+    "configv1MetricNameDefaultActiveSeriesLimit": {
+      "properties": {
+        "created_at": {
+          "description": "Timestamp of when the MetricNameDefaultActiveSeriesLimit was created. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Timestamp of when the MetricNameDefaultActiveSeriesLimit was last updated. Cannot be set by clients.",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "default_max_active_standard_series": {
+          "description": "The default active standard (non-histogram) time series allowed for each\nmetric name over the active time series rolling window. If zero, the\nChronosphere-managed default limit is used. A MetricNameActiveSeriesLimit\noverrides this default for its metric name, whether looser or stricter.\nThis value can't exceed the Chronosphere-managed default limit.",
+          "format": "int64",
+          "type": "string"
+        },
+        "default_max_active_histogram_series": {
+          "description": "The default active histogram time series allowed for each metric name\nover the active time series rolling window. If zero, the\nChronosphere-managed default limit is used. A MetricNameActiveSeriesLimit\noverrides this default for its metric name, whether looser or stricter.\nThis value can't exceed the Chronosphere-managed default limit.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "configv1Monitor": {
       "properties": {
         "slug": {
@@ -6545,7 +6689,7 @@
           "type": "string"
         },
         "description": {
-          "description": "Optional description of the monitor. Markdown is supported when rendered\nin the Chronosphere app.",
+          "description": "Optional description of the monitor. Markdown is supported when rendered\nin the Palo Alto Networks app.",
           "type": "string"
         },
         "bucket_slug": {
@@ -7273,6 +7417,14 @@
       },
       "type": "object"
     },
+    "configv1ReadCommandCenterGroupResponse": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
+        }
+      },
+      "type": "object"
+    },
     "configv1ReadConsumptionBudgetResponse": {
       "properties": {
         "consumption_budget": {
@@ -7397,6 +7549,14 @@
       "properties": {
         "metric_name_active_series_limit": {
           "$ref": "#/definitions/configv1MetricNameActiveSeriesLimit"
+        }
+      },
+      "type": "object"
+    },
+    "configv1ReadMetricNameDefaultActiveSeriesLimitResponse": {
+      "properties": {
+        "metric_name_default_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameDefaultActiveSeriesLimit"
         }
       },
       "type": "object"
@@ -7599,7 +7759,7 @@
           "type": "string"
         },
         "execution_group": {
-          "description": "The slug of the execution group in which the recording rule will be evaluated.\nRules in the same execution group run at intervals. All rules in a group must\ncomplete before the rules in that group run again. Required if `bucket_slug`\nisn't set. If both `bucket_slug` and `execution_group` are set, their values\nmust match.\n\nCreating too many rules in an execution group can cause delays in execution of\nthe next iteration. Chronosphere recommends limiting the number of rules in an\nexecution group to 200-300 maximum.",
+          "description": "The slug of the execution group in which the recording rule will be evaluated.\nRules in the same execution group run at intervals. All rules in a group must\ncomplete before the rules in that group run again. Required if `bucket_slug`\nisn't set. If both `bucket_slug` and `execution_group` are set, their values\nmust match.\n\nCreating too many rules in an execution group can cause delays in execution of\nthe next iteration. Palo Alto Networks recommends limiting the number of rules in an\nexecution group to 200-300 maximum.",
           "type": "string"
         },
         "execution_mode": {
@@ -7726,7 +7886,7 @@
           "type": "string"
         },
         "filters": {
-          "description": "Filters incoming metrics by label. If multiple label filters are specified, an\nincoming metric must match every label filter to match the rule. Label values\nsupport glob patterns, including matching multiple patterns with an `OR`, such\nas `service:{svc1,svc2}`. These special filters are available for matching\nmetrics by non-label request metadata:\n * `__metric_type__`: Matches the incoming metric's [Observability Platform\n   metric\n   type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#observability-platform-types).\n   This is the recommended method for filtering on metric type. Valid values:\n   `cumulative_counter`, `cumulative_exponential_histogram`, `delta_counter`,\n   `delta_exponential_histogram`, `gauge`, `measurement`.\n * `__metric_source__`: Matches the incoming metric's [source\n   format](https://docs.chronosphere.io/control/shaping/shape-metrics/types#supported-formats).\n   Valid values: `carbon`, `chrono_gcp`, `dogstatsd`, `open_metrics`,\n   `open_telemetry`, `prometheus`, `signalfx`, `statsd`, `wavefront`.\n * `__m3_prom_type__`: When ingesting metric data with Prometheus, matches the\n   incoming metric's [Prometheus metric\n   type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#prometheus). Valid\n   values: `counter`, `gauge`, `histogram`, `gauge_histogram`, `summary`,\n   `info`, `state_set`, `quantile`.\n * `__otel_type__`: When ingesting with OpenTelemetry, matches on the incoming\n   metric's [OpenTelemetry metric\n   type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#opentelemetry).\n   Valid values: `sum`, `monotonic_sum`, `gauge`, `histogram`, `exp_histogram`,\n  `summary`. For example, the following filter matches any cumulative counter\n  metric with a `service=gateway` label whose metric name starts with\n  `http_requests_`:\n```\n__metric_type__:cumulative_counter service:gateway __name__:http_requests_*\n```",
+          "description": "Filters incoming metrics by label. If multiple label filters are specified, an\nincoming metric must match every label filter to match the rule. Label values\nsupport glob patterns, including matching multiple patterns with an `OR`, such\nas `service:{svc1,svc2}`. These special filters are available for matching\nmetrics by non-label request metadata:\n * `__metric_type__`: Matches the incoming metric's [Cortex XCOR\n   metric\n   type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#observability-platform-types).\n   This is the recommended method for filtering on metric type. Valid values:\n   `cumulative_counter`, `cumulative_exponential_histogram`, `delta_counter`,\n   `delta_exponential_histogram`, `gauge`, `measurement`.\n * `__metric_source__`: Matches the incoming metric's [source\n   format](https://docs.chronosphere.io/control/shaping/shape-metrics/types#supported-formats).\n   Valid values: `carbon`, `chrono_gcp`, `dogstatsd`, `open_metrics`,\n   `open_telemetry`, `prometheus`, `signalfx`, `statsd`, `wavefront`.\n * `__m3_prom_type__`: When ingesting metric data with Prometheus, matches the\n   incoming metric's [Prometheus metric\n   type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#prometheus). Valid\n   values: `counter`, `gauge`, `histogram`, `gauge_histogram`, `summary`,\n   `info`, `state_set`, `quantile`.\n * `__otel_type__`: When ingesting with OpenTelemetry, matches on the incoming\n   metric's [OpenTelemetry metric\n   type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#opentelemetry).\n   Valid values: `sum`, `monotonic_sum`, `gauge`, `histogram`, `exp_histogram`,\n  `summary`. For example, the following filter matches any cumulative counter\n  metric with a `service=gateway` label whose metric name starts with\n  `http_requests_`:\n```\n__metric_type__:cumulative_counter service:gateway __name__:http_requests_*\n```",
           "items": {
             "$ref": "#/definitions/configv1LabelFilter"
           },
@@ -7985,7 +8145,7 @@
           "type": "string"
         },
         "unrestricted": {
-          "description": "If set, grants the service account access to all Chronosphere APIs, including\nresource configuration and metric data within the access controls defined by the\nservice account's team membership.\n\nOnly one of `unrestricted` or `metrics_restriction` must be set.",
+          "description": "If set, grants the service account access to all Palo Alto Networks APIs, including\nresource configuration and metric data within the access controls defined by the\nservice account's team membership.\n\nOnly one of `unrestricted` or `metrics_restriction` must be set.",
           "type": "boolean"
         },
         "metrics_restriction": {
@@ -8026,6 +8186,16 @@
         },
         "description": {
           "description": "A description of the service.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "configv1SloReference": {
+      "description": "SloReference references an SLO by slug.",
+      "properties": {
+        "slug": {
+          "description": "Slug of the referenced SLO.",
           "type": "string"
         }
       },
@@ -8483,6 +8653,14 @@
       },
       "type": "object"
     },
+    "configv1UpdateCommandCenterGroupResponse": {
+      "properties": {
+        "command_center_group": {
+          "$ref": "#/definitions/configv1CommandCenterGroup"
+        }
+      },
+      "type": "object"
+    },
     "configv1UpdateConsumptionBudgetResponse": {
       "properties": {
         "consumption_budget": {
@@ -8671,6 +8849,30 @@
       "properties": {
         "metric_name_active_series_limit": {
           "$ref": "#/definitions/configv1MetricNameActiveSeriesLimit"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateMetricNameDefaultActiveSeriesLimitRequest": {
+      "properties": {
+        "metric_name_default_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameDefaultActiveSeriesLimit"
+        },
+        "create_if_missing": {
+          "description": "If `true`, the MetricNameDefaultActiveSeriesLimit will be created if it does not already exist. If `false`, an error will be returned if the MetricNameDefaultActiveSeriesLimit does not already exist.",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "description": "If `true`, validates the specified configuration without creating or updating the MetricNameDefaultActiveSeriesLimit. If the specified configuration is valid, the endpoint returns a partial response without the MetricNameDefaultActiveSeriesLimit. If the specified configuration is invalid, the endpoint returns an error.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "configv1UpdateMetricNameDefaultActiveSeriesLimitResponse": {
+      "properties": {
+        "metric_name_default_active_series_limit": {
+          "$ref": "#/definitions/configv1MetricNameDefaultActiveSeriesLimit"
         }
       },
       "type": "object"
@@ -10258,6 +10460,265 @@
         },
         "tags": [
           "Collection"
+        ]
+      }
+    },
+    "/api/v1/config/command-center-groups": {
+      "get": {
+        "operationId": "ListCommandCenterGroups",
+        "parameters": [
+          {
+            "description": "Sets the preferred number of items to return per page. If set to `0`, the\nserver will use its default value. Regardless of the value specified, clients\nmust never assume how many items will be returned.",
+            "format": "int64",
+            "in": "query",
+            "name": "page.max_size",
+            "type": "integer"
+          },
+          {
+            "description": "An opaque page token that identifies which page the client should request.\nAn empty value indicates the first page.",
+            "in": "query",
+            "name": "page.token",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by slug, where any CommandCenterGroup with a matching slug in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Filters results by name, where any CommandCenterGroup with a matching name in the given list (and matches all other filters) will be returned.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "names",
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ListCommandCenterGroupsResponse"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      },
+      "post": {
+        "operationId": "CreateCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateCommandCenterGroupRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateCommandCenterGroupResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the CommandCenterGroup because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the CommandCenterGroup because there is a conflict with an existing CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      }
+    },
+    "/api/v1/config/command-center-groups/{slug}": {
+      "delete": {
+        "operationId": "DeleteCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteCommandCenterGroupResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the CommandCenterGroup because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the CommandCenterGroup because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      },
+      "get": {
+        "operationId": "ReadCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadCommandCenterGroupResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the CommandCenterGroup because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateCommandCenterGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigV1UpdateCommandCenterGroupBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateCommandCenterGroupResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the CommandCenterGroup because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the CommandCenterGroup because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot update the CommandCenterGroup because there is a conflict with an existing CommandCenterGroup.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "CommandCenterGroup"
         ]
       }
     },
@@ -11850,6 +12311,16 @@
               "type": "string"
             },
             "name": "names",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Restricts the returned drop rules to those whose `filters` would accept\na series carrying these labels. Each entry is `name=value`, for example\n`__name__=http_requests_total`. A rule matches when every supplied label\nsatisfies the rule's glob filter for that label, so a rule with no filter\non a label accepts any value of it. Filters on labels not supplied here\nare ignored. Values are concrete: a value containing glob characters such\nas `*` or `{a,b}` is rejected. Currently only the metric name may be\nsupplied, as a single `__name__=\u003cmetric\u003e` entry; other labels are\nrejected.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "matches_series",
             "type": "array"
           }
         ],
@@ -14201,6 +14672,174 @@
         ]
       }
     },
+    "/api/v1/config/metric-name-default-active-series-limit": {
+      "delete": {
+        "operationId": "DeleteMetricNameDefaultActiveSeriesLimit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1DeleteMetricNameDefaultActiveSeriesLimitResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot delete the MetricNameDefaultActiveSeriesLimit because it is in use.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot delete the MetricNameDefaultActiveSeriesLimit because the slug does not exist.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameDefaultActiveSeriesLimit"
+        ]
+      },
+      "get": {
+        "operationId": "ReadMetricNameDefaultActiveSeriesLimit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/configv1ReadMetricNameDefaultActiveSeriesLimitResponse"
+            }
+          },
+          "404": {
+            "description": "Cannot read the MetricNameDefaultActiveSeriesLimit because MetricNameDefaultActiveSeriesLimit has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameDefaultActiveSeriesLimit"
+        ]
+      },
+      "post": {
+        "operationId": "CreateMetricNameDefaultActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1CreateMetricNameDefaultActiveSeriesLimitRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the created MetricNameDefaultActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/configv1CreateMetricNameDefaultActiveSeriesLimitResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot create the MetricNameDefaultActiveSeriesLimit because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "409": {
+            "description": "Cannot create the MetricNameDefaultActiveSeriesLimit because there is a conflict with an existing MetricNameDefaultActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameDefaultActiveSeriesLimit"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateMetricNameDefaultActiveSeriesLimit",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateMetricNameDefaultActiveSeriesLimitRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response containing the updated MetricNameDefaultActiveSeriesLimit.",
+            "schema": {
+              "$ref": "#/definitions/configv1UpdateMetricNameDefaultActiveSeriesLimitResponse"
+            }
+          },
+          "400": {
+            "description": "Cannot update the MetricNameDefaultActiveSeriesLimit because the request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "404": {
+            "description": "Cannot update the MetricNameDefaultActiveSeriesLimit because MetricNameDefaultActiveSeriesLimit has not been created.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "500": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          },
+          "default": {
+            "description": "An undefined error response.",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        },
+        "tags": [
+          "MetricNameDefaultActiveSeriesLimit"
+        ]
+      }
+    },
     "/api/v1/config/monitors": {
       "get": {
         "operationId": "ListMonitors",
@@ -15986,6 +16625,16 @@
               "type": "string"
             },
             "name": "bucket_slugs",
+            "type": "array"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "Restricts the returned rollup rules to those whose `filters` would accept\na series carrying these labels. Each entry is `name=value`, for example\n`__name__=http_requests_total`. A rule matches when every supplied label\nsatisfies the rule's glob filter for that label, so a rule with no filter\non a label accepts any value of it. Filters on labels not supplied here\nare ignored. Values are concrete: a value containing glob characters such\nas `*` or `{a,b}` is rejected. Currently only the metric name may be\nsupplied, as a single `__name__=\u003cmetric\u003e` entry; other labels are\nrejected.",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "matches_series",
             "type": "array"
           }
         ],

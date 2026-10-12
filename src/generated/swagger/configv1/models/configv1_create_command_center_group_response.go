@@ -13,23 +13,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigUnstableUpdateCommandCenterGroupBody config unstable update command center group body
+// Configv1CreateCommandCenterGroupResponse configv1 create command center group response
 //
-// swagger:model ConfigUnstableUpdateCommandCenterGroupBody
-type ConfigUnstableUpdateCommandCenterGroupBody struct {
+// swagger:model configv1CreateCommandCenterGroupResponse
+type Configv1CreateCommandCenterGroupResponse struct {
 
 	// command center group
-	CommandCenterGroup *ConfigunstableCommandCenterGroup `json:"command_center_group,omitempty"`
-
-	// If `true`, the CommandCenterGroup will be created if it does not already exist, identified by `slug`. If `false`, an error will be returned if the CommandCenterGroup does not already exist.
-	CreateIfMissing bool `json:"create_if_missing,omitempty"`
-
-	// If `true`, validates the specified configuration without creating or updating the CommandCenterGroup. If the specified configuration is valid, the endpoint returns a partial response without the CommandCenterGroup. If the specified configuration is invalid, the endpoint returns an error.
-	DryRun bool `json:"dry_run,omitempty"`
+	CommandCenterGroup *Configv1CommandCenterGroup `json:"command_center_group,omitempty"`
 }
 
-// Validate validates this config unstable update command center group body
-func (m *ConfigUnstableUpdateCommandCenterGroupBody) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 create command center group response
+func (m *Configv1CreateCommandCenterGroupResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCommandCenterGroup(formats); err != nil {
@@ -42,7 +36,7 @@ func (m *ConfigUnstableUpdateCommandCenterGroupBody) Validate(formats strfmt.Reg
 	return nil
 }
 
-func (m *ConfigUnstableUpdateCommandCenterGroupBody) validateCommandCenterGroup(formats strfmt.Registry) error {
+func (m *Configv1CreateCommandCenterGroupResponse) validateCommandCenterGroup(formats strfmt.Registry) error {
 	if swag.IsZero(m.CommandCenterGroup) { // not required
 		return nil
 	}
@@ -61,8 +55,8 @@ func (m *ConfigUnstableUpdateCommandCenterGroupBody) validateCommandCenterGroup(
 	return nil
 }
 
-// ContextValidate validate this config unstable update command center group body based on the context it is used
-func (m *ConfigUnstableUpdateCommandCenterGroupBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 create command center group response based on the context it is used
+func (m *Configv1CreateCommandCenterGroupResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCommandCenterGroup(ctx, formats); err != nil {
@@ -75,7 +69,7 @@ func (m *ConfigUnstableUpdateCommandCenterGroupBody) ContextValidate(ctx context
 	return nil
 }
 
-func (m *ConfigUnstableUpdateCommandCenterGroupBody) contextValidateCommandCenterGroup(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1CreateCommandCenterGroupResponse) contextValidateCommandCenterGroup(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CommandCenterGroup != nil {
 
@@ -97,7 +91,7 @@ func (m *ConfigUnstableUpdateCommandCenterGroupBody) contextValidateCommandCente
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigUnstableUpdateCommandCenterGroupBody) MarshalBinary() ([]byte, error) {
+func (m *Configv1CreateCommandCenterGroupResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -105,8 +99,8 @@ func (m *ConfigUnstableUpdateCommandCenterGroupBody) MarshalBinary() ([]byte, er
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigUnstableUpdateCommandCenterGroupBody) UnmarshalBinary(b []byte) error {
-	var res ConfigUnstableUpdateCommandCenterGroupBody
+func (m *Configv1CreateCommandCenterGroupResponse) UnmarshalBinary(b []byte) error {
+	var res Configv1CreateCommandCenterGroupResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

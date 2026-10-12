@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // ListCommandCenterGroupsReader is a Reader for the ListCommandCenterGroups structure.
@@ -58,7 +58,7 @@ ListCommandCenterGroupsOK describes a response with status code 200, with defaul
 A successful response.
 */
 type ListCommandCenterGroupsOK struct {
-	Payload *models.ConfigunstableListCommandCenterGroupsResponse
+	Payload *models.Configv1ListCommandCenterGroupsResponse
 }
 
 // IsSuccess returns true when this list command center groups o k response has a 2xx status code
@@ -92,20 +92,20 @@ func (o *ListCommandCenterGroupsOK) Code() int {
 }
 
 func (o *ListCommandCenterGroupsOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups][%d] listCommandCenterGroupsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups][%d] listCommandCenterGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListCommandCenterGroupsOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups][%d] listCommandCenterGroupsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups][%d] listCommandCenterGroupsOK  %+v", 200, o.Payload)
 }
 
-func (o *ListCommandCenterGroupsOK) GetPayload() *models.ConfigunstableListCommandCenterGroupsResponse {
+func (o *ListCommandCenterGroupsOK) GetPayload() *models.Configv1ListCommandCenterGroupsResponse {
 	return o.Payload
 }
 
 func (o *ListCommandCenterGroupsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableListCommandCenterGroupsResponse)
+	o.Payload = new(models.Configv1ListCommandCenterGroupsResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -160,11 +160,11 @@ func (o *ListCommandCenterGroupsInternalServerError) Code() int {
 }
 
 func (o *ListCommandCenterGroupsInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups][%d] listCommandCenterGroupsInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups][%d] listCommandCenterGroupsInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ListCommandCenterGroupsInternalServerError) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups][%d] listCommandCenterGroupsInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups][%d] listCommandCenterGroupsInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ListCommandCenterGroupsInternalServerError) GetPayload() *models.APIError {
@@ -232,11 +232,11 @@ func (o *ListCommandCenterGroupsDefault) Code() int {
 }
 
 func (o *ListCommandCenterGroupsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups][%d] ListCommandCenterGroups default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups][%d] ListCommandCenterGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListCommandCenterGroupsDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups][%d] ListCommandCenterGroups default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups][%d] ListCommandCenterGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListCommandCenterGroupsDefault) GetPayload() models.GenericError {

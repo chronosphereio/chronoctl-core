@@ -64,7 +64,8 @@ type ListNotebooksParams struct {
 
 	/* CollectionSlugs.
 
-	   Filters results by collection_slug, where any Notebook with a matching collection_slug in the given list (and matches all other filters) will be returned.
+	     Slugs of SIMPLE collections. Notebooks in service or user collections
+	are not matched by this filter.
 	*/
 	CollectionSlugs []string
 

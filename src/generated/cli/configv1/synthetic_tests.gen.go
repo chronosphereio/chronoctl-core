@@ -529,7 +529,10 @@ spec:
     collection_slug: <string>
     collection:
         slug: <string>
-        type: <SIMPLE|SERVICE>
+        # Type values must match entitiespb.Collection.CollectionType.
+
+        #  - USER: A user's personal collection. Only notebooks and dashboards can be owned by a user collection; other entity types, Grafana dashboards included, reject a USER owner with a 400.
+        type: <SIMPLE|SERVICE|USER>
     dns_test:
         # Domain the test resolves.
         domain: <string>

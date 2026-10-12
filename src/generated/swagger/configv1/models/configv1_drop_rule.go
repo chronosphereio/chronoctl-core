@@ -50,7 +50,7 @@ type Configv1DropRule struct {
 	// value based drop
 	ValueBasedDrop *DropRuleValueBasedDrop `json:"value_based_drop,omitempty"`
 
-	// Drops data points if values are Not a Number (NaN). If set to true, Chronosphere
+	// Drops data points if values are Not a Number (NaN). If set to true, Palo Alto Networks
 	// drops NaN data points, along with any published staleness markers. See the
 	// [drop rules
 	// documentation](https://docs.chronosphere.io/control/shaping/shape-metrics/rules/drop-rules#define-a-value-based-drop-rule)

@@ -25,6 +25,10 @@ type ExternalConnectionDatadogConfig struct {
 
 	// Datadog site, e.g. "datadoghq.com" (default) or "datadoghq.eu".
 	Site string `json:"site,omitempty"`
+
+	// Custom sub-domain of the Datadog org's web UI, e.g. "acme" for an org
+	// served from "acme.datadoghq.com". Affects only UI links, never the API.
+	CustomSubdomain string `json:"custom_subdomain,omitempty"`
 }
 
 // Validate validates this external connection datadog config

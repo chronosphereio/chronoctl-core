@@ -211,7 +211,7 @@
           "type": "integer"
         },
         "message": {
-          "description": "Detailed message related to rule evaluation issue. See \"Admin \u003e Evaluation failures\" in the Chronosphere documentation for more information.",
+          "description": "Detailed message related to rule evaluation issue. See \"Admin \u003e Evaluation failures\" in the Palo Alto Networks documentation for more information.",
           "type": "string"
         },
         "severity": {

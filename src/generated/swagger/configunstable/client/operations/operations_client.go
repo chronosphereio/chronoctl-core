@@ -28,8 +28,6 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateCommandCenterGroup(params *CreateCommandCenterGroupParams, opts ...ClientOption) (*CreateCommandCenterGroupOK, error)
-
 	CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error)
 
 	CreateLinkTemplate(params *CreateLinkTemplateParams, opts ...ClientOption) (*CreateLinkTemplateOK, error)
@@ -53,8 +51,6 @@ type ClientService interface {
 	CreateTraceTailSamplingRules(params *CreateTraceTailSamplingRulesParams, opts ...ClientOption) (*CreateTraceTailSamplingRulesOK, error)
 
 	CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, opts ...ClientOption) (*CreateTraceTopTagConfigOK, error)
-
-	DeleteCommandCenterGroup(params *DeleteCommandCenterGroupParams, opts ...ClientOption) (*DeleteCommandCenterGroupOK, error)
 
 	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error)
 
@@ -80,8 +76,6 @@ type ClientService interface {
 
 	DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, opts ...ClientOption) (*DeleteTraceTopTagConfigOK, error)
 
-	ListCommandCenterGroups(params *ListCommandCenterGroupsParams, opts ...ClientOption) (*ListCommandCenterGroupsOK, error)
-
 	ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error)
 
 	ListLinkTemplates(params *ListLinkTemplatesParams, opts ...ClientOption) (*ListLinkTemplatesOK, error)
@@ -97,8 +91,6 @@ type ClientService interface {
 	ListServices(params *ListServicesParams, opts ...ClientOption) (*ListServicesOK, error)
 
 	ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaegerRemoteSamplingStrategiesParams, opts ...ClientOption) (*ListTraceJaegerRemoteSamplingStrategiesOK, error)
-
-	ReadCommandCenterGroup(params *ReadCommandCenterGroupParams, opts ...ClientOption) (*ReadCommandCenterGroupOK, error)
 
 	ReadDashboard(params *ReadDashboardParams, opts ...ClientOption) (*ReadDashboardOK, error)
 
@@ -126,8 +118,6 @@ type ClientService interface {
 
 	SyncPrometheus(params *SyncPrometheusParams, opts ...ClientOption) (*SyncPrometheusOK, error)
 
-	UpdateCommandCenterGroup(params *UpdateCommandCenterGroupParams, opts ...ClientOption) (*UpdateCommandCenterGroupOK, error)
-
 	UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOption) (*UpdateDashboardOK, error)
 
 	UpdateLinkTemplate(params *UpdateLinkTemplateParams, opts ...ClientOption) (*UpdateLinkTemplateOK, error)
@@ -153,43 +143,6 @@ type ClientService interface {
 	ValidateDashboard(params *ValidateDashboardParams, opts ...ClientOption) (*ValidateDashboardOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
-}
-
-/*
-CreateCommandCenterGroup create command center group API
-*/
-func (a *Client) CreateCommandCenterGroup(params *CreateCommandCenterGroupParams, opts ...ClientOption) (*CreateCommandCenterGroupOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateCommandCenterGroupParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateCommandCenterGroup",
-		Method:             "POST",
-		PathPattern:        "/api/unstable/config/command-center-groups",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateCommandCenterGroupReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateCommandCenterGroupOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateCommandCenterGroupDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -640,43 +593,6 @@ func (a *Client) CreateTraceTopTagConfig(params *CreateTraceTopTagConfigParams, 
 }
 
 /*
-DeleteCommandCenterGroup delete command center group API
-*/
-func (a *Client) DeleteCommandCenterGroup(params *DeleteCommandCenterGroupParams, opts ...ClientOption) (*DeleteCommandCenterGroupOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteCommandCenterGroupParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteCommandCenterGroup",
-		Method:             "DELETE",
-		PathPattern:        "/api/unstable/config/command-center-groups/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteCommandCenterGroupReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteCommandCenterGroupOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteCommandCenterGroupDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 DeleteDashboard delete dashboard API
 */
 func (a *Client) DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardOK, error) {
@@ -1121,43 +1037,6 @@ func (a *Client) DeleteTraceTopTagConfig(params *DeleteTraceTopTagConfigParams, 
 }
 
 /*
-ListCommandCenterGroups list command center groups API
-*/
-func (a *Client) ListCommandCenterGroups(params *ListCommandCenterGroupsParams, opts ...ClientOption) (*ListCommandCenterGroupsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListCommandCenterGroupsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ListCommandCenterGroups",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/command-center-groups",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListCommandCenterGroupsReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListCommandCenterGroupsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListCommandCenterGroupsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ListDashboards list dashboards API
 */
 func (a *Client) ListDashboards(params *ListDashboardsParams, opts ...ClientOption) (*ListDashboardsOK, error) {
@@ -1450,43 +1329,6 @@ func (a *Client) ListTraceJaegerRemoteSamplingStrategies(params *ListTraceJaeger
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListTraceJaegerRemoteSamplingStrategiesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ReadCommandCenterGroup read command center group API
-*/
-func (a *Client) ReadCommandCenterGroup(params *ReadCommandCenterGroupParams, opts ...ClientOption) (*ReadCommandCenterGroupOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadCommandCenterGroupParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadCommandCenterGroup",
-		Method:             "GET",
-		PathPattern:        "/api/unstable/config/command-center-groups/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadCommandCenterGroupReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadCommandCenterGroupOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadCommandCenterGroupDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1971,43 +1813,6 @@ func (a *Client) SyncPrometheus(params *SyncPrometheusParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*SyncPrometheusDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-UpdateCommandCenterGroup update command center group API
-*/
-func (a *Client) UpdateCommandCenterGroup(params *UpdateCommandCenterGroupParams, opts ...ClientOption) (*UpdateCommandCenterGroupOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateCommandCenterGroupParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateCommandCenterGroup",
-		Method:             "PUT",
-		PathPattern:        "/api/unstable/config/command-center-groups/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateCommandCenterGroupReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateCommandCenterGroupOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateCommandCenterGroupDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

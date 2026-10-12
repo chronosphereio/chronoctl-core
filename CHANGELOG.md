@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+### Added
+* Add support for resource `v1/config/CommandCenterGroup` and the `command-center-groups` commands. Command center groups are promoted from the unstable API to v1: a group of signals tracked in the command center, with a primary SLO reference and related SLO references.
+* Add support for resource `v1/config/MetricNameDefaultActiveSeriesLimit` and the `metric-name-default-active-series-limit` commands. It sets the default active standard and histogram time series allowed for each metric name; a `v1/config/MetricNameActiveSeriesLimit` overrides the default for its metric name.
+* Add `custom_subdomain` to the `v1/config/ExternalConnection` Datadog config. It names the sub-domain of the Datadog org's web UI and affects only UI links.
+* Add `USER` collection reference type to `v1/config` and `unstable/config`, for a user's personal collection. Only notebooks and dashboards can be owned by a user collection.
+* Add a `matches_series` filter to listing `v1/config/DropRule` and `v1/config/RollupRule`, and a matching `--matches-series` flag to `drop-rules list` and `rollup-rules list`. Only rules whose filters would accept a series carrying the given labels are returned; currently only a single `__name__=<metric>` entry is accepted.
+* Add `started_at` to `unstable/state` monitor status signal statuses, the time the signal started firing. Available to library consumers only.
+
+### Changed
+* Deprecate `series` on `unstable/state` monitor status signal statuses, and the `include_series_statuses` query parameter on the monitor status list endpoint. Available to library consumers only.
+* Update field documentation across `v1/config`, `unstable/config`, and `v1/state` models; no functional changes.
+
+### Removed
+* Remove `unstable/config/CommandCenterGroup` from the generated `configunstable` client, replaced by `v1/config/CommandCenterGroup` and the `command-center-groups` commands. The unstable endpoints no longer exist in the public API. Available to library consumers only; there were never unstable `command-center-groups` commands. **This is a breaking change**.
+
 ## v1.35.0
 
 ### Added

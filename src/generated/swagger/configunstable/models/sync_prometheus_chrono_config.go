@@ -29,7 +29,7 @@ type SyncPrometheusChronoConfig struct {
 	SeverityMappings []*ChronoConfigSeverityMapping `json:"severity_mappings"`
 
 	// Customer-specific name of alert rule label used to determine severity.
-	// If omitted, the Chronosphere default of "severity" is used.
+	// If omitted, the Palo Alto Networks default of "severity" is used.
 	SeverityLabelName string `json:"severity_label_name,omitempty"`
 
 	// TODO: before configv1 - is this still required? does chronoctl set it?

@@ -13,17 +13,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableUpdateCommandCenterGroupResponse configunstable update command center group response
+// Configv1CreateCommandCenterGroupRequest configv1 create command center group request
 //
-// swagger:model configunstableUpdateCommandCenterGroupResponse
-type ConfigunstableUpdateCommandCenterGroupResponse struct {
+// swagger:model configv1CreateCommandCenterGroupRequest
+type Configv1CreateCommandCenterGroupRequest struct {
 
 	// command center group
-	CommandCenterGroup *ConfigunstableCommandCenterGroup `json:"command_center_group,omitempty"`
+	CommandCenterGroup *Configv1CommandCenterGroup `json:"command_center_group,omitempty"`
+
+	// If `true`, validates the specified configuration without creating the CommandCenterGroup. If the specified configuration is valid, the endpoint returns a partial response without the CommandCenterGroup. If the specified configuration is invalid, the endpoint returns an error.
+	DryRun bool `json:"dry_run,omitempty"`
 }
 
-// Validate validates this configunstable update command center group response
-func (m *ConfigunstableUpdateCommandCenterGroupResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 create command center group request
+func (m *Configv1CreateCommandCenterGroupRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCommandCenterGroup(formats); err != nil {
@@ -36,7 +39,7 @@ func (m *ConfigunstableUpdateCommandCenterGroupResponse) Validate(formats strfmt
 	return nil
 }
 
-func (m *ConfigunstableUpdateCommandCenterGroupResponse) validateCommandCenterGroup(formats strfmt.Registry) error {
+func (m *Configv1CreateCommandCenterGroupRequest) validateCommandCenterGroup(formats strfmt.Registry) error {
 	if swag.IsZero(m.CommandCenterGroup) { // not required
 		return nil
 	}
@@ -55,8 +58,8 @@ func (m *ConfigunstableUpdateCommandCenterGroupResponse) validateCommandCenterGr
 	return nil
 }
 
-// ContextValidate validate this configunstable update command center group response based on the context it is used
-func (m *ConfigunstableUpdateCommandCenterGroupResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 create command center group request based on the context it is used
+func (m *Configv1CreateCommandCenterGroupRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCommandCenterGroup(ctx, formats); err != nil {
@@ -69,7 +72,7 @@ func (m *ConfigunstableUpdateCommandCenterGroupResponse) ContextValidate(ctx con
 	return nil
 }
 
-func (m *ConfigunstableUpdateCommandCenterGroupResponse) contextValidateCommandCenterGroup(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1CreateCommandCenterGroupRequest) contextValidateCommandCenterGroup(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CommandCenterGroup != nil {
 
@@ -91,7 +94,7 @@ func (m *ConfigunstableUpdateCommandCenterGroupResponse) contextValidateCommandC
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableUpdateCommandCenterGroupResponse) MarshalBinary() ([]byte, error) {
+func (m *Configv1CreateCommandCenterGroupRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -99,8 +102,8 @@ func (m *ConfigunstableUpdateCommandCenterGroupResponse) MarshalBinary() ([]byte
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableUpdateCommandCenterGroupResponse) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableUpdateCommandCenterGroupResponse
+func (m *Configv1CreateCommandCenterGroupRequest) UnmarshalBinary(b []byte) error {
+	var res Configv1CreateCommandCenterGroupRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

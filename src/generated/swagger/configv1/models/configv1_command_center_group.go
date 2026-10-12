@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ConfigunstableCommandCenterGroup CommandCenterGroup is a group of signals tracked in the command center.
+// Configv1CommandCenterGroup CommandCenterGroup is a group of signals tracked in the command center.
 //
-// swagger:model configunstableCommandCenterGroup
-type ConfigunstableCommandCenterGroup struct {
+// swagger:model configv1CommandCenterGroup
+type Configv1CommandCenterGroup struct {
 
 	// Unique slug identifying the CommandCenterGroup.
 	Slug string `json:"slug,omitempty"`
@@ -36,18 +36,15 @@ type ConfigunstableCommandCenterGroup struct {
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// group slo reference
-	GroupSLOReference *ConfigunstableSLOReference `json:"group_slo_reference,omitempty"`
+	// primary slo reference
+	PrimarySLOReference *Configv1SLOReference `json:"primary_slo_reference,omitempty"`
 
 	// Related SLOs tracked by this group, secondary to the primary one.
-	RelatedSLOReferences []*ConfigunstableSLOReference `json:"related_slo_references"`
-
-	// primary slo reference
-	PrimarySLOReference *ConfigunstableSLOReference `json:"primary_slo_reference,omitempty"`
+	RelatedSLOReferences []*Configv1SLOReference `json:"related_slo_references"`
 }
 
-// Validate validates this configunstable command center group
-func (m *ConfigunstableCommandCenterGroup) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 command center group
+func (m *Configv1CommandCenterGroup) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
@@ -58,15 +55,11 @@ func (m *ConfigunstableCommandCenterGroup) Validate(formats strfmt.Registry) err
 		res = append(res, err)
 	}
 
-	if err := m.validateGroupSLOReference(formats); err != nil {
+	if err := m.validatePrimarySLOReference(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateRelatedSLOReferences(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validatePrimarySLOReference(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -76,7 +69,7 @@ func (m *ConfigunstableCommandCenterGroup) Validate(formats strfmt.Registry) err
 	return nil
 }
 
-func (m *ConfigunstableCommandCenterGroup) validateCreatedAt(formats strfmt.Registry) error {
+func (m *Configv1CommandCenterGroup) validateCreatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -88,7 +81,7 @@ func (m *ConfigunstableCommandCenterGroup) validateCreatedAt(formats strfmt.Regi
 	return nil
 }
 
-func (m *ConfigunstableCommandCenterGroup) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *Configv1CommandCenterGroup) validateUpdatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -100,17 +93,17 @@ func (m *ConfigunstableCommandCenterGroup) validateUpdatedAt(formats strfmt.Regi
 	return nil
 }
 
-func (m *ConfigunstableCommandCenterGroup) validateGroupSLOReference(formats strfmt.Registry) error {
-	if swag.IsZero(m.GroupSLOReference) { // not required
+func (m *Configv1CommandCenterGroup) validatePrimarySLOReference(formats strfmt.Registry) error {
+	if swag.IsZero(m.PrimarySLOReference) { // not required
 		return nil
 	}
 
-	if m.GroupSLOReference != nil {
-		if err := m.GroupSLOReference.Validate(formats); err != nil {
+	if m.PrimarySLOReference != nil {
+		if err := m.PrimarySLOReference.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("group_slo_reference")
+				return ve.ValidateName("primary_slo_reference")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("group_slo_reference")
+				return ce.ValidateName("primary_slo_reference")
 			}
 			return err
 		}
@@ -119,7 +112,7 @@ func (m *ConfigunstableCommandCenterGroup) validateGroupSLOReference(formats str
 	return nil
 }
 
-func (m *ConfigunstableCommandCenterGroup) validateRelatedSLOReferences(formats strfmt.Registry) error {
+func (m *Configv1CommandCenterGroup) validateRelatedSLOReferences(formats strfmt.Registry) error {
 	if swag.IsZero(m.RelatedSLOReferences) { // not required
 		return nil
 	}
@@ -145,13 +138,59 @@ func (m *ConfigunstableCommandCenterGroup) validateRelatedSLOReferences(formats 
 	return nil
 }
 
-func (m *ConfigunstableCommandCenterGroup) validatePrimarySLOReference(formats strfmt.Registry) error {
-	if swag.IsZero(m.PrimarySLOReference) { // not required
-		return nil
+// ContextValidate validate this configv1 command center group based on the context it is used
+func (m *Configv1CommandCenterGroup) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
 	}
 
+	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePrimarySLOReference(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRelatedSLOReferences(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Configv1CommandCenterGroup) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Configv1CommandCenterGroup) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Configv1CommandCenterGroup) contextValidatePrimarySLOReference(ctx context.Context, formats strfmt.Registry) error {
+
 	if m.PrimarySLOReference != nil {
-		if err := m.PrimarySLOReference.Validate(formats); err != nil {
+
+		if swag.IsZero(m.PrimarySLOReference) { // not required
+			return nil
+		}
+
+		if err := m.PrimarySLOReference.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("primary_slo_reference")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
@@ -164,76 +203,7 @@ func (m *ConfigunstableCommandCenterGroup) validatePrimarySLOReference(formats s
 	return nil
 }
 
-// ContextValidate validate this configunstable command center group based on the context it is used
-func (m *ConfigunstableCommandCenterGroup) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateGroupSLOReference(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateRelatedSLOReferences(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidatePrimarySLOReference(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *ConfigunstableCommandCenterGroup) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCommandCenterGroup) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCommandCenterGroup) contextValidateGroupSLOReference(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.GroupSLOReference != nil {
-
-		if swag.IsZero(m.GroupSLOReference) { // not required
-			return nil
-		}
-
-		if err := m.GroupSLOReference.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("group_slo_reference")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("group_slo_reference")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConfigunstableCommandCenterGroup) contextValidateRelatedSLOReferences(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1CommandCenterGroup) contextValidateRelatedSLOReferences(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.RelatedSLOReferences); i++ {
 
@@ -258,29 +228,8 @@ func (m *ConfigunstableCommandCenterGroup) contextValidateRelatedSLOReferences(c
 	return nil
 }
 
-func (m *ConfigunstableCommandCenterGroup) contextValidatePrimarySLOReference(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.PrimarySLOReference != nil {
-
-		if swag.IsZero(m.PrimarySLOReference) { // not required
-			return nil
-		}
-
-		if err := m.PrimarySLOReference.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("primary_slo_reference")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("primary_slo_reference")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 // MarshalBinary interface implementation
-func (m *ConfigunstableCommandCenterGroup) MarshalBinary() ([]byte, error) {
+func (m *Configv1CommandCenterGroup) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -288,8 +237,8 @@ func (m *ConfigunstableCommandCenterGroup) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableCommandCenterGroup) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableCommandCenterGroup
+func (m *Configv1CommandCenterGroup) UnmarshalBinary(b []byte) error {
+	var res Configv1CommandCenterGroup
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
