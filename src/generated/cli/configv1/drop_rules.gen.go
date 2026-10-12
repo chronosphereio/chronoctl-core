@@ -362,12 +362,15 @@ type DropRuleListOpts struct {
 	// PageToken is the pagination token we want to start our request at.
 	PageToken string
 	// PageMaxSize is the maximum page size to use when making List calls.
-	PageMaxSize int
-	Names       []string
-	Slugs       []string
+	PageMaxSize   int
+	MatchesSeries []string
+	Names         []string
+	Slugs         []string
 }
 
 func (r *DropRuleListOpts) registerFlags(flags *flag.FlagSet) {
+	var emptyMatchesSeries []string
+	flags.StringSliceVar(&r.MatchesSeries, "matches-series", emptyMatchesSeries, "Restricts the returned drop rules to those whose `filters` would accept a series carrying these labels. Each entry is `name=value`, for example `__name__=http_requests_total`. A rule matches when every supplied label satisfies the rule's glob filter for that label, so a rule with no filter on a label accepts any value of it. Filters on labels not supplied here are ignored. Values are concrete: a value containing glob characters such as `*` or `{a,b}` is rejected. Currently only the metric name may be supplied, as a single `__name__=<metric>` entry; other labels are rejected.")
 	var emptyNames []string
 	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any DropRule with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
@@ -396,11 +399,12 @@ func ListDropRules(
 
 	for {
 		res, err := client.ListDropRules(&config_v1.ListDropRulesParams{
-			Context:     ctx,
-			PageToken:   &nextToken,
-			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
-			Names:       opts.Names,
-			Slugs:       opts.Slugs,
+			Context:       ctx,
+			PageToken:     &nextToken,
+			PageMaxSize:   ptr.Int64(int64(pageMaxSize)),
+			MatchesSeries: opts.MatchesSeries,
+			Names:         opts.Names,
+			Slugs:         opts.Slugs,
 		})
 		if err != nil {
 			return pagination.Token(""), clienterror.Wrap(err)
@@ -503,7 +507,7 @@ spec:
           name: <string>
           # The glob value of the label to match.
           value_glob: <string>
-    # Drops data points if values are Not a Number (NaN). If set to true, Chronosphere
+    # Drops data points if values are Not a Number (NaN). If set to true, Palo Alto Networks
     # drops NaN data points, along with any published staleness markers. See the
     # [drop rules
     # documentation](https://docs.chronosphere.io/control/shaping/shape-metrics/rules/drop-rules#define-a-value-based-drop-rule)

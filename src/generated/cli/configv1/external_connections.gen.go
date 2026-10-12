@@ -510,6 +510,9 @@ spec:
         app_key: <string>
         # Datadog site, e.g. "datadoghq.com" (default) or "datadoghq.eu".
         site: <string>
+        # Custom sub-domain of the Datadog org's web UI, e.g. "acme" for an org
+        # served from "acme.datadoghq.com". Affects only UI links, never the API.
+        custom_subdomain: <string>
     mongodb_atlas:
         # Service Account client ID.
         client_id: <string>

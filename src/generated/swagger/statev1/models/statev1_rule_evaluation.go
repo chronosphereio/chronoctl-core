@@ -33,7 +33,7 @@ type Statev1RuleEvaluation struct {
 	// The number of rule evaluation issues occurred over last 5 minutes.
 	Count int32 `json:"count,omitempty"`
 
-	// Detailed message related to rule evaluation issue. See "Admin > Evaluation failures" in the Chronosphere documentation for more information.
+	// Detailed message related to rule evaluation issue. See "Admin > Evaluation failures" in the Palo Alto Networks documentation for more information.
 	Message string `json:"message,omitempty"`
 
 	// severity

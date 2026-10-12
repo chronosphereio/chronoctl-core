@@ -36,7 +36,7 @@ type Configv1Monitor struct {
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
 	// Optional description of the monitor. Markdown is supported when rendered
-	// in the Chronosphere app.
+	// in the Palo Alto Networks app.
 	Description string `json:"description,omitempty"`
 
 	// Slug of the bucket the monitor belongs to. Required if `collection_slug` isn't

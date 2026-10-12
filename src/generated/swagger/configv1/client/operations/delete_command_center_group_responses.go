@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // DeleteCommandCenterGroupReader is a Reader for the DeleteCommandCenterGroup structure.
@@ -70,7 +70,7 @@ DeleteCommandCenterGroupOK describes a response with status code 200, with defau
 A successful response.
 */
 type DeleteCommandCenterGroupOK struct {
-	Payload models.ConfigunstableDeleteCommandCenterGroupResponse
+	Payload models.Configv1DeleteCommandCenterGroupResponse
 }
 
 // IsSuccess returns true when this delete command center group o k response has a 2xx status code
@@ -104,14 +104,14 @@ func (o *DeleteCommandCenterGroupOK) Code() int {
 }
 
 func (o *DeleteCommandCenterGroupOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteCommandCenterGroupOK) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteCommandCenterGroupOK) GetPayload() models.ConfigunstableDeleteCommandCenterGroupResponse {
+func (o *DeleteCommandCenterGroupOK) GetPayload() models.Configv1DeleteCommandCenterGroupResponse {
 	return o.Payload
 }
 
@@ -170,11 +170,11 @@ func (o *DeleteCommandCenterGroupBadRequest) Code() int {
 }
 
 func (o *DeleteCommandCenterGroupBadRequest) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteCommandCenterGroupBadRequest) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *DeleteCommandCenterGroupBadRequest) GetPayload() *models.APIError {
@@ -238,11 +238,11 @@ func (o *DeleteCommandCenterGroupNotFound) Code() int {
 }
 
 func (o *DeleteCommandCenterGroupNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteCommandCenterGroupNotFound) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupNotFound  %+v", 404, o.Payload)
 }
 
 func (o *DeleteCommandCenterGroupNotFound) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *DeleteCommandCenterGroupInternalServerError) Code() int {
 }
 
 func (o *DeleteCommandCenterGroupInternalServerError) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteCommandCenterGroupInternalServerError) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] deleteCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *DeleteCommandCenterGroupInternalServerError) GetPayload() *models.APIError {
@@ -378,11 +378,11 @@ func (o *DeleteCommandCenterGroupDefault) Code() int {
 }
 
 func (o *DeleteCommandCenterGroupDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] DeleteCommandCenterGroup default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] DeleteCommandCenterGroup default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteCommandCenterGroupDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/unstable/config/command-center-groups/{slug}][%d] DeleteCommandCenterGroup default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/config/command-center-groups/{slug}][%d] DeleteCommandCenterGroup default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteCommandCenterGroupDefault) GetPayload() models.GenericError {

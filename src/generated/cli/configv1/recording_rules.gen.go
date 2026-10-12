@@ -526,7 +526,7 @@ spec:
     # must match.
 
     # Creating too many rules in an execution group can cause delays in execution of
-    # the next iteration. Chronosphere recommends limiting the number of rules in an
+    # the next iteration. Palo Alto Networks recommends limiting the number of rules in an
     # execution group to 200-300 maximum.
     execution_group: <string>
     # ExecutionMode controls how a recording rule is assigned to shards for execution.

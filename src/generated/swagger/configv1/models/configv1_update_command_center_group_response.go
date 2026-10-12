@@ -13,17 +13,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ConfigunstableCreateCommandCenterGroupResponse configunstable create command center group response
+// Configv1UpdateCommandCenterGroupResponse configv1 update command center group response
 //
-// swagger:model configunstableCreateCommandCenterGroupResponse
-type ConfigunstableCreateCommandCenterGroupResponse struct {
+// swagger:model configv1UpdateCommandCenterGroupResponse
+type Configv1UpdateCommandCenterGroupResponse struct {
 
 	// command center group
-	CommandCenterGroup *ConfigunstableCommandCenterGroup `json:"command_center_group,omitempty"`
+	CommandCenterGroup *Configv1CommandCenterGroup `json:"command_center_group,omitempty"`
 }
 
-// Validate validates this configunstable create command center group response
-func (m *ConfigunstableCreateCommandCenterGroupResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this configv1 update command center group response
+func (m *Configv1UpdateCommandCenterGroupResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCommandCenterGroup(formats); err != nil {
@@ -36,7 +36,7 @@ func (m *ConfigunstableCreateCommandCenterGroupResponse) Validate(formats strfmt
 	return nil
 }
 
-func (m *ConfigunstableCreateCommandCenterGroupResponse) validateCommandCenterGroup(formats strfmt.Registry) error {
+func (m *Configv1UpdateCommandCenterGroupResponse) validateCommandCenterGroup(formats strfmt.Registry) error {
 	if swag.IsZero(m.CommandCenterGroup) { // not required
 		return nil
 	}
@@ -55,8 +55,8 @@ func (m *ConfigunstableCreateCommandCenterGroupResponse) validateCommandCenterGr
 	return nil
 }
 
-// ContextValidate validate this configunstable create command center group response based on the context it is used
-func (m *ConfigunstableCreateCommandCenterGroupResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this configv1 update command center group response based on the context it is used
+func (m *Configv1UpdateCommandCenterGroupResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCommandCenterGroup(ctx, formats); err != nil {
@@ -69,7 +69,7 @@ func (m *ConfigunstableCreateCommandCenterGroupResponse) ContextValidate(ctx con
 	return nil
 }
 
-func (m *ConfigunstableCreateCommandCenterGroupResponse) contextValidateCommandCenterGroup(ctx context.Context, formats strfmt.Registry) error {
+func (m *Configv1UpdateCommandCenterGroupResponse) contextValidateCommandCenterGroup(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CommandCenterGroup != nil {
 
@@ -91,7 +91,7 @@ func (m *ConfigunstableCreateCommandCenterGroupResponse) contextValidateCommandC
 }
 
 // MarshalBinary interface implementation
-func (m *ConfigunstableCreateCommandCenterGroupResponse) MarshalBinary() ([]byte, error) {
+func (m *Configv1UpdateCommandCenterGroupResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -99,8 +99,8 @@ func (m *ConfigunstableCreateCommandCenterGroupResponse) MarshalBinary() ([]byte
 }
 
 // UnmarshalBinary interface implementation
-func (m *ConfigunstableCreateCommandCenterGroupResponse) UnmarshalBinary(b []byte) error {
-	var res ConfigunstableCreateCommandCenterGroupResponse
+func (m *Configv1UpdateCommandCenterGroupResponse) UnmarshalBinary(b []byte) error {
+	var res Configv1UpdateCommandCenterGroupResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

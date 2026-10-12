@@ -516,7 +516,7 @@ spec:
     # The name of the Monitor. You can modify this value after the Monitor is created.
     name: <string>
     # Optional description of the monitor. Markdown is supported when rendered
-    # in the Chronosphere app.
+    # in the Palo Alto Networks app.
     description: <string>
     # Slug of the bucket the monitor belongs to. Required if 'collection_slug' isn't
     # set.
@@ -545,7 +545,10 @@ spec:
     logging_query: <string>
     collection:
         slug: <string>
-        type: <SIMPLE|SERVICE>
+        # Type values must match entitiespb.Collection.CollectionType.
+
+        #  - USER: A user's personal collection. Only notebooks and dashboards can be owned by a user collection; other entity types, Grafana dashboards included, reject a USER owner with a 400.
+        type: <SIMPLE|SERVICE|USER>
     notification_template:
         # Go template for the alert title.
         title: <string>

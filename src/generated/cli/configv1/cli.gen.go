@@ -17,6 +17,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewClassicDashboardCmd())
 	root.AddCommand(NewCloudIntegrationCmd())
 	root.AddCommand(NewCollectionCmd())
+	root.AddCommand(NewCommandCenterGroupCmd())
 	root.AddCommand(NewConsumptionBudgetCmd())
 	root.AddCommand(NewConsumptionConfigCmd())
 	root.AddCommand(NewDashboardCmd())
@@ -33,6 +34,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewLogRetentionConfigCmd())
 	root.AddCommand(NewMappingRuleCmd())
 	root.AddCommand(NewMetricNameActiveSeriesLimitCmd())
+	root.AddCommand(NewMetricNameDefaultActiveSeriesLimitCmd())
 	root.AddCommand(NewMonitorCmd())
 	root.AddCommand(NewMutingRuleCmd())
 	root.AddCommand(NewNotificationPolicyCmd())
@@ -130,6 +132,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateCollection(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		CommandCenterGroupTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*CommandCenterGroup)
+			if !ok {
+				return types.WrongObjectErr((&CommandCenterGroup{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateCommandCenterGroup(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}
@@ -386,6 +404,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateMetricNameActiveSeriesLimit(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		MetricNameDefaultActiveSeriesLimitTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*MetricNameDefaultActiveSeriesLimit)
+			if !ok {
+				return types.WrongObjectErr((&MetricNameDefaultActiveSeriesLimit{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateMetricNameDefaultActiveSeriesLimit(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

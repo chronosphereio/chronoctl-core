@@ -44,7 +44,7 @@ type Configv1RollupRule struct {
 	// support glob patterns, including matching multiple patterns with an `OR`, such
 	// as `service:{svc1,svc2}`. These special filters are available for matching
 	// metrics by non-label request metadata:
-	//  * `__metric_type__`: Matches the incoming metric's [Observability Platform
+	//  * `__metric_type__`: Matches the incoming metric's [Cortex XCOR
 	//    metric
 	//    type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#observability-platform-types).
 	//    This is the recommended method for filtering on metric type. Valid values:

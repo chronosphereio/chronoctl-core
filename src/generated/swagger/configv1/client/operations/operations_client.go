@@ -38,6 +38,8 @@ type ClientService interface {
 
 	CreateCollection(params *CreateCollectionParams, opts ...ClientOption) (*CreateCollectionOK, error)
 
+	CreateCommandCenterGroup(params *CreateCommandCenterGroupParams, opts ...ClientOption) (*CreateCommandCenterGroupOK, error)
+
 	CreateConsumptionBudget(params *CreateConsumptionBudgetParams, opts ...ClientOption) (*CreateConsumptionBudgetOK, error)
 
 	CreateConsumptionConfig(params *CreateConsumptionConfigParams, opts ...ClientOption) (*CreateConsumptionConfigOK, error)
@@ -69,6 +71,8 @@ type ClientService interface {
 	CreateMappingRule(params *CreateMappingRuleParams, opts ...ClientOption) (*CreateMappingRuleOK, error)
 
 	CreateMetricNameActiveSeriesLimit(params *CreateMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*CreateMetricNameActiveSeriesLimitOK, error)
+
+	CreateMetricNameDefaultActiveSeriesLimit(params *CreateMetricNameDefaultActiveSeriesLimitParams, opts ...ClientOption) (*CreateMetricNameDefaultActiveSeriesLimitOK, error)
 
 	CreateMonitor(params *CreateMonitorParams, opts ...ClientOption) (*CreateMonitorOK, error)
 
@@ -116,6 +120,8 @@ type ClientService interface {
 
 	DeleteCollection(params *DeleteCollectionParams, opts ...ClientOption) (*DeleteCollectionOK, error)
 
+	DeleteCommandCenterGroup(params *DeleteCommandCenterGroupParams, opts ...ClientOption) (*DeleteCommandCenterGroupOK, error)
+
 	DeleteConsumptionBudget(params *DeleteConsumptionBudgetParams, opts ...ClientOption) (*DeleteConsumptionBudgetOK, error)
 
 	DeleteConsumptionConfig(params *DeleteConsumptionConfigParams, opts ...ClientOption) (*DeleteConsumptionConfigOK, error)
@@ -147,6 +153,8 @@ type ClientService interface {
 	DeleteMappingRule(params *DeleteMappingRuleParams, opts ...ClientOption) (*DeleteMappingRuleOK, error)
 
 	DeleteMetricNameActiveSeriesLimit(params *DeleteMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*DeleteMetricNameActiveSeriesLimitOK, error)
+
+	DeleteMetricNameDefaultActiveSeriesLimit(params *DeleteMetricNameDefaultActiveSeriesLimitParams, opts ...ClientOption) (*DeleteMetricNameDefaultActiveSeriesLimitOK, error)
 
 	DeleteMonitor(params *DeleteMonitorParams, opts ...ClientOption) (*DeleteMonitorOK, error)
 
@@ -195,6 +203,8 @@ type ClientService interface {
 	ListCloudIntegrations(params *ListCloudIntegrationsParams, opts ...ClientOption) (*ListCloudIntegrationsOK, error)
 
 	ListCollections(params *ListCollectionsParams, opts ...ClientOption) (*ListCollectionsOK, error)
+
+	ListCommandCenterGroups(params *ListCommandCenterGroupsParams, opts ...ClientOption) (*ListCommandCenterGroupsOK, error)
 
 	ListConsumptionBudgets(params *ListConsumptionBudgetsParams, opts ...ClientOption) (*ListConsumptionBudgetsOK, error)
 
@@ -260,6 +270,8 @@ type ClientService interface {
 
 	ReadCollection(params *ReadCollectionParams, opts ...ClientOption) (*ReadCollectionOK, error)
 
+	ReadCommandCenterGroup(params *ReadCommandCenterGroupParams, opts ...ClientOption) (*ReadCommandCenterGroupOK, error)
+
 	ReadConsumptionBudget(params *ReadConsumptionBudgetParams, opts ...ClientOption) (*ReadConsumptionBudgetOK, error)
 
 	ReadConsumptionConfig(params *ReadConsumptionConfigParams, opts ...ClientOption) (*ReadConsumptionConfigOK, error)
@@ -291,6 +303,8 @@ type ClientService interface {
 	ReadMappingRule(params *ReadMappingRuleParams, opts ...ClientOption) (*ReadMappingRuleOK, error)
 
 	ReadMetricNameActiveSeriesLimit(params *ReadMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*ReadMetricNameActiveSeriesLimitOK, error)
+
+	ReadMetricNameDefaultActiveSeriesLimit(params *ReadMetricNameDefaultActiveSeriesLimitParams, opts ...ClientOption) (*ReadMetricNameDefaultActiveSeriesLimitOK, error)
 
 	ReadMonitor(params *ReadMonitorParams, opts ...ClientOption) (*ReadMonitorOK, error)
 
@@ -340,6 +354,8 @@ type ClientService interface {
 
 	UpdateCollection(params *UpdateCollectionParams, opts ...ClientOption) (*UpdateCollectionOK, error)
 
+	UpdateCommandCenterGroup(params *UpdateCommandCenterGroupParams, opts ...ClientOption) (*UpdateCommandCenterGroupOK, error)
+
 	UpdateConsumptionBudget(params *UpdateConsumptionBudgetParams, opts ...ClientOption) (*UpdateConsumptionBudgetOK, error)
 
 	UpdateConsumptionConfig(params *UpdateConsumptionConfigParams, opts ...ClientOption) (*UpdateConsumptionConfigOK, error)
@@ -371,6 +387,8 @@ type ClientService interface {
 	UpdateMappingRule(params *UpdateMappingRuleParams, opts ...ClientOption) (*UpdateMappingRuleOK, error)
 
 	UpdateMetricNameActiveSeriesLimit(params *UpdateMetricNameActiveSeriesLimitParams, opts ...ClientOption) (*UpdateMetricNameActiveSeriesLimitOK, error)
+
+	UpdateMetricNameDefaultActiveSeriesLimit(params *UpdateMetricNameDefaultActiveSeriesLimitParams, opts ...ClientOption) (*UpdateMetricNameDefaultActiveSeriesLimitOK, error)
 
 	UpdateMonitor(params *UpdateMonitorParams, opts ...ClientOption) (*UpdateMonitorOK, error)
 
@@ -591,6 +609,43 @@ func (a *Client) CreateCollection(params *CreateCollectionParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateCollectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateCommandCenterGroup create command center group API
+*/
+func (a *Client) CreateCommandCenterGroup(params *CreateCommandCenterGroupParams, opts ...ClientOption) (*CreateCommandCenterGroupOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateCommandCenterGroupParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateCommandCenterGroup",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/command-center-groups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateCommandCenterGroupReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateCommandCenterGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateCommandCenterGroupDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1183,6 +1238,43 @@ func (a *Client) CreateMetricNameActiveSeriesLimit(params *CreateMetricNameActiv
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateMetricNameActiveSeriesLimitDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateMetricNameDefaultActiveSeriesLimit create metric name default active series limit API
+*/
+func (a *Client) CreateMetricNameDefaultActiveSeriesLimit(params *CreateMetricNameDefaultActiveSeriesLimitParams, opts ...ClientOption) (*CreateMetricNameDefaultActiveSeriesLimitOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateMetricNameDefaultActiveSeriesLimitParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateMetricNameDefaultActiveSeriesLimit",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/metric-name-default-active-series-limit",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateMetricNameDefaultActiveSeriesLimitReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateMetricNameDefaultActiveSeriesLimitOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateMetricNameDefaultActiveSeriesLimitDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2041,6 +2133,43 @@ func (a *Client) DeleteCollection(params *DeleteCollectionParams, opts ...Client
 }
 
 /*
+DeleteCommandCenterGroup delete command center group API
+*/
+func (a *Client) DeleteCommandCenterGroup(params *DeleteCommandCenterGroupParams, opts ...ClientOption) (*DeleteCommandCenterGroupOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteCommandCenterGroupParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteCommandCenterGroup",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/command-center-groups/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteCommandCenterGroupReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteCommandCenterGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteCommandCenterGroupDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteConsumptionBudget delete consumption budget API
 */
 func (a *Client) DeleteConsumptionBudget(params *DeleteConsumptionBudgetParams, opts ...ClientOption) (*DeleteConsumptionBudgetOK, error) {
@@ -2629,6 +2758,43 @@ func (a *Client) DeleteMetricNameActiveSeriesLimit(params *DeleteMetricNameActiv
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteMetricNameActiveSeriesLimitDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteMetricNameDefaultActiveSeriesLimit delete metric name default active series limit API
+*/
+func (a *Client) DeleteMetricNameDefaultActiveSeriesLimit(params *DeleteMetricNameDefaultActiveSeriesLimitParams, opts ...ClientOption) (*DeleteMetricNameDefaultActiveSeriesLimitOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteMetricNameDefaultActiveSeriesLimitParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteMetricNameDefaultActiveSeriesLimit",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/metric-name-default-active-series-limit",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteMetricNameDefaultActiveSeriesLimitReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteMetricNameDefaultActiveSeriesLimitOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteMetricNameDefaultActiveSeriesLimitDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3519,6 +3685,43 @@ func (a *Client) ListCollections(params *ListCollectionsParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListCollectionsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListCommandCenterGroups list command center groups API
+*/
+func (a *Client) ListCommandCenterGroups(params *ListCommandCenterGroupsParams, opts ...ClientOption) (*ListCommandCenterGroupsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListCommandCenterGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListCommandCenterGroups",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/command-center-groups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListCommandCenterGroupsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListCommandCenterGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListCommandCenterGroupsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -4707,6 +4910,43 @@ func (a *Client) ReadCollection(params *ReadCollectionParams, opts ...ClientOpti
 }
 
 /*
+ReadCommandCenterGroup read command center group API
+*/
+func (a *Client) ReadCommandCenterGroup(params *ReadCommandCenterGroupParams, opts ...ClientOption) (*ReadCommandCenterGroupOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadCommandCenterGroupParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadCommandCenterGroup",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/command-center-groups/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadCommandCenterGroupReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadCommandCenterGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadCommandCenterGroupDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadConsumptionBudget read consumption budget API
 */
 func (a *Client) ReadConsumptionBudget(params *ReadConsumptionBudgetParams, opts ...ClientOption) (*ReadConsumptionBudgetOK, error) {
@@ -5295,6 +5535,43 @@ func (a *Client) ReadMetricNameActiveSeriesLimit(params *ReadMetricNameActiveSer
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadMetricNameActiveSeriesLimitDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadMetricNameDefaultActiveSeriesLimit read metric name default active series limit API
+*/
+func (a *Client) ReadMetricNameDefaultActiveSeriesLimit(params *ReadMetricNameDefaultActiveSeriesLimitParams, opts ...ClientOption) (*ReadMetricNameDefaultActiveSeriesLimitOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadMetricNameDefaultActiveSeriesLimitParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadMetricNameDefaultActiveSeriesLimit",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/metric-name-default-active-series-limit",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadMetricNameDefaultActiveSeriesLimitReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadMetricNameDefaultActiveSeriesLimitOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadMetricNameDefaultActiveSeriesLimitDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -6187,6 +6464,43 @@ func (a *Client) UpdateCollection(params *UpdateCollectionParams, opts ...Client
 }
 
 /*
+UpdateCommandCenterGroup update command center group API
+*/
+func (a *Client) UpdateCommandCenterGroup(params *UpdateCommandCenterGroupParams, opts ...ClientOption) (*UpdateCommandCenterGroupOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateCommandCenterGroupParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateCommandCenterGroup",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/command-center-groups/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateCommandCenterGroupReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateCommandCenterGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateCommandCenterGroupDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 UpdateConsumptionBudget update consumption budget API
 */
 func (a *Client) UpdateConsumptionBudget(params *UpdateConsumptionBudgetParams, opts ...ClientOption) (*UpdateConsumptionBudgetOK, error) {
@@ -6775,6 +7089,43 @@ func (a *Client) UpdateMetricNameActiveSeriesLimit(params *UpdateMetricNameActiv
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateMetricNameActiveSeriesLimitDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateMetricNameDefaultActiveSeriesLimit update metric name default active series limit API
+*/
+func (a *Client) UpdateMetricNameDefaultActiveSeriesLimit(params *UpdateMetricNameDefaultActiveSeriesLimitParams, opts ...ClientOption) (*UpdateMetricNameDefaultActiveSeriesLimitOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateMetricNameDefaultActiveSeriesLimitParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateMetricNameDefaultActiveSeriesLimit",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/metric-name-default-active-series-limit",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateMetricNameDefaultActiveSeriesLimitReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateMetricNameDefaultActiveSeriesLimitOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateMetricNameDefaultActiveSeriesLimitDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

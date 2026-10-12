@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // CreateCommandCenterGroupReader is a Reader for the CreateCommandCenterGroup structure.
@@ -70,7 +70,7 @@ CreateCommandCenterGroupOK describes a response with status code 200, with defau
 A successful response containing the created CommandCenterGroup.
 */
 type CreateCommandCenterGroupOK struct {
-	Payload *models.ConfigunstableCreateCommandCenterGroupResponse
+	Payload *models.Configv1CreateCommandCenterGroupResponse
 }
 
 // IsSuccess returns true when this create command center group o k response has a 2xx status code
@@ -104,20 +104,20 @@ func (o *CreateCommandCenterGroupOK) Code() int {
 }
 
 func (o *CreateCommandCenterGroupOK) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] createCommandCenterGroupOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] createCommandCenterGroupOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateCommandCenterGroupOK) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] createCommandCenterGroupOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] createCommandCenterGroupOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateCommandCenterGroupOK) GetPayload() *models.ConfigunstableCreateCommandCenterGroupResponse {
+func (o *CreateCommandCenterGroupOK) GetPayload() *models.Configv1CreateCommandCenterGroupResponse {
 	return o.Payload
 }
 
 func (o *CreateCommandCenterGroupOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableCreateCommandCenterGroupResponse)
+	o.Payload = new(models.Configv1CreateCommandCenterGroupResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -172,11 +172,11 @@ func (o *CreateCommandCenterGroupBadRequest) Code() int {
 }
 
 func (o *CreateCommandCenterGroupBadRequest) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] createCommandCenterGroupBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] createCommandCenterGroupBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *CreateCommandCenterGroupBadRequest) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] createCommandCenterGroupBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] createCommandCenterGroupBadRequest  %+v", 400, o.Payload)
 }
 
 func (o *CreateCommandCenterGroupBadRequest) GetPayload() *models.APIError {
@@ -240,11 +240,11 @@ func (o *CreateCommandCenterGroupConflict) Code() int {
 }
 
 func (o *CreateCommandCenterGroupConflict) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] createCommandCenterGroupConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] createCommandCenterGroupConflict  %+v", 409, o.Payload)
 }
 
 func (o *CreateCommandCenterGroupConflict) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] createCommandCenterGroupConflict  %+v", 409, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] createCommandCenterGroupConflict  %+v", 409, o.Payload)
 }
 
 func (o *CreateCommandCenterGroupConflict) GetPayload() *models.APIError {
@@ -308,11 +308,11 @@ func (o *CreateCommandCenterGroupInternalServerError) Code() int {
 }
 
 func (o *CreateCommandCenterGroupInternalServerError) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] createCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] createCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *CreateCommandCenterGroupInternalServerError) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] createCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] createCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *CreateCommandCenterGroupInternalServerError) GetPayload() *models.APIError {
@@ -380,11 +380,11 @@ func (o *CreateCommandCenterGroupDefault) Code() int {
 }
 
 func (o *CreateCommandCenterGroupDefault) Error() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] CreateCommandCenterGroup default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] CreateCommandCenterGroup default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateCommandCenterGroupDefault) String() string {
-	return fmt.Sprintf("[POST /api/unstable/config/command-center-groups][%d] CreateCommandCenterGroup default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v1/config/command-center-groups][%d] CreateCommandCenterGroup default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateCommandCenterGroupDefault) GetPayload() models.GenericError {

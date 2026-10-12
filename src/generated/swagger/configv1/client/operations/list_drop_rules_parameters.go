@@ -62,6 +62,20 @@ ListDropRulesParams contains all the parameters to send to the API endpoint
 */
 type ListDropRulesParams struct {
 
+	/* MatchesSeries.
+
+	     Restricts the returned drop rules to those whose `filters` would accept
+	a series carrying these labels. Each entry is `name=value`, for example
+	`__name__=http_requests_total`. A rule matches when every supplied label
+	satisfies the rule's glob filter for that label, so a rule with no filter
+	on a label accepts any value of it. Filters on labels not supplied here
+	are ignored. Values are concrete: a value containing glob characters such
+	as `*` or `{a,b}` is rejected. Currently only the metric name may be
+	supplied, as a single `__name__=<metric>` entry; other labels are
+	rejected.
+	*/
+	MatchesSeries []string
+
 	/* Names.
 
 	   Filters results by name, where any DropRule with a matching name in the given list (and matches all other filters) will be returned.
@@ -144,6 +158,17 @@ func (o *ListDropRulesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithMatchesSeries adds the matchesSeries to the list drop rules params
+func (o *ListDropRulesParams) WithMatchesSeries(matchesSeries []string) *ListDropRulesParams {
+	o.SetMatchesSeries(matchesSeries)
+	return o
+}
+
+// SetMatchesSeries adds the matchesSeries to the list drop rules params
+func (o *ListDropRulesParams) SetMatchesSeries(matchesSeries []string) {
+	o.MatchesSeries = matchesSeries
+}
+
 // WithNames adds the names to the list drop rules params
 func (o *ListDropRulesParams) WithNames(names []string) *ListDropRulesParams {
 	o.SetNames(names)
@@ -195,6 +220,17 @@ func (o *ListDropRulesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
+
+	if o.MatchesSeries != nil {
+
+		// binding items for matches_series
+		joinedMatchesSeries := o.bindParamMatchesSeries(reg)
+
+		// query array param matches_series
+		if err := r.SetQueryParam("matches_series", joinedMatchesSeries...); err != nil {
+			return err
+		}
+	}
 
 	if o.Names != nil {
 
@@ -256,6 +292,23 @@ func (o *ListDropRulesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
+}
+
+// bindParamListDropRules binds the parameter matches_series
+func (o *ListDropRulesParams) bindParamMatchesSeries(formats strfmt.Registry) []string {
+	matchesSeriesIR := o.MatchesSeries
+
+	var matchesSeriesIC []string
+	for _, matchesSeriesIIR := range matchesSeriesIR { // explode []string
+
+		matchesSeriesIIV := matchesSeriesIIR // string as string
+		matchesSeriesIC = append(matchesSeriesIC, matchesSeriesIIV)
+	}
+
+	// items.CollectionFormat: "multi"
+	matchesSeriesIS := swag.JoinByFormat(matchesSeriesIC, "multi")
+
+	return matchesSeriesIS
 }
 
 // bindParamListDropRules binds the parameter names

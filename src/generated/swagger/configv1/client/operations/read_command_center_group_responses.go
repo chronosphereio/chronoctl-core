@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // ReadCommandCenterGroupReader is a Reader for the ReadCommandCenterGroup structure.
@@ -64,7 +64,7 @@ ReadCommandCenterGroupOK describes a response with status code 200, with default
 A successful response.
 */
 type ReadCommandCenterGroupOK struct {
-	Payload *models.ConfigunstableReadCommandCenterGroupResponse
+	Payload *models.Configv1ReadCommandCenterGroupResponse
 }
 
 // IsSuccess returns true when this read command center group o k response has a 2xx status code
@@ -98,20 +98,20 @@ func (o *ReadCommandCenterGroupOK) Code() int {
 }
 
 func (o *ReadCommandCenterGroupOK) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups/{slug}][%d] readCommandCenterGroupOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups/{slug}][%d] readCommandCenterGroupOK  %+v", 200, o.Payload)
 }
 
 func (o *ReadCommandCenterGroupOK) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups/{slug}][%d] readCommandCenterGroupOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups/{slug}][%d] readCommandCenterGroupOK  %+v", 200, o.Payload)
 }
 
-func (o *ReadCommandCenterGroupOK) GetPayload() *models.ConfigunstableReadCommandCenterGroupResponse {
+func (o *ReadCommandCenterGroupOK) GetPayload() *models.Configv1ReadCommandCenterGroupResponse {
 	return o.Payload
 }
 
 func (o *ReadCommandCenterGroupOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ConfigunstableReadCommandCenterGroupResponse)
+	o.Payload = new(models.Configv1ReadCommandCenterGroupResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -166,11 +166,11 @@ func (o *ReadCommandCenterGroupNotFound) Code() int {
 }
 
 func (o *ReadCommandCenterGroupNotFound) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups/{slug}][%d] readCommandCenterGroupNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups/{slug}][%d] readCommandCenterGroupNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadCommandCenterGroupNotFound) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups/{slug}][%d] readCommandCenterGroupNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups/{slug}][%d] readCommandCenterGroupNotFound  %+v", 404, o.Payload)
 }
 
 func (o *ReadCommandCenterGroupNotFound) GetPayload() *models.APIError {
@@ -234,11 +234,11 @@ func (o *ReadCommandCenterGroupInternalServerError) Code() int {
 }
 
 func (o *ReadCommandCenterGroupInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups/{slug}][%d] readCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups/{slug}][%d] readCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadCommandCenterGroupInternalServerError) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups/{slug}][%d] readCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups/{slug}][%d] readCommandCenterGroupInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *ReadCommandCenterGroupInternalServerError) GetPayload() *models.APIError {
@@ -306,11 +306,11 @@ func (o *ReadCommandCenterGroupDefault) Code() int {
 }
 
 func (o *ReadCommandCenterGroupDefault) Error() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups/{slug}][%d] ReadCommandCenterGroup default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups/{slug}][%d] ReadCommandCenterGroup default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadCommandCenterGroupDefault) String() string {
-	return fmt.Sprintf("[GET /api/unstable/config/command-center-groups/{slug}][%d] ReadCommandCenterGroup default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v1/config/command-center-groups/{slug}][%d] ReadCommandCenterGroup default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ReadCommandCenterGroupDefault) GetPayload() models.GenericError {

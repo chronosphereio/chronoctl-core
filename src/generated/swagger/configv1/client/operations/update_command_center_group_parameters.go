@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configunstable/models"
+	"github.com/chronosphereio/chronoctl-core/src/generated/swagger/configv1/models"
 )
 
 // NewUpdateCommandCenterGroupParams creates a new UpdateCommandCenterGroupParams object,
@@ -64,7 +64,7 @@ UpdateCommandCenterGroupParams contains all the parameters to send to the API en
 type UpdateCommandCenterGroupParams struct {
 
 	// Body.
-	Body *models.ConfigUnstableUpdateCommandCenterGroupBody
+	Body *models.ConfigV1UpdateCommandCenterGroupBody
 
 	// Slug.
 	Slug string
@@ -123,13 +123,13 @@ func (o *UpdateCommandCenterGroupParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update command center group params
-func (o *UpdateCommandCenterGroupParams) WithBody(body *models.ConfigUnstableUpdateCommandCenterGroupBody) *UpdateCommandCenterGroupParams {
+func (o *UpdateCommandCenterGroupParams) WithBody(body *models.ConfigV1UpdateCommandCenterGroupBody) *UpdateCommandCenterGroupParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update command center group params
-func (o *UpdateCommandCenterGroupParams) SetBody(body *models.ConfigUnstableUpdateCommandCenterGroupBody) {
+func (o *UpdateCommandCenterGroupParams) SetBody(body *models.ConfigV1UpdateCommandCenterGroupBody) {
 	o.Body = body
 }
 

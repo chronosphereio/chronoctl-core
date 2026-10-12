@@ -362,15 +362,18 @@ type RollupRuleListOpts struct {
 	// PageToken is the pagination token we want to start our request at.
 	PageToken string
 	// PageMaxSize is the maximum page size to use when making List calls.
-	PageMaxSize int
-	BucketSlugs []string
-	Names       []string
-	Slugs       []string
+	PageMaxSize   int
+	BucketSlugs   []string
+	MatchesSeries []string
+	Names         []string
+	Slugs         []string
 }
 
 func (r *RollupRuleListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyBucketSlugs []string
 	flags.StringSliceVar(&r.BucketSlugs, "bucket-slugs", emptyBucketSlugs, "Filters results by bucket_slug, where any RollupRule with a matching bucket_slug in the given list (and matches all other filters) will be returned.")
+	var emptyMatchesSeries []string
+	flags.StringSliceVar(&r.MatchesSeries, "matches-series", emptyMatchesSeries, "Restricts the returned rollup rules to those whose `filters` would accept a series carrying these labels. Each entry is `name=value`, for example `__name__=http_requests_total`. A rule matches when every supplied label satisfies the rule's glob filter for that label, so a rule with no filter on a label accepts any value of it. Filters on labels not supplied here are ignored. Values are concrete: a value containing glob characters such as `*` or `{a,b}` is rejected. Currently only the metric name may be supplied, as a single `__name__=<metric>` entry; other labels are rejected.")
 	var emptyNames []string
 	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any RollupRule with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
@@ -399,12 +402,13 @@ func ListRollupRules(
 
 	for {
 		res, err := client.ListRollupRules(&config_v1.ListRollupRulesParams{
-			Context:     ctx,
-			PageToken:   &nextToken,
-			PageMaxSize: ptr.Int64(int64(pageMaxSize)),
-			BucketSlugs: opts.BucketSlugs,
-			Names:       opts.Names,
-			Slugs:       opts.Slugs,
+			Context:       ctx,
+			PageToken:     &nextToken,
+			PageMaxSize:   ptr.Int64(int64(pageMaxSize)),
+			BucketSlugs:   opts.BucketSlugs,
+			MatchesSeries: opts.MatchesSeries,
+			Names:         opts.Names,
+			Slugs:         opts.Slugs,
 		})
 		if err != nil {
 			return pagination.Token(""), clienterror.Wrap(err)
@@ -506,7 +510,7 @@ spec:
     # support glob patterns, including matching multiple patterns with an 'OR', such
     # as 'service:{svc1,svc2}'. These special filters are available for matching
     # metrics by non-label request metadata:
-    #  * '__metric_type__': Matches the incoming metric's [Observability Platform
+    #  * '__metric_type__': Matches the incoming metric's [Cortex XCOR
     #    metric
     #    type](https://docs.chronosphere.io/control/shaping/shape-metrics/types#observability-platform-types).
     #    This is the recommended method for filtering on metric type. Valid values:
