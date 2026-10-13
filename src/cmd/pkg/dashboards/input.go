@@ -1,17 +1,3 @@
-// Copyright 2023 Chronosphere Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package dashboards
 
 import (
@@ -54,14 +40,14 @@ type importRequest struct {
 }
 
 // newImportRequest builds the request from -f content, which is either raw
-// Grafana dashboard JSON or exactly one ClassicDashboard or GrafanaDashboard
+// classic dashboard JSON or exactly one ClassicDashboard or GrafanaDashboard
 // manifest. All input errors surface here, before any API call.
 func newImportRequest(content []byte, f importFlags) (*importRequest, error) {
 	if len(bytes.TrimSpace(content)) == 0 {
 		return nil, errors.New("input is empty")
 	}
 
-	// A raw Grafana dashboard is always a JSON object, so an array can only be
+	// Classic dashboard JSON is always an object, so an array can only be
 	// manifests.
 	isManifest := jsonArrayStart.Match(content)
 	if !isManifest {
@@ -103,14 +89,14 @@ func peekTypeMeta(content []byte) (types.TypeMeta, error) {
 		return meta, nil
 	}
 	if err := yaml.NewDecoder(bytes.NewReader(content)).Decode(&meta); err != nil && !errors.Is(err, io.EOF) {
-		return types.TypeMeta{}, fmt.Errorf("expected raw Grafana dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest: could not parse input as YAML: %w", err)
+		return types.TypeMeta{}, fmt.Errorf("expected classic dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest: could not parse input as YAML: %w", err)
 	}
 	return meta, nil
 }
 
 func requestFromRawJSON(content []byte, f importFlags) (*importRequest, error) {
 	if !jsonStart.Match(content) || !json.Valid(content) {
-		return nil, errors.New("expected raw Grafana dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest with api_version and kind")
+		return nil, errors.New("expected classic dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest with api_version and kind")
 	}
 	if f.collectionSlug == "" {
 		return nil, errors.New("--collection-slug is required")

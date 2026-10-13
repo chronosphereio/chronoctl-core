@@ -1,17 +1,3 @@
-// Copyright 2023 Chronosphere Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package dashboards
 
 import (
@@ -130,7 +116,7 @@ func TestNewImportRequest(t *testing.T) {
 			name:    "invalid JSON object",
 			content: `{"title": "API Latency Overview",`,
 			flags:   importFlags{filename: "grafana.json", collectionSlug: "team-a"},
-			wantErr: "expected raw Grafana dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest with api_version and kind",
+			wantErr: "expected classic dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest with api_version and kind",
 		},
 		{
 			name:    "empty input",
@@ -192,12 +178,12 @@ func TestNewImportRequest(t *testing.T) {
 			name:    "YAML without api_version",
 			content: "title: API Latency Overview\npanels: []\n",
 			flags:   importFlags{collectionSlug: "team-a"},
-			wantErr: "expected raw Grafana dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest with api_version and kind",
+			wantErr: "expected classic dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest with api_version and kind",
 		},
 		{
 			name:    "unparseable YAML",
 			content: "title: [unclosed\n",
-			wantErr: "expected raw Grafana dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest: could not parse input as YAML: ",
+			wantErr: "expected classic dashboard JSON or a ClassicDashboard or GrafanaDashboard manifest: could not parse input as YAML: ",
 		},
 		{
 			name:    "YAML stream of two",

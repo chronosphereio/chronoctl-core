@@ -1,17 +1,3 @@
-// Copyright 2023 Chronosphere Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package dashboards
 
 import (
@@ -39,56 +25,18 @@ func newImportFromClassicCommand() *cobra.Command {
 	o := newImportFromClassicOptions()
 
 	cmd := &cobra.Command{
-		Use:     "import-from-classic -f <file>",
+		Use:     "import-from-classic -f <filename>",
 		GroupID: groups.Commands.ID,
-		Short:   "Imports a classic (Grafana) dashboard as a Dashboard.",
-		Long: `Imports a classic (Grafana) dashboard as a Dashboard.
+		Short:   "Imports a classic dashboard as a Dashboard.",
+		Long:    `Imports a classic dashboard as a Dashboard. -f accepts classic dashboard JSON or a single ClassicDashboard manifest, whose fields --collection-slug, --name and --slug override. The new Dashboard is printed to stdout.`,
+		Example: `# Import classic dashboard JSON into a collection.
+chronoctl dashboards import-from-classic -f dashboard.json --collection-slug my-collection
 
--f takes either of:
+# Import an existing classic dashboard under a new slug.
+chronoctl classic-dashboards read my-dashboard | yq '.spec.slug = "my-dashboard-v2"' | chronoctl dashboards import-from-classic -f -
 
-  * Raw Grafana dashboard JSON, the bare dashboard object a classic dashboard
-    exports as. It is sent to the API verbatim, and --collection-slug is
-    required.
-  * One ClassicDashboard or GrafanaDashboard manifest, such as the output of
-    "chronoctl classic-dashboards read <slug>". Its spec.dashboard_json,
-    spec.name, spec.slug and collection fill the request.
-
-Each run imports one dashboard. Multi-document input, such as "list" output,
-is rejected before the API is called; import one "read" at a time instead.
-
-For a manifest, --collection-slug, --name and --slug override the manifest's
-collection, spec.name and spec.slug. Without --collection-slug, the collection
-comes from spec.collection_slug, or from spec.collection when it is a simple
-collection. A manifest that belongs to a bucket, or to a SERVICE or USER
-collection, needs --collection-slug.
-
-A dashboard cannot reuse the slug of a classic dashboard that still exists, so
-piping "classic-dashboards read" output in unchanged fails with a conflict.
-Set a new spec.slug or pass --slug, or delete spec.slug to have a slug
-generated from the name.
-
-The resulting v1/config Dashboard manifest is printed on stdout, ready for
-"chronoctl apply -f -". On --dry-run it is a preview of what would be created
-rather than a persisted result. A status line and any classic dashboard
-features the conversion could not carry over are written to stderr.
-Unsupported features do not affect the command's exit code.`,
-		Example: `# Import a Grafana dashboard JSON file into a collection.
-chronoctl dashboards import-from-classic -f grafana.json --collection-slug team-a
-
-# Import a classic dashboard under a new slug, since a dashboard cannot reuse
-# the slug of a classic dashboard that still exists.
-chronoctl classic-dashboards read xyz \
-  | yq '.spec.slug = "xyz-native"' \
-  | chronoctl dashboards import-from-classic -f -
-
-# Preview a Grafana dashboard's conversion into another collection, letting
-# the API generate the slug from the name.
-chronoctl grafana-dashboards read xyz \
-  | yq 'del(.spec.slug)' \
-  | chronoctl dashboards import-from-classic -f - --collection-slug migrated --dry-run
-
-# Replace an existing dashboard that already has the given slug.
-chronoctl dashboards import-from-classic -f grafana.json --collection-slug my-collection --slug my-dashboard --update-if-exists`,
+# Preview the import without creating anything.
+chronoctl dashboards import-from-classic -f dashboard.json --collection-slug my-collection --dry-run`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			o.stderr = cmd.ErrOrStderr()
 			if err := o.validate(); err != nil {
@@ -137,9 +85,9 @@ func (o *importFromClassicOptions) addFlags(cmd *cobra.Command) {
 	o.outputFlags.AddFlags(cmd)
 	o.fileFlags.AddFlags(cmd)
 
-	cmd.Flags().StringVar(&o.collectionSlug, "collection-slug", "", "Slug of the collection the imported dashboard belongs to. Required for raw JSON input; for a manifest, overrides its collection.")
-	cmd.Flags().StringVar(&o.name, "name", "", "Name for the new dashboard. Overrides a manifest's spec.name. Defaults to the classic dashboard's title when neither is set.")
-	cmd.Flags().StringVar(&o.slug, "slug", "", "Slug for the new dashboard. Overrides a manifest's spec.slug. Generated from the name when neither is set. A slug is required when --update-if-exists is set.")
+	cmd.Flags().StringVar(&o.collectionSlug, "collection-slug", "", "Slug of the collection for the new dashboard. Required for classic dashboard JSON; overrides a manifest's collection.")
+	cmd.Flags().StringVar(&o.name, "name", "", "Name of the new dashboard. Overrides a manifest's name; defaults to the classic dashboard's title.")
+	cmd.Flags().StringVar(&o.slug, "slug", "", "Slug of the new dashboard. Overrides a manifest's slug; generated from the name if unset. Required with --update-if-exists.")
 	cmd.Flags().BoolVar(&o.updateIfExists, "update-if-exists", false, "If true, replaces an existing dashboard with the same slug instead of failing.")
 	cmd.Flags().BoolVar(&o.permissiveParsing, "no-strict", false, "If set, manifests with unknown fields are allowed. Defaults to false.")
 }
