@@ -1,0 +1,46 @@
+{
+  "title": "API Latency Overview",
+  "uid": "api-latency-overview",
+  "tags": ["api", "latency"],
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "templating": {
+    "list": [
+      {
+        "name": "service",
+        "type": "query",
+        "query": "label_values(http_request_duration_seconds, service)",
+        "current": {
+          "text": "checkout",
+          "value": "checkout"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "P99 Latency",
+      "type": "graph",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service=\"$service\"}[5m])) by (le))",
+          "legendFormat": "p99"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Request Rate",
+      "type": "graph",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(rate(http_requests_total{service=\"$service\"}[5m]))",
+          "legendFormat": "requests/s"
+        }
+      ]
+    }
+  ]
+}
