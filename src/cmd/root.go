@@ -18,6 +18,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/auth"
+	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/dashboards"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/groups"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/metricusages"
 	"github.com/chronosphereio/chronoctl-core/src/cmd/pkg/ruleevaluations"
@@ -53,6 +54,9 @@ func New(options Options) (*cobra.Command, error) {
 	cmd.AddCommand(metricusages.NewCommands()...)
 	cmd.AddCommand(auth.NewCommand())
 	configv1.AddCommandsTo(cmd)
+	if err := dashboards.AddCommandsTo(cmd); err != nil {
+		return nil, err
+	}
 
 	return cmd, nil
 }

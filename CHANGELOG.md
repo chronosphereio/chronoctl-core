@@ -9,6 +9,7 @@
 * Add `USER` collection reference type to `v1/config` and `unstable/config`, for a user's personal collection. Only notebooks and dashboards can be owned by a user collection.
 * Add a `matches_series` filter to listing `v1/config/DropRule` and `v1/config/RollupRule`, and a matching `--matches-series` flag to `drop-rules list` and `rollup-rules list`. Only rules whose filters would accept a series carrying the given labels are returned; currently only a single `__name__=<metric>` entry is accepted.
 * Add `started_at` to `unstable/state` monitor status signal statuses, the time the signal started firing. Available to library consumers only.
+* Add a `dashboards import-from-classic` command, which converts a classic dashboard into a Dashboard through `POST /api/v1/config/dashboards:importFromClassic`. `-f` takes classic dashboard JSON or a single `ClassicDashboard` manifest, such as `classic-dashboards read` output; `--collection-slug`, `--name` and `--slug` override the manifest's fields.
 
 ### Changed
 * Deprecate `series` on `unstable/state` monitor status signal statuses, and the `include_series_statuses` query parameter on the monitor status list endpoint. Available to library consumers only.
