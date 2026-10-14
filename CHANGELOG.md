@@ -17,7 +17,7 @@
 * Update field documentation across `v1/config`, `unstable/config`, and `v1/state` models; no functional changes.
 
 ### Removed
-* Remove `unstable/config/CommandCenterGroup` from the generated `configunstable` client, replaced by `v1/config/CommandCenterGroup` and the `command-center-groups` commands. The unstable endpoints no longer exist in the public API. Available to library consumers only; there were never unstable `command-center-groups` commands. **This is a breaking change**.
+* Remove `unstable/config/CommandCenterGroup` from the generated `configunstable` client, replaced by `v1/config/CommandCenterGroup` and the `command-center-groups` commands. The unstable endpoints no longer exist in the public API. Available to library consumers only; there were never unstable `command-center-groups` commands.
 
 ## v1.35.0
 
@@ -32,10 +32,10 @@
 * Add `primary_slo_reference` and `related_slo_references` to `unstable/config/CommandCenterGroup`. Available to library consumers only.
 
 ### Removed
-* Remove `unstable/config/MetricNameActiveSeriesLimit` from the generated `configunstable` client, replaced by `v1/config/MetricNameActiveSeriesLimit` and the `metric-name-active-series-limits` commands. The unstable endpoints no longer exist in the public API. Available to library consumers only. **This is a breaking change**.
+* Remove `unstable/config/MetricNameActiveSeriesLimit` from the generated `configunstable` client, replaced by `v1/config/MetricNameActiveSeriesLimit` and the `metric-name-active-series-limits` commands. The unstable endpoints no longer exist in the public API. Available to library consumers only.
 * Rename the generated `configv1` monitor schedule model types (`ScheduleWeeklySchedule` becomes `MonitorScheduleWeeklySchedule`, `ScheduleDayTimeRange` becomes `ScheduleScheduleDayTimeRange`). Available to library consumers only. **This is a breaking change**.
 * Remove `dns_server` and `dns_server_port` from the `v1/config/SyntheticTest` DNS test configuration. The API no longer accepts a custom nameserver, so drop the fields from any `synthetic-tests` YAML that sets them. **This is a breaking change**.
-* Remove the `dashboards:createFromClassic` endpoint from `unstable/config`, replaced by `v1/config` `dashboards:importFromClassic`. Available to library consumers only. **This is a breaking change**.
+* Remove the `dashboards:createFromClassic` endpoint from `unstable/config`, replaced by `v1/config` `dashboards:importFromClassic`. Available to library consumers only.
 
 ## v1.34.0
 
