@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.36.0
+
 ### Added
 * Add support for resource `v1/config/CommandCenterGroup` and the `command-center-groups` commands. Command center groups are promoted from the unstable API to v1: a group of signals tracked in the command center, with a primary SLO reference and related SLO references.
 * Add support for resource `v1/config/MetricNameDefaultActiveSeriesLimit` and the `metric-name-default-active-series-limit` commands. It sets the default active standard and histogram time series allowed for each metric name; a `v1/config/MetricNameActiveSeriesLimit` overrides the default for its metric name.
