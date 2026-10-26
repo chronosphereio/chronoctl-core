@@ -29,7 +29,8 @@ type SyntheticTestHTTPTestConfig struct {
 	// authentication
 	Authentication *HTTPTestConfigHTTPAuth `json:"authentication,omitempty"`
 
-	// Headers sent with the request.
+	// Headers sent with the request. If no `User-Agent` header is set, the
+	// request is sent with `User-Agent: Cortex/XCOR-Synthetics`.
 	Headers []*HTTPTestConfigHeader `json:"headers"`
 
 	// Body sent with the request.

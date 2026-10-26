@@ -75,6 +75,46 @@ func (mr *MockClientServiceMockRecorder) ListMonitorStatuses(params interface{},
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMonitorStatuses", reflect.TypeOf((*MockClientService)(nil).ListMonitorStatuses), varargs...)
 }
 
+// ListTestNotificationRecipients mocks base method.
+func (m *MockClientService) ListTestNotificationRecipients(params *operations.ListTestNotificationRecipientsParams, opts ...operations.ClientOption) (*operations.ListTestNotificationRecipientsOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListTestNotificationRecipients", varargs...)
+	ret0, _ := ret[0].(*operations.ListTestNotificationRecipientsOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListTestNotificationRecipients indicates an expected call of ListTestNotificationRecipients.
+func (mr *MockClientServiceMockRecorder) ListTestNotificationRecipients(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTestNotificationRecipients", reflect.TypeOf((*MockClientService)(nil).ListTestNotificationRecipients), varargs...)
+}
+
+// SendTestNotification mocks base method.
+func (m *MockClientService) SendTestNotification(params *operations.SendTestNotificationParams, opts ...operations.ClientOption) (*operations.SendTestNotificationOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "SendTestNotification", varargs...)
+	ret0, _ := ret[0].(*operations.SendTestNotificationOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SendTestNotification indicates an expected call of SendTestNotification.
+func (mr *MockClientServiceMockRecorder) SendTestNotification(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendTestNotification", reflect.TypeOf((*MockClientService)(nil).SendTestNotification), varargs...)
+}
+
 // SetTransport mocks base method.
 func (m *MockClientService) SetTransport(transport runtime.ClientTransport) {
 	m.ctrl.T.Helper()

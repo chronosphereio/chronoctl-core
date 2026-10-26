@@ -557,7 +557,8 @@ spec:
     http_test:
         # URL the test requests.
         url: <string>
-        # Headers sent with the request.
+        # Headers sent with the request. If no 'User-Agent' header is set, the
+        # request is sent with 'User-Agent: Cortex/XCOR-Synthetics'.
         headers:
             - name: <string>
               value: <string>

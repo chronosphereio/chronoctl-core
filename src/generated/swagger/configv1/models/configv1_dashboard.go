@@ -46,6 +46,9 @@ type Configv1Dashboard struct {
 
 	// Optional. Defines tags that add metadata about the dashboard.
 	Labels map[string]string `json:"labels,omitempty"`
+
+	// source system
+	SourceSystem Configv1SourceSystem `json:"source_system,omitempty"`
 }
 
 // Validate validates this configv1 dashboard
@@ -61,6 +64,10 @@ func (m *Configv1Dashboard) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCollection(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSourceSystem(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -113,6 +120,23 @@ func (m *Configv1Dashboard) validateCollection(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Configv1Dashboard) validateSourceSystem(formats strfmt.Registry) error {
+	if swag.IsZero(m.SourceSystem) { // not required
+		return nil
+	}
+
+	if err := m.SourceSystem.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("source_system")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("source_system")
+		}
+		return err
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 dashboard based on the context it is used
 func (m *Configv1Dashboard) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -126,6 +150,10 @@ func (m *Configv1Dashboard) ContextValidate(ctx context.Context, formats strfmt.
 	}
 
 	if err := m.contextValidateCollection(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSourceSystem(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -169,6 +197,24 @@ func (m *Configv1Dashboard) contextValidateCollection(ctx context.Context, forma
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *Configv1Dashboard) contextValidateSourceSystem(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.SourceSystem) { // not required
+		return nil
+	}
+
+	if err := m.SourceSystem.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("source_system")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("source_system")
+		}
+		return err
 	}
 
 	return nil

@@ -37,6 +37,7 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(NewMetricNameDefaultActiveSeriesLimitCmd())
 	root.AddCommand(NewMonitorCmd())
 	root.AddCommand(NewMutingRuleCmd())
+	root.AddCommand(NewNotebookCmd())
 	root.AddCommand(NewNotificationPolicyCmd())
 	root.AddCommand(NewNotifierCmd())
 	root.AddCommand(NewOtelMetricsIngestionCmd())
@@ -452,6 +453,22 @@ func ApplyMappings() map[types.TypeMeta]func(context.Context, client.Clients, ty
 				CreateIfMissing: true,
 			}
 			_, err := UpdateMutingRule(ctx, clients.ConfigV1, entity, updateOpts)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		NotebookTypeMeta: func(ctx context.Context, clients client.Clients, obj types.Object, dryRun bool) error {
+			entity, ok := obj.(*Notebook)
+			if !ok {
+				return types.WrongObjectErr((&Notebook{}), obj)
+			}
+
+			updateOpts := UpdateOptions{
+				DryRun:          dryRun,
+				CreateIfMissing: true,
+			}
+			_, err := UpdateNotebook(ctx, clients.ConfigV1, entity, updateOpts)
 			if err != nil {
 				return err
 			}

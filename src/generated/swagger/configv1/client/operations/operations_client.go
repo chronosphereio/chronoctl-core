@@ -78,6 +78,8 @@ type ClientService interface {
 
 	CreateMutingRule(params *CreateMutingRuleParams, opts ...ClientOption) (*CreateMutingRuleOK, error)
 
+	CreateNotebook(params *CreateNotebookParams, opts ...ClientOption) (*CreateNotebookOK, error)
+
 	CreateNotificationPolicy(params *CreateNotificationPolicyParams, opts ...ClientOption) (*CreateNotificationPolicyOK, error)
 
 	CreateNotifier(params *CreateNotifierParams, opts ...ClientOption) (*CreateNotifierOK, error)
@@ -160,6 +162,8 @@ type ClientService interface {
 
 	DeleteMutingRule(params *DeleteMutingRuleParams, opts ...ClientOption) (*DeleteMutingRuleOK, error)
 
+	DeleteNotebook(params *DeleteNotebookParams, opts ...ClientOption) (*DeleteNotebookOK, error)
+
 	DeleteNotificationPolicy(params *DeleteNotificationPolicyParams, opts ...ClientOption) (*DeleteNotificationPolicyOK, error)
 
 	DeleteNotifier(params *DeleteNotifierParams, opts ...ClientOption) (*DeleteNotifierOK, error)
@@ -233,6 +237,8 @@ type ClientService interface {
 	ListMonitors(params *ListMonitorsParams, opts ...ClientOption) (*ListMonitorsOK, error)
 
 	ListMutingRules(params *ListMutingRulesParams, opts ...ClientOption) (*ListMutingRulesOK, error)
+
+	ListNotebooks(params *ListNotebooksParams, opts ...ClientOption) (*ListNotebooksOK, error)
 
 	ListNotificationPolicies(params *ListNotificationPoliciesParams, opts ...ClientOption) (*ListNotificationPoliciesOK, error)
 
@@ -309,6 +315,8 @@ type ClientService interface {
 	ReadMonitor(params *ReadMonitorParams, opts ...ClientOption) (*ReadMonitorOK, error)
 
 	ReadMutingRule(params *ReadMutingRuleParams, opts ...ClientOption) (*ReadMutingRuleOK, error)
+
+	ReadNotebook(params *ReadNotebookParams, opts ...ClientOption) (*ReadNotebookOK, error)
 
 	ReadNotificationPolicy(params *ReadNotificationPolicyParams, opts ...ClientOption) (*ReadNotificationPolicyOK, error)
 
@@ -393,6 +401,8 @@ type ClientService interface {
 	UpdateMonitor(params *UpdateMonitorParams, opts ...ClientOption) (*UpdateMonitorOK, error)
 
 	UpdateMutingRule(params *UpdateMutingRuleParams, opts ...ClientOption) (*UpdateMutingRuleOK, error)
+
+	UpdateNotebook(params *UpdateNotebookParams, opts ...ClientOption) (*UpdateNotebookOK, error)
 
 	UpdateNotificationPolicy(params *UpdateNotificationPolicyParams, opts ...ClientOption) (*UpdateNotificationPolicyOK, error)
 
@@ -1349,6 +1359,43 @@ func (a *Client) CreateMutingRule(params *CreateMutingRuleParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateMutingRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateNotebook create notebook API
+*/
+func (a *Client) CreateNotebook(params *CreateNotebookParams, opts ...ClientOption) (*CreateNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateNotebook",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/notebooks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateNotebookDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2873,6 +2920,43 @@ func (a *Client) DeleteMutingRule(params *DeleteMutingRuleParams, opts ...Client
 }
 
 /*
+DeleteNotebook delete notebook API
+*/
+func (a *Client) DeleteNotebook(params *DeleteNotebookParams, opts ...ClientOption) (*DeleteNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteNotebook",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/notebooks/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteNotebookDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteNotificationPolicy delete notification policy API
 */
 func (a *Client) DeleteNotificationPolicy(params *DeleteNotificationPolicyParams, opts ...ClientOption) (*DeleteNotificationPolicyOK, error) {
@@ -4240,6 +4324,43 @@ func (a *Client) ListMutingRules(params *ListMutingRulesParams, opts ...ClientOp
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListMutingRulesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListNotebooks list notebooks API
+*/
+func (a *Client) ListNotebooks(params *ListNotebooksParams, opts ...ClientOption) (*ListNotebooksOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListNotebooksParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListNotebooks",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/notebooks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListNotebooksReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListNotebooksOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListNotebooksDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5646,6 +5767,43 @@ func (a *Client) ReadMutingRule(params *ReadMutingRuleParams, opts ...ClientOpti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadMutingRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ReadNotebook read notebook API
+*/
+func (a *Client) ReadNotebook(params *ReadNotebookParams, opts ...ClientOption) (*ReadNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadNotebook",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/notebooks/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadNotebookDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -7200,6 +7358,43 @@ func (a *Client) UpdateMutingRule(params *UpdateMutingRuleParams, opts ...Client
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateMutingRuleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+UpdateNotebook update notebook API
+*/
+func (a *Client) UpdateNotebook(params *UpdateNotebookParams, opts ...ClientOption) (*UpdateNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateNotebook",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/notebooks/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateNotebookDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

@@ -56,6 +56,62 @@
       },
       "type": "object"
     },
+    "StateUnstableListTestNotificationRecipientsBody": {
+      "properties": {
+        "severity": {
+          "$ref": "#/definitions/datav1Severity"
+        },
+        "signal_labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels of the signal the test notification is for. When the monitor\ngroups signals by label names, only those names are accepted; when it\nuses one signal per series, any name is accepted; when it has no signal\ngrouping, none are accepted. Names starting with `__chrono_`,\n`alertname`, and `severity`, are reserved.",
+          "example": "{\"env\": \"prod\"}",
+          "type": "object"
+        },
+        "include_previews": {
+          "description": "Render each recipient's notification preview. Previews cost a render per\nintegration, so leave this false when only recipient IDs are needed.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "StateUnstableSendTestNotificationBody": {
+      "properties": {
+        "severity": {
+          "$ref": "#/definitions/datav1Severity"
+        },
+        "signal_labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels of the signal the test notification is for. Same rules as\nListTestNotificationRecipients's `signal_labels`.",
+          "example": "{\"env\": \"prod\"}",
+          "type": "object"
+        },
+        "recipient_ids": {
+          "description": "IDs from ListTestNotificationRecipients to deliver to. When empty,\ndelivers to every recipient the test alert routes to with these signal\nlabels. An unknown or stale ID fails the request.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "TestNotificationRecipientRecipientType": {
+      "description": " - OTHER: A recipient whose integration is not one of the above.",
+      "enum": [
+        "EMAIL",
+        "SLACK",
+        "PAGERDUTY",
+        "WEBHOOK",
+        "OPSGENIE",
+        "VICTOROPS",
+        "OTHER"
+      ],
+      "type": "string"
+    },
     "apiError": {
       "properties": {
         "code": {
@@ -80,6 +136,14 @@
         }
       },
       "type": "object"
+    },
+    "datav1Severity": {
+      "description": "The severity an alert fired at.",
+      "enum": [
+        "WARN",
+        "CRITICAL"
+      ],
+      "type": "string"
     },
     "stateunstableAlertingState": {
       "description": " - ALERTING_STATE_PASS: Monitor is not triggered.\n - ALERTING_STATE_PENDING: Monitor is triggered but not yet alerting.\n - ALERTING_STATE_ALERTING: Monitor is triggered and alerting.\n - ALERTING_STATE_MUTED: Monitor is triggered but is muted.",
@@ -110,6 +174,18 @@
       },
       "type": "object"
     },
+    "stateunstableListTestNotificationRecipientsResponse": {
+      "properties": {
+        "recipients": {
+          "description": "Every recipient reachable from the monitor's notification policy at the\nseverity, using the policy's default routes and then every override route,\neach listed once. Override label matchers are not applied. Empty when the\nmonitor has no notification policy.",
+          "items": {
+            "$ref": "#/definitions/stateunstableTestNotificationRecipient"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "stateunstableMonitorStatus": {
       "description": "MonitorStatus contains the status of a monitor.",
       "properties": {
@@ -127,6 +203,31 @@
             "$ref": "#/definitions/MonitorStatusSignalStatus"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "stateunstableSendTestNotificationResponse": {
+      "description": "Returned when the test notification is accepted for delivery. Acceptance\ndoes not confirm that any integration delivered it.",
+      "type": "object"
+    },
+    "stateunstableTestNotificationRecipient": {
+      "description": "A recipient of a monitor's notification policy: a notifier, or a\ndestination configured directly on the policy. A destination that sends to\nseveral Slack channels or VictorOps routing keys is one recipient per\nchannel or routing key.",
+      "properties": {
+        "id": {
+          "description": "Opaque, server-issued ID. Pass it back in SendTestNotification's\n`recipient_ids`. Stays valid until the notification policy or the\nrecipient's notifier changes.",
+          "type": "string"
+        },
+        "display_name": {
+          "description": "The notifier's name, or a generated name describing the destination.",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/TestNotificationRecipientRecipientType"
+        },
+        "preview_markdown": {
+          "description": "Markdown preview of the notification this recipient would receive. Set\nonly with `include_previews`, and only for recipients the test alert is\nrouted to with these signal labels. Templates render against the signal\nlabels alone, and values that would come from the monitor's query are\nplaceholders. Empty when the preview fails to render.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -237,6 +338,86 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/stateunstableListMonitorStatusesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "StateUnstable"
+        ]
+      }
+    },
+    "/api/unstable/state/monitors/{monitor_slug}:list-test-notification-recipients": {
+      "post": {
+        "description": "Lists the recipients a saved monitor's notification policy reaches at a\nseverity, with a rendered preview of the notification each would receive.\nSends nothing. A read served by POST, because signal labels cannot be\nexpressed as query parameters. Rate limited per tenant. A rate limited\nrequest returns 429.",
+        "operationId": "ListTestNotificationRecipients",
+        "parameters": [
+          {
+            "description": "The slug of the saved monitor.",
+            "in": "path",
+            "name": "monitor_slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StateUnstableListTestNotificationRecipientsBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stateunstableListTestNotificationRecipientsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "tags": [
+          "StateUnstable"
+        ]
+      }
+    },
+    "/api/unstable/state/monitors/{monitor_slug}:send-test-notification": {
+      "post": {
+        "description": "Sends a test notification for a saved monitor through its notification\npolicy's integrations. Does not change monitor state or create an alert.\nFails when the monitor has no notification policy. Sends are rate\nlimited per tenant and per monitor, and requests that fail validation\ncount toward the limits. A rate limited request returns 429; wait and\nretry.",
+        "operationId": "SendTestNotification",
+        "parameters": [
+          {
+            "description": "The slug of the saved monitor.",
+            "in": "path",
+            "name": "monitor_slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StateUnstableSendTestNotificationBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stateunstableSendTestNotificationResponse"
             }
           },
           "default": {

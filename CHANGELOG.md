@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Added
+* Add support for resource `v1/config/Notebook` and the `notebooks` commands. Notebooks are promoted from the unstable API to v1: a notebook has a `name`, an owning collection (`collection_slug`, or a `collection` reference that may name a user collection), opaque `notebook_json`, and optional `labels`. `notebooks list` takes `--names`, `--slugs`, `--collection-slugs` (which matches SIMPLE collections only, so it does not find notebooks in service or user collections) and `--include-notebook-json`. Without `--include-notebook-json` the listed notebooks have an empty `notebook_json`, so `list` output is not applyable with `apply` or `update` unless that flag is set. The `configunstable` notebook client is unchanged.
+* Add `source_system` to `v1/config/Dashboard`, the system that last wrote the dashboard (Terraform, chronoctl, the UI, the API, and so on). Available to library consumers only.
+* Add a monitor status list endpoint to `v1/state` (`POST /api/v1/state/monitor-statuses`), which lists monitors with at least one firing alert and how they are firing. The read is served by POST because its label filters cannot be expressed as query parameters. Available to library consumers only.
+* Add test notification endpoints to `unstable/state` for a saved monitor: `monitors/{monitor_slug}:list-test-notification-recipients` previews the recipients the monitor's notification policy reaches at a severity without sending anything, and `monitors/{monitor_slug}:send-test-notification` sends a test notification through the policy's integrations without changing monitor state. Both are rate limited per tenant. Available to library consumers only.
+
+### Changed
+* Rename the generated `statev1` enum type `RuleEvaluationSeverity` to `Statev1RuleEvaluationSeverity` on `v1/state` rule evaluations (enum values are unchanged). Available to library consumers only. **This is a breaking change**.
+* Update field documentation for `v1/config/SyntheticTest` HTTP test headers, which now note the default `User-Agent`; no functional changes.
+
 ## v1.36.0
 
 ### Added
