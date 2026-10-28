@@ -535,6 +535,26 @@ func (mr *MockClientServiceMockRecorder) CreateMutingRule(params interface{}, op
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMutingRule", reflect.TypeOf((*MockClientService)(nil).CreateMutingRule), varargs...)
 }
 
+// CreateNotebook mocks base method.
+func (m *MockClientService) CreateNotebook(params *operations.CreateNotebookParams, opts ...operations.ClientOption) (*operations.CreateNotebookOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateNotebook", varargs...)
+	ret0, _ := ret[0].(*operations.CreateNotebookOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateNotebook indicates an expected call of CreateNotebook.
+func (mr *MockClientServiceMockRecorder) CreateNotebook(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNotebook", reflect.TypeOf((*MockClientService)(nil).CreateNotebook), varargs...)
+}
+
 // CreateNotificationPolicy mocks base method.
 func (m *MockClientService) CreateNotificationPolicy(params *operations.CreateNotificationPolicyParams, opts ...operations.ClientOption) (*operations.CreateNotificationPolicyOK, error) {
 	m.ctrl.T.Helper()
@@ -713,26 +733,6 @@ func (mr *MockClientServiceMockRecorder) CreateServiceAttribute(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateServiceAttribute", reflect.TypeOf((*MockClientService)(nil).CreateServiceAttribute), varargs...)
-}
-
-// CreateSyntheticTest mocks base method.
-func (m *MockClientService) CreateSyntheticTest(params *operations.CreateSyntheticTestParams, opts ...operations.ClientOption) (*operations.CreateSyntheticTestOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateSyntheticTest", varargs...)
-	ret0, _ := ret[0].(*operations.CreateSyntheticTestOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateSyntheticTest indicates an expected call of CreateSyntheticTest.
-func (mr *MockClientServiceMockRecorder) CreateSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSyntheticTest", reflect.TypeOf((*MockClientService)(nil).CreateSyntheticTest), varargs...)
 }
 
 // CreateTeam mocks base method.
@@ -1355,6 +1355,26 @@ func (mr *MockClientServiceMockRecorder) DeleteMutingRule(params interface{}, op
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMutingRule", reflect.TypeOf((*MockClientService)(nil).DeleteMutingRule), varargs...)
 }
 
+// DeleteNotebook mocks base method.
+func (m *MockClientService) DeleteNotebook(params *operations.DeleteNotebookParams, opts ...operations.ClientOption) (*operations.DeleteNotebookOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteNotebook", varargs...)
+	ret0, _ := ret[0].(*operations.DeleteNotebookOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteNotebook indicates an expected call of DeleteNotebook.
+func (mr *MockClientServiceMockRecorder) DeleteNotebook(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNotebook", reflect.TypeOf((*MockClientService)(nil).DeleteNotebook), varargs...)
+}
+
 // DeleteNotificationPolicy mocks base method.
 func (m *MockClientService) DeleteNotificationPolicy(params *operations.DeleteNotificationPolicyParams, opts ...operations.ClientOption) (*operations.DeleteNotificationPolicyOK, error) {
 	m.ctrl.T.Helper()
@@ -1533,26 +1553,6 @@ func (mr *MockClientServiceMockRecorder) DeleteServiceAttribute(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteServiceAttribute", reflect.TypeOf((*MockClientService)(nil).DeleteServiceAttribute), varargs...)
-}
-
-// DeleteSyntheticTest mocks base method.
-func (m *MockClientService) DeleteSyntheticTest(params *operations.DeleteSyntheticTestParams, opts ...operations.ClientOption) (*operations.DeleteSyntheticTestOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "DeleteSyntheticTest", varargs...)
-	ret0, _ := ret[0].(*operations.DeleteSyntheticTestOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DeleteSyntheticTest indicates an expected call of DeleteSyntheticTest.
-func (mr *MockClientServiceMockRecorder) DeleteSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSyntheticTest", reflect.TypeOf((*MockClientService)(nil).DeleteSyntheticTest), varargs...)
 }
 
 // DeleteTeam mocks base method.
@@ -2095,6 +2095,26 @@ func (mr *MockClientServiceMockRecorder) ListMutingRules(params interface{}, opt
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMutingRules", reflect.TypeOf((*MockClientService)(nil).ListMutingRules), varargs...)
 }
 
+// ListNotebooks mocks base method.
+func (m *MockClientService) ListNotebooks(params *operations.ListNotebooksParams, opts ...operations.ClientOption) (*operations.ListNotebooksOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListNotebooks", varargs...)
+	ret0, _ := ret[0].(*operations.ListNotebooksOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListNotebooks indicates an expected call of ListNotebooks.
+func (mr *MockClientServiceMockRecorder) ListNotebooks(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListNotebooks", reflect.TypeOf((*MockClientService)(nil).ListNotebooks), varargs...)
+}
+
 // ListNotificationPolicies mocks base method.
 func (m *MockClientService) ListNotificationPolicies(params *operations.ListNotificationPoliciesParams, opts ...operations.ClientOption) (*operations.ListNotificationPoliciesOK, error) {
 	m.ctrl.T.Helper()
@@ -2253,26 +2273,6 @@ func (mr *MockClientServiceMockRecorder) ListServices(params interface{}, opts .
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListServices", reflect.TypeOf((*MockClientService)(nil).ListServices), varargs...)
-}
-
-// ListSyntheticTests mocks base method.
-func (m *MockClientService) ListSyntheticTests(params *operations.ListSyntheticTestsParams, opts ...operations.ClientOption) (*operations.ListSyntheticTestsOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ListSyntheticTests", varargs...)
-	ret0, _ := ret[0].(*operations.ListSyntheticTestsOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListSyntheticTests indicates an expected call of ListSyntheticTests.
-func (mr *MockClientServiceMockRecorder) ListSyntheticTests(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSyntheticTests", reflect.TypeOf((*MockClientService)(nil).ListSyntheticTests), varargs...)
 }
 
 // ListTeams mocks base method.
@@ -2855,6 +2855,26 @@ func (mr *MockClientServiceMockRecorder) ReadMutingRule(params interface{}, opts
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadMutingRule", reflect.TypeOf((*MockClientService)(nil).ReadMutingRule), varargs...)
 }
 
+// ReadNotebook mocks base method.
+func (m *MockClientService) ReadNotebook(params *operations.ReadNotebookParams, opts ...operations.ClientOption) (*operations.ReadNotebookOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ReadNotebook", varargs...)
+	ret0, _ := ret[0].(*operations.ReadNotebookOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadNotebook indicates an expected call of ReadNotebook.
+func (mr *MockClientServiceMockRecorder) ReadNotebook(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadNotebook", reflect.TypeOf((*MockClientService)(nil).ReadNotebook), varargs...)
+}
+
 // ReadNotificationPolicy mocks base method.
 func (m *MockClientService) ReadNotificationPolicy(params *operations.ReadNotificationPolicyParams, opts ...operations.ClientOption) (*operations.ReadNotificationPolicyOK, error) {
 	m.ctrl.T.Helper()
@@ -3053,26 +3073,6 @@ func (mr *MockClientServiceMockRecorder) ReadServiceAttribute(params interface{}
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadServiceAttribute", reflect.TypeOf((*MockClientService)(nil).ReadServiceAttribute), varargs...)
-}
-
-// ReadSyntheticTest mocks base method.
-func (m *MockClientService) ReadSyntheticTest(params *operations.ReadSyntheticTestParams, opts ...operations.ClientOption) (*operations.ReadSyntheticTestOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "ReadSyntheticTest", varargs...)
-	ret0, _ := ret[0].(*operations.ReadSyntheticTestOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ReadSyntheticTest indicates an expected call of ReadSyntheticTest.
-func (mr *MockClientServiceMockRecorder) ReadSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadSyntheticTest", reflect.TypeOf((*MockClientService)(nil).ReadSyntheticTest), varargs...)
 }
 
 // ReadTeam mocks base method.
@@ -3707,6 +3707,26 @@ func (mr *MockClientServiceMockRecorder) UpdateMutingRule(params interface{}, op
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMutingRule", reflect.TypeOf((*MockClientService)(nil).UpdateMutingRule), varargs...)
 }
 
+// UpdateNotebook mocks base method.
+func (m *MockClientService) UpdateNotebook(params *operations.UpdateNotebookParams, opts ...operations.ClientOption) (*operations.UpdateNotebookOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateNotebook", varargs...)
+	ret0, _ := ret[0].(*operations.UpdateNotebookOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateNotebook indicates an expected call of UpdateNotebook.
+func (mr *MockClientServiceMockRecorder) UpdateNotebook(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNotebook", reflect.TypeOf((*MockClientService)(nil).UpdateNotebook), varargs...)
+}
+
 // UpdateNotificationPolicy mocks base method.
 func (m *MockClientService) UpdateNotificationPolicy(params *operations.UpdateNotificationPolicyParams, opts ...operations.ClientOption) (*operations.UpdateNotificationPolicyOK, error) {
 	m.ctrl.T.Helper()
@@ -3865,26 +3885,6 @@ func (mr *MockClientServiceMockRecorder) UpdateServiceAttribute(params interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{params}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateServiceAttribute", reflect.TypeOf((*MockClientService)(nil).UpdateServiceAttribute), varargs...)
-}
-
-// UpdateSyntheticTest mocks base method.
-func (m *MockClientService) UpdateSyntheticTest(params *operations.UpdateSyntheticTestParams, opts ...operations.ClientOption) (*operations.UpdateSyntheticTestOK, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{params}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "UpdateSyntheticTest", varargs...)
-	ret0, _ := ret[0].(*operations.UpdateSyntheticTestOK)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateSyntheticTest indicates an expected call of UpdateSyntheticTest.
-func (mr *MockClientServiceMockRecorder) UpdateSyntheticTest(params interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{params}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSyntheticTest", reflect.TypeOf((*MockClientService)(nil).UpdateSyntheticTest), varargs...)
 }
 
 // UpdateTeam mocks base method.

@@ -78,6 +78,8 @@ type ClientService interface {
 
 	CreateMutingRule(params *CreateMutingRuleParams, opts ...ClientOption) (*CreateMutingRuleOK, error)
 
+	CreateNotebook(params *CreateNotebookParams, opts ...ClientOption) (*CreateNotebookOK, error)
+
 	CreateNotificationPolicy(params *CreateNotificationPolicyParams, opts ...ClientOption) (*CreateNotificationPolicyOK, error)
 
 	CreateNotifier(params *CreateNotifierParams, opts ...ClientOption) (*CreateNotifierOK, error)
@@ -95,8 +97,6 @@ type ClientService interface {
 	CreateServiceAccount(params *CreateServiceAccountParams, opts ...ClientOption) (*CreateServiceAccountOK, error)
 
 	CreateServiceAttribute(params *CreateServiceAttributeParams, opts ...ClientOption) (*CreateServiceAttributeOK, error)
-
-	CreateSyntheticTest(params *CreateSyntheticTestParams, opts ...ClientOption) (*CreateSyntheticTestOK, error)
 
 	CreateTeam(params *CreateTeamParams, opts ...ClientOption) (*CreateTeamOK, error)
 
@@ -160,6 +160,8 @@ type ClientService interface {
 
 	DeleteMutingRule(params *DeleteMutingRuleParams, opts ...ClientOption) (*DeleteMutingRuleOK, error)
 
+	DeleteNotebook(params *DeleteNotebookParams, opts ...ClientOption) (*DeleteNotebookOK, error)
+
 	DeleteNotificationPolicy(params *DeleteNotificationPolicyParams, opts ...ClientOption) (*DeleteNotificationPolicyOK, error)
 
 	DeleteNotifier(params *DeleteNotifierParams, opts ...ClientOption) (*DeleteNotifierOK, error)
@@ -177,8 +179,6 @@ type ClientService interface {
 	DeleteServiceAccount(params *DeleteServiceAccountParams, opts ...ClientOption) (*DeleteServiceAccountOK, error)
 
 	DeleteServiceAttribute(params *DeleteServiceAttributeParams, opts ...ClientOption) (*DeleteServiceAttributeOK, error)
-
-	DeleteSyntheticTest(params *DeleteSyntheticTestParams, opts ...ClientOption) (*DeleteSyntheticTestOK, error)
 
 	DeleteTeam(params *DeleteTeamParams, opts ...ClientOption) (*DeleteTeamOK, error)
 
@@ -234,6 +234,8 @@ type ClientService interface {
 
 	ListMutingRules(params *ListMutingRulesParams, opts ...ClientOption) (*ListMutingRulesOK, error)
 
+	ListNotebooks(params *ListNotebooksParams, opts ...ClientOption) (*ListNotebooksOK, error)
+
 	ListNotificationPolicies(params *ListNotificationPoliciesParams, opts ...ClientOption) (*ListNotificationPoliciesOK, error)
 
 	ListNotifiers(params *ListNotifiersParams, opts ...ClientOption) (*ListNotifiersOK, error)
@@ -249,8 +251,6 @@ type ClientService interface {
 	ListServiceAttributes(params *ListServiceAttributesParams, opts ...ClientOption) (*ListServiceAttributesOK, error)
 
 	ListServices(params *ListServicesParams, opts ...ClientOption) (*ListServicesOK, error)
-
-	ListSyntheticTests(params *ListSyntheticTestsParams, opts ...ClientOption) (*ListSyntheticTestsOK, error)
 
 	ListTeams(params *ListTeamsParams, opts ...ClientOption) (*ListTeamsOK, error)
 
@@ -310,6 +310,8 @@ type ClientService interface {
 
 	ReadMutingRule(params *ReadMutingRuleParams, opts ...ClientOption) (*ReadMutingRuleOK, error)
 
+	ReadNotebook(params *ReadNotebookParams, opts ...ClientOption) (*ReadNotebookOK, error)
+
 	ReadNotificationPolicy(params *ReadNotificationPolicyParams, opts ...ClientOption) (*ReadNotificationPolicyOK, error)
 
 	ReadNotifier(params *ReadNotifierParams, opts ...ClientOption) (*ReadNotifierOK, error)
@@ -329,8 +331,6 @@ type ClientService interface {
 	ReadServiceAccount(params *ReadServiceAccountParams, opts ...ClientOption) (*ReadServiceAccountOK, error)
 
 	ReadServiceAttribute(params *ReadServiceAttributeParams, opts ...ClientOption) (*ReadServiceAttributeOK, error)
-
-	ReadSyntheticTest(params *ReadSyntheticTestParams, opts ...ClientOption) (*ReadSyntheticTestOK, error)
 
 	ReadTeam(params *ReadTeamParams, opts ...ClientOption) (*ReadTeamOK, error)
 
@@ -394,6 +394,8 @@ type ClientService interface {
 
 	UpdateMutingRule(params *UpdateMutingRuleParams, opts ...ClientOption) (*UpdateMutingRuleOK, error)
 
+	UpdateNotebook(params *UpdateNotebookParams, opts ...ClientOption) (*UpdateNotebookOK, error)
+
 	UpdateNotificationPolicy(params *UpdateNotificationPolicyParams, opts ...ClientOption) (*UpdateNotificationPolicyOK, error)
 
 	UpdateNotifier(params *UpdateNotifierParams, opts ...ClientOption) (*UpdateNotifierOK, error)
@@ -409,8 +411,6 @@ type ClientService interface {
 	UpdateSLO(params *UpdateSLOParams, opts ...ClientOption) (*UpdateSLOOK, error)
 
 	UpdateServiceAttribute(params *UpdateServiceAttributeParams, opts ...ClientOption) (*UpdateServiceAttributeOK, error)
-
-	UpdateSyntheticTest(params *UpdateSyntheticTestParams, opts ...ClientOption) (*UpdateSyntheticTestOK, error)
 
 	UpdateTeam(params *UpdateTeamParams, opts ...ClientOption) (*UpdateTeamOK, error)
 
@@ -1353,6 +1353,43 @@ func (a *Client) CreateMutingRule(params *CreateMutingRuleParams, opts ...Client
 }
 
 /*
+CreateNotebook create notebook API
+*/
+func (a *Client) CreateNotebook(params *CreateNotebookParams, opts ...ClientOption) (*CreateNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateNotebook",
+		Method:             "POST",
+		PathPattern:        "/api/v1/config/notebooks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateNotebookDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 CreateNotificationPolicy create notification policy API
 */
 func (a *Client) CreateNotificationPolicy(params *CreateNotificationPolicyParams, opts ...ClientOption) (*CreateNotificationPolicyOK, error) {
@@ -1682,43 +1719,6 @@ func (a *Client) CreateServiceAttribute(params *CreateServiceAttributeParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateServiceAttributeDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-CreateSyntheticTest create synthetic test API
-*/
-func (a *Client) CreateSyntheticTest(params *CreateSyntheticTestParams, opts ...ClientOption) (*CreateSyntheticTestOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateSyntheticTestParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "CreateSyntheticTest",
-		Method:             "POST",
-		PathPattern:        "/api/v1/config/synthetic-tests",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &CreateSyntheticTestReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateSyntheticTestOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*CreateSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2873,6 +2873,43 @@ func (a *Client) DeleteMutingRule(params *DeleteMutingRuleParams, opts ...Client
 }
 
 /*
+DeleteNotebook delete notebook API
+*/
+func (a *Client) DeleteNotebook(params *DeleteNotebookParams, opts ...ClientOption) (*DeleteNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteNotebook",
+		Method:             "DELETE",
+		PathPattern:        "/api/v1/config/notebooks/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteNotebookDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 DeleteNotificationPolicy delete notification policy API
 */
 func (a *Client) DeleteNotificationPolicy(params *DeleteNotificationPolicyParams, opts ...ClientOption) (*DeleteNotificationPolicyOK, error) {
@@ -3202,43 +3239,6 @@ func (a *Client) DeleteServiceAttribute(params *DeleteServiceAttributeParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteServiceAttributeDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-DeleteSyntheticTest delete synthetic test API
-*/
-func (a *Client) DeleteSyntheticTest(params *DeleteSyntheticTestParams, opts ...ClientOption) (*DeleteSyntheticTestOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteSyntheticTestParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "DeleteSyntheticTest",
-		Method:             "DELETE",
-		PathPattern:        "/api/v1/config/synthetic-tests/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteSyntheticTestReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteSyntheticTestOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -4244,6 +4244,43 @@ func (a *Client) ListMutingRules(params *ListMutingRulesParams, opts ...ClientOp
 }
 
 /*
+ListNotebooks list notebooks API
+*/
+func (a *Client) ListNotebooks(params *ListNotebooksParams, opts ...ClientOption) (*ListNotebooksOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListNotebooksParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListNotebooks",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/notebooks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListNotebooksReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListNotebooksOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListNotebooksDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListNotificationPolicies list notification policies API
 */
 func (a *Client) ListNotificationPolicies(params *ListNotificationPoliciesParams, opts ...ClientOption) (*ListNotificationPoliciesOK, error) {
@@ -4536,43 +4573,6 @@ func (a *Client) ListServices(params *ListServicesParams, opts ...ClientOption) 
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListServicesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListSyntheticTests list synthetic tests API
-*/
-func (a *Client) ListSyntheticTests(params *ListSyntheticTestsParams, opts ...ClientOption) (*ListSyntheticTestsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListSyntheticTestsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ListSyntheticTests",
-		Method:             "GET",
-		PathPattern:        "/api/v1/config/synthetic-tests",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListSyntheticTestsReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListSyntheticTestsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListSyntheticTestsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5650,6 +5650,43 @@ func (a *Client) ReadMutingRule(params *ReadMutingRuleParams, opts ...ClientOpti
 }
 
 /*
+ReadNotebook read notebook API
+*/
+func (a *Client) ReadNotebook(params *ReadNotebookParams, opts ...ClientOption) (*ReadNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewReadNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ReadNotebook",
+		Method:             "GET",
+		PathPattern:        "/api/v1/config/notebooks/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ReadNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ReadNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ReadNotebookDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ReadNotificationPolicy read notification policy API
 */
 func (a *Client) ReadNotificationPolicy(params *ReadNotificationPolicyParams, opts ...ClientOption) (*ReadNotificationPolicyOK, error) {
@@ -6016,43 +6053,6 @@ func (a *Client) ReadServiceAttribute(params *ReadServiceAttributeParams, opts .
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ReadServiceAttributeDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ReadSyntheticTest read synthetic test API
-*/
-func (a *Client) ReadSyntheticTest(params *ReadSyntheticTestParams, opts ...ClientOption) (*ReadSyntheticTestOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewReadSyntheticTestParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "ReadSyntheticTest",
-		Method:             "GET",
-		PathPattern:        "/api/v1/config/synthetic-tests/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ReadSyntheticTestReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ReadSyntheticTestOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ReadSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -7204,6 +7204,43 @@ func (a *Client) UpdateMutingRule(params *UpdateMutingRuleParams, opts ...Client
 }
 
 /*
+UpdateNotebook update notebook API
+*/
+func (a *Client) UpdateNotebook(params *UpdateNotebookParams, opts ...ClientOption) (*UpdateNotebookOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateNotebookParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateNotebook",
+		Method:             "PUT",
+		PathPattern:        "/api/v1/config/notebooks/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateNotebookReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateNotebookOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*UpdateNotebookDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 UpdateNotificationPolicy update notification policy API
 */
 func (a *Client) UpdateNotificationPolicy(params *UpdateNotificationPolicyParams, opts ...ClientOption) (*UpdateNotificationPolicyOK, error) {
@@ -7496,43 +7533,6 @@ func (a *Client) UpdateServiceAttribute(params *UpdateServiceAttributeParams, op
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*UpdateServiceAttributeDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-UpdateSyntheticTest update synthetic test API
-*/
-func (a *Client) UpdateSyntheticTest(params *UpdateSyntheticTestParams, opts ...ClientOption) (*UpdateSyntheticTestOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateSyntheticTestParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateSyntheticTest",
-		Method:             "PUT",
-		PathPattern:        "/api/v1/config/synthetic-tests/{slug}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateSyntheticTestReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateSyntheticTestOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UpdateSyntheticTestDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

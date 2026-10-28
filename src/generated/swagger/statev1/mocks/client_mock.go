@@ -75,6 +75,26 @@ func (mr *MockClientServiceMockRecorder) ListMetricUsagesByMetricName(params int
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMetricUsagesByMetricName", reflect.TypeOf((*MockClientService)(nil).ListMetricUsagesByMetricName), varargs...)
 }
 
+// ListMonitorStatuses mocks base method.
+func (m *MockClientService) ListMonitorStatuses(params *operations.ListMonitorStatusesParams, opts ...operations.ClientOption) (*operations.ListMonitorStatusesOK, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{params}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListMonitorStatuses", varargs...)
+	ret0, _ := ret[0].(*operations.ListMonitorStatusesOK)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListMonitorStatuses indicates an expected call of ListMonitorStatuses.
+func (mr *MockClientServiceMockRecorder) ListMonitorStatuses(params interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{params}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMonitorStatuses", reflect.TypeOf((*MockClientService)(nil).ListMonitorStatuses), varargs...)
+}
+
 // ListRuleEvaluations mocks base method.
 func (m *MockClientService) ListRuleEvaluations(params *operations.ListRuleEvaluationsParams, opts ...operations.ClientOption) (*operations.ListRuleEvaluationsOK, error) {
 	m.ctrl.T.Helper()
