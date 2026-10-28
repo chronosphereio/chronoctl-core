@@ -32,6 +32,10 @@ type ClientService interface {
 
 	ListMonitorStatuses(params *ListMonitorStatusesParams, opts ...ClientOption) (*ListMonitorStatusesOK, error)
 
+	ListTestNotificationRecipients(params *ListTestNotificationRecipientsParams, opts ...ClientOption) (*ListTestNotificationRecipientsOK, error)
+
+	SendTestNotification(params *SendTestNotificationParams, opts ...ClientOption) (*SendTestNotificationOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -106,6 +110,91 @@ func (a *Client) ListMonitorStatuses(params *ListMonitorStatusesParams, opts ...
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListMonitorStatusesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+	ListTestNotificationRecipients Lists the recipients a saved monitor's notification policy reaches at a
+
+severity, with a rendered preview of the notification each would receive.
+Sends nothing. A read served by POST, because signal labels cannot be
+expressed as query parameters. Rate limited per tenant. A rate limited
+request returns 429.
+*/
+func (a *Client) ListTestNotificationRecipients(params *ListTestNotificationRecipientsParams, opts ...ClientOption) (*ListTestNotificationRecipientsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListTestNotificationRecipientsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListTestNotificationRecipients",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/state/monitors/{monitor_slug}:list-test-notification-recipients",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ListTestNotificationRecipientsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListTestNotificationRecipientsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListTestNotificationRecipientsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+	SendTestNotification Sends a test notification for a saved monitor through its notification
+
+policy's integrations. Does not change monitor state or create an alert.
+Fails when the monitor has no notification policy. Sends are rate
+limited per tenant and per monitor, and requests that fail validation
+count toward the limits. A rate limited request returns 429; wait and
+retry.
+*/
+func (a *Client) SendTestNotification(params *SendTestNotificationParams, opts ...ClientOption) (*SendTestNotificationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSendTestNotificationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "SendTestNotification",
+		Method:             "POST",
+		PathPattern:        "/api/unstable/state/monitors/{monitor_slug}:send-test-notification",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &SendTestNotificationReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SendTestNotificationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*SendTestNotificationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

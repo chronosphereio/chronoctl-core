@@ -37,7 +37,7 @@ type Statev1RuleEvaluation struct {
 	Message string `json:"message,omitempty"`
 
 	// severity
-	Severity RuleEvaluationSeverity `json:"severity,omitempty"`
+	Severity Statev1RuleEvaluationSeverity `json:"severity,omitempty"`
 }
 
 // Validate validates this statev1 rule evaluation
