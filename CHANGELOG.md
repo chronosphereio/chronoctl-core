@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Added
+* Add support for resource `v1/config/Notebook` and the `notebooks` commands.
+* Add output-only `source_system` to `v1/config/Dashboard`, recording the system a dashboard came from, such as Terraform, Chronoctl, the UI or the API.
+* Add a `monitor-statuses` endpoint to `v1/state`, which lists monitors with at least one firing alert and how they are firing. Available to library consumers only.
+* Add `list-test-notification-recipients` and `send-test-notification` monitor endpoints to `unstable/state`. Available to library consumers only.
+
+### Removed
+* Remove resource `v1/config/SyntheticTest` and the `synthetic-tests` commands. The endpoints are no longer part of the public API. **This is a breaking change**.
+* Rename the generated `statev1` rule evaluation severity model type (`RuleEvaluationSeverity` becomes `Statev1RuleEvaluationSeverity`). Available to library consumers only. **This is a breaking change**.
+
 ## v1.36.0
 
 ### Added
