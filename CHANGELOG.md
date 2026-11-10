@@ -2,11 +2,14 @@
 
 ## Unreleased
 
+## v1.37.0
+
 ### Added
 * Add support for resource `v1/config/Notebook` and the `notebooks` commands.
 * Add output-only `source_system` to `v1/config/Dashboard`, recording the system a dashboard came from, such as Terraform, Chronoctl, the UI or the API.
 * Add a `monitor-statuses` endpoint to `v1/state`, which lists monitors with at least one firing alert and how they are firing. Available to library consumers only.
 * Add `list-test-notification-recipients` and `send-test-notification` monitor endpoints to `unstable/state`. Available to library consumers only.
+* Add a `dashboards import-from-classic` command, which converts a classic dashboard into a Dashboard through `POST /api/v1/config/dashboards:importFromClassic`. `-f` takes classic dashboard JSON or a single `ClassicDashboard` manifest, such as `classic-dashboards read` output; `--collection-slug`, `--name` and `--slug` override the manifest's fields.
 
 ### Removed
 * Remove resource `v1/config/SyntheticTest` and the `synthetic-tests` commands. The endpoints are no longer part of the public API. **This is a breaking change**.
@@ -21,7 +24,6 @@
 * Add `USER` collection reference type to `v1/config` and `unstable/config`, for a user's personal collection. Only notebooks and dashboards can be owned by a user collection.
 * Add a `matches_series` filter to listing `v1/config/DropRule` and `v1/config/RollupRule`, and a matching `--matches-series` flag to `drop-rules list` and `rollup-rules list`. Only rules whose filters would accept a series carrying the given labels are returned; currently only a single `__name__=<metric>` entry is accepted.
 * Add `started_at` to `unstable/state` monitor status signal statuses, the time the signal started firing. Available to library consumers only.
-* Add a `dashboards import-from-classic` command, which converts a classic dashboard into a Dashboard through `POST /api/v1/config/dashboards:importFromClassic`. `-f` takes classic dashboard JSON or a single `ClassicDashboard` manifest, such as `classic-dashboards read` output; `--collection-slug`, `--name` and `--slug` override the manifest's fields.
 
 ### Changed
 * Deprecate `series` on `unstable/state` monitor status signal statuses, and the `include_series_statuses` query parameter on the monitor status list endpoint. Available to library consumers only.
