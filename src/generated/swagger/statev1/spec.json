@@ -128,6 +128,14 @@
       },
       "type": "object"
     },
+    "datav1FiringStatus": {
+      "description": "Whether an alert is currently firing or has resolved.",
+      "enum": [
+        "RESOLVED",
+        "FIRING"
+      ],
+      "type": "string"
+    },
     "datav1LabelFilter": {
       "description": "A set of label matchers evaluated together as a single AND clause.",
       "properties": {
@@ -183,21 +191,21 @@
     "statev1ListMonitorStatusesRequest": {
       "properties": {
         "monitor_slugs": {
-          "description": "Return only these monitors. When empty, returns every monitor with a firing\nalert.",
+          "description": "Return only these monitors. When empty, returns every monitor with a firing\nalert that matches the other filters. A named monitor with no firing alert\nmatching the filters is returned as passing, even when it has firing alerts\nthe filters exclude. Slugs are not checked against existing monitors, so a\nslug that names no monitor is also returned as passing.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "collection_slugs": {
-          "description": "Return only monitors owned by one of these collections.",
+          "description": "Count only alerts from monitors owned by one of these collections.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "team_slugs": {
-          "description": "Return only monitors owned by one of these teams.",
+          "description": "Count only alerts from monitors owned by one of these teams.",
           "items": {
             "type": "string"
           },
@@ -223,7 +231,7 @@
     "statev1ListMonitorStatusesResponse": {
       "properties": {
         "monitor_statuses": {
-          "description": "One entry per monitor with at least one matching firing alert, ordered by\nmonitor slug. Monitors that are not firing are omitted.",
+          "description": "One entry per monitor with at least one firing alert matching the filters,\nplus a passing entry for each of `monitor_slugs` that has none, ordered by\nmonitor slug. Other monitors are omitted.",
           "items": {
             "$ref": "#/definitions/statev1MonitorStatus"
           },
@@ -313,21 +321,24 @@
       "type": "object"
     },
     "statev1MonitorStatus": {
-      "description": "The rolled-up state of every firing alert of one monitor.",
+      "description": "The state of one monitor under the request's filters, rolled up from its\nfiring alerts that match them. A monitor whose firing alerts the filters all\nexclude is reported as passing. A passing monitor has a `RESOLVED` firing\nstatus, no severity and no signals.",
       "properties": {
         "monitor_slug": {
           "description": "The slug of the monitor.",
           "type": "string"
         },
+        "firing_status": {
+          "$ref": "#/definitions/datav1FiringStatus"
+        },
         "muted": {
-          "description": "True when every firing alert is muted.",
+          "description": "True when every matching firing alert is muted.",
           "type": "boolean"
         },
         "severity": {
           "$ref": "#/definitions/datav1Severity"
         },
         "signals": {
-          "description": "The monitor's firing signals, ordered by their labels. Set only with\n`include_signals`.",
+          "description": "The monitor's firing signals that match the filters, ordered by their\nlabels. Set only with `include_signals`.",
           "items": {
             "$ref": "#/definitions/statev1SignalStatus"
           },
@@ -565,7 +576,7 @@
     },
     "/api/v1/state/monitor-statuses": {
       "post": {
-        "description": "Lists monitors that have at least one firing alert, and how they are\nfiring. A read served by POST, because its label filters cannot be\nexpressed as query parameters.",
+        "description": "Lists monitors that have at least one firing alert matching the request's\nfilters, and how they are firing, plus each requested monitor that is\npassing under those filters. A read served by POST, because its label\nfilters cannot be expressed as query parameters.",
         "operationId": "ListMonitorStatuses",
         "parameters": [
           {

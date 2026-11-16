@@ -54,6 +54,9 @@ const (
 	// ConsumptionBudgetResourceGroupTRACEALL captures enum value "TRACE_ALL"
 	ConsumptionBudgetResourceGroupTRACEALL ConsumptionBudgetResourceGroup = "TRACE_ALL"
 
+	// ConsumptionBudgetResourceGroupAISREAGENTUNITS captures enum value "AISRE_AGENT_UNITS"
+	ConsumptionBudgetResourceGroupAISREAGENTUNITS ConsumptionBudgetResourceGroup = "AISRE_AGENT_UNITS"
+
 	// ConsumptionBudgetResourceGroupALL captures enum value "ALL"
 	ConsumptionBudgetResourceGroupALL ConsumptionBudgetResourceGroup = "ALL"
 )
@@ -63,7 +66,7 @@ var consumptionBudgetResourceGroupEnum []interface{}
 
 func init() {
 	var res []ConsumptionBudgetResourceGroup
-	if err := json.Unmarshal([]byte(`["LOG_PERSISTED_BYTES","LOG_PROCESSED_BYTES","METRIC_PERSISTED_SERIES","METRIC_ALL","LOG_ALL","TRACE_PROCESSED_BYTES","TRACE_PERSISTED_BYTES","TRACE_ALL","ALL"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["LOG_PERSISTED_BYTES","LOG_PROCESSED_BYTES","METRIC_PERSISTED_SERIES","METRIC_ALL","LOG_ALL","TRACE_PROCESSED_BYTES","TRACE_PERSISTED_BYTES","TRACE_ALL","AISRE_AGENT_UNITS","ALL"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

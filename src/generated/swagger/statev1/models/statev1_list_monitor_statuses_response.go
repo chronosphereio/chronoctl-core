@@ -19,8 +19,9 @@ import (
 // swagger:model statev1ListMonitorStatusesResponse
 type Statev1ListMonitorStatusesResponse struct {
 
-	// One entry per monitor with at least one matching firing alert, ordered by
-	// monitor slug. Monitors that are not firing are omitted.
+	// One entry per monitor with at least one firing alert matching the filters,
+	// plus a passing entry for each of `monitor_slugs` that has none, ordered by
+	// monitor slug. Other monitors are omitted.
 	MonitorStatuses []*Statev1MonitorStatus `json:"monitor_statuses"`
 }
 

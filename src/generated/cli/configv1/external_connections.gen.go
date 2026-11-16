@@ -370,7 +370,7 @@ type ExternalConnectionListOpts struct {
 
 func (r *ExternalConnectionListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyConnectionTypes []string
-	flags.StringSliceVar(&r.ConnectionTypes, "connection-types", emptyConnectionTypes, "")
+	flags.StringSliceVar(&r.ConnectionTypes, "connection-types", emptyConnectionTypes, "- BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.  - XCOR_SLACK_APP: An install of the XCOR Slack app. Read-only: created when an admin installs the app and deleted when it is uninstalled.")
 	var emptyNames []string
 	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ExternalConnection with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
@@ -499,6 +499,10 @@ spec:
     slug: <string>
     # The name of the ExternalConnection. You can modify this value after the ExternalConnection is created.
     name: <string>
+    blazemeter_api_monitoring:
+        # BlazeMeter API Monitoring (formerly Runscope) access token (Bearer
+        # token).
+        access_token: <string>
     cloudflare:
         # Cloudflare API Token. Accepts User API Tokens (cfut_ prefix) and
         # Account API Tokens (cfat_ prefix).
@@ -562,6 +566,16 @@ spec:
                 password: <string>
             tls_config:
                 insecure_skip_verify: <true|false>
+    # A tenant's install of the XCOR Slack app into one Slack workspace
+    # or one Enterprise Grid org. Exactly one of team_id and enterprise_id is
+    # set. Read-only.
+    xcor_slack_app:
+        # Slack workspace ID, set for a workspace install.
+        team_id: <string>
+        # Slack Enterprise Grid org ID, set for an org-level install.
+        enterprise_id: <string>
+        # Name of the workspace or org as Slack reported it at install.
+        workspace_name: <string>
 `
 
 func newExternalConnectionScaffoldCmd() *cobra.Command {

@@ -87,6 +87,9 @@ type Configv1Monitor struct {
 
 	// notification template
 	NotificationTemplate *MonitorNotificationTemplate `json:"notification_template,omitempty"`
+
+	// source system
+	SourceSystem Configv1SourceSystem `json:"source_system,omitempty"`
 }
 
 // Validate validates this configv1 monitor
@@ -118,6 +121,10 @@ func (m *Configv1Monitor) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateNotificationTemplate(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSourceSystem(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -246,6 +253,23 @@ func (m *Configv1Monitor) validateNotificationTemplate(formats strfmt.Registry) 
 	return nil
 }
 
+func (m *Configv1Monitor) validateSourceSystem(formats strfmt.Registry) error {
+	if swag.IsZero(m.SourceSystem) { // not required
+		return nil
+	}
+
+	if err := m.SourceSystem.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("source_system")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("source_system")
+		}
+		return err
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 monitor based on the context it is used
 func (m *Configv1Monitor) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -275,6 +299,10 @@ func (m *Configv1Monitor) ContextValidate(ctx context.Context, formats strfmt.Re
 	}
 
 	if err := m.contextValidateNotificationTemplate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSourceSystem(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -402,6 +430,24 @@ func (m *Configv1Monitor) contextValidateNotificationTemplate(ctx context.Contex
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *Configv1Monitor) contextValidateSourceSystem(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.SourceSystem) { // not required
+		return nil
+	}
+
+	if err := m.SourceSystem.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("source_system")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("source_system")
+		}
+		return err
 	}
 
 	return nil

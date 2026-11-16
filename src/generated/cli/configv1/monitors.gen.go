@@ -864,6 +864,11 @@ spec:
         # If set to 'true', each series will have its own signal. Cannot be used with
         # 'label_names'.
         signal_per_series: <true|false>
+    #  - SOURCE_SYSTEM_UNKNOWN: No source is recorded, or the recorded source is not a system that
+    # Chronosphere recognizes.
+    #  - SOURCE_SYSTEM_API: A client calling the API that does not identify itself as another system.
+    #  - SOURCE_SYSTEM_MANAGED_API: A client calling the API with a 'chrono-managed-api' User-Agent.
+    source_system: <SOURCE_SYSTEM_UNKNOWN|SOURCE_SYSTEM_TERRAFORM|SOURCE_SYSTEM_CHRONOCTL|SOURCE_SYSTEM_UI|SOURCE_SYSTEM_API|SOURCE_SYSTEM_KUBERNETES_OPERATOR|SOURCE_SYSTEM_SYNC_PROMETHEUS|SOURCE_SYSTEM_INTERNAL|SOURCE_SYSTEM_MANAGED_API>
 `
 
 func newMonitorScaffoldCmd() *cobra.Command {
