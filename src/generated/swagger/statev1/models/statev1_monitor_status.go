@@ -14,7 +14,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Statev1MonitorStatus The rolled-up state of every firing alert of one monitor.
+// Statev1MonitorStatus The state of one monitor under the request's filters, rolled up from its
+// firing alerts that match them. A monitor whose firing alerts the filters all
+// exclude is reported as passing. A passing monitor has a `RESOLVED` firing
+// status, no severity and no signals.
 //
 // swagger:model statev1MonitorStatus
 type Statev1MonitorStatus struct {
@@ -22,20 +25,27 @@ type Statev1MonitorStatus struct {
 	// The slug of the monitor.
 	MonitorSlug string `json:"monitor_slug,omitempty"`
 
-	// True when every firing alert is muted.
+	// firing status
+	FiringStatus Datav1FiringStatus `json:"firing_status,omitempty"`
+
+	// True when every matching firing alert is muted.
 	Muted bool `json:"muted,omitempty"`
 
 	// severity
 	Severity Datav1Severity `json:"severity,omitempty"`
 
-	// The monitor's firing signals, ordered by their labels. Set only with
-	// `include_signals`.
+	// The monitor's firing signals that match the filters, ordered by their
+	// labels. Set only with `include_signals`.
 	Signals []*Statev1SignalStatus `json:"signals"`
 }
 
 // Validate validates this statev1 monitor status
 func (m *Statev1MonitorStatus) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateFiringStatus(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateSeverity(formats); err != nil {
 		res = append(res, err)
@@ -48,6 +58,23 @@ func (m *Statev1MonitorStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Statev1MonitorStatus) validateFiringStatus(formats strfmt.Registry) error {
+	if swag.IsZero(m.FiringStatus) { // not required
+		return nil
+	}
+
+	if err := m.FiringStatus.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("firing_status")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("firing_status")
+		}
+		return err
+	}
+
 	return nil
 }
 
@@ -98,6 +125,10 @@ func (m *Statev1MonitorStatus) validateSignals(formats strfmt.Registry) error {
 func (m *Statev1MonitorStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateFiringStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateSeverity(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -109,6 +140,24 @@ func (m *Statev1MonitorStatus) ContextValidate(ctx context.Context, formats strf
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Statev1MonitorStatus) contextValidateFiringStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.FiringStatus) { // not required
+		return nil
+	}
+
+	if err := m.FiringStatus.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("firing_status")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("firing_status")
+		}
+		return err
+	}
+
 	return nil
 }
 

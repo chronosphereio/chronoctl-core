@@ -114,10 +114,11 @@ func (a *Client) ListMetricUsagesByMetricName(params *ListMetricUsagesByMetricNa
 }
 
 /*
-	ListMonitorStatuses Lists monitors that have at least one firing alert, and how they are
+	ListMonitorStatuses Lists monitors that have at least one firing alert matching the request's
 
-firing. A read served by POST, because its label filters cannot be
-expressed as query parameters.
+filters, and how they are firing, plus each requested monitor that is
+passing under those filters. A read served by POST, because its label
+filters cannot be expressed as query parameters.
 */
 func (a *Client) ListMonitorStatuses(params *ListMonitorStatusesParams, opts ...ClientOption) (*ListMonitorStatusesOK, error) {
 	// TODO: Validate the params before sending

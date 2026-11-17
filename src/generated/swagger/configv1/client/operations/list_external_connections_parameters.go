@@ -62,7 +62,10 @@ ListExternalConnectionsParams contains all the parameters to send to the API end
 */
 type ListExternalConnectionsParams struct {
 
-	// ConnectionTypes.
+	/* ConnectionTypes.
+
+	   - BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.
+	*/
 	ConnectionTypes []string
 
 	/* Names.

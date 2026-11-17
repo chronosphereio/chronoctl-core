@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Added
+* Add `blazemeter_api_monitoring` config to `v1/config/ExternalConnection`, which holds a BlazeMeter API Monitoring (formerly Runscope) access token, and the `BLAZEMETER_API_MONITORING` value to the `--connection-types` filter of `external-connections list`.
+* Add read-only `xcor_slack_app` config to `v1/config/ExternalConnection`, for an install of the XCOR Slack app into a Slack workspace or Enterprise Grid org, and the `XCOR_SLACK_APP` value to the `--connection-types` filter of `external-connections list`.
+* Add output-only `source_system` to `v1/config/Monitor`, recording the system a monitor came from, such as Terraform, Chronoctl, the UI or the API.
+* Add `AISRE_AGENT_UNITS` resource to `v1/config/ConsumptionBudget`.
+* Add `firing_status` to `v1/state` monitor statuses. Available to library consumers only.
+
+### Changed
+* `v1/state` `monitor-statuses` now returns a passing entry, with a `RESOLVED` firing status, for each monitor in `monitor_slugs` that has no firing alert matching the filters, and its collection and team filters count only alerts from matching monitors. Available to library consumers only.
+
 ## v1.37.0
 
 ### Added

@@ -685,6 +685,7 @@
         "TRACE_PROCESSED_BYTES",
         "TRACE_PERSISTED_BYTES",
         "TRACE_ALL",
+        "AISRE_AGENT_UNITS",
         "ALL"
       ],
       "type": "string"
@@ -1052,6 +1053,15 @@
       ],
       "type": "string"
     },
+    "ExternalConnectionBlazemeterApiMonitoringConfig": {
+      "properties": {
+        "access_token": {
+          "description": "BlazeMeter API Monitoring (formerly Runscope) access token (Bearer\ntoken).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ExternalConnectionCloudflareConfig": {
       "properties": {
         "api_token": {
@@ -1099,6 +1109,24 @@
       "properties": {
         "api_key": {
           "description": "SendGrid API key (Bearer token).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ExternalConnectionXcorSlackAppConfig": {
+      "description": "A tenant's install of the XCOR Slack app into one Slack workspace\nor one Enterprise Grid org. Exactly one of team_id and enterprise_id is\nset. Read-only.",
+      "properties": {
+        "team_id": {
+          "description": "Slack workspace ID, set for a workspace install.",
+          "type": "string"
+        },
+        "enterprise_id": {
+          "description": "Slack Enterprise Grid org ID, set for an org-level install.",
+          "type": "string"
+        },
+        "workspace_name": {
+          "description": "Name of the workspace or org as Slack reported it at install.",
           "type": "string"
         }
       },
@@ -4713,6 +4741,12 @@
         },
         "datadog": {
           "$ref": "#/definitions/ExternalConnectionDatadogConfig"
+        },
+        "xcor_slack_app": {
+          "$ref": "#/definitions/ExternalConnectionXcorSlackAppConfig"
+        },
+        "blazemeter_api_monitoring": {
+          "$ref": "#/definitions/ExternalConnectionBlazemeterApiMonitoringConfig"
         }
       },
       "type": "object"
@@ -5919,6 +5953,9 @@
         },
         "notification_template": {
           "$ref": "#/definitions/MonitorNotificationTemplate"
+        },
+        "source_system": {
+          "$ref": "#/definitions/configv1SourceSystem"
         }
       },
       "type": "object"
@@ -9845,6 +9882,7 @@
                 "TRACE_PROCESSED_BYTES",
                 "TRACE_PERSISTED_BYTES",
                 "TRACE_ALL",
+                "AISRE_AGENT_UNITS",
                 "ALL"
               ],
               "type": "string"
@@ -11646,6 +11684,7 @@
           },
           {
             "collectionFormat": "multi",
+            "description": "- BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.",
             "in": "query",
             "items": {
               "enum": [
@@ -11657,7 +11696,9 @@
                 "CLOUDFLARE",
                 "MONGODB_ATLAS",
                 "SENDGRID",
-                "DATADOG"
+                "DATADOG",
+                "BLAZEMETER_API_MONITORING",
+                "XCOR_SLACK_APP"
               ],
               "type": "string"
             },

@@ -20,13 +20,16 @@ import (
 type Statev1ListMonitorStatusesRequest struct {
 
 	// Return only these monitors. When empty, returns every monitor with a firing
-	// alert.
+	// alert that matches the other filters. A named monitor with no firing alert
+	// matching the filters is returned as passing, even when it has firing alerts
+	// the filters exclude. Slugs are not checked against existing monitors, so a
+	// slug that names no monitor is also returned as passing.
 	MonitorSlugs []string `json:"monitor_slugs"`
 
-	// Return only monitors owned by one of these collections.
+	// Count only alerts from monitors owned by one of these collections.
 	CollectionSlugs []string `json:"collection_slugs"`
 
-	// Return only monitors owned by one of these teams.
+	// Count only alerts from monitors owned by one of these teams.
 	TeamSlugs []string `json:"team_slugs"`
 
 	// Each LabelFilter is one AND clause; the clauses are OR'ed together.

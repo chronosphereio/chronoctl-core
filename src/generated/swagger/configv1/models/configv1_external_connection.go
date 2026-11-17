@@ -61,6 +61,12 @@ type Configv1ExternalConnection struct {
 
 	// datadog
 	Datadog *ExternalConnectionDatadogConfig `json:"datadog,omitempty"`
+
+	// xcor slack app
+	XcorSlackApp *ExternalConnectionXcorSlackAppConfig `json:"xcor_slack_app,omitempty"`
+
+	// blazemeter api monitoring
+	BlazemeterAPIMonitoring *ExternalConnectionBlazemeterAPIMonitoringConfig `json:"blazemeter_api_monitoring,omitempty"`
 }
 
 // Validate validates this configv1 external connection
@@ -108,6 +114,14 @@ func (m *Configv1ExternalConnection) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDatadog(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateXcorSlackApp(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateBlazemeterAPIMonitoring(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -312,6 +326,44 @@ func (m *Configv1ExternalConnection) validateDatadog(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *Configv1ExternalConnection) validateXcorSlackApp(formats strfmt.Registry) error {
+	if swag.IsZero(m.XcorSlackApp) { // not required
+		return nil
+	}
+
+	if m.XcorSlackApp != nil {
+		if err := m.XcorSlackApp.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("xcor_slack_app")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("xcor_slack_app")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1ExternalConnection) validateBlazemeterAPIMonitoring(formats strfmt.Registry) error {
+	if swag.IsZero(m.BlazemeterAPIMonitoring) { // not required
+		return nil
+	}
+
+	if m.BlazemeterAPIMonitoring != nil {
+		if err := m.BlazemeterAPIMonitoring.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("blazemeter_api_monitoring")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("blazemeter_api_monitoring")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this configv1 external connection based on the context it is used
 func (m *Configv1ExternalConnection) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -357,6 +409,14 @@ func (m *Configv1ExternalConnection) ContextValidate(ctx context.Context, format
 	}
 
 	if err := m.contextValidateDatadog(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateXcorSlackApp(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateBlazemeterAPIMonitoring(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -565,6 +625,48 @@ func (m *Configv1ExternalConnection) contextValidateDatadog(ctx context.Context,
 				return ve.ValidateName("datadog")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("datadog")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1ExternalConnection) contextValidateXcorSlackApp(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.XcorSlackApp != nil {
+
+		if swag.IsZero(m.XcorSlackApp) { // not required
+			return nil
+		}
+
+		if err := m.XcorSlackApp.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("xcor_slack_app")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("xcor_slack_app")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Configv1ExternalConnection) contextValidateBlazemeterAPIMonitoring(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BlazemeterAPIMonitoring != nil {
+
+		if swag.IsZero(m.BlazemeterAPIMonitoring) { // not required
+			return nil
+		}
+
+		if err := m.BlazemeterAPIMonitoring.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("blazemeter_api_monitoring")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("blazemeter_api_monitoring")
 			}
 			return err
 		}
