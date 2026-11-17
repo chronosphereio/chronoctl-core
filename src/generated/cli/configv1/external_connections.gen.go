@@ -370,7 +370,7 @@ type ExternalConnectionListOpts struct {
 
 func (r *ExternalConnectionListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyConnectionTypes []string
-	flags.StringSliceVar(&r.ConnectionTypes, "connection-types", emptyConnectionTypes, "- BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.  - XCOR_SLACK_APP: An install of the XCOR Slack app. Read-only: created when an admin installs the app and deleted when it is uninstalled.")
+	flags.StringSliceVar(&r.ConnectionTypes, "connection-types", emptyConnectionTypes, "- BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.")
 	var emptyNames []string
 	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ExternalConnection with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string

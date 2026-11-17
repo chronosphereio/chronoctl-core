@@ -11684,7 +11684,7 @@
           },
           {
             "collectionFormat": "multi",
-            "description": "- BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.\n - XCOR_SLACK_APP: An install of the XCOR Slack app. Read-only: created when an admin\ninstalls the app and deleted when it is uninstalled.",
+            "description": "- BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.",
             "in": "query",
             "items": {
               "enum": [

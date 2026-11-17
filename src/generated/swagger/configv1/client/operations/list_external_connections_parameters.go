@@ -64,9 +64,7 @@ type ListExternalConnectionsParams struct {
 
 	/* ConnectionTypes.
 
-	     - BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.
-	 - XCOR_SLACK_APP: An install of the XCOR Slack app. Read-only: created when an admin
-	installs the app and deleted when it is uninstalled.
+	   - BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.
 	*/
 	ConnectionTypes []string
 
