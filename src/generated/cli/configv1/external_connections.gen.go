@@ -370,7 +370,7 @@ type ExternalConnectionListOpts struct {
 
 func (r *ExternalConnectionListOpts) registerFlags(flags *flag.FlagSet) {
 	var emptyConnectionTypes []string
-	flags.StringSliceVar(&r.ConnectionTypes, "connection-types", emptyConnectionTypes, "- BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.")
+	flags.StringSliceVar(&r.ConnectionTypes, "connection-types", emptyConnectionTypes, " - BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.")
 	var emptyNames []string
 	flags.StringSliceVar(&r.Names, "names", emptyNames, "Filters results by name, where any ExternalConnection with a matching name in the given list (and matches all other filters) will be returned.")
 	var emptySlugs []string
@@ -503,6 +503,14 @@ spec:
         # BlazeMeter API Monitoring (formerly Runscope) access token (Bearer
         # token).
         access_token: <string>
+    circleci:
+        # A CircleCI personal API token, or an OAuth token at Read level.
+        api_token: <string>
+    clickhouse_cloud:
+        # ID of a ClickHouse Cloud API key, the HTTP Basic username.
+        key_id: <string>
+        # Secret of the same API key, the HTTP Basic password.
+        key_secret: <string>
     cloudflare:
         # Cloudflare API Token. Accepts User API Tokens (cfut_ prefix) and
         # Account API Tokens (cfat_ prefix).
@@ -548,6 +556,17 @@ spec:
         rest:
             # The PagerDuty REST API token used to authenticate note polling.
             api_key: <string>
+    salesforce:
+        # The org's My Domain host, without scheme or path, such as
+        # "acme.my.salesforce.com" or "acme--uat.sandbox.my.salesforce.com". Must
+        # end in ".my.salesforce.com".
+        my_domain_host: <string>
+        # Consumer key (OAuth client ID) of the org's External Client App.
+        consumer_key: <string>
+        # Consumer secret of the org's External Client App. This field is
+        # write-only: reads return '**REDACTED**', and writing that sentinel value
+        # back preserves the stored secret.
+        consumer_secret: <string>
     sendgrid:
         # SendGrid API key (Bearer token).
         api_key: <string>

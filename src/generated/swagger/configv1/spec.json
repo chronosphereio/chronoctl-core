@@ -1062,6 +1062,28 @@
       },
       "type": "object"
     },
+    "ExternalConnectionCircleCiConfig": {
+      "properties": {
+        "api_token": {
+          "description": "A CircleCI personal API token, or an OAuth token at Read level.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ExternalConnectionClickHouseCloudConfig": {
+      "properties": {
+        "key_id": {
+          "description": "ID of a ClickHouse Cloud API key, the HTTP Basic username.",
+          "type": "string"
+        },
+        "key_secret": {
+          "description": "Secret of the same API key, the HTTP Basic password.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ExternalConnectionCloudflareConfig": {
       "properties": {
         "api_token": {
@@ -1100,6 +1122,23 @@
         },
         "client_secret": {
           "description": "Service Account client secret.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ExternalConnectionSalesforceConfig": {
+      "properties": {
+        "my_domain_host": {
+          "description": "The org's My Domain host, without scheme or path, such as\n\"acme.my.salesforce.com\" or \"acme--uat.sandbox.my.salesforce.com\". Must\nend in \".my.salesforce.com\".",
+          "type": "string"
+        },
+        "consumer_key": {
+          "description": "Consumer key (OAuth client ID) of the org's External Client App.",
+          "type": "string"
+        },
+        "consumer_secret": {
+          "description": "Consumer secret of the org's External Client App. This field is\nwrite-only: reads return `**REDACTED**`, and writing that sentinel value\nback preserves the stored secret.",
           "type": "string"
         }
       },
@@ -4747,6 +4786,15 @@
         },
         "blazemeter_api_monitoring": {
           "$ref": "#/definitions/ExternalConnectionBlazemeterApiMonitoringConfig"
+        },
+        "circleci": {
+          "$ref": "#/definitions/ExternalConnectionCircleCiConfig"
+        },
+        "salesforce": {
+          "$ref": "#/definitions/ExternalConnectionSalesforceConfig"
+        },
+        "clickhouse_cloud": {
+          "$ref": "#/definitions/ExternalConnectionClickHouseCloudConfig"
         }
       },
       "type": "object"
@@ -11684,7 +11732,7 @@
           },
           {
             "collectionFormat": "multi",
-            "description": "- BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.",
+            "description": " - BLAZEMETER_API_MONITORING: A BlazeMeter API Monitoring (formerly Runscope) access token.",
             "in": "query",
             "items": {
               "enum": [
@@ -11698,7 +11746,8 @@
                 "SENDGRID",
                 "DATADOG",
                 "BLAZEMETER_API_MONITORING",
-                "XCOR_SLACK_APP"
+                "XCOR_SLACK_APP",
+                "CIRCLECI"
               ],
               "type": "string"
             },
