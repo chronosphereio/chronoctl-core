@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+* Add `clickhouse_cloud` config to `v1/config/ExternalConnection`, which holds the ID and secret of a ClickHouse Cloud API key.
+* Add `circleci` config to `v1/config/ExternalConnection`, which holds a CircleCI personal API token or a Read-level OAuth token, and the `CIRCLECI` value to the `--connection-types` filter of `external-connections list`.
+* Add `salesforce` config to `v1/config/ExternalConnection`, which holds a Salesforce org's My Domain host and the consumer key and secret of its External Client App.
+
 ## v1.38.0
 
 ### Added
